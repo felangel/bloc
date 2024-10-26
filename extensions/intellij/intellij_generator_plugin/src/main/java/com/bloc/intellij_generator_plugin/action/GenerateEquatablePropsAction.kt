@@ -3,6 +3,7 @@ package com.bloc.intellij_generator_plugin.action
 import com.intellij.lang.ASTNode
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Document
@@ -13,6 +14,7 @@ import com.intellij.psi.util.PsiUtilBase
 
 
 class GenerateEquatablePropsAction : AnAction() {
+    override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
 
     private var propsNullable = false
 

@@ -23,45 +23,38 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 class PostBloc extends Bloc<PostEvent, PostState> {
   PostBloc({required this.httpClient}) : super(const PostState()) {
     on<PostFetched>(
-      _onPostFetched,
+      _onFetched,
       transformer: throttleDroppable(throttleDuration),
     );
   }
 
   final http.Client httpClient;
 
-  Future<void> _onPostFetched(
+  Future<void> _onFetched(
     PostFetched event,
     Emitter<PostState> emit,
   ) async {
     if (state.hasReachedMax) return;
+
     try {
-      if (state.status == PostStatus.initial) {
-        final posts = await _fetchPosts();
-        return emit(
-          state.copyWith(
-            status: PostStatus.success,
-            posts: posts,
-            hasReachedMax: false,
-          ),
-        );
+      final posts = await _fetchPosts(startIndex: state.posts.length);
+
+      if (posts.isEmpty) {
+        return emit(state.copyWith(hasReachedMax: true));
       }
-      final posts = await _fetchPosts(state.posts.length);
-      posts.isEmpty
-          ? emit(state.copyWith(hasReachedMax: true))
-          : emit(
-              state.copyWith(
-                status: PostStatus.success,
-                posts: List.of(state.posts)..addAll(posts),
-                hasReachedMax: false,
-              ),
-            );
+
+      emit(
+        state.copyWith(
+          status: PostStatus.success,
+          posts: [...state.posts, ...posts],
+        ),
+      );
     } catch (_) {
       emit(state.copyWith(status: PostStatus.failure));
     }
   }
 
-  Future<List<Post>> _fetchPosts([int startIndex = 0]) async {
+  Future<List<Post>> _fetchPosts({required int startIndex}) async {
     final response = await httpClient.get(
       Uri.https(
         'jsonplaceholder.typicode.com',

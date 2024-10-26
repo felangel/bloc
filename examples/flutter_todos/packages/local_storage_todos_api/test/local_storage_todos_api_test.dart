@@ -207,5 +207,20 @@ void main() {
         ).called(1);
       });
     });
+
+    group('close', () {
+      test('closes the instance', () async {
+        final subject = createSubject();
+
+        await subject.close();
+
+        expect(
+          () => subject.saveTodo(
+            Todo(id: '1', title: 'title 1'),
+          ),
+          throwsStateError,
+        );
+      });
+    });
   });
 }

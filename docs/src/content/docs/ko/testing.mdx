@@ -1,0 +1,64 @@
+---
+title: 테스팅
+description: Bloc에 대한 테스트 작성 방법에 대한 기본 사항입니다.
+---
+
+import CounterBlocSnippet from '~/components/testing/CounterBlocSnippet.astro';
+import AddDevDependenciesSnippet from '~/components/testing/AddDevDependenciesSnippet.astro';
+import CounterBlocTestImportsSnippet from '~/components/testing/CounterBlocTestImportsSnippet.astro';
+import CounterBlocTestMainSnippet from '~/components/testing/CounterBlocTestMainSnippet.astro';
+import CounterBlocTestSetupSnippet from '~/components/testing/CounterBlocTestSetupSnippet.astro';
+import CounterBlocTestInitialStateSnippet from '~/components/testing/CounterBlocTestInitialStateSnippet.astro';
+import CounterBlocTestBlocTestSnippet from '~/components/testing/CounterBlocTestBlocTestSnippet.astro';
+
+Bloc은 테스트하기가 매우 쉽도록 설계되었습니다. 이 섹션에서는 bloc을 unit test 하는 방법을 살펴보겠습니다.
+
+단순화를 위해, [Core Concepts](/ko/bloc-concepts)에서 만든 `CounterBloc`에 대한 테스트를 작성해보겠습니다.
+
+복습을 위해 요약하면, `CounterBloc` 구현은 다음과 같습니다:
+
+<CounterBlocSnippet />
+
+## 준비
+
+테스트 작성을 시작하기 전에 종속성에 테스트 프레임워크를 추가해야 합니다.
+
+프로젝트에 [test](https://pub.dev/packages/test) 및 [bloc_test](https://pub.dev/packages/bloc_test)를 추가합니다.
+
+<AddDevDependenciesSnippet />
+
+## 테스팅
+
+`CounterBloc` 테스트용 파일인 `counter_bloc_test.dart`를 만들고 테스트 패키지를 가져오는 것부터 시작해 보겠습니다.
+
+<CounterBlocTestImportsSnippet />
+
+다음으로, `main`와 테스트 그룹을 만들어야 합니다.
+
+<CounterBlocTestMainSnippet />
+
+:::note
+그룹은 개별 테스트를 구성하고 모든 개별 테스트에서 공통 `setUp` 및 `tearDown`을 공유할 수 있는 context를 생성하기 위한 것입니다.
+:::
+
+모든 테스트에서 사용될 `CounterBloc`의 인스턴스를 생성하는 것부터 시작해 보겠습니다.
+
+<CounterBlocTestSetupSnippet />
+
+이제 개별 테스트 작성을 시작하겠습니다.
+
+<CounterBlocTestInitialStateSnippet />
+
+:::note
+`dart test` 명령어를 사용하여 모든 테스트를 실행할 수 있습니다.
+:::
+
+이 시점에서 우리는 첫 번째 통과된 테스트를 받아야 합니다! 이제 [bloc_test](https://pub.dev/packages/bloc_test) 패키지를 사용하여 좀 더 복잡한 테스트를 작성해 보겠습니다.
+
+<CounterBlocTestBlocTestSnippet />
+
+이제 우리는 테스트를 실행하고 모든 테스트가 통과되는지 확인할 수 있어야 합니다.
+
+이게 전부입니다. 테스트는 쉬워야 하며 코드를 변경하고 리펙토링할 때 자신감을 가질 수 있어야 합니다.
+
+완전히 테스트된 애플리케이션의 예제는 [Weather App](https://github.com/felangel/bloc/tree/master/examples/flutter_weather)을 참조 바랍니다.

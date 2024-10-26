@@ -1,5 +1,5 @@
 ---
-title: Flutter Bloc 概念
+title: Flutter Bloc 核心概念
 description: package:flutter_bloc 的核心概念概览
 sidebar:
   order: 2
@@ -42,7 +42,7 @@ import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSn
 所有 `flutter_bloc` 套件导出的Widget都与 Cubit 和 Bloc 实例集成。
 :::
 
-## Bloc Widgets
+## Bloc 组件
 
 ### BlocBuilder
 
@@ -172,7 +172,7 @@ import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSn
 
 <MultiRepositoryProviderSnippet />
 
-## BlocProvider Usage
+## BlocProvider 用法
 
 接着来看看如何使用 `BlocProvider` 来提供一个 `CounterBloc` 给一个 `CounterPage` 并且使用`BlocBuilder` 来对状态变化做出反应.
 
@@ -184,7 +184,7 @@ import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSn
 
 到目前为止，我们成功地将我们的表示层 ( presentational layer ) 与我们的业务逻辑层 (business logic layer) 分开了。注意，`CounterPage` widget 不知道当用户点击按钮时会发生什么。该 widget 只是告诉 `CounterBloc` 用户按下了增加或减少按钮。
 
-## RepositoryProvider Usage
+## RepositoryProvider 用法
 
 接下来，我们将利用 flutter_weather 范例，来查看如何使用 RepositoryProvider。
 
@@ -206,7 +206,7 @@ import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSn
 
 [flutter_weather_link]: https://github.com/felangel/bloc/blob/master/examples/flutter_weather
 
-## Extension Methods
+## 扩展方法
 
 [
 Extension methods](https://dart.dev/guides/language/extension-methods)，在 Dart 2.7 中引入，是一种向现有库添加功能的方法。在本节中，我们将看一下 `package:flutter_bloc` 中包含的扩展方法以及它们的使用方式。
@@ -231,7 +231,7 @@ Extension methods](https://dart.dev/guides/language/extension-methods)，在 Dar
 
 #### Usage
 
-✅ **DO** 在回调函数中使用`context.read` 方法来添加事件。
+✅ **建议** 在回调函数中使用`context.read` 方法来添加事件。
 
 ```dart
 onPressed() {
@@ -239,7 +239,7 @@ onPressed() {
 }
 ```
 
-❌ **AVOID** 在 `build` 方法当中使用`context.read` 查找状态
+❌ **避免** 在 `build` 方法当中使用`context.read` 查找状态
 
 ```dart
 @override
@@ -267,7 +267,7 @@ Widget build(BuildContext context) {
 
 #### Usage
 
-✅ **DO** 使用 `BlocBuilder` 而不是 `context.watch` 来明确地范围化重新构建。
+✅ **建议** 使用 `BlocBuilder` 而不是 `context.watch` 来明确地范围化重新构建。
 
 ```dart
 Widget build(BuildContext context) {
@@ -303,7 +303,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-✅ **DO** 将 `Builder` 和 `context.watch` 一起使用，类似于 `MultiBlocBuilder` 的效果.
+✅ **建议** 将 `Builder` 和 `context.watch` 一起使用，类似于 `MultiBlocBuilder` 的效果.
 
 ```dart
 Builder(
@@ -317,7 +317,7 @@ Builder(
 );
 ```
 
-❌ **AVOID** 使用 `context.watch`
+❌ **避免** 使用 `context.watch`
 当父 Widget 的 build 方法不依赖于状态
 
 ```dart
@@ -354,7 +354,7 @@ Widget build(BuildContext context) {
 
 #### Usage
 
-✅ **DO** 使用 BlocSelector 而不是 context.select，以明确地限定重新构建的范围。
+✅ **建议** 使用 BlocSelector 而不是 context.select，以明确地限定重新构建的范围。
 
 ```dart
 Widget build(BuildContext context) {
@@ -391,7 +391,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-❌ **AVOID** 在父 Widget 的 build 方法中使用 context.select，但父 Widget 不依賴於狀態。
+❌ **避免** 在父 Widget 的 build 方法中使用 context.select，但父 Widget 不依赖于状态。
 
 ```dart
 @override

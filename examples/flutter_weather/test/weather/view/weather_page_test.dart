@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_weather/search/search.dart';
 import 'package:flutter_weather/settings/settings.dart';
-import 'package:flutter_weather/theme/theme.dart';
 import 'package:flutter_weather/weather/weather.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:weather_repository/weather_repository.dart' hide Weather;
@@ -15,8 +14,6 @@ import '../../helpers/hydrated_bloc.dart';
 
 class MockWeatherRepository extends Mock implements WeatherRepository {}
 
-class MockThemeCubit extends MockCubit<Color> implements ThemeCubit {}
-
 class MockWeatherCubit extends MockCubit<WeatherState>
     implements WeatherCubit {}
 
@@ -24,35 +21,15 @@ void main() {
   initHydratedStorage();
 
   group('WeatherPage', () {
-    late WeatherRepository weatherRepository;
-
-    setUp(() {
-      weatherRepository = MockWeatherRepository();
-    });
-
-    testWidgets('renders WeatherView', (tester) async {
-      await tester.pumpWidget(
-        RepositoryProvider.value(
-          value: weatherRepository,
-          child: MaterialApp(home: WeatherPage()),
-        ),
-      );
-      expect(find.byType(WeatherView), findsOneWidget);
-    });
-  });
-
-  group('WeatherView', () {
     final weather = Weather(
       temperature: Temperature(value: 4.2),
       condition: WeatherCondition.cloudy,
       lastUpdated: DateTime(2020),
       location: 'London',
     );
-    late ThemeCubit themeCubit;
     late WeatherCubit weatherCubit;
 
     setUp(() {
-      themeCubit = MockThemeCubit();
       weatherCubit = MockWeatherCubit();
     });
 
@@ -62,7 +39,7 @@ void main() {
       await tester.pumpWidget(
         BlocProvider.value(
           value: weatherCubit,
-          child: MaterialApp(home: WeatherView()),
+          child: MaterialApp(home: WeatherPage()),
         ),
       );
       expect(find.byType(WeatherEmpty), findsOneWidget);
@@ -78,7 +55,7 @@ void main() {
       await tester.pumpWidget(
         BlocProvider.value(
           value: weatherCubit,
-          child: MaterialApp(home: WeatherView()),
+          child: MaterialApp(home: WeatherPage()),
         ),
       );
       expect(find.byType(WeatherLoading), findsOneWidget);
@@ -95,7 +72,7 @@ void main() {
       await tester.pumpWidget(
         BlocProvider.value(
           value: weatherCubit,
-          child: MaterialApp(home: WeatherView()),
+          child: MaterialApp(home: WeatherPage()),
         ),
       );
       expect(find.byType(WeatherPopulated), findsOneWidget);
@@ -111,7 +88,7 @@ void main() {
       await tester.pumpWidget(
         BlocProvider.value(
           value: weatherCubit,
-          child: MaterialApp(home: WeatherView()),
+          child: MaterialApp(home: WeatherPage()),
         ),
       );
       expect(find.byType(WeatherError), findsOneWidget);
@@ -128,7 +105,7 @@ void main() {
       await tester.pumpWidget(
         BlocProvider.value(
           value: WeatherCubit(MockWeatherRepository()),
-          child: MaterialApp(home: WeatherView()),
+          child: MaterialApp(home: WeatherPage()),
         ),
       );
       expect(find.byType(WeatherPopulated), findsOneWidget);
@@ -140,7 +117,7 @@ void main() {
       await tester.pumpWidget(
         BlocProvider.value(
           value: weatherCubit,
-          child: MaterialApp(home: WeatherView()),
+          child: MaterialApp(home: WeatherPage()),
         ),
       );
       await tester.tap(find.byType(IconButton));
@@ -154,38 +131,12 @@ void main() {
       await tester.pumpWidget(
         BlocProvider.value(
           value: weatherCubit,
-          child: MaterialApp(home: WeatherView()),
+          child: MaterialApp(home: WeatherPage()),
         ),
       );
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
       expect(find.byType(SearchPage), findsOneWidget);
-    });
-
-    testWidgets('calls updateTheme when whether changes', (tester) async {
-      whenListen(
-        weatherCubit,
-        Stream<WeatherState>.fromIterable([
-          WeatherState(),
-          WeatherState(status: WeatherStatus.success, weather: weather),
-        ]),
-      );
-      when(() => weatherCubit.state).thenReturn(
-        WeatherState(
-          status: WeatherStatus.success,
-          weather: weather,
-        ),
-      );
-      await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider.value(value: themeCubit),
-            BlocProvider.value(value: weatherCubit),
-          ],
-          child: MaterialApp(home: WeatherView()),
-        ),
-      );
-      verify(() => themeCubit.updateTheme(weather)).called(1);
     });
 
     testWidgets('triggers refreshWeather on pull to refresh', (tester) async {
@@ -199,7 +150,7 @@ void main() {
       await tester.pumpWidget(
         BlocProvider.value(
           value: weatherCubit,
-          child: MaterialApp(home: WeatherView()),
+          child: MaterialApp(home: WeatherPage()),
         ),
       );
       await tester.fling(
@@ -217,7 +168,7 @@ void main() {
       await tester.pumpWidget(
         BlocProvider.value(
           value: weatherCubit,
-          child: MaterialApp(home: WeatherView()),
+          child: MaterialApp(home: WeatherPage()),
         ),
       );
       await tester.tap(find.byType(FloatingActionButton));

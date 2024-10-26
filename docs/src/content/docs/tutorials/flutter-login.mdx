@@ -18,7 +18,6 @@ In the following tutorial, we're going to build a Login Flow in Flutter using th
 ## Key Topics
 
 - [BlocProvider](/flutter-bloc-concepts#blocprovider), Flutter widget which provides a bloc to its children.
-- [BlocBuilder](/flutter-bloc-concepts#blocbuilder), Flutter widget that handles building the widget in response to new states.
 - Using Cubit instead of Bloc. [What's the difference?](/bloc-concepts#cubit-vs-bloc)
 - Adding events with [context.read](/flutter-bloc-concepts#contextread).
 - Prevent unnecessary rebuilds with [Equatable](/faqs#when-to-use-equatable).
@@ -192,8 +191,8 @@ Use the [VSCode Extension](https://marketplace.visualstudio.com/items?itemName=F
 
 In this application, the `AuthenticationBloc` will be reacting to two different events:
 
-- `AuthenticationStatusChanged`: notifies the bloc of a change to the user's `AuthenticationStatus`
-- `AuthenticationLogoutRequested`: notifies the bloc of a logout request
+- `AuthenticationSubscriptionRequested`: initial event that notifies the bloc to subscribe to the `AuthenticationStatus` stream
+- `AuthenticationLogoutPressed`: notifies the bloc of a user logout action
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/authentication/bloc/authentication_event.dart"
@@ -232,15 +231,25 @@ The `AuthenticationBloc` manages the authentication state of the application whi
 
 The `AuthenticationBloc` has a dependency on both the `AuthenticationRepository` and `UserRepository` and defines the initial state as `AuthenticationState.unknown()`.
 
-In the constructor body, the `AuthenticationBloc` subscribes to the `status` stream of the `AuthenticationRepository` and adds an `AuthenticationStatusChanged` event internally in response to a new `AuthenticationStatus`.
+In the constructor body, `AuthenticationEvent` subclasses are mapped to their corresponding event handlers.
+
+In the `_onSubscriptionRequested` event handler, the `AuthenticationBloc` uses `emit.onEach` to subscribe to the `status` stream of the `AuthenticationRepository` and emit a state in response to each `AuthenticationStatus`.
+
+`emit.onEach` creates a stream subscription internally and takes care of canceling it when either `AuthenticationBloc` or the `status` stream is closed.
+
+If the `status` stream emits an error, `addError` forwards the error and stackTrace to any `BlocObserver` listening.
 
 :::caution
-The `AuthenticationBloc` overrides `close` in order to dispose both the `StreamSubscription` as well as the `AuthenticationRepository`.
+If `onError` is omitted, any errors on the `status` stream are considered unhandled, and will be thrown by `onEach`. As a result, the subscription to the `status` stream will be canceled.
 :::
 
-Next, the `EventHandler` handles transforming the incoming `AuthenticationEvent` instances into new `AuthenticationState` instances.
+:::tip
+A [`BlocObserver`](/bloc-concepts/#blocobserver-1) is great for logging Bloc events, errors, and state changes especially in the context analytics and crash reporting.;
+:::
 
-When an `AuthenticationStatusChanged` event is added if the associated status is `AuthenticationStatus.authenticated`, the `AuthentictionBloc` queries the user via the `UserRepository`.
+When the `status` stream emits `AuthenticationStatus.unknown` or `unauthenticated`, the corresponding `AuthenticationState` is emitted.
+
+When `AuthenticationStatus.authenticated` is emitted, the `AuthentictionBloc` queries the user via the `UserRepository`.
 
 ## main.dart
 
@@ -271,6 +280,8 @@ We are injecting a single instance of the `AuthenticationRepository` and `UserRe
 :::note
 `RepositoryProvider` is used to provide the single instance of `AuthenticationRepository` to the entire application which will come in handy later on.
 :::
+
+By default, `BlocProvider` is lazy and does not call `create` until the first time the Bloc is accessed. Since `AuthenticationBloc` should always subscribe to the `AuthenticationStatus` stream immediately (via the `AuthenticationSubscriptionRequested` event), we can explicitly opt out of this behavior by setting `lazy: false`.
 
 `AppView` is a `StatefulWidget` because it maintains a `GlobalKey` which is used to access the `NavigatorState`. By default, `AppView` will render the `SplashPage` (which we will see later) and it uses `BlocListener` to navigate to different pages based on changes in the `AuthenticationState`.
 

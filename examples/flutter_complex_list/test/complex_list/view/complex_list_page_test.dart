@@ -6,9 +6,9 @@ import 'package:flutter_complex_list/repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockRepository extends Mock implements Repository {}
+class _MockRepository extends Mock implements Repository {}
 
-class MockComplexListCubit extends MockCubit<ComplexListState>
+class _MockComplexListCubit extends MockCubit<ComplexListState>
     implements ComplexListCubit {}
 
 extension on WidgetTester {
@@ -46,21 +46,21 @@ void main() {
   late ComplexListCubit listCubit;
 
   setUp(() {
-    repository = MockRepository();
-    listCubit = MockComplexListCubit();
+    repository = _MockRepository();
+    listCubit = _MockComplexListCubit();
   });
 
-  group('ListPage', () {
-    testWidgets('renders ComplexListView', (tester) async {
+  group(ComplexListPage, () {
+    testWidgets('renders $ComplexListView', (tester) async {
       when(() => repository.fetchItems()).thenAnswer((_) async => []);
       await tester.pumpListPage(repository);
       expect(find.byType(ComplexListView), findsOneWidget);
     });
   });
 
-  group('ComplexListView', () {
+  group(ComplexListView, () {
     testWidgets(
-        'renders CircularProgressIndicator while '
+        'renders $CircularProgressIndicator while '
         'waiting for items to load', (tester) async {
       when(() => listCubit.state).thenReturn(const ComplexListState.loading());
       await tester.pumpListView(listCubit);
@@ -76,7 +76,7 @@ void main() {
     });
 
     testWidgets(
-        'renders ComplexListView after items '
+        'renders $ComplexListView after items '
         'are finished loading', (tester) async {
       when(() => listCubit.state).thenReturn(
         const ComplexListState.success(mockItems),
@@ -94,7 +94,7 @@ void main() {
       expect(find.text('No Content'), findsOneWidget);
     });
 
-    testWidgets('renders three ItemTiles', (tester) async {
+    testWidgets('renders three ${ItemTile}s', (tester) async {
       when(() => listCubit.state).thenReturn(
         const ComplexListState.success(mockItems),
       );
@@ -113,7 +113,7 @@ void main() {
     });
   });
 
-  group('ItemTile', () {
+  group(ItemTile, () {
     testWidgets('renders value text', (tester) async {
       const mockItem = Item(id: '1', value: 'Item 1');
       when(() => listCubit.state).thenReturn(
@@ -135,7 +135,7 @@ void main() {
     });
 
     testWidgets(
-        'renders CircularProgressIndicator '
+        'renders $CircularProgressIndicator '
         'when item is being deleting', (tester) async {
       const mockItem = Item(id: '1', value: 'Item 1', isDeleting: true);
       when(() => listCubit.state).thenReturn(

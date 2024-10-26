@@ -1,3 +1,7 @@
+# 8.1.6
+
+- docs: fix gallery image urls ([#4184](https://github.com/felangel/bloc/pull/4184))
+
 # 8.1.5
 
 - feat: override `debugFillProperties` ([#4082](https://github.com/felangel/bloc/pull/4082))

@@ -1,0 +1,81 @@
+---
+template: splash
+title: Bloc 상태 관리 라이브러리
+description: Bloc 상태 관리 라이브러리에 대한 공식 문서입니다. Dart, Flutter, 그리고 AngularDart를 지원합니다. 예제 및 튜토리얼이 포함되어 있습니다.
+banner:
+  content: |
+    ✨ <a href="https://shop.bloclibrary.dev">Bloc Shop</a> 
+    을 방문해보세요✨
+editUrl: false
+lastUpdated: false
+hero:
+  title: Bloc <sup><span style="font-size:0.4em">v8.1.4</span></sup>
+  tagline: Dart를 위한 예측 가능한 상태관리 라이브러리.
+  image:
+    alt: Bloc logo
+    file: ~/assets/bloc.svg
+  actions:
+    - text: 시작하기
+      link: /ko/getting-started/
+      variant: primary
+      icon: rocket
+    - text: GitHub에서 보기
+      link: https://github.com/felangel/bloc
+      icon: github
+      variant: secondary
+---
+
+import { CardGrid } from '@astrojs/starlight/components';
+import SponsorsGrid from '~/components/landing/SponsorsGrid.astro';
+import Card from '~/components/landing/Card.astro';
+import ListCard from '~/components/landing/ListCard.astro';
+import SplitCard from '~/components/landing/SplitCard.astro';
+import Discord from '~/components/landing/Discord.astro';
+
+<SponsorsGrid sponsoredBy="의 💖으로 후원" becomeASponsor="후원자가 되세요" />
+
+<hr />
+
+<CardGrid>
+
+<SplitCard title="시작하기" icon="rocket">
+	```sh
+	# 프로젝트에 bloc을 추가하세요.
+	dart pub add bloc
+	```
+
+여기 [시작하기 가이드](/ko/getting-started) 에는 빠르게 Bloc을 사용하는 방법에 대한 단계별 지침이 나와 있습니다.
+
+</SplitCard>
+
+<Card title="가이드 둘러보기" icon="star">
+	[공식 튜토리얼](/ko/tutorials/flutter-counter) 을 완료하여 모범 사례를 배우고,
+	Bloc을 사용하는 다양한 앱을 빌드하세요.
+</Card>
+
+<Card title="Bloc으로 빌드하기" icon="laptop">
+	카운터, 타이머, 무한 스크롤, 날씨, todo 등과 같은 고품질의, 완벽한 테스트를
+	거친 [예시 앱](https://github.com/felangel/bloc/tree/master/examples)들을
+	살펴보세요!
+</Card>
+
+<ListCard title="학습" icon="open-book">
+
+    - [왜 Bloc인가?](/ko/why-bloc)
+    - [핵심 컨셉](/ko/bloc-concepts)
+    - [아키텍쳐](/ko/architecture)
+    - [테스팅](/ko/testing)
+    - [작명 규칙](/ko/naming-conventions)
+
+</ListCard>
+
+  <ListCard title="통합 개발도구" icon="puzzle">
+    - [VSCode Integration](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+    - [IntelliJ Integration](https://plugins.jetbrains.com/plugin/12129-bloc)
+    - [Mason CLI Integration](https://github.com/felangel/bloc/blob/master/bricks/README.md)
+    - [Custom Templates](https://brickhub.dev/search?q=bloc)
+    - [Developer Tools](https://github.com/felangel/bloc/issues/2748)
+  </ListCard>
+</CardGrid>
+
+<Discord joinDiscord="Discord에 가입하세요" />
