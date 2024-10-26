@@ -7,7 +7,7 @@ EventTransformer<E> debounceFirst<E>([
   Duration duration = const Duration(milliseconds: 300),
 ]) {
   return (events, mapper) {
-    return events.transform(DebounceFirst(mapper, duration));
+    return events.transform(_DebounceFirst(mapper, duration));
   };
 }
 
@@ -24,8 +24,8 @@ EventTransformer<E> debounceFirst<E>([
 ///
 /// **Note**: debounced events never trigger the event handler.
 /// {@endtemplate}
-class DebounceFirst<T> extends StreamTransformerBase<T, T> {
-  const DebounceFirst(
+class _DebounceFirst<T> extends StreamTransformerBase<T, T> {
+  const _DebounceFirst(
     this.mapper, [
     this.duration = const Duration(milliseconds: 300),
   ]);

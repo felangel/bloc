@@ -7,7 +7,7 @@ EventTransformer<E> debounce<E>([
   Duration duration = const Duration(milliseconds: 300),
 ]) {
   return (events, mapper) {
-    return events.transform(Debounce(mapper, duration));
+    return events.transform(_Debounce(mapper, duration));
   };
 }
 
@@ -21,9 +21,9 @@ EventTransformer<E> debounce<E>([
 ///
 /// **Note**: debounced events never trigger the event handler.
 /// {@endtemplate}
-class Debounce<T> extends StreamTransformerBase<T, T> {
+class _Debounce<T> extends StreamTransformerBase<T, T> {
   /// {@macro debounce}
-  const Debounce(
+  const _Debounce(
     this.mapper, [
     this.duration = const Duration(milliseconds: 300),
   ]);
