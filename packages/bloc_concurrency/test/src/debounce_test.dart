@@ -8,7 +8,7 @@ import 'package:test/test.dart';
 import 'helpers.dart';
 
 void main() {
-  group('debounceFirst', () {
+  group('debounce', () {
     test('should debounce all events', () async {
       final states = <int>[];
       final bloc = CounterBloc(
