@@ -25,6 +25,9 @@ EventTransformer<E> debounce<E>({
   bool leading = false,
   bool trailing = true,
 }) {
+  assert(duration >= Duration.zero, 'duration cannot be negative');
+  assert(leading || trailing, 'leading or trailing must be true');
+
   return (events, mapper) {
     return concurrent<E>().call(
       events.debounce(
