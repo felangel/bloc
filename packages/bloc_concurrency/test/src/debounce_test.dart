@@ -81,6 +81,7 @@ void main() {
           ),
         )
           ..stream.listen(states.add)
+          ..add(Increment())
           ..add(Increment());
 
         expect(bloc.onCalls, isEmpty);
@@ -88,9 +89,13 @@ void main() {
 
         // Add events after debounce period
         await Future<void>.delayed(const Duration(milliseconds: 10));
-        bloc.add(Increment());
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(const Duration(milliseconds: 10));
-        bloc.add(Increment());
+        bloc
+          ..add(Increment())
+          ..add(Increment());
         await Future<void>.delayed(const Duration(milliseconds: 10));
 
         expect(bloc.onCalls, hasLength(3));
