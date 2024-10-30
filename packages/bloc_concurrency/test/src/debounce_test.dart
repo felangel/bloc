@@ -7,11 +7,12 @@ void main() {
   group('debounceFirst', () {
     test('should debounce all events', () async {
       final states = <int>[];
-      final bloc = CounterBloc(debounce(const Duration(milliseconds: 20)))
-        ..stream.listen(states.add)
-        ..add(Increment())
-        ..add(Increment())
-        ..add(Increment());
+      final bloc =
+          CounterBloc(debounce(duration: const Duration(milliseconds: 20)))
+            ..stream.listen(states.add)
+            ..add(Increment())
+            ..add(Increment())
+            ..add(Increment());
 
       await tick();
 

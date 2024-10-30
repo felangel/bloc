@@ -1,63 +1,38 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/src/concurrent.dart';
+import 'package:stream_transform/stream_transform.dart';
 
-/// {@macro debounce}
-EventTransformer<E> debounce<E>([
-  Duration duration = const Duration(milliseconds: 300),
-]) {
-  return (events, mapper) {
-    return events.transform(_Debounce(mapper, duration));
-  };
-}
-
-/// {@template debounce_first}
-/// Debounces incoming events.
+/// Returns an [EventTransformer] that applies a
+/// debounce to the incoming events.
 ///
-/// When an event is received, a "window" is set
-/// for the specified [duration]. If any events are emitted
-/// during this window, they will be debounced. Once the
-/// window expires, the last event received will be processed.
+/// Debouncing ensures that events are emitted only if there is a pause in their
+/// occurrence for a specified [duration]. This is useful for limiting the rate
+/// of events, for example, handling user input to avoid excessive processing.
+///
+/// The [duration] parameter specifies the debounce period during which incoming
+/// events will be ignored until the specified time has elapsed.
+///
+/// The [leading] parameter determines whether the first event in a sequence
+/// should be emitted immediately. By default, [leading] is set to `false`.
+///
+/// The [trailing] parameter determines whether the last event in a sequence
+/// should be emitted after the [duration] expires.
+/// By default, [trailing] is set to `true`.
 ///
 /// **Note**: debounced events never trigger the event handler.
-/// {@endtemplate}
-class _Debounce<T> extends StreamTransformerBase<T, T> {
-  /// {@macro debounce}
-  const _Debounce(
-    this.mapper, [
-    this.duration = const Duration(milliseconds: 300),
-  ]);
-
-  /// The [EventMapper] used to map events.
-  final EventMapper<T> mapper;
-
-  /// The [Duration] to wait before emitting the last event.
-  final Duration duration;
-
-  @override
-  Stream<T> bind(Stream<T> stream) {
-    final controller = StreamController<Stream<T>>();
-    Timer? timer;
-
-    final subscription = stream.listen((event) {
-      timer?.cancel();
-
-      timer = Timer(duration, () {
-        controller.add(mapper(event));
-      });
-    });
-
-    controller.onCancel = () {
-      subscription.cancel();
-      timer?.cancel();
-      controller.close();
-    };
-
-    return controller.stream.asyncExpand((stream) => stream);
-  }
-
-  @override
-  StreamTransformer<RS, RT> cast<RS, RT>() {
-    throw UnimplementedError();
-  }
+EventTransformer<E> debounce<E>({
+  required Duration duration,
+  bool leading = false,
+  bool trailing = true,
+}) {
+  return (events, mapper) {
+    return concurrent<E>().call(
+      events.debounce(
+        duration,
+        leading: leading,
+        trailing: trailing,
+      ),
+      mapper,
+    );
+  };
 }
