@@ -15,15 +15,20 @@ import 'package:stream_transform/stream_transform.dart';
 /// The [leading] parameter determines whether the first event in a sequence
 /// should be emitted immediately. By default, [leading] is set to `false`.
 ///
+/// The [transformer] parameter is an optional [EventTransformer] that
+/// is applied to the events after debouncing.
+/// If not provided, the default transformer is [concurrent].
+///
 /// **Note**: debounced events never trigger the event handler.
 EventTransformer<E> debounce<E>({
   required Duration duration,
   bool leading = false,
+  EventTransformer<E>? transformer,
 }) {
   assert(duration >= Duration.zero, 'duration cannot be negative');
 
   return (events, mapper) {
-    return concurrent<E>().call(
+    return (transformer ?? concurrent<E>()).call(
       events.debounce(
         duration,
         leading: leading,
