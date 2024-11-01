@@ -265,7 +265,7 @@ Bloc은 새로운 state를 직접 `emit`하면 안 됩니다. 대신 모든 stat
 :::
 
 :::caution
-Bloc과 Cubit ahen 복제된 상태를 무시합니다. `state == nextState`에서 `State nextState`를 emit하면 state 변경이 발생하지 않습니다.
+Bloc과 Cubit 모두 복제된 상태를 무시합니다. `state == nextState`에서 `State nextState`를 emit하면 state 변경이 발생하지 않습니다.
 :::
 
 ### Bloc 사용하기
@@ -276,7 +276,7 @@ Bloc과 Cubit ahen 복제된 상태를 무시합니다. `state == nextState`에�
 
 <CounterBlocUsageSnippet />
 
-위의 예시 코드에서는 먼저 `CounterBloc`의 인스턴스를 생성합니다. 그런 다음 초기 state인 `Bloc`의 현재 state를 출력합니다 (아직 새로운 state가 emit되지 않았으므로). 다음으로 state 변경을 촉발하기 위해 `CounterIncrementPressed` event를 추가합니다. 마지막으로 `0`애서 `1`로 변경된 `Bloc`의 state를 다시 출력하고 `Bloc`의 `close`룰 호출하여 내부 state stream을 닫습니다.
+위의 예시 코드에서는 먼저 `CounterBloc`의 인스턴스를 생성합니다. 그런 다음 초기 state인 `Bloc`의 현재 state를 출력합니다 (아직 새로운 state가 emit되지 않았으므로). 다음으로 state 변경을 촉발하기 위해 `CounterIncrementPressed` event를 추가합니다. 마지막으로 `0`에서 `1`로 변경된 `Bloc`의 state를 다시 출력하고 `Bloc`의 `close`룰 호출하여 내부 state stream을 닫습니다.
 
 :::note
 다음 event-loop를 기다리기 위해 `await Future.delayed(Duration.zero)`가 추가됩니다 (`EventHandler`가 event를 처리할 수 있도록 허용).
@@ -296,7 +296,7 @@ Bloc과 Cubit ahen 복제된 상태를 무시합니다. `state == nextState`에�
 
 ### Bloc 관찰하기
 
-`Bloc`은 `BlocBase`를 extends 하기 떄문에 `onChange`를 사용하여 `Bloc`의 모든 state 변화를 관찰할 수 있습니다.
+`Bloc`은 `BlocBase`를 extends 하기 때문에 `onChange`를 사용하여 `Bloc`의 모든 state 변화를 관찰할 수 있습니다.
 
 <CounterBlocOnChangeSnippet />
 
