@@ -54,3 +54,8 @@
 		filter: drop-shadow(0 0 5rem #81d9ef);
 	}
 }
+
+/* Secondary Button Styles */
+.sl-link-button.secondary {
+	border: 1px solid var(--sl-color-white) !important;
+}
