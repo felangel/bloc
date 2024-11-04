@@ -1,0 +1,114 @@
+---
+title: Arquitetura
+description: Visão geral dos padrões de arquitetura recomendados ao usar bloc.
+---
+
+import DataProviderSnippet from '~/components/architecture/DataProviderSnippet.astro';
+import RepositorySnippet from '~/components/architecture/RepositorySnippet.astro';
+import BusinessLogicComponentSnippet from '~/components/architecture/BusinessLogicComponentSnippet.astro';
+import BlocTightCouplingSnippet from '~/components/architecture/BlocTightCouplingSnippet.astro';
+import BlocLooseCouplingPresentationSnippet from '~/components/architecture/BlocLooseCouplingPresentationSnippet.astro';
+import AppIdeasRepositorySnippet from '~/components/architecture/AppIdeasRepositorySnippet.astro';
+import AppIdeaRankingBlocSnippet from '~/components/architecture/AppIdeaRankingBlocSnippet.astro';
+import PresentationComponentSnippet from '~/components/architecture/PresentationComponentSnippet.astro';
+
+![Arquitetura Bloc](~/assets/concepts/bloc_architecture_full.png)
+
+Usar a biblioteca bloc nos permite separar nossa aplicação em três camadas:
+
+- Apresentação
+- Lógica de Negócios
+- Dados
+  - Repositório
+  - Provedor de Dados
+
+Começaremos na camada de nível mais baixo (mais distante da interface do usuário) e avançaremos até a camada de apresentação.
+
+## Camada de Dados
+
+A responsabilidade da camada de dados é recuperar/manipular dados de uma ou mais fontes.
+
+A camada de dados pode ser dividida em duas partes:
+
+- Repositório
+- Provedor de Dados
+
+Esta camada é o nível mais baixo da aplicação e interage com bancos de dados, requisições de rede e outras fontes de dados assíncronas.
+
+### Provedor de Dados
+
+A responsabilidade do provedor de dados é fornecer dados brutos. O provedor de dados deve ser genérico e versátil.
+
+O provedor de dados geralmente expõe APIs simples para executar operações [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete). Podemos ter os métodos `createData`, `readData`, `updateData`, e `deleteData` como parte da nossa camada de dados.
+
+<DataProviderSnippet />
+
+### Repositório
+
+A camada de repositório é um wrapper em torno de um ou mais provedores de dados com os quais a camada Bloc se comunica.
+
+<RepositorySnippet />
+
+Como pode ver, nossa camada de repositório pode interagir com vários provedores de dados e executar transformações nos dados antes de entregar o resultado para a camada de lógica de negócios.
+
+## Camada de Lógica de Negócios
+
+A responsabilidade da camada de lógica de negócios é responder às entradas da camada de apresentação com novos estados. Esta camada pode depender de um ou mais repositórios para recuperar os dados necessários para construir o estado do aplicativo.
+
+Pense na camada de lógica de negócios como a ponte entre a interface do usuário (camada de apresentação) e a camada de dados. A camada de lógica de negócios é notificada por eventos/ações da camada de apresentação e então se comunica com o repositório para criar um novo estado para a camada de apresentação consumir.
+
+<BusinessLogicComponentSnippet />
+
+### Comunicação Bloc-to-Bloc
+
+Como os blocs expõem streams, pode ser tentador criar um bloc que ouça outro bloc. Você **não** deve fazer isso. Existem alternativas melhores do que recorrer ao código abaixo:
+
+<BlocTightCouplingSnippet />
+
+Embora o código acima esteja livre de erros (e até mesmo se limpe depois de executado), ele tem um grande problema: ele cria uma dependência entre dois blocs.
+
+Em geral, dependências entre duas entidades na mesma camada arquitetural devem ser evitadas a todo custo, pois criam um alto acoplamento que é difícil de manter. Como os blocs ficam na camada arquitetural da lógica de negócios, nenhum bloc deve saber sobre qualquer outro bloc.
+
+![Camadas de Arquitetura da Aplicação](~/assets/architecture/architecture.png)
+
+Um bloc só deve receber informações por meio de eventos e de repositórios injetados (ou seja, repositórios fornecidos ao bloc em seu construtor).
+
+Se você estiver em uma situação em que um bloc precisa responder a outro bloc, você tem duas outras opções. Você pode enviar o problema para uma camada acima (a camada de apresentação) ou para uma camada abaixo (a camada de domínio).
+
+#### Conectando Blocs com Apresentação
+
+Você pode usar um `BlocListener` para escutar um bloc e adicionar um evento a outro bloc sempre que o primeiro bloc for alterado.
+
+<BlocLooseCouplingPresentationSnippet />
+
+O código acima impede que o `SecondBloc` precise saber algo sobre o `FirstBloc`, encorajando o baixo acoplamento. O aplicativo [flutter_weather](/pt-br/tutorials/flutter-weather) usa [essa técnica](https://github.com/felangel/bloc/blob/b4c8db938ad71a6b60d4a641ec357905095c3965/examples/flutter_weather/lib/weather/view/weather_page.dart#L38-L42) para alterar o tema do aplicativo com base nas informações meteorológicas recebidas.
+
+Em algumas situações, você pode não querer acoplar dois blocs na camada de apresentação. Em vez disso, pode fazer sentido que dois blocs compartilhem a mesma fonte de dados e atualizem sempre que os dados mudarem.
+
+#### Conectando Blocs com Domínio
+
+Dois blocs podem escutar um stream de um repositório e atualizar seus estados, independente um do outro, sempre que os dados do repositório mudarem. Usar repositórios reativos para manter o estado sincronizado é comum em aplicativos empresariais de larga escala.
+
+Primeiro, crie ou use um repositório que forneça um `Stream` de dados. Por exemplo, o seguinte repositório expõe um stream interminável das mesmas ideias de aplicativos:
+
+<AppIdeasRepositorySnippet />
+
+O mesmo repositório pode ser injetado em cada bloc que precisa reagir a novas ideias de aplicativo. Abaixo está um `AppIdeaRankingBloc` que produz um estado para cada ideia de aplicativo recebida do repositório acima:
+
+<AppIdeaRankingBlocSnippet />
+
+Para saber mais sobre como usar streams com Bloc, consulte [Como usar o Bloc com streams e concorrência](https://verygood.ventures/blog/how-to-use-bloc-with-streams-and-concurrency).
+
+## Camada de Apresentação
+
+A responsabilidade da camada de apresentação é resolver como se renderizar com base em um ou mais estados do bloc. Além disso, ela deve manipular as entradas do usuário e os eventos do ciclo de vida do aplicativo.
+
+A maioria dos fluxos de aplicativos começa com um evento `AppStart` que aciona a aplicação para buscar alguns dados para apresentar ao usuário.
+
+Nesse cenário, a camada de apresentação adicionaria um evento `AppStart`.
+
+Além disso, a camada de apresentação terá que descobrir o que renderizar na tela com base no estado da camada do bloc.
+
+<PresentationComponentSnippet />
+
+Até agora, embora tenhamos alguns trechos de código, tudo isso tem sido muito de alto nível. Na seção tutorial, vamos juntar tudo isso enquanto construímos vários aplicativos de exemplo diferentes.
