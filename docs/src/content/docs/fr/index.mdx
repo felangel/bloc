@@ -1,0 +1,79 @@
+---
+template: splash
+title: Bloc State Management Library
+description:  Documentation officielle de la bibliothèque de gestion d'état Bloc. Supporter pour Dart, Flutter et AngularDart. Inclut des exemples et des tutoriels.
+banner:
+  content: |
+    ✨ Visite le
+    <a href="https://shop.bloclibrary.dev">Bloc Shop</a> ✨
+editUrl: false
+lastUpdated: false
+hero:
+  title: Bloc <sup><span style="font-size:0.4em">v8.1.4</span></sup>
+  tagline: Une bibliothèque de gestion d'états prévisibles pour Dart.
+  image:
+    alt: Bloc logo
+    file: ~/assets/bloc.svg
+  actions:
+    - text: Démarrer
+      link: /getting-started/
+      variant: primary
+      icon: rocket
+    - text: Voir sur GitHub
+      link: https://github.com/felangel/bloc
+      icon: github
+      variant: secondary
+---
+
+import { CardGrid } from '@astrojs/starlight/components';
+import SponsorsGrid from '~/components/landing/SponsorsGrid.astro';
+import Card from '~/components/landing/Card.astro';
+import ListCard from '~/components/landing/ListCard.astro';
+import SplitCard from '~/components/landing/SplitCard.astro';
+import Discord from '~/components/landing/Discord.astro';
+
+<SponsorsGrid />
+
+<hr />
+
+<CardGrid>
+
+<SplitCard title="Démarrer" icon="rocket">
+	```sh
+	# Ajoute un bloc ton projet
+	dart pub add bloc
+	```
+
+Notre [guide de démarrage](/getting-started) possède des instructions étape par étape pour commencer à utiliser Bloc en juste quelques minutes.
+
+</SplitCard>
+
+<Card title="Explorer avec des tutoriels" icon="star">
+	Complète les [tutoriels officiels](/tutorials/flutter-counter) pour apprendre les meilleurs pratiques et créer une variété d'applications avec Bloc.
+</Card>
+
+<Card title="Développer avec Bloc" icon="laptop">
+  Explore des [applications demo](https://github.com/felangel/bloc/tree/master/examples) de qualité et entièrement testé
+	tel qu'un compteur, un timer, une liste infini, une application de météo, une todo-list et plus encore!
+</Card>
+
+<ListCard title="Apprendre" icon="open-book">
+
+    - [Pourquoi utiliser Bloc?](/why-bloc)
+    - [Concepts fondamentaux](/bloc-concepts)
+    - [Architecture](/architecture)
+    - [Tester](/testing)
+    - [Conventions de nommage](/naming-conventions)
+
+</ListCard>
+
+  <ListCard title="Integration" icon="puzzle">
+    - [Integration pour VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+    - [Integration pour IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc)
+    - [Integration de Mason CLI ](https://github.com/felangel/bloc/blob/master/bricks/README.md)
+    - [Templates customisées](https://brickhub.dev/search?q=bloc)
+    - [Outils de developpeur](https://github.com/felangel/bloc/issues/2748)
+  </ListCard>
+</CardGrid>
+
+<Discord />
