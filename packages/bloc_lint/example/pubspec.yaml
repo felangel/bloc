@@ -1,0 +1,12 @@
+name: 'bloc_lint_example'
+description: 'A project to test bloc_lint rules.'
+environment:
+  sdk: ">=3.3.3 <4.0.0"
+
+dependencies:
+  bloc_lint:
+    path: '../'
+  custom_lint: ^0.7.0
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.1.6
