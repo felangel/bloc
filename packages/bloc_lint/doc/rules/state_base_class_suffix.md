@@ -18,6 +18,7 @@ final class HomepageInitial extends HomepageData {}
 ✅ **GOOD**:
 
 ```dart
+@immutable
 sealed class HomepageState {}
 
 final class HomepageInitial extends HomepageState {}
