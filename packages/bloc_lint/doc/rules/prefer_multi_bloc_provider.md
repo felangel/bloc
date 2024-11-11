@@ -1,5 +1,7 @@
 prefer-multi-bloc-provider
 ===
+exists from: 0.1.0
+
 severity: WARNING
 
 Warns when a `BlocProvider` can be replaced by a `MultiBlocProvider`.

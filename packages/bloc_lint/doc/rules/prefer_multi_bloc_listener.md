@@ -1,5 +1,7 @@
 prefer-multi-bloc-listener
 ===
+exists from: 0.1.0
+
 severity: WARNING
 
 Warns when a `BlocListener` can be replaced by a `MultiBlocListener`.

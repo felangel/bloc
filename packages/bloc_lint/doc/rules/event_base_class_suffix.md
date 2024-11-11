@@ -1,5 +1,7 @@
 event_base_class_suffix
 ===
+exists from: 0.1.0
+
 severity: WARNING
 
 The base event class should always be suffixed by `Event`.

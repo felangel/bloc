@@ -1,5 +1,7 @@
 prefer-multi-repository-provider
 ===
+exists from: 0.1.0
+
 severity: WARNING
 
 Warns when a `RepositoryProvider` can be replaced by a `MultiRepositoryProvider`.
