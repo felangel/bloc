@@ -3,7 +3,6 @@ title: Tester
 description: Les bases de l'écriture de tests pour vos blocs.
 ---
 
-
 import CounterBlocSnippet from '~/components/testing/CounterBlocSnippet.astro';
 import AddDevDependenciesSnippet from '~/components/testing/AddDevDependenciesSnippet.astro';
 import CounterBlocTestImportsSnippet from '~/components/testing/CounterBlocTestImportsSnippet.astro';
@@ -16,15 +15,15 @@ Bloc a été conçu pour être extrêmement facile à tester. Dans cette section
 
 Par souci de simplicité, nous allons écrire des tests pour le `CounterBloc` que nous avons créé dans [Core Concepts](/bloc-concepts).
 
-Pour rappel, l'implémentation du `CounterBloc` ressemble à ça :
+Pour rappel, l'implémentation du `CounterBloc` ressemble à ceci:
 
 <CounterBlocSnippet />
 
 ## Configuration
 
-Avant de commencer à écrire nos tests, nous avons besoins d'ajouter des framework de test dans nos dépendances,
+Avant de commencer à écrire nos tests, nous avons besoin d'ajouter des framework de test dans nos dépendances,
 
-Nous allons ajouter [test](https://pub.dev/packages/test) et [bloc_test](https://pub.dev/packages/bloc_test) à notre projet.
+Nous allons ajouter les packages [test](https://pub.dev/packages/test) et [bloc_test](https://pub.dev/packages/bloc_test) à notre projet.
 
 <AddDevDependenciesSnippet />
 
@@ -54,7 +53,7 @@ Maintenant, nous pouvons commencer à écrire des tests unitaires.
 Nous pouvons exécuter tous nos tests avec la commande `dart test`.
 :::
 
-À ce stade, nous devrions avoir notre premier test réussi! Écrivons maintenant des tests plus complexe en utilisant le package [bloc_test](https://pub.dev/packages/bloc_test).
+À ce stade, nous devrions avoir notre premier test réussi! Écrivons maintenant des tests plus complexes en utilisant le package [bloc_test](https://pub.dev/packages/bloc_test).
 
 <CounterBlocTestBlocTestSnippet />
 

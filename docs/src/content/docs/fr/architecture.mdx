@@ -3,7 +3,6 @@ title: Architecture
 description: Vue d'ensemble des modèles d'architecture recommandés pour l'utilisation de Bloc.
 ---
 
-
 import DataProviderSnippet from '~/components/architecture/DataProviderSnippet.astro';
 import RepositorySnippet from '~/components/architecture/RepositorySnippet.astro';
 import BusinessLogicComponentSnippet from '~/components/architecture/BusinessLogicComponentSnippet.astro';
@@ -18,12 +17,12 @@ import PresentationComponentSnippet from '~/components/architecture/Presentation
 L'utilisation de la librairie bloc nous permet de séparer notre application en trois couches :
 
 - Presentation
-- Logic Métier (Business Logic)
+- Logique Métier (Business Logic)
 - Data
   - Repository
   - Data Provider
 
-Nous allons commencer avec la couche la plus basse (la plus éloigné de l'interfacer utilisateur) et remonter jusqu'à la couche de Présentation. 
+Nous allons commencer avec la couche la plus basse (la plus éloignée de l'interfacer utilisateur) et remonter jusqu'à la couche de Présentation.
 
 ## Couche Data
 
@@ -40,7 +39,7 @@ Cette couche est le niveau le plus bas de l'application, elle interagit avec les
 
 Le rôle du Data Provider est de fournir des données brutes. Il doit être générique et polyvalent.
 
-Le Data Provider permet généralement d'intéragir avec des API simple afin d'effectuer des opérations [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete).
+Le Data Provider permet généralement d’interagir avec des API simple afin d'effectuer des opérations [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete).
 Nous pourrions avoir des méthodes `createData`, `readData`, `updateData`, et `deleteData` qui feront partie de notre couche Data.
 
 <DataProviderSnippet />
@@ -55,13 +54,13 @@ Comme vous pouvez le constater, notre couche Repository peut interagir avec plus
 
 ## Couche Logique Métier (Business Logic layer)
 
-La fonction de la couche de Logique Métier est de répondre aux entrées provenant de la couche Présentation avec de nouveaux états. Cette couche peut dépendre d'un ou plusieurs Repository afin de récupérer les données nécessaire à la construction de l'état de l'application.
+La fonction de la couche de Logique Métier est de répondre aux entrées provenant de la couche Présentation avec de nouveaux états. Cette couche peut dépendre d'un ou plusieurs Repository afin de récupérer les données nécessaires à la construction de l'état de l'application.
 
 Considérez la couche Logique Métier comme le pont entre l'interface utilisateur (couche Présentation) et la couche Data. La couche Logique Métier est informée des événements/actions de la couche Présentation et communique alors avec le Repository afin de construire un nouvel état que la couche Présentation pourra appliquer.
 
 <BusinessLogicComponentSnippet />
 
-### Communication de Bloc-à-Bloc 
+### Communication de Bloc-à-Bloc
 
 Because blocs expose streams, it may be tempting to make a bloc which listens to another bloc. You should **not** do this. There are better alternatives than resorting to the code below:
 Comme les blocs mettent à disposition des flux, il peut être tentant de créer un bloc qui écoute un autre bloc. Vous ne devriez **pas** faire ça. Il existe de meilleures alternatives que le code ci-dessous :
@@ -92,11 +91,11 @@ Dans certains cas, il n'est pas préférable de coupler deux blocs dans la couch
 
 Deux blocs peuvent écouter un flux provenant d'un Repository et mettre à jour leur état indépendamment l'un de l'autre chaque fois que les données du Repository changent. L'utilisation de Repository réactifs pour maintenir la synchronisation des états est courante dans les applications d'entreprise à grande échelle.
 
-En premier lieu, créez ou utilisez un Repository qui met à disposition un flux de données (`Stream`). Par exemple, le Repository suivant met à disposition un `Stream` infini comportant cinq idées d'applications. 
+En premier lieu, créez ou utilisez un Repository qui met à disposition un flux de données (`Stream`). Par exemple, le Repository suivant met à disposition un `Stream` infini comportant cinq idées d'applications.
 
 <AppIdeasRepositorySnippet />
 
-Le même Repository peut être injecté dans chaque bloc qui doit réagir aux nouvelles idées d'applications. Voici un `AppIdeaRankingBloc` qui creer un état pour chaque idée d'application provenant du Repository ci-dessus :
+Le même Repository peut être injecté dans chaque bloc qui doit réagir aux nouvelles idées d'applications. Voici un `AppIdeaRankingBloc` qui crée un état pour chaque idée d'application provenant du Repository ci-dessus :
 
 <AppIdeaRankingBlocSnippet />
 
@@ -106,7 +105,7 @@ Pour en savoir plus sur l'utilisation des flux avec Bloc, voir [How to use Bloc 
 
 Le rôle de la couche Presentation est de déterminer comment elle doit s'afficher, en fonction d'un ou plusieurs états de bloc. Elle doit également gérer les entrées de l'utilisateur et les événements du cycle de vie de l'application.
 
-La plupart des flux d'applications commencent par un événement `AppStart` qui déclenche la récupération des données qui vont être présenter à l'utilisateur.
+La plupart des flux d'applications commencent par un événement `AppStart` qui déclenche la récupération des données qui vont être présentées à l'utilisateur.
 
 Dans ce scénario, la couche Presentation provoquerait un événement `AppStart`.
 
