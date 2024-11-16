@@ -7,6 +7,9 @@ analyzer:
     strict-inference: true
     strict-raw-types: true
 
+  plugins:
+    - custom_lint
+
   errors:
     close_sinks: ignore
     missing_required_param: error

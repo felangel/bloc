@@ -1,0 +1,3 @@
+analyzer:
+  plugins:
+    - custom_lint

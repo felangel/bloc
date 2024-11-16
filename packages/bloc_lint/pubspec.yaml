@@ -1,0 +1,13 @@
+name: bloc_lint
+version: 0.1.0
+description: Set of lint rules for the Flutter BLoC library.
+repository: https://github.com/felangel/bloc/tree/master/packages/bloc_lint
+issue_tracker: https://github.com/felangel/bloc/issues
+
+environment:
+  sdk: ">=3.3.3 <4.0.0"
+
+dependencies:
+  analyzer: ^6.7.0
+  analyzer_plugin: ^0.11.3
+  custom_lint_builder: ^0.7.0
