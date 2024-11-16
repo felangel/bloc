@@ -98,36 +98,35 @@ class TodosOverviewView extends StatelessWidget {
                 );
               }
             }
-            return ListView.builder(
-              itemCount: state.filteredTodos.length,
-              itemBuilder: (_, idx) {
-                final todo = state.filteredTodos.elementAt(idx);
-                return TodoListTile(
-                  todo: todo,
-                  onToggleCompleted: (isCompleted) {
-                    context.read<TodosOverviewBloc>().add(
-                          TodosOverviewTodoCompletionToggled(
-                            todo: todo,
-                            isCompleted: isCompleted,
-                          ),
-                        );
-                  },
-                  onDismissed: (_) {
-                    context.read<TodosOverviewBloc>().add(
-                          TodosOverviewTodoDeleted(
-                            todo,
-                          ),
-                        );
-                  },
-                  onTap: () {
-                    Navigator.of(context).push(
-                      EditTodoPage.route(
-                        initialTodo: todo,
-                      ),
-                    );
-                  },
-                );
-              },
+
+            return CupertinoScrollbar(
+              child: ListView.builder(
+                itemCount: state.filteredTodos.length,
+                itemBuilder: (_, index) {
+                  final todo = state.filteredTodos.elementAt(index);
+                  return TodoListTile(
+                    todo: todo,
+                    onToggleCompleted: (isCompleted) {
+                      context.read<TodosOverviewBloc>().add(
+                            TodosOverviewTodoCompletionToggled(
+                              todo: todo,
+                              isCompleted: isCompleted,
+                            ),
+                          );
+                    },
+                    onDismissed: (_) {
+                      context
+                          .read<TodosOverviewBloc>()
+                          .add(TodosOverviewTodoDeleted(todo));
+                    },
+                    onTap: () {
+                      Navigator.of(context).push(
+                        EditTodoPage.route(initialTodo: todo),
+                      );
+                    },
+                  );
+                },
+              ),
             );
           },
         ),
