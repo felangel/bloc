@@ -6,9 +6,15 @@ part '{{name.snakeCase()}}_state.dart';
 part '{{name.snakeCase()}}_bloc.freezed.dart';
 
 class {{name.pascalCase()}}Bloc extends Bloc<{{name.pascalCase()}}Event, {{name.pascalCase()}}State> {
-  {{name.pascalCase()}}Bloc() : super(const {{name.pascalCase()}}State.initial()) {
-    on<{{name.pascalCase()}}Event>((event, emit) {
-      // TODO: implement event handler
-    });
+  {{name.pascalCase()}}Bloc() : super(const {{name.pascalCase()}}State.{{initial_state.camelCase()}}()) {
+    {{#has_events}}{{> freezed_on_events }}{{/has_events}}{{^has_events}}{{> on_event }}{{/has_events}}    
+  }{{#has_events}}
+  {{#events}}
+  Future<void> _on{{name.pascalCase()}}{{..pascalCase()}}(
+    _{{..pascalCase()}} event,
+    Emitter<{{name.pascalCase()}}State> emit,
+  ) async {
+    // TODO: handle {{name.pascalCase()}}{{..pascalCase()}}.
   }
+  {{/events}}{{/has_events}}
 }
