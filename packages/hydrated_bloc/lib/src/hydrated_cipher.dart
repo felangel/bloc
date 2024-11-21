@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 
 /// Abstract cipher can be implemented to customize encryption.
 abstract class HydratedCipher implements HiveCipher {
