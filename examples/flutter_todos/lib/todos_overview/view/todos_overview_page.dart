@@ -100,31 +100,32 @@ class TodosOverviewView extends StatelessWidget {
             }
 
             return CupertinoScrollbar(
-              child: ListView(
-                children: [
-                  for (final todo in state.filteredTodos)
-                    TodoListTile(
-                      todo: todo,
-                      onToggleCompleted: (isCompleted) {
-                        context.read<TodosOverviewBloc>().add(
-                              TodosOverviewTodoCompletionToggled(
-                                todo: todo,
-                                isCompleted: isCompleted,
-                              ),
-                            );
-                      },
-                      onDismissed: (_) {
-                        context
-                            .read<TodosOverviewBloc>()
-                            .add(TodosOverviewTodoDeleted(todo));
-                      },
-                      onTap: () {
-                        Navigator.of(context).push(
-                          EditTodoPage.route(initialTodo: todo),
-                        );
-                      },
-                    ),
-                ],
+              child: ListView.builder(
+                itemCount: state.filteredTodos.length,
+                itemBuilder: (_, index) {
+                  final todo = state.filteredTodos.elementAt(index);
+                  return TodoListTile(
+                    todo: todo,
+                    onToggleCompleted: (isCompleted) {
+                      context.read<TodosOverviewBloc>().add(
+                            TodosOverviewTodoCompletionToggled(
+                              todo: todo,
+                              isCompleted: isCompleted,
+                            ),
+                          );
+                    },
+                    onDismissed: (_) {
+                      context
+                          .read<TodosOverviewBloc>()
+                          .add(TodosOverviewTodoDeleted(todo));
+                    },
+                    onTap: () {
+                      Navigator.of(context).push(
+                        EditTodoPage.route(initialTodo: todo),
+                      );
+                    },
+                  );
+                },
               ),
             );
           },
