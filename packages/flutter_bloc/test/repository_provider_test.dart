@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (useValueProvider == true) {
+    if (useValueProvider) {
       return MaterialApp(
         home: RepositoryProvider<Repository>.value(
           value: repository,
@@ -92,25 +92,6 @@ class CounterPage extends StatelessWidget {
 
     return Scaffold(
       body: Text('${repository.data}', key: const Key('value_data')),
-    );
-  }
-}
-
-class RoutePage extends StatelessWidget {
-  const RoutePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: ElevatedButton(
-        key: const Key('route_button'),
-        child: const SizedBox(),
-        onPressed: () {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute<Widget>(builder: (context) => const SizedBox()),
-          );
-        },
-      ),
     );
   }
 }

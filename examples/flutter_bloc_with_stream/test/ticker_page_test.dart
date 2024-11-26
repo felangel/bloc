@@ -8,7 +8,7 @@ import 'package:flutter_bloc_with_stream/main.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockTickerBloc extends MockBloc<TickerEvent, TickerState>
+class _MockTickerBloc extends MockBloc<TickerEvent, TickerState>
     implements TickerBloc {}
 
 extension on WidgetTester {
@@ -25,12 +25,12 @@ void main() {
   late TickerBloc tickerBloc;
 
   setUp(() {
-    tickerBloc = MockTickerBloc();
+    tickerBloc = _MockTickerBloc();
   });
 
   tearDown(() => reset(tickerBloc));
 
-  group('TickerPage', () {
+  group(TickerPage, () {
     testWidgets('renders initial state', (tester) async {
       when(() => tickerBloc.state).thenReturn(TickerInitial());
       await tester.pumpTickerPage(tickerBloc);

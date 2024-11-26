@@ -424,6 +424,10 @@ This tells us that the user was logged out but it doesn't explain why which migh
 
 Another area in which `Bloc` excels over `Cubit` is when we need to take advantage of reactive operators such as `buffer`, `debounceTime`, `throttle`, etc.
 
+:::tip
+See [`package:stream_transform`](https://pub.dev/packages/stream_transform) and [`package:rxdart`](https://pub.dev/packages/rxdart) for stream transformers.
+:::
+
 `Bloc` has an event sink that allows us to control and transform the incoming flow of events.
 
 For example, if we were building a real-time search, we would probably want to debounce the requests to the backend in order to avoid getting rate-limited as well as to cut down on cost/load on the backend.

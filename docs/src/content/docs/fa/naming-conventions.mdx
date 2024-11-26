@@ -1,0 +1,82 @@
+---
+title: قراردادهای نامگذاری
+description: مروری بر قوانین نامگذاری توصیه شده هنگام استفاده از بلوک.
+---
+
+import EventExamplesGood1 from '~/components/naming-conventions/EventExamplesGood1Snippet.astro';
+import EventExamplesBad1 from '~/components/naming-conventions/EventExamplesBad1Snippet.astro';
+import StateExamplesGood1Snippet from '~/components/naming-conventions/StateExamplesGood1Snippet.astro';
+import SingleStateExamplesGood1Snippet from '~/components/naming-conventions/SingleStateExamplesGood1Snippet.astro';
+import StateExamplesBad1Snippet from '~/components/naming-conventions/StateExamplesBad1Snippet.astro';
+
+قراردادهای نامگذاری زیر صرفاً توصیه شده و کاملاً اختیاری هستند. با خیال راحت از هر گونه قرارداد نامگذاری که ترجیح می دهید استفاده کنید. ممکن است دریابید که برخی از مثال‌ها/اسناد اصولاً به دلیل سادگی/مختصر بودن از قراردادهای نام‌گذاری پیروی نمی‌کنند. این قرارداد ها به شدت برای پروژه های بزرگ با توسعه دهندگان متعدد توصیه می شود.
+
+## قراردادهای کلاس رویداد
+
+رویدادها باید با **گذشته ساده** نامگذاری شوند، زیرا رویدادها چیزهایی هستند که از دیدگاه Bloc قبلاً اتفاق افتاده اند.
+
+### ساختار
+
+`BlocSubject` + `Noun (optional)` + `Verb (event)`
+
+رویدادهای لود اولیه باید این قرارداد را دنبال کنند: `BlocSubject` + `Started`
+
+:::note
+کلاس های رویداد پایه باید این نامگذاری را داشته باشند: `BlocSubject` + `Event`.
+:::
+
+### مثال ها
+
+✅ **خوب**
+
+<EventExamplesGood1 />
+
+❌ **بد**
+
+<EventExamplesBad1 />
+
+## قراردادهای کلاس وضعیت
+
+وضعیت‌ها باید اسم باشند، چرا که یک وضعیت فقط یک لحظه‌ی خاص در زمان را نمایان می‌کند. دو روش رایج برای نمایش وضعیت وجود دارد: استفاده از زیرکلاس‌ها (Subclasses) یا استفاده از یک کلاس تکی (Single class).
+
+### ساختار
+
+#### زیرکلاس‌ها
+
+`BlocSubject` + `Verb (action)` + `State`
+
+هنگام نمایش وضعیت به عنوان چندین زیرکلاس، `State` باید یکی از موارد زیر را دارا باشد:
+
+`Initial` | `Success` | `Failure` | `InProgress`
+
+:::note
+وضعیت‌های اولیه باید طبق این قرار داد عمل کنند: `BlocSubject` + `Initial`.
+:::
+
+#### کلاس تکی
+
+`BlocSubject` + `State`
+
+هنگام نمایش وضعیت به عنوان یک کلاس پایه تکی، باید از یک enum با نام `BlocSubject` + `Status` برای نمایش وضعیت‌های مختلف استفاده شود:
+
+`initial` | `success` | `failure` | `loading`.
+
+:::note
+کلاس وضعیت پایه همیشه باید به این روش نام گذاری شوند: `BlocSubject` + `State`.
+:::
+
+### مثال ها
+
+✅ **خوب**
+
+##### زیرکلاس‌ها
+
+<StateExamplesGood1Snippet />
+
+##### کلاس تکی
+
+<SingleStateExamplesGood1Snippet />
+
+❌ **بد**
+
+<StateExamplesBad1Snippet />

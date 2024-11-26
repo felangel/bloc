@@ -1,0 +1,35 @@
+---
+title: شروع شدن
+description: همه چیزی که برای شروع ساختن با استفاده از بلوک نیاز دارید.
+---
+
+import InstallationTabs from '~/components/getting-started/InstallationTabs.astro';
+import ImportTabs from '~/components/getting-started/ImportTabs.astro';
+
+## بسته‌ها
+
+اکوسیستم بلوک از بسته های متعددی تشکیل شده است که در زیر فهرست شده اند:
+
+| بسته                                                                                       | توصیف                                | لینک                                                                                                           |
+| ------------------------------------------------------------------------------------------ | ------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| [angular_bloc](https://github.com/felangel/bloc/tree/master/packages/angular_bloc)         | اجزای AngularDart                    | [![pub package](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dev/packages/angular_bloc)         |
+| [bloc](https://github.com/felangel/bloc/tree/master/packages/bloc)                         | API‌های اصلی Dart                    | [![pub package](https://img.shields.io/pub/v/bloc.svg)](https://pub.dev/packages/bloc)                         |
+| [bloc_concurrency](https://github.com/felangel/bloc/tree/master/packages/bloc_concurrency) | تبدیل‌کننده‌های رویداد               | [![pub package](https://img.shields.io/pub/v/bloc_concurrency.svg)](https://pub.dev/packages/bloc_concurrency) |
+| [bloc_test](https://github.com/felangel/bloc/tree/master/packages/bloc_test)               | API های تست                          | [![pub package](https://img.shields.io/pub/v/bloc_test.svg)](https://pub.dev/packages/bloc_test)               |
+| [flutter_bloc](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc)         | ویجت ها فلاتر                        | [![pub package](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dev/packages/flutter_bloc)         |
+| [hydrated_bloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc)       | پشتیبانی از حافظه پنهان/ماندگاری     | [![pub package](https://img.shields.io/pub/v/hydrated_bloc.svg)](https://pub.dev/packages/hydrated_bloc)       |
+| [replay_bloc](https://github.com/felangel/bloc/tree/master/packages/replay_bloc)           | پشتیبانی از واگَرد/اَزنو (Undo/Redo) | [![pub package](https://img.shields.io/pub/v/replay_bloc.svg)](https://pub.dev/packages/replay_bloc)           |
+
+## نصب
+
+<InstallationTabs />
+
+:::note
+برای شروع استفاده از بلوک، باید [SDK دارت](https://dart.dev/get-dart) را در دستگاه خود نصب کنید.
+:::
+
+## وارد کردن (Imports)
+
+حالا که با موفقیت bloc را نصب کردیم، می‌توانیم `main.dart` خود را ایجاد کنیم و بسته `bloc` مربوطه را وارد کنیم.
+
+<ImportTabs />

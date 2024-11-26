@@ -12,8 +12,6 @@ class FakeCubit extends Fake implements Cubit<Object> {}
 
 class FakeEvent extends Fake implements Object {}
 
-class FakeState extends Fake implements Object {}
-
 class FakeStackTrace extends Fake implements StackTrace {}
 
 class FakeChange extends Fake implements Change<Object> {}

@@ -1,0 +1,36 @@
+name: Astro Site Workflow
+description: Build and test Astro sites.
+
+inputs:
+  working_directory:
+    required: false
+    default: "."
+    description: The working directory for this workflow
+  node_version:
+    required: false
+    default: "20"
+    description: The node version to use.
+
+runs:
+  using: "composite"
+  steps:
+    - name: ⚙️ Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node_version }}
+
+    - name: ⬇️ Install Dependencies
+      run: npm install
+      shell: ${{ inputs.shell }}
+      working-directory: ${{ inputs.working_directory }}
+
+    - name: ✨ Check Format
+      run: npm run format:check
+      shell: ${{ inputs.shell }}
+      working-directory: ${{ inputs.working_directory }}
+
+    - name: 📦 Build Site
+      uses: withastro/action@v2
+      with:
+        path: ${{ inputs.working_directory }}
+        node-version: ${{ inputs.node_version }}

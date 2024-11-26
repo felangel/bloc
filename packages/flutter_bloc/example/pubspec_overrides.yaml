@@ -1,0 +1,3 @@
+dependency_overrides:
+  flutter_bloc:
+    path: ../

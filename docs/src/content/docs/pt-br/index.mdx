@@ -1,0 +1,86 @@
+---
+template: splash
+title: Biblioteca de Gerenciamento de Estado Bloc
+description: Documentação oficial da biblioteca de gerenciamento de estado bloc. Suporte para Dart, Flutter e AngularDart. Inclui exemplos e tutoriais.
+banner:
+  content: |
+    ✨ Visite a
+    <a href="https://shop.bloclibrary.dev">loja Bloc</a> ✨
+editUrl: false
+lastUpdated: false
+hero:
+  title: Bloc <sup><span style="font-size:0.4em">v8.1.3</span></sup>
+  tagline: Uma biblioteca de gerenciamento de estado previsível para Dart.
+  image:
+    alt: Bloc logo
+    file: ~/assets/bloc.svg
+  actions:
+    - text: Começar
+      link: /pt-br/getting-started/
+      variant: primary
+      icon: rocket
+    - text: Ver no GitHub
+      link: https://github.com/felangel/bloc
+      icon: github
+      variant: secondary
+---
+
+import { CardGrid } from '@astrojs/starlight/components';
+import SponsorsGrid from '~/components/landing/SponsorsGrid.astro';
+import Card from '~/components/landing/Card.astro';
+import ListCard from '~/components/landing/ListCard.astro';
+import SplitCard from '~/components/landing/SplitCard.astro';
+import Discord from '~/components/landing/Discord.astro';
+
+<SponsorsGrid
+	sponsoredBy="Patrocinado com 💖 por"
+	becomeASponsor="Seja um patrocinador"
+/>
+
+<hr />
+
+<CardGrid>
+
+<SplitCard title="Começar" icon="rocket">
+  ```sh
+  # Adicione o bloc ao seu projeto.
+  dart pub add bloc
+  ```
+
+Nosso [guia de iniciação](/pt-br/getting-started) contém instruções passo a passo sobre como começar a utilizar o Bloc em apenas alguns minutos.
+
+</SplitCard>
+
+<Card title="Fazer uma visita guiada" icon="star">
+	Complete [os tutoriais oficiais](/pt-br/tutorials/flutter-counter) para
+	aprender as práticas recomendadas e criar uma variedade de aplicativos
+	diferentes desenvolvidos pelo Bloc.
+</Card>
+
+<Card title="Construir com Bloc" icon="laptop">
+	Explore [amostras de
+	aplicações](https://github.com/felangel/bloc/tree/master/examples) de alta
+	qualidade e totalmente testadas, como contador, temporizador, lista infinita,
+	previsão do tempo, lista de tarefas e muito mais!
+</Card>
+
+<ListCard title="Aprender" icon="open-book">
+
+    - [Por que Bloc?](/pt-br/why-bloc)
+    - [Conceitos Básicos](/pt-br/bloc-concepts)
+    - [Arquitetura](/pt-br/architecture)
+    - [Testes](/pt-br/testing)
+    - [Convenções de Nomenclatura](/pt-br/naming-conventions)
+
+</ListCard>
+
+  <ListCard title="Integrações" icon="puzzle">
+    - [Integração com VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+    - [Integração com IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc)
+    - [Integração com Mason CLI](https://github.com/felangel/bloc/blob/master/bricks/README.md)
+    - [Templates Customizados](https://brickhub.dev/search?q=bloc)
+    - [Ferramentas de Desenvolvedor](https://github.com/felangel/bloc/issues/2748)
+  </ListCard>
+</CardGrid>
+
+<Discord joinDiscord="Junte-se ao nosso Discord" />

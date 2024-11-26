@@ -1,3 +1,13 @@
+# 10.0.0-dev.4
+
+- chore: update sponsors table in `README`
+- chore: add `funding` to `pubspec.yaml`
+
+# 10.0.0-dev.3
+
+- chore: update copyright year
+- chore: update sponsors
+
 # 10.0.0-dev.2
 
 - chore(deps): upgrade to `package:ngdart 8.0.0-dev.4`

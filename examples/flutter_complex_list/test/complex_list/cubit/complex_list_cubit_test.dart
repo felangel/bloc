@@ -4,7 +4,7 @@ import 'package:flutter_complex_list/repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockRepository extends Mock implements Repository {}
+class _MockRepository extends Mock implements Repository {}
 
 void main() {
   const mockItems = [
@@ -13,14 +13,14 @@ void main() {
     Item(id: '3', value: '3'),
   ];
 
-  group('ComplexListCubit', () {
+  group(ComplexListCubit, () {
     late Repository repository;
 
     setUp(() {
-      repository = MockRepository();
+      repository = _MockRepository();
     });
 
-    test('initial state is ComplexListState.loading', () {
+    test('initial state is ${ComplexListState.loading}', () {
       expect(
         ComplexListCubit(repository: repository).state,
         const ComplexListState.loading(),
@@ -29,7 +29,7 @@ void main() {
 
     group('fetchList', () {
       blocTest<ComplexListCubit, ComplexListState>(
-        'emits ComplexListState.success after fetching list',
+        'emits ${ComplexListState.success} after fetching list',
         setUp: () {
           when(repository.fetchItems).thenAnswer((_) async => mockItems);
         },
@@ -42,7 +42,7 @@ void main() {
       );
 
       blocTest<ComplexListCubit, ComplexListState>(
-        'emits ComplexListState.failure after failing to fetch list',
+        'emits ${ComplexListState.failure} after failing to fetch list',
         setUp: () {
           when(repository.fetchItems).thenThrow(Exception('Error'));
         },

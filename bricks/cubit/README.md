@@ -1,5 +1,5 @@
 <p align="center">
-<img style="height:100px" src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/cubit_full_dark.png" alt="Cubit" />
+<img style="height:100px" src="https://raw.githubusercontent.com/felangel/bloc/master/assets/logos/cubit_dark.png" alt="Cubit" />
 </p>
 
 <p align="center">

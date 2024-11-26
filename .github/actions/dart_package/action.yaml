@@ -76,7 +76,7 @@ runs:
       run: echo "name=${PACKAGE_PATH##*/}" >> $GITHUB_OUTPUT
 
     - name: ⬆️ Upload Coverage
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       env:
         PACKAGE_PATH: ${{ inputs.working_directory}}
       with:
@@ -84,7 +84,7 @@ runs:
         token: ${{ inputs.codecov_token }}
 
     - name: 📊 Verify Coverage
-      uses: VeryGoodOpenSource/very_good_coverage@v2
+      uses: VeryGoodOpenSource/very_good_coverage@v3
       with:
         path: ${{inputs.working_directory}}/coverage/lcov.info
         exclude: ${{inputs.coverage_excludes}}

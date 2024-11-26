@@ -1,4 +1,6 @@
 import { defineConfig } from 'astro/config';
+import rehypeSlug from 'rehype-slug';
+import { rehypeAutolink } from './plugins/rehype-autolink';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
 import tailwind from '@astrojs/tailwind';
@@ -14,7 +16,7 @@ const locales = {
 		lang: 'az',
 	},
 	cs: {
-		label: 'čeština',
+		label: 'Čeština',
 		lang: 'cs',
 	},
 	de: {
@@ -25,6 +27,10 @@ const locales = {
 		label: 'Español',
 		lang: 'es',
 	},
+	fil: {
+		label: 'Filipino',
+		lang: 'fil',
+	},
 	fr: {
 		label: 'Français',
 		lang: 'fr',
@@ -34,7 +40,7 @@ const locales = {
 		lang: 'ja',
 	},
 	ko: {
-		label: '한국인',
+		label: '한국어',
 		lang: 'ko',
 	},
 	'pt-br': {
@@ -46,8 +52,18 @@ const locales = {
 		lang: 'ru',
 	},
 	'zh-cn': {
-		label: '中国人',
+		label: '简体中文',
 		lang: 'zh-CN',
+	},
+	ar: {
+		label: 'العربية',
+		lang: 'ar',
+		dir: 'rtl',
+	},
+	fa: {
+		label: 'فارسی',
+		lang: 'fa',
+		dir: 'rtl',
 	},
 };
 
@@ -81,6 +97,9 @@ export default defineConfig({
 				},
 			],
 			customCss: ['src/tailwind.css', 'src/styles/landing.css', '@fontsource-variable/figtree'],
+			components: {
+				MarkdownContent: './src/components/starlight/MarkdownContent.astro',
+			},
 			social: {
 				github: 'https://github.com/felangel/bloc',
 				discord: 'https://discord.gg/bloc',
@@ -90,66 +109,123 @@ export default defineConfig({
 			sidebar: [
 				{
 					label: 'Introduction',
+					translations: {
+						'zh-CN': '介绍',
+						fa: 'مقدمه',
+					},
 					items: [
 						{
 							label: 'Getting Started',
-							link: '/getting-started',
+							link: '/getting-started/',
+							translations: {
+								'zh-CN': '快速入门',
+								fa: 'شروع شدن',
+							},
 						},
 						{
 							label: 'Why Bloc?',
-							link: '/why-bloc',
+							link: '/why-bloc/',
+							translations: {
+								'zh-CN': '为什么用 Bloc?',
+								fa: 'چرا Bloc؟',
+							},
 						},
 						{
 							label: 'Bloc Concepts',
-							link: '/bloc-concepts',
+							link: '/bloc-concepts/',
+							translations: {
+								'zh-CN': 'Bloc 核心概念',
+								fa: 'مفاهیم Bloc',
+							},
 						},
 						{
 							label: 'Flutter Bloc Concepts',
-							link: '/flutter-bloc-concepts',
+							link: '/flutter-bloc-concepts/',
+							translations: {
+								'zh-CN': 'Flutter Bloc 核心概念',
+								fa: 'مفاهیم بلوک فلاتر',
+							},
 						},
 						{
 							label: 'Architecture',
-							link: '/architecture',
+							link: '/architecture/',
+							translations: {
+								fa: 'معماری',
+							},
+						},
+						{
+							label: 'Modeling State',
+							link: '/modeling-state/',
+							translations: {
+								fa: 'وضعیت (State) مدل سازی',
+							},
 						},
 						{
 							label: 'Testing',
-							link: '/testing',
+							link: '/testing/',
+							translations: {
+								fa: 'آزمایش کردن',
+							},
 						},
 						{
 							label: 'Naming Conventions',
-							link: '/naming-conventions',
+							link: '/naming-conventions/',
+							translations: {
+								fa: 'قراردادهای نامگذاری',
+							},
 						},
 						{
 							label: 'FAQs',
-							link: '/faqs',
+							link: '/faqs/',
+							translations: {
+								fa: 'سوالات متداول',
+							},
 						},
 						{
 							label: 'Migration Guide',
-							link: '/migration',
+							link: '/migration/',
+							translations: {
+								fa: 'راهنمای مهاجرت',
+							},
 						},
 					],
 				},
 				{
 					label: 'Tutorials',
+					translations: {
+						fa: 'آموزش ها',
+					},
 					autogenerate: {
 						directory: 'tutorials',
 					},
 				},
 				{
 					label: 'Tools',
+					translations: {
+						fa: 'ابزار',
+					},
 					items: [
 						{
 							label: 'IntelliJ Plugin',
 							link: 'https://plugins.jetbrains.com/plugin/12129-bloc',
+							translations: {
+								fa: 'پلاگین IntelliJ',
+							},
 						},
 						{
 							label: 'VSCode Extension',
 							link: 'https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc',
+							translations: {
+								fa: 'پلاگین VSCode',
+							},
 						},
 					],
 				},
 				{
 					label: 'Reference',
+					translations: {
+						fa: 'مرجع',
+					},
 					items: [
 						{
 							label: 'angular_bloc',
@@ -191,4 +267,7 @@ export default defineConfig({
 		}),
 		tailwind({ applyBaseStyles: false }),
 	],
+	markdown: {
+		rehypePlugins: [rehypeSlug, ...rehypeAutolink()],
+	},
 });

@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_logo_full.png" height="100" alt="Bloc" />
+<img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/logos/bloc.png" height="100" alt="Bloc" />
 </p>
 
 <p align="center">
@@ -18,16 +18,16 @@
 
 A predictable state management library that helps implement the BLoC design pattern.
 
-| Package                                                                                    | Pub                                                                                                                  |
-| ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
-| [bloc](https://github.com/felangel/bloc/tree/master/packages/bloc)                         | [![pub package](https://img.shields.io/pub/v/bloc.svg)](https://pub.dev/packages/bloc)                               |
-| [bloc_test](https://github.com/felangel/bloc/tree/master/packages/bloc_test)               | [![pub package](https://img.shields.io/pub/v/bloc_test.svg)](https://pub.dev/packages/bloc_test)                     |
-| [bloc_concurrency](https://github.com/felangel/bloc/tree/master/packages/bloc_concurrency) | [![pub package](https://img.shields.io/pub/v/bloc_concurrency.svg)](https://pub.dev/packages/bloc_concurrency)       |
-| [flutter_bloc](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc)         | [![pub package](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dev/packages/flutter_bloc)               |
-| [angular_bloc](https://github.com/felangel/bloc/tree/master/packages/angular_bloc)         | [![pub package](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dev/packages/angular_bloc)               |
-| [hydrated_bloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc)       | [![pub package](https://img.shields.io/pub/v/hydrated_bloc.svg)](https://pub.dev/packages/hydrated_bloc)             |
-| [replay_bloc](https://github.com/felangel/bloc/tree/master/packages/replay_bloc)           | [![pub package](https://img.shields.io/pub/v/replay_bloc.svg)](https://pub.dev/packages/replay_bloc)                 |
-| [sealed_flutter_bloc](https://github.com/felangel/sealed_flutter_bloc)                     | [![pub package](https://img.shields.io/pub/v/sealed_flutter_bloc.svg)](https://pub.dev/packages/sealed_flutter_bloc) |
+| Package                                                                                    | Pub                                                                                                            |
+| ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| [bloc](https://github.com/felangel/bloc/tree/master/packages/bloc)                         | [![pub package](https://img.shields.io/pub/v/bloc.svg)](https://pub.dev/packages/bloc)                         |
+| [bloc_test](https://github.com/felangel/bloc/tree/master/packages/bloc_test)               | [![pub package](https://img.shields.io/pub/v/bloc_test.svg)](https://pub.dev/packages/bloc_test)               |
+| [bloc_concurrency](https://github.com/felangel/bloc/tree/master/packages/bloc_concurrency) | [![pub package](https://img.shields.io/pub/v/bloc_concurrency.svg)](https://pub.dev/packages/bloc_concurrency) |
+| [bloc_lint](https://github.com/felangel/bloc/tree/master/packages/bloc_lint)               | [![pub package](https://img.shields.io/pub/v/bloc_lint.svg)](https://pub.dev/packages/bloc_lint)               |
+| [flutter_bloc](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc)         | [![pub package](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dev/packages/flutter_bloc)         |
+| [angular_bloc](https://github.com/felangel/bloc/tree/master/packages/angular_bloc)         | [![pub package](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dev/packages/angular_bloc)         |
+| [hydrated_bloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc)       | [![pub package](https://img.shields.io/pub/v/hydrated_bloc.svg)](https://pub.dev/packages/hydrated_bloc)       |
+| [replay_bloc](https://github.com/felangel/bloc/tree/master/packages/replay_bloc)           | [![pub package](https://img.shields.io/pub/v/replay_bloc.svg)](https://pub.dev/packages/replay_bloc)           |
 
 ---
 
@@ -35,29 +35,29 @@ A predictable state management library that helps implement the BLoC design patt
 
 Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsors/felangel)]
 
-<table>
+<table style="background-color: white; border: 1px solid black">
     <tbody>
         <tr>
-            <td align="center" style="background-color: white">
-                <a href="https://www.monterail.com/services/flutter-development/?utm_source=bloc&utm_medium=logo&utm_campaign=flutter"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/monterail_logo.svg" width="225"/></a>
+            <td align="center" style="border: 1px solid black">
+                <a href="https://shorebird.dev"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/shorebird.png" width="225"/></a>
             </td>
-            <td align="center" style="background-color: white">
-                <a href="https://getstream.io/chat/flutter/tutorial/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_FlutterChat&utm_term=bloc" target="_blank"><img width="250px" src="https://stream-blog.s3.amazonaws.com/blog/wp-content/uploads/fc148f0fc75d02841d017bb36e14e388/Stream-logo-with-background-.png"/></a><br/><span><a href="https://getstream.io/chat/flutter/tutorial/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_FlutterChat&utm_term=bloc" target="_blank">Try the Flutter Chat Tutorial &nbsp💬</a></span>
+            <td align="center" style="border: 1px solid black">
+                <a href="https://www.monterail.com/services/flutter-development/?utm_source=bloc&utm_medium=logo&utm_campaign=flutter"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/monterail.png" width="225"/></a>
             </td>
-            <td align="center" style="background-color: white">
-                <a href="https://www.miquido.com/flutter-development-company/?utm_source=github&utm_medium=sponsorship&utm_campaign=bloc-silver-tier&utm_term=flutter-development-company&utm_content=miquido-logo"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/miquido_logo.png" width="225"/></a>
+            <td align="center" style="border: 1px solid black">
+                <a href="https://getstream.io/chat/flutter/tutorial/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_FlutterChat&utm_term=bloc"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/stream.png" width="225"/></a>
             </td>
         </tr>
         <tr>
-            <td align="center" style="background-color: white">
-                <a href="https://bit.ly/parabeac_flutterbloc"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/parabeac_logo.png" width="225"/></a>
+            <td align="center" style="border: 1px solid black">
+                <a href="https://www.miquido.com/flutter-development-company/?utm_source=github&utm_medium=sponsorship&utm_campaign=bloc-silver-tier&utm_term=flutter-development-company&utm_content=miquido-logo"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/miquido.png" width="225"/></a>
             </td>
-            <td align="center" style="background-color: white">
-                <a href="https://www.netguru.com/services/flutter-app-development?utm_campaign=%5BS%5D%5BMob%5D%20Flutter&utm_source=github&utm_medium=sponsorship&utm_term=bloclibrary"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/netguru_logo.png" width="225"/></a>
+            <td align="center" style="border: 1px solid black">
+                <a href="https://bit.ly/parabeac_flutterbloc"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/parabeac.png" width="225"/></a>
             </td>
-            <td align="center" style="background-color: white">
-                <a href="https://www.porada.app/"><img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/porada_logo.png" width="225"/></a>
-            </td>            
+            <td align="center" style="border: 1px solid black">
+                <a href="https://www.netguru.com/services/flutter-app-development?utm_campaign=%5BS%5D%5BMob%5D%20Flutter&utm_source=github&utm_medium=sponsorship&utm_term=bloclibrary"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/netguru.png" width="225"/></a>
+            </td>
         </tr>
     </tbody>
 </table>
@@ -66,7 +66,7 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 
 ## Overview
 
-<img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/bloc_architecture.png" width="500" alt="Bloc Architecture"></img>
+<img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/diagrams/bloc_architecture.png" width="500" alt="Bloc Architecture"></img>
 
 The goal of this library is to make it easy to separate _presentation_ from _business logic_, facilitating testability and reusability.
 
@@ -80,7 +80,6 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 - [Angular Bloc Package](https://github.com/felangel/bloc/tree/master/packages/angular_bloc/README.md)
 - [Hydrated Bloc Package](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc/README.md)
 - [Replay Bloc Package](https://github.com/felangel/bloc/tree/master/packages/replay_bloc/README.md)
-- [Sealed Flutter Bloc Package](https://github.com/felangel/sealed_flutter_bloc/blob/master/README.md)
 
 ## Migration
 
@@ -93,34 +92,34 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
         <tr>
             <td style="text-align: center">
                 <a href="https://bloclibrary.dev/tutorials/flutter-counter">
-                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/gifs/flutter_counter.gif" width="200"/>
+                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/examples/flutter_counter.gif" width="200"/>
                 </a>
             </td>            
             <td style="text-align: center">
                 <a href="https://bloclibrary.dev/tutorials/flutter-infinite-list">
-                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/gifs/flutter_infinite_list.gif" width="200"/>
+                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/examples/flutter_infinite_list.gif" width="200"/>
                 </a>
             </td>
             <td style="text-align: center">
                 <a href="https://bloclibrary.dev/tutorials/flutter-login">
-                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/gifs/flutter_firebase_login.gif" width="200" />
+                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/examples/flutter_firebase_login.gif" width="200" />
                 </a>
             </td>
         </tr>
         <tr>
             <td style="text-align: center">
                 <a href="https://bloclibrary.dev/tutorials/github-search">
-                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/gifs/flutter_github_search.gif" width="200"/>
+                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/examples/flutter_github_search.gif" width="200"/>
                 </a>
             </td>
             <td style="text-align: center">
                 <a href="https://bloclibrary.dev/tutorials/flutter-weather">
-                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/gifs/flutter_weather.gif" width="200"/>
+                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/examples/flutter_weather.gif" width="200"/>
                 </a>
             </td>
             <td style="text-align: center">
                 <a href="https://bloclibrary.dev/tutorials/flutter-todos">
-                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/gifs/flutter_todos.gif" width="200"/>
+                    <img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/examples/flutter_todos.gif" width="200"/>
                 </a>
             </td>
         </tr>
@@ -150,6 +149,8 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 - [Fluttersaurus](https://github.com/felangel/fluttersaurus) - an example of how to use the `bloc` and `flutter_bloc` packages to create a thesaurus app -- made for Bytconf Flutter 2020.
 - [I/O Photo Booth](https://github.com/flutter/photobooth) - an example of how to use the `bloc` and `flutter_bloc` packages to create a virtual photo booth web app -- made for Google I/O 2021.
 - [I/O Pinball](https://github.com/flutter/pinball) - an example of how to use the `bloc` and `flutter_bloc` packages to create a pinball web app -- made for Google I/O 2022.
+- [I/O Holobooth](https://github.com/flutter/holobooth) - an example of how to use the `bloc` and `flutter_bloc` packages to create a virtual photobooth experience -- made for Flutter Forward.
+- [I/O Flip](https://github.com/flutter/io_flip) - an example of how to use the `bloc`, `flutter_bloc`, and `flame_bloc` packages to create a card game -- made for Google I/O 2023.
 
 ### Web
 

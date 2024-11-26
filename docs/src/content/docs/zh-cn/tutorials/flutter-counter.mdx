@@ -1,0 +1,187 @@
+---
+title: Flutter 计数器
+description: 关于如何使用 bloc 构建 Flutter 计数器应用程序的深入指南。
+sidebar:
+  order: 1
+---
+
+import RemoteCode from '~/components/tutorials/RemoteCode.astro';
+import FlutterCreateSnippet from '~/components/tutorials/flutter-counter/FlutterCreateSnippet.astro';
+import FlutterPackagesGetSnippet from '~/components/tutorials/flutter-counter/FlutterPackagesGetSnippet.astro';
+
+![初级](https://img.shields.io/badge/level-beginner-green.svg)
+
+在下面的教程中，我们将使用 Bloc 库在 Flutter 中构建一个计数器。
+
+![demo](~/assets/tutorials/flutter-counter.gif)
+
+## 关键主题
+
+- 使用 [BlocObserver](/zh-cn/bloc-concepts#blocobserver) 观察状态变更。
+- [BlocProvider](/zh-cn/flutter-bloc-concepts#blocprovider)，为子组件提供 bloc 的 Flutter 部件。
+- [BlocBuilder](/zh-cn/flutter-bloc-concepts#blocbuilder)，用于响应新状态来构建小部件的 Flutter 部件。
+- 用 Cubit 替代 Bloc。[有什么不同？](/zh-cn/bloc-concepts#cubit-和-bloc-对比)。
+- 使用 [context.read](/zh-cn/flutter-bloc-concepts#contextread) 添加事件。
+
+## 设置
+
+我们从创建一个全新的 Flutter 项目开始
+
+<FlutterCreateSnippet />
+
+用下面的代码替换 `pubspec.yaml` 的内容：
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+然后安装所有的依赖
+
+<FlutterPackagesGetSnippet />
+
+## 项目结构
+
+```
+├── lib
+│   ├── app.dart
+│   ├── counter
+│   │   ├── counter.dart
+│   │   ├── cubit
+│   │   │   └── counter_cubit.dart
+│   │   └── view
+│   │       ├── counter_page.dart
+│   │       ├── counter_view.dart
+│   │       └── view.dart
+│   ├── counter_observer.dart
+│   └── main.dart
+├── pubspec.lock
+├── pubspec.yaml
+```
+
+这个应用采用了功能驱动的目录结构。这种项目结构以便于我们按照独立的功能对项目进行扩展。这个示例项目里只有一个功能（计数器），但是在更加复杂的应用里我们可以包含数以百计的功能。
+
+## BlocObserver
+
+我们要做的第一件事是看看如何创建一个 `BlocObserver` 来观察应用里所有的状态变更。
+
+我们先创建一个 `lib/counter_observer.dart`：
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter_observer.dart"
+	title="lib/counter_observer.dart"
+/>
+
+目前，我们仅重写了 `onChange` 来查看所有发生的状态变更。
+
+:::note
+`Bloc` 和 `Cubit` 的 `onChange` 工作方式是相同的。
+:::
+
+## main.dart
+
+下一步，我们替换 `lib/main.dart` 的代码如下：
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/main.dart"
+	title="lib/main.dart"
+/>
+
+我们初始化了我们创建的 `CounterObserver` 并且在 `runApp` 里添加了 `CounterApp` 组件。
+
+## Counter App
+
+创建一个 `lib/app.dart`:
+
+`CounterApp` 是一个 `MaterialApp` 并且指定了 `CounterPage` 作为主页。
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/app.dart"
+	title="lib/app.dart"
+/>
+
+:::note
+我们扩展了 `MaterialApp` 因为 `CounterApp` _是_ 一个 `MaterialApp`。在大多数情况下，我们会创建 `StatelessWidget` 或者 `StatefulWidget` 实例并且在 `build` 里进行组合。但是在这里没有部件需要组合，所以最简单的方式就是直接扩展 `MaterialApp`。
+:::
+
+接下来咱们看看 `CounterPage` ！
+
+## Counter Page
+
+创建 `lib/counter/view/counter_page.dart` 如下：
+
+`CounterPage` 部件负责创建 `CounterCubit` （下面会讲到）并且提供给 `CounterView`。
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_page.dart"
+	title="lib/counter/view/counter_page.dart"
+/>
+
+:::note
+将 `Cubit` 的创建和消费分开并解耦非常重要，这样可以让代码更加的易于测试和重用。
+:::
+
+## Counter Cubit
+
+创建 `lib/counter/cubit/counter_cubit.dart` 如下：
+
+`CounterCubit` 会公开以下方法：
+
+- `increment`: 当前状态 +1
+- `decrement`: 当前状态 -1
+
+`CounterCubit` 管理的是 `int` 型的状态，初始值为 `0`。
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/cubit/counter_cubit.dart"
+	title="lib/counter/cubit/counter_cubit.dart"
+/>
+
+:::tip
+使用 [VSCode 插件](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) 或者 [IntelliJ 插件](https://plugins.jetbrains.com/plugin/12129-bloc) 可以自动创建新的 cubits。
+:::
+
+接下来，我们看看负责消费并且与 `CounterCubit` 进行交互的 `CounterView`。
+
+## Counter View
+
+创建 `lib/counter/view/counter_view.dart` 如下：
+
+`CounterView` 负责渲染当前的数值，以及两个 FloatingActionButtons 来负责增/减计数。
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_view.dart"
+	title="lib/counter/view/counter_view.dart"
+/>
+
+`BlocBuilder` 用来包装 `Text` 部件，这样 `CounterCubit` 任何的状态变化都会更新文本。此外， `context.read<CounterCubit>()` 用于查找最近的 `CounterCubit` 实例。
+
+:::note
+只有 `Text` 部件被包装在 `BlocBuilder` 里，因为它是 `CounterCubit` 状态变更时需要更新的唯一部件。避免包装不需要根据状态变更重新构建的部件。
+:::
+
+## Barrel
+
+创建 `lib/counter/view/view.dart`:
+
+添加 `view.dart` 来导出所有 counter 视图的公共部分。
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/view.dart"
+	title="lib/counter/view/view.dart"
+/>
+
+创建 `lib/counter/counter.dart`:
+
+添加 `counter.dart` 来导出 counter 功能的所有公共部分。
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/counter.dart"
+	title="lib/counter/counter.dart"
+/>
+
+以上就是全部！我们将业务逻辑层从展现层种分离了出来。 `CounterView` 不知道用户按下按钮以后会发生什么；它只是通知 `CounterCubit`。此外，`CounterCubit` 也不知道状态（计数器的值）发生了什么；它只是响应调用的方法发出新状态。
+
+我们可以运行 `flutter run` 来在设备或者模拟器上查看运行的效果。
+
+可以在 [这里](https://github.com/felangel/Bloc/tree/master/examples/flutter_counter) 找到这个例子的完整代码（包括单元和部件测试）。

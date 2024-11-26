@@ -1,0 +1,97 @@
+---
+title: Modelagem de Estado
+description: Uma visão geral das várias formas de modelar estados quando se utiliza package:bloc.
+---
+
+import ConcreteClassAndStatusEnumSnippet from '~/components/modeling-state/ConcreteClassAndStatusEnumSnippet.astro';
+import SealedClassAndSubclassesSnippet from '~/components/modeling-state/SealedClassAndSubclassesSnippet.astro';
+
+Há muitas abordagens diferentes quando se trata de estruturar o estado do aplicativo.
+Cada uma tem suas próprias vantagens e desvantagens. Nesta seção, daremos uma olhada
+em várias abordagens, seus prós e contras, e quando usar cada uma delas.
+
+As abordagens a seguir são simplesmente recomendações e são completamente opcionais.
+Sinta-se à vontade para usar qualquer abordagem que preferir. Você pode descobrir
+que alguns dos exemplos/documentação não seguem estas abordagens principalmente por
+simplicidade/concisão.
+
+:::tip
+
+Os trechos de código a seguir são focados na estrutura de estado. Na prática, você
+também pode querer:
+
+- Estender `Equatable` do [`package:equatable`](https://pub.dev/packages/equatable)
+- Anotar a classe com `@Data()` do [`package:data_class`](https://pub.dev/packages/data_class)
+- Anotar a classe com **@immutable** do [`package:meta`](https://pub.dev/packages/meta)
+- Implementar um método `copyWith`
+- Usar a palavra-chave `const` nos construtores
+
+:::
+
+## Classe Concreta e Enum de Status
+
+Esta abordagem consiste em uma **única classe concreta** para todos os estados junto com
+um `enum` representando diferentes status. Propriedades são tornadas anuláveis e são
+manipuladas com base no status atual. Esta abordagem funciona melhor para estados que
+não são estritamente exclusivos e/ou contêm muitas propriedades compartilhadas.
+
+<ConcreteClassAndStatusEnumSnippet />
+
+#### Prós
+
+- **Simples**: Fácil de gerenciar uma única classe e um status enum e todas as propriedades são prontamente acessíveis.
+- **Conciso**: Geralmente requer menos linhas de código em comparação a outras abordagens.
+
+#### Contras
+
+- **Não é Type Safe**: Requer a verificação do `status` antes de acessar as propriedades.
+  É possível fazer `emit` de um estado malformado que pode levar a bugs. Propriedades
+  para estados específicos são anuláveis, o que pode ser trabalhoso de gerenciar e
+  requer desempacotamento forçado ou execução de verificações de nulos. Alguns desses contras
+  podem ser atenuados escrevendo testes unitários e escrevendo construtores
+  especializados e nomeados.
+- **Inchado**: Resulta em um único estado que pode ficar inchado com muitas
+  propriedades ao longo do tempo.
+
+#### Veredito
+
+Essa abordagem funciona melhor para estados simples ou quando os requisitos exigem
+estados que não são exclusivos (por exemplo, mostrar uma snackbar quando ocorre um erro enquanto
+ainda mostra dados antigos do último estado de sucesso). Essa abordagem fornece
+flexibilidade e concisão ao custo da segurança de tipo.
+
+## Classe Selada e Subclasses
+
+Essa abordagem consiste em uma **classe selada** que contém as propriedades compartilhadas
+e múltiplas subclasses para os estados separados. Essa abordagem é ótima para
+estados separados e exclusivos.
+
+<SealedClassAndSubclassesSnippet />
+
+#### Prós
+
+- **Tipagem segura**: O código é seguro para compilação e não é possível acessar acidentalmente
+  uma propriedade inválida. Cada subclasse mantém suas próprias propriedades, deixando
+  claro quais propriedades pertencem a qual estado.
+- **Explícito:** Separa propriedades compartilhadas de propriedades específicas do estado.
+- **Exaustivo**: Usa uma declaração `switch` para verificações de exaustividade
+  para garantir que cada estado seja explicitamente manipulado.
+  - Se você não quer usar o [switch exaustivo](https://dart.dev/language/branches#exhaustiveness-checking) ou
+    pretende adicionar subtipos mais tarde sem quebrar a API, use o
+    modificador [final](https://dart.dev/language/class-modifiers#final).
+  - Veja a [documentação da classe selada](https://dart.dev/language/class-modifiers#sealed) para mais detalhes.
+
+#### Contras
+
+- **Verboso**: Requer mais código (uma classe base e uma subclasse por estado).
+  Também pode exigir código duplicado para propriedades compartilhadas entre subclasses.
+- **Complexo**: Adicionar novas propriedades requer a atualização de cada subclasse e da
+  classe base, o que pode ser trabalhoso e levar ao aumento da complexidade do
+  estado. Além disso, pode exigir verificação de tipo desnecessária/excessiva para acessar
+  propriedades.
+
+#### Veredito
+
+Esta abordagem funciona melhor para estados bem definidos, exclusivos e com propriedades
+únicas. Esta abordagem fornece verificações de segurança de tipo e exaustividade e enfatiza
+a segurança em vez da concisão e simplicidade.

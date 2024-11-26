@@ -1,3 +1,10 @@
+# 6.6.6
+
+- fix: wrap with preserves escaping
+- fix: wrap with preserves `const`
+- docs: update docs site references
+- chore: update copyright year
+
 # 6.6.5
 
 - fix: show context menu conditionally

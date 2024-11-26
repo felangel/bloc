@@ -1,0 +1,19 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+enum TodoStatus { initial, loading, success, failure }
+final class TodoState {
+  const TodoState({
+    this.status = TodoStatus.initial,
+    this.todos = const <Todo>[],
+    this.exception = null,
+  });
+  final TodoStatus status;
+  final List<Todos> todos;
+  final Exception? exception;
+}
+`;
+---
+
+<Code code={code} lang="dart" title="todo_state.dart" />

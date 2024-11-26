@@ -10,6 +10,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.*
 
 class GenerateCubitAction : AnAction(), GenerateBlocDialog.Listener {
+    override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
 
     private lateinit var dataContext: DataContext
 
@@ -39,12 +40,9 @@ class GenerateCubitAction : AnAction(), GenerateBlocDialog.Listener {
         val directory = view?.orChooseDirectory
         ApplicationManager.getApplication().runWriteAction {
             CommandProcessor.getInstance().executeCommand(
-                    project,
-                    {
-                        mainSourceGenerators.forEach { createSourceFile(project!!, it, directory!!) }
-                    },
-                    "Generate a new Cubit",
-                    null
+                project, {
+                    mainSourceGenerators.forEach { createSourceFile(project!!, it, directory!!) }
+                }, "Generate a new Cubit", null
             )
         }
     }
@@ -58,7 +56,7 @@ class GenerateCubitAction : AnAction(), GenerateBlocDialog.Listener {
             return
         }
         val psiFile = PsiFileFactory.getInstance(project)
-                .createFileFromText(fileName, JavaLanguage.INSTANCE, generator.generate())
+            .createFileFromText(fileName, JavaLanguage.INSTANCE, generator.generate())
         directory.add(psiFile)
     }
 }
