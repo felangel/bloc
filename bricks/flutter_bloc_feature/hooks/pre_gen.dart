@@ -15,12 +15,12 @@ enum BlocType {
 }
 
 final brickVersions = {
-  BlocType.bloc: '^0.3.0',
-  BlocType.cubit: '^0.2.0',
-  BlocType.hydrated_bloc: '^0.3.0',
-  BlocType.hydrated_cubit: '^0.2.0',
-  BlocType.replay_bloc: '^0.2.0',
-  BlocType.replay_cubit: '^0.2.0',
+  BlocType.bloc: '^0.4.0',
+  BlocType.cubit: '^0.3.0',
+  BlocType.hydrated_bloc: '^0.4.0',
+  BlocType.hydrated_cubit: '^0.3.0',
+  BlocType.replay_bloc: '^0.3.0',
+  BlocType.replay_cubit: '^0.3.0',
 };
 
 Future<void> run(HookContext context) async {
