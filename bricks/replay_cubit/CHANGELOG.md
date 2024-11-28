@@ -1,3 +1,8 @@
+# 0.3.0
+
+- chore(deps): upgrade to `mason ^0.1.0`
+- chore(deps): upgrade hooks to `dart ^3.5.4`
+
 # 0.2.1
 
 - chore: update copyright year
