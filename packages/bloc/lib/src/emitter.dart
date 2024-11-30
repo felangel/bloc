@@ -1,4 +1,6 @@
-part of 'bloc.dart';
+import 'dart:async';
+
+import 'package:bloc/bloc.dart';
 
 /// {@template emitter}
 /// An [Emitter] is a class which is capable of emitting new states.
@@ -61,10 +63,14 @@ abstract class Emitter<State> {
   void call(State state);
 }
 
-class _Emitter<State> implements Emitter<State> {
-  _Emitter(this._emit);
+/// {@macro emitter}
+class BlocBaseEmitter<State> implements Emitter<State> {
+  /// {@macro emitter}
+  BlocBaseEmitter(this._emit, {void Function()? onSubscribe})
+      : _onSubscribe = onSubscribe;
 
   final void Function(State state) _emit;
+  final void Function()? _onSubscribe;
   final _completer = Completer<void>();
   final _disposables = <FutureOr<void> Function()>[];
 
@@ -78,6 +84,7 @@ class _Emitter<State> implements Emitter<State> {
     void Function(Object error, StackTrace stackTrace)? onError,
   }) {
     final completer = Completer<void>();
+    _onSubscribe?.call();
     final subscription = stream.listen(
       onData,
       onDone: completer.complete,
@@ -110,6 +117,45 @@ class _Emitter<State> implements Emitter<State> {
 
   @override
   void call(State state) {
+    if (!_isCanceled) _emit(state);
+  }
+
+  @override
+  bool get isDone => _isCanceled || _isCompleted;
+
+  /// Marks the current operation as canceled and disposes all disposables.
+  void cancel() {
+    if (isDone) return;
+    _isCanceled = true;
+    _close();
+  }
+
+  /// Marks the current operation as completed and disposes all disposables.
+  void complete() {
+    if (isDone) return;
+    _isCompleted = true;
+    _close();
+  }
+
+  /// A future representing the current operation.
+  Future<void> get future => _completer.future;
+
+  void _close() {
+    for (final disposable in _disposables) {
+      disposable.call();
+    }
+    _disposables.clear();
+    if (!_completer.isCompleted) _completer.complete();
+  }
+}
+
+/// {@macro emitter}
+class BlocEmitter<State> extends BlocBaseEmitter<State> {
+  /// {@macro emitter}
+  BlocEmitter(void Function(State state) emit) : super(emit);
+
+  @override
+  void call(State state) {
     assert(
       !_isCompleted,
       '''
@@ -132,18 +178,10 @@ ensure the event handler has not completed.
   });
 ''',
     );
-    if (!_isCanceled) _emit(state);
+    super.call(state);
   }
 
   @override
-  bool get isDone => _isCanceled || _isCompleted;
-
-  void cancel() {
-    if (isDone) return;
-    _isCanceled = true;
-    _close();
-  }
-
   void complete() {
     if (isDone) return;
     assert(
@@ -175,17 +213,6 @@ Please make sure to await all asynchronous operations within event handlers.
 
 ''',
     );
-    _isCompleted = true;
-    _close();
+    super.complete();
   }
-
-  void _close() {
-    for (final disposable in _disposables) {
-      disposable.call();
-    }
-    _disposables.clear();
-    if (!_completer.isCompleted) _completer.complete();
-  }
-
-  Future<void> get future => _completer.future;
 }

@@ -12,6 +12,8 @@ class FakeBlocBase<S> extends Fake implements BlocBase<S> {}
 
 class FakeChange<S> extends Fake implements Change<S> {}
 
+Future<void> tick() => Future<void>.delayed(Duration.zero);
+
 void main() {
   group('Cubit', () {
     group('constructor', () {
@@ -139,20 +141,18 @@ void main() {
     });
 
     group('emit', () {
-      test('throws StateError if cubit is closed', () {
-        var didThrow = false;
-        runZonedGuarded(() {
-          final cubit = CounterCubit();
-          expectLater(
-            cubit.stream,
-            emitsInOrder(<Matcher>[equals(1), emitsDone]),
-          );
-          cubit
-            ..increment()
-            ..close()
+      test('throws StateError if cubit is closed', () async {
+        try {
+          final states = <int>[];
+          final cubit = CounterCubit()
+            ..stream.listen(states.add)
             ..increment();
-        }, (error, _) {
-          didThrow = true;
+          await cubit.close();
+          expect(states, [equals(1)]);
+          expect(cubit.isClosed, isTrue);
+          cubit.increment();
+          fail('should throw StateError');
+        } catch (error) {
           expect(
             error,
             isA<StateError>().having(
@@ -161,8 +161,7 @@ void main() {
               'Cannot emit new states after calling close',
             ),
           );
-        });
-        expect(didThrow, isTrue);
+        }
       });
 
       test('emits states in the correct order', () async {
@@ -260,6 +259,159 @@ void main() {
           ..increment();
         await cubit.close();
         expect(states, [equals(1), equals(1)]);
+      });
+    });
+
+    group('forEach', () {
+      late StreamCubit cubit;
+      late StreamController<int> controllerA;
+      late StreamController<int> controllerB;
+
+      setUp(() {
+        controllerA = StreamController<int>.broadcast();
+        controllerB = StreamController<int>.broadcast();
+        cubit = StreamCubit();
+      });
+
+      tearDown(() {
+        controllerA.close();
+        controllerB.close();
+      });
+
+      test('emits correct states and unsubscribes on close', () async {
+        final states = <int>[];
+        cubit
+          ..stream.listen(states.add)
+          // ignore: unawaited_futures
+          ..forEach(controllerA.stream);
+        controllerA
+          ..add(1)
+          ..add(2)
+          ..add(3);
+        await tick();
+        await cubit.close();
+        expect(states, [equals(1), equals(2), equals(3)]);
+        expect(controllerA.hasListener, isFalse);
+        controllerA.add(42);
+        await tick();
+        expect(states, [equals(1), equals(2), equals(3)]);
+      });
+
+      test('consecutive calls cancel previous subscriptions', () async {
+        final states = <int>[];
+        cubit
+          ..stream.listen(states.add)
+          // ignore: unawaited_futures
+          ..forEach(controllerA.stream)
+          // ignore: unawaited_futures
+          ..forEach(controllerB.stream);
+        controllerA
+          ..add(1)
+          ..add(2)
+          ..add(3);
+        controllerB
+          ..add(42)
+          ..add(43)
+          ..add(44);
+        await tick();
+        await cubit.close();
+        expect(states, [equals(42), equals(43), equals(44)]);
+        expect(controllerA.hasListener, isFalse);
+        expect(controllerB.hasListener, isFalse);
+        controllerA.add(0);
+        controllerB.add(0);
+        await tick();
+        expect(states, [equals(42), equals(43), equals(44)]);
+      });
+    });
+
+    group('onEach', () {
+      late StreamCubit cubit;
+      late StreamController<int> controllerA;
+      late StreamController<int> controllerB;
+
+      setUp(() {
+        controllerA = StreamController<int>.broadcast();
+        controllerB = StreamController<int>.broadcast();
+        cubit = StreamCubit();
+      });
+
+      tearDown(() {
+        controllerA.close();
+        controllerB.close();
+      });
+
+      test('emits correct states and unsubscribes on close', () async {
+        final states = <int>[];
+        cubit
+          ..stream.listen(states.add)
+          // ignore: unawaited_futures
+          ..forEach(controllerA.stream);
+        controllerA
+          ..add(1)
+          ..add(2)
+          ..add(3);
+        await tick();
+        await cubit.close();
+        expect(states, [equals(1), equals(2), equals(3)]);
+        expect(controllerA.hasListener, isFalse);
+        controllerA.add(42);
+        await tick();
+        expect(states, [equals(1), equals(2), equals(3)]);
+      });
+
+      test('consecutive calls cancel previous subscriptions', () async {
+        final states = <int>[];
+        cubit
+          ..stream.listen(states.add)
+          // ignore: unawaited_futures
+          ..onEach(controllerA.stream)
+          // ignore: unawaited_futures
+          ..onEach(controllerB.stream);
+        controllerA
+          ..add(1)
+          ..add(2)
+          ..add(3);
+        controllerB
+          ..add(42)
+          ..add(43)
+          ..add(44);
+        await tick();
+        await cubit.close();
+        expect(states, [equals(42), equals(43), equals(44)]);
+        expect(controllerA.hasListener, isFalse);
+        expect(controllerB.hasListener, isFalse);
+        controllerA.add(0);
+        controllerB.add(0);
+        await tick();
+        expect(states, [equals(42), equals(43), equals(44)]);
+      });
+
+      test('consecutive calls cancel previous subscriptions (mixed)', () async {
+        final states = <int>[];
+        cubit
+          ..stream.listen(states.add)
+          // ignore: unawaited_futures
+          ..onEach(controllerA.stream)
+          // ignore: unawaited_futures
+          ..forEach(controllerB.stream);
+        controllerA
+          ..add(1)
+          ..add(2)
+          ..add(3);
+        controllerB
+          ..add(42)
+          ..add(43)
+          ..add(44);
+        await tick();
+        await cubit.close();
+        expect(states, [equals(42), equals(43), equals(44)]);
+        expect(controllerA.hasListener, isFalse);
+        expect(controllerB.hasListener, isFalse);
+        controllerA.add(0);
+        controllerB.add(0);
+        await tick();
+        expect(states, [equals(42), equals(43), equals(44)]);
       });
     });
 

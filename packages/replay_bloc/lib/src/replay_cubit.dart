@@ -1,6 +1,8 @@
 import 'dart:collection';
 
 import 'package:bloc/bloc.dart';
+// ignore: implementation_imports
+import 'package:bloc/src/emitter.dart';
 
 part 'change_stack.dart';
 part 'replay_bloc.dart';
@@ -63,16 +65,18 @@ mixin ReplayCubitMixin<State> on Cubit<State> {
   set limit(int limit) => _changeStack.limit = limit;
 
   @override
-  void emit(State state) {
-    _changeStack.add(
-      _Change<State>(
-        this.state,
-        state,
-        () => super.emit(state),
-        (val) => super.emit(val),
-      ),
-    );
-    super.emit(state);
+  Emitter<State> get emit {
+    return BlocBaseEmitter((State state) {
+      _changeStack.add(
+        _Change<State>(
+          this.state,
+          state,
+          () => super.emit(state),
+          (val) => super.emit(val),
+        ),
+      );
+      super.emit(state);
+    });
   }
 
   /// Undo the last change.
