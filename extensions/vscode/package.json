@@ -2,7 +2,7 @@
   "name": "bloc",
   "displayName": "bloc",
   "description": "Support for the bloc library and provides tools for effectively creating blocs for both Flutter and AngularDart apps.",
-  "version": "6.6.5",
+  "version": "6.6.6",
   "publisher": "FelixAngelov",
   "bugs": {
     "url": "https://github.com/felangel/bloc/issues",
@@ -239,7 +239,7 @@
     "ts-loader": "^9.4.2",
     "tslint": "^5.12.1",
     "typescript": "^3.5.1",
-    "webpack": "^5.76.1",
+    "webpack": "^5.94.0",
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {

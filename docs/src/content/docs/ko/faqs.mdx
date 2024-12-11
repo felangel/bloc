@@ -1,0 +1,194 @@
+---
+title: 자주 묻는 질문
+description: Bloc 라이브러리와 관련하여 자주 묻는 질문에 대한 답변입니다.
+---
+
+import StateNotUpdatingGood1Snippet from '~/components/faqs/StateNotUpdatingGood1Snippet.astro';
+import StateNotUpdatingGood2Snippet from '~/components/faqs/StateNotUpdatingGood2Snippet.astro';
+import StateNotUpdatingGood3Snippet from '~/components/faqs/StateNotUpdatingGood3Snippet.astro';
+import StateNotUpdatingBad1Snippet from '~/components/faqs/StateNotUpdatingBad1Snippet.astro';
+import StateNotUpdatingBad2Snippet from '~/components/faqs/StateNotUpdatingBad2Snippet.astro';
+import StateNotUpdatingBad3Snippet from '~/components/faqs/StateNotUpdatingBad3Snippet.astro';
+import EquatableEmitSnippet from '~/components/faqs/EquatableEmitSnippet.astro';
+import EquatableBlocTestSnippet from '~/components/faqs/EquatableBlocTestSnippet.astro';
+import NoEquatableBlocTestSnippet from '~/components/faqs/NoEquatableBlocTestSnippet.astro';
+import SingleStateSnippet from '~/components/faqs/SingleStateSnippet.astro';
+import SingleStateUsageSnippet from '~/components/faqs/SingleStateUsageSnippet.astro';
+import BlocProviderGood1Snippet from '~/components/faqs/BlocProviderGood1Snippet.astro';
+import BlocProviderGood2Snippet from '~/components/faqs/BlocProviderGood2Snippet.astro';
+import BlocProviderBad1Snippet from '~/components/faqs/BlocProviderBad1Snippet.astro';
+import BlocInternalAddEventSnippet from '~/components/faqs/BlocInternalAddEventSnippet.astro';
+import BlocInternalEventSnippet from '~/components/faqs/BlocInternalEventSnippet.astro';
+import BlocExternalForEachSnippet from '~/components/faqs/BlocExternalForEachSnippet.astro';
+
+## State가 업데이트되지 않아요
+
+❔ **Question**: Bloc에서 state를 emit하는데 UI가 업데이트되지 않아요. 무엇이 문제인가요?
+
+💡 **Answer**: 만약 Equatable을 사용하는 경우 모든 프로퍼티를 props getter에 전달해야 합니다.
+
+✅ **GOOD**
+
+<StateNotUpdatingGood1Snippet />
+
+❌ **BAD**
+
+<StateNotUpdatingBad1Snippet />
+
+<StateNotUpdatingBad2Snippet />
+
+또한, Bloc에서 state의 새 인스턴스를 emit하고 있는지 확인하세요.
+
+✅ **GOOD**
+
+<StateNotUpdatingGood2Snippet />
+
+<StateNotUpdatingGood3Snippet />
+
+❌ **BAD**
+
+<StateNotUpdatingBad3Snippet />
+
+:::caution
+`Equatable` 프로퍼티는 항상 수정하지 말고 복사해야 합니다. `Equatable` 클래스에 `List` 또는 `Map`이 프로퍼티로 있는 경우, 참조가 아닌 프로퍼티 값을 기준으로 동등성이 평가되도록 `List.from` 또는 `Map.from`을 각각 사용해야 합니다.
+:::
+
+## 언제 Equatable를 사용해야 하나요
+
+❔**Question**: Equatable은 언제 사용해야 하나요?
+
+💡**Answer**:
+
+<EquatableEmitSnippet />
+
+위의 시나리오에서 `StateA`가 `Equatable`을 extends 한다면 하나의 state 변경만 발생합니다 (두 번째 emit은 무시됩니다). 일반적으로 코드를 최적화하여 리빌드 횟수를 줄이려면 `Equatable`을 사용해야 합니다. 동일한 state가 연속적으로 여러 Transition을 촉발하려면 `Equatable`을 사용하면 안 됩니다.
+
+또한, `Equatable`을 사용하면 `Matchers`나 `Predicates`를 사용하는 것보다 Bloc state의 특정 인스턴스를 예상할 수 있으므로 Bloc을 훨씬 쉽게 테스트할 수 있습니다.
+
+<EquatableBlocTestSnippet />
+
+`Equatable`이 없다면 위의 테스트는 실패할 것이고, 다음과 같이 다시 작성해야 합니다:
+
+<NoEquatableBlocTestSnippet />
+
+## 에러 처리
+
+❔ **Question**: 이전 데이터를 계속 표시하면서 에러를 처리하려면 어떻게 해야 하나요?
+
+💡 **Answer**:
+
+이는 Bloc의 state가 어떻게 모델링되었는지에 따라 크게 달라집니다. 에러가 발생하더라도 데이터를 계속 유지해야 하는 경우에는 단일 state 클래스를 사용하는 것이 좋습니다.
+
+<SingleStateSnippet />
+
+이렇게 하면 위젯이 `데이터` 및 `에러` 프로퍼티에 동시에 접근할 수 있으며, Bloc은 `state.copyWith`을 사용하여 에러가 발생한 경우에도 이전 데이터를 유지할 수 있습니다.
+
+<SingleStateUsageSnippet />
+
+## Bloc vs. Redux
+
+❔ **Question**: Bloc과 Redux의 차이점은 무엇인가요?
+
+💡 **Answer**:
+
+BLoC 은 다음 규칙에 의해 정의되는 디자인 패턴입니다:
+
+1. BLoC의 입력과 출력은 간단한 Streams과 Sinks 입니다.
+2. 종속성은 주입이 가능하고 플렛폼에 구애받지 않아야 합니다.
+3. 플랫폼별 분기은 허용되지 않습니다.
+4. 위의 규칙을 따르는 한 원하는 대로 구현할 수 있습니다.
+
+UI 가이드라인은 다음과 같습니다:
+
+1. "충분히 복잡한" 각 컴포넌트에는 해당하는 BLoC이 있습니다.
+2. 컴포넌트는 입력을 "있는 그대로" 보내야 합니다.
+3. 컴포넌트는 가능한 "있는 그대로"에 가까운 출력을 표시해야 합니다.
+4. 모든 분기는 간단한 BLoC boolean 출력을 기반으로 해야 합니다.
+
+Bloc 라이브러리는 BLoC 디자인 패턴을 구현하며 개발자 경험을 단순화하기 위해 RxDart를 추상화하는 것을 목표로 합니다.
+
+Redux의 세 원칙은 다음과 같습니다:
+
+1. 신뢰할 수 있는 단일 소스
+2. State는 읽기 전용
+3. 순수 함수로 Change가 이루어짐
+
+Bloc 라이브러리는 bloc state가 여러 bloc에 분산되어 있기 때문에 첫 번째 원칙을 위반합니다. 또한 bloc에는 미들웨어라는 개념이 없으며 bloc은 비동기 상태 변경을 매우 쉽게 할 수 있도록 설계되어 단일 event에 대해 여러 state를 emit할 수 있습니다.
+
+## Bloc vs. Provider
+
+❔ **Question**: Bloc과 Provider의 차이점은 무엇인가요?
+
+💡 **Answer**: `provider`는 종속성 주입을 위해 설계되었습니다 (`InheritedWidget`을 래핑합니다). 여전히 state를 관리하는 방법을 알아내야 합니다 (`ChangeNotifier`, `Bloc`, `Mobx` 등을 통해). Bloc 라이브러리는 내부적으로 `provider`를 사용하여 위젯 트리 전체에서 bloc을 쉽게 제공하고 접근할 수 있도록 합니다.
+
+## BlocProvider.of()가 Bloc을 못 찾아요
+
+❔ **Question**: `BlocProvider.of(context)`을 사용할 때 bloc을 찾을 수 없어요. 어떻게 고치면 될까요?
+
+💡 **Answer**: Bloc이 제공한 context와 동일한 context에서는 bloc에 접근할 수 없으므로, 하위 `BuildContext` 내에서 `BlocProvider.of()`가 호출되는지 확인해야 합니다.
+
+✅ **GOOD**
+
+<BlocProviderGood1Snippet />
+
+<BlocProviderGood2Snippet />
+
+❌ **BAD**
+
+<BlocProviderBad1Snippet />
+
+## 프로젝트 구조
+
+❔ **Question**: 프로젝트를 어떻게 구조화하는게 좋을까요?
+
+💡 **Answer**: 이 질문에 대한 정답은 없지만, 몇 가지 권장되는 참고 자료는 다음과 같습니다:
+
+- [I/O Photobooth](https://github.com/flutter/photobooth)
+- [I/O Pinball](https://github.com/flutter/pinball)
+- [Flutter News Toolkit](https://github.com/flutter/news_toolkit)
+
+가장 중요한 것은 **일관성**있고 **의도적인** 프로젝트 구조를 갖는 것입니다.
+
+## Bloc 내에서 Event 추가하기
+
+❔ **Question**: Bloc 내에서 event를 추가해도 괜찮은가요?
+
+💡 **Answer**: 대부분의 경우, event는 외부에서 추가해야 하지만 일부 경우에는 event를 내부적으로 추가하는 것이 합리적일 수 있습니다.
+
+내부 event가 사용되는 가장 일반적인 상황은 Repository의 실시간 업데이트에 대한 응답으로 state의 변경이 발생해야 하는 경우입니다. 이러한 상황에서 Repository는 버튼 탭과 같은 외부 event 대신 state 변경에 대한 자극이 됩니다.
+
+다음 예시에서 `MyBloc`의 state는 `UserRepository`의 `Stream<User>`를 통해 노출되는 현재 사용자에 따라 달라집니다. `MyBloc`은 현재 사용자의 변경 사항을 수신하고, 사용자가 사용자 stream에서 방출될 때 마다 내부 `_UserChanged` event를 추가합니다.
+
+<BlocInternalAddEventSnippet />
+
+내부 event를 추가함으로써 event에 대한 커스텀 `transformer`를 지정하여 여러 `_UserChanged` event가 처리되는 방식을 결정할 수도 있습니다. 기본적으로 event는 동시에 처리됩니다.
+
+내부 event는 private로 정의되는 것을 강력히 권장합니다. 이는 특정 event가 bloc 자체 내에서만 사용한다는 것을 명시적으로 알리는 방법이며, 외부 컴포넌트가 event에 대해 아는 것을 방지합니다.
+
+<BlocInternalEventSnippet />
+
+또한 외부 `Started` event를 정의하고 `emit.forEach` API를 사용하여 실시간 사용자 업데이트에 대한 반응을 처리할 수 있습니다.
+
+<BlocExternalForEachSnippet />
+
+위 접근 방식의 장점은 다음과 같습니다:
+
+- 내부 `_UserChanged` event가 필요하지 않습니다.
+- `StreamSubscription`을 수동으로 관리할 필요가 없습니다.
+- Bloc이 사용자 업데이트 steram을 구독하는 시기를 완전히 제어할 수 있습니다.
+
+위 접근 방식의 단점은 다음과 같습니다:
+
+- 구독을 쉽게 `pause` 하거나 `resume`할 수 없습니다.
+- 외부적으로 추가해야 하는 공개 `Started` event를 노출해야 합니다.
+- 사용자 업데이트에 반응하는 방식을 조정하기 위해 커스텀 `transformer`를 사용할 수 없습니다.
+
+## Public 메서드 노출
+
+❔ **Question**: Bloc 및 Cubit 인스턴스에 public 메서드를 노출해도 괜찮을까요?
+
+💡 **Answer**
+
+Cubit을 생성할 때 state 변경을 촉발할 목적으로만 public 메서드를 노출하는 것이 좋습니다. 결과적으로, 일반적인 cubit 인스턴스의 모든 public 메서드는 `void` 또는 `Future<void>`를 반환해야 합니다.
+
+Bloc을 생성할 때 커스텀 public 메서드를 노출하지 않고, 대신 `add`를 호출하여 event를 bloc에 알리는 것이 좋습니다.

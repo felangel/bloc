@@ -1,3 +1,13 @@
+# 0.3.0
+
+- chore(deps): upgrade to `mason ^0.1.0`
+- chore(deps): upgrade hooks to `dart ^3.5.4`
+
+# 0.2.1
+
+- chore: update copyright year
+- chore: update logo image refs
+
 # 0.2.0
 
 - feat: add support for `equatable`

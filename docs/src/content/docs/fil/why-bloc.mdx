@@ -1,0 +1,31 @@
+---
+title: Bakit Bloc?
+description: Kabuuang idea kung bakit ang Bloc ay isang solid na solusyon sa pamamahala ng state.
+sidebar:
+  order: 1
+---
+
+Pinadadali ng Bloc na ihiwalay ang presentation sa business logic, ginawawang _mabilis_, _madali i-test_, at _reusable_ ang iyong code.
+
+Sa pagbuo ng mga application na may kalidad para sa produksiyon, naging kritikal ang pamamahala ng state.
+
+Bilang developers gusto nating:
+
+- malaman kung anong state ng ating application anumang oras.
+- madaling i-test ang bawat kalagayan sa application upang tiyakin na ito ay tumutugon nang naaayon.
+- i-record ang bawat interaksyon ng user sa ating application upang magkaruon ng mga desisyon na data-driven.
+- makapagtrabaho nang maayos at epektibo at gamitin muli ang ilang mga bahagi ng application sa iba pang application.
+- magkaruon ng maraming developers na maayos na nagtatrabaho sa loob ng isang code base na sinusunod ang parehong mga pattern at kumbensiyon.
+- gumawa ng mabilis at responsibong mga application.
+
+Ang Bloc ay idinisenyo upang matugunan ang lahat ng pangangailangan na ito at marami pang iba.
+
+Marami ang mga solusyon sa pamamahala ng state at ang pagpili kung alin ang gagamitin ay maaaring maging isang masalimuot na gawain. Wala namang perpektong solusyon sa pamamahala ng state! Ang mahalaga ay pumili ka ng isang solusyon na pinakamabuti para sa iyong mga kasama at proyekto.
+
+Ang Bloc ay idinisenyo na may tatlong pangunahing halaga sa isipan:
+
+- **Simple:** Madaling maunawaan at maaaring gamitin ng mga developer na may iba't ibang antas ng kasanayan.
+- **Mabisa:** Makatulong na gumawa ng kamangha-mangha at kumplikadong mga application sa pamamagitan ng pag-compose ng mga ito mula sa mas maliit na mga bahagi.
+- **Pwedeng I-test:** Madaling mai-test ang bawat bahagi ng application upang magkaruon tayo ng kumpiyansa sa bawat pagbabago.
+
+Sa kabuuan, ang Bloc ay sumusubok na gawing maaasahan ang mga pagbabago sa state sa pamamagitan ng pagre-regulate kung kailan maaaring mangyari ang pagbabago sa state at ipinapatupad ang iisang paraan ng pagbabago ng state sa buong application.

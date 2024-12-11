@@ -1,5 +1,5 @@
 <p align="center">
-<img style="height:100px" src="https://raw.githubusercontent.com/felangel/bloc/master/docs/assets/replay_cubit_full_dark.png" alt="Replay Cubit" />
+<img style="height:100px" src="https://raw.githubusercontent.com/felangel/bloc/master/assets/logos/replay_cubit_dark.png" alt="Replay Cubit" />
 </p>
 
 <p align="center">

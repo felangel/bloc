@@ -3,7 +3,7 @@ import 'package:flutter_complex_list/repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('Repository', () {
+  group(Repository, () {
     late Repository repository;
 
     setUp(() {

@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_weather/app.dart';
-import 'package:flutter_weather/theme/theme.dart';
 import 'package:flutter_weather/weather/weather.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:weather_repository/weather_repository.dart';
+import 'package:weather_repository/weather_repository.dart'
+    show WeatherRepository;
 
 import 'helpers/hydrated_bloc.dart';
 
-class MockThemeCubit extends MockCubit<Color> implements ThemeCubit {}
+class MockWeatherCubit extends MockCubit<WeatherState>
+    implements WeatherCubit {}
 
 class MockWeatherRepository extends Mock implements WeatherRepository {}
 
@@ -33,21 +34,21 @@ void main() {
   });
 
   group('WeatherAppView', () {
-    late ThemeCubit themeCubit;
+    late WeatherCubit weatherCubit;
     late WeatherRepository weatherRepository;
 
     setUp(() {
-      themeCubit = MockThemeCubit();
+      weatherCubit = MockWeatherCubit();
       weatherRepository = MockWeatherRepository();
     });
 
     testWidgets('renders WeatherPage', (tester) async {
-      when(() => themeCubit.state).thenReturn(Colors.blue);
+      when(() => weatherCubit.state).thenReturn(WeatherState());
       await tester.pumpWidget(
         RepositoryProvider.value(
           value: weatherRepository,
           child: BlocProvider.value(
-            value: themeCubit,
+            value: weatherCubit,
             child: const WeatherAppView(),
           ),
         ),
@@ -56,13 +57,21 @@ void main() {
     });
 
     testWidgets('has correct theme color scheme', (tester) async {
-      const color = Color(0xFFD2D2D2);
-      when(() => themeCubit.state).thenReturn(color);
+      final state = WeatherState(
+        status: WeatherStatus.success,
+        weather: Weather(
+          condition: WeatherCondition.rainy,
+          lastUpdated: DateTime(2024),
+          location: 'Seattle',
+          temperature: const Temperature(value: 20),
+        ),
+      );
+      when(() => weatherCubit.state).thenReturn(state);
       await tester.pumpWidget(
         RepositoryProvider.value(
           value: weatherRepository,
           child: BlocProvider.value(
-            value: themeCubit,
+            value: weatherCubit,
             child: const WeatherAppView(),
           ),
         ),
@@ -70,7 +79,7 @@ void main() {
       final materialApp = tester.widget<MaterialApp>(find.byType(MaterialApp));
       expect(
         materialApp.theme?.colorScheme,
-        ColorScheme.fromSeed(seedColor: color),
+        ColorScheme.fromSeed(seedColor: Colors.indigoAccent),
       );
     });
   });

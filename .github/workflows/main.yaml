@@ -9,6 +9,11 @@ on:
   push:
     branches: [master]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   semantic_pull_request:
     name: ✅ Semantic Pull Request
@@ -24,6 +29,7 @@ jobs:
       needs_dart_package_checks: ${{ steps.needs_dart_package_checks.outputs.changes }}
       needs_flutter_package_checks: ${{ steps.needs_flutter_package_checks.outputs.changes }}
       needs_flutter_example_checks: ${{ steps.needs_flutter_example_checks.outputs.changes }}
+      needs_docs_checks: ${{ steps.needs_docs_checks.outputs.changes }}
 
     name: 👀 Detect Changes
 
@@ -175,6 +181,16 @@ jobs:
               - ./.github/actions/flutter_package/action.yaml
               - examples/github_search/flutter_github_search/**
 
+      - uses: dorny/paths-filter@v3
+        name: Docs Detection
+        id: needs_docs_checks
+        with:
+          filters: |
+            - ./.github/workflows/main.yaml
+            - ./.github/actions/astro_site/action.yaml
+            - examples/**
+            - docs/**
+
   dart_package_checks:
     needs: changes
     if: ${{ needs.changes.outputs.needs_dart_package_checks != '[]' }}
@@ -271,6 +287,38 @@ jobs:
           collect_score: false
           working_directory: examples/${{ matrix.example }}
 
+  docs_checks:
+    needs: changes
+    if: ${{ needs.changes.outputs.needs_docs_checks != '[]' }}
+
+    runs-on: ubuntu-latest
+
+    name: 📖 docs
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v4
+
+      - name: 📦 Build Docs
+        uses: ./.github/actions/astro_site
+        with:
+          working_directory: ./docs
+
+  deploy:
+    needs: docs_checks
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
   build:
     needs:
       [
@@ -279,7 +327,9 @@ jobs:
         flutter_package_checks,
         angular_dart_example_checks,
         flutter_example_checks,
+        docs_checks,
       ]
+
     if: ${{ always() }}
 
     runs-on: ubuntu-latest
