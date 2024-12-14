@@ -14,7 +14,7 @@
   },
   "homepage": "https://bloclibrary.dev",
   "engines": {
-    "vscode": "^1.56.0"
+    "vscode": "^1.75.0"
   },
   "categories": [
     "Snippets",
@@ -29,7 +29,6 @@
   ],
   "icon": "assets/logo.png",
   "activationEvents": [
-    "onCommand:extension.new-bloc",
     "workspaceContains:**/pubspec.yaml"
   ],
   "main": "./dist/extension",
