@@ -1,0 +1,16 @@
+name: bloc_lint
+description: Official lint rules for development when using the bloc state management library.
+version: 0.2.0-dev.0
+repository: https://github.com/felangel/bloc/tree/master/packages/bloc_lint
+issue_tracker: https://github.com/felangel/bloc/issues
+homepage: https://github.com/felangel/bloc
+documentation: https://bloclibrary.dev
+topics: [bloc, state-management, lint]
+funding: [https://github.com/sponsors/felangel]
+
+environment:
+  sdk: ">=2.12.0 <4.0.0"
+
+screenshots:
+  - description: The bloc_lint package logo.
+    path: screenshots/logo.png

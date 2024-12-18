@@ -1,3 +1,8 @@
+# 0.1.0-dev.7
+
+- fix: version constant
+- chore(deps): upgrade to `pub_updater ^0.5.0`
+
 # 0.1.0-dev.6
 
 - chore: add screenshot to `pubspec.yaml`
