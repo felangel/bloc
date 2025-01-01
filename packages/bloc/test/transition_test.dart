@@ -25,7 +25,7 @@ class CounterEvent extends TransitionEvent {
           eventData == other.eventData;
 
   @override
-  int get hashCode => eventData.hashCode;
+  int get hashCode => Object.hashAll([eventData]);
 }
 
 class CounterState extends TransitionState {
@@ -41,7 +41,7 @@ class CounterState extends TransitionState {
           count == other.count;
 
   @override
-  int get hashCode => count.hashCode;
+  int get hashCode => Object.hashAll([count]);
 }
 
 void main() {
@@ -78,7 +78,7 @@ void main() {
         const change = Change<int>(currentState: 0, nextState: 1);
         expect(
           change.hashCode,
-          change.currentState.hashCode ^ change.nextState.hashCode,
+          Object.hashAll([change.currentState, change.nextState]),
         );
       });
     });
@@ -196,9 +196,11 @@ void main() {
         );
         expect(
           transition.hashCode,
-          transition.currentState.hashCode ^
-              transition.event.hashCode ^
-              transition.nextState.hashCode,
+          Object.hashAll([
+            transition.currentState,
+            transition.event,
+            transition.nextState,
+          ]),
         );
       });
     });
