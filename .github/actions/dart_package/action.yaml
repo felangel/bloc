@@ -5,6 +5,14 @@ inputs:
   codecov_token:
     required: true
     description: The Codecov token used to upload coverage
+  collect_coverage:
+    required: false
+    default: "true"
+    description: Whether to collect code coverage
+  collect_score:
+    required: false
+    default: "true"
+    description: Whether to collect the pana score
   concurrency:
     required: false
     default: "4"
@@ -69,6 +77,7 @@ runs:
         dart test -j ${{inputs.concurrency}} --coverage=coverage && dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.dart_tool/package_config.json --report-on=${{inputs.report_on}} --check-ignore
 
     - name: 📦 Detect Package Name
+      if: inputs.collect_coverage == 'true'
       env:
         PACKAGE_PATH: ${{ inputs.working_directory}}
       id: package
@@ -76,6 +85,7 @@ runs:
       run: echo "name=${PACKAGE_PATH##*/}" >> $GITHUB_OUTPUT
 
     - name: ⬆️ Upload Coverage
+      if: inputs.collect_coverage == 'true'
       uses: codecov/codecov-action@v4
       env:
         PACKAGE_PATH: ${{ inputs.working_directory}}
@@ -84,6 +94,7 @@ runs:
         token: ${{ inputs.codecov_token }}
 
     - name: 📊 Verify Coverage
+      if: inputs.collect_coverage == 'true'
       uses: VeryGoodOpenSource/very_good_coverage@v3
       with:
         path: ${{inputs.working_directory}}/coverage/lcov.info
@@ -91,6 +102,7 @@ runs:
         min_coverage: ${{inputs.min_coverage}}
 
     - name: 💯 Verify Pub Score
+      if: inputs.collect_score == 'true'
       working-directory: ${{ inputs.working_directory }}
       shell: ${{ inputs.shell }}
       run: |
