@@ -9,17 +9,17 @@ topics: [bloc, state-management, test]
 funding: [https://github.com/sponsors/felangel]
 
 environment:
-  sdk: ">=2.12.0 <4.0.0"
+  sdk: ">=2.14.0 <4.0.0"
 
 dependencies:
   bloc: ^8.1.1
   diff_match_patch: ^0.4.1
   meta: ^1.3.0
-  mocktail: ">=0.2.0 <2.0.0"
+  mocktail: ^1.0.0
   test: ^1.16.0
 
 dev_dependencies:
-  rxdart: ^0.27.2
+  rxdart: ^0.28.0
 
 screenshots:
   - description: The bloc test package logo.
