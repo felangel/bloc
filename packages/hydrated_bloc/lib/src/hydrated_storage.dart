@@ -46,7 +46,7 @@ class HydratedStorageDirectory {
   ///   storageDirectory: HydratedStorageDirectory.web,
   /// );
   /// ```
-  static const web = HydratedStorageDirectory('__web__');
+  static const web = HydratedStorageDirectory('');
 }
 
 /// {@template hydrated_storage}
