@@ -15,7 +15,7 @@ class MockBox extends Mock implements Box<dynamic> {}
 void main() {
   group('HydratedStorage', () {
     final cwd = Directory.current.absolute.path;
-    final storageDirectory = Directory(cwd);
+    final storageDirectory = HydratedStorageDirectory(cwd);
 
     late Storage storage;
 
@@ -78,7 +78,7 @@ void main() {
         await runZonedGuarded(
           () {
             HydratedStorage.build(
-              storageDirectory: HydratedStorage.webStorageDirectory,
+              storageDirectory: HydratedStorageDirectory.web,
             ).whenComplete(completer.complete);
             return completer.future;
           },
@@ -179,7 +179,7 @@ void main() {
       test('writes key/value pairs correctly', () async {
         const token = 'token';
         storage = await HydratedStorage.build(
-          storageDirectory: Directory(cwd),
+          storageDirectory: HydratedStorageDirectory(cwd),
         );
         await Stream.fromIterable(
           Iterable.generate(120, (i) => i),
@@ -193,7 +193,7 @@ void main() {
           storage.write(token, record);
 
           storage = await HydratedStorage.build(
-            storageDirectory: Directory(cwd),
+            storageDirectory: HydratedStorageDirectory(cwd),
           );
 
           final written = storage.read(token) as List<List<String>>;
@@ -217,8 +217,9 @@ void main() {
 
       test('Hive and Hydrated default directories', () async {
         Hive.init(docs);
+        final tempDir = Directory(temp)..createSync();
         storage = await HydratedStorage.build(
-          storageDirectory: Directory(temp)..createSync(),
+          storageDirectory: HydratedStorageDirectory(tempDir.path),
         );
 
         var box = await Hive.openBox<String>('hive');

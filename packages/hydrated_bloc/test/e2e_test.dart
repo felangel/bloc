@@ -15,7 +15,7 @@ void main() {
 
     setUp(() async {
       storage = await HydratedStorage.build(
-        storageDirectory: Directory(
+        storageDirectory: HydratedStorageDirectory(
           path.join(Directory.current.path, '.cache'),
         ),
       );
