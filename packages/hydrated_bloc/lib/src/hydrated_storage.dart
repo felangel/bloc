@@ -50,7 +50,7 @@ class HydratedStorageDirectory {
 }
 
 /// {@template hydrated_storage}
-/// Implementation of [Storage] which uses [package:hive](https://pub.dev/packages/hive)
+/// Implementation of [Storage] which uses [package:hive_ce](https://pub.dev/packages/hive_ce)
 /// to persist and retrieve state changes from the local device.
 /// {@endtemplate}
 class HydratedStorage implements Storage {
