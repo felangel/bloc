@@ -41,9 +41,7 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State>
 
   /// Setter for instance of [Storage] which will be used to
   /// manage persisting/restoring the [Bloc] state.
-  /// Closes the previous [Storage] instance if applicable.
   static set storage(Storage? storage) {
-    _storage?.close();
     _storage = storage;
   }
 

@@ -50,14 +50,14 @@ void main() {
         await storage.close();
       });
 
-      test('reuses existing instance when called multiple times', () async {
+      test('returns new instance when called multiple times', () async {
         final instanceA = storage = await HydratedStorage.build(
           storageDirectory: storageDirectory,
         );
         final instanceB = await HydratedStorage.build(
           storageDirectory: storageDirectory,
         );
-        expect(instanceA, instanceB);
+        expect(instanceA, isNot(instanceB));
       });
 
       test('creates new instance if storage was closed', () async {
@@ -196,7 +196,7 @@ void main() {
             storageDirectory: HydratedStorageDirectory(cwd),
           );
 
-          final written = storage.read(token) as List<List<String>>;
+          final written = storage.read(token);
           expect(written, isNotNull);
           expect(written, record);
         }).drain<dynamic>();
