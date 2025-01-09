@@ -174,7 +174,7 @@ If we cannot retrieve the posts, we emit `PostStatus.failure`.
 
 If we can retrieve the posts, we emit `PostStatus.success` and the entire list of posts.
 
-One optimization we can make is to `throttle` the `PostFetched` event in order to prevent spamming our API unnecessarily. We can do this by using the `transform` parameter when we register the `_onPostFetched` event handler.
+One optimization we can make is to `throttle` the `PostFetched` event in order to prevent spamming our API unnecessarily. We can do this by using the `transform` parameter when we register the `_onFetched` event handler.
 
 :::note
 Passing a `transformer` to `on<PostFetched>` allows us to customize how events are processed.
@@ -203,10 +203,6 @@ In our `main.dart` we can start by implementing our main function and calling `r
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/main.dart"
 	title="lib/main.dart"
 />
-
-:::note
-`EquatableConfig.stringify = kDebugMode;` is a constant that affects the output of toString. When in debug mode, equatable's toString method will behave differently than profile and release mode and can use constants like kDebugMode or kReleaseMode to understand if you are running on debug or release.
-:::
 
 In our `App` widget, the root of our project, we can then set the home to `PostsPage`
 
