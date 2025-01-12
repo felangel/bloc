@@ -4,16 +4,16 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
-  bloc: ^8.1.0
+  bloc: ^9.0.0
   flutter:
     sdk: flutter
-  flutter_bloc: ^8.1.1
+  flutter_bloc: ^9.0.0
 
 dev_dependencies:
-  bloc_test: ^9.1.0
+  bloc_test: ^10.0.0
   flutter_test:
     sdk: flutter
   integration_test:

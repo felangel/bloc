@@ -4,15 +4,15 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
-  bloc: ^8.1.0
+  bloc: ^9.0.0
   common_github_search:
     path: ../common_github_search
   flutter:
     sdk: flutter
-  flutter_bloc: ^8.1.1
+  flutter_bloc: ^9.0.1
   url_launcher: ^6.0.0
 
 flutter:

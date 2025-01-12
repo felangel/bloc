@@ -4,27 +4,27 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
   authentication_repository:
     path: packages/authentication_repository
-  bloc: ^8.1.0
-  equatable: ^2.0.3
+  bloc: ^9.0.0
+  equatable: ^2.0.0
   firebase_core: ^3.0.0
   flow_builder: ^0.1.0
   flutter:
     sdk: flutter
-  flutter_bloc: ^8.1.1
+  flutter_bloc: ^9.0.0
   font_awesome_flutter: ^10.1.0
   form_inputs:
     path: packages/form_inputs
-  formz: ^0.7.0
-  google_fonts: ^6.2.1
+  formz: ^0.8.0
+  google_fonts: ^6.0.0
   meta: ^1.7.0
 
 dev_dependencies:
-  bloc_test: ^9.0.0
+  bloc_test: ^10.0.0
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.0

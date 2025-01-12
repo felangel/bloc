@@ -1,3 +1,9 @@
+# 0.3.0
+
+- refactor: upgrade to `bloc ^9.0.0` ([#4137](https://github.com/felangel/bloc/pull/4137))
+- chore: add `funding` to `pubspec.yaml` ([#4200](https://github.com/felangel/bloc/pull/4200))
+- chore: update sponsors
+
 # 0.2.7
 
 - refactor: use additional lint rules ([#4083](https://github.com/felangel/bloc/pull/4083))

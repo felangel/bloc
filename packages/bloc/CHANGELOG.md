@@ -1,3 +1,12 @@
+# 9.0.0
+
+- **BREAKING** refactor!: introduce `EmittableStateStreamableSource` ([#4311](https://github.com/felangel/bloc/pull/4311))
+  - `BlocBase<State>` implements `EmittableStateStreamableSource<State>`
+- **BREAKING** refactor!: remove deprecated `BlocOverrides` ([#4137](https://github.com/felangel/bloc/pull/4137))
+- refactor: use `Object.hashAll` internally ([#4310](https://github.com/felangel/bloc/pull/4310))
+  - bumps minimum Dart SDK to 2.14
+- chore: update sponsors
+
 # 8.1.4
 
 - docs: improve diagrams

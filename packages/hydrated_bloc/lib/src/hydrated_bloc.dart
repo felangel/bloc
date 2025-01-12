@@ -33,8 +33,8 @@ import 'package:meta/meta.dart';
 abstract class HydratedBloc<Event, State> extends Bloc<Event, State>
     with HydratedMixin {
   /// {@macro hydrated_bloc}
-  HydratedBloc(State state, [Storage? storage]) : super(state) {
-    hydrate(storage);
+  HydratedBloc(State state, {Storage? storage}) : super(state) {
+    hydrate(storage: storage);
   }
 
   static Storage? _storage;
@@ -76,7 +76,7 @@ abstract class HydratedCubit<State> extends Cubit<State>
     with HydratedMixin<State> {
   /// {@macro hydrated_cubit}
   HydratedCubit(State state, [Storage? storage]) : super(state) {
-    hydrate(storage);
+    hydrate(storage: storage);
   }
 }
 
@@ -118,7 +118,7 @@ mixin HydratedMixin<State> on BlocBase<State> {
   ///  ...
   /// }
   /// ```
-  void hydrate([Storage? storage]) {
+  void hydrate({Storage? storage}) {
     __storage = storage ??= HydratedBloc.storage;
     try {
       final stateJson = __storage.read(storageToken) as Map<dynamic, dynamic>?;

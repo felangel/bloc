@@ -1,3 +1,9 @@
+# 0.3.0
+
+- chore(deps): upgrade to `package:bloc v9.0.0`
+- chore: update sponsors
+- chore: add `funding` to `pubspec.yaml`
+
 # 0.2.5
 
 - docs: improve diagrams
