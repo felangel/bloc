@@ -1,3 +1,36 @@
+# 10.0.0
+
+- **BREAKING** feat!: support for `wasm` ([#4313](https://github.com/felangel/bloc/pull/4313))
+
+  - introduces `HydratedStorageDirectory` and modifies `HydratedStorage.build` signature to use `HydratedStorageDirectory` instead of `Directory` from `dart:io`
+
+  ```dart
+  import 'package:flutter/foundation.dart';
+  import 'package:flutter/material.dart';
+
+  import 'package:flutter_bloc/flutter_bloc.dart';
+  import 'package:hydrated_bloc/hydrated_bloc.dart';
+  import 'package:path_provider/path_provider.dart';
+
+  void main() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    HydratedBloc.storage = await HydratedStorage.build(
+      storageDirectory: kIsWeb
+          ? HydratedStorageDirectory.web
+          : HydratedStorageDirectory((await getTemporaryDirectory()).path),
+    );
+    runApp(const App());
+  }
+  ```
+
+- feat: allow overriding storage per bloc/cubit instance ([#4314](https://github.com/felangel/bloc/pull/4314))
+- feat: migrate to `package:hive_ce` (Hive Community Edition) ([#4262](https://github.com/felangel/bloc/pull/4262))
+- fix: `HydratedStorage.build` should not cache instance ([#4317](https://github.com/felangel/bloc/pull/4317))
+- chore: upgrade to `package:bloc v9.0.0`
+- chore: bump miniumum Dart SDK version to 2.14
+- chore: update sponsors
+- chore: add `funding` to `pubspec.yaml` ([#4200](https://github.com/felangel/bloc/pull/4200))
+
 # 9.1.5
 
 - chore: update copyright year
