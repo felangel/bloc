@@ -4,21 +4,15 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
-  bloc: ^8.1.0
-  equatable: ^2.0.3
+  bloc: ^9.0.0
+  equatable: ^2.0.0
   flutter:
     sdk: flutter
-  flutter_bloc: ^8.1.1
-  formz: ^0.6.0
-
-dependency_overrides:
-  bloc:
-    path: ../../packages/bloc
-  flutter_bloc:
-    path: ../../packages/flutter_bloc
+  flutter_bloc: ^9.0.0
+  formz: ^0.8.0
 
 flutter:
   uses-material-design: true
