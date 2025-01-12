@@ -44,14 +44,14 @@ packages:
       path: "../../packages/bloc"
       relative: true
     source: path
-    version: "8.1.4"
+    version: "9.0.0"
   bloc_test:
     dependency: "direct dev"
     description:
       path: "../../packages/bloc_test"
       relative: true
     source: path
-    version: "9.1.7"
+    version: "10.0.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -159,7 +159,7 @@ packages:
       path: "../../packages/flutter_bloc"
       relative: true
     source: path
-    version: "8.1.6"
+    version: "9.0.0"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -203,10 +203,10 @@ packages:
     dependency: transitive
     description:
       name: http_parser
-      sha256: "76d306a1c3afb33fe82e2bbacad62a61f409b5634c915fceb0d799de1a913360"
+      sha256: "178d74305e7866013777bab2c3d8726205dc5a4dd935297175b19a23a2e66571"
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.1"
+    version: "4.1.2"
   intl:
     dependency: "direct main"
     description:
@@ -322,10 +322,10 @@ packages:
     dependency: "direct dev"
     description:
       name: mockingjay
-      sha256: "04beab95a415cda5bd4efa2681ee76eb92bb9377acaf1a0c08cd58efbae70d83"
+      sha256: cea2f3d38d1343beb6908f0ade5724c12304ee74014fbd274b4065a4b7db6536
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.0"
+    version: "0.6.0"
   mocktail:
     dependency: "direct dev"
     description:
@@ -434,26 +434,26 @@ packages:
     dependency: transitive
     description:
       name: rxdart
-      sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"
+      sha256: "5c3004a4a8dbb94bd4bf5412a4def4acdaa12e12f269737a5751369e12d1a962"
       url: "https://pub.dev"
     source: hosted
-    version: "0.27.7"
+    version: "0.28.0"
   shared_preferences:
     dependency: transitive
     description:
       name: shared_preferences
-      sha256: "3c7e73920c694a436afaf65ab60ce3453d91f84208d761fbd83fc21182134d93"
+      sha256: a752ce92ea7540fc35a0d19722816e04d0e72828a4200e83a98cf1a1eb524c9a
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.4"
+    version: "2.3.5"
   shared_preferences_android:
     dependency: transitive
     description:
       name: shared_preferences_android
-      sha256: "02a7d8a9ef346c9af715811b01fbd8e27845ad2c41148eefd31321471b41863d"
+      sha256: bf808be89fe9dc467475e982c1db6c2faf3d2acf54d526cd5ec37d86c99dbd84
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.0"
+    version: "2.4.1"
   shared_preferences_foundation:
     dependency: transitive
     description:
@@ -714,5 +714,5 @@ packages:
     source: hosted
     version: "3.1.3"
 sdks:
-  dart: ">=3.5.0 <4.0.0"
+  dart: ">=3.6.0 <4.0.0"
   flutter: ">=3.24.0"
