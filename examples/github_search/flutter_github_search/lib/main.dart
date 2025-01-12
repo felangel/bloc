@@ -20,9 +20,9 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Github Search',
+      title: 'GitHub Search',
       home: Scaffold(
-        appBar: AppBar(title: const Text('Github Search')),
+        appBar: AppBar(title: const Text('GitHub Search')),
         body: BlocProvider(
           create: (_) => GithubSearchBloc(githubRepository: githubRepository),
           child: const SearchForm(),

@@ -4,10 +4,10 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
-  bloc: ^8.1.0
-  equatable: ^2.0.3
-  http: ^0.13.3
+  bloc: ^9.0.0
+  equatable: ^2.0.0
+  http: ^1.0.0
   stream_transform: ^2.0.0
