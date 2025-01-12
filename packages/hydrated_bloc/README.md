@@ -114,8 +114,26 @@ Now the `CounterCubit` and `CounterBloc` will automatically persist/restore thei
 ```dart
 class CounterCubit extends Cubit<int> with HydratedMixin {
   CounterCubit() : super(0) {
-    hydrate();
+    hydrate(); // You must always call `hydrate` when using `HydratedMixin`
   }
+
+  void increment() => emit(state + 1);
+
+  @override
+  int fromJson(Map<String, dynamic> json) => json['value'] as int;
+
+  @override
+  Map<String, int> toJson(int state) => { 'value': state };
+}
+```
+
+## Storage Overrides
+
+You can override the global storage instance for specific `HydratedBloc` or `HydratedCubit` instances by passing a custom storage instance via constructor.
+
+```dart
+class CounterCubit extends HydratedCubit<int> {
+  CounterCubit() : super(0, storage: EncryptedStorage());
 
   void increment() => emit(state + 1);
 
@@ -211,7 +229,7 @@ testWidgets('...', (tester) async {
 
 ## Dart Versions
 
-- Dart 2: >= 2.12
+- Dart 2: >= 2.14
 
 ## Maintainers
 

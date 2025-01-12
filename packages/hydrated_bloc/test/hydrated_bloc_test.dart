@@ -28,7 +28,7 @@ class MyUuidHydratedBloc extends HydratedBloc<String, String?> {
 }
 
 class MyHydratedBlocWithCustomStorage extends HydratedBloc<int, int> {
-  MyHydratedBlocWithCustomStorage(Storage storage) : super(0, storage);
+  MyHydratedBlocWithCustomStorage(Storage storage) : super(0, storage: storage);
 
   @override
   Map<String, int>? toJson(int state) {
