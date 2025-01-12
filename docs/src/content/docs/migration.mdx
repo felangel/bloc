@@ -74,6 +74,10 @@ void main() async {
 In bloc v9.0.0, all previously deprecated APIs were removed.
 :::
 
+##### Summary
+
+- `BlocOverrides` removed in favor of `Bloc.observer` and `Bloc.transformer`
+
 #### ❗✨ Introduce new `EmittableStateStreamableSource` Interface
 
 :::note[What Changed?]
@@ -83,10 +87,6 @@ In bloc v9.0.0, a new core interface `EmittableStateStreamableSource` was introd
 ##### Rationale
 
 `package:bloc_test` was previously tightly coupled to `BlocBase`. The `EmittableStateStreamableSource` interface was introduced in order to allow `blocTest` to be decoupled from the `BlocBase` concrete implementation.
-
-##### Summary
-
-- `BlocOverrides` removed in favor of `Bloc.observer` and `Bloc.transformer`
 
 ### `package:hydrated_bloc`
 
