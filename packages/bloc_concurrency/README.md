@@ -91,7 +91,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
 ## Dart Versions
 
-- Dart 2: >= 2.12
+- Dart 2: >= 2.14
 
 ## Maintainers
 
