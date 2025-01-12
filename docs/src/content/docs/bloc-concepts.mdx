@@ -220,10 +220,6 @@ If we run the same program again we should see the following output:
 
 <CounterCubitOnErrorOutputSnippet />
 
-:::note
-Just as with `onChange`, the internal `onError` override is invoked before the global `BlocObserver` override.
-:::
-
 ## Bloc
 
 A `Bloc` is a more advanced class which relies on `events` to trigger `state` changes rather than functions. `Bloc` also extends `BlocBase` which means it has a similar public API as `Cubit`. However, rather than calling a `function` on a `Bloc` and directly emitting a new `state`, `Blocs` receive `events` and convert the incoming `events` into outgoing `states`.

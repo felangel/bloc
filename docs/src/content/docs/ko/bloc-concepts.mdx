@@ -220,10 +220,6 @@ Bloc 라이브러리를 사용하면 한 곳에서 모든 `Change`에 접근할 
 
 <CounterCubitOnErrorOutputSnippet />
 
-:::note
-`onChange`와 마찬가지로, 내부 `onError` override는 전역 `BlocObserver` override보다 먼저 호출됩니다.
-:::
-
 ## Bloc
 
 `Bloc`은 함수가 아닌 `event`에 의존하여 `state` 변경을 촉발하는 고급 클래스 입니다. `Bloc`은 또한 `BlocBase`를 extends하여 `Cubit`과 유사한 공용 API를 갖고 있습니다. 그러나, `Bloc`에서 `함수`를 호출하여 새로운 `state`를 직접 emit하는 대신, `Bloc`은 `event`를 수신하고 수신된 `event`를 나가는 `state`로 변환합니다.
