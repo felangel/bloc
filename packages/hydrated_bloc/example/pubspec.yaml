@@ -1,5 +1,5 @@
 name: example
-description: A new Flutter project.
+description: A sample project that showcases how to use package:hydrated_bloc.
 version: 1.0.0+1
 publish_to: none
 
