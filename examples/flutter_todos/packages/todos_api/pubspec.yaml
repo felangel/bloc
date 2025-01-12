@@ -4,10 +4,10 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
-  equatable: ^2.0.3
+  equatable: ^2.0.0
   json_annotation: ^4.6.0
   meta: ^1.7.0
   uuid: ^3.0.6

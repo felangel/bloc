@@ -1,3 +1,11 @@
+# 9.0.0
+
+- fix: ensure widget is mounted before invoking listener ([#4237](https://github.com/felangel/bloc/pull/4237))
+- chore(deps): upgrade to `bloc ^9.0.0`
+- chore(deps): bump minimum Dart SDK version to 2.14
+- chore: update sponsors
+- chore: add funding to pubspec.yaml ([#4200](https://github.com/felangel/bloc/pull/4200))
+
 # 8.1.6
 
 - docs: fix gallery image urls ([#4184](https://github.com/felangel/bloc/pull/4184))

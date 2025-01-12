@@ -108,6 +108,6 @@ We are using the `BlocPipe` so that we can display our `CounterBloc` state as it
 
 That's it! We've separated our presentation layer from our business logic layer. Our `CounterPageComponent` has no idea what happens when a user presses a button; it just adds an event to notify the `CounterBloc`. Furthermore, our `CounterBloc` has no idea what is happening with the state (counter value); it's simply converting the `CounterEvents` into integers.
 
-We can run our app with `webdev serve` and can view it at [http://localhost:8080](http://localhost:8080).
+We can run our app with `webdev serve` and can view it locally.
 
 The full source for this example can be found [here](https://github.com/felangel/bloc/tree/master/examples/angular_counter).

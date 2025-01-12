@@ -1,5 +1,5 @@
 name: example
-description: A new Flutter project.
+description: A sample project that showcases how to use package:replay_bloc.
 version: 1.0.0+1
 publish_to: none
 
@@ -7,11 +7,11 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  bloc: ^8.1.1
+  bloc: ^9.0.0
   flutter:
     sdk: flutter
-  flutter_bloc: ^8.1.2
-  replay_bloc: ^0.2.2
+  flutter_bloc: ^9.0.0
+  replay_bloc: ^0.3.0
 
 flutter:
   uses-material-design: true

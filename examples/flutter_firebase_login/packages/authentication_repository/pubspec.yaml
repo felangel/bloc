@@ -4,12 +4,12 @@ version: 1.0.0
 publish_to: none
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
   cache:
     path: ../cache
-  equatable: ^2.0.5
+  equatable: ^2.0.0
   firebase_auth: ^5.0.0
   firebase_core: ^3.0.0
   flutter:

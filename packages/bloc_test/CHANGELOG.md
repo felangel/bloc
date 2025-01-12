@@ -1,3 +1,11 @@
+# 10.0.0
+
+- refactor: `blocTest` depends on core interfaces instead of `BlocBase` ([#4311](https://github.com/felangel/bloc/pull/4311))
+- chore: update to `bloc: ^9.0.0`
+- chore: bump minimum Dart SDK to 2.14
+- chore: add `funding` to `pubspec.yaml`
+- chore: update sponsors
+
 # 9.1.7
 
 - chore: update copyright year
