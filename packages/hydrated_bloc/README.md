@@ -145,6 +145,27 @@ class CounterCubit extends HydratedCubit<int> {
 }
 ```
 
+### Cubit storage set expireIn
+
+You can override the `hydrationExpiresIn` to customize the expiration period of a specific hydration using instances of `HydratedBloc` or `HydratedCubit`.
+
+```dart
+class CounterCubit extends HydratedCubit<int> {
+  CounterCubit() : super(0, storage: EncryptedStorage());
+
+  void increment() => emit(state + 1);
+
+  @override
+  int fromJson(Map<String, dynamic> json) => json['value'] as int;
+
+  @override
+  Map<String, int> toJson(int state) => { 'value': state };
+
+  @override
+  Duration? get hydrationExpiresIn => const Duration(minutes: 1);
+}
+```
+
 ## Custom Storage Directory
 
 Any `storageDirectory` can be used when creating an instance of `HydratedStorage`:
