@@ -121,7 +121,25 @@ mixin HydratedMixin<State> on BlocBase<State> {
   void hydrate({Storage? storage}) {
     __storage = storage ??= HydratedBloc.storage;
     try {
-      final stateJson = __storage.read(storageToken) as Map<dynamic, dynamic>?;
+      Map<dynamic, dynamic>? stateJson =
+          __storage.read(storageToken) as Map<dynamic, dynamic>?;
+
+      try {
+        final stateExpireIn = __storage.read(expirationStorageToken) as int?;
+        if (stateExpireIn != null) {
+          final expireIn = DateTime.fromMicrosecondsSinceEpoch(stateExpireIn);
+          if (DateTime.now().isAfter(expireIn)) {
+            stateJson = null;
+            __storage.delete(storageToken).then((_) {}, onError: onError);
+            __storage
+                .delete(expirationStorageToken)
+                .then((_) {}, onError: onError);
+          }
+        }
+      } catch (error, stackTrace) {
+        onError(error, stackTrace);
+      }
+
       _state = stateJson != null ? _fromJson(stateJson) : super.state;
     } catch (error, stackTrace) {
       onError(error, stackTrace);
@@ -132,6 +150,12 @@ mixin HydratedMixin<State> on BlocBase<State> {
       final stateJson = _toJson(state);
       if (stateJson != null) {
         __storage.write(storageToken, stateJson).then((_) {}, onError: onError);
+      }
+      if (hydrationExpiresIn != null) {
+        __storage
+            .write(expirationStorageToken,
+                DateTime.now().add(hydrationExpiresIn!).microsecondsSinceEpoch)
+            .then((_) {}, onError: onError);
       }
     } catch (error, stackTrace) {
       onError(error, stackTrace);
@@ -152,6 +176,12 @@ mixin HydratedMixin<State> on BlocBase<State> {
       final stateJson = _toJson(state);
       if (stateJson != null) {
         __storage.write(storageToken, stateJson).then((_) {}, onError: onError);
+      }
+      if (hydrationExpiresIn != null) {
+        __storage
+            .write(expirationStorageToken,
+                DateTime.now().add(hydrationExpiresIn!).microsecondsSinceEpoch)
+            .then((_) {}, onError: onError);
       }
     } catch (error, stackTrace) {
       onError(error, stackTrace);
@@ -309,10 +339,17 @@ mixin HydratedMixin<State> on BlocBase<State> {
   @nonVirtual
   String get storageToken => '$storagePrefix$id';
 
+  /// `expirationStorageToken` is used as hydrated storage expiration date.
+  @nonVirtual
+  String get expirationStorageToken => '$storagePrefix$id-expireIn';
+
   /// [clear] is used to wipe or invalidate the cache of a [HydratedBloc].
   /// Calling [clear] will delete the cached state of the bloc
   /// but will not modify the current state of the bloc.
-  Future<void> clear() => __storage.delete(storageToken);
+  Future<void> clear() async {
+    await __storage.delete(expirationStorageToken);
+    await __storage.delete(storageToken);
+  }
 
   /// Responsible for converting the `Map<String, dynamic>` representation
   /// of the bloc state into a concrete instance of the bloc state.
@@ -323,6 +360,9 @@ mixin HydratedMixin<State> on BlocBase<State> {
   ///
   /// If [toJson] returns `null`, then no state changes will be persisted.
   Map<String, dynamic>? toJson(State state);
+
+  /// `hydrationExpiresIn` sets the expiration duration for the stored state.
+  Duration? hydrationExpiresIn;
 }
 
 /// Reports that an object could not be serialized due to cyclic references.
