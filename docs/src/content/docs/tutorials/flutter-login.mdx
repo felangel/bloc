@@ -18,7 +18,6 @@ In the following tutorial, we're going to build a Login Flow in Flutter using th
 ## Key Topics
 
 - [BlocProvider](/flutter-bloc-concepts#blocprovider), Flutter widget which provides a bloc to its children.
-- Using Cubit instead of Bloc. [What's the difference?](/bloc-concepts#cubit-vs-bloc)
 - Adding events with [context.read](/flutter-bloc-concepts#contextread).
 - Prevent unnecessary rebuilds with [Equatable](/faqs#when-to-use-equatable).
 - [RepositoryProvider](/flutter-bloc-concepts#repositoryprovider), a Flutter widget which provides a repository to its children.
@@ -60,7 +59,7 @@ Next, we can create a `pubspec.yaml` for the `authentication_repository` package
 />
 
 :::note
-`package:authentication_repository` will be a pure Dart package and for simplicity we will only have a dependency on [package:meta](https://pub.dev/packages/meta) for some useful annotations.
+`package:authentication_repository` will be a pure Dart package without any external dependencies.
 :::
 
 Next up, we need to implement the `AuthenticationRepository` class itself which will be in `packages/authentication_repository/lib/src/authentication_repository.dart`.
@@ -260,10 +259,6 @@ Next, we can replace the default `main.dart` with:
 	title="lib/main.dart"
 />
 
-:::note
-We are injecting a single instance of the `AuthenticationRepository` and `UserRepository` into the `App` widget (which we will get to next).
-:::
-
 ## App
 
 `app.dart` will contain the root `App` widget for the entire application.
@@ -416,7 +411,7 @@ The `LoginPage` is responsible for exposing the `Route` as well as creating and 
 />
 
 :::note
-`RepositoryProvider.of<AuthenticationRepository>(context)` is used to lookup the instance of `AuthenticationRepository` via the `BuildContext`.
+`context.read<AuthenticationRepository>()` is used to lookup the instance of `AuthenticationRepository` via the `BuildContext`.
 :::
 
 ### Login Form
@@ -428,7 +423,7 @@ The `LoginForm` handles notifying the `LoginBloc` of user events and also respon
 	title="lib/login/view/login_form.dart"
 />
 
-`BlocListener` is used to show a `SnackBar` if the login submission fails. In addition, `BlocBuilder` widgets are used to wrap each of the `TextField` widgets and make use of the `buildWhen` property in order to optimize for rebuilds. The `onChanged` callback is used to notify the `LoginBloc` of changes to the username/password.
+`BlocListener` is used to show a `SnackBar` if the login submission fails. In addition, `context.select` is used to efficiently access specific parts of the `LoginState` for each widget, preventing unnecessary rebuilds. The `onChanged` callback is used to notify the `LoginBloc` of changes to the username/password.
 
 The `_LoginButton` widget is only enabled if the status of the form is valid and a `CircularProgressIndicator` is shown in its place while the form is being submitted.
 
