@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 class ListCubit extends HydratedCubit<List<String>> {
   ListCubit() : super(const <String>[]);
 
-  void addItem(String item) => emit(List.from(state)..add(item));
+  void addItem(String item) => emit(List.of(state)..add(item));
 
   @override
   Map<String, dynamic> toJson(List<String> state) {
@@ -22,16 +22,14 @@ class ListCubitMap<T extends ToJsonMap<E>, E> extends HydratedCubit<List<T>> {
   final T Function(Map<String, dynamic> json) _fromJson;
   final bool explicit;
 
-  void addItem(T item) => emit(List.from(state)..add(item));
+  void addItem(T item) => emit(List.of(state)..add(item));
 
   @override
   Map<String, dynamic> toJson(List<T> state) {
     final map = <String, dynamic>{
       'state': explicit
-          ? List<Map<String, E>>.from(
-              state.map<dynamic>(
-                (x) => x.toJson(),
-              ),
+          ? List<Map<String, E>>.of(
+              state.map((x) => x.toJson()),
             )
           : state,
     };
@@ -53,17 +51,15 @@ class ListCubitList<T extends ToJsonList<E>, E> extends HydratedCubit<List<T>> {
   final T Function(List<dynamic> json) _fromJson;
   final bool explicit;
 
-  void addItem(T item) => emit(List.from(state)..add(item));
+  void addItem(T item) => emit(List.of(state)..add(item));
   void reset() => emit(<T>[]);
 
   @override
   Map<String, dynamic> toJson(List<T> state) {
     final map = <String, dynamic>{
       'state': explicit
-          ? List<List<E>>.from(
-              state.map<dynamic>(
-                (x) => x.toJson(),
-              ),
+          ? List<List<E>>.of(
+              state.map((x) => x.toJson()),
             )
           : state,
     };
