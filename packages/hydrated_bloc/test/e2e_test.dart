@@ -15,7 +15,7 @@ void main() {
 
     setUp(() async {
       storage = await HydratedStorage.build(
-        storageDirectory: Directory(
+        storageDirectory: HydratedStorageDirectory(
           path.join(Directory.current.path, '.cache'),
         ),
       );
@@ -309,6 +309,30 @@ void main() {
         cubit.increment();
         expect(cubit.state, 1);
         await storage.clear();
+        expect(SimpleCubit().state, 0);
+      });
+
+      test('can change storage', () async {
+        await HydratedBloc.storage.close();
+        final storageDirectoryA = Directory.systemTemp.createTempSync();
+        final storageA = await HydratedStorage.build(
+          storageDirectory: HydratedStorageDirectory(storageDirectoryA.path),
+        );
+
+        HydratedBloc.storage = storageA;
+        final cubit = SimpleCubit();
+        expect(cubit.state, 0);
+        cubit.increment();
+        expect(cubit.state, 1);
+        await sleep();
+        expect(SimpleCubit().state, 1);
+
+        final storageDirectoryB = Directory.systemTemp.createTempSync();
+        final storageB = await HydratedStorage.build(
+          storageDirectory: HydratedStorageDirectory(storageDirectoryB.path),
+        );
+        HydratedBloc.storage = storageB;
+
         expect(SimpleCubit().state, 0);
       });
     });

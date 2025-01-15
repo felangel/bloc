@@ -1,5 +1,5 @@
 name: example
-description: A new Flutter project.
+description: A sample project that showcases how to use package:hydrated_bloc.
 version: 1.0.0+1
 publish_to: none
 
@@ -9,8 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^8.1.2
-  hydrated_bloc: ^9.0.0
+  flutter_bloc: ^9.0.0
+  hydrated_bloc: ^10.0.0
   path_provider: ^2.0.15
 
 flutter:

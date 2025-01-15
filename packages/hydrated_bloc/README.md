@@ -40,10 +40,7 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
         <tr>
             <td align="center" style="border: 1px solid black">
                 <a href="https://www.miquido.com/flutter-development-company/?utm_source=github&utm_medium=sponsorship&utm_campaign=bloc-silver-tier&utm_term=flutter-development-company&utm_content=miquido-logo"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/miquido.png" width="225"/></a>
-            </td>
-            <td align="center" style="border: 1px solid black">
-                <a href="https://bit.ly/parabeac_flutterbloc"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/parabeac.png" width="225"/></a>
-            </td>
+            </td>            
             <td align="center" style="border: 1px solid black">
                 <a href="https://www.netguru.com/services/flutter-app-development?utm_campaign=%5BS%5D%5BMob%5D%20Flutter&utm_source=github&utm_medium=sponsorship&utm_term=bloclibrary"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/netguru.png" width="225"/></a>
             </td>
@@ -68,8 +65,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: kIsWeb
-        ? HydratedStorage.webStorageDirectory
-        : await getApplicationDocumentsDirectory(),
+        ? HydratedStorageDirectory.web
+        : HydratedStorageDirectory((await getTemporaryDirectory()).path),
   );
   runApp(App());
 }
@@ -117,8 +114,26 @@ Now the `CounterCubit` and `CounterBloc` will automatically persist/restore thei
 ```dart
 class CounterCubit extends Cubit<int> with HydratedMixin {
   CounterCubit() : super(0) {
-    hydrate();
+    hydrate(); // You must always call `hydrate` when using `HydratedMixin`
   }
+
+  void increment() => emit(state + 1);
+
+  @override
+  int fromJson(Map<String, dynamic> json) => json['value'] as int;
+
+  @override
+  Map<String, int> toJson(int state) => { 'value': state };
+}
+```
+
+## Storage Overrides
+
+You can override the global storage instance for specific `HydratedBloc` or `HydratedCubit` instances by passing a custom storage instance via constructor.
+
+```dart
+class CounterCubit extends HydratedCubit<int> {
+  CounterCubit() : super(0, storage: EncryptedStorage());
 
   void increment() => emit(state + 1);
 
@@ -214,7 +229,7 @@ testWidgets('...', (tester) async {
 
 ## Dart Versions
 
-- Dart 2: >= 2.12
+- Dart 2: >= 2.14
 
 ## Maintainers
 

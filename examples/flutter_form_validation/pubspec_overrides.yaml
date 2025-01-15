@@ -1,0 +1,5 @@
+dependency_overrides:
+  bloc:
+    path: ../../packages/bloc
+  flutter_bloc:
+    path: ../../packages/flutter_bloc

@@ -9,7 +9,84 @@ import { Code, Tabs, TabItem } from '@astrojs/starlight/components';
 Please refer to the [release log](https://github.com/felangel/bloc/releases) for more information regarding what changed in each release.
 :::
 
+## v10.0.0
+
+### `package:bloc_test`
+
+#### ❗✨ Decouple `blocTest` from `BlocBase`
+
+:::note[What Changed?]
+In bloc_test v10.0.0, the `blocTest` API is no longer tightly coupled to `BlocBase`.
+:::
+
+##### Rationale
+
+`blocTest` should use the core bloc interfaces when possible for increased flexibility and reusability.
+Previously this wasn't possible because `BlocBase` implemented `StateStreamableSource` which was not enough for `blocTest` due to the internal dependency on the `emit` API.
+
+### `package:hydrated_bloc`
+
+#### ❗✨ Support WebAssembly
+
+:::note[What Changed?]
+In hydrated_bloc v10.0.0, support for compiling to WebAssembly (wasm) was added.
+:::
+
+##### Rationale
+
+It was previously not possible to compile apps to wasm when using `hydrated_bloc`. In v10.0.0, the package was refactored to allow compiling to wasm.
+
+**v9.x.x**
+
+```dart
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorage.webStorageDirectory
+        : await getTemporaryDirectory(),
+  );
+  runApp(App());
+}
+```
+
+**v10.x.x**
+
+```dart
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorageDirectory.web
+        : HydratedStorageDirectory((await getTemporaryDirectory()).path),
+  );
+  runApp(const App());
+}
+```
+
 ## v9.0.0
+
+### `package:bloc`
+
+#### ❗🧹 Remove Deprecated APIs
+
+:::note[What Changed?]
+In bloc v9.0.0, all previously deprecated APIs were removed.
+:::
+
+##### Summary
+
+- `BlocOverrides` removed in favor of `Bloc.observer` and `Bloc.transformer`
+
+#### ❗✨ Introduce new `EmittableStateStreamableSource` Interface
+
+:::note[What Changed?]
+In bloc v9.0.0, a new core interface `EmittableStateStreamableSource` was introduced.
+:::
+
+##### Rationale
+
+`package:bloc_test` was previously tightly coupled to `BlocBase`. The `EmittableStateStreamableSource` interface was introduced in order to allow `blocTest` to be decoupled from the `BlocBase` concrete implementation.
 
 ### `package:hydrated_bloc`
 

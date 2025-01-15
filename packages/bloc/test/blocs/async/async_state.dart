@@ -43,8 +43,7 @@ class AsyncState {
           isSuccess == other.isSuccess;
 
   @override
-  int get hashCode =>
-      isLoading.hashCode ^ hasError.hashCode ^ isSuccess.hashCode;
+  int get hashCode => Object.hashAll([isLoading, hasError, isSuccess]);
 
   @override
   String toString() =>

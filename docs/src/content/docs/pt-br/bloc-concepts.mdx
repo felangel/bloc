@@ -220,10 +220,6 @@ Se rodarmos o mesmo programa novamente, devemos ver o seguinte output:
 
 <CounterCubitOnErrorOutputSnippet />
 
-:::note
-Assim como no `onChange`, a sobrescrita interna `onError` é invocada antes da sobrescrita global do `BlocObserver`.
-:::
-
 ## Bloc
 
 Um `Bloc` é uma classe mais avançada que depende de `eventos` para acionar mudanças de `estado` em vez de funções. `Bloc` também estende `BlocBase`, o que significa que ele tem uma API pública semelhante ao `Cubit`. No entanto, em vez de chamar uma `função` em um `Bloc` e emitir diretamente um novo `estado`, os `Blocs` recebem `eventos` e convertem os `eventos` de entrada em `estados` de saída.

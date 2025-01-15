@@ -120,6 +120,10 @@ extension on Color {
       'percentage must be between 1 and 100',
     );
     final p = percent / 100;
+    final alpha = a.round();
+    final red = r.round();
+    final green = g.round();
+    final blue = b.round();
     return Color.fromARGB(
       alpha,
       red + ((255 - red) * p).round(),

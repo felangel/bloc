@@ -1,0 +1,9 @@
+dependency_overrides:
+  bloc:
+    path: ../../packages/bloc
+  bloc_concurrency:
+    path: ../../packages/bloc_concurrency
+  bloc_test:
+    path: ../../packages/bloc_test
+  flutter_bloc:
+    path: ../../packages/flutter_bloc

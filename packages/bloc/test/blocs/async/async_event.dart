@@ -13,7 +13,7 @@ class AsyncEvent {
       other is AsyncEvent && runtimeType == other.runtimeType;
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hashAll([runtimeType]);
 
   @override
   String toString() => 'AsyncEvent';
