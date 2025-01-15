@@ -89,16 +89,12 @@ abstract class BlocBase<State>
   /// To allow for the possibility of notifying listeners of the initial state,
   /// emitting a state which is equal to the initial state is allowed as long
   /// as it is the first thing emitted by the instance.
-  ///
-  /// * Throws a [StateError] if the bloc is closed.
   @protected
   @visibleForTesting
   @override
   void emit(State state) {
     try {
-      if (isClosed) {
-        throw StateError('Cannot emit new states after calling close');
-      }
+      if (isClosed) return;
       if (state == _state && _emitted) return;
       onChange(Change<State>(currentState: this.state, nextState: state));
       _state = state;
