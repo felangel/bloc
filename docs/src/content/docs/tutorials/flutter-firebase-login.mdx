@@ -110,6 +110,36 @@ We need to follow the [firebase_auth usage instructions](https://pub.dev/package
 Remember to update the `google-services.json` on Android and the `GoogleService-Info.plist` & `Info.plist` on iOS, otherwise the application will crash.
 :::
 
+## Caching Implementation
+
+### Purpose of Caching
+
+The caching mechanism in this login flow provides several key benefits:
+
+- **Improved User Experience**: By caching the user's authentication state, we eliminate unnecessary sign-in prompts and provide seamless transitions between app sessions.
+- **Offline Support**: The cached authentication state allows the application to function even with intermittent internet connectivity.
+- **Performance Optimization**: Caching reduces authentication checks, improving app responsiveness.
+
+### Caching Details
+
+#### Caching Mechanism
+
+- Implementation using shared preferences for persistent storage
+- Secure storage of authentication tokens
+- User state management through local caching
+
+#### Caching Strategy
+
+- When cache is updated: After successful login, registration, and token refresh
+- When cache is read: App startup and authentication state checks
+- Cache invalidation rules and refresh policies
+
+#### Error Handling
+
+- Handling expired cached credentials
+- Cache corruption recovery
+- Fallback mechanisms for cache failures
+
 ## Project Dependencies
 
 We can replace the generated `pubspec.yaml` at the root of the project with the following:
@@ -128,6 +158,27 @@ Then install all of the dependencies:
 :::note
 We are depending on the `authentication_repository` package via path which will allow us to iterate quickly while still maintaining a clear separation.
 :::
+
+## Package Documentation
+
+### Firebase Packages
+
+- **firebase_auth**: Core authentication package for Firebase integration
+  
+  - User authentication management
+  - Authentication state tracking
+  - Various sign-in method support
+- **firebase_core**: Base Firebase functionality
+  
+  - Firebase initialization
+  - Platform-specific configurations
+  - Core Firebase services setup
+
+### Installation Guide
+
+- Package version compatibility matrix
+- Step-by-step installation process
+- Required configuration for each package
 
 ## main.dart
 
@@ -200,6 +251,36 @@ A [`BlocObserver`](/bloc-concepts/#blocobserver-1) is great for logging Bloc eve
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/app/bloc/app_bloc.dart"
 	title="lib/app/bloc/app_bloc.dart"
 />
+
+## Project Structure Overview
+
+### BLoC Pattern Implementation
+
+- Separation of business logic from UI
+- State management architecture
+- Event handling and state emissions
+
+### Directory Structure
+
+```
+lib/
+├── blocs/
+│   ├── authentication/
+│   └── login/
+├── models/
+│   ├── user.dart
+│   └── authentication_status.dart
+├── repositories/
+│   └── authentication_repository.dart
+└── utils/
+    └── validators.dart
+```
+
+### Key Files
+
+- **auth_bloc.dart**: Manages authentication state
+- **auth_repository.dart**: Firebase authentication interface
+- **user_repository.dart**: User data management
 
 ## Models
 
@@ -335,6 +416,69 @@ A `widgets` directory was created alongside the `view` directory within the `hom
 :::note
 When the logout `IconButton` is tapped, an `AuthenticationLogoutRequested` event is added to the `AuthenticationBloc` which signs the user out and navigates them back to the `LoginPage`.
 :::
+
+## Detailed Setup Guide
+
+### Firebase Project Configuration
+
+1. Creating Firebase project
+   
+   - Project setup in Firebase Console
+   - Application registration
+   - Authentication service enablement
+2. Required configurations
+   
+   - API key setup
+   - OAuth consent configuration
+   - Allowed domains and redirect URIs
+
+### Platform Configuration
+
+#### Android Setup
+
+1. google-services.json
+   
+   - Proper file placement
+   - Configuration verification
+2. Gradle configuration
+   
+   - Required dependencies
+   - Plugin configuration
+3. Manifest updates
+   
+   - Internet permissions
+   - OAuth redirects
+   - Required metadata
+
+#### iOS Setup
+
+1. GoogleService-Info.plist
+   
+   - File placement
+   - Configuration verification
+2. Info.plist configuration
+   
+   - URL schemes
+   - Required permissions
+3. CocoaPods setup
+   
+   - Pod installation
+   - Platform configuration
+   - Required dependencies
+
+### Troubleshooting
+
+#### Common Issues
+
+1. Firebase initialization failures
+2. Authentication state inconsistencies
+3. Platform-specific integration problems
+
+#### Solutions and Best Practices
+
+- Verification steps for each integration point
+- Debug logging implementation
+- Error handling strategies
 
 At this point we have a pretty solid login implementation using Firebase and we have decoupled our presentation layer from the business logic layer by using the Bloc Library.
 
