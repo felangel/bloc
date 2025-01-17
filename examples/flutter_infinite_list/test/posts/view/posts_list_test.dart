@@ -15,7 +15,7 @@ extension on WidgetTester {
       MaterialApp(
         home: BlocProvider.value(
           value: postBloc,
-          child: PostsList(),
+          child: Scaffold(body: PostsList()),
         ),
       ),
     );
