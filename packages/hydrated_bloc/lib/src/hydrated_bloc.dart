@@ -22,6 +22,14 @@ import 'package:meta/meta.dart';
 ///   }
 ///
 ///   @override
+///   bool shouldPersistOnEvent(CounterEvent? event) {
+///     // Persist state only on increment and decrement events
+///     final shouldPersist = event is CounterIncrementPressed ||
+///        event is CounterDecrementPressed;
+///     return shouldPersist;
+///   }
+///
+///   @override
 ///   int fromJson(Map<String, dynamic> json) => json['value'] as int;
 ///
 ///   @override
@@ -33,8 +41,12 @@ import 'package:meta/meta.dart';
 abstract class HydratedBloc<Event, State> extends Bloc<Event, State>
     with HydratedMixin {
   /// {@macro hydrated_bloc}
-  HydratedBloc(State state, {Storage? storage}) : super(state) {
-    hydrate(storage: storage);
+  HydratedBloc(
+    State state, {
+    Storage? storage,
+    Duration? ttl,
+  }) : super(state) {
+    hydrate(storage: storage, ttl: ttl);
   }
 
   static Storage? _storage;
@@ -48,6 +60,26 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State>
   static Storage get storage {
     if (_storage == null) throw const StorageNotFound();
     return _storage!;
+  }
+
+  /// Determines whether to persist the state based on the event.
+  ///
+  /// By default, all events trigger state persistence.
+  /// Override this method to customize which events should persist state.
+  bool shouldPersistOnEvent(Event? event) => true;
+
+  @override
+  bool shouldPersistOnChange(Change<State> change) {
+    return shouldPersistOnEvent(_currentEvent);
+  }
+
+  /// The current event being processed.
+  Event? _currentEvent;
+
+  @override
+  void onEvent(Event event) {
+    super.onEvent(event);
+    _currentEvent = event;
   }
 }
 
@@ -75,8 +107,12 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State>
 abstract class HydratedCubit<State> extends Cubit<State>
     with HydratedMixin<State> {
   /// {@macro hydrated_cubit}
-  HydratedCubit(State state, [Storage? storage]) : super(state) {
-    hydrate(storage: storage);
+  HydratedCubit(
+    State state, [
+    Storage? storage,
+    Duration? ttl,
+  ]) : super(state) {
+    hydrate(storage: storage, ttl: ttl);
   }
 }
 
@@ -106,6 +142,8 @@ abstract class HydratedCubit<State> extends Cubit<State>
 mixin HydratedMixin<State> on BlocBase<State> {
   late final Storage __storage;
 
+  static const String _updatedAtKey = '_updatedAt';
+
   /// Populates the internal state storage with the latest state.
   /// This should be called when using the [HydratedMixin]
   /// directly within the constructor body.
@@ -118,11 +156,30 @@ mixin HydratedMixin<State> on BlocBase<State> {
   ///  ...
   /// }
   /// ```
-  void hydrate({Storage? storage}) {
+  void hydrate({Storage? storage, Duration? ttl}) {
     __storage = storage ??= HydratedBloc.storage;
+    _ttl = ttl;
+
     try {
-      final stateJson = __storage.read(storageToken) as Map<dynamic, dynamic>?;
-      _state = stateJson != null ? _fromJson(stateJson) : super.state;
+      final stateJson = __storage.read(storageToken) as Map<String, dynamic>?;
+      if (stateJson != null) {
+        if (_ttl != null && stateJson.containsKey(_updatedAtKey)) {
+          final updatedAt =
+              DateTime.tryParse(stateJson[_updatedAtKey] as String);
+          if (updatedAt != null &&
+              updatedAt.add(_ttl!).isBefore(DateTime.now())) {
+            // Persisted state is expired
+            _state = super.state;
+            __storage.delete(storageToken);
+          } else {
+            _state = _fromJson(stateJson);
+          }
+        } else {
+          _state = _fromJson(stateJson);
+        }
+      } else {
+        _state = super.state;
+      }
     } catch (error, stackTrace) {
       onError(error, stackTrace);
       _state = super.state;
@@ -131,6 +188,9 @@ mixin HydratedMixin<State> on BlocBase<State> {
     try {
       final stateJson = _toJson(state);
       if (stateJson != null) {
+        if (_ttl != null) {
+          stateJson[_updatedAtKey] = DateTime.now().toIso8601String();
+        }
         __storage.write(storageToken, stateJson).then((_) {}, onError: onError);
       }
     } catch (error, stackTrace) {
@@ -148,17 +208,31 @@ mixin HydratedMixin<State> on BlocBase<State> {
   void onChange(Change<State> change) {
     super.onChange(change);
     final state = change.nextState;
-    try {
-      final stateJson = _toJson(state);
-      if (stateJson != null) {
-        __storage.write(storageToken, stateJson).then((_) {}, onError: onError);
+    if (shouldPersistOnChange(change)) {
+      try {
+        final stateJson = _toJson(state);
+        if (stateJson != null) {
+          if (_ttl != null) {
+            stateJson[_updatedAtKey] = DateTime.now().toIso8601String();
+          }
+          __storage.write(storageToken, stateJson).then(
+                (_) {},
+                onError: onError,
+              );
+        }
+      } catch (error, stackTrace) {
+        onError(error, stackTrace);
+        rethrow;
       }
-    } catch (error, stackTrace) {
-      onError(error, stackTrace);
-      rethrow;
     }
     _state = state;
   }
+
+  /// Determines whether to persist the state based on the state change.
+  ///
+  /// By default, all state changes are persisted.
+  /// Override this method to customize persistence logic.
+  bool shouldPersistOnChange(Change<State> change) => true;
 
   State? _fromJson(dynamic json) {
     final dynamic traversedJson = _traverseRead(json);
@@ -190,18 +264,18 @@ mixin HydratedMixin<State> on BlocBase<State> {
   T? _cast<T>(dynamic x) => x is T ? x : null;
 
   _Traversed _traverseWrite(Object? value) {
-    final dynamic traversedAtomicJson = _traverseAtomicJson(value);
+    final traversedAtomicJson = _traverseAtomicJson(value);
     if (traversedAtomicJson is! NIL) {
       return _Traversed.atomic(traversedAtomicJson);
     }
-    final dynamic traversedComplexJson = _traverseComplexJson(value);
+    final traversedComplexJson = _traverseComplexJson(value);
     if (traversedComplexJson is! NIL) {
       return _Traversed.complex(traversedComplexJson);
     }
     try {
       _checkCycle(value);
-      final dynamic customJson = _toEncodable(value);
-      final dynamic traversedCustomJson = _traverseJson(customJson);
+      final customJson = _toEncodable(value);
+      final traversedCustomJson = _traverseJson(customJson);
       if (traversedCustomJson is NIL) {
         throw HydratedUnsupportedError(value);
       }
@@ -262,7 +336,7 @@ mixin HydratedMixin<State> on BlocBase<State> {
   }
 
   dynamic _traverseJson(dynamic object) {
-    final dynamic traversedAtomicJson = _traverseAtomicJson(object);
+    final traversedAtomicJson = _traverseAtomicJson(object);
     return traversedAtomicJson is! NIL
         ? traversedAtomicJson
         : _traverseComplexJson(object);
@@ -287,6 +361,8 @@ mixin HydratedMixin<State> on BlocBase<State> {
     assert(identical(_seen.last, object), 'last seen object must be identical');
     _seen.removeLast();
   }
+
+  Duration? _ttl;
 
   /// [id] is used to uniquely identify multiple instances
   /// of the same [HydratedBloc] type.

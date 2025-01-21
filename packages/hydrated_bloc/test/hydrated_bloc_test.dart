@@ -43,6 +43,10 @@ abstract class CounterEvent {}
 
 class Increment extends CounterEvent {}
 
+class Decrement extends CounterEvent {}
+
+class DoNothing extends CounterEvent {}
+
 class MyCallbackHydratedBloc extends HydratedBloc<CounterEvent, int> {
   MyCallbackHydratedBloc({this.onFromJsonCalled}) : super(0) {
     on<Increment>((event, emit) => emit(state + 1));
@@ -127,6 +131,39 @@ class MyErrorThrowingBloc extends HydratedBloc<Object, int> {
   int fromJson(dynamic json) {
     return 0;
   }
+}
+
+class ConditionalPersistHydratedBloc extends HydratedBloc<CounterEvent, int> {
+  ConditionalPersistHydratedBloc() : super(0) {
+    on<Increment>((event, emit) => emit(state + 1));
+    on<Decrement>((event, emit) => emit(state - 1));
+    on<DoNothing>((event, emit) => emit(state + 1000));
+  }
+
+  @override
+  Map<String, int>? toJson(int state) => {'value': state};
+
+  @override
+  int? fromJson(Map<String, dynamic> json) => json['value'] as int?;
+
+  // Only persist on Increment/Decrement, not on DoNothing
+  @override
+  bool shouldPersistOnEvent(CounterEvent? event) {
+    return event is Increment || event is Decrement;
+  }
+}
+
+class TtlHydratedBloc extends HydratedBloc<CounterEvent, int> {
+  TtlHydratedBloc({Storage? storage, Duration? ttl})
+      : super(0, storage: storage, ttl: ttl) {
+    on<Increment>((event, emit) => emit(state + 1));
+  }
+
+  @override
+  int? fromJson(Map<String, dynamic> json) => json['value'] as int?;
+
+  @override
+  Map<String, dynamic>? toJson(int state) => {'value': state};
 }
 
 void main() {
@@ -559,6 +596,96 @@ void main() {
           ).called(1);
         });
       });
+    });
+  });
+
+  group('ConditionalPersistHydratedBloc', () {
+    late Storage storage;
+
+    setUp(() {
+      storage = MockStorage();
+      when<dynamic>(() => storage.read(any())).thenReturn(null);
+      when(() => storage.write(any(), any<dynamic>())).thenAnswer((_) async {});
+      when(() => storage.delete(any())).thenAnswer((_) async {});
+      when(() => storage.clear()).thenAnswer((_) async {});
+      HydratedBloc.storage = storage;
+    });
+
+    test('persists only on Increment/Decrement events', () async {
+      final bloc = ConditionalPersistHydratedBloc();
+      verify(() => storage.read('ConditionalPersistHydratedBloc')).called(1);
+      verify(
+        () => storage.write('ConditionalPersistHydratedBloc', {'value': 0}),
+      ).called(1);
+
+      bloc.add(Increment());
+
+      await expectLater(bloc.stream, emits(1));
+
+      verify(
+        () => storage.write('ConditionalPersistHydratedBloc', {'value': 1}),
+      ).called(1);
+
+      bloc.add(DoNothing());
+
+      await expectLater(bloc.stream, emits(1001));
+
+      verifyNever(
+        () => storage.write('ConditionalPersistHydratedBloc', {'value': 1001}),
+      );
+
+      bloc.add(Decrement());
+
+      await expectLater(bloc.stream, emits(1000));
+
+      verify(
+        () => storage.write('ConditionalPersistHydratedBloc', {'value': 1000}),
+      ).called(1);
+
+      verifyNoMoreInteractions(storage);
+    });
+  });
+
+  group('TtlHydratedBloc', () {
+    late Storage storage;
+
+    setUp(() {
+      storage = MockStorage();
+      when<dynamic>(() => storage.read(any())).thenReturn(null);
+      when(() => storage.write(any(), any<dynamic>())).thenAnswer((_) async {});
+      when(() => storage.delete(any())).thenAnswer((_) async {});
+      when(() => storage.clear()).thenAnswer((_) async {});
+      HydratedBloc.storage = storage;
+    });
+
+    test('restores state when not expired', () {
+      final updatedAt = DateTime.now().subtract(const Duration(seconds: 5));
+      const ttl = Duration(seconds: 10);
+
+      when<dynamic>(() => storage.read('TtlHydratedBloc')).thenReturn({
+        'value': 123,
+        '_updatedAt': updatedAt.toIso8601String(),
+      });
+
+      final bloc = TtlHydratedBloc(storage: storage, ttl: ttl);
+      expect(bloc.state, 123);
+
+      verifyNever(() => storage.delete('TtlHydratedBloc'));
+    });
+
+    test('does not restore state when expired and deletes from storage', () {
+      final updatedAt = DateTime.now().subtract(const Duration(days: 2));
+      const ttl = Duration(days: 1);
+
+      when<dynamic>(() => storage.read('TtlHydratedBloc')).thenReturn({
+        'value': 999,
+        '_updatedAt': updatedAt.toIso8601String(),
+      });
+
+      final bloc = TtlHydratedBloc(storage: storage, ttl: ttl);
+      expect(bloc.state, 0);
+
+      verify(() => storage.delete('TtlHydratedBloc')).called(1);
     });
   });
 }

@@ -88,6 +88,22 @@ class MyMultiHydratedCubit extends HydratedCubit<int> {
   int? fromJson(dynamic json) => json['value'] as int?;
 }
 
+class NoPersistHydratedCubit extends HydratedCubit<int> {
+  NoPersistHydratedCubit() : super(0);
+
+  @override
+  Map<String, int>? toJson(int state) => {'value': state};
+
+  @override
+  int? fromJson(Map<String, dynamic> json) => json['value'] as int?;
+
+  // Always return false to skip persisting.
+  @override
+  bool shouldPersistOnChange(Change<int> change) => false;
+
+  void increment() => emit(state + 1);
+}
+
 void main() {
   group('HydratedCubit', () {
     late Storage storage;
@@ -378,6 +394,18 @@ void main() {
 
         expect(initialStateB, cachedState);
       });
+    });
+
+    test('should not persist state when shouldPersistOnChange returns false',
+        () {
+      final cubit = NoPersistHydratedCubit();
+      // The first write happens once in the constructor
+      // due to immediate hydration attempt.
+      verify(() => storage.write('NoPersistHydratedCubit', any<dynamic>()))
+          .called(1);
+
+      cubit.increment();
+      verifyNever(() => storage.write('NoPersistHydratedCubit', {'value': 1}));
     });
   });
 }
