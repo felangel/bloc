@@ -4,11 +4,16 @@ import { BlocType } from "../utils";
 export function getCubitStateTemplate(
   cubitName: string,
   type: BlocType,
-  useSealedClasses: boolean
+  useSealedClasses: boolean,
+  useUnionTypes: boolean,
 ): string {
   switch (type) {
     case BlocType.Freezed:
-      return getFreezedCubitStateTemplate(cubitName);
+      return getFreezedCubitStateTemplate(
+        cubitName,
+        useSealedClasses,
+        useUnionTypes,
+      );
     case BlocType.Equatable:
       return getEquatableCubitStateTemplate(cubitName, useSealedClasses);
     default:
@@ -54,14 +59,30 @@ ${subclassPrefix}class ${pascalCaseCubitName}Initial extends ${pascalCaseCubitNa
 `;
 }
 
-function getFreezedCubitStateTemplate(cubitName: string): string {
+function getFreezedCubitStateTemplate(
+  cubitName: string,
+  useSealedClasses: boolean,
+  useUnionTypes: boolean,
+): string {
   const pascalCaseCubitName = changeCase.pascalCase(cubitName);
   const snakeCaseCubitName = changeCase.snakeCase(cubitName);
+  const classPrefix = useSealedClasses ? "sealed " : "";
+
+  if (useUnionTypes) {
+    return `part of '${snakeCaseCubitName}_cubit.dart';
+
+@freezed
+${classPrefix}class ${pascalCaseCubitName}State with _\$${pascalCaseCubitName}State {
+  const factory ${pascalCaseCubitName}State.initial() = _Initial;
+}
+`;
+  }
+
   return `part of '${snakeCaseCubitName}_cubit.dart';
 
 @freezed
-class ${pascalCaseCubitName}State with _\$${pascalCaseCubitName}State {
-  const factory ${pascalCaseCubitName}State.initial() = _Initial;
+${classPrefix}class ${pascalCaseCubitName}State with _\$${pascalCaseCubitName}State {
+  const factory ${pascalCaseCubitName}State() = _${pascalCaseCubitName}State;
 }
 `;
 }
