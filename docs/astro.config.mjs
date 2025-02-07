@@ -112,6 +112,7 @@ export default defineConfig({
 					translations: {
 						'zh-CN': '介绍',
 						fa: 'مقدمه',
+						es: 'Introducción',
 					},
 					items: [
 						{
@@ -120,6 +121,7 @@ export default defineConfig({
 							translations: {
 								'zh-CN': '快速入门',
 								fa: 'شروع شدن',
+								es: 'Empezando',
 							},
 						},
 						{
@@ -128,6 +130,7 @@ export default defineConfig({
 							translations: {
 								'zh-CN': '为什么用 Bloc?',
 								fa: 'چرا Bloc؟',
+								es: '¿Por qué Bloc?',
 							},
 						},
 						{
@@ -136,6 +139,7 @@ export default defineConfig({
 							translations: {
 								'zh-CN': 'Bloc 核心概念',
 								fa: 'مفاهیم Bloc',
+								es: 'Conceptos de Bloc',
 							},
 						},
 						{
@@ -144,6 +148,7 @@ export default defineConfig({
 							translations: {
 								'zh-CN': 'Flutter Bloc 核心概念',
 								fa: 'مفاهیم بلوک فلاتر',
+								es: 'Conceptos de Flutter Bloc',
 							},
 						},
 						{
@@ -151,6 +156,7 @@ export default defineConfig({
 							link: '/architecture/',
 							translations: {
 								fa: 'معماری',
+								es: 'Arquitectura',
 							},
 						},
 						{
@@ -158,6 +164,7 @@ export default defineConfig({
 							link: '/modeling-state/',
 							translations: {
 								fa: 'وضعیت (State) مدل سازی',
+								es: 'Modelando el Estado',
 							},
 						},
 						{
@@ -165,6 +172,7 @@ export default defineConfig({
 							link: '/testing/',
 							translations: {
 								fa: 'آزمایش کردن',
+								es: 'Pruebas',
 							},
 						},
 						{
@@ -172,6 +180,7 @@ export default defineConfig({
 							link: '/naming-conventions/',
 							translations: {
 								fa: 'قراردادهای نامگذاری',
+								es: 'Convenciones de Nomenclatura',
 							},
 						},
 						{
@@ -179,6 +188,7 @@ export default defineConfig({
 							link: '/faqs/',
 							translations: {
 								fa: 'سوالات متداول',
+								es: 'Preguntas Frecuentes',
 							},
 						},
 						{
@@ -186,6 +196,7 @@ export default defineConfig({
 							link: '/migration/',
 							translations: {
 								fa: 'راهنمای مهاجرت',
+								es: 'Guía de Migración',
 							},
 						},
 					],
@@ -194,6 +205,7 @@ export default defineConfig({
 					label: 'Tutorials',
 					translations: {
 						fa: 'آموزش ها',
+						es: 'Tutoriales',
 					},
 					autogenerate: {
 						directory: 'tutorials',
@@ -203,6 +215,7 @@ export default defineConfig({
 					label: 'Tools',
 					translations: {
 						fa: 'ابزار',
+						es: 'Herramientas',
 					},
 					items: [
 						{
@@ -210,6 +223,7 @@ export default defineConfig({
 							link: 'https://plugins.jetbrains.com/plugin/12129-bloc',
 							translations: {
 								fa: 'پلاگین IntelliJ',
+								es: 'Plugin de IntelliJ',
 							},
 						},
 						{
@@ -217,6 +231,7 @@ export default defineConfig({
 							link: 'https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc',
 							translations: {
 								fa: 'پلاگین VSCode',
+								es: 'Extensión de VSCode',
 							},
 						},
 					],
@@ -225,6 +240,7 @@ export default defineConfig({
 					label: 'Reference',
 					translations: {
 						fa: 'مرجع',
+						es: 'Referencia',
 					},
 					items: [
 						{
