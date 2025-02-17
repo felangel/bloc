@@ -143,6 +143,20 @@ The `Todo` model uses [json_serializable](https://pub.dev/packages/json_serializ
 
 The model of the `Todo` is defined in `todos_api/models/todo.dart` and is exported by `package:todos_api/todos_api.dart`.
 
+#### Update Exports
+
+Our `Todo` model and the `TodosApi` are exported via barrel files. Notice how we don't import the model directly, but we import it in `lib/src/todos_api.dart` with a reference to the package barrel file: `import 'package:todos_api/todos_api.dart';`. Update the barrel files to resolve any remaining import errors:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/lib/src/models/models.dart"
+	title="packages/todos_api/lib/src/models/models.dart"
+/>
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/lib/todos_api.dart"
+	title="packages/todos_api/lib/todos_api.dart"
+/>
+
 #### Streams vs Futures
 
 In a previous version of this tutorial, the `TodosApi` was `Future`-based rather than `Stream`-based.
