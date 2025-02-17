@@ -145,7 +145,7 @@ The model of the `Todo` is defined in `todos_api/models/todo.dart` and is export
 
 #### Update Exports
 
-Our ToDo model and the ToDosApi is made available externally (and internally) through barrel files. Notice how we don't import the ToDo model directly, but we import it in `lib/src/todos_api.dart` with a reference to the package barrel file: `import 'package:todos_api/todos_api.dart';`. Now, update the barrel files to resolve any remaining import errors.
+Our `Todo` model and the `TodosApi` are exported via barrel files. Notice how we don't import the model directly, but we import it in `lib/src/todos_api.dart` with a reference to the package barrel file: `import 'package:todos_api/todos_api.dart';`. Update the barrel files to resolve any remaining import errors:
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/lib/src/models/models.dart"
