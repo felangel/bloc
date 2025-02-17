@@ -82,7 +82,7 @@ Puedes usar un `BlocListener` para escuchar a un bloc y agregar un evento a otro
 
 <BlocLooseCouplingPresentationSnippet />
 
-El código anterior evita que `SecondBloc` necesite conocer a `FirstBloc`, fomentando el acoplamiento débil. La aplicación [flutter_weather](/tutorials/flutter-weather) [usa esta técnica](https://github.com/felangel/bloc/blob/b4c8db938ad71a6b60d4a641ec357905095c3965/examples/flutter_weather/lib/weather/view/weather_page.dart#L38-L42) para cambiar el tema de la aplicación basado en la información del clima que se recibe.
+El código anterior evita que `SecondBloc` necesite conocer a `FirstBloc`, fomentando el acoplamiento débil. La aplicación [flutter_weather](/es/tutorials/flutter-weather) [usa esta técnica](https://github.com/felangel/bloc/blob/b4c8db938ad71a6b60d4a641ec357905095c3965/examples/flutter_weather/lib/weather/view/weather_page.dart#L38-L42) para cambiar el tema de la aplicación basado en la información del clima que se recibe.
 
 En algunas situaciones, puede que no quieras acoplar dos blocs en la capa de presentación. En su lugar, a menudo tiene sentido que dos blocs compartan la misma fuente de datos y se actualicen cada vez que los datos cambien.
 
