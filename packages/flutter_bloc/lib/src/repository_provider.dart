@@ -29,13 +29,14 @@ class RepositoryProvider<T> extends Provider<T> {
   /// {@macro repository_provider}
   RepositoryProvider({
     required Create<T> create,
+    Dispose<T>? dispose,
     Key? key,
     Widget? child,
     bool? lazy,
   }) : super(
           key: key,
           create: create,
-          dispose: (_, __) {},
+          dispose: dispose,
           child: child,
           lazy: lazy,
         );
