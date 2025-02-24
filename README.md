@@ -45,7 +45,7 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
                 <a href="https://www.monterail.com/services/flutter-development/?utm_source=bloc&utm_medium=logo&utm_campaign=flutter"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/monterail.png" width="225"/></a>
             </td>
             <td align="center" style="border: 1px solid black">
-                <a href="https://getstream.io/chat/flutter/tutorial/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_FlutterChat&utm_term=bloc"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/stream.png" width="225"/></a>
+                <a href="https://getstream.io/chat/flutter/tutorial/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_FlutterChat&utm_term=bloc"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/stream-logo.png" width="225"/></a>
             </td>
         </tr>
         <tr>
