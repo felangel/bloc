@@ -82,10 +82,10 @@ class LocalStorageTodosApi extends TodosApi {
   Future<int> clearCompleted() async {
     final todos = [..._todoStreamController.value];
     final initialLength = todos.length;
-    
+
     todos.removeWhere((t) => t.isCompleted);
     final completedTodosAmount = initialLength - todos.length;
-    
+
     _todoStreamController.add(todos);
     await _setValue(kTodosCollectionKey, json.encode(todos));
     return completedTodosAmount;
