@@ -68,6 +68,11 @@
             "default": true,
             "description": "Whether to use sealed classes when creating a new bloc."
           },
+          "bloc.newBlocTemplate.useUnionTypes": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether to use union types for state or a single class relying on copyWith. Only works with \"freezed\"."
+          },
           "bloc.newCubitTemplate.type": {
             "type": "string",
             "default": "auto",
@@ -93,6 +98,11 @@
             "type": "boolean",
             "default": true,
             "description": "Whether to use sealed classes when creating a new cubit."
+          },
+          "bloc.newCubitTemplate.useUnionTypes": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether to use union types for state or a single class relying on copyWith. Only works with \"freezed\"."
           }
         }
       }
