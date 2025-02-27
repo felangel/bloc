@@ -79,20 +79,13 @@ class BlocToolsCommandRunner extends CommandRunner<int> {
 +------------------------------------------------------------------------------------+
 ''',
           );
-        final response = _logger.prompt('Would you like to update? (y/n) ');
-        if (response.isYes()) {
+        final confirm = _logger.confirm('Would you like to update?');
+        if (confirm) {
           final progress = _logger.progress('Updating to $latestVersion');
           await _pubUpdater.update(packageName: packageName);
           progress.complete('Updated to $latestVersion');
         }
       }
     } catch (_) {}
-  }
-}
-
-extension on String {
-  bool isYes() {
-    final normalized = toLowerCase().trim();
-    return normalized == 'y' || normalized == 'yes';
   }
 }
