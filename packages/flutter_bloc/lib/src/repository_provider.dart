@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 /// {@template repository_provider}
-/// Takes a [Create] function that is responsible for creating the repository
+/// Takes a `create` function that is responsible for creating the repository
 /// and a `child` which will have access to the repository via
 /// `RepositoryProvider.of(context)`.
 /// It is used as a dependency injection (DI) widget so that a single instance
@@ -28,14 +28,15 @@ import 'package:provider/provider.dart';
 class RepositoryProvider<T> extends Provider<T> {
   /// {@macro repository_provider}
   RepositoryProvider({
-    required Create<T> create,
+    required T Function(BuildContext context) create,
+    void Function(T value)? dispose,
     Key? key,
     Widget? child,
     bool? lazy,
   }) : super(
           key: key,
           create: create,
-          dispose: (_, __) {},
+          dispose: (_, value) => dispose?.call(value),
           child: child,
           lazy: lazy,
         );

@@ -426,6 +426,16 @@ context.read<RepositoryA>();
 RepositoryProvider.of<RepositoryA>(context)
 ```
 
+Repositories that manage resources which must be disposed can do so via the `dispose` callback:
+
+```dart
+RepositoryProvider(
+  create: (context) => RepositoryA(),
+  dispose: (context, repository) => repository.close(),
+  child: ChildA(),
+);
+```
+
 ### MultiRepositoryProvider
 
 **MultiRepositoryProvider** is a Flutter widget that merges multiple `RepositoryProvider` widgets into one.

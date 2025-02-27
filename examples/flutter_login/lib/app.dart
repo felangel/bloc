@@ -7,39 +7,24 @@ import 'package:flutter_login/login/login.dart';
 import 'package:flutter_login/splash/splash.dart';
 import 'package:user_repository/user_repository.dart';
 
-class App extends StatefulWidget {
+class App extends StatelessWidget {
   const App({super.key});
 
   @override
-  State<App> createState() => _AppState();
-}
-
-class _AppState extends State<App> {
-  late final AuthenticationRepository _authenticationRepository;
-  late final UserRepository _userRepository;
-
-  @override
-  void initState() {
-    super.initState();
-    _authenticationRepository = AuthenticationRepository();
-    _userRepository = UserRepository();
-  }
-
-  @override
-  void dispose() {
-    _authenticationRepository.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: _authenticationRepository,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider(
+          create: (_) => AuthenticationRepository(),
+          dispose: (repository) => repository.dispose(),
+        ),
+        RepositoryProvider(create: (_) => UserRepository()),
+      ],
       child: BlocProvider(
         lazy: false,
-        create: (_) => AuthenticationBloc(
-          authenticationRepository: _authenticationRepository,
-          userRepository: _userRepository,
+        create: (context) => AuthenticationBloc(
+          authenticationRepository: context.read<AuthenticationRepository>(),
+          userRepository: context.read<UserRepository>(),
         )..add(AuthenticationSubscriptionRequested()),
         child: const AppView(),
       ),
