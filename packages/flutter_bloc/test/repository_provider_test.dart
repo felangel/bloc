@@ -368,22 +368,18 @@ void main() {
                 disposeCalled = true;
                 expect(repository.data, equals(0));
               },
-              child: Center(
-                child: Builder(
-                  builder: (context) => Text(
-                    '${context.read<Repository>().data}',
-                    key: const Key('value_data'),
-                  ),
+              child: Builder(
+                builder: (context) => Text(
+                  '${context.read<Repository>().data}',
+                  key: const Key('value_data'),
                 ),
               ),
             ),
             floatingActionButton: Builder(
-              builder: (context) {
-                return FloatingActionButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Icon(Icons.remove),
-                );
-              },
+              builder: (context) => FloatingActionButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Icon(Icons.remove),
+              ),
             ),
           ),
         ),
