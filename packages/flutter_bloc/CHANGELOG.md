@@ -1,3 +1,7 @@
+# 9.1.0
+
+- feat: expose `dispose` callback on `RepositoryProvider` ([#4356](https://github.com/felangel/bloc/pull/4356))
+
 # 9.0.0
 
 - fix: ensure widget is mounted before invoking listener ([#4237](https://github.com/felangel/bloc/pull/4237))
