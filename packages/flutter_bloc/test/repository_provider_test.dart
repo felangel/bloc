@@ -362,10 +362,11 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: RepositoryProvider(
+            body: RepositoryProvider<Repository>(
               create: (_) => const Repository(0),
               dispose: (context, repository) {
                 disposeCalled = true;
+                expect(repository.data, equals(0));
               },
               child: Center(
                 child: Builder(
