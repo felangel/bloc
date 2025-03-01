@@ -6,16 +6,17 @@ import 'package:weather_repository/weather_repository.dart'
     show WeatherRepository;
 
 class WeatherApp extends StatelessWidget {
-  const WeatherApp({required WeatherRepository weatherRepository, super.key})
-      : _weatherRepository = weatherRepository;
-
-  final WeatherRepository _weatherRepository;
+  const WeatherApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => WeatherCubit(_weatherRepository),
-      child: const WeatherAppView(),
+    return RepositoryProvider(
+      create: (_) => WeatherRepository(),
+      dispose: (repository) => repository.dispose(),
+      child: BlocProvider(
+        create: (context) => WeatherCubit(context.read<WeatherRepository>()),
+        child: const WeatherAppView(),
+      ),
     );
   }
 }

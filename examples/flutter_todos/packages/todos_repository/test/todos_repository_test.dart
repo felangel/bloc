@@ -46,6 +46,7 @@ void main() {
       when(
         () => api.completeAll(isCompleted: any(named: 'isCompleted')),
       ).thenAnswer((_) async => 0);
+      when(() => api.close()).thenAnswer((_) async {});
     });
 
     TodosRepository createSubject() => TodosRepository(todosApi: api);
@@ -122,6 +123,15 @@ void main() {
         expect(subject.completeAll(isCompleted: true), completes);
 
         verify(() => api.completeAll(isCompleted: true)).called(1);
+      });
+    });
+
+    group('dispose', () {
+      test('closes the underlying api client', () {
+        final subject = createSubject();
+        verifyNever(api.close);
+        subject.dispose();
+        verify(api.close).called(1);
       });
     });
   });

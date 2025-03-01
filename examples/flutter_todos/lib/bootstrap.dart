@@ -20,7 +20,5 @@ void bootstrap({required TodosApi todosApi}) {
 
   Bloc.observer = const AppBlocObserver();
 
-  final todosRepository = TodosRepository(todosApi: todosApi);
-
-  runApp(App(todosRepository: todosRepository));
+  runApp(App(createTodosRepository: () => TodosRepository(todosApi: todosApi)));
 }

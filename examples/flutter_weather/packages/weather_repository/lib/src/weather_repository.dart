@@ -21,6 +21,10 @@ class WeatherRepository {
       condition: weather.weatherCode.toInt().toCondition,
     );
   }
+
+  void dispose() {
+    _weatherApiClient.close();
+  }
 }
 
 extension on int {

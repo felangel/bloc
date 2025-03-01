@@ -35,4 +35,7 @@ class TodosRepository {
   /// Returns the number of updated todos.
   Future<int> completeAll({required bool isCompleted}) =>
       _todosApi.completeAll(isCompleted: isCompleted);
+
+  /// Disposes any resources managed by the repository.
+  void dispose() => _todosApi.close();
 }

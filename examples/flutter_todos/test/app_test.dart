@@ -22,7 +22,7 @@ void main() {
   group('App', () {
     testWidgets('renders AppView', (tester) async {
       await tester.pumpWidget(
-        App(todosRepository: todosRepository),
+        App(createTodosRepository: () => todosRepository),
       );
 
       expect(find.byType(AppView), findsOneWidget);

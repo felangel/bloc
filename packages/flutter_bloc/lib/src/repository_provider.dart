@@ -24,6 +24,17 @@ import 'package:provider/provider.dart';
 ///   child: ChildA(),
 /// );
 /// ```
+///
+/// Repositories that manage resources which must be disposed
+/// can do so via the `dispose` callback.
+///
+/// ```dart
+/// RepositoryProvider(
+///  create: (context) => RepositoryA(),
+///  dispose: (repository) => repository.dispose(),
+///  child: ChildA(),
+///);
+/// ```
 /// {@endtemplate}
 class RepositoryProvider<T> extends Provider<T> {
   /// {@macro repository_provider}

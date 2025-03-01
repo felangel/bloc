@@ -4,7 +4,6 @@ import 'package:flutter_weather/app.dart';
 import 'package:flutter_weather/weather_bloc_observer.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:weather_repository/weather_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,5 +13,5 @@ void main() async {
         ? HydratedStorageDirectory.web
         : HydratedStorageDirectory((await getTemporaryDirectory()).path),
   );
-  runApp(WeatherApp(weatherRepository: WeatherRepository()));
+  runApp(WeatherApp());
 }
