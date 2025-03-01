@@ -431,9 +431,7 @@ Repositories that manage resources which must be disposed can do so via the `dis
 ```dart
 RepositoryProvider(
   create: (context) => RepositoryA(),
-  dispose: (context, repository) {
-    repository.close();
-  }
+  dispose: (context, repository) => repository.close(),
   child: ChildA(),
 );
 ```
