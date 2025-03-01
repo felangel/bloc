@@ -6,14 +6,15 @@ import 'package:flutter_todos/theme/theme.dart';
 import 'package:todos_repository/todos_repository.dart';
 
 class App extends StatelessWidget {
-  const App({required this.todosRepository, super.key});
+  const App({required this.createTodosRepository, super.key});
 
-  final TodosRepository todosRepository;
+  final TodosRepository Function() createTodosRepository;
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: todosRepository,
+    return RepositoryProvider<TodosRepository>(
+      create: (_) => createTodosRepository(),
+      dispose: (repository) => repository.dispose(),
       child: const AppView(),
     );
   }

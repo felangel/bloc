@@ -8,8 +8,5 @@ import 'package:ngdart/angular.dart';
   directives: [SearchFormComponent],
 )
 class AppComponent {
-  final githubRepository = GithubRepository(
-    GithubCache(),
-    GithubClient(),
-  );
+  final githubRepository = GithubRepository();
 }

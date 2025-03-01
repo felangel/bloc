@@ -228,5 +228,12 @@ void main() {
         );
       });
     });
+
+    group('dispose', () {
+      test('closes the weather api client', () {
+        weatherRepository.dispose();
+        verify(weatherApiClient.close).called(1);
+      });
+    });
   });
 }

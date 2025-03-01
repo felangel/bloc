@@ -198,5 +198,12 @@ void main() {
         );
       });
     });
+
+    group('close', () {
+      test('closes the underlying http client', () {
+        apiClient.close();
+        verify(httpClient.close).called(1);
+      });
+    });
   });
 }
