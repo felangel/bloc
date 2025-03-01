@@ -22,9 +22,7 @@ class WeatherRepository {
     );
   }
 
-  void dispose() {
-    _weatherApiClient.close();
-  }
+  void dispose() => _weatherApiClient.close();
 }
 
 extension on int {
