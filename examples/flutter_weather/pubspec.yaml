@@ -11,7 +11,7 @@ dependencies:
   equatable: ^2.0.0
   flutter:
     sdk: flutter
-  flutter_bloc: ^9.0.0
+  flutter_bloc: ^9.1.0
   google_fonts: ^6.0.0
   hydrated_bloc: ^10.0.0
   json_annotation: ^4.8.1

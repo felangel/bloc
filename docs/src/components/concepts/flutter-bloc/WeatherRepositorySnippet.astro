@@ -19,6 +19,8 @@ class WeatherRepository {
       condition: weather.weatherStateAbbr.toCondition,
     );
   }
+
+  void dispose() => _weatherApiClient.close();
 }
 `;
 ---

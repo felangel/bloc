@@ -159,7 +159,7 @@ packages:
       path: "../../packages/flutter_bloc"
       relative: true
     source: path
-    version: "9.0.0"
+    version: "9.1.0"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
