@@ -24,6 +24,7 @@ import BlocConsumerSnippet from '~/components/concepts/flutter-bloc/BlocConsumer
 import BlocConsumerConditionSnippet from '~/components/concepts/flutter-bloc/BlocConsumerConditionSnippet.astro';
 import RepositoryProviderSnippet from '~/components/concepts/flutter-bloc/RepositoryProviderSnippet.astro';
 import RepositoryProviderLookupSnippet from '~/components/concepts/flutter-bloc/RepositoryProviderLookupSnippet.astro';
+import RepositoryProviderDisposeSnippet from '~/components/concepts/flutter-bloc/RepositoryProviderDisposeSnippet.astro';
 import NestedRepositoryProviderSnippet from '~/components/concepts/flutter-bloc/NestedRepositoryProviderSnippet.astro';
 import MultiRepositoryProviderSnippet from '~/components/concepts/flutter-bloc/MultiRepositoryProviderSnippet.astro';
 import CounterBlocSnippet from '~/components/concepts/flutter-bloc/CounterBlocSnippet.astro';
@@ -157,6 +158,10 @@ then from `ChildA` we can retrieve the `Repository` instance with:
 
 <RepositoryProviderLookupSnippet />
 
+Repositories that manage resources which must be disposed can do so via the `dispose` callback:
+
+<RepositoryProviderDisposeSnippet />
+
 ### MultiRepositoryProvider
 
 **MultiRepositoryProvider** is a Flutter widget that merges multiple `RepositoryProvider` widgets into one.
@@ -187,19 +192,23 @@ We are going to take a look at how to use `RepositoryProvider` within the contex
 
 <WeatherRepositorySnippet />
 
-Since the app has an explicit dependency on the `WeatherRepository` we inject an instance via constructor. This allows us to inject different instances of `WeatherRepository` based on the build flavor or environment.
+In our `main.dart`, we call `runApp` with our `WeatherApp` widget.
 
 <WeatherMainSnippet />
 
-Since we only have one repository in our app, we will inject it into our widget tree via `RepositoryProvider.value`. If you have more than one repository, you can use `MultiRepositoryProvider` to provide multiple repository instances to the subtree.
+We will inject our `WeatherRepository` instance into our widget tree via `RepositoryProvider`.
+
+When instantiating a bloc, we can access the instance of a repository via `context.read` and inject the repository into the bloc via constructor.
 
 <WeatherAppSnippet />
 
-In most cases, the root app widget will expose one or more repositories to the subtree via `RepositoryProvider`.
+:::tip
+If you have more than one repository, you can use `MultiRepositoryProvider` to provide multiple repository instances to the subtree.
+:::
 
-<WeatherPageSnippet />
-
-Now when instantiating a bloc, we can access the instance of a repository via `context.read` and inject the repository into the bloc via constructor.
+:::note
+Use the `dispose` callback to handle freeing any resources when the `RepositoryProvider` is unmounted.
+:::
 
 [flutter_weather_link]: https://github.com/felangel/bloc/blob/master/examples/flutter_weather
 

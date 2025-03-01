@@ -13,7 +13,7 @@ dependencies:
   equatable: ^2.0.0
   flutter:
     sdk: flutter
-  flutter_bloc: ^9.0.0
+  flutter_bloc: ^9.1.0
   formz: ^0.8.0
   user_repository:
     path: packages/user_repository

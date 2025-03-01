@@ -12,7 +12,7 @@ dependencies:
   flow_builder: ^0.1.0
   flutter:
     sdk: flutter
-  flutter_bloc: ^9.0.0
+  flutter_bloc: ^9.1.0
 
 flutter:
   uses-material-design: true
