@@ -104,7 +104,7 @@ Navigation, Dialog 표시 등과 같은 state 변경에 대한 응답으로 무�
 
 ### BlocListener
 
-**BlocListener**는 필수 `BlocWidgetListener`와 선택적 `Bloc` 파라미터를 사용하고 bloc의 state 변경에 대한 응답으로 `listener`를 호출하는 Flutter 위젯입니다. Navigation, `Shackbar` 표시, `Dialog` 표시 등과 같이 state 변경당 한 번 발생해야 하는 기능에 사용해야 합니다.
+**BlocListener**는 필수 `BlocWidgetListener`와 선택적 `Bloc` 파라미터를 사용하고 bloc의 state 변경에 대한 응답으로 `listener`를 호출하는 Flutter 위젯입니다. navigation, `Snackbar` 표시, `Dialog` 표시 등과 같이 state 변경당 한 번 발생해야 하는 기능에 사용해야 합니다.
 
 `listener`는 `BlocBuilder`의 `builder`와 달리 각 state 변경 (초기 state를 포함하지 **않음**)에 대해 한 번만 호출되며 `void` 함수입니다.
 
