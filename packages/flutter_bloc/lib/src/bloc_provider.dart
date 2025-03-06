@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
 /// {@template bloc_provider}
-/// Takes a [Create] function that is responsible for
+/// Takes a `create` function that is responsible for
 /// creating the [Bloc] or [Cubit] and a [child] which will have access
 /// to the instance via `BlocProvider.of(context)`.
 /// It is used as a dependency injection (DI) widget so that a single instance
@@ -19,7 +19,7 @@ import 'package:provider/single_child_widget.dart';
 /// ```
 ///
 /// It automatically handles closing the instance when used with [Create].
-/// By default, [Create] is called only when the instance is accessed.
+/// By default, `create` is called only when the instance is accessed.
 /// To override this behavior, set [lazy] to `false`.
 ///
 /// ```dart
@@ -35,7 +35,7 @@ class BlocProvider<T extends StateStreamableSource<Object?>>
     extends SingleChildStatelessWidget {
   /// {@macro bloc_provider}
   const BlocProvider({
-    required Create<T> create,
+    required T Function(BuildContext context) create,
     Key? key,
     this.child,
     this.lazy = true,
@@ -52,7 +52,7 @@ class BlocProvider<T extends StateStreamableSource<Object?>>
   ///
   /// A new [Bloc] or [Cubit] should not be created in `BlocProvider.value`.
   /// New instances should always be created using the
-  /// default constructor within the [Create] function.
+  /// default constructor within the `create` function.
   ///
   /// ```dart
   /// BlocProvider.value(
@@ -76,7 +76,7 @@ class BlocProvider<T extends StateStreamableSource<Object?>>
   /// Defaults to `true`.
   final bool lazy;
 
-  final Create<T>? _create;
+  final T Function(BuildContext context)? _create;
 
   final T? _value;
 

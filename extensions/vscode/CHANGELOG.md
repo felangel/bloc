@@ -1,3 +1,8 @@
+# 6.7.0
+
+- deps: upgrade vscode engine to ^1.75.0
+- deps: upgrade webpack and braces
+
 # 6.6.6
 
 - fix: wrap with preserves escaping

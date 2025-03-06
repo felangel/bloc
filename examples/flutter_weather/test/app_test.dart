@@ -19,16 +19,8 @@ void main() {
   initHydratedStorage();
 
   group('WeatherApp', () {
-    late WeatherRepository weatherRepository;
-
-    setUp(() {
-      weatherRepository = MockWeatherRepository();
-    });
-
     testWidgets('renders WeatherAppView', (tester) async {
-      await tester.pumpWidget(
-        WeatherApp(weatherRepository: weatherRepository),
-      );
+      await tester.pumpWidget(const WeatherApp());
       expect(find.byType(WeatherAppView), findsOneWidget);
     });
   });

@@ -12,7 +12,6 @@ import shorebirdDark from '~/assets/sponsors/shorebird-dark.png';
 import miquido from '~/assets/sponsors/miquido.png';
 import monterail from '~/assets/sponsors/monterail.png';
 import netguru from '~/assets/sponsors/netguru.png';
-import parabeac from '~/assets/sponsors/parabeac.png';
 import stream from '~/assets/sponsors/stream.png';
 
 const { sponsoredBy = 'Sponsored with 💖 by', becomeASponsor = 'Become a Sponsor' } = Astro.props;
@@ -57,12 +56,6 @@ const sponsors: Sponsor[] = [
 		invert: true,
 	},
 	{
-		alt: 'Parabeac Logo',
-		img: parabeac,
-		href: 'https://bit.ly/parabeac_flutterbloc',
-		invert: false,
-	},
-	{
 		alt: 'Netguru Logo',
 		img: netguru,
 		href: 'https://www.netguru.com/services/flutter-app-development?utm_campaign=%5BS%5D%5BMob%5D%20Flutter&utm_source=github&utm_medium=sponsorship&utm_term=bloclibrary',
@@ -90,12 +83,12 @@ function isDynamicImage(
 	<p class="text-xl font-semibold">{sponsoredBy}</p>
 </div>
 <div class="flex w-full justify-center items-center not-content">
-	<div class="grid grid-cols-2 gap-1 sm:grid-cols-3 md:grid-cols-6">
+	<div class="grid grid-cols-2 gap-1 sm:grid-cols-3 md:grid-cols-5">
 		{
 			sponsors.map((sponsor) => {
 				return (
 					<div class="flex flex-row justify-center items-center">
-						<a href={sponsor.href} aria-label={sponsor.alt} target="_blank" rel="noreferrer">
+						<a href={sponsor.href} aria-label={sponsor.alt}>
 							{isDynamicImage(sponsor.img) ? (
 								<>
 									<Image

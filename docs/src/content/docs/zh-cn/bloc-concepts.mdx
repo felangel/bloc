@@ -220,10 +220,6 @@ import DebounceEventTransformerSnippet from '~/components/concepts/bloc/Debounce
 
 <CounterCubitOnErrorOutputSnippet />
 
-:::note
-与 `onChange` 一样，内部重写的 `onError` 会在全局 `BlocObserver` 重写的 `onError` 之前被调用。
-:::
-
 ## Bloc
 
 相对于函数来说，`Bloc` 是一个依赖 `事件` 触发 `状态` 变更的更高级的类。`Bloc` 同样扩展了 `BlocBase`，这意味着它和 `Cubit` 一样拥有类似的公共 API，`Blocs` 不是调用 `Bloc` 上的 `函数` 并直接发出新的 `状态`，而是接收 `事件` 并将传入的 `事件` 转换为传出的 `状态`。
@@ -282,7 +278,7 @@ blocs 和 cubits 都会忽略重复的状态。如果 `state == nextState` 时�
 `await Future.delayed(Duration.zero)` 是用来确保我们等待下一个事件循环周期（以便 `EventHandler` 处理这个事件）。
 :::
 
-#### Steam的用法
+#### Stream的用法
 
 和 `Cubit` 一样，`Bloc` 是一个特殊的 `Stream` 类型，这意味着我们也可以订阅 `Bloc` 以实时更新其状态：
 

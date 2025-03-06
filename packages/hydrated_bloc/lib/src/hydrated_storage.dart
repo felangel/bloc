@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 // ignore: implementation_imports
-import 'package:hive/src/hive_impl.dart';
+import 'package:hive_ce/src/hive_impl.dart';
+import 'package:hydrated_bloc/src/_migration/_migration_stub.dart'
+    if (dart.library.io) 'package:hydrated_bloc/src/_migration/_migration_io.dart';
 import 'package:hydrated_bloc/src/hydrated_cipher.dart';
 import 'package:meta/meta.dart';
 import 'package:synchronized/synchronized.dart';
@@ -28,8 +28,29 @@ abstract class Storage {
   Future<void> close();
 }
 
+/// {@template hydrated_storage_directory}
+/// A platform-agnostic storage directory representation.
+/// {@endtemplate}
+class HydratedStorageDirectory {
+  /// {@macro hydrated_storage_directory}
+  const HydratedStorageDirectory(this.path);
+
+  /// The path to the storage directory.
+  final String path;
+
+  /// Sentinel directory used to determine that web storage should be used
+  /// when initializing [HydratedStorage].
+  ///
+  /// ```dart
+  /// await HydratedStorage.build(
+  ///   storageDirectory: HydratedStorageDirectory.web,
+  /// );
+  /// ```
+  static const web = HydratedStorageDirectory('');
+}
+
 /// {@template hydrated_storage}
-/// Implementation of [Storage] which uses [package:hive](https://pub.dev/packages/hive)
+/// Implementation of [Storage] which uses [package:hive_ce](https://pub.dev/packages/hive_ce)
 /// to persist and retrieve state changes from the local device.
 /// {@endtemplate}
 class HydratedStorage implements Storage {
@@ -37,20 +58,10 @@ class HydratedStorage implements Storage {
   @visibleForTesting
   HydratedStorage(this._box);
 
-  /// Sentinel directory used to determine that web storage should be used
-  /// when initializing [HydratedStorage].
-  ///
-  /// ```dart
-  /// await HydratedStorage.build(
-  ///   storageDirectory: HydratedStorage.webStorageDirectory,
-  /// );
-  /// ```
-  static final webStorageDirectory = Directory('');
-
   /// Returns an instance of [HydratedStorage].
   /// [storageDirectory] is required.
   ///
-  /// For web, use [webStorageDirectory] as the `storageDirectory`
+  /// For web, use [HydratedStorageDirectory.web] as the `storageDirectory`
   ///
   /// ```dart
   /// import 'package:flutter/foundation.dart';
@@ -63,8 +74,8 @@ class HydratedStorage implements Storage {
   ///   WidgetsFlutterBinding.ensureInitialized();
   ///   HydratedBloc.storage = await HydratedStorage.build(
   ///     storageDirectory: kIsWeb
-  ///         ? HydratedStorage.webStorageDirectory
-  ///         : await getTemporaryDirectory(),
+  ///         ? HydratedStorageDirectory.web
+  ///         : HydratedStorageDirectory((await getTemporaryDirectory()).path),
   ///   );
   ///   runApp(App());
   /// }
@@ -81,17 +92,16 @@ class HydratedStorage implements Storage {
   /// return HydratedAesCipher(byteskey);
   /// ```
   static Future<HydratedStorage> build({
-    required Directory storageDirectory,
+    required HydratedStorageDirectory storageDirectory,
     HydratedCipher? encryptionCipher,
   }) {
     return _lock.synchronized(() async {
-      if (_instance != null) return _instance!;
       // Use HiveImpl directly to avoid conflicts with existing Hive.init
       // https://github.com/hivedb/hive/issues/336
       hive = HiveImpl();
       Box<dynamic> box;
 
-      if (storageDirectory == webStorageDirectory) {
+      if (storageDirectory == HydratedStorageDirectory.web) {
         box = await hive.openBox<dynamic>(
           'hydrated_box',
           encryptionCipher: encryptionCipher,
@@ -102,29 +112,11 @@ class HydratedStorage implements Storage {
           'hydrated_box',
           encryptionCipher: encryptionCipher,
         );
-        await _migrate(storageDirectory, box);
+        await migrate(storageDirectory.path, box);
       }
 
-      return _instance = HydratedStorage(box);
+      return HydratedStorage(box);
     });
-  }
-
-  static Future<dynamic> _migrate(Directory directory, Box<dynamic> box) async {
-    final file = File('${directory.path}/.hydrated_bloc.json');
-    if (file.existsSync()) {
-      try {
-        final dynamic storageJson = json.decode(await file.readAsString());
-        final cache = (storageJson as Map).cast<String, String>();
-        for (final key in cache.keys) {
-          try {
-            final string = cache[key];
-            final dynamic object = json.decode(string ?? '');
-            await box.put(key, object);
-          } catch (_) {}
-        }
-      } catch (_) {}
-      await file.delete();
-    }
   }
 
   /// Internal instance of [HiveImpl].
@@ -133,7 +125,6 @@ class HydratedStorage implements Storage {
   static late HiveInterface hive;
 
   static final _lock = Lock();
-  static HydratedStorage? _instance;
 
   final Box<dynamic> _box;
 
@@ -157,7 +148,6 @@ class HydratedStorage implements Storage {
   @override
   Future<void> clear() async {
     if (_box.isOpen) {
-      _instance = null;
       return _lock.synchronized(_box.clear);
     }
   }
@@ -165,7 +155,6 @@ class HydratedStorage implements Storage {
   @override
   Future<void> close() async {
     if (_box.isOpen) {
-      _instance = null;
       return _lock.synchronized(_box.close);
     }
   }

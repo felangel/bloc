@@ -356,5 +356,47 @@ void main() {
       final counterText = counterFinder.evaluate().first.widget as Text;
       expect(counterText.data, '0');
     });
+
+    testWidgets('calls dispose callback when disposed', (tester) async {
+      var disposeCalled = false;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: RepositoryProvider<Repository>(
+              create: (_) => const Repository(0),
+              dispose: (repository) {
+                disposeCalled = true;
+                expect(repository.data, equals(0));
+              },
+              child: Builder(
+                builder: (context) => Text(
+                  '${context.read<Repository>().data}',
+                  key: const Key('value_data'),
+                ),
+              ),
+            ),
+            floatingActionButton: Builder(
+              builder: (context) => FloatingActionButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Icon(Icons.remove),
+              ),
+            ),
+          ),
+        ),
+      );
+      final repositoryFinder = find.byKey(const Key('value_data'));
+      expect(repositoryFinder, findsOneWidget);
+
+      final repositoryText = repositoryFinder.evaluate().first.widget as Text;
+      expect(repositoryText.data, '0');
+
+      final fabFinder = find.byType(FloatingActionButton);
+      expect(fabFinder, findsOneWidget);
+
+      expect(disposeCalled, isFalse);
+      await tester.tap(fabFinder);
+      await tester.pumpAndSettle();
+      expect(disposeCalled, isTrue);
+    });
   });
 }

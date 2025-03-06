@@ -81,4 +81,9 @@ class OpenMeteoApiClient {
 
     return Weather.fromJson(weatherJson);
   }
+
+  /// Closes the underlying http client.
+  void close() {
+    _httpClient.close();
+  }
 }

@@ -49,9 +49,7 @@ class _PostsListState extends State<PostsList> {
 
   @override
   void dispose() {
-    _scrollController
-      ..removeListener(_onScroll)
-      ..dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 

@@ -1,0 +1,115 @@
+---
+title: Arquitectura
+description: Descripción general de los patrones de arquitectura recomendados al usar bloc.
+---
+
+import DataProviderSnippet from '~/components/architecture/DataProviderSnippet.astro';
+import RepositorySnippet from '~/components/architecture/RepositorySnippet.astro';
+import BusinessLogicComponentSnippet from '~/components/architecture/BusinessLogicComponentSnippet.astro';
+import BlocTightCouplingSnippet from '~/components/architecture/BlocTightCouplingSnippet.astro';
+import BlocLooseCouplingPresentationSnippet from '~/components/architecture/BlocLooseCouplingPresentationSnippet.astro';
+import AppIdeasRepositorySnippet from '~/components/architecture/AppIdeasRepositorySnippet.astro';
+import AppIdeaRankingBlocSnippet from '~/components/architecture/AppIdeaRankingBlocSnippet.astro';
+import PresentationComponentSnippet from '~/components/architecture/PresentationComponentSnippet.astro';
+
+![Arquitectura Bloc](~/assets/concepts/bloc_architecture_full.png)
+
+Usar la biblioteca bloc nos permite separar nuestra aplicación en tres capas:
+
+- Presentación
+- Lógica de Negocio
+- Datos
+  - Repositorio
+  - Proveedor de Datos
+
+Vamos a comenzar en la capa de nivel más bajo (más alejada de la interfaz de usuario) y trabajaremos hacia arriba hasta la capa de presentación.
+
+## Capa de Datos
+
+La responsabilidad de la capa de datos es recuperar/manipular datos de una o más fuentes.
+
+La capa de datos se puede dividir en dos partes:
+
+- Repositorio
+- Proveedor de Datos
+
+Esta capa es el nivel más bajo de la aplicación e interactúa con bases de datos, solicitudes de red y otras fuentes de datos asíncronas.
+
+### Proveedor de Datos
+
+La responsabilidad del proveedor de datos es proporcionar datos en bruto. El proveedor de datos debe ser genérico y versátil.
+
+El proveedor de datos generalmente expondrá APIs simples para realizar operaciones [CRUD](https://es.wikipedia.org/wiki/Crear,_leer,_actualizar_y_borrar).
+Podríamos tener un método `createData`, `readData`, `updateData` y `deleteData` como parte de nuestra capa de datos.
+
+<DataProviderSnippet />
+
+### Repositorio
+
+La capa de repositorio es un envoltorio alrededor de uno o más proveedores de datos con los que se comunica la capa Bloc.
+
+<RepositorySnippet />
+
+Como puedes ver, nuestra capa de repositorio puede interactuar con múltiples proveedores de datos y realizar transformaciones en los datos antes de entregar el resultado a la capa de lógica de negocio.
+
+## Capa de Lógica de Negocio
+
+La responsabilidad de la capa de lógica de negocio es responder a la entrada de la capa de presentación con nuevos estados. Esta capa puede depender de uno o más repositorios para recuperar los datos necesarios para construir el estado de la aplicación.
+
+Piensa en la capa de lógica de negocio como el puente entre la interfaz de usuario (capa de presentación) y la capa de datos. La capa de lógica de negocio es notificada de eventos/acciones desde la capa de presentación y luego se comunica con el repositorio para construir un nuevo estado para que la capa de presentación lo consuma.
+
+<BusinessLogicComponentSnippet />
+
+### Comunicación Bloc a Bloc
+
+Debido a que los blocs exponen streams, puede ser tentador hacer un bloc que escuche a otro bloc. No deberías **hacer** esto. Hay mejores alternativas que recurrir al siguiente código:
+
+<BlocTightCouplingSnippet />
+
+Aunque el código anterior no tiene errores (e incluso se limpia después de sí mismo), tiene un problema mayor: crea una dependencia entre dos blocs.
+
+Generalmente, las dependencias entre dos entidades en la misma capa arquitectónica deben evitarse a toda costa, ya que crea un acoplamiento fuerte que es difícil de mantener. Dado que los blocs residen en la capa arquitectónica de lógica de negocio, ningún bloc debería conocer a otro bloc.
+
+![Capas de Arquitectura de la Aplicación](~/assets/architecture/architecture.png)
+
+Un bloc solo debería recibir información a través de eventos y de repositorios inyectados (es decir, repositorios dados al bloc en su constructor).
+
+Si te encuentras en una situación donde un bloc necesita responder a otro bloc, tienes dos opciones. Puedes empujar el problema hacia arriba (a la capa de presentación) o hacia abajo (a la capa de dominio).
+
+#### Conectando Blocs a través de la Presentación
+
+Puedes usar un `BlocListener` para escuchar a un bloc y agregar un evento a otro bloc cada vez que el primer bloc cambie.
+
+<BlocLooseCouplingPresentationSnippet />
+
+El código anterior evita que `SecondBloc` necesite conocer a `FirstBloc`, fomentando el acoplamiento débil. La aplicación [flutter_weather](/es/tutorials/flutter-weather) [usa esta técnica](https://github.com/felangel/bloc/blob/b4c8db938ad71a6b60d4a641ec357905095c3965/examples/flutter_weather/lib/weather/view/weather_page.dart#L38-L42) para cambiar el tema de la aplicación basado en la información del clima que se recibe.
+
+En algunas situaciones, puede que no quieras acoplar dos blocs en la capa de presentación. En su lugar, a menudo tiene sentido que dos blocs compartan la misma fuente de datos y se actualicen cada vez que los datos cambien.
+
+#### Conectando Blocs a través del Dominio
+
+Dos blocs pueden escuchar un stream de un repositorio y actualizar sus estados independientemente cada vez que los datos del repositorio cambien. Usar repositorios reactivos para mantener el estado sincronizado es común en aplicaciones empresariales a gran escala.
+
+Primero, crea o usa un repositorio que proporcione un `Stream` de datos. Por ejemplo, el siguiente repositorio expone un stream interminable de las mismas pocas ideas de aplicaciones:
+
+<AppIdeasRepositorySnippet />
+
+El mismo repositorio puede ser inyectado en cada bloc que necesite reaccionar a nuevas ideas de aplicaciones. A continuación se muestra un `AppIdeaRankingBloc` que emite un estado por cada idea de aplicación entrante del repositorio anterior:
+
+<AppIdeaRankingBlocSnippet />
+
+Para más información sobre cómo usar streams con Bloc, consulta [Cómo usar Bloc con streams y concurrencia](https://verygood.ventures/blog/how-to-use-bloc-with-streams-and-concurrency).
+
+## Capa de Presentación
+
+La responsabilidad de la capa de presentación es determinar cómo renderizarse a sí misma en función de uno o más estados del bloc. Además, debe manejar la entrada del usuario y los eventos del ciclo de vida de la aplicación.
+
+La mayoría de los flujos de aplicaciones comenzarán con un evento `AppStart` que desencadena la aplicación para obtener algunos datos para presentar al usuario.
+
+En este escenario, la capa de presentación agregaría un evento `AppStart`.
+
+Además, la capa de presentación tendrá que determinar qué renderizar en la pantalla en función del estado de la capa de bloc.
+
+<PresentationComponentSnippet />
+
+Hasta ahora, aunque hemos tenido algunos fragmentos de código, todo esto ha sido bastante a alto nivel. En la sección de tutoriales vamos a juntar todo esto mientras construimos varias aplicaciones de ejemplo diferentes.

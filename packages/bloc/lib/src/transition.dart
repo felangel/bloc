@@ -27,9 +27,7 @@ class Transition<Event, State> extends Change<State> {
           nextState == other.nextState;
 
   @override
-  int get hashCode {
-    return currentState.hashCode ^ event.hashCode ^ nextState.hashCode;
-  }
+  int get hashCode => Object.hashAll([currentState, event, nextState]);
 
   @override
   String toString() {

@@ -10,4 +10,8 @@ class GithubCache {
   bool contains(String term) => _cache.containsKey(term);
 
   void remove(String term) => _cache.remove(term);
+
+  void close() {
+    _cache.clear();
+  }
 }

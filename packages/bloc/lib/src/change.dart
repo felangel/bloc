@@ -24,7 +24,7 @@ class Change<State> {
           nextState == other.nextState;
 
   @override
-  int get hashCode => currentState.hashCode ^ nextState.hashCode;
+  int get hashCode => Object.hashAll([currentState, nextState]);
 
   @override
   String toString() {

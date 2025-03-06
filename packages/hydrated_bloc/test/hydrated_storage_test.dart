@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 // ignore: implementation_imports
-import 'package:hive/src/hive_impl.dart';
+import 'package:hive_ce/src/hive_impl.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:path/path.dart' as p;
@@ -15,7 +15,7 @@ class MockBox extends Mock implements Box<dynamic> {}
 void main() {
   group('HydratedStorage', () {
     final cwd = Directory.current.absolute.path;
-    final storageDirectory = Directory(cwd);
+    final storageDirectory = HydratedStorageDirectory(cwd);
 
     late Storage storage;
 
@@ -50,14 +50,14 @@ void main() {
         await storage.close();
       });
 
-      test('reuses existing instance when called multiple times', () async {
+      test('returns new instance when called multiple times', () async {
         final instanceA = storage = await HydratedStorage.build(
           storageDirectory: storageDirectory,
         );
         final instanceB = await HydratedStorage.build(
           storageDirectory: storageDirectory,
         );
-        expect(instanceA, instanceB);
+        expect(instanceA, isNot(instanceB));
       });
 
       test('creates new instance if storage was closed', () async {
@@ -78,7 +78,7 @@ void main() {
         await runZonedGuarded(
           () {
             HydratedStorage.build(
-              storageDirectory: HydratedStorage.webStorageDirectory,
+              storageDirectory: HydratedStorageDirectory.web,
             ).whenComplete(completer.complete);
             return completer.future;
           },
@@ -179,7 +179,7 @@ void main() {
       test('writes key/value pairs correctly', () async {
         const token = 'token';
         storage = await HydratedStorage.build(
-          storageDirectory: Directory(cwd),
+          storageDirectory: HydratedStorageDirectory(cwd),
         );
         await Stream.fromIterable(
           Iterable.generate(120, (i) => i),
@@ -193,10 +193,10 @@ void main() {
           storage.write(token, record);
 
           storage = await HydratedStorage.build(
-            storageDirectory: Directory(cwd),
+            storageDirectory: HydratedStorageDirectory(cwd),
           );
 
-          final written = storage.read(token) as List<List<String>>;
+          final written = storage.read(token);
           expect(written, isNotNull);
           expect(written, record);
         }).drain<dynamic>();
@@ -217,8 +217,9 @@ void main() {
 
       test('Hive and Hydrated default directories', () async {
         Hive.init(docs);
+        final tempDir = Directory(temp)..createSync();
         storage = await HydratedStorage.build(
-          storageDirectory: Directory(temp)..createSync(),
+          storageDirectory: HydratedStorageDirectory(tempDir.path),
         );
 
         var box = await Hive.openBox<String>('hive');

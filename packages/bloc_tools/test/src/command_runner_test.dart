@@ -93,13 +93,13 @@ void main() {
           () => pubUpdater.getLatestVersion(any()),
         ).thenAnswer((_) async => latestVersion);
 
-        when(() => logger.prompt(any())).thenReturn('n');
+        when(() => logger.confirm(any())).thenReturn(false);
 
         final result = await commandRunner.run(['--version']);
         expect(result, equals(ExitCode.success.code));
         verify(() => logger.info(updatePrompt)).called(1);
         verify(
-          () => logger.prompt('Would you like to update? (y/n) '),
+          () => logger.confirm('Would you like to update?'),
         ).called(1);
       });
 
@@ -119,7 +119,7 @@ void main() {
           () => pubUpdater.getLatestVersion(any()),
         ).thenAnswer((_) async => latestVersion);
 
-        when(() => logger.prompt(any())).thenReturn('y');
+        when(() => logger.confirm(any())).thenReturn(true);
         when(() => logger.progress(any())).thenReturn(progress);
 
         final result = await commandRunner.run(['--version']);

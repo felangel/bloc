@@ -39,10 +39,7 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
         <tr>
             <td align="center" style="border: 1px solid black">
                 <a href="https://www.miquido.com/flutter-development-company/?utm_source=github&utm_medium=sponsorship&utm_campaign=bloc-silver-tier&utm_term=flutter-development-company&utm_content=miquido-logo"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/miquido.png" width="225"/></a>
-            </td>
-            <td align="center" style="border: 1px solid black">
-                <a href="https://bit.ly/parabeac_flutterbloc"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/parabeac.png" width="225"/></a>
-            </td>
+            </td>            
             <td align="center" style="border: 1px solid black">
                 <a href="https://www.netguru.com/services/flutter-app-development?utm_campaign=%5BS%5D%5BMob%5D%20Flutter&utm_source=github&utm_medium=sponsorship&utm_term=bloclibrary"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/netguru.png" width="225"/></a>
             </td>
@@ -166,7 +163,7 @@ class CounterBloc extends HydratedBloc<CounterEvent, int> with ReplayBlocMixin {
 
 ## Dart Versions
 
-- Dart 2: >= 2.12
+- Dart 2: >= 2.14
 
 ## Maintainers
 

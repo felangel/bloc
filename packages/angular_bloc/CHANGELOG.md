@@ -1,3 +1,13 @@
+# 10.0.0-dev.5
+
+- chore(deps): upgrade to `package:bloc v9.0.0`
+- chore: update sponsors
+
+# 10.0.0-dev.4
+
+- chore: update sponsors table in `README`
+- chore: add `funding` to `pubspec.yaml`
+
 # 10.0.0-dev.3
 
 - chore: update copyright year
@@ -5,7 +15,7 @@
 
 # 10.0.0-dev.2
 
-- chore(deps): upgrade to `package:ngdart 8.0.0-dev.4`
+- chore(deps): upgrade to `package:ngdart v8.0.0-dev.4`
 - chore: add `topics` to `pubspec.yaml`
 - chore(deps): upgrade to `package:mocktail v1.0.0`
 - chore: update sponsors

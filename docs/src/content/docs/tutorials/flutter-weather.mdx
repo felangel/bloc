@@ -25,6 +25,7 @@ import FlutterCreateRepositorySnippet from '~/components/tutorials/flutter-weath
 import RepositoryModelsBarrelTreeSnippet from '~/components/tutorials/flutter-weather/RepositoryModelsBarrelTreeSnippet.astro';
 import WeatherRepositoryLibrarySnippet from '~/components/tutorials/flutter-weather/WeatherRepositoryLibrarySnippet.astro';
 import WeatherCubitTreeSnippet from '~/components/tutorials/flutter-weather/WeatherCubitTreeSnippet.astro';
+import WeatherBarrelDartSnippet from '~/components/tutorials/flutter-weather/WeatherBarrelDartSnippet.astro';
 
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
@@ -183,7 +184,7 @@ In order for code generation to work, we need to annotate our code using the fol
 For each file we also need to:
 
 - Import `json_annotation`
-- Include the generated code using the [part](https://dart.dev/guides/libraries/create-library-packages#organizing-a-library-package) keyword
+- Include the generated code using the [part](https://dart.dev/tools/pub/create-packages#organizing-a-package) keyword
 - Include `fromJson` methods for deserialization
 
 #### Location Model
@@ -464,6 +465,10 @@ Let's export our models from the barrel file (`flutter_weather/lib/weather/model
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/models/models.dart"
 	title="lib/weather/models/models.dart"
 />
+
+Then, let's create a top-level weather barrel file (`flutter_weather/lib/weather/weather.dart`);
+
+<WeatherBarrelDartSnippet />
 
 ### Weather
 

@@ -50,7 +50,7 @@ import BlocExternalForEachSnippet from '~/components/faqs/BlocExternalForEachSni
 <StateNotUpdatingBad3Snippet />
 
 :::caution
-`Equatable` 프로퍼티는 항상 수정하지 말고 복사해야 합니다. `Equatable` 클래스에 `List` 또는 `Map`이 프로퍼티로 있는 경우, 참조가 아닌 프로퍼티 값을 기준으로 동등성이 평가되도록 `List.from` 또는 `Map.from`을 각각 사용해야 합니다.
+`Equatable` 프로퍼티는 항상 수정하지 말고 복사해야 합니다. `Equatable` 클래스에 `List` 또는 `Map`이 프로퍼티로 있는 경우, 참조가 아닌 프로퍼티 값을 기준으로 동등성이 평가되도록 `List.of` 또는 `Map.of`을 각각 사용해야 합니다.
 :::
 
 ## 언제 Equatable를 사용해야 하나요

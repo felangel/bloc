@@ -1,0 +1,94 @@
+---
+title: Modelado de Estado
+description: Una visión general de varias formas de modelar estados al usar package:bloc.
+---
+
+import ConcreteClassAndStatusEnumSnippet from '~/components/modeling-state/ConcreteClassAndStatusEnumSnippet.astro';
+import SealedClassAndSubclassesSnippet from '~/components/modeling-state/SealedClassAndSubclassesSnippet.astro';
+
+Hay muchos enfoques diferentes cuando se trata de estructurar el estado de la aplicación.
+Cada uno tiene sus propias ventajas y desventajas. En esta sección, veremos varios enfoques,
+sus pros y contras, y cuándo usar cada uno.
+
+Los siguientes enfoques son simplemente recomendaciones y son completamente opcionales.
+Siéntase libre de usar el enfoque que prefiera. Puede encontrar que algunos de los
+ejemplos/documentación no siguen los enfoques principalmente por simplicidad/concisión.
+
+:::tip
+
+Los siguientes fragmentos de código están enfocados en la estructura del estado. En la práctica, también puede querer:
+
+- Extender `Equatable` de [`package:equatable`](https://pub.dev/packages/equatable)
+- Anotar la clase con `@Data()` de [`package:data_class`](https://pub.dev/packages/data_class)
+- Anotar la clase con **@immutable** de [`package:meta`](https://pub.dev/packages/meta)
+- Implementar un método `copyWith`
+- Usar la palabra clave `const` para los constructores
+
+:::
+
+## Clase Concreta y Enum de Estado
+
+Este enfoque consiste en una **clase concreta única** para todos los estados junto con
+un `enum` que representa diferentes estados. Las propiedades son anulables y se manejan
+según el estado actual. Este enfoque funciona mejor para estados que no son estrictamente
+exclusivos y/o contienen muchas propiedades compartidas.
+
+<ConcreteClassAndStatusEnumSnippet />
+
+#### Pros
+
+- **Simple**: Fácil de gestionar una sola clase y un enum de estado y todas las propiedades son fácilmente accesibles.
+- **Conciso**: Generalmente requiere menos líneas de código en comparación con otros enfoques.
+
+#### Contras
+
+- **No es Seguro en Tipos**: Requiere verificar el `estado` antes de acceder a las propiedades.
+  Es posible emitir un estado malformado que puede llevar a errores. Las propiedades
+  para estados específicos son anulables, lo que puede ser engorroso de manejar y
+  requiere ya sea desenvolvimiento forzado o realizar verificaciones de nulidad. Algunos
+  de estos contras pueden mitigarse escribiendo pruebas unitarias y constructores
+  especializados y nombrados.
+- **Inflado**: Resulta en un solo estado que puede volverse inflado con muchas
+  propiedades con el tiempo.
+
+#### Veredicto
+
+Este enfoque funciona mejor para estados simples o cuando los requisitos llaman a
+estados que no son exclusivos (por ejemplo, mostrar un snackbar cuando ocurre un error
+mientras se sigue mostrando datos antiguos del último estado exitoso). Este enfoque
+proporciona flexibilidad y concisión a costa de la seguridad en tipos.
+
+## Clase Sellada y Subclases
+
+Este enfoque consiste en una **clase sellada** que contiene cualquier propiedad compartida
+y múltiples subclases para los estados separados. Este enfoque es ideal para
+estados separados y exclusivos.
+
+<SealedClassAndSubclassesSnippet />
+
+#### Pros
+
+- **Seguro en Tipos**: El código es seguro en tiempo de compilación y no es posible
+  acceder accidentalmente a una propiedad no válida. Cada subclase contiene sus propias propiedades, lo que hace claro qué propiedades pertenecen a qué estado.
+- **Explícito**: Separa las propiedades compartidas de las propiedades específicas del estado.
+- **Exhaustivo**: Usar una declaración `switch` para verificaciones exhaustivas
+  asegura que cada estado sea manejado explícitamente.
+  - Si no desea [verificaciones exhaustivas](https://dart.dev/language/branches#exhaustiveness-checking) o
+    desea poder agregar subtipos más tarde sin romper la API, use el
+    modificador [final](https://dart.dev/language/class-modifiers#final).
+  - Consulte la [documentación de clases selladas](https://dart.dev/language/class-modifiers#sealed) para más detalles.
+
+#### Contras
+
+- **Verborrea**: Requiere más código (una clase base y una subclase por estado).
+  También puede requerir código duplicado para propiedades compartidas entre subclases.
+- **Complejidad**: Agregar nuevas propiedades requiere actualizar cada subclase y la
+  clase base, lo que puede ser engorroso y llevar a un aumento en la complejidad del
+  estado. Además, puede requerir verificaciones de tipo innecesarias/excesivas para acceder
+  a propiedades.
+
+#### Veredicto
+
+Este enfoque funciona mejor para estados bien definidos y exclusivos con propiedades únicas.
+Este enfoque proporciona seguridad en tipos y verificaciones exhaustivas y enfatiza
+la seguridad sobre la concisión y simplicidad.
