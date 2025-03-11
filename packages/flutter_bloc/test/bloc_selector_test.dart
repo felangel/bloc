@@ -9,6 +9,33 @@ class CounterCubit extends Cubit<int> {
   void increment() => emit(state + 1);
 }
 
+class ListCubit extends Cubit<ComplexState> {
+  ListCubit({
+    ComplexState seed = const ComplexState(items: [0], whatever: 0),
+  }) : super(seed);
+
+  void set(ComplexState value) => emit(value);
+}
+
+@immutable
+class ComplexState {
+  const ComplexState({required this.items, required this.whatever});
+
+  final List<int> items;
+  final int whatever;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is ComplexState &&
+        listEquals(other.items, items) &&
+        other.whatever == whatever;
+  }
+
+  @override
+  int get hashCode => Object.hash(items, whatever);
+}
+
 void main() {
   group('BlocSelector', () {
     testWidgets('renders with correct state', (tester) async {
@@ -206,6 +233,45 @@ void main() {
           'has selector',
         ],
       );
+    });
+
+    testWidgets('only rebuilds when selected collection changes',
+        (tester) async {
+      final listCubit = ListCubit();
+      var builderCallCount = 0;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: BlocSelector<ListCubit, ComplexState, List<int>>(
+            bloc: listCubit,
+            selector: (state) => state.items,
+            builder: (context, state) {
+              builderCallCount++;
+              final sum = state.fold<int>(0, (prev, item) => prev + item);
+              return Text('sum: $sum');
+            },
+          ),
+        ),
+      );
+
+      expect(find.text('sum: 0'), findsOneWidget);
+      expect(builderCallCount, equals(1));
+
+      listCubit.set(ComplexState(items: List.of([0, 1, 2]), whatever: 0));
+      await tester.pumpAndSettle();
+
+      expect(find.text('sum: 3'), findsOneWidget);
+      expect(builderCallCount, equals(2));
+
+      listCubit.set(ComplexState(items: List.of([0, 1, 2]), whatever: 6));
+      await tester.pumpAndSettle();
+      listCubit.set(ComplexState(items: List.of([0, 1, 2]), whatever: 7));
+      await tester.pumpAndSettle();
+      listCubit.set(ComplexState(items: List.of([0, 1, 2]), whatever: 8));
+      await tester.pumpAndSettle();
+
+      expect(find.text('sum: 3'), findsOneWidget);
+      expect(builderCallCount, equals(2));
     });
   });
 }
