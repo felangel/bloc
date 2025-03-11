@@ -32,6 +32,7 @@ class BlocSelector<B extends StateStreamable<S>, S, T> extends StatefulWidget {
     required this.builder,
     Key? key,
     this.bloc,
+    this.selectorEquality,
   }) : super(key: key);
 
   /// The [bloc] that the [BlocSelector] will interact with.
@@ -50,6 +51,22 @@ class BlocSelector<B extends StateStreamable<S>, S, T> extends StatefulWidget {
   /// and is responsible for returning a selected value of type [T] based on
   /// the current state.
   final BlocWidgetSelector<S, T> selector;
+
+  /// The [selectorEquality] function determines whether two selected values
+  /// of type [T] are equal.
+  /// This is mainly used when the selection is a collection, for example List.
+  /// Collections do not implement content-based equality by default.
+  /// Flutter already provides a set of functions, for example 'listEquals'
+  /// that solves this problem.
+  /// ```dart
+  /// BlocSelector<BlocA, BlocAState, List<State>>(
+  ///   selector: (state) { ... },
+  ///   builder: (context, state) { ... },
+  ///   selectorEquality: listEquals,
+  /// )
+  /// ```
+  /// If `null`, the default equality operator (`==`) is used.
+  final bool Function(T a, T b)? selectorEquality;
 
   @override
   State<BlocSelector<B, S, T>> createState() => _BlocSelectorState<B, S, T>();
@@ -113,9 +130,12 @@ class _BlocSelectorState<B extends StateStreamable<S>, S, T>
       bloc: _bloc,
       listener: (context, state) {
         final selectedState = widget.selector(state);
-        if (_state != selectedState) setState(() => _state = selectedState);
+        if (!_equals(_state, selectedState))
+          setState(() => _state = selectedState);
       },
       child: widget.builder(context, _state),
     );
   }
+
+  bool _equals(T a, T b) => widget.selectorEquality?.call(a, b) ?? a == b;
 }

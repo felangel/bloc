@@ -245,6 +245,7 @@ void main() {
           home: BlocSelector<ListCubit, ComplexState, List<int>>(
             bloc: listCubit,
             selector: (state) => state.items,
+            selectorEquality: listEquals,
             builder: (context, state) {
               builderCallCount++;
               final sum = state.fold<int>(0, (prev, item) => prev + item);
