@@ -19,7 +19,7 @@ Open this project in your editor of choice (VSCode is recommended).
    cd common_github_search
 
    # install dependencies
-   pub get
+   dart pub get
 
    # change directories back out to the root directory
    cd ../
@@ -32,7 +32,7 @@ Open this project in your editor of choice (VSCode is recommended).
    cd flutter_github_search
 
    # install dependencies
-   flutter packages get
+   flutter pub get
 
    # change directories back out to the root directory
    cd ../
@@ -45,7 +45,7 @@ Open this project in your editor of choice (VSCode is recommended).
    cd angular_github_search
 
    # install dependencies
-   pub get
+   dart pub get
 
    # change directories into flutter_github_search
    cd ../
