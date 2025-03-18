@@ -7,7 +7,7 @@ sidebar:
 
 import RemoteCode from '~/components/tutorials/RemoteCode.astro';
 import FlutterCreateSnippet from '~/components/tutorials/flutter-firebase-login/FlutterCreateSnippet.astro';
-import FlutterPackagesGetSnippet from '~/components/tutorials/flutter-firebase-login/FlutterPackagesGetSnippet.astro';
+import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.astro';
 
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
@@ -50,7 +50,7 @@ We'll start by creating `packages/authentication_repository` and a `pubspec.yaml
 
 Next, we can install the dependencies by running:
 
-<FlutterPackagesGetSnippet />
+<FlutterPubGetSnippet />
 
 in the `authentication_repository` directory.
 
@@ -123,7 +123,7 @@ Notice that we are specifying an assets directory for all of our applications lo
 
 Then install all of the dependencies:
 
-<FlutterPackagesGetSnippet />
+<FlutterPubGetSnippet />
 
 :::note
 We are depending on the `authentication_repository` package via path which will allow us to iterate quickly while still maintaining a clear separation.

@@ -23,7 +23,7 @@ track of the issue.
 Before creating a pull request please:
 
 1. Fork the repository and create your branch from `master`.
-1. Install all dependencies (`flutter packages get` or `pub get`).
+1. Install all dependencies (`flutter pub get`).
 1. Squash your commits and ensure you have a meaningful commit message.
 1. If you’ve fixed a bug or added code that should be tested, add tests!
    Pull Requests without 100% test coverage will not be approved.
