@@ -51,22 +51,21 @@ import 'package:provider/single_child_widget.dart';
 class MultiBlocProvider extends StatelessWidget {
   /// {@macro multi_bloc_provider}
   const MultiBlocProvider({
-    required this.providers,
-    required this.child,
+    required List<SingleChildWidget> providers,
+    required Widget child,
     Key? key,
-  }) : super(key: key);
+  })  : _providers = providers,
+        _child = child,
+        super(key: key);
 
-  /// The list of [BlocProvider] instances.
-  final List<SingleChildWidget> providers;
-
-  /// The [Widget] that will be rendered as a child.
-  final Widget child;
+  final List<SingleChildWidget> _providers;
+  final Widget _child;
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: providers,
-      child: child,
+      providers: _providers,
+      child: _child,
     );
   }
 }

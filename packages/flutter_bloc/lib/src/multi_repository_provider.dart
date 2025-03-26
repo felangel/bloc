@@ -45,22 +45,21 @@ import 'package:provider/single_child_widget.dart';
 class MultiRepositoryProvider extends StatelessWidget {
   /// {@macro multi_repository_provider}
   const MultiRepositoryProvider({
-    required this.providers,
-    required this.child,
+    required List<SingleChildWidget> providers,
+    required Widget child,
     Key? key,
-  }) : super(key: key);
+  })  : _providers = providers,
+        _child = child,
+        super(key: key);
 
-  /// The list of [RepositoryProvider] instances.
-  final List<SingleChildWidget> providers;
-
-  /// The [Widget] that will be rendered as a child.
-  final Widget child;
+  final List<SingleChildWidget> _providers;
+  final Widget _child;
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: providers,
-      child: child,
+      providers: _providers,
+      child: _child,
     );
   }
 }

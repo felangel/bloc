@@ -51,22 +51,21 @@ import 'package:provider/single_child_widget.dart';
 class MultiBlocListener extends StatelessWidget {
   /// {@macro multi_bloc_listener}
   const MultiBlocListener({
-    required this.listeners,
-    required this.child,
+    required List<SingleChildWidget> listeners,
+    required Widget child,
     Key? key,
-  }) : super(key: key);
+  })  : _listeners = listeners,
+        _child = child,
+        super(key: key);
 
-  /// The list of [BlocListener] instances.
-  final List<SingleChildWidget> listeners;
-
-  /// The [Widget] that will be rendered as a child.
-  final Widget child;
+  final List<SingleChildWidget> _listeners;
+  final Widget _child;
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: listeners,
-      child: child,
+      providers: _listeners,
+      child: _child,
     );
   }
 }
