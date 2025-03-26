@@ -42,11 +42,25 @@ import 'package:provider/single_child_widget.dart';
 /// As a result, the only advantage of using [MultiRepositoryProvider] is
 /// improved readability due to the reduction in nesting and boilerplate.
 /// {@endtemplate}
-class MultiRepositoryProvider extends MultiProvider {
+class MultiRepositoryProvider extends StatelessWidget {
   /// {@macro multi_repository_provider}
-  MultiRepositoryProvider({
-    required List<SingleChildWidget> providers,
-    required Widget child,
+  const MultiRepositoryProvider({
+    required this.providers,
+    required this.child,
     Key? key,
-  }) : super(key: key, providers: providers, child: child);
+  }) : super(key: key);
+
+  /// The list of [RepositoryProvider] instances.
+  final List<SingleChildWidget> providers;
+
+  /// The [Widget] that will be rendered as a child.
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: providers,
+      child: child,
+    );
+  }
 }

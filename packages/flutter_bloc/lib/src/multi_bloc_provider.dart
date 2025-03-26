@@ -48,11 +48,25 @@ import 'package:provider/single_child_widget.dart';
 /// As a result, the only advantage of using [MultiBlocProvider] is improved
 /// readability due to the reduction in nesting and boilerplate.
 /// {@endtemplate}
-class MultiBlocProvider extends MultiProvider {
+class MultiBlocProvider extends StatelessWidget {
   /// {@macro multi_bloc_provider}
-  MultiBlocProvider({
-    required List<SingleChildWidget> providers,
-    required Widget child,
+  const MultiBlocProvider({
+    required this.providers,
+    required this.child,
     Key? key,
-  }) : super(key: key, providers: providers, child: child);
+  }) : super(key: key);
+
+  /// The list of [BlocProvider] instances.
+  final List<SingleChildWidget> providers;
+
+  /// The [Widget] that will be rendered as a child.
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: providers,
+      child: child,
+    );
+  }
 }

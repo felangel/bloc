@@ -48,11 +48,25 @@ import 'package:provider/single_child_widget.dart';
 /// As a result, the only advantage of using [MultiBlocListener] is improved
 /// readability due to the reduction in nesting and boilerplate.
 /// {@endtemplate}
-class MultiBlocListener extends MultiProvider {
+class MultiBlocListener extends StatelessWidget {
   /// {@macro multi_bloc_listener}
-  MultiBlocListener({
-    required List<SingleChildWidget> listeners,
-    required Widget child,
+  const MultiBlocListener({
+    required this.listeners,
+    required this.child,
     Key? key,
-  }) : super(key: key, providers: listeners, child: child);
+  }) : super(key: key);
+
+  /// The list of [BlocListener] instances.
+  final List<SingleChildWidget> listeners;
+
+  /// The [Widget] that will be rendered as a child.
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: listeners,
+      child: child,
+    );
+  }
 }
