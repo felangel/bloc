@@ -1540,6 +1540,16 @@ void main() {
         await counterBloc.close();
       });
 
+      test('safely updates the state with maybeEmit', () async {
+        final counterBloc = CounterBloc();
+        unawaited(
+          expectLater(counterBloc.stream, emitsInOrder(const <int>[42])),
+        );
+        counterBloc.maybeEmit(42);
+        expect(counterBloc.state, 42);
+        await counterBloc.close();
+      });
+
       test(
           'throws StateError and triggers onError '
           'when bloc is closed', () async {
@@ -1570,6 +1580,30 @@ void main() {
         expect(states, isEmpty);
         expect(capturedError, expectedStateError);
         expect(capturedStacktrace, isNotNull);
+      });
+
+      test('ignores maybeEmit when bloc is closed', () async {
+        Object? capturedError;
+        StackTrace? capturedStacktrace;
+
+        final states = <int>[];
+        final counterBloc = CounterBloc(
+          onErrorCallback: (error, stackTrace) {
+            capturedError = error;
+            capturedStacktrace = stackTrace;
+          },
+        )..stream.listen(states.add);
+
+        await counterBloc.close();
+
+        expect(counterBloc.isClosed, isTrue);
+        expect(counterBloc.state, equals(0));
+        expect(states, isEmpty);
+        expect(() => counterBloc.maybeEmit(1), returnsNormally);
+        expect(counterBloc.state, equals(0));
+        expect(states, isEmpty);
+        expect(capturedError, isNull);
+        expect(capturedStacktrace, isNull);
       });
     });
 

@@ -33,6 +33,9 @@ abstract class Closable {
 abstract class Emittable<State extends Object?> {
   /// Emits a new [state].
   void emit(State state);
+
+  /// Safely emits a new [state] if the bloc is not closed.
+  void maybeEmit(State state);
 }
 
 /// A generic destination for errors.
@@ -109,6 +112,21 @@ abstract class BlocBase<State>
       rethrow;
     }
   }
+
+  /// Safely updates the [state] to the provided [state] if the block is not
+  /// closed.
+  /// [emit] does nothing if the [state] being emitted
+  /// is equal to the current [state].
+  ///
+  /// To allow for the possibility of notifying listeners of the initial state,
+  /// emitting a state which is equal to the initial state is allowed as long
+  /// as it is the first thing emitted by the instance.
+  ///
+  /// * Throws a [StateError] if the bloc is closed.
+  @protected
+  @visibleForTesting
+  @override
+  void maybeEmit(State state) => isClosed ? null : emit(state);
 
   /// Called whenever a [change] occurs with the given [change].
   /// A [change] occurs when a new `state` is emitted.

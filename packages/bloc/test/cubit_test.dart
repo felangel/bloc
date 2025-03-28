@@ -165,11 +165,40 @@ void main() {
         expect(didThrow, isTrue);
       });
 
+      test('ignores maybeEmit if cubit is closed', () {
+        var didThrow = false;
+        runZonedGuarded(
+          () {
+            final cubit = CounterCubit();
+            expectLater(
+              cubit.stream,
+              emitsInOrder(<Matcher>[equals(1), emitsDone]),
+            );
+            cubit
+              ..maybeIncrement()
+              ..close()
+              ..maybeIncrement();
+          },
+          (error, _) => didThrow = true,
+        );
+        expect(didThrow, isFalse);
+      });
+
       test('emits states in the correct order', () async {
         final states = <int>[];
         final cubit = CounterCubit();
         final subscription = cubit.stream.listen(states.add);
         cubit.increment();
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, [1]);
+      });
+
+      test('maybeEmit states in the correct order', () async {
+        final states = <int>[];
+        final cubit = CounterCubit();
+        final subscription = cubit.stream.listen(states.add);
+        cubit.maybeIncrement();
         await cubit.close();
         await subscription.cancel();
         expect(states, [1]);
