@@ -1,3 +1,27 @@
+# 0.1.0-dev.8
+
+- feat: add `bloc new <template>` command
+
+  ```sh
+  $ bloc new --help
+  Generate new bloc components.
+
+  Usage: bloc new <subcommand> [arguments]
+  -h, --help    Print this usage information.
+
+  Available subcommands:
+    bloc             Generate a new Bloc in Dart. Built for the bloc state management library.
+    cubit            Generate a new Cubit in Dart. Built for the bloc state management library.
+    hydrated_bloc    Generate a new HydratedBloc in Dart. Built for the bloc state management library.
+    hydrated_cubit   Generate a new HydratedCubit in Dart. Built for the bloc state management library.
+    replay_bloc      Generate a new ReplayBloc in Dart. Built for the bloc state management library.
+    replay_cubit     Generate a new ReplayCubit in Dart. Built for the bloc state management library.
+
+  Run "bloc help" to see global options.
+  ```
+
+- chore: bump minimum Dart SDK version to 3.7.0
+
 # 0.1.0-dev.7
 
 - fix: version constant
