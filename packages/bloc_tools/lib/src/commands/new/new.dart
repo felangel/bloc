@@ -74,8 +74,7 @@ class GeneratorCommand extends Command<int> {
   @override
   String get description => bundle.description;
 
-  /// The variables passed to the template during generation.
-  Map<String, dynamic> get templateVars => {
+  Map<String, dynamic> get _vars => {
     for (final entry in bundle.vars.entries) entry.key: argResults![entry.key],
   };
 
@@ -84,7 +83,7 @@ class GeneratorCommand extends Command<int> {
     final generator = await _buildGenerator();
     final generateProgress = logger.progress('Generating');
     final target = DirectoryGeneratorTarget(outputDirectory);
-    var vars = templateVars;
+    var vars = _vars;
     await generator.hooks.preGen(vars: vars, onVarsChanged: (v) => vars = v);
     final files = await generator.generate(target, vars: vars, logger: logger);
     generateProgress.complete('Generated ${files.length} file(s)');
@@ -142,7 +141,7 @@ extension on ArgParser {
             name,
             help: properties.description,
             mandatory: properties.defaultValue == null,
-            defaultsTo: properties.defaultValue as String?,
+            defaultsTo: properties.defaultValue?.toString(),
           );
         case BrickVariableType.boolean:
           addFlag(
