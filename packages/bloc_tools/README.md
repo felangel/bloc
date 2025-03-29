@@ -31,7 +31,8 @@ Global options:
     --version    Print the current version.
 
 Available commands:
-  help   Display help information for bloc.
+  new   bloc new <subcommand> [arguments]
+        Generate new bloc components.
 
 Run "bloc help <command>" for more information about a command.
 ```
