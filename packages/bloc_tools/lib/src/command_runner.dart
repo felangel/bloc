@@ -1,9 +1,8 @@
 import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
+import 'package:bloc_tools/src/commands/new/new.dart';
 import 'package:bloc_tools/src/version.dart';
-import 'package:io/ansi.dart';
-import 'package:io/io.dart';
-import 'package:mason/mason.dart' show Logger;
+import 'package:mason/mason.dart' show ExitCode, Logger, lightCyan, lightYellow;
 import 'package:pub_updater/pub_updater.dart';
 
 /// The package name.
@@ -15,14 +14,15 @@ const packageName = 'bloc_tools';
 class BlocToolsCommandRunner extends CommandRunner<int> {
   /// {@macro bloc_tools_command_runner}
   BlocToolsCommandRunner({Logger? logger, PubUpdater? pubUpdater})
-      : _logger = logger ?? Logger(),
-        _pubUpdater = pubUpdater ?? PubUpdater(),
-        super('bloc', 'Command Line Tools for the Bloc Library.') {
+    : _logger = logger ?? Logger(),
+      _pubUpdater = pubUpdater ?? PubUpdater(),
+      super('bloc', 'Command Line Tools for the Bloc Library.') {
     argParser.addFlag(
       'version',
       negatable: false,
       help: 'Print the current version.',
     );
+    addCommand(NewCommand(logger: _logger));
   }
 
   final Logger _logger;
@@ -69,16 +69,14 @@ class BlocToolsCommandRunner extends CommandRunner<int> {
       if (!isUpToDate) {
         _logger
           ..info('')
-          ..info(
-            '''
+          ..info('''
 +------------------------------------------------------------------------------------+
 |                                                                                    |
 |                    ${lightYellow.wrap('Update available!')} ${lightCyan.wrap(packageVersion)} \u2192 ${lightCyan.wrap(latestVersion)}                     |
 |  ${lightYellow.wrap('Changelog:')} ${lightCyan.wrap('https://github.com/felangel/bloc/releases/tag/$packageName-v$latestVersion')}  |
 |                                                                                    |
 +------------------------------------------------------------------------------------+
-''',
-          );
+''');
         final confirm = _logger.confirm('Would you like to update?');
         if (confirm) {
           final progress = _logger.progress('Updating to $latestVersion');

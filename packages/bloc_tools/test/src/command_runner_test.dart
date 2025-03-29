@@ -5,9 +5,8 @@ import 'dart:io';
 import 'package:args/command_runner.dart';
 import 'package:bloc_tools/src/command_runner.dart';
 import 'package:bloc_tools/src/version.dart';
-import 'package:io/ansi.dart';
-import 'package:io/io.dart';
-import 'package:mason/mason.dart' show Logger, Progress;
+import 'package:mason/mason.dart'
+    show ExitCode, Logger, Progress, lightCyan, lightYellow;
 import 'package:mocktail/mocktail.dart';
 import 'package:pub_updater/pub_updater.dart';
 import 'package:test/test.dart';
@@ -17,8 +16,6 @@ class MockLogger extends Mock implements Logger {}
 class MockProgress extends Mock implements Progress {}
 
 class MockPubUpdater extends Mock implements PubUpdater {}
-
-class FakeProcessResult extends Fake implements ProcessResult {}
 
 const expectedUsage = [
   'Command Line Tools for the Bloc Library.\n'
@@ -30,9 +27,10 @@ const expectedUsage = [
       '    --version    Print the current version.\n'
       '\n'
       'Available commands:\n'
-      '  help   Display help information for bloc.\n'
+      '  new   bloc new <subcommand> [arguments]\n'
+      '        Generate new bloc components.\n'
       '\n'
-      'Run "bloc help <command>" for more information about a command.'
+      'Run "bloc help <command>" for more information about a command.',
 ];
 
 final updatePrompt = '''
@@ -72,9 +70,10 @@ void main() {
       when(
         () => pubUpdater.getLatestVersion(any()),
       ).thenAnswer((_) async => packageVersion);
-      when(
-        () => pubUpdater.update(packageName: packageName),
-      ).thenAnswer((_) => Future.value(FakeProcessResult()));
+      when(() => pubUpdater.update(packageName: packageName)).thenAnswer(
+        (_) =>
+            Future.value(ProcessResult(0, ExitCode.success.code, null, null)),
+      );
 
       commandRunner = BlocToolsCommandRunner(
         logger: logger,
@@ -98,9 +97,7 @@ void main() {
         final result = await commandRunner.run(['--version']);
         expect(result, equals(ExitCode.success.code));
         verify(() => logger.info(updatePrompt)).called(1);
-        verify(
-          () => logger.confirm('Would you like to update?'),
-        ).called(1);
+        verify(() => logger.confirm('Would you like to update?')).called(1);
       });
 
       test('handles pub update errors gracefully', () async {
