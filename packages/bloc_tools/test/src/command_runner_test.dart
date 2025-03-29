@@ -27,7 +27,8 @@ const expectedUsage = [
       '    --version    Print the current version.\n'
       '\n'
       'Available commands:\n'
-      '  help   Display help information for bloc.\n'
+      '  new   bloc new <subcommand> [arguments]\n'
+      '        Generate new bloc components.\n'
       '\n'
       'Run "bloc help <command>" for more information about a command.',
 ];

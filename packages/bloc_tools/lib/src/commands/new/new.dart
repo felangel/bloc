@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
-import 'package:bloc_tools/src/commands/create/bundles/bundles.dart';
+import 'package:bloc_tools/src/commands/new/bundles/bundles.dart';
 import 'package:mason/mason.dart';
 
 /// Signature for [MasonGenerator.fromBundle].
@@ -11,12 +11,12 @@ typedef MasonGeneratorFromBundle = Future<MasonGenerator> Function(MasonBundle);
 /// Signature for [MasonGenerator.fromBrick].
 typedef MasonGeneratorFromBrick = Future<MasonGenerator> Function(Brick);
 
-/// {@template create_command}
-/// The `bloc create <template>` command generates code from various templates.
+/// {@template new_command}
+/// The `bloc new <template>` command generates code from various templates.
 /// {@endtemplate}
-class CreateCommand extends Command<int> {
-  /// {@macro create_command}
-  CreateCommand({required Logger logger}) {
+class NewCommand extends Command<int> {
+  /// {@macro new_command}
+  NewCommand({required Logger logger}) {
     for (final bundle in bundles) {
       addSubcommand(GeneratorCommand(bundle: bundle, logger: logger));
     }
@@ -26,14 +26,14 @@ class CreateCommand extends Command<int> {
   String get summary => '$invocation\n$description';
 
   @override
-  String get description => 'Generate code from a template.';
+  String get description => 'Generate new bloc components.';
 
   @override
-  String get name => 'create';
+  String get name => 'new';
 }
 
 /// {@template generator_subcommand}
-/// A generic class for all subcommands of [CreateCommand].
+/// A generic command for generating code from a brick or bundle.
 /// {@endtemplate}
 class GeneratorCommand extends Command<int> {
   /// {@macro generator_command}
@@ -84,11 +84,11 @@ class GeneratorCommand extends Command<int> {
     final generator = await _buildGenerator();
     final generateProgress = logger.progress('Generating');
     final target = DirectoryGeneratorTarget(outputDirectory);
-
     var vars = templateVars;
     await generator.hooks.preGen(vars: vars, onVarsChanged: (v) => vars = v);
     final files = await generator.generate(target, vars: vars, logger: logger);
     generateProgress.complete('Generated ${files.length} file(s)');
+    logger.flush((message) => logger.info(darkGray.wrap(message)));
 
     return ExitCode.success.code;
   }
