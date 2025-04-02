@@ -5,6 +5,15 @@ import 'dart:async';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
 
+/// Describes the various behaviors when a hydration error occurs.
+enum HydrationErrorBehavior {
+  /// Retain the cached state when a hydration error occurs.
+  retain,
+
+  /// Reset the cached state when a hydration error occurs.
+  reset,
+}
+
 /// {@template hydrated_bloc}
 /// Specialized [Bloc] which handles initializing the [Bloc] state
 /// based on the persisted state. This allows state to be persisted
@@ -105,6 +114,7 @@ abstract class HydratedCubit<State> extends Cubit<State>
 ///
 mixin HydratedMixin<State> on BlocBase<State> {
   late final Storage __storage;
+  bool _hydrationFailed = false;
 
   /// Populates the internal state storage with the latest state.
   /// This should be called when using the [HydratedMixin]
@@ -118,14 +128,32 @@ mixin HydratedMixin<State> on BlocBase<State> {
   ///  ...
   /// }
   /// ```
-  void hydrate({Storage? storage}) {
+  void hydrate({
+    Storage? storage,
+    HydrationErrorBehavior Function(dynamic error, StackTrace)?
+        onHydrationError,
+  }) {
     __storage = storage ??= HydratedBloc.storage;
     try {
       final stateJson = __storage.read(storageToken) as Map<dynamic, dynamic>?;
       _state = stateJson != null ? _fromJson(stateJson) : super.state;
+      _hydrationFailed = false;
     } catch (error, stackTrace) {
+      _hydrationFailed = true;
       onError(error, stackTrace);
       _state = super.state;
+      final hydrationErrorBehavior = onHydrationError?.call(error, stackTrace);
+
+      if (hydrationErrorBehavior == HydrationErrorBehavior.retain) {
+        return;
+      } else {
+        // If the behavior is to reset, we just allow the method to proceed
+        // and the state will be persisted as the default state.
+        //
+        // And we mark the hydration as succeded since the behavior is to reset
+        // it.
+        _hydrationFailed = false;
+      }
     }
 
     try {
@@ -148,14 +176,18 @@ mixin HydratedMixin<State> on BlocBase<State> {
   void onChange(Change<State> change) {
     super.onChange(change);
     final state = change.nextState;
-    try {
-      final stateJson = _toJson(state);
-      if (stateJson != null) {
-        __storage.write(storageToken, stateJson).then((_) {}, onError: onError);
+    if (!_hydrationFailed) {
+      try {
+        final stateJson = _toJson(state);
+        if (stateJson != null) {
+          __storage
+              .write(storageToken, stateJson)
+              .then((_) {}, onError: onError);
+        }
+      } catch (error, stackTrace) {
+        onError(error, stackTrace);
+        rethrow;
       }
-    } catch (error, stackTrace) {
-      onError(error, stackTrace);
-      rethrow;
     }
     _state = state;
   }
