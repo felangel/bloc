@@ -114,7 +114,7 @@ abstract class HydratedCubit<State> extends Cubit<State>
 ///
 mixin HydratedMixin<State> on BlocBase<State> {
   late final Storage __storage;
-  bool _hydrationFailed = false;
+  bool? _hydrationFailed;
 
   /// Populates the internal state storage with the latest state.
   /// This should be called when using the [HydratedMixin]
@@ -133,7 +133,9 @@ mixin HydratedMixin<State> on BlocBase<State> {
     HydrationErrorBehavior Function(dynamic error, StackTrace)?
         onHydrationError,
   }) {
-    __storage = storage ??= HydratedBloc.storage;
+    if (_hydrationFailed == null) {
+      __storage = storage ??= HydratedBloc.storage;
+    }
     try {
       final stateJson = __storage.read(storageToken) as Map<dynamic, dynamic>?;
       _state = stateJson != null ? _fromJson(stateJson) : super.state;
@@ -176,7 +178,7 @@ mixin HydratedMixin<State> on BlocBase<State> {
   void onChange(Change<State> change) {
     super.onChange(change);
     final state = change.nextState;
-    if (!_hydrationFailed) {
+    if (!(_hydrationFailed ?? false)) {
       try {
         final stateJson = _toJson(state);
         if (stateJson != null) {
