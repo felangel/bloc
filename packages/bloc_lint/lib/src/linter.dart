@@ -135,7 +135,7 @@ class LintContext {
   }
 
   /// Reports a lint from [beginToken] to [endToken].
-  void reportRange({
+  void reportTokenRange({
     required Token beginToken,
     required Token endToken,
     required String message,

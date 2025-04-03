@@ -67,7 +67,7 @@ class _Listener extends Listener {
     if (!_isRelevantEnclosingClass) return;
     if (varFinalOrConst == null) return;
     if (varFinalOrConst.keyword != Keyword.VAR) return;
-    context.reportRange(
+    context.reportTokenRange(
       beginToken: beginToken,
       endToken: endToken,
       message: 'Avoid mutable fields.',
