@@ -10,7 +10,7 @@ class AvoidFlutterImports extends LintRule {
 
   @override
   Listener? create(LintContext context) {
-    if (context.document.type == TextDocumentType.other) return null;
+    if (context.document.type.isOther) return null;
     return _Listener(context);
   }
 }
@@ -27,8 +27,7 @@ class _Listener extends Listener {
     final package = importKeyword.next;
     if (package == null) return;
     if (!package.lexeme.substring(1).startsWith(flutterImport)) return;
-    final instance =
-        context.document.type == TextDocumentType.bloc ? 'Bloc' : 'Cubit';
+    final instance = context.document.type.isBloc ? 'Bloc' : 'Cubit';
     context.reportToken(
       token: package,
       message:

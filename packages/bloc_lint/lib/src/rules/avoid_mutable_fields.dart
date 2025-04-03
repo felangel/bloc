@@ -10,7 +10,7 @@ class AvoidMutableFields extends LintRule {
 
   @override
   Listener? create(LintContext context) {
-    if (context.document.type == TextDocumentType.other) return null;
+    if (context.document.type.isOther) return null;
     return _Listener(context);
   }
 }

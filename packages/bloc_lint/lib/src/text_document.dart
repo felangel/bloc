@@ -178,7 +178,7 @@ enum TextDocumentType {
 
 /// Extensions on [TextDocument] that provide access to
 /// document type information.
-extension TextDocumentTypeX on TextDocument {
+extension TextDocumentX on TextDocument {
   /// Returns the [TextDocumentType] for the given document.
   TextDocumentType get type {
     final basename = path.basename(uri.path);
@@ -188,4 +188,17 @@ extension TextDocumentTypeX on TextDocument {
         ? TextDocumentType.cubit
         : TextDocumentType.other;
   }
+}
+
+/// Extensions on [TextDocumentType] that provide access to
+/// convenience methods for interpreting the type.
+extension TextDocumentTypeX on TextDocumentType {
+  /// Whether the document type is a bloc.
+  bool get isBloc => this == TextDocumentType.bloc;
+
+  /// Whether the document type is a cubit.
+  bool get isCubit => this == TextDocumentType.cubit;
+
+  /// Whether the document type is other.
+  bool get isOther => this == TextDocumentType.other;
 }

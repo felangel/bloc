@@ -14,4 +14,10 @@ export 'src/rules/rules.dart'
         PreferBlocLint,
         PreferCubitLint;
 export 'src/text_document.dart'
-    show Position, Range, TextDocument, TextDocumentType, TextDocumentTypeX;
+    show
+        Position,
+        Range,
+        TextDocument,
+        TextDocumentType,
+        TextDocumentTypeX,
+        TextDocumentX;
