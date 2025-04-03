@@ -1,1 +1,3 @@
 include: ../../analysis_options.yaml
+analyzer:
+  exclude: ["lib/src/generated/**", "lib/src/third_party/**"]
