@@ -5,11 +5,19 @@ export 'package:_fe_analyzer_shared/src/scanner/scanner.dart'
 
 export 'src/diagnostic.dart' show Diagnostic, Severity;
 export 'src/lint_rule.dart' show LintRule;
-export 'src/linter.dart' show LintContext, Linter, allRules;
+export 'src/linter.dart' show LintContext, Linter, allRules, recommendedRules;
 export 'src/rules/rules.dart'
     show
-        AvoidDependingOnFlutter,
+        AvoidFlutterImports,
+        AvoidMutableFields,
         AvoidPublicBlocMethods,
         PreferBlocLint,
         PreferCubitLint;
-export 'src/text_document.dart' show Position, Range, TextDocument;
+export 'src/text_document.dart'
+    show
+        Position,
+        Range,
+        TextDocument,
+        TextDocumentType,
+        TextDocumentTypeX,
+        TextDocumentX;

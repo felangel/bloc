@@ -10,10 +10,18 @@ import 'package:path/path.dart' as p;
 
 /// All supported lint rules.
 const allRules = <LintRule>[
-  AvoidDependingOnFlutter(),
+  AvoidFlutterImports(),
+  AvoidMutableFields(),
   AvoidPublicBlocMethods(),
   PreferBlocLint(),
   PreferCubitLint(),
+];
+
+/// All recommended lint rules.
+const recommendedRules = <LintRule>[
+  AvoidFlutterImports(),
+  AvoidMutableFields(),
+  AvoidPublicBlocMethods(),
 ];
 
 /// {@template linter}
@@ -64,7 +72,9 @@ class Linter {
     final tokens = scan(utf8.encode(content)).tokens;
     for (final rule in rules) {
       final context = LintContext._(rule: rule, document: document);
-      Parser(rule.create(context)).parseUnit(tokens);
+      final listener = rule.create(context);
+      if (listener == null) continue;
+      Parser(listener).parseUnit(tokens);
       diagnostics.addAll(context.diagnostics);
     }
     return {file.path: diagnostics};
@@ -76,7 +86,9 @@ class Linter {
     final tokens = scan(utf8.encode(content)).tokens;
     for (final rule in rules) {
       final context = LintContext._(rule: rule, document: document);
-      Parser(rule.create(context)).parseUnit(tokens);
+      final listener = rule.create(context);
+      if (listener == null) continue;
+      Parser(listener).parseUnit(tokens);
       diagnostics.addAll(context.diagnostics);
     }
     return {uri.path: diagnostics};
@@ -103,18 +115,15 @@ class LintContext {
   /// The list of reported diagnostics.
   List<Diagnostic> get diagnostics => _diagnostics;
 
-  /// Reports a lint at the provided [token].
+  /// Reports a lint at the provided [range].
   void report({
-    required Token token,
+    required Range range,
     required String message,
     String hint = '',
   }) {
     _diagnostics.add(
       Diagnostic(
-        range: Range(
-          start: document.positionAt(token.offset),
-          end: document.positionAt(token.offset + token.length),
-        ),
+        range: range,
         source: 'bloc',
         message: message,
         hint: hint,
@@ -122,6 +131,39 @@ class LintContext {
         description: 'https://bloclibrary.dev/lint-rules/${_rule.name}',
         severity: _rule.severity,
       ),
+    );
+  }
+
+  /// Reports a lint from [beginToken] to [endToken].
+  void reportTokenRange({
+    required Token beginToken,
+    required Token endToken,
+    required String message,
+    String hint = '',
+  }) {
+    report(
+      range: Range(
+        start: document.positionAt(beginToken.offset),
+        end: document.positionAt(endToken.offset),
+      ),
+      message: message,
+      hint: hint,
+    );
+  }
+
+  /// Reports a lint at the specified [token].
+  void reportToken({
+    required Token token,
+    required String message,
+    String hint = '',
+  }) {
+    report(
+      range: Range(
+        start: document.positionAt(token.offset),
+        end: document.positionAt(token.offset + token.length),
+      ),
+      message: message,
+      hint: hint,
     );
   }
 }

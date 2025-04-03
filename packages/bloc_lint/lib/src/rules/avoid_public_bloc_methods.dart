@@ -9,7 +9,10 @@ class AvoidPublicBlocMethods extends LintRule {
     : super(name: 'avoid_public_bloc_methods', severity: Severity.warning);
 
   @override
-  Listener create(LintContext context) => _Listener(context);
+  Listener? create(LintContext context) {
+    if (!context.document.type.isBloc) return null;
+    return _Listener(context);
+  }
 }
 
 class _Listener extends Listener {
@@ -50,7 +53,7 @@ class _Listener extends Listener {
     if (enclosingDeclarationName == methodName) return;
     if (allowedMethods.contains(methodName)) return;
     if (methodName.startsWith('_')) return;
-    context.report(
+    context.reportToken(
       token: name,
       message: 'Avoid public methods on bloc instances.',
       hint: 'Prefer notifying bloc instances via `add`.',

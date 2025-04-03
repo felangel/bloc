@@ -38,7 +38,7 @@ class _Listener extends Listener {
 
     if (superclazz.lexeme.endsWith('Cubit')) {
       final prefix = superclazz.lexeme.split('Cubit').first;
-      context.report(
+      context.reportToken(
         token: name,
         message: 'Avoid extending ${prefix}Cubit.',
         hint: 'Prefer extending ${prefix}Bloc instead.',

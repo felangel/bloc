@@ -1,13 +1,13 @@
-import 'package:bloc_lint/src/rules/rules.dart';
+import 'package:bloc_lint/bloc_lint.dart';
 import 'package:test/test.dart';
 
 import '../lint_test_helper.dart';
 
 void main() {
-  group(AvoidDependingOnFlutter, () {
+  group(AvoidFlutterImports, () {
     lintTest(
       'lints when bloc contains flutter import',
-      rule: AvoidDependingOnFlutter.new,
+      rule: AvoidFlutterImports.new,
       path: 'counter_bloc.dart',
       content: '''
 import 'package:bloc/bloc.dart';
@@ -22,7 +22,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
     lintTest(
       'lints when cubit contains flutter import',
-      rule: AvoidDependingOnFlutter.new,
+      rule: AvoidFlutterImports.new,
       path: 'counter_cubit.dart',
       content: '''
 import 'package:bloc/bloc.dart';
@@ -36,7 +36,7 @@ class CounterCubit extends Cubit<int> {
 
     lintTest(
       'does not lint when no flutter import exists',
-      rule: AvoidDependingOnFlutter.new,
+      rule: AvoidFlutterImports.new,
       path: 'counter_bloc.dart',
       content: '''
 import 'package:bloc/bloc.dart';
@@ -50,7 +50,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
     lintTest(
       'does not lint when flutter import exists outside of bloc',
-      rule: AvoidDependingOnFlutter.new,
+      rule: AvoidFlutterImports.new,
       path: 'main.dart',
       content: '''
 import 'package:flutter/material.dart';

@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:path/path.dart' as path;
+
 /// The newline symbol (\n).
 const newline = 10;
 
@@ -160,4 +162,43 @@ class Range {
   Map<String, dynamic> toJson() {
     return {'start': start.toJson(), 'end': end.toJson()};
   }
+}
+
+/// Relevant types of text documents.
+enum TextDocumentType {
+  /// A bloc file.
+  bloc,
+
+  /// A cubit file.
+  cubit,
+
+  /// Any other file.
+  other,
+}
+
+/// Extensions on [TextDocument] that provide access to
+/// document type information.
+extension TextDocumentX on TextDocument {
+  /// Returns the [TextDocumentType] for the given document.
+  TextDocumentType get type {
+    final basename = path.basename(uri.path);
+    return basename.endsWith('_bloc.dart')
+        ? TextDocumentType.bloc
+        : basename.endsWith('_cubit.dart')
+        ? TextDocumentType.cubit
+        : TextDocumentType.other;
+  }
+}
+
+/// Extensions on [TextDocumentType] that provide access to
+/// convenience methods for interpreting the type.
+extension TextDocumentTypeX on TextDocumentType {
+  /// Whether the document type is a bloc.
+  bool get isBloc => this == TextDocumentType.bloc;
+
+  /// Whether the document type is a cubit.
+  bool get isCubit => this == TextDocumentType.cubit;
+
+  /// Whether the document type is other.
+  bool get isOther => this == TextDocumentType.other;
 }
