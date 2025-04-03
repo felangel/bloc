@@ -20,7 +20,7 @@ class _Listener extends Listener {
 
   final LintContext context;
 
-  bool isBlocOrCubit = false;
+  bool _isRelevantEnclosingClass = false;
 
   @override
   void beginClassDeclaration(
@@ -35,6 +35,8 @@ class _Listener extends Listener {
     Token? mixinToken,
     Token name,
   ) {
+    _isRelevantEnclosingClass = false;
+
     final extendz = name.next;
 
     if (extendz == null || extendz.kind != Keyword.EXTENDS.kind) return;
@@ -44,7 +46,7 @@ class _Listener extends Listener {
 
     if (superclazz.lexeme.endsWith('Bloc') ||
         superclazz.lexeme.endsWith('Cubit')) {
-      isBlocOrCubit = true;
+      _isRelevantEnclosingClass = true;
     }
     return;
   }
@@ -62,7 +64,7 @@ class _Listener extends Listener {
     Token beginToken,
     Token endToken,
   ) {
-    if (!isBlocOrCubit) return;
+    if (!_isRelevantEnclosingClass) return;
     if (varFinalOrConst == null) return;
     if (varFinalOrConst.keyword != Keyword.VAR) return;
     context.reportRange(
