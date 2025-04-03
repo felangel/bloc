@@ -15,5 +15,5 @@ abstract class LintRule {
 
   /// Method that must be implemented which returns a listener
   /// given a [LintContext].
-  Listener create(LintContext context);
+  Listener? create(LintContext context);
 }
