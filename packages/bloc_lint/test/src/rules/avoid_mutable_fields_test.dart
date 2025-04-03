@@ -72,6 +72,22 @@ class CounterCubit extends Cubit<int> {
     );
 
     lintTest(
+      'does not lint when bloc has immutable fields',
+      rule: AvoidMutableFields.new,
+      path: 'counter_bloc.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+
+enum CounterEvent { increment, decrement }
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc(this.count) : super(0);
+
+  final int count;
+}
+''',
+    );
+
+    lintTest(
       'does not lint when bloc has no fields',
       rule: AvoidMutableFields.new,
       path: 'counter_bloc.dart',
@@ -81,6 +97,21 @@ import 'package:bloc/bloc.dart';
 enum CounterEvent { increment, decrement }
 class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc() : super(0);
+}
+''',
+    );
+
+    lintTest(
+      'does not lint when cubit has immutable field',
+      rule: AvoidMutableFields.new,
+      path: 'counter_cubit.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+
+class CounterCubit extends Cubit<int> {
+  CounterCubit(this.count) : super(0);
+
+  final int count;
 }
 ''',
     );
