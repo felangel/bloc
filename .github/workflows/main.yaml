@@ -68,6 +68,11 @@ jobs:
               - ./.github/workflows/main.yaml
               - ./.github/actions/dart_package/action.yaml
               - packages/bloc_concurrency/**
+            bloc_lint:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/dart_package/action.yaml
+              - packages/bloc_lint/**
             bloc_test:
               - ./.github/codecov.yml
               - ./.github/workflows/main.yaml
