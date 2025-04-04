@@ -37,7 +37,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
     );
 
     lintTest(
-      'does not lint public overrides exist',
+      'does not lint allowed methods',
       rule: AvoidPublicBlocMethods.new,
       path: 'counter_bloc.dart',
       content: '''
@@ -48,9 +48,24 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc() : super(0);
 
   @override
-  Future<void> close() {    
-    return super.close();
-  }
+  Future<void> close() => super.close();
+}
+''',
+    );
+
+    lintTest(
+      'does not lint public method overrides',
+      rule: AvoidPublicBlocMethods.new,
+      path: 'counter_bloc.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+
+enum CounterEvent { increment, decrement }
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+
+  @override
+  bool operator==(bool value) => false;
 }
 ''',
     );

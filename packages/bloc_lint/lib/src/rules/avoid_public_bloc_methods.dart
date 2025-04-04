@@ -35,6 +35,13 @@ class _Listener extends Listener {
 
   final LintContext context;
 
+  var _isOverride = false;
+
+  @override
+  void beginMetadata(Token token) {
+    _isOverride = token.next?.lexeme == 'override';
+  }
+
   @override
   void beginMethod(
     DeclarationKind declarationKind,
@@ -48,6 +55,7 @@ class _Listener extends Listener {
     String? enclosingDeclarationName,
   ) {
     if (declarationKind != DeclarationKind.Class) return;
+    if (_isOverride || staticToken != null) return;
     if (!(enclosingDeclarationName?.endsWith('Bloc') ?? false)) {
       return;
     }
