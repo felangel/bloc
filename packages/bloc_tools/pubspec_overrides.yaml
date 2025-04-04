@@ -1,0 +1,3 @@
+dependency_overrides:
+  bloc_lint:
+    path: ../bloc_lint
