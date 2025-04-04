@@ -23,6 +23,8 @@ class _Listener extends Listener {
     'addError',
     'close',
     'emit',
+    'state',
+    'stream',
     'on',
     'onChange',
     'onError',

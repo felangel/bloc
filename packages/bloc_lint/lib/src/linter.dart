@@ -41,8 +41,8 @@ class Linter {
   Map<String, List<Diagnostic>> analyze({required Uri uri, String? content}) {
     if (content != null) return _analyzeContent(uri, content);
     final directory = Directory(uri.path);
-    final file = File(uri.path);
     if (directory.existsSync()) return _analyzeDirectory(directory);
+    final file = File(uri.path);
     if (file.existsSync()) return _analyzeFile(file);
     return {};
   }
@@ -51,13 +51,7 @@ class Linter {
     final files =
         directory
             .listSync(recursive: true)
-            .where(
-              (e) =>
-                  e is File &&
-                  p.extension(e.path) == '.dart' &&
-                  !p.basename(e.path).endsWith('.g.dart') &&
-                  !p.split(e.path).contains('.dart_tool'),
-            )
+            .where((e) => e.isLintableDartFile)
             .cast<File>();
 
     return files
@@ -66,18 +60,7 @@ class Linter {
   }
 
   Map<String, List<Diagnostic>> _analyzeFile(File file) {
-    final diagnostics = <Diagnostic>[];
-    final content = file.readAsStringSync();
-    final document = TextDocument(uri: file.uri, content: content);
-    final tokens = scan(utf8.encode(content)).tokens;
-    for (final rule in rules) {
-      final context = LintContext._(rule: rule, document: document);
-      final listener = rule.create(context);
-      if (listener == null) continue;
-      Parser(listener).parseUnit(tokens);
-      diagnostics.addAll(context.diagnostics);
-    }
-    return {file.path: diagnostics};
+    return _analyzeContent(file.uri, file.readAsStringSync());
   }
 
   Map<String, List<Diagnostic>> _analyzeContent(Uri uri, String content) {
@@ -92,6 +75,15 @@ class Linter {
       diagnostics.addAll(context.diagnostics);
     }
     return {uri.path: diagnostics};
+  }
+}
+
+extension on FileSystemEntity {
+  bool get isLintableDartFile {
+    return this is File &&
+        p.extension(path) == '.dart' &&
+        !p.basename(path).endsWith('.g.dart') &&
+        !p.split(path).contains('.dart_tool');
   }
 }
 
