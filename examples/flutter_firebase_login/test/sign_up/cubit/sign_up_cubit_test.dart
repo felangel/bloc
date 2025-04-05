@@ -41,9 +41,7 @@ void main() {
         'emits [invalid] when email/password/confirmedPassword are invalid',
         build: () => SignUpCubit(authenticationRepository),
         act: (cubit) => cubit.emailChanged(invalidEmail),
-        expect: () => <SignUpState>[
-          SignUpState().dirtyEmail(invalidEmail),
-        ],
+        expect: () => <SignUpState>[SignUpState().dirtyEmail(invalidEmail)],
       );
 
       blocTest<SignUpCubit, SignUpState>(
@@ -115,20 +113,19 @@ void main() {
           cubit.confirmedPasswordChanged(invalidConfirmedPassword);
         },
         expect: () => <SignUpState>[
-          SignUpState().dirtyConfirmedPassword(
-            invalidConfirmedPassword,
-          ),
+          SignUpState().dirtyConfirmedPassword(invalidConfirmedPassword),
         ],
       );
 
       blocTest<SignUpCubit, SignUpState>(
         'emits [valid] when email/password/confirmedPassword are valid',
         build: () => SignUpCubit(authenticationRepository),
-        seed: () =>
-            SignUpState().dirtyEmail(validEmail).dirtyPassword(validPassword),
-        act: (cubit) => cubit.confirmedPasswordChanged(
-          validConfirmedPassword,
-        ),
+        seed: () {
+          return SignUpState()
+              .dirtyEmail(validEmail)
+              .dirtyPassword(validPassword);
+        },
+        act: (cubit) => cubit.confirmedPasswordChanged(validConfirmedPassword),
         expect: () => <SignUpState>[
           SignUpState()
               .dirtyEmail(validEmail)

@@ -39,9 +39,7 @@ void main() {
         'emits [invalid] when email/password are invalid',
         build: () => LoginCubit(authenticationRepository),
         act: (cubit) => cubit.emailChanged(invalidEmail),
-        expect: () => <LoginState>[
-          LoginState().dirtyEmail(invalidEmail),
-        ],
+        expect: () => <LoginState>[LoginState().dirtyEmail(invalidEmail)],
       );
 
       blocTest<LoginCubit, LoginState>(
@@ -60,9 +58,7 @@ void main() {
         'emits [invalid] when email/password are invalid',
         build: () => LoginCubit(authenticationRepository),
         act: (cubit) => cubit.passwordChanged(invalidPassword),
-        expect: () => <LoginState>[
-          LoginState().dirtyPassword(invalidPassword),
-        ],
+        expect: () => <LoginState>[LoginState().dirtyPassword(invalidPassword)],
       );
 
       blocTest<LoginCubit, LoginState>(
@@ -87,8 +83,11 @@ void main() {
       blocTest<LoginCubit, LoginState>(
         'calls logInWithEmailAndPassword with correct email/password',
         build: () => LoginCubit(authenticationRepository),
-        seed: () =>
-            LoginState().dirtyEmail(validEmail).dirtyPassword(validPassword),
+        seed: () {
+          return LoginState()
+              .dirtyEmail(validEmail)
+              .dirtyPassword(validPassword);
+        },
         act: (cubit) => cubit.logInWithCredentials(),
         verify: (_) {
           verify(
@@ -104,8 +103,11 @@ void main() {
         'emits [submissionInProgress, submissionSuccess] '
         'when logInWithEmailAndPassword succeeds',
         build: () => LoginCubit(authenticationRepository),
-        seed: () =>
-            LoginState().dirtyEmail(validEmail).dirtyPassword(validPassword),
+        seed: () {
+          return LoginState()
+              .dirtyEmail(validEmail)
+              .dirtyPassword(validPassword);
+        },
         act: (cubit) => cubit.logInWithCredentials(),
         expect: () => <LoginState>[
           LoginState()
@@ -132,8 +134,11 @@ void main() {
           ).thenThrow(LogInWithEmailAndPasswordFailure('oops'));
         },
         build: () => LoginCubit(authenticationRepository),
-        seed: () =>
-            LoginState().dirtyEmail(validEmail).dirtyPassword(validPassword),
+        seed: () {
+          return LoginState()
+              .dirtyEmail(validEmail)
+              .dirtyPassword(validPassword);
+        },
         act: (cubit) => cubit.logInWithCredentials(),
         expect: () => <LoginState>[
           LoginState()
@@ -159,8 +164,11 @@ void main() {
           ).thenThrow(Exception('oops'));
         },
         build: () => LoginCubit(authenticationRepository),
-        seed: () =>
-            LoginState().dirtyEmail(validEmail).dirtyPassword(validPassword),
+        seed: () {
+          return LoginState()
+              .dirtyEmail(validEmail)
+              .dirtyPassword(validPassword);
+        },
         act: (cubit) => cubit.logInWithCredentials(),
         expect: () => <LoginState>[
           LoginState()
