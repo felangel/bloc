@@ -13,6 +13,7 @@ environment:
 
 dependencies:
   args: ^2.1.0
+  bloc_lint: ^0.1.0
   mason: ^0.1.0
   pub_updater: ^0.5.0
 
@@ -21,6 +22,7 @@ dev_dependencies:
   build_verify: ^3.0.0
   build_version: ^2.0.0
   mocktail: ^1.0.0
+  path: ^1.9.1
   test: ^1.17.0
 
 executables:

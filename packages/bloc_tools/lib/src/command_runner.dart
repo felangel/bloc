@@ -1,6 +1,7 @@
 import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
-import 'package:bloc_tools/src/commands/new/new.dart';
+import 'package:bloc_lint/bloc_lint.dart';
+import 'package:bloc_tools/src/commands/commands.dart';
 import 'package:bloc_tools/src/version.dart';
 import 'package:mason/mason.dart' show ExitCode, Logger, lightCyan, lightYellow;
 import 'package:pub_updater/pub_updater.dart';
@@ -23,6 +24,12 @@ class BlocToolsCommandRunner extends CommandRunner<int> {
       help: 'Print the current version.',
     );
     addCommand(NewCommand(logger: _logger));
+    addCommand(
+      LintCommand(
+        linter: const Linter(rules: recommendedRules),
+        logger: _logger,
+      ),
+    );
   }
 
   final Logger _logger;

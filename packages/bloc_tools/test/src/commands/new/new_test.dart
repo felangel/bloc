@@ -1,6 +1,6 @@
 import 'package:args/command_runner.dart';
+import 'package:bloc_tools/src/commands/commands.dart';
 import 'package:bloc_tools/src/commands/new/bundles/bundles.dart' show bundles;
-import 'package:bloc_tools/src/commands/new/new.dart';
 import 'package:mason/mason.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
