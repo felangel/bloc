@@ -9,6 +9,8 @@ class SignUpForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<SignUpCubit, SignUpState>(
+      listenWhen: (previous, current) =>
+          previous.status != current.status && current.status.isFailure,
       listener: (context, state) {
         if (state.status.isSuccess) {
           Navigator.of(context).pop();
