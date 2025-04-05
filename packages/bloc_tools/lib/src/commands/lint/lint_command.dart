@@ -60,11 +60,11 @@ Usage: bloc lint [OPTIONS] [files]...''');
       }
       fileCount++;
     }
-    _logger.info(
-      '''$issueCount ${issueCount == 1 ? 'issue' : 'issues'} found in $fileCount ${fileCount == 1 ? 'file' : 'files'}.''',
-    );
+    _logger.info('''
+$issueCount ${issueCount == 1 ? 'issue' : 'issues'} found
+Analyzed $fileCount ${fileCount == 1 ? 'file' : 'files'}''');
 
-    return ExitCode.success.code;
+    return issueCount > 0 ? 1 : 0;
   }
 }
 
