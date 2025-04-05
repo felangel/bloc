@@ -11,17 +11,11 @@ final class LoginState extends Equatable {
   });
 
   LoginState withEmail(String email) {
-    return LoginState._(
-      email: Email.dirty(email),
-      password: password,
-    );
+    return LoginState._(email: Email.dirty(email), password: password);
   }
 
   LoginState withPassword(String password) {
-    return LoginState._(
-      email: email,
-      password: Password.dirty(password),
-    );
+    return LoginState._(email: email, password: Password.dirty(password));
   }
 
   LoginState withSubmissionInProgress() {
