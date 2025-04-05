@@ -19,9 +19,9 @@ void main() {
       test('is true when validation succeeds', () {
         expect(
           SignUpState()
-              .dirtyEmail(email)
-              .dirtyPassword(password)
-              .dirtyConfirmedPassword(password)
+              .withEmail(email)
+              .withPassword(password)
+              .withConfirmedPassword(password)
               .isValid,
           isTrue,
         );

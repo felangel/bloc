@@ -10,21 +10,21 @@ final class LoginState extends Equatable {
     this.errorMessage,
   });
 
-  LoginState dirtyEmail(String email) {
+  LoginState withEmail(String email) {
     return LoginState._(
       email: Email.dirty(email),
       password: password,
     );
   }
 
-  LoginState dirtyPassword(String password) {
+  LoginState withPassword(String password) {
     return LoginState._(
       email: email,
       password: Password.dirty(password),
     );
   }
 
-  LoginState submissionInProgress() {
+  LoginState withSubmissionInProgress() {
     return LoginState._(
       email: email,
       password: password,
@@ -32,7 +32,7 @@ final class LoginState extends Equatable {
     );
   }
 
-  LoginState submissionSuccess() {
+  LoginState withSubmissionSuccess() {
     return LoginState._(
       email: email,
       password: password,
@@ -40,7 +40,7 @@ final class LoginState extends Equatable {
     );
   }
 
-  LoginState submissionFailure([String? error]) {
+  LoginState withSubmissionFailure([String? error]) {
     return LoginState._(
       email: email,
       password: password,

@@ -41,21 +41,21 @@ void main() {
         'emits [invalid] when email/password/confirmedPassword are invalid',
         build: () => SignUpCubit(authenticationRepository),
         act: (cubit) => cubit.emailChanged(invalidEmail),
-        expect: () => <SignUpState>[SignUpState().dirtyEmail(invalidEmail)],
+        expect: () => <SignUpState>[SignUpState().withEmail(invalidEmail)],
       );
 
       blocTest<SignUpCubit, SignUpState>(
         'emits [valid] when email/password/confirmedPassword are valid',
         build: () => SignUpCubit(authenticationRepository),
         seed: () => SignUpState()
-            .dirtyPassword(validPassword)
-            .dirtyConfirmedPassword(validConfirmedPassword),
+            .withPassword(validPassword)
+            .withConfirmedPassword(validConfirmedPassword),
         act: (cubit) => cubit.emailChanged(validEmail),
         expect: () => <SignUpState>[
           SignUpState()
-              .dirtyEmail(validEmail)
-              .dirtyPassword(validPassword)
-              .dirtyConfirmedPassword(validConfirmedPassword),
+              .withEmail(validEmail)
+              .withPassword(validPassword)
+              .withConfirmedPassword(validConfirmedPassword),
         ],
       );
     });
@@ -66,7 +66,7 @@ void main() {
         build: () => SignUpCubit(authenticationRepository),
         act: (cubit) => cubit.passwordChanged(invalidPassword),
         expect: () => <SignUpState>[
-          SignUpState().dirtyPassword(invalidPassword),
+          SignUpState().withPassword(invalidPassword),
         ],
       );
 
@@ -74,14 +74,14 @@ void main() {
         'emits [valid] when email/password/confirmedPassword are valid',
         build: () => SignUpCubit(authenticationRepository),
         seed: () => SignUpState()
-            .dirtyEmail(validEmail)
-            .dirtyConfirmedPassword(validConfirmedPassword),
+            .withEmail(validEmail)
+            .withConfirmedPassword(validConfirmedPassword),
         act: (cubit) => cubit.passwordChanged(validPassword),
         expect: () => <SignUpState>[
           SignUpState()
-              .dirtyEmail(validEmail)
-              .dirtyPassword(validPassword)
-              .dirtyConfirmedPassword(validConfirmedPassword),
+              .withEmail(validEmail)
+              .withPassword(validPassword)
+              .withConfirmedPassword(validConfirmedPassword),
         ],
       );
 
@@ -89,18 +89,18 @@ void main() {
         'emits [valid] when confirmedPasswordChanged is called first and then '
         'passwordChanged is called',
         build: () => SignUpCubit(authenticationRepository),
-        seed: () => SignUpState().dirtyEmail(validEmail),
+        seed: () => SignUpState().withEmail(validEmail),
         act: (cubit) => cubit
           ..confirmedPasswordChanged(validConfirmedPassword)
           ..passwordChanged(validPassword),
         expect: () => <SignUpState>[
           SignUpState()
-              .dirtyEmail(validEmail)
-              .dirtyConfirmedPassword(validConfirmedPassword),
+              .withEmail(validEmail)
+              .withConfirmedPassword(validConfirmedPassword),
           SignUpState()
-              .dirtyEmail(validEmail)
-              .dirtyPassword(validPassword)
-              .dirtyConfirmedPassword(validConfirmedPassword),
+              .withEmail(validEmail)
+              .withPassword(validPassword)
+              .withConfirmedPassword(validConfirmedPassword),
         ],
       );
     });
@@ -113,7 +113,7 @@ void main() {
           cubit.confirmedPasswordChanged(invalidConfirmedPassword);
         },
         expect: () => <SignUpState>[
-          SignUpState().dirtyConfirmedPassword(invalidConfirmedPassword),
+          SignUpState().withConfirmedPassword(invalidConfirmedPassword),
         ],
       );
 
@@ -122,15 +122,15 @@ void main() {
         build: () => SignUpCubit(authenticationRepository),
         seed: () {
           return SignUpState()
-              .dirtyEmail(validEmail)
-              .dirtyPassword(validPassword);
+              .withEmail(validEmail)
+              .withPassword(validPassword);
         },
         act: (cubit) => cubit.confirmedPasswordChanged(validConfirmedPassword),
         expect: () => <SignUpState>[
           SignUpState()
-              .dirtyEmail(validEmail)
-              .dirtyPassword(validPassword)
-              .dirtyConfirmedPassword(validConfirmedPassword),
+              .withEmail(validEmail)
+              .withPassword(validPassword)
+              .withConfirmedPassword(validConfirmedPassword),
         ],
       );
 
@@ -138,16 +138,16 @@ void main() {
         'emits [valid] when passwordChanged is called first and then '
         'confirmedPasswordChanged is called',
         build: () => SignUpCubit(authenticationRepository),
-        seed: () => SignUpState().dirtyEmail(validEmail),
+        seed: () => SignUpState().withEmail(validEmail),
         act: (cubit) => cubit
           ..passwordChanged(validPassword)
           ..confirmedPasswordChanged(validConfirmedPassword),
         expect: () => <SignUpState>[
-          SignUpState().dirtyEmail(validEmail).dirtyPassword(validPassword),
+          SignUpState().withEmail(validEmail).withPassword(validPassword),
           SignUpState()
-              .dirtyEmail(validEmail)
-              .dirtyPassword(validPassword)
-              .dirtyConfirmedPassword(validConfirmedPassword),
+              .withEmail(validEmail)
+              .withPassword(validPassword)
+              .withConfirmedPassword(validConfirmedPassword),
         ],
       );
     });
@@ -164,9 +164,9 @@ void main() {
         'calls signUp with correct email/password/confirmedPassword',
         build: () => SignUpCubit(authenticationRepository),
         seed: () => SignUpState()
-            .dirtyEmail(validEmail)
-            .dirtyPassword(validPassword)
-            .dirtyConfirmedPassword(validConfirmedPassword),
+            .withEmail(validEmail)
+            .withPassword(validPassword)
+            .withConfirmedPassword(validConfirmedPassword),
         act: (cubit) => cubit.signUpFormSubmitted(),
         verify: (_) {
           verify(
@@ -183,21 +183,21 @@ void main() {
         'when signUp succeeds',
         build: () => SignUpCubit(authenticationRepository),
         seed: () => SignUpState()
-            .dirtyEmail(validEmail)
-            .dirtyPassword(validPassword)
-            .dirtyConfirmedPassword(validConfirmedPassword),
+            .withEmail(validEmail)
+            .withPassword(validPassword)
+            .withConfirmedPassword(validConfirmedPassword),
         act: (cubit) => cubit.signUpFormSubmitted(),
         expect: () => <SignUpState>[
           SignUpState()
-              .dirtyEmail(validEmail)
-              .dirtyPassword(validPassword)
-              .dirtyConfirmedPassword(validConfirmedPassword)
-              .submissionInProgress(),
+              .withEmail(validEmail)
+              .withPassword(validPassword)
+              .withConfirmedPassword(validConfirmedPassword)
+              .withSubmissionInProgress(),
           SignUpState()
-              .dirtyEmail(validEmail)
-              .dirtyPassword(validPassword)
-              .dirtyConfirmedPassword(validConfirmedPassword)
-              .submissionSuccess(),
+              .withEmail(validEmail)
+              .withPassword(validPassword)
+              .withConfirmedPassword(validConfirmedPassword)
+              .withSubmissionSuccess(),
         ],
       );
 
@@ -214,21 +214,21 @@ void main() {
         },
         build: () => SignUpCubit(authenticationRepository),
         seed: () => SignUpState()
-            .dirtyEmail(validEmail)
-            .dirtyPassword(validPassword)
-            .dirtyConfirmedPassword(validConfirmedPassword),
+            .withEmail(validEmail)
+            .withPassword(validPassword)
+            .withConfirmedPassword(validConfirmedPassword),
         act: (cubit) => cubit.signUpFormSubmitted(),
         expect: () => <SignUpState>[
           SignUpState()
-              .dirtyEmail(validEmail)
-              .dirtyPassword(validPassword)
-              .dirtyConfirmedPassword(validConfirmedPassword)
-              .submissionInProgress(),
+              .withEmail(validEmail)
+              .withPassword(validPassword)
+              .withConfirmedPassword(validConfirmedPassword)
+              .withSubmissionInProgress(),
           SignUpState()
-              .dirtyEmail(validEmail)
-              .dirtyPassword(validPassword)
-              .dirtyConfirmedPassword(validConfirmedPassword)
-              .submissionFailure('oops'),
+              .withEmail(validEmail)
+              .withPassword(validPassword)
+              .withConfirmedPassword(validConfirmedPassword)
+              .withSubmissionFailure('oops'),
         ],
       );
 
@@ -245,21 +245,21 @@ void main() {
         },
         build: () => SignUpCubit(authenticationRepository),
         seed: () => SignUpState()
-            .dirtyEmail(validEmail)
-            .dirtyPassword(validPassword)
-            .dirtyConfirmedPassword(validConfirmedPassword),
+            .withEmail(validEmail)
+            .withPassword(validPassword)
+            .withConfirmedPassword(validConfirmedPassword),
         act: (cubit) => cubit.signUpFormSubmitted(),
         expect: () => <SignUpState>[
           SignUpState()
-              .dirtyEmail(validEmail)
-              .dirtyPassword(validPassword)
-              .dirtyConfirmedPassword(validConfirmedPassword)
-              .submissionInProgress(),
+              .withEmail(validEmail)
+              .withPassword(validPassword)
+              .withConfirmedPassword(validConfirmedPassword)
+              .withSubmissionInProgress(),
           SignUpState()
-              .dirtyEmail(validEmail)
-              .dirtyPassword(validPassword)
-              .dirtyConfirmedPassword(validConfirmedPassword)
-              .submissionFailure(),
+              .withEmail(validEmail)
+              .withPassword(validPassword)
+              .withConfirmedPassword(validConfirmedPassword)
+              .withSubmissionFailure(),
         ],
       );
     });

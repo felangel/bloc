@@ -18,7 +18,7 @@ void main() {
 
       test('is true when validation succeeds', () {
         expect(
-          LoginState().dirtyEmail(email).dirtyPassword(password).isValid,
+          LoginState().withEmail(email).withPassword(password).isValid,
           isTrue,
         );
       });

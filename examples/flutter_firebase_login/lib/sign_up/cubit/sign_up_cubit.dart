@@ -11,27 +11,27 @@ class SignUpCubit extends Cubit<SignUpState> {
 
   final AuthenticationRepository _authenticationRepository;
 
-  void emailChanged(String email) => emit(state.dirtyEmail(email));
+  void emailChanged(String email) => emit(state.withEmail(email));
 
-  void passwordChanged(String password) => emit(state.dirtyPassword(password));
+  void passwordChanged(String password) => emit(state.withPassword(password));
 
   void confirmedPasswordChanged(String confirmedPassword) {
-    emit(state.dirtyConfirmedPassword(confirmedPassword));
+    emit(state.withConfirmedPassword(confirmedPassword));
   }
 
   Future<void> signUpFormSubmitted() async {
     if (!state.isValid) return;
-    emit(state.submissionInProgress());
+    emit(state.withSubmissionInProgress());
     try {
       await _authenticationRepository.signUp(
         email: state.email.value,
         password: state.password.value,
       );
-      emit(state.submissionSuccess());
+      emit(state.withSubmissionSuccess());
     } on SignUpWithEmailAndPasswordFailure catch (e) {
-      emit(state.submissionFailure(e.message));
+      emit(state.withSubmissionFailure(e.message));
     } catch (_) {
-      emit(state.submissionFailure());
+      emit(state.withSubmissionFailure());
     }
   }
 }

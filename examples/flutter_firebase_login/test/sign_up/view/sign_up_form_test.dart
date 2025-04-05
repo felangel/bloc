@@ -84,9 +84,9 @@ void main() {
           (tester) async {
         when(() => signUpCubit.state).thenReturn(
           const SignUpState()
-              .dirtyEmail(validEmail)
-              .dirtyPassword(validPassword)
-              .dirtyConfirmedPassword(validPassword),
+              .withEmail(validEmail)
+              .withPassword(validPassword)
+              .withConfirmedPassword(validPassword),
         );
         await tester.pumpWidget(
           MaterialApp(
@@ -110,7 +110,7 @@ void main() {
           signUpCubit,
           Stream.fromIterable(<SignUpState>[
             const SignUpState(),
-            const SignUpState().submissionFailure(),
+            const SignUpState().withSubmissionFailure(),
           ]),
         );
         await tester.pumpWidget(
@@ -131,9 +131,9 @@ void main() {
           (tester) async {
         when(() => signUpCubit.state).thenReturn(
           const SignUpState()
-              .dirtyEmail(invalidEmail)
-              .dirtyPassword(validPassword)
-              .dirtyConfirmedPassword(validPassword),
+              .withEmail(invalidEmail)
+              .withPassword(validPassword)
+              .withConfirmedPassword(validPassword),
         );
         await tester.pumpWidget(
           MaterialApp(
@@ -152,8 +152,8 @@ void main() {
           (tester) async {
         when(() => signUpCubit.state).thenReturn(
           const SignUpState()
-              .dirtyEmail(validEmail)
-              .dirtyPassword(invalidPassword),
+              .withEmail(validEmail)
+              .withPassword(invalidPassword),
         );
         await tester.pumpWidget(
           MaterialApp(
@@ -172,7 +172,7 @@ void main() {
           'invalid confirmedPassword error text'
           ' when confirmedPassword is invalid', (tester) async {
         when(() => signUpCubit.state).thenReturn(
-          const SignUpState().dirtyConfirmedPassword(invalidPassword),
+          const SignUpState().withConfirmedPassword(invalidPassword),
         );
         await tester.pumpWidget(
           MaterialApp(
@@ -210,9 +210,9 @@ void main() {
           (tester) async {
         when(() => signUpCubit.state).thenReturn(
           const SignUpState()
-              .dirtyEmail(validEmail)
-              .dirtyPassword(validPassword)
-              .dirtyConfirmedPassword(validPassword),
+              .withEmail(validEmail)
+              .withPassword(validPassword)
+              .withConfirmedPassword(validPassword),
         );
         await tester.pumpWidget(
           MaterialApp(
@@ -238,15 +238,15 @@ void main() {
           signUpCubit,
           Stream.fromIterable(<SignUpState>[
             const SignUpState()
-                .dirtyEmail(validEmail)
-                .dirtyPassword(validPassword)
-                .dirtyConfirmedPassword(validPassword)
-                .submissionInProgress(),
+                .withEmail(validEmail)
+                .withPassword(validPassword)
+                .withConfirmedPassword(validPassword)
+                .withSubmissionInProgress(),
             const SignUpState()
-                .dirtyEmail(validEmail)
-                .dirtyPassword(validPassword)
-                .dirtyConfirmedPassword(validPassword)
-                .submissionSuccess(),
+                .withEmail(validEmail)
+                .withPassword(validPassword)
+                .withConfirmedPassword(validPassword)
+                .withSubmissionSuccess(),
           ]),
         );
         await tester.pumpWidget(

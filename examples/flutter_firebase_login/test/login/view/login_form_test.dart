@@ -68,9 +68,7 @@ void main() {
       testWidgets('logInWithCredentials when login button is pressed',
           (tester) async {
         when(() => loginCubit.state).thenReturn(
-          const LoginState()
-              .dirtyEmail(validEmail)
-              .dirtyPassword(validPassword),
+          const LoginState().withEmail(validEmail).withPassword(validPassword),
         );
         await tester.pumpWidget(
           MaterialApp(
@@ -109,8 +107,8 @@ void main() {
         whenListen(
           loginCubit,
           Stream.fromIterable(<LoginState>[
-            const LoginState().submissionInProgress(),
-            const LoginState().submissionFailure(),
+            const LoginState().withSubmissionInProgress(),
+            const LoginState().withSubmissionFailure(),
           ]),
         );
         await tester.pumpWidget(
@@ -130,7 +128,7 @@ void main() {
       testWidgets('invalid email error text when email is invalid',
           (tester) async {
         when(() => loginCubit.state).thenReturn(
-          const LoginState().dirtyEmail(invalidEmail),
+          const LoginState().withEmail(invalidEmail),
         );
         await tester.pumpWidget(
           MaterialApp(
@@ -148,7 +146,7 @@ void main() {
       testWidgets('invalid password error text when password is invalid',
           (tester) async {
         when(() => loginCubit.state).thenReturn(
-          const LoginState().dirtyPassword(invalidPassword),
+          const LoginState().withPassword(invalidPassword),
         );
         await tester.pumpWidget(
           MaterialApp(
@@ -185,9 +183,7 @@ void main() {
       testWidgets('enabled login button when status is validated',
           (tester) async {
         when(() => loginCubit.state).thenReturn(
-          const LoginState()
-              .dirtyEmail(validEmail)
-              .dirtyPassword(validPassword),
+          const LoginState().withEmail(validEmail).withPassword(validPassword),
         );
         await tester.pumpWidget(
           MaterialApp(

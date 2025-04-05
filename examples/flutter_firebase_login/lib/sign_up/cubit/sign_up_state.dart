@@ -17,7 +17,7 @@ final class SignUpState extends Equatable {
   final FormzSubmissionStatus status;
   final String? errorMessage;
 
-  SignUpState dirtyEmail(String email) {
+  SignUpState withEmail(String email) {
     return SignUpState._(
       email: Email.dirty(email),
       password: password,
@@ -25,7 +25,7 @@ final class SignUpState extends Equatable {
     );
   }
 
-  SignUpState dirtyPassword(String password) {
+  SignUpState withPassword(String password) {
     return SignUpState._(
       email: email,
       password: Password.dirty(password),
@@ -33,7 +33,7 @@ final class SignUpState extends Equatable {
     );
   }
 
-  SignUpState dirtyConfirmedPassword(String confirmedPassword) {
+  SignUpState withConfirmedPassword(String confirmedPassword) {
     return SignUpState._(
       email: email,
       password: password,
@@ -44,7 +44,7 @@ final class SignUpState extends Equatable {
     );
   }
 
-  SignUpState submissionInProgress() {
+  SignUpState withSubmissionInProgress() {
     return SignUpState._(
       email: email,
       password: password,
@@ -53,7 +53,7 @@ final class SignUpState extends Equatable {
     );
   }
 
-  SignUpState submissionSuccess() {
+  SignUpState withSubmissionSuccess() {
     return SignUpState._(
       email: email,
       password: password,
@@ -62,7 +62,7 @@ final class SignUpState extends Equatable {
     );
   }
 
-  SignUpState submissionFailure([String? error]) {
+  SignUpState withSubmissionFailure([String? error]) {
     return SignUpState._(
       email: email,
       password: password,
