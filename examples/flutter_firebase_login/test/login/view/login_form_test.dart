@@ -5,18 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_login/login/login.dart';
 import 'package:flutter_firebase_login/sign_up/sign_up.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:form_inputs/form_inputs.dart';
-import 'package:formz/formz.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockAuthenticationRepository extends Mock
     implements AuthenticationRepository {}
 
 class MockLoginCubit extends MockCubit<LoginState> implements LoginCubit {}
-
-class MockEmail extends Mock implements Email {}
-
-class MockPassword extends Mock implements Password {}
 
 void main() {
   const loginButtonKey = Key('loginForm_continue_raisedButton');
@@ -25,15 +19,17 @@ void main() {
   const passwordInputKey = Key('loginForm_passwordInput_textField');
   const createAccountButtonKey = Key('loginForm_createAccount_flatButton');
 
-  const testEmail = 'test@gmail.com';
-  const testPassword = 'testP@ssw0rd1';
+  const validEmail = 'test@gmail.com';
+  const validPassword = 'Test1234';
+  const invalidEmail = 'invalid';
+  const invalidPassword = 'invalid';
 
   group('LoginForm', () {
     late LoginCubit loginCubit;
 
     setUp(() {
       loginCubit = MockLoginCubit();
-      when(() => loginCubit.state).thenReturn(const LoginState());
+      when(() => loginCubit.state).thenReturn(const LoginState.initial());
       when(() => loginCubit.logInWithGoogle()).thenAnswer((_) async {});
       when(() => loginCubit.logInWithCredentials()).thenAnswer((_) async {});
     });
@@ -50,8 +46,8 @@ void main() {
             ),
           ),
         );
-        await tester.enterText(find.byKey(emailInputKey), testEmail);
-        verify(() => loginCubit.emailChanged(testEmail)).called(1);
+        await tester.enterText(find.byKey(emailInputKey), validEmail);
+        verify(() => loginCubit.emailChanged(validEmail)).called(1);
       });
 
       testWidgets('passwordChanged when password changes', (tester) async {
@@ -65,14 +61,16 @@ void main() {
             ),
           ),
         );
-        await tester.enterText(find.byKey(passwordInputKey), testPassword);
-        verify(() => loginCubit.passwordChanged(testPassword)).called(1);
+        await tester.enterText(find.byKey(passwordInputKey), validPassword);
+        verify(() => loginCubit.passwordChanged(validPassword)).called(1);
       });
 
       testWidgets('logInWithCredentials when login button is pressed',
           (tester) async {
         when(() => loginCubit.state).thenReturn(
-          const LoginState(isValid: true),
+          const LoginState.initial()
+              .dirtyEmail(validEmail)
+              .dirtyPassword(validPassword),
         );
         await tester.pumpWidget(
           MaterialApp(
@@ -110,9 +108,9 @@ void main() {
           (tester) async {
         whenListen(
           loginCubit,
-          Stream.fromIterable(const <LoginState>[
-            LoginState(status: FormzSubmissionStatus.inProgress),
-            LoginState(status: FormzSubmissionStatus.failure),
+          Stream.fromIterable(<LoginState>[
+            const LoginState.initial().submissionInProgress(),
+            const LoginState.initial().submissionFailure(),
           ]),
         );
         await tester.pumpWidget(
@@ -131,9 +129,9 @@ void main() {
 
       testWidgets('invalid email error text when email is invalid',
           (tester) async {
-        final email = MockEmail();
-        when(() => email.displayError).thenReturn(EmailValidationError.invalid);
-        when(() => loginCubit.state).thenReturn(LoginState(email: email));
+        when(() => loginCubit.state).thenReturn(
+          const LoginState.initial().dirtyEmail(invalidEmail),
+        );
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -149,11 +147,9 @@ void main() {
 
       testWidgets('invalid password error text when password is invalid',
           (tester) async {
-        final password = MockPassword();
-        when(
-          () => password.displayError,
-        ).thenReturn(PasswordValidationError.invalid);
-        when(() => loginCubit.state).thenReturn(LoginState(password: password));
+        when(() => loginCubit.state).thenReturn(
+          const LoginState.initial().dirtyPassword(invalidPassword),
+        );
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -169,7 +165,7 @@ void main() {
 
       testWidgets('disabled login button when status is not validated',
           (tester) async {
-        when(() => loginCubit.state).thenReturn(const LoginState());
+        when(() => loginCubit.state).thenReturn(const LoginState.initial());
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -189,7 +185,9 @@ void main() {
       testWidgets('enabled login button when status is validated',
           (tester) async {
         when(() => loginCubit.state).thenReturn(
-          const LoginState(isValid: true),
+          const LoginState.initial()
+              .dirtyEmail(validEmail)
+              .dirtyPassword(validPassword),
         );
         await tester.pumpWidget(
           MaterialApp(
