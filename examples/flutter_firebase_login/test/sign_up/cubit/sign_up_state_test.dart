@@ -8,17 +8,17 @@ void main() {
 
   group('SignUpState', () {
     test('supports value comparisons', () {
-      expect(SignUpState.initial(), SignUpState.initial());
+      expect(SignUpState(), SignUpState());
     });
 
     group('isValid', () {
       test('is false for initial state', () {
-        expect(SignUpState.initial().isValid, isFalse);
+        expect(SignUpState().isValid, isFalse);
       });
 
       test('is true when validation succeeds', () {
         expect(
-          SignUpState.initial()
+          SignUpState()
               .dirtyEmail(email)
               .dirtyPassword(password)
               .dirtyConfirmedPassword(password)

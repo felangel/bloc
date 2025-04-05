@@ -1,6 +1,8 @@
 part of 'sign_up_cubit.dart';
 
 final class SignUpState extends Equatable {
+  const SignUpState() : this._();
+
   const SignUpState._({
     this.email = const Email.pure(),
     this.password = const Password.pure(),
@@ -8,8 +10,6 @@ final class SignUpState extends Equatable {
     this.status = FormzSubmissionStatus.initial,
     this.errorMessage,
   });
-
-  const SignUpState.initial() : this._();
 
   final Email email;
   final Password password;

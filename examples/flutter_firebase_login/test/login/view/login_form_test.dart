@@ -29,7 +29,7 @@ void main() {
 
     setUp(() {
       loginCubit = MockLoginCubit();
-      when(() => loginCubit.state).thenReturn(const LoginState.initial());
+      when(() => loginCubit.state).thenReturn(const LoginState());
       when(() => loginCubit.logInWithGoogle()).thenAnswer((_) async {});
       when(() => loginCubit.logInWithCredentials()).thenAnswer((_) async {});
     });
@@ -68,7 +68,7 @@ void main() {
       testWidgets('logInWithCredentials when login button is pressed',
           (tester) async {
         when(() => loginCubit.state).thenReturn(
-          const LoginState.initial()
+          const LoginState()
               .dirtyEmail(validEmail)
               .dirtyPassword(validPassword),
         );
@@ -109,8 +109,8 @@ void main() {
         whenListen(
           loginCubit,
           Stream.fromIterable(<LoginState>[
-            const LoginState.initial().submissionInProgress(),
-            const LoginState.initial().submissionFailure(),
+            const LoginState().submissionInProgress(),
+            const LoginState().submissionFailure(),
           ]),
         );
         await tester.pumpWidget(
@@ -130,7 +130,7 @@ void main() {
       testWidgets('invalid email error text when email is invalid',
           (tester) async {
         when(() => loginCubit.state).thenReturn(
-          const LoginState.initial().dirtyEmail(invalidEmail),
+          const LoginState().dirtyEmail(invalidEmail),
         );
         await tester.pumpWidget(
           MaterialApp(
@@ -148,7 +148,7 @@ void main() {
       testWidgets('invalid password error text when password is invalid',
           (tester) async {
         when(() => loginCubit.state).thenReturn(
-          const LoginState.initial().dirtyPassword(invalidPassword),
+          const LoginState().dirtyPassword(invalidPassword),
         );
         await tester.pumpWidget(
           MaterialApp(
@@ -165,7 +165,7 @@ void main() {
 
       testWidgets('disabled login button when status is not validated',
           (tester) async {
-        when(() => loginCubit.state).thenReturn(const LoginState.initial());
+        when(() => loginCubit.state).thenReturn(const LoginState());
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -185,7 +185,7 @@ void main() {
       testWidgets('enabled login button when status is validated',
           (tester) async {
         when(() => loginCubit.state).thenReturn(
-          const LoginState.initial()
+          const LoginState()
               .dirtyEmail(validEmail)
               .dirtyPassword(validPassword),
         );

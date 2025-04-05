@@ -24,7 +24,7 @@ void main() {
 
     setUp(() {
       signUpCubit = MockSignUpCubit();
-      when(() => signUpCubit.state).thenReturn(const SignUpState.initial());
+      when(() => signUpCubit.state).thenReturn(const SignUpState());
       when(() => signUpCubit.signUpFormSubmitted()).thenAnswer((_) async {});
     });
 
@@ -83,7 +83,7 @@ void main() {
       testWidgets('signUpFormSubmitted when sign up button is pressed',
           (tester) async {
         when(() => signUpCubit.state).thenReturn(
-          const SignUpState.initial()
+          const SignUpState()
               .dirtyEmail(validEmail)
               .dirtyPassword(validPassword)
               .dirtyConfirmedPassword(validPassword),
@@ -109,8 +109,8 @@ void main() {
         whenListen(
           signUpCubit,
           Stream.fromIterable(<SignUpState>[
-            const SignUpState.initial(),
-            const SignUpState.initial().submissionFailure(),
+            const SignUpState(),
+            const SignUpState().submissionFailure(),
           ]),
         );
         await tester.pumpWidget(
@@ -130,7 +130,7 @@ void main() {
       testWidgets('invalid email error text when email is invalid',
           (tester) async {
         when(() => signUpCubit.state).thenReturn(
-          const SignUpState.initial()
+          const SignUpState()
               .dirtyEmail(invalidEmail)
               .dirtyPassword(validPassword)
               .dirtyConfirmedPassword(validPassword),
@@ -151,7 +151,7 @@ void main() {
       testWidgets('invalid password error text when password is invalid',
           (tester) async {
         when(() => signUpCubit.state).thenReturn(
-          const SignUpState.initial()
+          const SignUpState()
               .dirtyEmail(validEmail)
               .dirtyPassword(invalidPassword),
         );
@@ -172,7 +172,7 @@ void main() {
           'invalid confirmedPassword error text'
           ' when confirmedPassword is invalid', (tester) async {
         when(() => signUpCubit.state).thenReturn(
-          const SignUpState.initial().dirtyConfirmedPassword(invalidPassword),
+          const SignUpState().dirtyConfirmedPassword(invalidPassword),
         );
         await tester.pumpWidget(
           MaterialApp(
@@ -189,7 +189,7 @@ void main() {
 
       testWidgets('disabled sign up button when status is not validated',
           (tester) async {
-        when(() => signUpCubit.state).thenReturn(const SignUpState.initial());
+        when(() => signUpCubit.state).thenReturn(const SignUpState());
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -209,7 +209,7 @@ void main() {
       testWidgets('enabled sign up button when status is validated',
           (tester) async {
         when(() => signUpCubit.state).thenReturn(
-          const SignUpState.initial()
+          const SignUpState()
               .dirtyEmail(validEmail)
               .dirtyPassword(validPassword)
               .dirtyConfirmedPassword(validPassword),
@@ -237,12 +237,12 @@ void main() {
         whenListen(
           signUpCubit,
           Stream.fromIterable(<SignUpState>[
-            const SignUpState.initial()
+            const SignUpState()
                 .dirtyEmail(validEmail)
                 .dirtyPassword(validPassword)
                 .dirtyConfirmedPassword(validPassword)
                 .submissionInProgress(),
-            const SignUpState.initial()
+            const SignUpState()
                 .dirtyEmail(validEmail)
                 .dirtyPassword(validPassword)
                 .dirtyConfirmedPassword(validPassword)

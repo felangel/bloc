@@ -31,7 +31,7 @@ void main() {
     });
 
     test('initial state is LoginState', () {
-      expect(LoginCubit(authenticationRepository).state, LoginState.initial());
+      expect(LoginCubit(authenticationRepository).state, LoginState());
     });
 
     group('emailChanged', () {
@@ -40,19 +40,17 @@ void main() {
         build: () => LoginCubit(authenticationRepository),
         act: (cubit) => cubit.emailChanged(invalidEmail),
         expect: () => <LoginState>[
-          LoginState.initial().dirtyEmail(invalidEmail),
+          LoginState().dirtyEmail(invalidEmail),
         ],
       );
 
       blocTest<LoginCubit, LoginState>(
         'emits [valid] when email/password are valid',
         build: () => LoginCubit(authenticationRepository),
-        seed: () => LoginState.initial().dirtyPassword(validPassword),
+        seed: () => LoginState().dirtyPassword(validPassword),
         act: (cubit) => cubit.emailChanged(validEmail),
         expect: () => <LoginState>[
-          LoginState.initial()
-              .dirtyEmail(validEmail)
-              .dirtyPassword(validPassword),
+          LoginState().dirtyEmail(validEmail).dirtyPassword(validPassword),
         ],
       );
     });
@@ -63,19 +61,17 @@ void main() {
         build: () => LoginCubit(authenticationRepository),
         act: (cubit) => cubit.passwordChanged(invalidPassword),
         expect: () => <LoginState>[
-          LoginState.initial().dirtyPassword(invalidPassword),
+          LoginState().dirtyPassword(invalidPassword),
         ],
       );
 
       blocTest<LoginCubit, LoginState>(
         'emits [valid] when email/password are valid',
         build: () => LoginCubit(authenticationRepository),
-        seed: () => LoginState.initial().dirtyEmail(validEmail),
+        seed: () => LoginState().dirtyEmail(validEmail),
         act: (cubit) => cubit.passwordChanged(validPassword),
         expect: () => <LoginState>[
-          LoginState.initial()
-              .dirtyEmail(validEmail)
-              .dirtyPassword(validPassword),
+          LoginState().dirtyEmail(validEmail).dirtyPassword(validPassword),
         ],
       );
     });
@@ -91,9 +87,8 @@ void main() {
       blocTest<LoginCubit, LoginState>(
         'calls logInWithEmailAndPassword with correct email/password',
         build: () => LoginCubit(authenticationRepository),
-        seed: () => LoginState.initial()
-            .dirtyEmail(validEmail)
-            .dirtyPassword(validPassword),
+        seed: () =>
+            LoginState().dirtyEmail(validEmail).dirtyPassword(validPassword),
         act: (cubit) => cubit.logInWithCredentials(),
         verify: (_) {
           verify(
@@ -109,16 +104,15 @@ void main() {
         'emits [submissionInProgress, submissionSuccess] '
         'when logInWithEmailAndPassword succeeds',
         build: () => LoginCubit(authenticationRepository),
-        seed: () => LoginState.initial()
-            .dirtyEmail(validEmail)
-            .dirtyPassword(validPassword),
+        seed: () =>
+            LoginState().dirtyEmail(validEmail).dirtyPassword(validPassword),
         act: (cubit) => cubit.logInWithCredentials(),
         expect: () => <LoginState>[
-          LoginState.initial()
+          LoginState()
               .dirtyEmail(validEmail)
               .dirtyPassword(validPassword)
               .submissionInProgress(),
-          LoginState.initial()
+          LoginState()
               .dirtyEmail(validEmail)
               .dirtyPassword(validPassword)
               .submissionSuccess(),
@@ -138,16 +132,15 @@ void main() {
           ).thenThrow(LogInWithEmailAndPasswordFailure('oops'));
         },
         build: () => LoginCubit(authenticationRepository),
-        seed: () => LoginState.initial()
-            .dirtyEmail(validEmail)
-            .dirtyPassword(validPassword),
+        seed: () =>
+            LoginState().dirtyEmail(validEmail).dirtyPassword(validPassword),
         act: (cubit) => cubit.logInWithCredentials(),
         expect: () => <LoginState>[
-          LoginState.initial()
+          LoginState()
               .dirtyEmail(validEmail)
               .dirtyPassword(validPassword)
               .submissionInProgress(),
-          LoginState.initial()
+          LoginState()
               .dirtyEmail(validEmail)
               .dirtyPassword(validPassword)
               .submissionFailure('oops'),
@@ -166,16 +159,15 @@ void main() {
           ).thenThrow(Exception('oops'));
         },
         build: () => LoginCubit(authenticationRepository),
-        seed: () => LoginState.initial()
-            .dirtyEmail(validEmail)
-            .dirtyPassword(validPassword),
+        seed: () =>
+            LoginState().dirtyEmail(validEmail).dirtyPassword(validPassword),
         act: (cubit) => cubit.logInWithCredentials(),
         expect: () => <LoginState>[
-          LoginState.initial()
+          LoginState()
               .dirtyEmail(validEmail)
               .dirtyPassword(validPassword)
               .submissionInProgress(),
-          LoginState.initial()
+          LoginState()
               .dirtyEmail(validEmail)
               .dirtyPassword(validPassword)
               .submissionFailure(),
@@ -199,8 +191,8 @@ void main() {
         build: () => LoginCubit(authenticationRepository),
         act: (cubit) => cubit.logInWithGoogle(),
         expect: () => <LoginState>[
-          LoginState.initial().submissionInProgress(),
-          LoginState.initial().submissionSuccess(),
+          LoginState().submissionInProgress(),
+          LoginState().submissionSuccess(),
         ],
       );
 
@@ -215,8 +207,8 @@ void main() {
         build: () => LoginCubit(authenticationRepository),
         act: (cubit) => cubit.logInWithGoogle(),
         expect: () => <LoginState>[
-          LoginState.initial().submissionInProgress(),
-          LoginState.initial().submissionFailure('oops'),
+          LoginState().submissionInProgress(),
+          LoginState().submissionFailure('oops'),
         ],
       );
 
@@ -231,8 +223,8 @@ void main() {
         build: () => LoginCubit(authenticationRepository),
         act: (cubit) => cubit.logInWithGoogle(),
         expect: () => <LoginState>[
-          LoginState.initial().submissionInProgress(),
-          LoginState.initial().submissionFailure(),
+          LoginState().submissionInProgress(),
+          LoginState().submissionFailure(),
         ],
       );
     });

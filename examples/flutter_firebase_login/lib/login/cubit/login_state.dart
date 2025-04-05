@@ -1,14 +1,14 @@
 part of 'login_cubit.dart';
 
 final class LoginState extends Equatable {
+  const LoginState() : this._();
+
   const LoginState._({
     this.email = const Email.pure(),
     this.password = const Password.pure(),
     this.status = FormzSubmissionStatus.initial,
     this.errorMessage,
   });
-
-  const LoginState.initial() : this._();
 
   LoginState dirtyEmail(String email) {
     return LoginState._(
