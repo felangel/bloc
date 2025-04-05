@@ -29,7 +29,10 @@ final class SignUpState extends Equatable {
     return SignUpState._(
       email: email,
       password: Password.dirty(password),
-      confirmedPassword: confirmedPassword,
+      confirmedPassword: ConfirmedPassword.dirty(
+        password: password,
+        value: confirmedPassword.value,
+      ),
     );
   }
 
