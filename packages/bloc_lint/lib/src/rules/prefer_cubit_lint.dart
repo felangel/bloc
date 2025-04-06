@@ -5,8 +5,7 @@ import 'package:bloc_lint/bloc_lint.dart';
 /// {@endtemplate}
 class PreferCubitLint extends LintRule {
   /// {@macro prefer_cubit}
-  const PreferCubitLint()
-    : super(name: 'prefer_cubit', severity: Severity.info);
+  const PreferCubitLint() : super(name: 'prefer_cubit');
 
   @override
   Listener create(LintContext context) => _Listener(context);

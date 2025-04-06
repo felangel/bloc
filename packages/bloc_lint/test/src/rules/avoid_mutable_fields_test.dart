@@ -56,6 +56,22 @@ class CounterCubit extends Cubit<int> {
     );
 
     lintTest(
+      'lints when cubit contains a public, mutable field with explicit type',
+      rule: AvoidMutableFields.new,
+      path: 'counter_cubit.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+
+class CounterCubit extends Cubit<int> {
+  CounterCubit() : super(0);
+
+  int count = 0;
+  ^^^^^^^^^^^^^
+}
+''',
+    );
+
+    lintTest(
       'lints when cubit contains a private, mutable field',
       rule: AvoidMutableFields.new,
       path: 'counter_cubit.dart',

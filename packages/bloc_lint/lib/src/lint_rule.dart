@@ -5,7 +5,7 @@ import 'package:bloc_lint/bloc_lint.dart';
 /// {@endtemplate}
 abstract class LintRule {
   /// {@macro lint_rule}
-  const LintRule({required this.name, required this.severity});
+  const LintRule({required this.name, this.severity = Severity.warning});
 
   /// The unique name of the rule.
   final String name;

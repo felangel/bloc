@@ -5,8 +5,7 @@ import 'package:bloc_lint/bloc_lint.dart';
 /// {@endtemplate}
 class AvoidMutableFields extends LintRule {
   /// {@macro avoid_mutable_fields}
-  const AvoidMutableFields()
-    : super(name: 'avoid_mutable_fields', severity: Severity.warning);
+  const AvoidMutableFields() : super(name: 'avoid_mutable_fields');
 
   @override
   Listener? create(LintContext context) {
@@ -65,8 +64,7 @@ class _Listener extends Listener {
     Token endToken,
   ) {
     if (!_isRelevantEnclosingClass) return;
-    if (varFinalOrConst == null) return;
-    if (varFinalOrConst.keyword != Keyword.VAR) return;
+    if (varFinalOrConst?.keyword == Keyword.FINAL) return;
     context.reportTokenRange(
       beginToken: beginToken,
       endToken: endToken,
