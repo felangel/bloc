@@ -5,8 +5,7 @@ import 'package:bloc_lint/bloc_lint.dart';
 /// {@endtemplate}
 class AvoidFlutterImports extends LintRule {
   /// {@macro avoid_flutter_imports}
-  const AvoidFlutterImports()
-    : super(name: 'avoid_flutter_imports', severity: Severity.error);
+  const AvoidFlutterImports() : super(name: 'avoid_flutter_imports');
 
   @override
   Listener? create(LintContext context) {
