@@ -11,8 +11,8 @@ import 'package:path/path.dart' as p;
 /// All supported lint rules.
 const allRules = <LintRule>[
   AvoidFlutterImports(),
-  AvoidMutableFields(),
   AvoidPublicBlocMethods(),
+  AvoidPublicFields(),
   PreferBlocLint(),
   PreferCubitLint(),
 ];
@@ -20,8 +20,8 @@ const allRules = <LintRule>[
 /// All recommended lint rules.
 const recommendedRules = <LintRule>[
   AvoidFlutterImports(),
-  AvoidMutableFields(),
   AvoidPublicBlocMethods(),
+  AvoidPublicFields(),
 ];
 
 /// {@template linter}

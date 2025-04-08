@@ -1,11 +1,11 @@
 import 'package:bloc_lint/bloc_lint.dart';
 
-/// {@template avoid_mutable_fields}
-/// The avoid_mutable_fields lint rule.
+/// {@template avoid_public_fields}
+/// The avoid_public_fields lint rule.
 /// {@endtemplate}
-class AvoidMutableFields extends LintRule {
-  /// {@macro avoid_mutable_fields}
-  const AvoidMutableFields() : super(name: 'avoid_mutable_fields');
+class AvoidPublicFields extends LintRule {
+  /// {@macro avoid_public_fields}
+  const AvoidPublicFields() : super(name: 'avoid_public_fields');
 
   @override
   Listener? create(LintContext context) {
@@ -64,12 +64,33 @@ class _Listener extends Listener {
     Token endToken,
   ) {
     if (!_isRelevantEnclosingClass) return;
-    if (varFinalOrConst?.keyword == Keyword.FINAL) return;
+    if (staticToken != null) return;
+
+    final fieldName = _getFieldName(beginToken, endToken);
+    if (fieldName.lexeme.startsWith('_')) return;
+
     context.reportTokenRange(
       beginToken: beginToken,
       endToken: endToken,
-      message: 'Avoid mutable fields.',
-      hint: 'Prefer using the `state` to hold all mutable state.',
+      message: 'Avoid public fields.',
+      hint: 'Prefer using the `state` to hold all public fields.',
     );
   }
+}
+
+List<Token> _getTokens(Token begin, Token end) {
+  final tokens = <Token>[];
+  Token? token = begin;
+  while (token != null && token != end) {
+    tokens.add(token);
+    token = token.next;
+  }
+  return tokens;
+}
+
+Token _getFieldName(Token begin, Token end) {
+  final tokens = _getTokens(begin, end);
+  final equalsIndex = tokens.indexWhere((token) => token.type == TokenType.EQ);
+  if (equalsIndex != -1) return tokens.elementAt(equalsIndex).previous!;
+  return end.previous!;
 }
