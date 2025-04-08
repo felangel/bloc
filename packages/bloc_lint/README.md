@@ -64,7 +64,7 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 
 ## Dart Versions
 
-- Dart 2: >= 2.12
+- Dart 3: >= 3.7.0
 
 ## Maintainers
 
