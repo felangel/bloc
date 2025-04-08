@@ -104,7 +104,7 @@ abstract class HydratedCubit<State> extends Cubit<State>
 /// * [HydratedCubit] to enable automatic state persistence/restoration with [Cubit]
 ///
 mixin HydratedMixin<State> on BlocBase<State> {
-  late final Storage __storage;
+  Storage? __storage;
 
   /// Populates the internal state storage with the latest state.
   /// This should be called when using the [HydratedMixin]
@@ -121,7 +121,7 @@ mixin HydratedMixin<State> on BlocBase<State> {
   void hydrate({Storage? storage}) {
     __storage = storage ??= HydratedBloc.storage;
     try {
-      final stateJson = __storage.read(storageToken) as Map<dynamic, dynamic>?;
+      final stateJson = __storage?.read(storageToken) as Map<dynamic, dynamic>?;
       _state = stateJson != null ? _fromJson(stateJson) : super.state;
     } catch (error, stackTrace) {
       onError(error, stackTrace);
@@ -131,7 +131,9 @@ mixin HydratedMixin<State> on BlocBase<State> {
     try {
       final stateJson = _toJson(state);
       if (stateJson != null) {
-        __storage.write(storageToken, stateJson).then((_) {}, onError: onError);
+        __storage
+            ?.write(storageToken, stateJson)
+            .then((_) {}, onError: onError);
       }
     } catch (error, stackTrace) {
       onError(error, stackTrace);
@@ -151,7 +153,9 @@ mixin HydratedMixin<State> on BlocBase<State> {
     try {
       final stateJson = _toJson(state);
       if (stateJson != null) {
-        __storage.write(storageToken, stateJson).then((_) {}, onError: onError);
+        __storage
+            ?.write(storageToken, stateJson)
+            .then((_) {}, onError: onError);
       }
     } catch (error, stackTrace) {
       onError(error, stackTrace);
@@ -312,7 +316,7 @@ mixin HydratedMixin<State> on BlocBase<State> {
   /// [clear] is used to wipe or invalidate the cache of a [HydratedBloc].
   /// Calling [clear] will delete the cached state of the bloc
   /// but will not modify the current state of the bloc.
-  Future<void> clear() => __storage.delete(storageToken);
+  Future<void> clear() async => __storage?.delete(storageToken);
 
   /// Responsible for converting the `Map<String, dynamic>` representation
   /// of the bloc state into a concrete instance of the bloc state.
