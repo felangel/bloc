@@ -5,7 +5,11 @@ import 'package:bloc_lint/bloc_lint.dart';
 /// {@endtemplate}
 class PreferBlocLint extends LintRule {
   /// {@macro prefer_bloc}
-  const PreferBlocLint() : super(name: 'prefer_bloc');
+  PreferBlocLint([Severity? severity])
+    : super(name: rule, severity: severity ?? Severity.info);
+
+  /// The name of the lint rule.
+  static const rule = 'prefer_bloc';
 
   @override
   Listener create(LintContext context) => _Listener(context);

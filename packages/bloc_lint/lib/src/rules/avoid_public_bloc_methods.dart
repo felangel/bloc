@@ -5,7 +5,11 @@ import 'package:bloc_lint/bloc_lint.dart';
 /// {@endtemplate}
 class AvoidPublicBlocMethods extends LintRule {
   /// {@macro avoid_public_bloc_methods}
-  const AvoidPublicBlocMethods() : super(name: 'avoid_public_bloc_methods');
+  AvoidPublicBlocMethods([Severity? severity])
+    : super(name: rule, severity: severity ?? Severity.warning);
+
+  /// The name of the lint rule.
+  static const rule = 'avoid_public_bloc_methods';
 
   @override
   Listener? create(LintContext context) {

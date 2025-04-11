@@ -5,7 +5,11 @@ import 'package:bloc_lint/bloc_lint.dart';
 /// {@endtemplate}
 class AvoidPublicFields extends LintRule {
   /// {@macro avoid_public_fields}
-  const AvoidPublicFields() : super(name: 'avoid_public_fields');
+  AvoidPublicFields([Severity? severity])
+    : super(name: rule, severity: severity ?? Severity.warning);
+
+  /// The name of the lint rule.
+  static const rule = 'avoid_public_fields';
 
   @override
   Listener? create(LintContext context) {

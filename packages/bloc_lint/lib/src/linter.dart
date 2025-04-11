@@ -6,23 +6,24 @@ import 'package:_fe_analyzer_shared/src/parser/parser.dart' show Parser;
 // ignore: implementation_imports
 import 'package:_fe_analyzer_shared/src/scanner/scanner.dart' show scan;
 import 'package:bloc_lint/bloc_lint.dart';
+import 'package:bloc_lint/src/env.dart';
 import 'package:path/path.dart' as p;
 
 /// All supported lint rules.
-const allRules = <LintRule>[
-  AvoidFlutterImports(),
-  AvoidPublicBlocMethods(),
-  AvoidPublicFields(),
-  PreferBlocLint(),
-  PreferCubitLint(),
-];
+final allRules = <String, LintRuleBuilder>{
+  AvoidFlutterImports.rule: AvoidFlutterImports.new,
+  AvoidPublicBlocMethods.rule: AvoidPublicBlocMethods.new,
+  AvoidPublicFields.rule: AvoidPublicFields.new,
+  PreferBlocLint.rule: PreferBlocLint.new,
+  PreferCubitLint.rule: PreferCubitLint.new,
+};
 
 /// All recommended lint rules.
-const recommendedRules = <LintRule>[
-  AvoidFlutterImports(),
-  AvoidPublicBlocMethods(),
-  AvoidPublicFields(),
-];
+final recommendedRules = <String, LintRuleBuilder>{
+  AvoidFlutterImports.rule: AvoidFlutterImports.new,
+  AvoidPublicBlocMethods.rule: AvoidPublicBlocMethods.new,
+  AvoidPublicFields.rule: AvoidPublicFields.new,
+};
 
 /// {@template linter}
 /// A class that is able to analyze files and directories and
@@ -30,10 +31,7 @@ const recommendedRules = <LintRule>[
 /// {@endtemplate}
 class Linter {
   /// {@macro linter}
-  const Linter({required this.rules});
-
-  /// The lint rules
-  final List<LintRule> rules;
+  const Linter();
 
   /// Analyzes the provided [uri] and returns all reported diagnostics. If
   /// [content] is provided, it will be explicitly analyzed, otherwise the [uri]
@@ -65,8 +63,17 @@ class Linter {
 
   Map<String, List<Diagnostic>> _analyzeContent(Uri uri, String content) {
     final diagnostics = <Diagnostic>[];
+    final results = {uri.path: diagnostics};
+    final cwd = File(uri.path).parent;
+    final pubspecLock = getPubspecLock(cwd);
+
+    if (pubspecLock == null) return results;
+    if (!pubspecLock.packages.keys.contains('bloc')) return results;
+    if (getExcludes(cwd).any((e) => e.matches(uri.path))) return results;
+
     final document = TextDocument(uri: uri, content: content);
     final tokens = scan(utf8.encode(content)).tokens;
+    final rules = getLintRules(cwd);
     for (final rule in rules) {
       final context = LintContext._(rule: rule, document: document);
       final listener = rule.create(context);
@@ -74,7 +81,7 @@ class Linter {
       Parser(listener).parseUnit(tokens);
       diagnostics.addAll(context.diagnostics);
     }
-    return {uri.path: diagnostics};
+    return results;
   }
 }
 

@@ -1,11 +1,14 @@
 import 'package:bloc_lint/bloc_lint.dart';
 
+/// Signature for a method that builds a [LintRule] with an optional [severity].
+typedef LintRuleBuilder = LintRule Function([Severity? severity]);
+
 /// {@template lint_rule}
 /// An individual lint rule.
 /// {@endtemplate}
 abstract class LintRule {
   /// {@macro lint_rule}
-  const LintRule({required this.name, this.severity = Severity.warning});
+  LintRule({required this.name, required this.severity});
 
   /// The unique name of the rule.
   final String name;

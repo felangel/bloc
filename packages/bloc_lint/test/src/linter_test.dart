@@ -24,7 +24,7 @@ void main() {
     setUp(() {
       listener = _MockListener();
       rule = _MockLintRule();
-      linter = Linter(rules: [rule]);
+      linter = const Linter();
 
       when(() => rule.create(any())).thenReturn(listener);
     });

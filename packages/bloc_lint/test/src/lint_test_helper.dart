@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:bloc_lint/bloc_lint.dart';
 import 'package:meta/meta.dart';
+import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
 const lintMarker = '^';
@@ -38,10 +40,33 @@ void lintTest(
       );
     }
 
+    const linter = Linter();
     final lintRule = rule();
-    final linter = Linter(rules: [lintRule]);
+    final tempDir = Directory.systemTemp.createTempSync();
+    final tempFile = File(p.join(tempDir.path, path))
+      ..writeAsStringSync(content);
+    File(p.join(tempDir.path, 'analysis_options.yaml')).writeAsStringSync('''
+bloc:
+  rules:
+    - ${lintRule.name}
+''');
+
+    File(p.join(tempDir.path, 'pubspec.lock')).writeAsStringSync('''
+packages:
+  bloc:
+    dependency: "direct main"
+    description:
+      name: bloc
+      sha256: "52c10575f4445c61dd9e0cafcc6356fdd827c4c64dd7945ef3c4105f6b6ac189"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.0.0"
+sdks:
+  dart: ">=3.6.0 <4.0.0"
+''');
+
     final diagnostics = linter.analyze(
-      uri: Uri.parse(path),
+      uri: tempFile.uri,
       content: sanitizedLines.toString(),
     );
 
