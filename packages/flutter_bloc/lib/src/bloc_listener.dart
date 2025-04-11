@@ -74,6 +74,31 @@ typedef BlocListenerCondition<S> = bool Function(S previous, S current);
 /// )
 /// ```
 /// {@endtemplate}
+///
+/// {@template bloc_listener_start_with_current_state}
+/// By default, the [listener] will only be called on new state emissions from
+/// the bloc. If you want to call the listener with the current state
+/// immediately, set [startWithCurrentState] to true.
+/// Note that [listenWhen] is not called for the current state (as there is no
+/// previous state to compare to).
+///
+/// ```dart
+/// // Default behavior
+/// BlocListener<BlocA, BlocAState>(
+///   listener: (context, state) {
+///     // this is only called when BlocA emits new states
+///   },
+/// )
+///
+/// BlocListener<BlocA, BlocAState>(
+///   startWithCurrentState: true,
+///   listener: (context, state) {
+///     // this is now called immediately with BlocA's current state
+///     // in addition to new emissions
+///   },
+/// )
+/// ```
+/// {@endtemplate}
 class BlocListener<B extends StateStreamable<S>, S>
     extends BlocListenerBase<B, S> {
   /// {@macro bloc_listener}
@@ -83,6 +108,7 @@ class BlocListener<B extends StateStreamable<S>, S>
     Key? key,
     B? bloc,
     BlocListenerCondition<S>? listenWhen,
+    bool startWithCurrentState = false,
     Widget? child,
   }) : super(
           key: key,
@@ -90,6 +116,7 @@ class BlocListener<B extends StateStreamable<S>, S>
           listener: listener,
           bloc: bloc,
           listenWhen: listenWhen,
+          startWithCurrentState: startWithCurrentState,
         );
 }
 
@@ -109,6 +136,7 @@ abstract class BlocListenerBase<B extends StateStreamable<S>, S>
     this.bloc,
     this.child,
     this.listenWhen,
+    this.startWithCurrentState = false,
   }) : super(key: key, child: child);
 
   /// The widget which will be rendered as a descendant of the
@@ -127,6 +155,9 @@ abstract class BlocListenerBase<B extends StateStreamable<S>, S>
   /// {@macro bloc_listener_listen_when}
   final BlocListenerCondition<S>? listenWhen;
 
+  /// {@macro bloc_listener_start_with_current_state}
+  final bool startWithCurrentState;
+
   @override
   SingleChildState<BlocListenerBase<B, S>> createState() =>
       _BlocListenerBaseState<B, S>();
@@ -141,6 +172,14 @@ abstract class BlocListenerBase<B extends StateStreamable<S>, S>
         ObjectFlagProperty<BlocListenerCondition<S>?>.has(
           'listenWhen',
           listenWhen,
+        ),
+      )
+      ..add(
+        FlagProperty(
+          'startWithCurrentState',
+          value: startWithCurrentState,
+          ifTrue: 'with current state',
+          ifFalse: 'without current state',
         ),
       );
   }
@@ -209,8 +248,20 @@ class _BlocListenerBaseState<B extends StateStreamable<S>, S>
     super.dispose();
   }
 
+  Stream<T> _startWithValue<T>(
+    T value,
+    Stream<T> originalStream,
+  ) async* {
+    yield value;
+    yield* originalStream;
+  }
+
   void _subscribe() {
-    _subscription = _bloc.stream.listen((state) {
+    final stream = widget.startWithCurrentState
+        ? _startWithValue(_bloc.state, _bloc.stream)
+        : _bloc.stream;
+
+    _subscription = stream.listen((state) {
       if (!mounted) return;
       if (widget.listenWhen?.call(_previousState, state) ?? true) {
         widget.listener(context, state);
