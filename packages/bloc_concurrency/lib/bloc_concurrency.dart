@@ -6,5 +6,6 @@ library bloc_concurrency;
 
 export 'src/concurrent.dart';
 export 'src/droppable.dart';
+export 'src/mixins/bloc_concurrency_mixins.dart';
 export 'src/restartable.dart';
 export 'src/sequential.dart';
