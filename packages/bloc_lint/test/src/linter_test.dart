@@ -13,6 +13,8 @@ class _FakeLintContext extends Fake implements LintContext {}
 
 void main() {
   group(Linter, () {
+    const name = 'prefer_bloc';
+
     late Listener listener;
     late LintRule rule;
     late Linter linter;
@@ -27,6 +29,7 @@ void main() {
       linter = const Linter();
 
       when(() => rule.create(any())).thenReturn(listener);
+      when(() => rule.name).thenReturn(name);
     });
 
     group('analyze', () {
@@ -47,11 +50,10 @@ void main() {
   print('hello world');
 }
 ''');
-        linter.analyze(uri: file.uri);
-        final context =
-            verify(() => rule.create(captureAny())).captured.single
-                as LintContext;
-        expect(context.document.uri, equals(file.uri));
+        expect(
+          linter.analyze(uri: file.uri),
+          equals({file.path: <Diagnostic>[]}),
+        );
       });
 
       test('analyzes a nested directory file', () {
@@ -61,14 +63,10 @@ void main() {
           ..writeAsStringSync('void main() {}');
         final other = File(path.join(nested.path, 'other.dart'))
           ..writeAsStringSync('void other() {}');
-        linter.analyze(uri: nested.uri);
-        final contexts =
-            verify(
-              () => rule.create(captureAny()),
-            ).captured.cast<LintContext>();
-        expect(contexts.length, equals(2));
-        expect(contexts.first.document.uri, equals(main.uri));
-        expect(contexts.last.document.uri, equals(other.uri));
+        expect(
+          linter.analyze(uri: nested.uri),
+          equals({main.path: <Diagnostic>[], other.path: <Diagnostic>[]}),
+        );
       });
 
       test('does nothing if file/directory does not exist', () {

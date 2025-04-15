@@ -11,6 +11,10 @@ part of 'analysis_options.dart';
 AnalysisOptionsYaml _$AnalysisOptionsYamlFromJson(Map json) =>
     $checkedCreate('AnalysisOptionsYaml', json, ($checkedConvert) {
       final val = AnalysisOptionsYaml(
+        include: $checkedConvert(
+          'include',
+          (v) => const IncludeConverter().fromJson(v),
+        ),
         analyzer: $checkedConvert(
           'analyzer',
           (v) => v == null ? null : AnalyzerOptions.fromJson(v as Map),
@@ -26,9 +30,20 @@ AnalysisOptionsYaml _$AnalysisOptionsYamlFromJson(Map json) =>
 Map<String, dynamic> _$AnalysisOptionsYamlToJson(
   AnalysisOptionsYaml instance,
 ) => <String, dynamic>{
+  if (_$JsonConverterToJson<dynamic, List<String>>(
+        instance.include,
+        const IncludeConverter().toJson,
+      )
+      case final value?)
+    'include': value,
   if (instance.analyzer?.toJson() case final value?) 'analyzer': value,
   if (instance.bloc?.toJson() case final value?) 'bloc': value,
 };
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) => value == null ? null : toJson(value);
 
 AnalyzerOptions _$AnalyzerOptionsFromJson(Map json) =>
     $checkedCreate('AnalyzerOptions', json, ($checkedConvert) {

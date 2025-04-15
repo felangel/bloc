@@ -1,9 +1,6 @@
 import 'dart:core';
 import 'dart:io';
-import 'package:bloc_lint/bloc_lint.dart';
 import 'package:bloc_lint/src/analysis_options.dart';
-import 'package:collection/collection.dart';
-import 'package:glob/glob.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:pubspec_lock_parse/pubspec_lock_parse.dart';
@@ -18,36 +15,6 @@ String getAnalysisOptionsPath(Directory cwd) {
   return p.join(cwd.path, 'analysis_options.yaml');
 }
 
-/// Gets the list of [Glob] patterns to be excluded for this project.
-List<Glob> getExcludes(Directory cwd) {
-  final analysisOptions = findAnalysisOptions(cwd);
-  if (analysisOptions == null) return <Glob>[];
-  final excludes = analysisOptions.yaml.analyzer?.exclude ?? <String>[];
-  final context = p.Context(current: analysisOptions.file.parent.path);
-  return excludes.map((e) => Glob(e, context: context)).toList();
-}
-
-/// Gets the list of [LintRule] for this project.
-List<LintRule> getLintRules(Directory cwd) {
-  final analysisOptions = findAnalysisOptions(cwd);
-  if (analysisOptions == null) return [];
-  final blocAnalysis = analysisOptions.yaml.bloc;
-  if (blocAnalysis == null) return [];
-  return blocAnalysis.rules.entries
-      .map((analysisEntry) {
-        final rule = analysisEntry.key;
-        final state = analysisEntry.value;
-        if (state.isDisabled) return null;
-        final entry = allRules.entries.firstWhereOrNull((e) => e.key == rule);
-        if (entry == null) return null;
-        final builder = entry.value;
-        final severity = state.toSeverity(fallback: builder().severity);
-        return builder(severity);
-      })
-      .whereType<LintRule>()
-      .toList();
-}
-
 /// The `analysis_options.yaml` file for this project.
 ///
 /// Returns `null` if the file does not exist or is invalid.
@@ -59,13 +26,13 @@ File? getAnalysisOptionsFile(Directory cwd) {
   return file;
 }
 
-/// The parsed `analysis_options.yaml` file for this project.
+/// The resolved `analysis_options.yaml` file for this project.
 ///
 /// Returns `null` if the file does not exist or is invalid.
-AnalysisOptions? findAnalysisOptions(Directory cwd) {
+AnalysisOptions? getAnalysisOptions(Directory cwd) {
   final file = getAnalysisOptionsFile(cwd);
   if (file == null) return null;
-  return AnalysisOptions.tryParse(file);
+  return AnalysisOptions.tryResolve(file);
 }
 
 /// The `pubspec.lock` file for this project, parsed into a [PubspecLock]

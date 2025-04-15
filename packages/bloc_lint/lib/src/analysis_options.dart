@@ -3,7 +3,9 @@ import 'dart:io';
 
 import 'package:bloc_lint/src/diagnostic.dart';
 import 'package:checked_yaml/checked_yaml.dart';
+import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:path/path.dart' as p;
 
 part 'analysis_options.g.dart';
 
@@ -25,13 +27,88 @@ class AnalysisOptions {
     return AnalysisOptions(file: file, yaml: yaml);
   }
 
+  /// Resolve the provided options by recursively joining all includes.
+  factory AnalysisOptions.resolve(File file) {
+    AnalysisOptions recursiveResolver(
+      File file,
+      Directory root,
+      Map<String, dynamic> yaml,
+    ) {
+      final options = AnalysisOptions.parse(file);
+      for (final include in options.yaml.include ?? <String>[]) {
+        final isPackageInclude = include.startsWith('package:');
+        final parsedOptions =
+            isPackageInclude
+                ? AnalysisOptions.tryImport(include, cwd: root)
+                : AnalysisOptions.tryParse(
+                  File(p.normalize(p.join(options.file.parent.path, include))),
+                );
+        if (parsedOptions == null) continue;
+        final resolved = recursiveResolver(
+          parsedOptions.file,
+          isPackageInclude ? root : file.parent,
+          yaml,
+        );
+        // Accumulate the merged analysis_options yaml content
+        // ignore: parameter_assignments
+        yaml = _merge(yaml, resolved.yaml.toJson());
+      }
+
+      return AnalysisOptions(
+        file: options.file,
+        yaml: AnalysisOptionsYaml.fromJson(_merge(yaml, options.yaml.toJson())),
+      );
+    }
+
+    return recursiveResolver(file, file.parent, {});
+  }
+
   /// Try to parse [file] and return `null` if parsing fails.
   static AnalysisOptions? tryParse(File file) {
     try {
-      return AnalysisOptions.parse(file);
+      final options = AnalysisOptions.parse(file);
+      return options;
     } on Exception {
       return null;
     }
+  }
+
+  /// Try to resolve [file] and return `null` if resolving fails.
+  static AnalysisOptions? tryResolve(File file) {
+    try {
+      return AnalysisOptions.resolve(file);
+    } on Exception {
+      return null;
+    }
+  }
+
+  /// Try to parse an analysis_options yaml referenced by the [import].
+  static AnalysisOptions? tryImport(String import, {required Directory cwd}) {
+    final packagePrefix = import.split(p.separator).first;
+    final packageName = packagePrefix.split('package:').last;
+    final packageConfigFile = File(
+      p.join(cwd.path, '.dart_tool', 'package_config.json'),
+    );
+    if (!packageConfigFile.existsSync()) return null;
+    final packageConfig =
+        json.decode(packageConfigFile.readAsStringSync())
+            as Map<String, dynamic>;
+    final packages = packageConfig['packages'] as List;
+    final package = packages.cast<Map<String, dynamic>>().firstWhereOrNull(
+      (entry) => entry['name'] == packageName,
+    );
+    if (package == null) return null;
+    final fullUri = Uri.tryParse(
+      p.join(package['rootUri'] as String, package['packageUri'] as String),
+    );
+    if (fullUri == null) return null;
+    var path = import.split(packagePrefix).last;
+    if (path.startsWith(p.separator)) path = path.substring(1);
+    var resolvedPath = fullUri.path + path;
+    if (!p.isAbsolute(resolvedPath)) {
+      resolvedPath = p.join(packageConfigFile.parent.path, resolvedPath);
+    }
+    return AnalysisOptions.tryParse(File(p.normalize(resolvedPath)));
   }
 
   /// The `analysis_options.yaml` file.
@@ -47,7 +124,7 @@ class AnalysisOptions {
 @JsonSerializable()
 class AnalysisOptionsYaml {
   /// {@macro analysis_options_yaml}
-  AnalysisOptionsYaml({this.analyzer, this.bloc});
+  AnalysisOptionsYaml({this.include, this.analyzer, this.bloc});
 
   /// Converts [Map] to [AnalysisOptionsYaml]
   factory AnalysisOptionsYaml.fromJson(Map<dynamic, dynamic> json) =>
@@ -55,6 +132,10 @@ class AnalysisOptionsYaml {
 
   /// Converts [AnalysisOptionsYaml] to [Map].
   Map<String, dynamic> toJson() => _$AnalysisOptionsYamlToJson(this);
+
+  /// The list of shared analysis options.
+  @IncludeConverter()
+  final List<String>? include;
 
   /// The dart analyzer options.
   final AnalyzerOptions? analyzer;
@@ -82,12 +163,12 @@ class AnalyzerOptions {
   final List<String> exclude;
 }
 
-/// {@template bloc_linter}
-/// Bloc-specific lint rules.
+/// {@template bloc_analysis_options}
+/// Bloc-specific analysis options.
 /// {@endtemplate}
 @JsonSerializable()
 class BlocAnalysisOptions {
-  /// {@macro bloc_linter}
+  /// {@macro bloc_analysis_options}
   const BlocAnalysisOptions({required this.rules});
 
   /// Converts [Map] to [BlocAnalysisOptions].
@@ -132,9 +213,26 @@ enum LinterRuleState {
     return LinterRuleState.values.firstWhere((v) => v.value == value);
   }
 
-  /// Converts the [LinterRuleState] to a [Map].
-  Map<String, dynamic> toJson() {
-    return {'value': value};
+  /// Converts the [LinterRuleState] to a json encoded value.
+  String toJson() => value;
+}
+
+/// {@template rules_converter}
+/// Json Converter for `List<String>`.
+/// {@endtemplate}
+class IncludeConverter implements JsonConverter<List<String>, dynamic> {
+  /// {@macro rules_converter}
+  const IncludeConverter();
+
+  @override
+  dynamic toJson(List<String> value) => value;
+
+  @override
+  List<String> fromJson(dynamic value) {
+    if (value == null) return [];
+    if (value is String) return [value];
+    if (value is List) return value.cast<String>();
+    throw const FormatException();
   }
 }
 
@@ -153,6 +251,7 @@ class RulesConverter
 
   @override
   Map<String, LinterRuleState> fromJson(dynamic value) {
+    if (value == null) return {};
     final dynamic decoded = value is String ? json.decode(value) : value;
     if (decoded is List) {
       return <String, LinterRuleState>{
@@ -190,4 +289,24 @@ extension LinterRuleStateX on LinterRuleState {
       LinterRuleState.hint => Severity.hint,
     };
   }
+}
+
+/// Merge two maps recursively.
+Map<String, dynamic> _merge(
+  Map<String, dynamic> mapA,
+  Map<String, dynamic> mapB,
+) {
+  return mergeMaps(
+    mapA,
+    mapB,
+    value: (p0, p1) {
+      if (p0 is Map<String, dynamic> && p1 is Map<String, dynamic>) {
+        return _merge(p0, p1);
+      } else if (p0 is List && p1 is List) {
+        return {...p0, ...p1}.toList();
+      } else {
+        return p1;
+      }
+    },
+  );
 }

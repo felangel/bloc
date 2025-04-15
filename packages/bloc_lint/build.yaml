@@ -1,6 +1,6 @@
 # See https://github.com/dart-lang/build/tree/master/build_web_compilers#configuration
 targets:
-  $default:    
+  $default:
     builders:
       source_gen|combining_builder:
         options:
