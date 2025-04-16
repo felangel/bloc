@@ -39,7 +39,7 @@ class AnalysisOptions {
         final isPackageInclude = include.startsWith('package:');
         final parsedOptions =
             isPackageInclude
-                ? AnalysisOptions.tryImport(include, cwd: root)
+                ? AnalysisOptions.tryInclude(include, cwd: root)
                 : AnalysisOptions.tryParse(
                   File(p.normalize(p.join(options.file.parent.path, include))),
                 );
@@ -82,9 +82,9 @@ class AnalysisOptions {
     }
   }
 
-  /// Try to parse an analysis_options yaml referenced by the [import].
-  static AnalysisOptions? tryImport(String import, {required Directory cwd}) {
-    final packagePrefix = import.split(p.separator).first;
+  /// Try to parse an analysis_options yaml referenced by the [include].
+  static AnalysisOptions? tryInclude(String include, {required Directory cwd}) {
+    final packagePrefix = include.split(p.separator).first;
     final packageName = packagePrefix.split('package:').last;
     final packageConfigFile = File(
       p.join(cwd.path, '.dart_tool', 'package_config.json'),
@@ -102,7 +102,7 @@ class AnalysisOptions {
       p.join(package['rootUri'] as String, package['packageUri'] as String),
     );
     if (fullUri == null) return null;
-    var path = import.split(packagePrefix).last;
+    var path = include.split(packagePrefix).last;
     if (path.startsWith(p.separator)) path = path.substring(1);
     var resolvedPath = fullUri.path + path;
     if (!p.isAbsolute(resolvedPath)) {
