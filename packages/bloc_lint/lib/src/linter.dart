@@ -23,13 +23,6 @@ final allRules = <String, LintRuleBuilder>{
   PreferCubitLint.rule: PreferCubitLint.new,
 };
 
-/// All recommended lint rules.
-final recommendedRules = <String, LintRuleBuilder>{
-  AvoidFlutterImports.rule: AvoidFlutterImports.new,
-  AvoidPublicBlocMethods.rule: AvoidPublicBlocMethods.new,
-  AvoidPublicFields.rule: AvoidPublicFields.new,
-};
-
 /// {@template linter}
 /// A class that is able to analyze files and directories and
 /// report diagnostics based on a registered set of lint rules.
@@ -91,21 +84,21 @@ class Linter {
   }
 }
 
-extension on AnalysisOptions? {
+extension on AnalysisOptions {
   /// Gets the list of [Glob] patterns to be excluded for this project.
   List<Glob> get excludes {
-    if (this == null) return <Glob>[];
-    final excludes = this!.yaml.analyzer?.exclude ?? <String>[];
-    final context = p.Context(current: this!.file.parent.path);
+    final excludes = yaml.analyzer?.exclude ?? <String>[];
+    final context = p.Context(current: file.parent.path);
     return excludes.map((e) => Glob(e, context: context)).toList();
   }
 
   /// Gets the list of [LintRule] for this project.
   List<LintRule> get lintRules {
-    if (this == null) return [];
-    final blocAnalysis = this!.yaml.bloc;
-    if (blocAnalysis == null) return [];
-    return blocAnalysis.rules.entries
+    final blocLintOptions = yaml.bloc;
+    if (blocLintOptions == null) return [];
+    final rules = blocLintOptions.rules;
+    if (rules == null) return [];
+    return rules.entries
         .map<LintRule?>((analysisEntry) {
           final rule = analysisEntry.key;
           final state = analysisEntry.value;

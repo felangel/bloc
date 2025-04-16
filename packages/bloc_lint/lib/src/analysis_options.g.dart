@@ -21,7 +21,7 @@ AnalysisOptionsYaml _$AnalysisOptionsYamlFromJson(Map json) =>
         ),
         bloc: $checkedConvert(
           'bloc',
-          (v) => v == null ? null : BlocAnalysisOptions.fromJson(v as Map),
+          (v) => v == null ? null : BlocLintOptions.fromJson(v as Map),
         ),
       );
       return val;
@@ -30,20 +30,11 @@ AnalysisOptionsYaml _$AnalysisOptionsYamlFromJson(Map json) =>
 Map<String, dynamic> _$AnalysisOptionsYamlToJson(
   AnalysisOptionsYaml instance,
 ) => <String, dynamic>{
-  if (_$JsonConverterToJson<dynamic, List<String>>(
-        instance.include,
-        const IncludeConverter().toJson,
-      )
-      case final value?)
+  if (const IncludeConverter().toJson(instance.include) case final value?)
     'include': value,
   if (instance.analyzer?.toJson() case final value?) 'analyzer': value,
   if (instance.bloc?.toJson() case final value?) 'bloc': value,
 };
-
-Json? _$JsonConverterToJson<Json, Value>(
-  Value? value,
-  Json? Function(Value value) toJson,
-) => value == null ? null : toJson(value);
 
 AnalyzerOptions _$AnalyzerOptionsFromJson(Map json) =>
     $checkedCreate('AnalyzerOptions', json, ($checkedConvert) {
@@ -61,9 +52,9 @@ AnalyzerOptions _$AnalyzerOptionsFromJson(Map json) =>
 Map<String, dynamic> _$AnalyzerOptionsToJson(AnalyzerOptions instance) =>
     <String, dynamic>{'exclude': instance.exclude};
 
-BlocAnalysisOptions _$BlocAnalysisOptionsFromJson(Map json) =>
-    $checkedCreate('BlocAnalysisOptions', json, ($checkedConvert) {
-      final val = BlocAnalysisOptions(
+BlocLintOptions _$BlocLintOptionsFromJson(Map json) =>
+    $checkedCreate('BlocLintOptions', json, ($checkedConvert) {
+      final val = BlocLintOptions(
         rules: $checkedConvert(
           'rules',
           (v) => const RulesConverter().fromJson(v),
@@ -72,9 +63,8 @@ BlocAnalysisOptions _$BlocAnalysisOptionsFromJson(Map json) =>
       return val;
     });
 
-Map<String, dynamic> _$BlocAnalysisOptionsToJson(
-  BlocAnalysisOptions instance,
-) => <String, dynamic>{
-  if (const RulesConverter().toJson(instance.rules) case final value?)
-    'rules': value,
-};
+Map<String, dynamic> _$BlocLintOptionsToJson(BlocLintOptions instance) =>
+    <String, dynamic>{
+      if (const RulesConverter().toJson(instance.rules) case final value?)
+        'rules': value,
+    };

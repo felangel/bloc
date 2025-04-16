@@ -37,10 +37,47 @@ void main() {
 
       setUp(() {
         tempDir = Directory.systemTemp.createTempSync();
+        File(path.join(tempDir.path, 'pubspec.lock')).writeAsStringSync('''
+packages:
+  bloc:
+    dependency: "direct main"
+    description:
+      name: bloc
+      sha256: "52c10575f4445c61dd9e0cafcc6356fdd827c4c64dd7945ef3c4105f6b6ac189"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.0.0"
+sdks:
+  dart: ">=3.6.0 <4.0.0"
+''');
+        File(
+          path.join(tempDir.path, 'analysis_options.yaml'),
+        ).writeAsStringSync('{}');
       });
 
       tearDown(() {
         tempDir.deleteSync(recursive: true);
+      });
+
+      test('does nothing if file/directory does not exist', () {
+        final invalid = File('invalid');
+        expect(linter.analyze(uri: invalid.uri), isEmpty);
+      });
+
+      test('does nothing if pubspec.lock is malformed', () {
+        File(
+          path.join(tempDir.path, 'pubspec.lock'),
+        ).writeAsStringSync('invalid');
+        final file = File(path.join(tempDir.path, 'main.dart'))
+          ..writeAsStringSync('''
+void main() {
+  print('hello world');
+}
+''');
+        expect(
+          linter.analyze(uri: file.uri),
+          equals({file.path: <Diagnostic>[]}),
+        );
       });
 
       test('analyzes an individual file', () {
@@ -50,6 +87,18 @@ void main() {
   print('hello world');
 }
 ''');
+        expect(
+          linter.analyze(uri: file.uri),
+          equals({file.path: <Diagnostic>[]}),
+        );
+
+        File(
+          path.join(tempDir.path, 'analysis_options.yaml'),
+        ).writeAsStringSync('''
+bloc:
+  rules:
+''');
+
         expect(
           linter.analyze(uri: file.uri),
           equals({file.path: <Diagnostic>[]}),
@@ -67,11 +116,6 @@ void main() {
           linter.analyze(uri: nested.uri),
           equals({main.path: <Diagnostic>[], other.path: <Diagnostic>[]}),
         );
-      });
-
-      test('does nothing if file/directory does not exist', () {
-        final invalid = File('invalid');
-        expect(linter.analyze(uri: invalid.uri), isEmpty);
       });
     });
   });

@@ -140,8 +140,8 @@ class AnalysisOptionsYaml {
   /// The dart analyzer options.
   final AnalyzerOptions? analyzer;
 
-  /// The bloc analysis options.
-  final BlocAnalysisOptions? bloc;
+  /// The bloc lint options.
+  final BlocLintOptions? bloc;
 }
 
 /// {@template analyzer_options}
@@ -163,26 +163,27 @@ class AnalyzerOptions {
   final List<String> exclude;
 }
 
-/// {@template bloc_analysis_options}
-/// Bloc-specific analysis options.
+/// {@template bloc_lint_options}
+/// Bloc-specific lint options.
 /// {@endtemplate}
 @JsonSerializable()
-class BlocAnalysisOptions {
-  /// {@macro bloc_analysis_options}
-  const BlocAnalysisOptions({required this.rules});
+class BlocLintOptions {
+  /// {@macro bloc_lint_options}
+  const BlocLintOptions({required this.rules});
 
-  /// Converts [Map] to [BlocAnalysisOptions].
-  factory BlocAnalysisOptions.fromJson(Map<dynamic, dynamic> json) =>
-      _$BlocAnalysisOptionsFromJson(json);
+  /// Converts [Map] to [BlocLintOptions].
+  factory BlocLintOptions.fromJson(Map<dynamic, dynamic> json) =>
+      _$BlocLintOptionsFromJson(json);
 
-  /// Converts [BlocAnalysisOptions] to [Map].
-  Map<String, dynamic> toJson() => _$BlocAnalysisOptionsToJson(this);
+  /// Converts [BlocLintOptions] to [Map].
+  Map<String, dynamic> toJson() => _$BlocLintOptionsToJson(this);
 
   /// The configured bloc lint rules.
   @RulesConverter()
-  final Map<String, LinterRuleState> rules;
+  final Map<String, LinterRuleState>? rules;
 }
 
+@JsonEnum(valueField: 'value')
 /// The state of a given linter rule.
 enum LinterRuleState {
   /// The rule is enabled with a default severity.
@@ -209,7 +210,7 @@ enum LinterRuleState {
   final String value;
 
   /// Parse the provided [value] as a [LinterRuleState].
-  static LinterRuleState parse(String value) {
+  static LinterRuleState fromJson(String value) {
     return LinterRuleState.values.firstWhere((v) => v.value == value);
   }
 
@@ -220,19 +221,18 @@ enum LinterRuleState {
 /// {@template rules_converter}
 /// Json Converter for `List<String>`.
 /// {@endtemplate}
-class IncludeConverter implements JsonConverter<List<String>, dynamic> {
+class IncludeConverter implements JsonConverter<List<String>?, dynamic> {
   /// {@macro rules_converter}
   const IncludeConverter();
 
   @override
-  dynamic toJson(List<String> value) => value;
+  dynamic toJson(List<String>? value) => value;
 
   @override
-  List<String> fromJson(dynamic value) {
-    if (value == null) return [];
+  List<String>? fromJson(dynamic value) {
     if (value is String) return [value];
     if (value is List) return value.cast<String>();
-    throw const FormatException();
+    return null;
   }
 }
 
@@ -240,18 +240,19 @@ class IncludeConverter implements JsonConverter<List<String>, dynamic> {
 /// Json Converter for [Map<String, LinterRuleState>].
 /// {@endtemplate}
 class RulesConverter
-    implements JsonConverter<Map<String, LinterRuleState>, dynamic> {
+    implements JsonConverter<Map<String, LinterRuleState>?, dynamic> {
   /// {@macro rules_converter}
   const RulesConverter();
 
   @override
-  dynamic toJson(Map<String, LinterRuleState> value) {
-    return value.map((key, value) => MapEntry(key, value.toJson()));
+  dynamic toJson(Map<String, LinterRuleState>? value) {
+    return value?.map<String, String>(
+      (key, value) => MapEntry(key, value.toJson()),
+    );
   }
 
   @override
-  Map<String, LinterRuleState> fromJson(dynamic value) {
-    if (value == null) return {};
+  Map<String, LinterRuleState>? fromJson(dynamic value) {
     final dynamic decoded = value is String ? json.decode(value) : value;
     if (decoded is List) {
       return <String, LinterRuleState>{
@@ -262,11 +263,11 @@ class RulesConverter
       return decoded.map(
         (dynamic key, dynamic value) => MapEntry(
           key as String,
-          LinterRuleState.parse(decoded[key].toString()),
+          LinterRuleState.fromJson(decoded[key].toString()),
         ),
       );
     }
-    throw const FormatException();
+    return null;
   }
 }
 
@@ -279,7 +280,7 @@ extension LinterRuleStateX on LinterRuleState {
   bool get isDisabled => !isEnabled;
 
   /// Converts the rule to a [Severity] using the [fallback].
-  Severity? toSeverity({required Severity fallback}) {
+  Severity? toSeverity({Severity? fallback}) {
     return switch (this) {
       LinterRuleState.enabled => fallback,
       LinterRuleState.disabled => null,

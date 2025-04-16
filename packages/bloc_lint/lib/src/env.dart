@@ -46,7 +46,7 @@ PubspecLock? getPubspecLock(Directory cwd) {
   if (!file.existsSync()) return null;
   try {
     return PubspecLock.parse(file.readAsStringSync());
-  } on Exception catch (_) {
+  } on Exception {
     return null;
   }
 }
@@ -64,10 +64,10 @@ Directory? getProjectRoot(Directory cwd) {
 /// Finds nearest ancestor file relative to the [cwd] that satisfies [where].
 File? findNearestAncestor({
   required File? Function(String path) where,
-  Directory? cwd,
+  required Directory cwd,
 }) {
   Directory? prev;
-  var dir = cwd ?? Directory.current;
+  var dir = cwd;
   while (prev?.path != dir.path) {
     final file = where(dir.path);
     if (file?.existsSync() ?? false) return file;
