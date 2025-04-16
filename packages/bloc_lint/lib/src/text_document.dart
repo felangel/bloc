@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:path/path.dart' as path;
+import 'package:path/path.dart' as p;
 
 /// The newline symbol (\n).
 const newline = 10;
@@ -181,7 +181,7 @@ enum TextDocumentType {
 extension TextDocumentX on TextDocument {
   /// Returns the [TextDocumentType] for the given document.
   TextDocumentType get type {
-    final basename = path.basename(uri.path);
+    final basename = p.basename(uri.path);
     return basename.endsWith('_bloc.dart')
         ? TextDocumentType.bloc
         : basename.endsWith('_cubit.dart')

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:bloc_lint/bloc_lint.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:path/path.dart' as path;
+import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
 class _MockLintRule extends Mock implements LintRule {}
@@ -37,7 +37,7 @@ void main() {
 
       setUp(() {
         tempDir = Directory.systemTemp.createTempSync();
-        File(path.join(tempDir.path, 'pubspec.lock')).writeAsStringSync('''
+        File(p.join(tempDir.path, 'pubspec.lock')).writeAsStringSync('''
 packages:
   bloc:
     dependency: "direct main"
@@ -51,7 +51,7 @@ sdks:
   dart: ">=3.6.0 <4.0.0"
 ''');
         File(
-          path.join(tempDir.path, 'analysis_options.yaml'),
+          p.join(tempDir.path, 'analysis_options.yaml'),
         ).writeAsStringSync('{}');
       });
 
@@ -65,10 +65,8 @@ sdks:
       });
 
       test('does nothing if pubspec.lock is malformed', () {
-        File(
-          path.join(tempDir.path, 'pubspec.lock'),
-        ).writeAsStringSync('invalid');
-        final file = File(path.join(tempDir.path, 'main.dart'))
+        File(p.join(tempDir.path, 'pubspec.lock')).writeAsStringSync('invalid');
+        final file = File(p.join(tempDir.path, 'main.dart'))
           ..writeAsStringSync('''
 void main() {
   print('hello world');
@@ -81,7 +79,7 @@ void main() {
       });
 
       test('analyzes an individual file', () {
-        final file = File(path.join(tempDir.path, 'main.dart'))
+        final file = File(p.join(tempDir.path, 'main.dart'))
           ..writeAsStringSync('''
 void main() {
   print('hello world');
@@ -92,12 +90,12 @@ void main() {
           equals({file.path: <Diagnostic>[]}),
         );
 
-        File(
-          path.join(tempDir.path, 'analysis_options.yaml'),
-        ).writeAsStringSync('''
+        File(p.join(tempDir.path, 'analysis_options.yaml')).writeAsStringSync(
+          '''
 bloc:
   rules:
-''');
+''',
+        );
 
         expect(
           linter.analyze(uri: file.uri),
@@ -106,11 +104,11 @@ bloc:
       });
 
       test('analyzes a nested directory file', () {
-        final nested = Directory(path.join(tempDir.path, 'nested'))
+        final nested = Directory(p.join(tempDir.path, 'nested'))
           ..createSync(recursive: true);
-        final main = File(path.join(nested.path, 'main.dart'))
+        final main = File(p.join(nested.path, 'main.dart'))
           ..writeAsStringSync('void main() {}');
-        final other = File(path.join(nested.path, 'other.dart'))
+        final other = File(p.join(nested.path, 'other.dart'))
           ..writeAsStringSync('void other() {}');
         expect(
           linter.analyze(uri: nested.uri),
