@@ -218,11 +218,11 @@ enum LinterRuleState {
   String toJson() => value;
 }
 
-/// {@template rules_converter}
-/// Json Converter for `List<String>`.
+/// {@template include_converter}
+/// Json Converter for analysis_options includes (`List<String>`).
 /// {@endtemplate}
 class IncludeConverter implements JsonConverter<List<String>?, dynamic> {
-  /// {@macro rules_converter}
+  /// {@macro include_converter}
   const IncludeConverter();
 
   @override
@@ -237,7 +237,7 @@ class IncludeConverter implements JsonConverter<List<String>?, dynamic> {
 }
 
 /// {@template rules_converter}
-/// Json Converter for [Map<String, LinterRuleState>].
+/// Json Converter for lint rules (`Map<String, LinterRuleState>`).
 /// {@endtemplate}
 class RulesConverter
     implements JsonConverter<Map<String, LinterRuleState>?, dynamic> {
