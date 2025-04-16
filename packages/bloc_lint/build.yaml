@@ -1,0 +1,21 @@
+# See https://github.com/dart-lang/build/tree/master/build_web_compilers#configuration
+targets:
+  $default:
+    builders:
+      source_gen|combining_builder:
+        options:
+          ignore_for_file:
+            - implicit_dynamic_parameter
+            - require_trailing_commas
+            - cast_nullable_to_non_nullable
+            - lines_longer_than_80_chars
+            - strict_raw_type
+      json_serializable:
+        options:
+          any_map: true
+          disallow_unrecognized_keys: false
+          field_rename: kebab
+          include_if_null: false
+          checked: true
+          explicit_to_json: true
+          create_to_json: true

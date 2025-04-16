@@ -1,28 +1,27 @@
 import 'dart:convert';
 import 'dart:io';
 
+// Use the parser from the shared frontend.
 // ignore: implementation_imports
 import 'package:_fe_analyzer_shared/src/parser/parser.dart' show Parser;
+// Use the scanner from the shared frontend.
 // ignore: implementation_imports
 import 'package:_fe_analyzer_shared/src/scanner/scanner.dart' show scan;
 import 'package:bloc_lint/bloc_lint.dart';
+import 'package:bloc_lint/src/analysis_options.dart';
+import 'package:bloc_lint/src/env.dart';
+import 'package:collection/collection.dart';
+import 'package:glob/glob.dart';
 import 'package:path/path.dart' as p;
 
 /// All supported lint rules.
-const allRules = <LintRule>[
-  AvoidFlutterImports(),
-  AvoidPublicBlocMethods(),
-  AvoidPublicFields(),
-  PreferBlocLint(),
-  PreferCubitLint(),
-];
-
-/// All recommended lint rules.
-const recommendedRules = <LintRule>[
-  AvoidFlutterImports(),
-  AvoidPublicBlocMethods(),
-  AvoidPublicFields(),
-];
+final allRules = <String, LintRuleBuilder>{
+  AvoidFlutterImports.rule: AvoidFlutterImports.new,
+  AvoidPublicBlocMethods.rule: AvoidPublicBlocMethods.new,
+  AvoidPublicFields.rule: AvoidPublicFields.new,
+  PreferBlocLint.rule: PreferBlocLint.new,
+  PreferCubitLint.rule: PreferCubitLint.new,
+};
 
 /// {@template linter}
 /// A class that is able to analyze files and directories and
@@ -30,10 +29,7 @@ const recommendedRules = <LintRule>[
 /// {@endtemplate}
 class Linter {
   /// {@macro linter}
-  const Linter({required this.rules});
-
-  /// The lint rules
-  final List<LintRule> rules;
+  const Linter();
 
   /// Analyzes the provided [uri] and returns all reported diagnostics. If
   /// [content] is provided, it will be explicitly analyzed, otherwise the [uri]
@@ -65,16 +61,56 @@ class Linter {
 
   Map<String, List<Diagnostic>> _analyzeContent(Uri uri, String content) {
     final diagnostics = <Diagnostic>[];
+    final results = {uri.path: diagnostics};
+    final cwd = File(uri.path).parent;
+    final pubspecLock = findPubspecLock(cwd);
+    if (pubspecLock == null) return results;
+    if (!pubspecLock.packages.keys.contains('bloc')) return results;
+    final analysisOptions = findAnalysisOptions(cwd);
+    if (analysisOptions == null) return results;
+    if (analysisOptions.excludes.any((e) => e.matches(uri.path))) {
+      return results;
+    }
     final document = TextDocument(uri: uri, content: content);
     final tokens = scan(utf8.encode(content)).tokens;
-    for (final rule in rules) {
+    for (final rule in analysisOptions.lintRules) {
       final context = LintContext._(rule: rule, document: document);
       final listener = rule.create(context);
       if (listener == null) continue;
       Parser(listener).parseUnit(tokens);
       diagnostics.addAll(context.diagnostics);
     }
-    return {uri.path: diagnostics};
+    return results;
+  }
+}
+
+extension on AnalysisOptions {
+  /// Gets the list of [Glob] patterns to be excluded for this project.
+  List<Glob> get excludes {
+    final excludes = yaml.analyzer?.exclude ?? <String>[];
+    final context = p.Context(current: file.parent.path);
+    return excludes.map((e) => Glob(e, context: context)).toList();
+  }
+
+  /// Gets the list of [LintRule] for this project.
+  List<LintRule> get lintRules {
+    final blocLintOptions = yaml.bloc;
+    if (blocLintOptions == null) return [];
+    final rules = blocLintOptions.rules;
+    if (rules == null) return [];
+    return rules.entries
+        .map<LintRule?>((analysisEntry) {
+          final rule = analysisEntry.key;
+          final state = analysisEntry.value;
+          if (state.isDisabled) return null;
+          final entry = allRules.entries.firstWhereOrNull((e) => e.key == rule);
+          if (entry == null) return null;
+          final builder = entry.value;
+          final severity = state.toSeverity(fallback: builder().severity);
+          return builder(severity);
+        })
+        .whereType<LintRule>()
+        .toList();
   }
 }
 
