@@ -63,10 +63,10 @@ class Linter {
     final diagnostics = <Diagnostic>[];
     final results = {uri.path: diagnostics};
     final cwd = File(uri.path).parent;
-    final pubspecLock = getPubspecLock(cwd);
+    final pubspecLock = findPubspecLock(cwd);
     if (pubspecLock == null) return results;
     if (!pubspecLock.packages.keys.contains('bloc')) return results;
-    final analysisOptions = getAnalysisOptions(cwd);
+    final analysisOptions = findAnalysisOptions(cwd);
     if (analysisOptions == null) return results;
     if (analysisOptions.excludes.any((e) => e.matches(uri.path))) {
       return results;

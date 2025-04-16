@@ -1,27 +1,27 @@
 import 'dart:core';
 import 'dart:io';
+
 import 'package:bloc_lint/src/analysis_options.dart';
 import 'package:path/path.dart' as p;
-
 import 'package:pubspec_lock_parse/pubspec_lock_parse.dart';
 
 /// The `pubspec.lock` file path for this project.
-String getPubspecLockPath(Directory cwd) {
+String pubspecLockPath(Directory cwd) {
   return p.join(cwd.path, 'pubspec.lock');
 }
 
 /// The `analysis_options.yaml` file path for this project.
-String getAnalysisOptionsPath(Directory cwd) {
+String analysisOptionsPath(Directory cwd) {
   return p.join(cwd.path, 'analysis_options.yaml');
 }
 
 /// The `analysis_options.yaml` file for this project.
 ///
 /// Returns `null` if the file does not exist or is invalid.
-File? getAnalysisOptionsFile(Directory cwd) {
-  final root = getProjectRoot(cwd);
+File? findAnalysisOptionsFile(Directory cwd) {
+  final root = findProjectRoot(cwd);
   if (root == null) return null;
-  final file = File(getAnalysisOptionsPath(root));
+  final file = File(analysisOptionsPath(root));
   if (!file.existsSync()) return null;
   return file;
 }
@@ -29,8 +29,8 @@ File? getAnalysisOptionsFile(Directory cwd) {
 /// The resolved `analysis_options.yaml` file for this project.
 ///
 /// Returns `null` if the file does not exist or is invalid.
-AnalysisOptions? getAnalysisOptions(Directory cwd) {
-  final file = getAnalysisOptionsFile(cwd);
+AnalysisOptions? findAnalysisOptions(Directory cwd) {
+  final file = findAnalysisOptionsFile(cwd);
   if (file == null) return null;
   return AnalysisOptions.tryResolve(file);
 }
@@ -39,10 +39,10 @@ AnalysisOptions? getAnalysisOptions(Directory cwd) {
 /// object.
 ///
 /// Returns `null` if the file does not exist or is invalid.
-PubspecLock? getPubspecLock(Directory cwd) {
-  final root = getProjectRoot(cwd);
+PubspecLock? findPubspecLock(Directory cwd) {
+  final root = findProjectRoot(cwd);
   if (root == null) return null;
-  final file = File(getPubspecLockPath(root));
+  final file = File(pubspecLockPath(root));
   if (!file.existsSync()) return null;
   try {
     return PubspecLock.parse(file.readAsStringSync());
@@ -52,9 +52,9 @@ PubspecLock? getPubspecLock(Directory cwd) {
 }
 
 /// Returns the root directory of the nearest project.
-Directory? getProjectRoot(Directory cwd) {
+Directory? findProjectRoot(Directory cwd) {
   final file = findNearestAncestor(
-    where: (path) => File(getPubspecLockPath(Directory(path))),
+    where: (path) => File(pubspecLockPath(Directory(path))),
     cwd: cwd,
   );
   if (file == null) return null;
