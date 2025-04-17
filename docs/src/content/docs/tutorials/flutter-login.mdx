@@ -439,7 +439,7 @@ Upon a successful `logIn` request, the state of the `AuthenticationBloc` will ch
 
 ### Home Page
 
-The `HomePage` can access the current user id via `context.select((AuthenticationBloc bloc) => bloc.state.user.id)` and displays it via a `Text` widget. In addition, when the logout button is tapped, an `AuthenticationLogoutRequested` event is added to the `AuthenticationBloc`.
+The `HomePage` can access the current user id via `context.select((AuthenticationBloc bloc) => bloc.state.user.id)` and displays it via a `Text` widget. In addition, when the logout button is tapped, an `AuthenticationLogoutPressed` event is added to the `AuthenticationBloc`.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/home/view/home_page.dart"
