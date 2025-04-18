@@ -89,6 +89,8 @@ class _BlocSelectorState<B extends StateStreamable<S>, S, T>
     if (oldBloc != currentBloc) {
       _bloc = currentBloc;
       _state = widget.selector(_bloc.state);
+    } else if (oldWidget.selector != widget.selector) {
+      _state = widget.selector(_bloc.state);
     }
   }
 
