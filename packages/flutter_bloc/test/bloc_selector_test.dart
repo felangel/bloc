@@ -207,5 +207,32 @@ void main() {
         ],
       );
     });
+
+    testWidgets('rebuild when selector changes', (tester) async {
+      final counterCubit = CounterCubit();
+      late bool Function(int) selector;
+
+      Widget buildSelector() => MaterialApp(
+            home: BlocSelector<CounterCubit, int, bool>(
+              bloc: counterCubit,
+              selector: selector,
+              builder: (context, state) => Text('Selected: $state'),
+            ),
+          );
+
+      counterCubit.increment(); // makes 0 -> 1
+
+      selector = (state) => state.isEven;
+      await tester.pumpWidget(buildSelector());
+      expect(find.text('Selected: false'), findsOneWidget);
+
+      selector = (state) => state.isOdd;
+      await tester.pumpWidget(buildSelector());
+      expect(find.text('Selected: true'), findsOneWidget);
+
+      counterCubit.increment(); // makes 1 -> 2
+      await tester.pumpAndSettle();
+      expect(find.text('Selected: false'), findsOneWidget);
+    });
   });
 }
