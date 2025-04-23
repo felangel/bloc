@@ -26,7 +26,7 @@ class BlocToolsCommandRunner extends CommandRunner<int> {
     addCommand(NewCommand(logger: _logger));
     addCommand(
       LintCommand(
-        linter: const Linter(rules: recommendedRules),
+        linter: const Linter(),
         logger: _logger,
       ),
     );
