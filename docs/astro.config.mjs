@@ -1,9 +1,7 @@
 import { defineConfig } from 'astro/config';
-import rehypeSlug from 'rehype-slug';
-import { rehypeAutolink } from './plugins/rehype-autolink';
 import starlight from '@astrojs/starlight';
 import starlightLinksValidator from 'starlight-links-validator';
-import tailwind from '@astrojs/tailwind';
+import tailwindcss from '@tailwindcss/vite';
 
 const site = 'https://bloclibrary.dev/';
 const locales = {
@@ -97,13 +95,10 @@ export default defineConfig({
 				},
 			],
 			customCss: ['src/tailwind.css', 'src/styles/landing.css', '@fontsource-variable/figtree'],
-			components: {
-				MarkdownContent: './src/components/starlight/MarkdownContent.astro',
-			},
-			social: {
-				github: 'https://github.com/felangel/bloc',
-				discord: 'https://discord.gg/bloc',
-			},
+			social: [
+				{ icon: 'github', label: 'GitHub', href: 'https://github.com/felangel/bloc' },
+				{ icon: 'discord', label: 'Discord', href: 'https://discord.gg/bloc' },
+			],
 			defaultLocale: 'root',
 			locales,
 			sidebar: [
@@ -281,9 +276,6 @@ export default defineConfig({
 				}),
 			],
 		}),
-		tailwind({ applyBaseStyles: false }),
 	],
-	markdown: {
-		rehypePlugins: [rehypeSlug, ...rehypeAutolink()],
-	},
+	vite: { plugins: [tailwindcss()] },
 });
