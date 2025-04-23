@@ -1,3 +1,23 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@layer base, starlight, theme, components, utilities;
+
+@import '@astrojs/starlight-tailwind';
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+@import '@fontsource-variable/figtree';
+
+@theme {
+	--font-sans: 'Figtree Variable', sans-serif;
+	--color-accent-200: #a8d3c9;
+	--color-accent-600: #007d6d;
+	--color-accent-900: #003c33;
+	--color-accent-950: #002b25;
+
+	--color-gray-100: #f5f6f8;
+	--color-gray-200: #eceef2;
+	--color-gray-300: #c0c2c7;
+	--color-gray-400: #888b96;
+	--color-gray-500: #545861;
+	--color-gray-700: #353841;
+	--color-gray-800: #24272f;
+	--color-gray-900: #17181c;
+}
