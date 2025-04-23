@@ -24,12 +24,7 @@ class BlocToolsCommandRunner extends CommandRunner<int> {
       help: 'Print the current version.',
     );
     addCommand(NewCommand(logger: _logger));
-    addCommand(
-      LintCommand(
-        linter: const Linter(rules: recommendedRules),
-        logger: _logger,
-      ),
-    );
+    addCommand(LintCommand(linter: const Linter(), logger: _logger));
   }
 
   final Logger _logger;
