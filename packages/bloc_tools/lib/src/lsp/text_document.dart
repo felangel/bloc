@@ -9,7 +9,7 @@ const lineFeed = 10;
 // \r
 const carriageReturn = 13;
 
-/// Mimics vscode-languageserver-node's
+/// A simplified, Dart representation of VSCode's Language Server
 /// [TextDocument](https://github.com/microsoft/vscode-languageserver-node/blob/main/textDocument/src/main.ts)
 class TextDocument {
   TextDocument(this._uri, this._languageId, this._version, this._content);
