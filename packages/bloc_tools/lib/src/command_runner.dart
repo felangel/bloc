@@ -23,6 +23,7 @@ class BlocToolsCommandRunner extends CommandRunner<int> {
       negatable: false,
       help: 'Print the current version.',
     );
+    addCommand(LanguageServerCommand());
     addCommand(NewCommand(logger: _logger));
     addCommand(LintCommand(linter: const Linter(), logger: _logger));
   }
