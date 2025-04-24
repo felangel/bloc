@@ -1,17 +1,19 @@
-// ignore_for_file: public_member_api_docs
-
 import 'dart:math';
 
 import 'package:lsp_server/lsp_server.dart';
 
-// \n
+/// The newline symbol (\n).
 const lineFeed = 10;
-// \r
+
+/// The carriage return symbol (\r).
 const carriageReturn = 13;
 
+/// {@template text_document}
 /// A simplified, Dart representation of VSCode's Language Server
-/// [TextDocument](https://github.com/microsoft/vscode-languageserver-node/blob/main/textDocument/src/main.ts)
+/// [TextDocument](https://github.com/microsoft/vscode-languageserver-node/blob/main/textDocument/src/main.ts).
+/// {@endtemplate}
 class TextDocument {
+  /// {@macro text_document}
   TextDocument(this._uri, this._languageId, this._version, this._content);
 
   final Uri _uri;
@@ -198,6 +200,7 @@ class TextDocument {
     return offset;
   }
 
+  /// Returns a wellformed range from the provided [range].
   Range getWellformedRange(Range range) {
     final start = range.start;
     final end = range.end;
