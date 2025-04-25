@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:isolate';
 
 import 'package:args/command_runner.dart';
 import 'package:bloc_tools/src/lsp/language_server.dart';
@@ -29,17 +28,7 @@ class LanguageServerCommand extends Command<int> {
 
   @override
   Future<int> run() async {
-    final onExit = ReceivePort();
-    final completer = Completer<void>();
-    final subscription = onExit.listen(completer.complete);
-    final isolate = await Isolate.spawn(
-      (_) => _languageServerBuilder().listen(),
-      null,
-      onExit: onExit.sendPort,
-    );
-    isolate.addOnExitListener(onExit.sendPort);
-    await completer.future;
-    await subscription.cancel();
+    await _languageServerBuilder().listen();
     return ExitCode.success.code;
   }
 }
