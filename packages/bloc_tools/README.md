@@ -53,12 +53,10 @@ Global options:
     --version    Print the current version.
 
 Available commands:
-  language-server   bloc language-server [arguments]
-                    Start the bloc analysis server.
-  lint              bloc lint [arguments]
-                    Lint Dart source code.
-  new               bloc new <subcommand> [arguments]
-                    Generate new bloc components.
+  lint   bloc lint [arguments]
+         Lint Dart source code.
+  new    bloc new <subcommand> [arguments]
+         Generate new bloc components.
 
 Run "bloc help <command>" for more information about a command.
 ```
