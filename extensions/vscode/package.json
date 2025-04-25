@@ -25,7 +25,8 @@
     "flutter",
     "angulardart",
     "bloc",
-    "state-management"
+    "state-management",
+    "language-server"
   ],
   "icon": "assets/logo.png",
   "activationEvents": [
