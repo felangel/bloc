@@ -23,6 +23,8 @@ Official lint rules for development when using the bloc state management library
 
 This package is built to work with:
 
+- [bloc](https://pub.dev/packages/bloc)
+- [bloc_tools](https://pub.dev/packages/bloc_tools)
 - [flutter_bloc](https://pub.dev/packages/flutter_bloc)
 - [angular_bloc](https://pub.dev/packages/angular_bloc)
 - [bloc_concurrency](https://pub.dev/packages/bloc_concurrency)
@@ -53,6 +55,14 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 </table>
 
 ---
+
+# All Lint Rules
+
+- [avoid_flutter_imports](https://bloclibrary.dev/lint-rules/avoid_flutter_imports)
+- [avoid_public_bloc_methods](https://bloclibrary.dev/lint-rules/avoid_public_bloc_methods)
+- [avoid_public_fields](https://bloclibrary.dev/lint-rules/avoid_public_fields)
+- [prefer_bloc](https://bloclibrary.dev/lint-rules/prefer_bloc)
+- [prefer_cubit](https://bloclibrary.dev/lint-rules/prefer_cubit)
 
 ## Dart Versions
 
