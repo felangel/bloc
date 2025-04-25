@@ -22,6 +22,9 @@ class LanguageServerCommand extends Command<int> {
   @override
   String get name => 'language-server';
 
+  @override
+  bool get hidden => true;
+
   final LanguageServer Function() _languageServerBuilder;
 
   @override

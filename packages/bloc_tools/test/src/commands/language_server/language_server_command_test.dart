@@ -24,6 +24,7 @@ void main() {
     test('has correct metadata', () {
       expect(command.name, equals('language-server'));
       expect(command.description, equals('Start the bloc language server.'));
+      expect(command.hidden, isTrue);
       expect(
         command.summary,
         equals(
