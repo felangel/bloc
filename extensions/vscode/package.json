@@ -42,6 +42,11 @@
             "default": true,
             "description": "Whether to check if you are using the latest package versions at startup."
           },
+          "bloc.languageServer.enabled": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether to run the bloc language server at startup."
+          },
           "bloc.newBlocTemplate.type": {
             "type": "string",
             "default": "auto",
@@ -247,6 +252,7 @@
     "lodash": "^4.17.19",
     "mkdirp": "^0.5.1",
     "node-fetch": "^2.0.0",
-    "semver": "^6.3.1"
+    "semver": "^6.3.1",
+    "vscode-languageclient": "^7.0.0"
   }
 }

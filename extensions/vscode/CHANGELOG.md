@@ -1,3 +1,7 @@
+# 6.8.0
+
+- feat: add language server
+
 # 6.7.0
 
 - deps: upgrade vscode engine to ^1.75.0
