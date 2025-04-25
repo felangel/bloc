@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:bloc_tools/src/command_runner.dart';
+import 'package:bloc_tools/src/lsp/language_server.dart';
 import 'package:bloc_tools/src/version.dart';
 import 'package:mason/mason.dart'
     show ExitCode, Logger, Progress, lightCyan, lightYellow;
@@ -11,11 +12,13 @@ import 'package:mocktail/mocktail.dart';
 import 'package:pub_updater/pub_updater.dart';
 import 'package:test/test.dart';
 
-class MockLogger extends Mock implements Logger {}
+class _MockLogger extends Mock implements Logger {}
 
-class MockProgress extends Mock implements Progress {}
+class _MockProgress extends Mock implements Progress {}
 
-class MockPubUpdater extends Mock implements PubUpdater {}
+class _MockPubUpdater extends Mock implements PubUpdater {}
+
+class _MockLanguageServer extends Mock implements LanguageServer {}
 
 const expectedUsage = [
   'Command Line Tools for the Bloc Library.\n'
@@ -51,6 +54,7 @@ void main() {
     late List<String> printLogs;
     late Logger logger;
     late PubUpdater pubUpdater;
+    late LanguageServer languageServer;
     late BlocToolsCommandRunner commandRunner;
 
     void Function() overridePrint(void Function() fn) {
@@ -66,20 +70,22 @@ void main() {
 
     setUp(() {
       printLogs = [];
-      logger = MockLogger();
-      pubUpdater = MockPubUpdater();
+      logger = _MockLogger();
+      pubUpdater = _MockPubUpdater();
+      languageServer = _MockLanguageServer();
 
       when(
         () => pubUpdater.getLatestVersion(any()),
       ).thenAnswer((_) async => packageVersion);
       when(() => pubUpdater.update(packageName: packageName)).thenAnswer(
-        (_) =>
-            Future.value(ProcessResult(0, ExitCode.success.code, null, null)),
+        (_) async => ProcessResult(0, ExitCode.success.code, null, null),
       );
+      when(languageServer.listen).thenAnswer((_) async {});
 
       commandRunner = BlocToolsCommandRunner(
         logger: logger,
         pubUpdater: pubUpdater,
+        languageServerBuilder: () => languageServer,
       );
     });
 
@@ -102,6 +108,19 @@ void main() {
         verify(() => logger.confirm('Would you like to update?')).called(1);
       });
 
+      test('skips update check when running language-server', () async {
+        when(
+          () => pubUpdater.getLatestVersion(any()),
+        ).thenAnswer((_) async => latestVersion);
+
+        when(() => logger.confirm(any())).thenReturn(false);
+
+        final result = await commandRunner.run(['language-server']);
+        expect(result, equals(ExitCode.success.code));
+        verifyNever(() => logger.info(updatePrompt));
+        verifyNever(() => logger.confirm('Would you like to update?'));
+      });
+
       test('handles pub update errors gracefully', () async {
         when(
           () => pubUpdater.getLatestVersion(any()),
@@ -113,7 +132,7 @@ void main() {
       });
 
       test('updates on "y" response when newer version exists', () async {
-        final progress = MockProgress();
+        final progress = _MockProgress();
         when(
           () => pubUpdater.getLatestVersion(any()),
         ).thenAnswer((_) async => latestVersion);
