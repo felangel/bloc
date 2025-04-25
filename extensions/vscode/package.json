@@ -42,6 +42,11 @@
             "default": true,
             "description": "Whether to check if you are using the latest package versions at startup."
           },
+          "bloc.languageServer.enabled": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether to run the bloc language server at startup."
+          },
           "bloc.newBlocTemplate.type": {
             "type": "string",
             "default": "auto",

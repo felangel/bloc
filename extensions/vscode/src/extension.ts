@@ -4,7 +4,6 @@ import {
   commands,
   ExtensionContext,
   languages,
-  ProgressLocation,
   window,
   workspace,
 } from "vscode";
@@ -22,99 +21,15 @@ import {
   wrapWithBlocSelector,
   wrapWithRepositoryProvider,
 } from "./commands";
-import {
-  analyzeDependencies,
-  areBlocToolsInstalled,
-  installBlocTools,
-  setShowContextMenu,
-} from "./utils";
-
-const DART_FILE = { language: "dart", scheme: "file" };
-const ANALYSIS_OPTIONS_FILE = {
-  pattern: "**/analysis_options.yaml",
-  scheme: "file",
-};
-
-import {
-  LanguageClient,
-  LanguageClientOptions,
-  RevealOutputChannelOn,
-  ServerOptions,
-  TransportKind,
-} from "vscode-languageclient/node";
-
-let client: LanguageClient;
-
-async function startLanguageServer() {
-  const serverOptions: ServerOptions = {
-    command: "bloc",
-    args: ["language-server"],
-    options: {
-      env: process.env,
-      shell: true,
-    },
-    transport: TransportKind.stdio,
-  };
-
-  const clientOptions: LanguageClientOptions = {
-    revealOutputChannelOn: RevealOutputChannelOn.Info,
-    documentSelector: [DART_FILE, ANALYSIS_OPTIONS_FILE],
-  };
-
-  client = new LanguageClient(
-    "blocAnalysisLSP",
-    "Bloc Analysis Server",
-    serverOptions,
-    clientOptions
-  );
-
-  return client.start();
-}
-
-async function tryInitLanguageServer(): Promise<void> {
-  const installed = await areBlocToolsInstalled();
-
-  if (!installed) {
-    var didInstall = false;
-    await window.withProgress(
-      {
-        location: ProgressLocation.Window,
-        title: "Installing Bloc Tools",
-      },
-      async (_) => {
-        try {
-          didInstall = await installBlocTools();
-          window.setStatusBarMessage("✓ Bloc Tools Installed", 3000);
-        } catch (err) {
-          window.showErrorMessage(`${err}`);
-        }
-      }
-    );
-
-    if (!didInstall) {
-      window.setStatusBarMessage("✗ Unable to install Bloc Tools", 3000);
-      return;
-    }
-  }
-
-  window.withProgress(
-    {
-      location: ProgressLocation.Window,
-      title: "Bloc Analysis Server",
-    },
-    async (_) => {
-      try {
-        await startLanguageServer();
-        window.setStatusBarMessage("✓ Bloc Analysis Server", 3000);
-      } catch (err) {
-        window.showErrorMessage(`${err}`);
-      }
-    }
-  );
-}
+import { analyzeDependencies, setShowContextMenu } from "./utils";
+import { client, DART_FILE, tryStartLanguageServer } from "./language-server";
 
 export function activate(context: ExtensionContext) {
-  tryInitLanguageServer();
+  if (
+    workspace.getConfiguration("bloc").get<boolean>("languageServer.enabled")
+  ) {
+    tryStartLanguageServer();
+  }
 
   if (workspace.getConfiguration("bloc").get<boolean>("checkForUpdates")) {
     analyzeDependencies();
