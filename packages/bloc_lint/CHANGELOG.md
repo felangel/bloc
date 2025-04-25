@@ -1,6 +1,6 @@
 # 0.2.0-dev.0
 
-- Complete rewrite
+- Full rewrite of `pkg:bloc_lint`
 - Supported Lint Rules
   - [avoid_flutter_imports](https://bloclibrary.dev/lint-rules/avoid_flutter_imports)
   - [avoid_public_bloc_methods](https://bloclibrary.dev/lint-rules/avoid_public_bloc_methods)
@@ -10,4 +10,4 @@
 
 # 0.1.0
 
-- Initial experimental release using `pkg:custom_lint`
+- Initial experimental community release using `pkg:custom_lint`
