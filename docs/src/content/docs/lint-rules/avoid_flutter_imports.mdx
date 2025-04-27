@@ -1,0 +1,99 @@
+---
+title: Avoid Flutter Imports
+description: The avoid_flutter_imports bloc lint rule.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import { Code, Tabs, TabItem } from '@astrojs/starlight/components';
+import { transformerMetaHighlight } from '@shikijs/transformers';
+
+<Badge text="new" />
+<Badge text="dart" variant="note" />
+<Badge text="recommended" variant="success" />
+
+Avoid introducing dependencies on Flutter within business logic components
+(`Bloc` or `Cubit` instances).
+
+## Rationale
+
+Layering an application is a key part of building a maintainable codebase and
+helps developers iterate quickly and with confidence. Each layer should have a
+single responsibility and be able to function and be tested in isolation. This
+allows us to keep changes contained to specific layers and minimize the impact
+on the entire application.
+
+As a result, business logic components should generally manage
+feature/application state and contain business logic that is decoupled from the
+UI layer. Events should flow into business logic components from the UI layer and
+state should flow out of the business logic layer into the UI layer.
+
+In addition, keeping business logic components decoupled from Flutter provides
+the ability to reuse business logic across multiple platforms/frameworks (e.g.
+Flutter, AngularDart, Jaspr, etc.).
+
+## Examples
+
+**DO NOT** import Flutter within your business logic components.
+
+**BAD**:
+
+<Code
+	code={`
+  import 'package:bloc/bloc.dart';
+  import 'packages:flutter/material.dart';
+
+class CounterCubit extends Cubit<int> {
+CounterCubit() : super(0);
+}
+`}
+lang="dart"
+title="counter_cubit.dart"
+transformers={[transformerMetaHighlight()]}
+class='warning'
+meta="{2}"
+
+/>
+
+**GOOD**:
+
+<Code
+	code={`
+  import 'package:bloc/bloc.dart';
+
+class CounterCubit extends Cubit<int> {
+CounterCubit() : super(0);
+}
+`}
+lang="dart"
+title="counter_cubit.dart"
+
+/>
+
+## Enable
+
+To enable the `avoid_flutter_imports` rule, add it to your `analysis_options.yaml` under `bloc` > `rules`:
+
+<Tabs>
+	<TabItem label="YAML List">
+		<Code
+			code={`
+  bloc:
+    rules:
+      - avoid_flutter_imports
+`}
+			lang="yaml"
+			title="analysis_options.yaml"
+		/>
+	</TabItem>
+	<TabItem label="YAML Map">
+		<Code
+			code={`
+  bloc:
+    rules:
+      avoid_flutter_imports: true
+`}
+			lang="yaml"
+			title="analysis_options.yaml"
+		/>
+	</TabItem>
+</Tabs>

@@ -21,3 +21,29 @@
 	--color-gray-800: #24272f;
 	--color-gray-900: #17181c;
 }
+
+.warning .highlight {
+	background: none;
+}
+
+.info .highlight {
+	background: none;
+}
+
+.warning .mark .code {
+	border-left-color: #bda036;
+}
+
+.warning .highlight > .code > span {
+	border-bottom: 2px #bda036 dashed;
+	padding: 0;
+}
+
+.info .mark .code {
+	border-left-color: #4c81d7;
+}
+
+.info .highlight > .code > span {
+	border-bottom: 2px #4c81d7 dashed;
+	padding: 0;
+}
