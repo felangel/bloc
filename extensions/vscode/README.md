@@ -30,6 +30,10 @@
 
 Bloc can be installed from the [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) or by [searching within VSCode](https://code.visualstudio.com/docs/editor/extension-gallery#_search-for-an-extension).
 
+## Language Server
+
+By default, the bloc language server started which enables custom bloc diagnotic reporting. See [https://pub.dev/packages/bloc_lint] for more information about supported lint rules.
+
 ## Commands
 
 | Command            | Description          |
