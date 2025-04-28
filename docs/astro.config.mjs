@@ -113,13 +113,13 @@ export default defineConfig({
 					],
 				},
 				{
-					label: 'Linting',
+					label: 'Linter',
 					badge: { text: 'new' },
 					items: [
-						{ label: 'Overview ', link: '/linting/' },
-						{ label: 'Installation ', link: '/linting/installation/' },
-						{ label: 'Configuration ', link: '/linting/configuration/' },
-						{ label: 'Customizing Rules ', link: '/linting/customizing-rules/' },
+						{ label: 'Overview ', link: '/lint/' },
+						{ label: 'Installation ', link: '/lint/installation/' },
+						{ label: 'Configuration ', link: '/lint/configuration/' },
+						{ label: 'Customizing Rules ', link: '/lint/customizing-rules/' },
 						{ label: 'Rules', autogenerate: { directory: '/lint-rules' } },
 					],
 				},
