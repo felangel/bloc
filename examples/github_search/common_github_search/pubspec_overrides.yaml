@@ -2,4 +2,4 @@ dependency_overrides:
   bloc:
     path: ../../../packages/bloc
   bloc_lint:
-    path: ../../packages/bloc_lint
+    path: ../../../packages/bloc_lint

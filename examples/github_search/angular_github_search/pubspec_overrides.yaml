@@ -4,6 +4,6 @@ dependency_overrides:
   bloc:
     path: ../../../packages/bloc
   bloc_lint:
-    path: ../../packages/bloc_lint
+    path: ../../../packages/bloc_lint
   build_modules: ^5.0.0
   build_web_compilers: ^4.0.0
