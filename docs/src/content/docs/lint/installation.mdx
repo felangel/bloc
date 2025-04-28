@@ -10,6 +10,7 @@ import Card from '~/components/landing/Card.astro';
 import InstallBlocToolsSnippet from '~/components/lint/InstallBlocToolsSnippet.astro';
 import BlocToolsLintHelpOutputSnippet from '~/components/lint/BlocToolsLintHelpOutputSnippet.astro';
 import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.astro';
+import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
 
 ## Command-Line Tools
 
@@ -31,6 +32,11 @@ To install preconfigured lint rule sets, install
 via the following command:
 
 <InstallBlocLintSnippet />
+
+Then, add an `analysis_options.yaml` to the root of your project with the
+recommended rule set:
+
+<BlocLintRecommendedAnalysisOptionsSnippet />
 
 ## IDE Integrations
 
