@@ -1,0 +1,33 @@
+---
+title: Overview
+description: An introduction to the bloc linter.
+sidebar:
+  order: 1
+---
+
+import AvoidFlutterImportsWarningSnippet from '~/components/linting/ImportFlutterWarningSnippet.mdx';
+import AvoidFlutterImportsWarningOutputSnippet from '~/components/linting/ImportFlutterWarningOutputSnippet.astro';
+
+Linting is the process of statically analyzing code for potential bugs in
+addition to programmatic and stylistic errors.
+
+Bloc has a built-in linter, which can be used through your IDE or the
+[`bloc command-line tools`](https://pub.dev/packages/bloc_tools) with the
+`bloc lint` command.
+
+With the help of the bloc linter, you can improve the quality of your codebase
+and enforce consistency without executing a single line of code.
+
+For example, perhaps you accidentally imported a Flutter dependency into your
+cubit:
+
+<AvoidFlutterImportsWarningSnippet />
+
+If properly configured, the bloc linter will point to the import and produce the
+following warning:
+
+<AvoidFlutterImportsWarningOutputSnippet />
+
+In the following sections, we'll cover how to install, configure, and customize
+the bloc linter so that you can take advantage of static analysis in your
+codebase.

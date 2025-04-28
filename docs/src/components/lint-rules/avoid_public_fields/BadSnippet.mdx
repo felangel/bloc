@@ -1,0 +1,22 @@
+import { Code } from '@astrojs/starlight/components';
+import { transformerMetaHighlight } from '@shikijs/transformers';
+
+<Code
+	code={`
+  import 'package:bloc/bloc.dart';
+
+  enum CounterEvent { increment };
+
+  class CounterBloc extends Bloc<CounterEvent, int> { 
+    CounterBloc() : super(0) {
+      on<CounterEvent>((event, emit) => emit(state + 1));
+    }
+
+    // Avoid public fields!
+    // Prefer to keep all external state in the [state] object.
+    int count = 0;
+  }
+`}
+lang="dart" title="counter_bloc.dart"
+transformers={[transformerMetaHighlight()]} class='warning' meta="{12}"
+/>

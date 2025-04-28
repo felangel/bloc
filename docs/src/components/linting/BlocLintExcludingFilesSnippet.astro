@@ -1,0 +1,12 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+include: package:bloc_lint/recommended.yaml
+analyzer:
+  exclude:
+    - "**.g.dart"
+`;
+---
+
+<Code code={code} lang="yaml" title="analysis_options.yaml" />
