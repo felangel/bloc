@@ -5,9 +5,13 @@ description: Migra a la última versión estable de Bloc.
 
 import { Code, Tabs, TabItem } from '@astrojs/starlight/components';
 
-:::tip Por favor, consulta el
+:::tip
+
+Por favor, consulta el
 [registro de versiones](https://github.com/felangel/bloc/releases) para obtener
-más información sobre los cambios en cada versión. :::
+más información sobre los cambios en cada versión.
+
+:::
 
 ## v10.0.0
 
@@ -15,8 +19,12 @@ más información sobre los cambios en cada versión. :::
 
 #### ❗✨ Desacoplar `blocTest` de `BlocBase`
 
-:::note[¿Qué cambió?] En bloc_test v10.0.0, la API `blocTest` ya no está
-estrechamente acoplada a `BlocBase`. :::
+:::note[¿Qué cambió?]
+
+En bloc_test v10.0.0, la API `blocTest` ya no está estrechamente acoplada a
+`BlocBase`.
+
+:::
 
 ##### Justificación
 
@@ -29,8 +37,11 @@ suficiente para `blocTest` debido a la dependencia interna en la API `emit`.
 
 #### ❗✨ Soporte para WebAssembly
 
-:::note[¿Qué cambió?] En hydrated_bloc v10.0.0, se añadió soporte para compilar
-a WebAssembly (wasm). :::
+:::note[¿Qué cambió?]
+
+En hydrated_bloc v10.0.0, se añadió soporte para compilar a WebAssembly (wasm).
+
+:::
 
 ##### Justificación
 
@@ -72,8 +83,11 @@ void main() async {
 
 #### ❗🧹 Eliminar APIs Obsoletas
 
-:::note[¿Qué cambió?] En bloc v9.0.0, todas las APIs previamente obsoletas
-fueron eliminadas. :::
+:::note[¿Qué cambió?]
+
+En bloc v9.0.0, todas las APIs previamente obsoletas fueron eliminadas.
+
+:::
 
 ##### Resumen
 
@@ -81,8 +95,12 @@ fueron eliminadas. :::
 
 #### ❗✨ Introducir nueva Interfaz `EmittableStateStreamableSource`
 
-:::note[¿Qué cambió?] En bloc v9.0.0, se introdujo una nueva interfaz central
-`EmittableStateStreamableSource`. :::
+:::note[¿Qué cambió?]
+
+En bloc v9.0.0, se introdujo una nueva interfaz central
+`EmittableStateStreamableSource`.
+
+:::
 
 ##### Justificación
 
@@ -94,8 +112,12 @@ interfaz `EmittableStateStreamableSource` se introdujo para permitir que
 
 #### ✨ Reintroducir la API `HydratedBloc.storage`
 
-:::note[¿Qué cambió?] En hydrated_bloc v9.0.0, `HydratedBlocOverrides` fue
-eliminado en favor de la API `HydratedBloc.storage`. :::
+:::note[¿Qué cambió?]
+
+En hydrated_bloc v9.0.0, `HydratedBlocOverrides` fue eliminado en favor de la
+API `HydratedBloc.storage`.
+
+:::
 
 ##### Justificación
 
@@ -138,8 +160,12 @@ Future<void> main() async {
 
 #### ✨ Reintroducir las APIs `Bloc.observer` y `Bloc.transformer`
 
-:::note[¿Qué cambió?] En bloc v8.1.0, `BlocOverrides` fue deprecado en favor de
-las APIs `Bloc.observer` y `Bloc.transformer`. :::
+:::note[¿Qué cambió?]
+
+En bloc v8.1.0, `BlocOverrides` fue deprecado en favor de las APIs
+`Bloc.observer` y `Bloc.transformer`.
+
+:::
 
 ##### Justificación
 
@@ -234,8 +260,12 @@ void main() {
 
 #### ❗✨ Introducir nueva API `BlocOverrides`
 
-:::note[¿Qué cambió?] En bloc v8.0.0, `Bloc.observer` y `Bloc.transformer`
-fueron eliminados en favor de la API `BlocOverrides`. :::
+:::note[¿Qué cambió?]
+
+En bloc v8.0.0, `Bloc.observer` y `Bloc.transformer` fueron eliminados en favor
+de la API `BlocOverrides`.
+
+:::
 
 ##### Justificación
 
@@ -324,11 +354,15 @@ BlocOverrides.runZoned(
 
 #### ❗✨ Mejorar el Manejo y Reporte de Errores
 
-:::note[¿Qué cambió?] En bloc v8.0.0, `BlocUnhandledErrorException` se eliminó.
-Además, cualquier excepción no capturada siempre se reporta a `onError` y se
-vuelve a lanzar (independientemente del modo de depuración o lanzamiento). La
-API `addError` informa errores a `onError`, pero no trata los errores reportados
-como excepciones no capturadas. :::
+:::note[¿Qué cambió?]
+
+En bloc v8.0.0, `BlocUnhandledErrorException` se eliminó. Además, cualquier
+excepción no capturada siempre se reporta a `onError` y se vuelve a lanzar
+(independientemente del modo de depuración o lanzamiento). La API `addError`
+informa errores a `onError`, pero no trata los errores reportados como
+excepciones no capturadas.
+
+:::
 
 ##### Justificación
 
@@ -352,9 +386,12 @@ lanzamiento).
 
 #### ❗🧹 Hacer `BlocObserver` abstracto
 
-:::note[¿Qué cambió?] En bloc v8.0.0, `BlocObserver` se convirtió en una clase
-`abstract`, lo que significa que no se puede instanciar una instancia de
-`BlocObserver`. :::
+:::note[¿Qué cambió?]
+
+En bloc v8.0.0, `BlocObserver` se convirtió en una clase `abstract`, lo que
+significa que no se puede instanciar una instancia de `BlocObserver`.
+
+:::
 
 ##### Justificación
 
@@ -388,8 +425,11 @@ void main() {
 
 #### ❗✨ `add` lanza `StateError` si el Bloc está cerrado
 
-:::note[¿Qué cambió?] En bloc v8.0.0, llamar a `add` en un bloc cerrado
-resultará en un `StateError`. :::
+:::note[¿Qué cambió?]
+
+En bloc v8.0.0, llamar a `add` en un bloc cerrado resultará en un `StateError`.
+
+:::
 
 ##### Justificación
 
@@ -401,8 +441,12 @@ capturada y se propagará a `onError`.
 
 #### ❗✨ `emit` lanza `StateError` si el Bloc está cerrado
 
-:::note[¿Qué cambió?] En bloc v8.0.0, llamar a `emit` dentro de un bloc cerrado
-resultará en un `StateError`. :::
+:::note[¿Qué cambió?]
+
+En bloc v8.0.0, llamar a `emit` dentro de un bloc cerrado resultará en un
+`StateError`.
+
+:::
 
 ##### Justificación
 
@@ -415,8 +459,11 @@ visible, en v8.0.0, llamar a `emit` dentro de un bloc cerrado lanzará un
 
 #### ❗🧹 Eliminar APIs Obsoletas
 
-:::note[¿Qué cambió?] En bloc v8.0.0, todas las APIs previamente obsoletas
-fueron eliminadas. :::
+:::note[¿Qué cambió?]
+
+En bloc v8.0.0, todas las APIs previamente obsoletas fueron eliminadas.
+
+:::
 
 ##### Resumen
 
@@ -429,9 +476,12 @@ fueron eliminadas. :::
 
 #### ✨ `MockBloc` y `MockCubit` ya no requieren `registerFallbackValue`
 
-:::note[¿Qué cambió?] En bloc_test v9.0.0, los desarrolladores ya no necesitan
-llamar explícitamente a `registerFallbackValue` al usar `MockBloc` o
-`MockCubit`. :::
+:::note[¿Qué cambió?]
+
+En bloc_test v9.0.0, los desarrolladores ya no necesitan llamar explícitamente a
+`registerFallbackValue` al usar `MockBloc` o `MockCubit`.
+
+:::
 
 ##### Resumen
 
@@ -471,8 +521,12 @@ void main() {
 
 #### ❗✨ Introducir nueva API `HydratedBlocOverrides`
 
-:::note[¿Qué cambió?] En hydrated_bloc v8.0.0, `HydratedBloc.storage` fue
-eliminado en favor de la API `HydratedBlocOverrides`. :::
+:::note[¿Qué cambió?]
+
+En hydrated_bloc v8.0.0, `HydratedBloc.storage` fue eliminado en favor de la API
+`HydratedBlocOverrides`.
+
+:::
 
 ##### Justificación
 
@@ -528,8 +582,12 @@ Esto permite que cada `Zone` funcione de manera independiente con sus propios
 
 #### ✨ Introducir nueva API `on<Event>`
 
-:::note[¿Qué cambió?] En bloc v7.2.0, `mapEventToState` fue deprecado en favor
-de `on<Event>`. `mapEventToState` será eliminado en bloc v8.0.0. :::
+:::note[¿Qué cambió?]
+
+En bloc v7.2.0, `mapEventToState` fue deprecado en favor de `on<Event>`.
+`mapEventToState` será eliminado en bloc v8.0.0.
+
+:::
 
 ##### Justificación
 
@@ -543,8 +601,12 @@ API `on<Event>` se creó para hacer que la biblioteca sea lo más segura posible
 de usar y para eliminar cualquier incertidumbre en lo que respecta a los cambios
 de estado.
 
-:::tip Para más información,
-[lee la propuesta completa](https://github.com/felangel/bloc/issues/2526). :::
+:::tip
+
+Para más información,
+[lee la propuesta completa](https://github.com/felangel/bloc/issues/2526).
+
+:::
 
 **Resumen**
 
@@ -584,9 +646,13 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-:::note Cada `EventHandler` registrado funciona de manera independiente, por lo
-que es importante registrar manejadores de eventos según el tipo de
-transformador que desees aplicar. :::
+:::note
+
+Cada `EventHandler` registrado funciona de manera independiente, por lo que es
+importante registrar manejadores de eventos según el tipo de transformador que
+desees aplicar.
+
+:::
 
 Si deseas mantener el mismo comportamiento exacto que en la versión v7.1.0,
 puedes registrar un solo manejador de eventos para todos los eventos y aplicar
@@ -622,8 +688,11 @@ void main() {
 
 #### ✨ Introducir nueva API `EventTransformer`
 
-:::note[¿Qué cambió?] En bloc v7.2.0, `transformEvents` fue deprecado en favor
-de la API `EventTransformer`. `transformEvents` será eliminado en bloc v8.0.0.
+:::note[¿Qué cambió?]
+
+En bloc v7.2.0, `transformEvents` fue deprecado en favor de la API
+`EventTransformer`. `transformEvents` será eliminado en bloc v8.0.0.
+
 :::
 
 ##### Justificación
@@ -653,9 +722,12 @@ EventTransformer<E> concurrent<E>() {
 }
 ```
 
-:::tip Consulta
-[package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency) para un
-conjunto de transformadores de eventos personalizados y con opiniones. :::
+:::tip
+
+Consulta [package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency)
+para un conjunto de transformadores de eventos personalizados y con opiniones.
+
+:::
 
 **v7.1.0**
 
@@ -684,9 +756,12 @@ MyBloc() : super(MyState()) {
 
 #### ⚠️ Marcar como obsoleta la API `transformTransitions`
 
-:::note[¿Qué cambió?] En bloc v7.2.0, `transformTransitions` fue deprecado en
-favor de sobrescribir la API `stream`. `transformTransitions` será eliminado en
-bloc v8.0.0. :::
+:::note[¿Qué cambió?]
+
+En bloc v7.2.0, `transformTransitions` fue deprecado en favor de sobrescribir la
+API `stream`. `transformTransitions` será eliminado en bloc v8.0.0.
+
+:::
 
 ##### Justificación
 
@@ -1172,11 +1247,15 @@ Widget build(BuildContext context) {
 }
 ```
 
-:::note Usar `context.watch` en la raíz del método `build` resultará en que todo
-el widget se reconstruya cuando cambie el estado del bloc. Si no es necesario
+:::note
+
+Usar `context.watch` en la raíz del método `build` resultará en que todo el
+widget se reconstruya cuando cambie el estado del bloc. Si no es necesario
 reconstruir todo el widget, usa `BlocBuilder` para envolver las partes que deben
 reconstruirse, usa un `Builder` con `context.watch` para delimitar las
-reconstrucciones, o descompón el widget en widgets más pequeños. :::
+reconstrucciones, o descompón el widget en widgets más pequeños.
+
+:::
 
 2. **Para acceder al bloc y poder agregar un evento**
 
@@ -1476,8 +1555,11 @@ blocTest<CounterBloc, int>(
 );
 ```
 
-:::note `emit` solo es visible para pruebas y nunca debe usarse fuera de las
-pruebas. :::
+:::note
+
+`emit` solo es visible para pruebas y nunca debe usarse fuera de las pruebas.
+
+:::
 
 ### `package:flutter_bloc`
 
@@ -1610,8 +1692,12 @@ desempeñaba la clase. `BlocDelegate` sugiere que la clase juega un papel activo
 mientras que en realidad el papel previsto del `BlocDelegate` era ser un
 componente pasivo que simplemente observa todos los blocs en una aplicación.
 
-:::note Idealmente, no debería haber ninguna funcionalidad o características
-orientadas al usuario manejadas dentro de `BlocObserver`. :::
+:::note
+
+Idealmente, no debería haber ninguna funcionalidad o características orientadas
+al usuario manejadas dentro de `BlocObserver`.
+
+:::
 
 **v4.x.x**
 

@@ -66,8 +66,12 @@ package:
 	title="packages/authentication_repository/pubspec.yaml"
 />
 
-:::note `package:authentication_repository` will be a pure Dart package without
-any external dependencies. :::
+:::note
+
+`package:authentication_repository` will be a pure Dart package without any
+external dependencies.
+
+:::
 
 Next up, we need to implement the `AuthenticationRepository` class itself which
 will be in
@@ -86,9 +90,12 @@ In addition, there are `logIn` and `logOut` methods which are stubbed for
 simplicity but can easily be extended to authenticate with `FirebaseAuth` for
 example or some other authentication provider.
 
-:::note Since we are maintaining a `StreamController` internally, a `dispose`
-method is exposed so that the controller can be closed when it is no longer
-needed. :::
+:::note
+
+Since we are maintaining a `StreamController` internally, a `dispose` method is
+exposed so that the controller can be closed when it is no longer needed.
+
+:::
 
 Lastly, we need to create
 `packages/authentication_repository/lib/authentication_repository.dart` which
@@ -138,8 +145,12 @@ The first thing we will define is the user model in
 For simplicity, a user just has an `id` property but in practice we might have
 additional properties like `firstName`, `lastName`, `avatarUrl`, etc...
 
-:::note [`package:equatable`](https://pub.dev/packages/equatable) is used to
-enable value comparisons of the `User` object. :::
+:::note
+
+[`package:equatable`](https://pub.dev/packages/equatable) is used to enable
+value comparisons of the `User` object.
+
+:::
 
 Next, we can create a `models.dart` in `packages/user_repository/lib/src/models`
 which will export all models so that we can use a single import state to import
@@ -209,10 +220,14 @@ application layer.
 │   ├── main.dart
 ```
 
-:::tip Use the
+:::tip
+
+Use the
 [VSCode Extension](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
 or [IntelliJ Plugin](https://plugins.jetbrains.com/plugin/12129-bloc) to create
-blocs automatically. :::
+blocs automatically.
+
+:::
 
 ### authentication_event.dart
 
@@ -286,13 +301,21 @@ canceling it when either `AuthenticationBloc` or the `status` stream is closed.
 If the `status` stream emits an error, `addError` forwards the error and
 stackTrace to any `BlocObserver` listening.
 
-:::caution If `onError` is omitted, any errors on the `status` stream are
-considered unhandled, and will be thrown by `onEach`. As a result, the
-subscription to the `status` stream will be canceled. :::
+:::caution
 
-:::tip A [`BlocObserver`](/bloc-concepts/#blocobserver-1) is great for logging
-Bloc events, errors, and state changes especially in the context analytics and
-crash reporting.; :::
+If `onError` is omitted, any errors on the `status` stream are considered
+unhandled, and will be thrown by `onEach`. As a result, the subscription to the
+`status` stream will be canceled.
+
+:::
+
+:::tip
+
+A [`BlocObserver`](/bloc-concepts/#blocobserver-1) is great for logging Bloc
+events, errors, and state changes especially in the context analytics and crash
+reporting.;
+
+:::
 
 When the `status` stream emits `AuthenticationStatus.unknown` or
 `unauthenticated`, the corresponding `AuthenticationState` is emitted.
@@ -318,14 +341,22 @@ Next, we can replace the default `main.dart` with:
 	title="lib/app.dart"
 />
 
-:::note `app.dart` is split into two parts `App` and `AppView`. `App` is
-responsible for creating/providing the `AuthenticationBloc` which will be
-consumed by the `AppView`. This decoupling will enable us to easily test both
-the `App` and `AppView` widgets later on. :::
+:::note
 
-:::note `RepositoryProvider` is used to provide the single instance of
+`app.dart` is split into two parts `App` and `AppView`. `App` is responsible for
+creating/providing the `AuthenticationBloc` which will be consumed by the
+`AppView`. This decoupling will enable us to easily test both the `App` and
+`AppView` widgets later on.
+
+:::
+
+:::note
+
+`RepositoryProvider` is used to provide the single instance of
 `AuthenticationRepository` to the entire application which will come in handy
-later on. :::
+later on.
+
+:::
 
 By default, `BlocProvider` is lazy and does not call `create` until the first
 time the Bloc is accessed. Since `AuthenticationBloc` should always subscribe to
@@ -357,8 +388,12 @@ lib
 	title="lib/splash/view/splash_page.dart"
 />
 
-:::tip `SplashPage` exposes a static `Route` which makes it very easy to
-navigate to via `Navigator.of(context).push(SplashPage.route())`; :::
+:::tip
+
+`SplashPage` exposes a static `Route` which makes it very easy to navigate to
+via `Navigator.of(context).push(SplashPage.route())`;
+
+:::
 
 ## Login
 
@@ -446,9 +481,12 @@ password input states.
 	title="lib/login/bloc/login_state.dart"
 />
 
-:::note The `Username` and `Password` models are used as part of the
-`LoginState` and the status is also part of
-[package:formz](https://pub.dev/packages/formz). :::
+:::note
+
+The `Username` and `Password` models are used as part of the `LoginState` and
+the status is also part of [package:formz](https://pub.dev/packages/formz).
+
+:::
 
 #### login_bloc.dart
 
@@ -485,8 +523,12 @@ providing the `LoginBloc` to the `LoginForm`.
 	title="lib/login/view/login_page.dart"
 />
 
-:::note `context.read<AuthenticationRepository>()` is used to lookup the
-instance of `AuthenticationRepository` via the `BuildContext`. :::
+:::note
+
+`context.read<AuthenticationRepository>()` is used to lookup the instance of
+`AuthenticationRepository` via the `BuildContext`.
+
+:::
 
 ### Login Form
 
@@ -533,8 +575,12 @@ it via a `Text` widget. In addition, when the logout button is tapped, an
 	title="lib/home/view/home_page.dart"
 />
 
-:::note `context.select((AuthenticationBloc bloc) => bloc.state.user.id)` will
-trigger updates if the user id changes. :::
+:::note
+
+`context.select((AuthenticationBloc bloc) => bloc.state.user.id)` will trigger
+updates if the user id changes.
+
+:::
 
 At this point we have a pretty solid login implementation and we have decoupled
 our presentation layer from the business logic layer by using Bloc.

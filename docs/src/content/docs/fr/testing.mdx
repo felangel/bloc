@@ -42,9 +42,13 @@ Ensuite, nous devons créer notre `main` ainsi que notre groupe de tests.
 
 <CounterBlocTestMainSnippet />
 
-:::note Les groupes servent à organiser des tests unitaires et à créer un
-contexte dans lequel vous pouvez partager un `setUp` et un `tearDown` communs à
-tous les tests du groupe. :::
+:::note
+
+Les groupes servent à organiser des tests unitaires et à créer un contexte dans
+lequel vous pouvez partager un `setUp` et un `tearDown` communs à tous les tests
+du groupe.
+
+:::
 
 Commençons par créer une instance de notre `CounterBloc` qui sera utilisée dans
 tous nos tests.
@@ -55,7 +59,11 @@ Maintenant, nous pouvons commencer à écrire des tests unitaires.
 
 <CounterBlocTestInitialStateSnippet />
 
-:::note Nous pouvons exécuter tous nos tests avec la commande `dart test`. :::
+:::note
+
+Nous pouvons exécuter tous nos tests avec la commande `dart test`.
+
+:::
 
 À ce stade, nous devrions avoir notre premier test réussi! Écrivons maintenant
 des tests plus complexes en utilisant le package

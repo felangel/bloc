@@ -34,10 +34,18 @@ import WeatherMainSnippet from '~/components/concepts/flutter-bloc/WeatherMainSn
 import WeatherAppSnippet from '~/components/concepts/flutter-bloc/WeatherAppSnippet.astro';
 import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSnippet.astro';
 
-:::note在开始 [`package:flutter_bloc`](https://pub.dev/packages/flutter_bloc)
-请详细阅读以下文档 :::
+:::note
 
-:::note所有 `flutter_bloc` 套件导出的Widget都与 Cubit 和 Bloc 实例集成。:::
+在开始 [`package:flutter_bloc`](https://pub.dev/packages/flutter_bloc)
+请详细阅读以下文档
+
+:::
+
+:::note
+
+所有 `flutter_bloc` 套件导出的Widget都与 Cubit 和 Bloc 实例集成。
+
+:::
 
 ## Bloc 组件
 
@@ -284,7 +292,11 @@ tree 中。如果您有多个 repository，则可以使用 `MultiRepositoryProvi
 `MultiRepositoryProvider` widgets。 `package:flutter_bloc` 从 `package:provider`
 中导出了 `ReadContext`、`WatchContext` 和 `SelectContext` 扩展。
 
-:::note查询更多关于 [`package:provider`](https://pub.dev/packages/provider). :::
+:::note
+
+查询更多关于 [`package:provider`](https://pub.dev/packages/provider).
+
+:::
 
 ### context.read
 
@@ -322,8 +334,12 @@ Widget build(BuildContext context) {
 以上的使用可能会导致UI 不会反应最新的状态变化的错误，因为即使状态改变了 `Text`
 widget 并不会被重新建立（rebuild），。
 
-:::caution使用 `BlocBuilder` 或者 `context.watch`
-以确保当状态改变时，UI 可以被正确地重新构建。:::
+:::caution
+
+使用 `BlocBuilder` 或者 `context.watch`
+以确保当状态改变时，UI 可以被正确地重新构建。
+
+:::
 
 ### context.watch
 
@@ -333,8 +349,11 @@ widget 并不会被重新建立（rebuild），。
 
 如果提供类型 T 的对象发生变化，context.watch 将会触发重新构建（rebuild）。
 
-:::caution `context.watch` 只能在 `StatelessWidget` 或 `State`
-类的 build 方法内部被访问。:::
+:::caution
+
+`context.watch` 只能在 `StatelessWidget` 或 `State` 类的 build 方法内部被访问。
+
+:::
 
 #### Usage
 
@@ -405,8 +424,12 @@ Widget build(BuildContext context) {
 }
 ```
 
-:::caution如果在 `build` 方法的根部使用 `context.watch`
-，当 bloc 的状态发生变化时，整个 Widget 都将被重新构建。:::
+:::caution
+
+如果在 `build` 方法的根部使用 `context.watch`
+，当 bloc 的状态发生变化时，整个 Widget 都将被重新构建。
+
+:::
 
 ### context.select
 
@@ -479,5 +502,9 @@ Widget build(BuildContext context) {
 }
 ```
 
-:::caution在 `build` 方法的根部使用 `context.select`
-将导致在选择范围发生变化时重新构建整个 Widget。:::
+:::caution
+
+在 `build` 方法的根部使用 `context.select`
+将导致在选择范围发生变化时重新构建整个 Widget。
+
+:::

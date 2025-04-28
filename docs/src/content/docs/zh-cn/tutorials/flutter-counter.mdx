@@ -74,7 +74,11 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 目前，我们仅重写了 `onChange` 来查看所有发生的状态变更。
 
-:::note `Bloc` 和 `Cubit` 的 `onChange` 工作方式是相同的。:::
+:::note
+
+`Bloc` 和 `Cubit` 的 `onChange` 工作方式是相同的。
+
+:::
 
 ## main.dart
 
@@ -99,11 +103,15 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 	title="lib/app.dart"
 />
 
-:::note我们扩展了 `MaterialApp` 因为 `CounterApp` _是_ 一个
+:::note
+
+我们扩展了 `MaterialApp` 因为 `CounterApp` _是_ 一个
 `MaterialApp`。在大多数情况下，我们会创建 `StatelessWidget` 或者
 `StatefulWidget` 实例并且在 `build`
 里进行组合。但是在这里没有部件需要组合，所以最简单的方式就是直接扩展
-`MaterialApp`。:::
+`MaterialApp`。
+
+:::
 
 接下来咱们看看 `CounterPage` ！
 
@@ -119,8 +127,11 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 	title="lib/counter/view/counter_page.dart"
 />
 
-:::note将 `Cubit`
-的创建和消费分开并解耦非常重要，这样可以让代码更加的易于测试和重用。:::
+:::note
+
+将 `Cubit` 的创建和消费分开并解耦非常重要，这样可以让代码更加的易于测试和重用。
+
+:::
 
 ## Counter Cubit
 
@@ -138,7 +149,9 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 	title="lib/counter/cubit/counter_cubit.dart"
 />
 
-:::tip使用
+:::tip
+
+使用
 [VSCode 插件](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
 或者 [IntelliJ 插件](https://plugins.jetbrains.com/plugin/12129-bloc)
 可以自动创建新的 cubits。:::
@@ -161,8 +174,12 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 任何的状态变化都会更新文本。此外， `context.read<CounterCubit>()` 用于查找最近的
 `CounterCubit` 实例。
 
-:::note只有 `Text` 部件被包装在 `BlocBuilder` 里，因为它是 `CounterCubit`
-状态变更时需要更新的唯一部件。避免包装不需要根据状态变更重新构建的部件。:::
+:::note
+
+只有 `Text` 部件被包装在 `BlocBuilder` 里，因为它是 `CounterCubit`
+状态变更时需要更新的唯一部件。避免包装不需要根据状态变更重新构建的部件。
+
+:::
 
 ## Barrel
 

@@ -35,11 +35,19 @@ import WeatherMainSnippet from '~/components/concepts/flutter-bloc/WeatherMainSn
 import WeatherAppSnippet from '~/components/concepts/flutter-bloc/WeatherAppSnippet.astro';
 import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSnippet.astro';
 
-:::note Please make sure to carefully read the following sections before working
-with [`package:flutter_bloc`](https://pub.dev/packages/flutter_bloc). :::
+:::note
 
-:::note All widgets exported by the `flutter_bloc` package integrate with both
-`Cubit` and `Bloc` instances. :::
+Please make sure to carefully read the following sections before working with
+[`package:flutter_bloc`](https://pub.dev/packages/flutter_bloc).
+
+:::
+
+:::note
+
+All widgets exported by the `flutter_bloc` package integrate with both `Cubit`
+and `Bloc` instances.
+
+:::
 
 ## Bloc Widgets
 
@@ -269,12 +277,19 @@ When instantiating a bloc, we can access the instance of a repository via
 
 <WeatherAppSnippet />
 
-:::tip If you have more than one repository, you can use
-`MultiRepositoryProvider` to provide multiple repository instances to the
-subtree. :::
+:::tip
 
-:::note Use the `dispose` callback to handle freeing any resources when the
-`RepositoryProvider` is unmounted. :::
+If you have more than one repository, you can use `MultiRepositoryProvider` to
+provide multiple repository instances to the subtree.
+
+:::
+
+:::note
+
+Use the `dispose` callback to handle freeing any resources when the
+`RepositoryProvider` is unmounted.
+
+:::
 
 [flutter_weather_link]:
 	https://github.com/felangel/bloc/blob/master/examples/flutter_weather
@@ -297,8 +312,11 @@ Internally, `package:flutter_bloc` uses `package:provider` to implement:
 `ReadContext`, `WatchContext` and `SelectContext`, extensions from
 `package:provider`.
 
-:::note Learn more about
-[`package:provider`](https://pub.dev/packages/provider). :::
+:::note
+
+Learn more about [`package:provider`](https://pub.dev/packages/provider).
+
+:::
 
 ### context.read
 
@@ -307,8 +325,12 @@ functionally equivalent to `BlocProvider.of<T>(context)`. `context.read` is most
 commonly used for retrieving a bloc instance in order to add an event within
 `onPressed` callbacks.
 
-:::note `context.read<T>()` does not listen to `T` -- if the provided `Object`
-of type `T` changes, `context.read` will not trigger a widget rebuild. :::
+:::note
+
+`context.read<T>()` does not listen to `T` -- if the provided `Object` of type
+`T` changes, `context.read` will not trigger a widget rebuild.
+
+:::
 
 #### Usage
 
@@ -333,8 +355,12 @@ Widget build(BuildContext context) {
 The above usage is error prone because the `Text` widget will not be rebuilt if
 the state of the bloc changes.
 
-:::caution Use `BlocBuilder` or `context.watch` instead in order to rebuild in
-response to state changes. :::
+:::caution
+
+Use `BlocBuilder` or `context.watch` instead in order to rebuild in response to
+state changes.
+
+:::
 
 ### context.watch
 
@@ -345,8 +371,12 @@ functionally equivalent to `BlocProvider.of<T>(context, listen: true)`.
 If the provided `Object` of type `T` changes, `context.watch` will trigger a
 rebuild.
 
-:::caution `context.watch` is only accessible within the `build` method of a
-`StatelessWidget` or `State` class. :::
+:::caution
+
+`context.watch` is only accessible within the `build` method of a
+`StatelessWidget` or `State` class.
+
+:::
 
 #### Usage
 
@@ -418,8 +448,12 @@ Widget build(BuildContext context) {
 }
 ```
 
-:::caution Using `context.watch` at the root of the `build` method will result
-in the entire widget being rebuilt when the bloc state changes. :::
+:::caution
+
+Using `context.watch` at the root of the `build` method will result in the
+entire widget being rebuilt when the bloc state changes.
+
+:::
 
 ### context.select
 
@@ -495,5 +529,9 @@ Widget build(BuildContext context) {
 }
 ```
 
-:::caution Using `context.select` at the root of the `build` method will result
-in the entire widget being rebuilt when the selection changes. :::
+:::caution
+
+Using `context.select` at the root of the `build` method will result in the
+entire widget being rebuilt when the selection changes.
+
+:::

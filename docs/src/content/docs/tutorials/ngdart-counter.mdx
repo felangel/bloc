@@ -56,8 +56,12 @@ create a custom class and we can co-locate the events and bloc.
 	title="lib/src/counter_page/counter_bloc.dart"
 />
 
-:::note Just from the class declaration we can tell that our `CounterBloc` will
-be taking `CounterEvents` as input and outputting integers. :::
+:::note
+
+Just from the class declaration we can tell that our `CounterBloc` will be
+taking `CounterEvents` as input and outputting integers.
+
+:::
 
 ## Counter App
 
@@ -89,13 +93,24 @@ Our `counter_page_component.dart` should look like:
 	title="lib/src/counter_page/counter_page_component.dart"
 />
 
-:::note We are able to access the `CounterBloc` instance using AngularDart's
-dependency injection system. Because we have registered it as a `Provider`,
-AngularDart can properly resolve `CounterBloc`. :::
+:::note
 
-:::note We are closing the `CounterBloc` in `ngOnDestroy`. :::
+We are able to access the `CounterBloc` instance using AngularDart's dependency
+injection system. Because we have registered it as a `Provider`, AngularDart can
+properly resolve `CounterBloc`.
 
-:::note We are importing the `BlocPipe` so that we can use it in our template.
+:::
+
+:::note
+
+We are closing the `CounterBloc` in `ngOnDestroy`.
+
+:::
+
+:::note
+
+We are importing the `BlocPipe` so that we can use it in our template.
+
 :::
 
 Lastly, our `counter_page_component.html` should look like:
@@ -105,8 +120,12 @@ Lastly, our `counter_page_component.html` should look like:
 	title="lib/src/counter_page/counter_page_component.html"
 />
 
-:::note We are using the `BlocPipe` so that we can display our `CounterBloc`
-state as it is updated. :::
+:::note
+
+We are using the `BlocPipe` so that we can display our `CounterBloc` state as it
+is updated.
+
+:::
 
 That's it! We've separated our presentation layer from our business logic layer.
 Our `CounterPageComponent` has no idea what happens when a user presses a

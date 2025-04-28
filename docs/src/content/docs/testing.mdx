@@ -42,9 +42,13 @@ Next, we need to create our `main` as well as our test group.
 
 <CounterBlocTestMainSnippet />
 
-:::note Groups are for organizing individual tests as well as for creating a
-context in which you can share a common `setUp` and `tearDown` across all of the
-individual tests. :::
+:::note
+
+Groups are for organizing individual tests as well as for creating a context in
+which you can share a common `setUp` and `tearDown` across all of the individual
+tests.
+
+:::
 
 Let's start by creating an instance of our `CounterBloc` which will be used
 across all of our tests.
@@ -55,7 +59,11 @@ Now we can start writing our individual tests.
 
 <CounterBlocTestInitialStateSnippet />
 
-:::note We can run all of our tests with the `dart test` command. :::
+:::note
+
+We can run all of our tests with the `dart test` command.
+
+:::
 
 At this point we should have our first passing test! Now let's write a more
 complex test using the [bloc_test](https://pub.dev/packages/bloc_test) package.

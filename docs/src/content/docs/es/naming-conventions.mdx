@@ -29,7 +29,11 @@ ya han ocurrido desde la perspectiva del bloc.
 Los eventos de carga inicial deben seguir la convención: `BlocSubject` +
 `Started`
 
-:::note La clase base del evento debe llamarse: `BlocSubject` + `Event`. :::
+:::note
+
+La clase base del evento debe llamarse: `BlocSubject` + `Event`.
+
+:::
 
 ### Ejemplos
 
@@ -58,8 +62,11 @@ los siguientes:
 
 `Initial` | `Success` | `Failure` | `InProgress`
 
-:::note Los estados iniciales deben seguir la convención: `BlocSubject` +
-`Initial`. :::
+:::note
+
+Los estados iniciales deben seguir la convención: `BlocSubject` + `Initial`.
+
+:::
 
 #### Clase Única
 
@@ -70,7 +77,10 @@ llamado `BlocSubject` + `Status` para representar el estado:
 
 `initial` | `success` | `failure` | `loading`.
 
-:::note La clase base del estado siempre debe llamarse: `BlocSubject` + `State`.
+:::note
+
+La clase base del estado siempre debe llamarse: `BlocSubject` + `State`.
+
 :::
 
 ### Ejemplos

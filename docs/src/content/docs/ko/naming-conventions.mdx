@@ -25,7 +25,10 @@ import StateExamplesBad1Snippet from '~/components/naming-conventions/StateExamp
 
 초기 로드 event는 다음의 규칙을 따라야 합니다: `BlocSubject` + `Started`
 
-:::note 기본이 되는 클래스 이름은 다음과 같아야 합니다: `BlocSubject` + `Event`.
+:::note
+
+기본이 되는 클래스 이름은 다음과 같아야 합니다: `BlocSubject` + `Event`.
+
 :::
 
 ### 예시
@@ -54,7 +57,11 @@ State를 여러 하위 클래스로 표현하는 경우 `State`는 다음 중 �
 
 `Initial` | `Success` | `Failure` | `InProgress`
 
-:::note 초기 state는 다음의 규칙을 따라야 합니다: `BlocSubject` + `Initial`. :::
+:::note
+
+초기 state는 다음의 규칙을 따라야 합니다: `BlocSubject` + `Initial`.
+
+:::
 
 #### 단일 클래스
 
@@ -65,8 +72,11 @@ State를 단일 기본 클래스로 표시할 때 `BlocSubject` + `Status`라는
 
 `initial` | `success` | `failure` | `loading`.
 
-:::note 기본이 되는 클래스 이름은 항상 다음과 같아야 합니다: `BlocSubject` +
-`State`. :::
+:::note
+
+기본이 되는 클래스 이름은 항상 다음과 같아야 합니다: `BlocSubject` + `State`.
+
+:::
 
 ### 예시
 

@@ -35,12 +35,19 @@ import WeatherMainSnippet from '~/components/concepts/flutter-bloc/WeatherMainSn
 import WeatherAppSnippet from '~/components/concepts/flutter-bloc/WeatherAppSnippet.astro';
 import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSnippet.astro';
 
-:::note Por favor, asegúrate de leer cuidadosamente las siguientes secciones
-antes de trabajar con
-[`package:flutter_bloc`](https://pub.dev/packages/flutter_bloc). :::
+:::note
 
-:::note Todos los widgets exportados por el paquete `flutter_bloc` se integran
-tanto con instancias de `Cubit` como de `Bloc`. :::
+Por favor, asegúrate de leer cuidadosamente las siguientes secciones antes de
+trabajar con [`package:flutter_bloc`](https://pub.dev/packages/flutter_bloc).
+
+:::
+
+:::note
+
+Todos los widgets exportados por el paquete `flutter_bloc` se integran tanto con
+instancias de `Cubit` como de `Bloc`.
+
+:::
 
 ## Widgets de Bloc
 
@@ -300,8 +307,11 @@ los widgets `BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` y
 `MultiRepositoryProvider`. `package:flutter_bloc` exporta las extensiones
 `ReadContext`, `WatchContext` y `SelectContext` de `package:provider`.
 
-:::note Aprende más sobre
-[`package:provider`](https://pub.dev/packages/provider). :::
+:::note
+
+Aprende más sobre [`package:provider`](https://pub.dev/packages/provider).
+
+:::
 
 ### context.read
 
@@ -310,8 +320,12 @@ funcionalmente equivalente a `BlocProvider.of<T>(context)`. `context.read` se
 usa más comúnmente para recuperar una instancia de bloc con el fin de agregar un
 evento dentro de las devoluciones de llamada `onPressed`.
 
-:::note `context.read<T>()` no escucha a `T` -- si el `Object` proporcionado del
-tipo `T` cambia, `context.read` no activará una reconstrucción del widget. :::
+:::note
+
+`context.read<T>()` no escucha a `T` -- si el `Object` proporcionado del tipo
+`T` cambia, `context.read` no activará una reconstrucción del widget.
+
+:::
 
 #### Uso
 
@@ -337,8 +351,12 @@ Widget build(BuildContext context) {
 El uso anterior es propenso a errores porque el widget `Text` no se reconstruirá
 si el estado del bloc cambia.
 
-:::caution Usa `BlocBuilder` o `context.watch` en su lugar para reconstruir en
-respuesta a cambios de estado. :::
+:::caution
+
+Usa `BlocBuilder` o `context.watch` en su lugar para reconstruir en respuesta a
+cambios de estado.
+
+:::
 
 ### context.watch
 
@@ -350,8 +368,12 @@ en la instancia. Es funcionalmente equivalente a
 Si el `Object` proporcionado del tipo `T` cambia, `context.watch` activará una
 reconstrucción.
 
-:::caution `context.watch` solo es accesible dentro del método `build` de una
-clase `StatelessWidget` o `State`. :::
+:::caution
+
+`context.watch` solo es accesible dentro del método `build` de una clase
+`StatelessWidget` o `State`.
+
+:::
 
 #### Uso
 
@@ -423,8 +445,12 @@ Widget build(BuildContext context) {
 }
 ```
 
-:::caution Usar `context.watch` en la raíz del método `build` resultará en que
-todo el widget se reconstruya cuando el estado del bloc cambie. :::
+:::caution
+
+Usar `context.watch` en la raíz del método `build` resultará en que todo el
+widget se reconstruya cuando el estado del bloc cambie.
+
+:::
 
 ### context.select
 
@@ -500,5 +526,9 @@ Widget build(BuildContext context) {
 }
 ```
 
-:::caution Usar `context.select` en la raíz del método `build` resultará en que
-todo el widget se reconstruya cuando la selección cambie. :::
+:::caution
+
+Usar `context.select` en la raíz del método `build` resultará en que todo el
+widget se reconstruya cuando la selección cambie.
+
+:::

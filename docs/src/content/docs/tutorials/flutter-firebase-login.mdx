@@ -79,8 +79,12 @@ surface via
 	title="packages/authentication_repository/lib/authentication_repository.dart"
 />
 
-:::note The `authentication_repository` package will be exposing an
-`AuthenticationRepository` as well as models. :::
+:::note
+
+The `authentication_repository` package will be exposing an
+`AuthenticationRepository` as well as models.
+
+:::
 
 Next, let's take a look at the models.
 
@@ -90,17 +94,29 @@ The `User` model will describe a user in the context of the authentication
 domain. For the purposes of this example, a user will consist of an `email`,
 `id`, `name`, and `photo`.
 
-:::note It's completely up to you to define what a user needs to look like in
-the context of your domain. :::
+:::note
+
+It's completely up to you to define what a user needs to look like in the
+context of your domain.
+
+:::
 
 [user.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/authentication_repository/lib/src/models/user.dart ':include')
 
-:::note The `User` class is extending
-[equatable](https://pub.dev/packages/equatable) in order to override equality
-comparisons so that we can compare different instances of `User` by value. :::
+:::note
 
-:::tip It's useful to define a `static` empty `User` so that we don't have to
-handle `null` Users and can always work with a concrete `User` object. :::
+The `User` class is extending [equatable](https://pub.dev/packages/equatable) in
+order to override equality comparisons so that we can compare different
+instances of `User` by value.
+
+:::
+
+:::tip
+
+It's useful to define a `static` empty `User` so that we don't have to handle
+`null` Users and can always work with a concrete `User` object.
+
+:::
 
 ### Repository
 
@@ -117,9 +133,13 @@ to in order to be notified of when a `User` changes. In addition, it exposes
 methods to `signUp`, `logInWithGoogle`, `logInWithEmailAndPassword`, and
 `logOut`.
 
-:::note The `AuthenticationRepository` is also responsible for handling
-low-level errors that can occur in the data layer and exposes a clean, simple
-set of errors that align with the domain. :::
+:::note
+
+The `AuthenticationRepository` is also responsible for handling low-level errors
+that can occur in the data layer and exposes a clean, simple set of errors that
+align with the domain.
+
+:::
 
 That's it for the `AuthenticationRepository`. Next, let's take a look at how to
 integrate it into the Flutter project we created.
@@ -131,9 +151,13 @@ We need to follow the
 in order to hook up our application to Firebase and enable
 [google_sign_in](https://pub.dev/packages/google_sign_in).
 
-:::caution Remember to update the `google-services.json` on Android and the
+:::caution
+
+Remember to update the `google-services.json` on Android and the
 `GoogleService-Info.plist` & `Info.plist` on iOS, otherwise the application will
-crash. :::
+crash.
+
+:::
 
 ## Project Dependencies
 
@@ -155,9 +179,12 @@ Then install all of the dependencies:
 
 <FlutterPubGetSnippet />
 
-:::note We are depending on the `authentication_repository` package via path
-which will allow us to iterate quickly while still maintaining a clear
-separation. :::
+:::note
+
+We are depending on the `authentication_repository` package via path which will
+allow us to iterate quickly while still maintaining a clear separation.
+
+:::
 
 ## main.dart
 
@@ -171,8 +198,12 @@ The `main.dart` file can be replaced with the following:
 It's simply setting up some global configuration for the application and calling
 `runApp` with an instance of `App`.
 
-:::note We're injecting a single instance of `AuthenticationRepository` into the
-`App` and it is an explicit constructor dependency. :::
+:::note
+
+We're injecting a single instance of `AuthenticationRepository` into the `App`
+and it is an explicit constructor dependency.
+
+:::
 
 ## App
 
@@ -233,13 +264,21 @@ canceling it when either `AppBloc` or the user stream is closed.
 If the user stream emits an error, `addError` forwards the error and stack trace
 to any `BlocObserver` listening.
 
-:::caution If `onError` is omitted, any errors on the user stream are considered
-unhandled, and will be thrown by `onEach`. As a result, the subscription to the
-user stream will be canceled. :::
+:::caution
 
-:::tip A [`BlocObserver`](/bloc-concepts/#blocobserver-1) is great for logging
-Bloc events, errors, and state changes especially in the context analytics and
-crash reporting. :::
+If `onError` is omitted, any errors on the user stream are considered unhandled,
+and will be thrown by `onEach`. As a result, the subscription to the user stream
+will be canceled.
+
+:::
+
+:::tip
+
+A [`BlocObserver`](/bloc-concepts/#blocobserver-1) is great for logging Bloc
+events, errors, and state changes especially in the context analytics and crash
+reporting.
+
+:::
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/app/bloc/app_bloc.dart"
@@ -280,9 +319,13 @@ The `LoginPage` is responsible for creating and providing an instance of
 	title="lib/login/view/login_page.dart"
 />
 
-:::tip It's very important to keep the creation of blocs/cubits separate from
-where they are consumed. This will allow you to easily inject mock instances and
-test your view in isolation. :::
+:::tip
+
+It's very important to keep the creation of blocs/cubits separate from where
+they are consumed. This will allow you to easily inject mock instances and test
+your view in isolation.
+
+:::
 
 ## Login Cubit
 
@@ -311,10 +354,14 @@ sign the user in either via credentials or via google sign in.
 	title="lib/login/cubit/login_cubit.dart"
 />
 
-:::note We used a `Cubit` instead of a `Bloc` here because the `LoginState` is
-fairly simple and localized. Even without events, we can still have a fairly
-good sense of what happened just by looking at the changes from one state to
-another and our code is a lot simpler and more concise. :::
+:::note
+
+We used a `Cubit` instead of a `Bloc` here because the `LoginState` is fairly
+simple and localized. Even without events, we can still have a fairly good sense
+of what happened just by looking at the changes from one state to another and
+our code is a lot simpler and more concise.
+
+:::
 
 ## Login Form
 
@@ -343,8 +390,12 @@ the `SignUpCubit` to the `SignUpForm` (exactly like in `LoginPage`).
 	title="lib/sign_up/view/sign_up_page.dart"
 />
 
-:::note Just as in the `LoginCubit`, the `SignUpCubit` has a dependency on the
-`AuthenticationRepository` in order to create new user accounts. :::
+:::note
+
+Just as in the `LoginCubit`, the `SignUpCubit` has a dependency on the
+`AuthenticationRepository` in order to create new user accounts.
+
+:::
 
 ## Sign Up Cubit
 
@@ -396,14 +447,22 @@ tapping the exit icon in the `AppBar`.
 	title="lib/home/view/home_page.dart"
 />
 
-:::note A `widgets` directory was created alongside the `view` directory within
-the `home` feature for reusable components that are specific to that particular
-feature. In this case a simple `Avatar` widget is exported and used within the
-`HomePage`. :::
+:::note
 
-:::note When the logout `IconButton` is tapped, an
-`AuthenticationLogoutRequested` event is added to the `AuthenticationBloc` which
-signs the user out and navigates them back to the `LoginPage`. :::
+A `widgets` directory was created alongside the `view` directory within the
+`home` feature for reusable components that are specific to that particular
+feature. In this case a simple `Avatar` widget is exported and used within the
+`HomePage`.
+
+:::
+
+:::note
+
+When the logout `IconButton` is tapped, an `AuthenticationLogoutRequested` event
+is added to the `AuthenticationBloc` which signs the user out and navigates them
+back to the `LoginPage`.
+
+:::
 
 At this point we have a pretty solid login implementation using Firebase and we
 have decoupled our presentation layer from the business logic layer by using the

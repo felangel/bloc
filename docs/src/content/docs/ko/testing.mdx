@@ -41,8 +41,12 @@ Bloc은 테스트하기가 매우 쉽도록 설계되었습니다. 이 섹션에
 
 <CounterBlocTestMainSnippet />
 
-:::note 그룹은 개별 테스트를 구성하고 모든 개별 테스트에서 공통 `setUp` 및
-`tearDown`을 공유할 수 있는 context를 생성하기 위한 것입니다. :::
+:::note
+
+그룹은 개별 테스트를 구성하고 모든 개별 테스트에서 공통 `setUp` 및 `tearDown`을
+공유할 수 있는 context를 생성하기 위한 것입니다.
+
+:::
 
 모든 테스트에서 사용될 `CounterBloc`의 인스턴스를 생성하는 것부터 시작해
 보겠습니다.
@@ -53,7 +57,11 @@ Bloc은 테스트하기가 매우 쉽도록 설계되었습니다. 이 섹션에
 
 <CounterBlocTestInitialStateSnippet />
 
-:::note `dart test` 명령어를 사용하여 모든 테스트를 실행할 수 있습니다. :::
+:::note
+
+`dart test` 명령어를 사용하여 모든 테스트를 실행할 수 있습니다.
+
+:::
 
 이 시점에서 우리는 첫 번째 통과된 테스트를 받아야 합니다! 이제
 [bloc_test](https://pub.dev/packages/bloc_test) 패키지를 사용하여 좀 더 복잡한

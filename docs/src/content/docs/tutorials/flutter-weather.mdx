@@ -221,7 +221,11 @@ Let's add these dependencies to the `pubspec.yaml`.
 	title="packages/open_meteo_api/pubspec.yaml"
 />
 
-:::note Remember to run `flutter pub get` after adding the dependencies. :::
+:::note
+
+Remember to run `flutter pub get` after adding the dependencies.
+
+:::
 
 ### (De)Serialization
 
@@ -359,11 +363,15 @@ We will be creating a test file for the api client as well as the two models.
 Next, let's test our API client. We should test to ensure that our API client
 handles both API calls correctly, including edge cases.
 
-:::note We don't want our tests to make real API calls since our goal is to test
-the API client logic (including all edge cases) and not the API itself. In order
-to have a consistent, controlled test environment, we will use
+:::note
+
+We don't want our tests to make real API calls since our goal is to test the API
+client logic (including all edge cases) and not the API itself. In order to have
+a consistent, controlled test environment, we will use
 [mocktail](https://github.com/felangel/mocktail) (which we added to the
-pubspec.yaml file earlier) to mock the `http` client. :::
+pubspec.yaml file earlier) to mock the `http` client.
+
+:::
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/test/open_meteo_api_client_test.dart"
@@ -398,8 +406,12 @@ We will use the same packages as in the `open_meteo_api` package including the
 `open_meteo_api` package from the last step. Update your `pubspec.yaml` and run
 `flutter pub get`.
 
-:::note We're using a `path` to specify the location of the `open_meteo_api`
-which allows us to treat it just like an external package from `pub.dev`. :::
+:::note
+
+We're using a `path` to specify the location of the `open_meteo_api` which
+allows us to treat it just like an external package from `pub.dev`.
+
+:::
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/pubspec.yaml"
@@ -461,11 +473,15 @@ abstracts the data provider. In this case, the `WeatherRepository` will have a
 dependency on the `WeatherApiClient` and expose a single public method,
 `getWeather(String city)`.
 
-:::note Consumers of the `WeatherRepository` are not privy to the underlying
+:::note
+
+Consumers of the `WeatherRepository` are not privy to the underlying
 implementation details such as the fact that two network requests are made to
 the weather API. The goal of the `WeatherRepository` is to separate the "what"
 from the "how" -- in other words, we want to have a way to fetch weather for a
-given city, but don't care about how or where that data is coming from. :::
+given city, but don't care about how or where that data is coming from.
+
+:::
 
 #### Setup
 
@@ -508,11 +524,15 @@ In the business logic layer, we will be consuming the weather domain model from
 the `WeatherRepository` and exposing a feature-level model which will be
 surfaced to the user via the UI.
 
-:::note This is the third different type of weather model we're implementing. In
-the API client, our weather model contained all the info returned by the API. In
-the repository layer, our weather model contained only the abstracted model
-based on our business case. In this layer, our weather model will contain
-relevant information needed specifically for the current feature set. :::
+:::note
+
+This is the third different type of weather model we're implementing. In the API
+client, our weather model contained all the info returned by the API. In the
+repository layer, our weather model contained only the abstracted model based on
+our business case. In this layer, our weather model will contain relevant
+information needed specifically for the current feature set.
+
+:::
 
 ### Setup
 
@@ -592,8 +612,12 @@ Then, let's create a top-level weather barrel file
 We will use `HydratedCubit` to enable our app to remember its application state,
 even after it's been closed and reopened.
 
-:::note `HydratedCubit` is an extension of `Cubit` which handles persisting and
-restoring state across sessions. :::
+:::note
+
+`HydratedCubit` is an extension of `Cubit` which handles persisting and
+restoring state across sessions.
+
+:::
 
 #### Weather State
 
@@ -639,7 +663,9 @@ will expose the following methods:
 	title="lib/weather/cubit/weather_cubit.dart"
 />
 
-:::note Remember to generate the (de)serialization code via:
+:::note
+
+Remember to generate the (de)serialization code via:
 
 <BuildRunnerBuildSnippet />
 :::
@@ -660,9 +686,13 @@ Let's add the `test`, `bloc_test`, and `mocktail` packages to the
 	title="pubspec.yaml"
 />
 
-:::note The [bloc_test](https://pub.dev/packages/bloc_test) package allows us to
-easily prepare our blocs for testing, handle state changes, and check results in
-a consistent way. :::
+:::note
+
+The [bloc_test](https://pub.dev/packages/bloc_test) package allows us to easily
+prepare our blocs for testing, handle state changes, and check results in a
+consistent way.
+
+:::
 
 #### Weather Cubit Tests
 
@@ -789,10 +819,14 @@ states of the various cubits and ensure that the UI reacts correctly.
 	title="test/weather/view/weather_page_test.dart"
 />
 
-:::note We're using a `MockWeatherCubit` together with the `when` API from
-`mocktail` in order to stub the state of the cubit in each of the test cases.
-This allows us to simulate all states and verify the UI behaves correctly under
-all circumstances. :::
+:::note
+
+We're using a `MockWeatherCubit` together with the `when` API from `mocktail` in
+order to stub the state of the cubit in each of the test cases. This allows us
+to simulate all states and verify the UI behaves correctly under all
+circumstances.
+
+:::
 
 ## Summary
 

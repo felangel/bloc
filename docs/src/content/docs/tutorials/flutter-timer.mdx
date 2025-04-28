@@ -49,8 +49,12 @@ We can then replace the contents of pubspec.yaml with:
 	title="pubspec.yaml"
 />
 
-:::note We'll be using the [flutter_bloc](https://pub.dev/packages/flutter_bloc)
-and [equatable](https://pub.dev/packages/equatable) packages in this app. :::
+:::note
+
+We'll be using the [flutter_bloc](https://pub.dev/packages/flutter_bloc) and
+[equatable](https://pub.dev/packages/equatable) packages in this app.
+
+:::
 
 Next, run `flutter pub get` to install all the dependencies.
 
@@ -117,10 +121,14 @@ that the user can perform. For example:
 In order to keep all of our bloc files together, let's create a bloc directory
 with `bloc/timer_state.dart`.
 
-:::tip You can use the
+:::tip
+
+You can use the
 [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) or
 [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
-extensions to autogenerate the following bloc files for you. :::
+extensions to autogenerate the following bloc files for you.
+
+:::
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/timer/bloc/timer_state.dart"
@@ -310,8 +318,12 @@ like:
 
 ![BlocBuilder buildWhen demo](https://cdn-images-1.medium.com/max/1600/1*YyjpH1rcZlYWxCX308l_Ew.gif)
 
-:::note Even though the `Text` widget is rebuilt on every tick, we only rebuild
-the `Actions` if they need to be rebuilt. :::
+:::note
+
+Even though the `Text` widget is rebuilt on every tick, we only rebuild the
+`Actions` if they need to be rebuilt.
+
+:::
 
 ### Background
 

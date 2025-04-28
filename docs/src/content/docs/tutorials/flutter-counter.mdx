@@ -83,7 +83,11 @@ Let's create `lib/counter_observer.dart`:
 In this case, we're only overriding `onChange` to see all state changes that
 occur.
 
-:::note `onChange` works the same way for both `Bloc` and `Cubit` instances. :::
+:::note
+
+`onChange` works the same way for both `Bloc` and `Cubit` instances.
+
+:::
 
 ## main.dart
 
@@ -109,10 +113,13 @@ Let's create `lib/app.dart`:
 	title="lib/app.dart"
 />
 
-:::note We are extending `MaterialApp` because `CounterApp` _is_ a
-`MaterialApp`. In most cases, we're going to be creating `StatelessWidget` or
-`StatefulWidget` instances and composing widgets in `build` but in this case
-there are no widgets to compose so it's simpler to just extend `MaterialApp`.
+:::note
+
+We are extending `MaterialApp` because `CounterApp` _is_ a `MaterialApp`. In
+most cases, we're going to be creating `StatelessWidget` or `StatefulWidget`
+instances and composing widgets in `build` but in this case there are no widgets
+to compose so it's simpler to just extend `MaterialApp`.
+
 :::
 
 Let's take a look at `CounterPage` next!
@@ -129,9 +136,13 @@ will look at next) and providing it to the `CounterView`.
 	title="lib/counter/view/counter_page.dart"
 />
 
-:::note It's important to separate or decouple the creation of a `Cubit` from
-the consumption of a `Cubit` in order to have code that is much more testable
-and reusable. :::
+:::note
+
+It's important to separate or decouple the creation of a `Cubit` from the
+consumption of a `Cubit` in order to have code that is much more testable and
+reusable.
+
+:::
 
 ## Counter Cubit
 
@@ -150,10 +161,14 @@ initial state is `0`.
 	title="lib/counter/cubit/counter_cubit.dart"
 />
 
-:::tip Use the
+:::tip
+
+Use the
 [VSCode Extension](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
 or [IntelliJ Plugin](https://plugins.jetbrains.com/plugin/12129-bloc) to create
-new cubits automatically. :::
+new cubits automatically.
+
+:::
 
 Next, let's take a look at the `CounterView` which will be responsible for
 consuming the state and interacting with the `CounterCubit`.
@@ -175,10 +190,14 @@ any time the `CounterCubit` state changes. In addition,
 `context.read<CounterCubit>()` is used to look-up the closest `CounterCubit`
 instance.
 
-:::note Only the `Text` widget is wrapped in a `BlocBuilder` because that is the
-only widget that needs to be rebuilt in response to state changes in the
+:::note
+
+Only the `Text` widget is wrapped in a `BlocBuilder` because that is the only
+widget that needs to be rebuilt in response to state changes in the
 `CounterCubit`. Avoid unnecessarily wrapping widgets that don't need to be
-rebuilt when a state changes. :::
+rebuilt when a state changes.
+
+:::
 
 ## Barrel
 

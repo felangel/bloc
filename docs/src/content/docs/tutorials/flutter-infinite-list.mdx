@@ -88,8 +88,12 @@ split up into respective folders with barrel files, indicated by the asterisk
 For this demo application, we'll be using
 [jsonplaceholder](http://jsonplaceholder.typicode.com) as our data source.
 
-:::note jsonplaceholder is an online REST API which serves fake data; it's very
-useful for building prototypes. :::
+:::note
+
+jsonplaceholder is an online REST API which serves fake data; it's very useful
+for building prototypes.
+
+:::
 
 Open a new tab in your browser and visit
 https://jsonplaceholder.typicode.com/posts?_start=0&_limit=2 to see what the API
@@ -97,8 +101,12 @@ returns.
 
 <PostsJsonSnippet />
 
-:::note In our url we specified the start and limit as query parameters to the
-GET request. :::
+:::note
+
+In our url we specified the start and limit as query parameters to the GET
+request.
+
+:::
 
 Great, now that we know what our data is going to look like, let's create the
 model.
@@ -114,11 +122,15 @@ Create `post.dart` and let's get to work creating the model of our Post object.
 
 `Post` is just a class with an `id`, `title`, and `body`.
 
-:::note We extend [`Equatable`](https://pub.dev/packages/equatable) so that we
-can compare `Posts`. Without this, we would need to manually change our class to
+:::note
+
+We extend [`Equatable`](https://pub.dev/packages/equatable) so that we can
+compare `Posts`. Without this, we would need to manually change our class to
 override equality and hashCode so that we could tell the difference between two
 `Posts` objects. See [the package](https://pub.dev/packages/equatable) for more
-details. :::
+details.
+
+:::
 
 Now that we have our `Post` object model, let's start working on the Business
 Logic Component (bloc).
@@ -167,9 +179,12 @@ We can now create `bloc/post_state.dart` and implement it like so.
 	title="lib/posts/bloc/post_state.dart"
 />
 
-:::note We implemented `copyWith` so that we can copy an instance of
-`PostSuccess` and update zero or more properties conveniently (this will come in
-handy later). :::
+:::note
+
+We implemented `copyWith` so that we can copy an instance of `PostSuccess` and
+update zero or more properties conveniently (this will come in handy later).
+
+:::
 
 Now that we have our `Events` and `States` implemented, we can create our
 `PostBloc`.
@@ -184,8 +199,12 @@ Let's create `post_bloc.dart` and create our empty `PostBloc`.
 
 <PostBlocInitialStateSnippet />
 
-:::note Just from the class declaration we can tell that our PostBloc will be
-taking PostEvents as input and outputting PostStates. :::
+:::note
+
+Just from the class declaration we can tell that our PostBloc will be taking
+PostEvents as input and outputting PostStates.
+
+:::
 
 Next, we need to register an event handler to handle incoming `PostFetched`
 events. In response to a `PostFetched` event, we will call `_fetchPosts` to
@@ -213,12 +232,20 @@ One optimization we can make is to `throttle` the `PostFetched` event in order
 to prevent spamming our API unnecessarily. We can do this by using the
 `transform` parameter when we register the `_onFetched` event handler.
 
-:::note Passing a `transformer` to `on<PostFetched>` allows us to customize how
-events are processed. :::
+:::note
 
-:::note Make sure to import
+Passing a `transformer` to `on<PostFetched>` allows us to customize how events
+are processed.
+
+:::
+
+:::note
+
+Make sure to import
 [`package:stream_transform`](https://pub.dev/packages/stream_transform) to use
-the `throttle` api. :::
+the `throttle` api.
+
+:::
 
 <PostBlocTransformerSnippet />
 
@@ -268,10 +295,14 @@ hook up to our `PostBloc`.
 	title="lib/posts/view/posts_list.dart"
 />
 
-:::note `PostsList` is a `StatefulWidget` because it will need to maintain a
+:::note
+
+`PostsList` is a `StatefulWidget` because it will need to maintain a
 `ScrollController`. In `initState`, we add a listener to our `ScrollController`
 so that we can respond to scroll events. We also access our `PostBloc` instance
-via `context.read<PostBloc>()`. :::
+via `context.read<PostBloc>()`.
+
+:::
 
 Moving along, our build method returns a `BlocBuilder`. `BlocBuilder` is a
 Flutter widget from the
@@ -279,8 +310,12 @@ Flutter widget from the
 building a widget in response to new bloc states. Any time our `PostBloc` state
 changes, our builder function will be called with the new `PostState`.
 
-:::caution We need to remember to clean up after ourselves and dispose of our
-`ScrollController` when the StatefulWidget is disposed. :::
+:::caution
+
+We need to remember to clean up after ourselves and dispose of our
+`ScrollController` when the StatefulWidget is disposed.
+
+:::
 
 Whenever the user scrolls, we calculate how far you have scrolled down the page
 and if our distance is ≥ 90% of our `maxScrollextent` we add a `PostFetched`
@@ -310,8 +345,11 @@ One added bonus of using the bloc library is that we can have access to all
 
 The change from one state to another is called a `Transition`.
 
-:::note A `Transition` consists of the current state, the event, and the next
-state. :::
+:::note
+
+A `Transition` consists of the current state, the event, and the next state.
+
+:::
 
 Even though in this application we only have one bloc, it's fairly common in
 larger applications to have many blocs managing different parts of the
@@ -325,15 +363,23 @@ simply create our own `BlocObserver`.
 	title="lib/simple_bloc_observer.dart"
 />
 
-:::note All we need to do is extend `BlocObserver` and override the
-`onTransition` method. :::
+:::note
+
+All we need to do is extend `BlocObserver` and override the `onTransition`
+method.
+
+:::
 
 Now every time a Bloc `Transition` occurs we can see the transition printed to
 the console.
 
-:::note In practice, you can create different `BlocObservers` and because every
-state change is recorded, we are able to very easily instrument our applications
-and track all user interactions and state changes in one place! :::
+:::note
+
+In practice, you can create different `BlocObservers` and because every state
+change is recorded, we are able to very easily instrument our applications and
+track all user interactions and state changes in one place!
+
+:::
 
 That's all there is to it! We've now successfully implemented an infinite list
 in flutter using the [bloc](https://pub.dev/packages/bloc) and

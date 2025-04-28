@@ -34,11 +34,19 @@ import WeatherMainSnippet from '~/components/concepts/flutter-bloc/WeatherMainSn
 import WeatherAppSnippet from '~/components/concepts/flutter-bloc/WeatherAppSnippet.astro';
 import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSnippet.astro';
 
-:::note [`package:flutter_bloc`](https://pub.dev/packages/flutter_bloc)을
-사용하기 전에 다음 섹션을 주의 깊게 읽어주세요. :::
+:::note
 
-:::note `flutter_bloc` 패키지에서 export된 모든 위젯은 `Cubit` 및 `Bloc`
-인스턴스와 모두 통합됩니다. :::
+[`package:flutter_bloc`](https://pub.dev/packages/flutter_bloc)을 사용하기 전에
+다음 섹션을 주의 깊게 읽어주세요.
+
+:::
+
+:::note
+
+`flutter_bloc` 패키지에서 export된 모든 위젯은 `Cubit` 및 `Bloc` 인스턴스와 모두
+통합됩니다.
+
+:::
 
 ## Bloc Widgets
 
@@ -288,8 +296,12 @@ Dart 2.7에 도입된
 `package:provider`의 확장인 `ReadContext`, `WatchContext` 그리고
 `SelectContext`를 export 합니다.
 
-:::note [`package:provider`](https://pub.dev/packages/provider)에 대해 자세히
-알아보세요. :::
+:::note
+
+[`package:provider`](https://pub.dev/packages/provider)에 대해 자세히
+알아보세요.
+
+:::
 
 ### context.read
 
@@ -298,8 +310,12 @@ Dart 2.7에 도입된
 내에 event를 추가하기 위해 bloc 인스턴스를 검색하는 데 가장 일반적으로
 사용됩니다.
 
-:::note `context.read<T>()`는 `T`를 listen하지 않습니다. 제공된 `T` 타입의
-`Object`가 변경되면 `context.read`는 위젯 리빌드를 촉발하지 않습니다. :::
+:::note
+
+`context.read<T>()`는 `T`를 listen하지 않습니다. 제공된 `T` 타입의 `Object`가
+변경되면 `context.read`는 위젯 리빌드를 촉발하지 않습니다.
+
+:::
 
 #### 사용법
 
@@ -324,8 +340,12 @@ Widget build(BuildContext context) {
 위의 사용법은 bloc의 state가 변경되어도 `Text` 위젯이 다시 리빌드되지 않기
 때문에 오류가 발생하기 쉽습니다.
 
-:::caution State 변경에 따라 다시 빌드하려면 `BlocBuilder` 또는 `context.watch`
-를 대신 사용하세요. :::
+:::caution
+
+State 변경에 따라 다시 빌드하려면 `BlocBuilder` 또는 `context.watch` 를 대신
+사용하세요.
+
+:::
 
 ### context.watch
 
@@ -336,8 +356,12 @@ Widget build(BuildContext context) {
 제공된 `T` 타입의 `Object`가 변경되면 `context.watch`는 위젯 리빌드를
 촉발합니다.
 
-:::caution `context.watch`는 `StatelessWidget` 또는 `State` 클래스의 `build`
-메서드 내에서만 접근할 수 있습니다. :::
+:::caution
+
+`context.watch`는 `StatelessWidget` 또는 `State` 클래스의 `build` 메서드
+내에서만 접근할 수 있습니다.
+
+:::
 
 #### 사용법
 
@@ -409,8 +433,12 @@ Widget build(BuildContext context) {
 }
 ```
 
-:::caution `build` 메서드의 root에서 `context.watch`를 사용하면 bloc state가
-변경될 때 전체 위젯이 다시 빌드됩니다. :::
+:::caution
+
+`build` 메서드의 root에서 `context.watch`를 사용하면 bloc state가 변경될 때 전체
+위젯이 다시 빌드됩니다.
+
+:::
 
 ### context.select
 
@@ -486,5 +514,9 @@ Widget build(BuildContext context) {
 }
 ```
 
-:::caution `build` 메서드의 root에서 `context.select`를 사용하면 bloc state가
-변경될 때 전체 위젯이 다시 빌드됩니다. :::
+:::caution
+
+`build` 메서드의 root에서 `context.select`를 사용하면 bloc state가 변경될 때
+전체 위젯이 다시 빌드됩니다.
+
+:::

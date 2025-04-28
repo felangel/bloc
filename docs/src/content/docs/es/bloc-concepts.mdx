@@ -48,8 +48,12 @@ import AuthenticationTransitionSnippet from '~/components/concepts/bloc/Authenti
 import AuthenticationChangeSnippet from '~/components/concepts/bloc/AuthenticationChangeSnippet.astro';
 import DebounceEventTransformerSnippet from '~/components/concepts/bloc/DebounceEventTransformerSnippet.astro';
 
-:::note Por favor, asegúrate de leer cuidadosamente las siguientes secciones
-antes de trabajar con [`package:bloc`](https://pub.dev/packages/bloc). :::
+:::note
+
+Por favor, asegúrate de leer cuidadosamente las siguientes secciones antes de
+trabajar con [`package:bloc`](https://pub.dev/packages/bloc).
+
+:::
 
 Hay varios conceptos clave que son críticos para entender cómo usar el paquete
 bloc.
@@ -59,9 +63,13 @@ también trabajaremos en cómo se aplicarían a una aplicación de contador.
 
 ## Streams
 
-:::note Consulta la
+:::note
+
+Consulta la
 [Documentación oficial de Dart](https://dart.dev/tutorials/language/streams)
-para obtener más información sobre `Streams`. :::
+para obtener más información sobre `Streams`.
+
+:::
 
 Un stream es una secuencia de datos asíncronos.
 
@@ -116,8 +124,12 @@ Los estados son la salida de un `Cubit` y representan una parte del estado de tu
 aplicación. Los componentes de la interfaz de usuario pueden ser notificados de
 los estados y redibujar partes de sí mismos en función del estado actual.
 
-:::note Para obtener más información sobre los orígenes de `Cubit`, consulta
-[el siguiente issue](https://github.com/felangel/cubit/issues/69). :::
+:::note
+
+Para obtener más información sobre los orígenes de `Cubit`, consulta
+[el siguiente issue](https://github.com/felangel/cubit/issues/69).
+
+:::
 
 ### Creando un Cubit
 
@@ -155,8 +167,12 @@ llamado `increment` que puede ser llamado externamente para notificar al
 acceder al estado actual del `Cubit` mediante el getter `state` y emitir un
 nuevo estado sumando 1 al estado actual.
 
-:::caution El método `emit` es protegido, lo que significa que solo debe ser
-usado dentro de un `Cubit`. :::
+:::caution
+
+El método `emit` es protegido, lo que significa que solo debe ser usado dentro
+de un `Cubit`.
+
+:::
 
 ### Usando un Cubit
 
@@ -185,11 +201,19 @@ a imprimir en cada cambio de estado. Luego invocamos la función `increment` que
 emitirá un nuevo estado. Por último, llamamos a `cancel` en la suscripción
 cuando ya no queremos recibir actualizaciones y cerramos el `Cubit`.
 
-:::note `await Future.delayed(Duration.zero)` se agrega para este ejemplo para
-evitar cancelar la suscripción inmediatamente. :::
+:::note
 
-:::caution Solo se recibirán cambios de estado subsecuentes al llamar a `listen`
-en un `Cubit`. :::
+`await Future.delayed(Duration.zero)` se agrega para este ejemplo para evitar
+cancelar la suscripción inmediatamente.
+
+:::
+
+:::caution
+
+Solo se recibirán cambios de estado subsecuentes al llamar a `listen` en un
+`Cubit`.
+
+:::
 
 ### Observando un Cubit
 
@@ -207,8 +231,12 @@ El ejemplo anterior imprimiría:
 
 <CounterCubitOnChangeOutputSnippet />
 
-:::note Un `Change` ocurre justo antes de que el estado del `Cubit` se
-actualice. Un `Change` consiste en el `currentState` y el `nextState`. :::
+:::note
+
+Un `Change` ocurre justo antes de que el estado del `Cubit` se actualice. Un
+`Change` consiste en el `currentState` y el `nextState`.
+
+:::
 
 #### BlocObserver
 
@@ -222,8 +250,12 @@ podemos crear nuestro propio `BlocObserver`.
 
 <SimpleBlocObserverOnChangeSnippet />
 
-:::note Todo lo que necesitamos hacer es extender `BlocObserver` y sobrescribir
-el método `onChange`. :::
+:::note
+
+Todo lo que necesitamos hacer es extender `BlocObserver` y sobrescribir el
+método `onChange`.
+
+:::
 
 Para usar el `SimpleBlocObserver`, solo necesitamos ajustar la función `main`:
 
@@ -233,11 +265,19 @@ El fragmento anterior imprimiría:
 
 <SimpleBlocObserverOnChangeOutputSnippet />
 
-:::note La sobrescritura interna de `onChange` se llama primero, lo que llama a
-`super.onChange` notificando al `onChange` en el `BlocObserver`. :::
+:::note
 
-:::tip En `BlocObserver` tenemos acceso a la instancia del `Cubit` además del
-`Change` en sí. :::
+La sobrescritura interna de `onChange` se llama primero, lo que llama a
+`super.onChange` notificando al `onChange` en el `BlocObserver`.
+
+:::
+
+:::tip
+
+En `BlocObserver` tenemos acceso a la instancia del `Cubit` además del `Change`
+en sí.
+
+:::
 
 ### Manejo de Errores en Cubit
 
@@ -246,8 +286,12 @@ ocurrido un error.
 
 <CounterCubitOnErrorSnippet />
 
-:::note `onError` puede ser sobrescrito dentro del `Cubit` para manejar todos
-los errores para un `Cubit` específico. :::
+:::note
+
+`onError` puede ser sobrescrito dentro del `Cubit` para manejar todos los
+errores para un `Cubit` específico.
+
+:::
 
 `onError` también puede ser sobrescrito en `BlocObserver` para manejar todos los
 errores reportados globalmente.
@@ -293,9 +337,12 @@ salientes.
 
 <CounterBlocEventHandlerSnippet />
 
-:::tip Un `EventHandler` tiene acceso al evento agregado así como a un `Emitter`
-que puede ser usado para emitir cero o más estados en respuesta al evento
-entrante. :::
+:::tip
+
+Un `EventHandler` tiene acceso al evento agregado así como a un `Emitter` que
+puede ser usado para emitir cero o más estados en respuesta al evento entrante.
+
+:::
 
 Luego podemos actualizar el `EventHandler` para manejar el evento
 `CounterIncrementPressed`:
@@ -307,17 +354,29 @@ todos los eventos `CounterIncrementPressed`. Para cada evento
 `CounterIncrementPressed` entrante, podemos acceder al estado actual del bloc a
 través del getter `state` y `emit(state + 1)`.
 
-:::note Dado que la clase `Bloc` extiende `BlocBase`, tenemos acceso al estado
-actual del bloc en cualquier momento a través del getter `state`, al igual que
-en `Cubit`. :::
+:::note
 
-:::caution Los blocs nunca deben emitir directamente nuevos estados. En su
-lugar, cada cambio de estado debe ser resultado de un evento entrante dentro de
-un `EventHandler`. :::
+Dado que la clase `Bloc` extiende `BlocBase`, tenemos acceso al estado actual
+del bloc en cualquier momento a través del getter `state`, al igual que en
+`Cubit`.
 
-:::caution Tanto los blocs como los cubits ignorarán estados duplicados. Si
-emitimos `State nextState` donde `state == nextState`, entonces no ocurrirá
-ningún cambio de estado. :::
+:::
+
+:::caution
+
+Los blocs nunca deben emitir directamente nuevos estados. En su lugar, cada
+cambio de estado debe ser resultado de un evento entrante dentro de un
+`EventHandler`.
+
+:::
+
+:::caution
+
+Tanto los blocs como los cubits ignorarán estados duplicados. Si emitimos
+`State nextState` donde `state == nextState`, entonces no ocurrirá ningún cambio
+de estado.
+
+:::
 
 ### Usando un Bloc
 
@@ -335,9 +394,13 @@ no se han emitido nuevos estados aún). A continuación, agregamos el evento
 imprimimos el estado del `Bloc` nuevamente, que pasó de `0` a `1` y llamamos a
 `close` en el `Bloc` para cerrar el stream interno de estado.
 
-:::note `await Future.delayed(Duration.zero)` se agrega para asegurar que
-esperemos a la siguiente iteración del ciclo de eventos (permitiendo que el
-`EventHandler` procese el evento). :::
+:::note
+
+`await Future.delayed(Duration.zero)` se agrega para asegurar que esperemos a la
+siguiente iteración del ciclo de eventos (permitiendo que el `EventHandler`
+procese el evento).
+
+:::
 
 #### Uso de Stream
 
@@ -354,8 +417,12 @@ imprimir en cada cambio de estado. Luego agregamos el evento
 `cancel` en la suscripción cuando ya no queremos recibir actualizaciones y
 cerramos el `Bloc`.
 
-:::note `await Future.delayed(Duration.zero)` se agrega para este ejemplo para
-evitar cancelar la suscripción inmediatamente. :::
+:::note
+
+`await Future.delayed(Duration.zero)` se agrega para este ejemplo para evitar
+cancelar la suscripción inmediatamente.
+
+:::
 
 ### Observando un Bloc
 
@@ -388,8 +455,12 @@ ver la siguiente salida:
 
 <CounterBlocOnTransitionOutputSnippet />
 
-:::note `onTransition` se invoca antes que `onChange` y contiene el evento que
-desencadenó el cambio de `currentState` a `nextState`. :::
+:::note
+
+`onTransition` se invoca antes que `onChange` y contiene el evento que
+desencadenó el cambio de `currentState` a `nextState`.
+
+:::
 
 #### BlocObserver
 
@@ -407,8 +478,11 @@ Ahora, si ejecutamos el fragmento anterior, la salida debería verse así:
 
 <SimpleBlocObserverOnTransitionOutputSnippet />
 
-:::note `onTransition` se invoca primero (local antes que global) seguido de
-`onChange`. :::
+:::note
+
+`onTransition` se invoca primero (local antes que global) seguido de `onChange`.
+
+:::
 
 Otra característica única de las instancias de `Bloc` es que nos permiten
 sobrescribir `onEvent`, que se llama cada vez que se agrega un nuevo evento al
@@ -424,8 +498,12 @@ salida:
 
 <SimpleBlocObserverOnEventOutputSnippet />
 
-:::note `onEvent` se llama tan pronto como se agrega el evento. El `onEvent`
-local se invoca antes que el `onEvent` global en `BlocObserver`. :::
+:::note
+
+`onEvent` se llama tan pronto como se agrega el evento. El `onEvent` local se
+invoca antes que el `onEvent` global en `BlocObserver`.
+
+:::
 
 ### Manejo de Errores en Bloc
 
@@ -441,14 +519,26 @@ cuando se informa un error:
 
 <CounterBlocOnErrorOutputSnippet />
 
-:::note El `onError` local se invoca primero seguido del `onError` global en
-`BlocObserver`. :::
+:::note
 
-:::note `onError` y `onChange` funcionan exactamente de la misma manera tanto
-para instancias de `Bloc` como de `Cubit`. :::
+El `onError` local se invoca primero seguido del `onError` global en
+`BlocObserver`.
 
-:::caution Cualquier excepción no manejada que ocurra dentro de un
-`EventHandler` también se informa a `onError`. :::
+:::
+
+:::note
+
+`onError` y `onChange` funcionan exactamente de la misma manera tanto para
+instancias de `Bloc` como de `Cubit`.
+
+:::
+
+:::caution
+
+Cualquier excepción no manejada que ocurra dentro de un `EventHandler` también
+se informa a `onError`.
+
+:::
 
 ## Cubit vs. Bloc
 
@@ -520,10 +610,13 @@ aplicación con el tiempo.
 Otra área en la que `Bloc` sobresale sobre `Cubit` es cuando necesitamos
 aprovechar operadores reactivos como `buffer`, `debounceTime`, `throttle`, etc.
 
-:::tip Consulta
-[`package:stream_transform`](https://pub.dev/packages/stream_transform) y
-[`package:rxdart`](https://pub.dev/packages/rxdart) para transformadores de
-streams. :::
+:::tip
+
+Consulta [`package:stream_transform`](https://pub.dev/packages/stream_transform)
+y [`package:rxdart`](https://pub.dev/packages/rxdart) para transformadores de
+streams.
+
+:::
 
 `Bloc` tiene un sink de eventos que nos permite controlar y transformar el flujo
 entrante de eventos.
@@ -541,9 +634,12 @@ la forma en que los eventos entrantes son procesados por el `Bloc`.
 Con el código anterior, podemos aplicar fácilmente debounce a los eventos
 entrantes con muy poco código adicional.
 
-:::tip Consulta
-[`package:bloc_concurrency`](https://pub.dev/packages/bloc_concurrency) para un
-conjunto de transformadores de eventos con una opinión definida. :::
+:::tip
+
+Consulta [`package:bloc_concurrency`](https://pub.dev/packages/bloc_concurrency)
+para un conjunto de transformadores de eventos con una opinión definida.
+
+:::
 
 Si no estás seguro de cuál usar, comienza con `Cubit` y luego puedes
 refactorizar o escalar a un `Bloc` según sea necesario.

@@ -51,11 +51,15 @@ Además, asegúrate de emitir una nueva instancia del estado en tu bloc.
 
 <StateNotUpdatingBad3Snippet />
 
-:::caution Las propiedades de `Equatable` siempre deben ser copiadas en lugar de
+:::caution
+
+Las propiedades de `Equatable` siempre deben ser copiadas en lugar de
 modificadas. Si una clase `Equatable` contiene una `Lista` o `Mapa` como
 propiedades, asegúrate de usar `List.of` o `Map.of` respectivamente para
 garantizar que la igualdad se evalúe en función de los valores de las
-propiedades en lugar de la referencia. :::
+propiedades en lugar de la referencia.
+
+:::
 
 ## Cuándo usar Equatable
 

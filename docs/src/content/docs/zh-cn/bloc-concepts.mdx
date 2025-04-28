@@ -48,8 +48,12 @@ import AuthenticationTransitionSnippet from '~/components/concepts/bloc/Authenti
 import AuthenticationChangeSnippet from '~/components/concepts/bloc/AuthenticationChangeSnippet.astro';
 import DebounceEventTransformerSnippet from '~/components/concepts/bloc/DebounceEventTransformerSnippet.astro';
 
-:::note在使用 [`package:bloc`](https://pub.dev/packages/bloc)
-之前请确保已仔细阅读以下内容。:::
+:::note
+
+在使用 [`package:bloc`](https://pub.dev/packages/bloc)
+之前请确保已仔细阅读以下内容。
+
+:::
 
 有几个核心概念对于理解如何使用 bloc 包至关重要。
 
@@ -57,8 +61,12 @@ import DebounceEventTransformerSnippet from '~/components/concepts/bloc/Debounce
 
 ## Streams （流）
 
-:::note有关 `Streams` 的更多信息，请参阅官方
-[Dart 文档](https://dart.dev/tutorials/language/streams)。:::
+:::note
+
+有关 `Streams` 的更多信息，请参阅官方
+[Dart 文档](https://dart.dev/tutorials/language/streams)。
+
+:::
 
 流是一系列异步数据。
 
@@ -102,8 +110,12 @@ import DebounceEventTransformerSnippet from '~/components/concepts/bloc/Debounce
 状态是 `Cubit`
 的输出，代表应用程序状态的一部分。UI 组件可以收到状态通知，并根据当前状态进行部分重绘。
 
-:::note有关 `Cubit` 的起源的更多信息，请查看
-[Github Issue \#69](https://github.com/felangel/cubit/issues/69)。:::
+:::note
+
+有关 `Cubit` 的起源的更多信息，请查看
+[Github Issue \#69](https://github.com/felangel/cubit/issues/69)。
+
+:::
 
 ### 创建一个 Cubit
 
@@ -135,7 +147,11 @@ import DebounceEventTransformerSnippet from '~/components/concepts/bloc/Debounce
 `increment` 时，我们可以通过 `状态` 的getter访问 `Cubit`
 的当前状态，并通过在当前状态上 `+1` 来 `emit` 一个新状态。
 
-:::caution `emit` 是保护方法，意味着它只能在 `Cubit` 内部被调用。:::
+:::caution
+
+`emit` 是保护方法，意味着它只能在 `Cubit` 内部被调用。
+
+:::
 
 ### 使用 Cubit
 
@@ -161,10 +177,18 @@ import DebounceEventTransformerSnippet from '~/components/concepts/bloc/Debounce
 函数来触发新的状态。最后，当我们不再需要接收时关闭了这个 `Cubit`， 并且在
 `subscription` 上调用了 `cancel` 。
 
-:::note `await Future.delayed(Duration.zero)` 在这个示例里是为了避免
-`subscription` 被立即取消。:::
+:::note
 
-:::caution只有在 `Cubit` 上调用 `listen` 时才会收到后续状态变化。:::
+`await Future.delayed(Duration.zero)` 在这个示例里是为了避免 `subscription`
+被立即取消。
+
+:::
+
+:::caution
+
+只有在 `Cubit` 上调用 `listen` 时才会收到后续状态变化。
+
+:::
 
 ### 观察 Cubit
 
@@ -181,8 +205,12 @@ import DebounceEventTransformerSnippet from '~/components/concepts/bloc/Debounce
 
 <CounterCubitOnChangeOutputSnippet />
 
-:::note `Change` 发生在 `Cubit` 状态更新之前。`Change` 包括 `currentState` 和
-`nextState`。:::
+:::note
+
+`Change` 发生在 `Cubit` 状态更新之前。`Change` 包括 `currentState` 和
+`nextState`。
+
+:::
 
 #### BlocObserver
 
@@ -195,7 +223,11 @@ import DebounceEventTransformerSnippet from '~/components/concepts/bloc/Debounce
 
 <SimpleBlocObserverOnChangeSnippet />
 
-:::note我们要做的仅仅是扩展 `BlocObserver` 并且重写 `onChange` 方法。:::
+:::note
+
+我们要做的仅仅是扩展 `BlocObserver` 并且重写 `onChange` 方法。
+
+:::
 
 要使用 `SimpleBlocObserver`，我们只需要对 `main` 函数做少许的变更：
 
@@ -205,11 +237,18 @@ import DebounceEventTransformerSnippet from '~/components/concepts/bloc/Debounce
 
 <SimpleBlocObserverOnChangeOutputSnippet />
 
-:::note内部重写的 `onChange` 先会被调用，它再调用 `super.onChange` 通知
-`BlocObserver` 的 `onChange`。:::
+:::note
 
-:::tip在 `BlocObserver` 中，除了 `Change` 本身之外，我们还可以访问 `Cubit`
-实例。:::
+内部重写的 `onChange` 先会被调用，它再调用 `super.onChange` 通知 `BlocObserver`
+的 `onChange`。
+
+:::
+
+:::tip
+
+在 `BlocObserver` 中，除了 `Change` 本身之外，我们还可以访问 `Cubit` 实例。
+
+:::
 
 ### Cubit 的错误处理
 
@@ -217,7 +256,11 @@ import DebounceEventTransformerSnippet from '~/components/concepts/bloc/Debounce
 
 <CounterCubitOnErrorSnippet />
 
-:::note可以在 `Cubit` 中覆盖 `onError` 来处理特定 `Cubit` 的所有错误。:::
+:::note
+
+可以在 `Cubit` 中覆盖 `onError` 来处理特定 `Cubit` 的所有错误。
+
+:::
 
 也可以在 `BlocObserver` 中重写 `onError`，以全局处理所有报告的错误。
 
@@ -254,8 +297,12 @@ API注册事件处理程序。事件处理程序负责将任何传入事件转�
 
 <CounterBlocEventHandlerSnippet />
 
-:::tip `EventHandler` 可以访问添加的事件以及 `Emitter`，`Emitter`
-可以对输入的事件发出零个或者多个状态。:::
+:::tip
+
+`EventHandler` 可以访问添加的事件以及 `Emitter`，`Emitter`
+可以对输入的事件发出零个或者多个状态。
+
+:::
 
 然后我们可以更新 `EventHandler` 来处理 `CounterIncrementPressed` 事件：
 
@@ -265,14 +312,26 @@ API注册事件处理程序。事件处理程序负责将任何传入事件转�
 `CounterIncrementPressed`。针对每个输入的 `CounterIncrementPressed`
 事件我们都可以通过 `状态` 的 getter 来访问当前的状态并且 `emit(state + 1)`。
 
-:::note因为 `Bloc` 扩展了 `BlocBase`，所以我们可以像在 `Cubit` 中一样通过 `状态`
-的 getter 随时访问 bloc 的当前状态。:::
+:::note
 
-:::caution Blocs 任何时候都不应该 `emit` 新的状态。相反，每次状态变更都必须在
-`EventHandler` 里响应并输出。:::
+因为 `Bloc` 扩展了 `BlocBase`，所以我们可以像在 `Cubit` 中一样通过 `状态`
+的 getter 随时访问 bloc 的当前状态。
 
-:::caution blocs 和 cubits 都会忽略重复的状态。如果 `state == nextState`
-时我们发出 `State nextState` ，不会有状态变更发生。:::
+:::
+
+:::caution
+
+Blocs 任何时候都不应该 `emit` 新的状态。相反，每次状态变更都必须在
+`EventHandler` 里响应并输出。
+
+:::
+
+:::caution
+
+blocs 和 cubits 都会忽略重复的状态。如果 `state == nextState` 时我们发出
+`State nextState` ，不会有状态变更发生。
+
+:::
 
 ### 使用 Bloc
 
@@ -287,8 +346,12 @@ API注册事件处理程序。事件处理程序负责将任何传入事件转�
 `CounterIncrementPressed` 事件来出发状态变更。最后，我们再次打印了 `Bloc`
 的状态，从 `0` 变成了 `1`，并且在 `Bloc` 上调用 `close` 关闭了内部的状态流。
 
-:::note `await Future.delayed(Duration.zero)`
-是用来确保我们等待下一个事件循环周期（以便 `EventHandler` 处理这个事件）。:::
+:::note
+
+`await Future.delayed(Duration.zero)` 是用来确保我们等待下一个事件循环周期（以便
+`EventHandler` 处理这个事件）。
+
+:::
 
 #### Stream的用法
 
@@ -303,8 +366,11 @@ API注册事件处理程序。事件处理程序负责将任何传入事件转�
 并且发出新的状态。最后，当我们不想再接受更新时，我们在这个订阅上调用了 `cancel`
 并且 `close` 了这个 `Bloc`。
 
-:::note 上面示例里的 await
-Future.delayed(Duration.zero)` 仅用于防止订阅被立即取消。:::
+:::note
+
+上面示例里的 await Future.delayed(Duration.zero)` 仅用于防止订阅被立即取消。
+
+:::
 
 ### 观察 Bloc
 
@@ -335,8 +401,12 @@ Future.delayed(Duration.zero)` 仅用于防止订阅被立即取消。:::
 
 <CounterBlocOnTransitionOutputSnippet />
 
-:::note `onTransition` 在 `onChange` 之前被调用并且包含了触发 `currentState` 到
-`nextState`的事件。:::
+:::note
+
+`onTransition` 在 `onChange` 之前被调用并且包含了触发 `currentState` 到
+`nextState`的事件。
+
+:::
 
 #### BlocObserver
 
@@ -353,7 +423,11 @@ Future.delayed(Duration.zero)` 仅用于防止订阅被立即取消。:::
 
 <SimpleBlocObserverOnTransitionOutputSnippet />
 
-:::note `onTransition` 会被先调用（先本地再全局），然后 `onChange` 被调用。:::
+:::note
+
+`onTransition` 会被先调用（先本地再全局），然后 `onChange` 被调用。
+
+:::
 
 另一个 `Bloc` 实例的特有功能是：它允许我们重写 `onEvent`
 方法，无论什么时候有新的事件被添加到 `Bloc`，这个方法都会被调用。和 `onChange`
@@ -367,8 +441,12 @@ Future.delayed(Duration.zero)` 仅用于防止订阅被立即取消。:::
 
 <SimpleBlocObserverOnEventOutputSnippet />
 
-:::note当事件被添加时，`onEvent` 会被立即调用。本地的 `onEvent` 会在
-`BlocObserver` 的全局 `onEvent` 之前被调用。:::
+:::note
+
+当事件被添加时，`onEvent` 会被立即调用。本地的 `onEvent` 会在 `BlocObserver`
+的全局 `onEvent` 之前被调用。
+
+:::
 
 ### Bloc 的错误处理
 
@@ -382,14 +460,23 @@ Future.delayed(Duration.zero)` 仅用于防止订阅被立即取消。:::
 
 <CounterBlocOnErrorOutputSnippet />
 
-:::note本地的 `onError` 方法会先被调用，然后时 `BlocObserver` 里的全局 `onError`
-方法。
+:::note
+
+本地的 `onError` 方法会先被调用，然后时 `BlocObserver` 里的全局 `onError` 方法。
 
 :::
 
-:::note `Bloc` 和 `Cubit` 实例里的 `onError` 和 `onChange` 工作方式完全相同。:::
+:::note
 
-:::caution `EventHandler` 里未被处理的异常同样触发 `onError`。:::
+`Bloc` 和 `Cubit` 实例里的 `onError` 和 `onChange` 工作方式完全相同。
+
+:::
+
+:::caution
+
+`EventHandler` 里未被处理的异常同样触发 `onError`。
+
+:::
 
 ## Cubit 和 Bloc 对比
 
@@ -449,10 +536,12 @@ token 被收回了并且他们被强制注销了。使用 `Bloc`
 `Bloc` 优于 `Cubit` 的另一个领域是当我们需要利用响应式操作符（例如
 `buffer`、`debounceTime`、`throttle` 等）时。
 
-:::tip查看
-[`package:stream_transform`](https://pub.dev/packages/stream_transform) 和
-[`package:rxdart`](https://pub.dev/packages/rxdart) 来了解 `Stream`
-转换的细节。:::
+:::tip
+
+查看 [`package:stream_transform`](https://pub.dev/packages/stream_transform) 和
+[`package:rxdart`](https://pub.dev/packages/rxdart) 来了解 `Stream` 转换的细节。
+
+:::
 
 `Bloc` 有一个 event 池允许我们控制和转换输入的事件。
 
@@ -465,9 +554,12 @@ token 被收回了并且他们被强制注销了。使用 `Bloc`
 
 通过上面的代码，我们只要添加一点点代码就可以很容易的实现对输入事件的去抖动。
 
-:::tip查看
-[`package:bloc_concurrency`](https://pub.dev/packages/bloc_concurrency)
-了解一组预定义的事件转换器。:::
+:::tip
+
+查看 [`package:bloc_concurrency`](https://pub.dev/packages/bloc_concurrency)
+了解一组预定义的事件转换器。
+
+:::
 
 如果你不确定应该用哪一种，先用 `Cubit`，后面根据需要你可以再重构或者升级为
 `Bloc`。

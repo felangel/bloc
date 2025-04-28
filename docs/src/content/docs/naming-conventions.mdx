@@ -26,7 +26,11 @@ already occurred from the bloc's perspective.
 
 Initial load events should follow the convention: `BlocSubject` + `Started`
 
-:::note The base event class should be name: `BlocSubject` + `Event`. :::
+:::note
+
+The base event class should be name: `BlocSubject` + `Event`.
+
+:::
 
 ### Examples
 
@@ -55,7 +59,10 @@ following:
 
 `Initial` | `Success` | `Failure` | `InProgress`
 
-:::note Initial states should follow the convention: `BlocSubject` + `Initial`.
+:::note
+
+Initial states should follow the convention: `BlocSubject` + `Initial`.
+
 :::
 
 #### Single Class
@@ -67,7 +74,10 @@ When representing the state as a single base class an enum named `BlocSubject` +
 
 `initial` | `success` | `failure` | `loading`.
 
-:::note The base state class should always be named: `BlocSubject` + `State`.
+:::note
+
+The base state class should always be named: `BlocSubject` + `State`.
+
 :::
 
 ### Examples

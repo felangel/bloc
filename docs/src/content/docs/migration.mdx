@@ -5,9 +5,12 @@ description: Migrate to the latest stable version of Bloc.
 
 import { Code, Tabs, TabItem } from '@astrojs/starlight/components';
 
-:::tip Please refer to the
-[release log](https://github.com/felangel/bloc/releases) for more information
-regarding what changed in each release. :::
+:::tip
+
+Please refer to the [release log](https://github.com/felangel/bloc/releases) for
+more information regarding what changed in each release.
+
+:::
 
 ## v10.0.0
 
@@ -15,8 +18,12 @@ regarding what changed in each release. :::
 
 #### ❗✨ Decouple `blocTest` from `BlocBase`
 
-:::note[What Changed?] In bloc_test v10.0.0, the `blocTest` API is no longer
-tightly coupled to `BlocBase`. :::
+:::note[What Changed?]
+
+In bloc_test v10.0.0, the `blocTest` API is no longer tightly coupled to
+`BlocBase`.
+
+:::
 
 ##### Rationale
 
@@ -29,8 +36,11 @@ the internal dependency on the `emit` API.
 
 #### ❗✨ Support WebAssembly
 
-:::note[What Changed?] In hydrated_bloc v10.0.0, support for compiling to
-WebAssembly (wasm) was added. :::
+:::note[What Changed?]
+
+In hydrated_bloc v10.0.0, support for compiling to WebAssembly (wasm) was added.
+
+:::
 
 ##### Rationale
 
@@ -72,8 +82,11 @@ void main() async {
 
 #### ❗🧹 Remove Deprecated APIs
 
-:::note[What Changed?] In bloc v9.0.0, all previously deprecated APIs were
-removed. :::
+:::note[What Changed?]
+
+In bloc v9.0.0, all previously deprecated APIs were removed.
+
+:::
 
 ##### Summary
 
@@ -81,8 +94,12 @@ removed. :::
 
 #### ❗✨ Introduce new `EmittableStateStreamableSource` Interface
 
-:::note[What Changed?] In bloc v9.0.0, a new core interface
-`EmittableStateStreamableSource` was introduced. :::
+:::note[What Changed?]
+
+In bloc v9.0.0, a new core interface `EmittableStateStreamableSource` was
+introduced.
+
+:::
 
 ##### Rationale
 
@@ -94,8 +111,12 @@ removed. :::
 
 #### ✨ Reintroduce `HydratedBloc.storage` API
 
-:::note[What Changed?] In hydrated_bloc v9.0.0, `HydratedBlocOverrides` was
-removed in favor of the `HydratedBloc.storage` API.\*\* :::
+:::note[What Changed?]
+
+In hydrated_bloc v9.0.0, `HydratedBlocOverrides` was removed in favor of the
+`HydratedBloc.storage` API.\*\*
+
+:::
 
 ##### Rationale
 
@@ -138,8 +159,12 @@ Future<void> main() async {
 
 #### ✨ Reintroduce `Bloc.observer` and `Bloc.transformer` APIs
 
-:::note[What Changed?] In bloc v8.1.0, `BlocOverrides` was deprecated in favor
-of the `Bloc.observer` and `Bloc.transformer` APIs. :::
+:::note[What Changed?]
+
+In bloc v8.1.0, `BlocOverrides` was deprecated in favor of the `Bloc.observer`
+and `Bloc.transformer` APIs.
+
+:::
 
 ##### Rationale
 
@@ -231,8 +256,12 @@ void main() {
 
 #### ❗✨ Introduce new `BlocOverrides` API
 
-:::note[What Changed?] In bloc v8.0.0, `Bloc.observer` and `Bloc.transformer`
-were removed in favor of the `BlocOverrides` API. :::
+:::note[What Changed?]
+
+In bloc v8.0.0, `Bloc.observer` and `Bloc.transformer` were removed in favor of
+the `BlocOverrides` API.
+
+:::
 
 ##### Rationale
 
@@ -320,10 +349,13 @@ BlocOverrides.runZoned(
 
 #### ❗✨ Improve Error Handling and Reporting
 
-:::note[What Changed?] In bloc v8.0.0, `BlocUnhandledErrorException` is removed.
-In addition, any uncaught exceptions are always reported to `onError` and
-rethrown (regardless of debug or release mode). The `addError` API reports
-errors to `onError`, but does not treat reported errors as uncaught exceptions.
+:::note[What Changed?]
+
+In bloc v8.0.0, `BlocUnhandledErrorException` is removed. In addition, any
+uncaught exceptions are always reported to `onError` and rethrown (regardless of
+debug or release mode). The `addError` API reports errors to `onError`, but does
+not treat reported errors as uncaught exceptions.
+
 :::
 
 ##### Rationale
@@ -347,9 +379,12 @@ or release mode).
 
 #### ❗🧹 Make `BlocObserver` abstract
 
-:::note[What Changed?] In bloc v8.0.0, `BlocObserver` was converted into an
-`abstract` class which means an instance of `BlocObserver` cannot be
-instantiated. :::
+:::note[What Changed?]
+
+In bloc v8.0.0, `BlocObserver` was converted into an `abstract` class which
+means an instance of `BlocObserver` cannot be instantiated.
+
+:::
 
 ##### Rationale
 
@@ -383,8 +418,11 @@ void main() {
 
 #### ❗✨ `add` throws `StateError` if Bloc is closed
 
-:::note[What Changed?] In bloc v8.0.0, calling `add` on a closed bloc will
-result in a `StateError`. :::
+:::note[What Changed?]
+
+In bloc v8.0.0, calling `add` on a closed bloc will result in a `StateError`.
+
+:::
 
 ##### Rationale
 
@@ -396,8 +434,12 @@ as an uncaught exception and propagated to `onError`.
 
 #### ❗✨ `emit` throws `StateError` if Bloc is closed
 
-:::note[What Changed?] In bloc v8.0.0, calling `emit` within a closed bloc will
-result in a `StateError`. :::
+:::note[What Changed?]
+
+In bloc v8.0.0, calling `emit` within a closed bloc will result in a
+`StateError`.
+
+:::
 
 ##### Rationale
 
@@ -409,8 +451,11 @@ be reported as an uncaught exception and propagated to `onError`.
 
 #### ❗🧹 Remove Deprecated APIs
 
-:::note[What Changed?] In bloc v8.0.0, all previously deprecated APIs were
-removed. :::
+:::note[What Changed?]
+
+In bloc v8.0.0, all previously deprecated APIs were removed.
+
+:::
 
 ##### Summary
 
@@ -423,8 +468,11 @@ removed. :::
 
 #### ✨ `MockBloc` and `MockCubit` no longer require `registerFallbackValue`
 
-:::note[What Changed?] In bloc_test v9.0.0, developers no longer need to
-explicitly call `registerFallbackValue` when using `MockBloc` or `MockCubit`.
+:::note[What Changed?]
+
+In bloc_test v9.0.0, developers no longer need to explicitly call
+`registerFallbackValue` when using `MockBloc` or `MockCubit`.
+
 :::
 
 ##### Summary
@@ -464,8 +512,12 @@ void main() {
 
 #### ❗✨ Introduce new `HydratedBlocOverrides` API
 
-:::note[What Changed?] In hydrated_bloc v8.0.0, `HydratedBloc.storage` was
-removed in favor of the `HydratedBlocOverrides` API. :::
+:::note[What Changed?]
+
+In hydrated_bloc v8.0.0, `HydratedBloc.storage` was removed in favor of the
+`HydratedBlocOverrides` API.
+
+:::
 
 ##### Rationale
 
@@ -521,8 +573,12 @@ This allows allow each `Zone` to function independently with its own
 
 #### ✨ Introduce new `on<Event>` API
 
-:::note[What Changed?] In bloc v7.2.0, `mapEventToState` was deprecated in favor
-of `on<Event>`. `mapEventToState` will be removed in bloc v8.0.0. :::
+:::note[What Changed?]
+
+In bloc v7.2.0, `mapEventToState` was deprecated in favor of `on<Event>`.
+`mapEventToState` will be removed in bloc v8.0.0.
+
+:::
 
 ##### Rationale
 
@@ -535,8 +591,12 @@ issue, one of the core principles of the bloc library is to be predictable. The
 `on<Event>` API was created to make the library as safe as possible to use and
 to eliminate any uncertainty when it comes to state changes.
 
-:::tip For more information,
-[read the full proposal](https://github.com/felangel/bloc/issues/2526). :::
+:::tip
+
+For more information,
+[read the full proposal](https://github.com/felangel/bloc/issues/2526).
+
+:::
 
 **Summary**
 
@@ -575,8 +635,11 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ```
 
-:::note Each registered `EventHandler` functions independently so it's important
-to register event handlers based on the type of transformer you'd like applied.
+:::note
+
+Each registered `EventHandler` functions independently so it's important to
+register event handlers based on the type of transformer you'd like applied.
+
 :::
 
 If you want to retain the exact same behavior as in v7.1.0 you can register a
@@ -612,8 +675,11 @@ void main() {
 
 #### ✨ Introduce new `EventTransformer` API
 
-:::note[What Changed?] In bloc v7.2.0, `transformEvents` was deprecated in favor
-of the `EventTransformer` API. `transformEvents` will be removed in bloc v8.0.0.
+:::note[What Changed?]
+
+In bloc v7.2.0, `transformEvents` was deprecated in favor of the
+`EventTransformer` API. `transformEvents` will be removed in bloc v8.0.0.
+
 :::
 
 ##### Rationale
@@ -642,9 +708,12 @@ EventTransformer<E> concurrent<E>() {
 }
 ```
 
-:::tip Check out
-[package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency) for an
-opinionated set of custom event transformers :::
+:::tip
+
+Check out [package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency)
+for an opinionated set of custom event transformers
+
+:::
 
 **v7.1.0**
 
@@ -673,9 +742,12 @@ MyBloc() : super(MyState()) {
 
 #### ⚠️ Deprecate `transformTransitions` API
 
-:::note[What Changed?] In bloc v7.2.0, `transformTransitions` was deprecated in
-favor of overriding the `stream` API. `transformTransitions` will be removed in
-bloc v8.0.0. :::
+:::note[What Changed?]
+
+In bloc v7.2.0, `transformTransitions` was deprecated in favor of overriding the
+`stream` API. `transformTransitions` will be removed in bloc v8.0.0.
+
+:::
 
 ##### Rationale
 
@@ -1154,11 +1226,15 @@ Widget build(BuildContext context) {
 }
 ```
 
-:::note Using `context.watch` at the root of the `build` method will result in
-the entire widget being rebuilt when the bloc state changes. If the entire
-widget does not need to be rebuilt, either use `BlocBuilder` to wrap the parts
-that should rebuild, use a `Builder` with `context.watch` to scope the rebuilds,
-or decompose the widget into smaller widgets. :::
+:::note
+
+Using `context.watch` at the root of the `build` method will result in the
+entire widget being rebuilt when the bloc state changes. If the entire widget
+does not need to be rebuilt, either use `BlocBuilder` to wrap the parts that
+should rebuild, use a `Builder` with `context.watch` to scope the rebuilds, or
+decompose the widget into smaller widgets.
+
+:::
 
 2. **To access the bloc so that an event can be added**
 
@@ -1454,8 +1530,11 @@ blocTest<CounterBloc, int>(
 );
 ```
 
-:::note `emit` is only visible for testing and should never be used outside of
-tests. :::
+:::note
+
+`emit` is only visible for testing and should never be used outside of tests.
+
+:::
 
 ### `package:flutter_bloc`
 
@@ -1587,8 +1666,12 @@ class played. `BlocDelegate` suggests that the class plays an active role
 whereas in reality the intended role of the `BlocDelegate` was for it to be a
 passive component which simply observes all blocs in an application.
 
-:::note There should ideally be no user-facing functionality or features handled
-within `BlocObserver`. :::
+:::note
+
+There should ideally be no user-facing functionality or features handled within
+`BlocObserver`.
+
+:::
 
 **v4.x.x**
 
