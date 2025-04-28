@@ -22,6 +22,13 @@
 	--color-gray-900: #17181c;
 }
 
+.badges {
+	margin-bottom: 1.5em;
+	display: flex;
+	flex-direction: row;
+	gap: 0.5em;
+}
+
 .warning .highlight {
 	background: none;
 }
@@ -34,7 +41,7 @@
 	border-left-color: #bda036;
 }
 
-.warning .highlight > .code > span {
+.warning .highlight > .code > span:not(.indent) {
 	border-bottom: 2px #bda036 dashed;
 	padding: 0;
 }
@@ -43,7 +50,7 @@
 	border-left-color: #4c81d7;
 }
 
-.info .highlight > .code > span {
+.info .highlight > .code > span:not(.indent) {
 	border-bottom: 2px #4c81d7 dashed;
 	padding: 0;
 }

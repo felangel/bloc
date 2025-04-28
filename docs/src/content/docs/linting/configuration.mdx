@@ -5,86 +5,50 @@ sidebar:
   order: 3
 ---
 
-import { Code } from '@astrojs/starlight/components';
-import { transformerMetaHighlight } from '@shikijs/transformers';
-import RemoteCode from '~/components/tutorials/RemoteCode.astro';
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import BlocLintBasicAnalysisOptionsSnippet from '~/components/linting/BlocLintBasicAnalysisOptionsSnippet.astro';
+import RunBlocLintInCurrentDirectorySnippet from '~/components/linting/RunBlocLintInCurrentDirectorySnippet.astro';
+import RunBlocLintInSrcTestSnippet from '~/components/linting/RunBlocLintInSrcTestSnippet.astro';
+import AvoidFlutterImportsWarningSnippet from '~/components/linting/ImportFlutterWarningSnippet.mdx';
+import RunBlocLintCounterCubitSnippet from '~/components/linting/RunBlocLintCounterCubitSnippet.astro';
+import AvoidFlutterImportsWarningOutputSnippet from '~/components/linting/ImportFlutterWarningOutputSnippet.astro';
 
 By default, the bloc linter will not report any diagnostics unless you have
-explicitly configured your project's analysis options.
+explicitly configured a project's analysis options.
 
-To get started, create or modify the existing `analysis_options.yaml` at the root of your
-project to include a list of rules under the top-level bloc key:
+To get started, create or modify the existing `analysis_options.yaml` at the
+root of your project to include a list of rules under the top-level bloc key:
 
-<Code
-	code={`
-  bloc:
-    rules:
-      - avoid_flutter_imports
-`}
-	lang="yaml"
-	title="analysis_options.yaml"
-/>
+<BlocLintBasicAnalysisOptionsSnippet />
 
-Run the linter, using the following command in your terminal:
+Run the linter using the following command in your terminal:
 
-```sh
-bloc lint .
-```
+<RunBlocLintInCurrentDirectorySnippet />
 
 The above command will analyze all files in the current directory and its
-subdirectories but you can also lint specific files and directories by passing
+subdirectories, but you can also lint specific files and directories by passing
 them as command-line arguments:
 
-```sh
-bloc lint src/ test/
-```
+<RunBlocLintInSrcTestSnippet />
 
 The above command will analyze all code in the `src` and `test` directories.
 
-With the `avoid_flutter_imports` rule enabled, if any bloc or cubit file
-contains a flutter import, it'll be reported as a warning:
+If the `avoid_flutter_imports` rule is enabled, any bloc or cubit file that
+contains a flutter import will be reported as a warning:
 
-<Code
-	code={`
-  import 'package:bloc/bloc.dart';
-  import 'packages:flutter/material.dart';
-
-class CounterCubit extends Cubit<int> {
-CounterCubit() : super(0);
-}
-`}
-lang="dart"
-title="counter_cubit.dart"
-transformers={[transformerMetaHighlight()]}
-class='warning'
-meta="{2}"
-
-/>
+<AvoidFlutterImportsWarningSnippet />
 
 You can see the warning by running the `bloc lint` command:
 
-```sh
-bloc lint counter_cubit.dart
-```
+<RunBlocLintCounterCubitSnippet />
 
 The output should look like:
 
-```sh
-warning[avoid_flutter_imports]: Avoid importing Flutter within bloc instances.
- --> counter_cubit.dart:2
-  |
-  | import 'package:flutter/material.dart';
-  |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  = hint: Blocs should be decoupled from Flutter.
- docs: https://bloclibrary.dev/lint-rules/avoid_flutter_imports
+<AvoidFlutterImportsWarningOutputSnippet />
 
-1 issue found
-Analyzed 1 file
-```
+:::note
 
-:::tip
-
-The full list of lint rules is:
+Here are all of the supported lint rules:
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/packages/bloc_lint/lib/all.yaml"

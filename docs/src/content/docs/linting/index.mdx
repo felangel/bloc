@@ -5,53 +5,29 @@ sidebar:
   order: 1
 ---
 
-import { Code } from '@astrojs/starlight/components';
-import { transformerMetaHighlight } from '@shikijs/transformers';
-import RemoteCode from '~/components/tutorials/RemoteCode.astro';
+import AvoidFlutterImportsWarningSnippet from '~/components/linting/ImportFlutterWarningSnippet.mdx';
+import AvoidFlutterImportsWarningOutputSnippet from '~/components/linting/ImportFlutterWarningOutputSnippet.astro';
 
-Linting is the process of statically analyzing your code for potential bugs in
+Linting is the process of statically analyzing code for potential bugs in
 addition to programmatic and stylistic errors.
 
-Bloc has a built-in linter, which can be used through your IDE or via the [`bloc
-command-line tools`](https://pub.dev/packages/bloc_tools) using the `bloc lint`
-command.
+Bloc has a built-in linter, which can be used through your IDE or the
+[`bloc command-line tools`](https://pub.dev/packages/bloc_tools) with the
+`bloc lint` command.
 
 With the help of the bloc linter, you can improve the quality of your codebase
-and enforce consistency all without having to execute a single line of code.
+and enforce consistency without executing a single line of code.
 
-For example, perhaps you accidentally imported a Flutter dependency into your cubit:
+For example, perhaps you accidentally imported a Flutter dependency into your
+cubit:
 
-<Code
-	code={`
-  import 'package:bloc/bloc.dart';
-  import 'packages:flutter/material.dart';
+<AvoidFlutterImportsWarningSnippet />
 
-class CounterCubit extends Cubit<int> {
-CounterCubit() : super(0);
-}
-`}
-lang="dart"
-title="counter_cubit.dart"
-transformers={[transformerMetaHighlight()]}
-class='warning'
-meta="{2}"
+If properly configured, the bloc linter will point to the import and produce the
+following warning:
 
-/>
-
-If properly configured, the bloc linter will point to the import and produce the following warning:
-
-```sh
-warning[avoid_flutter_imports]: Avoid importing Flutter within bloc instances.
- --> counter_cubit.dart:2
-  |
-  | import 'package:flutter/material.dart';
-  |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  = hint: Blocs should be decoupled from Flutter.
- docs: https://bloclibrary.dev/lint-rules/avoid_flutter_imports
-
-1 issue found
-Analyzed 1 file
-```
+<AvoidFlutterImportsWarningOutputSnippet />
 
 In the following sections, we'll cover how to install, configure, and customize
-the bloc linter in order take advantage of static analysis in your codebase.
+the bloc linter so that you can take advantage of static analysis in your
+codebase.

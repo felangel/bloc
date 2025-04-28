@@ -120,7 +120,7 @@ export default defineConfig({
 						{ label: 'Installation ', link: '/linting/installation/' },
 						{ label: 'Configuration ', link: '/linting/configuration/' },
 						{ label: 'Customizing Rules ', link: '/linting/customizing-rules/' },
-						{ label: 'Rules', autogenerate: { directory: '/lint-rules' }, collapsed: true },
+						{ label: 'Rules', autogenerate: { directory: '/lint-rules' } },
 					],
 				},
 				{

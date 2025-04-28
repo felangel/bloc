@@ -7,29 +7,22 @@ sidebar:
 
 import { CardGrid } from '@astrojs/starlight/components';
 import Card from '~/components/landing/Card.astro';
+import InstallBlocToolsSnippet from '~/components/linting/InstallBlocToolsSnippet.astro';
+import BlocToolsLintHelpOutputSnippet from '~/components/linting/BlocToolsLintHelpOutputSnippet.astro';
+import InstallBlocLintSnippet from '~/components/linting/InstallBlocLintSnippet.astro';
 
-## Command-line Tools
+## Command-Line Tools
 
-To use the linter from the command-line, install
+To use the linter from the command line, install
 [`package:bloc_tools`](https://pub.dev/packages/bloc_tools) via the following
 command:
 
-```sh
-dart pub global activate bloc_tools
-```
+<InstallBlocToolsSnippet />
 
 Once the bloc command-line tools have been installed, you can run the bloc
 linter via the `bloc lint` command:
 
-```sh
-$ bloc lint --help
-Lint Dart source code.
-
-Usage: bloc lint [arguments]
--h, --help    Print this usage information.
-
-Run "bloc help" to see global options.
-```
+<BlocToolsLintHelpOutputSnippet />
 
 ## Preconfigured Rule Sets
 
@@ -37,14 +30,12 @@ To install preconfigured lint rule sets, install
 [`package:bloc_lint`](https://pub.dev/packages/bloc_lint) as a dev dependency
 via the following command:
 
-```sh
-dart pub add --dev bloc_lint
-```
+<InstallBlocLintSnippet />
 
 ## IDE Integrations
 
-The following IDEs will officially support the bloc linter and language server to provide instant
-diagnostics directly within your IDE.
+The following IDEs officially support the bloc linter and language server to
+provide instant diagnostics directly within your IDE.
 
 <CardGrid>
 	<Card title="VSCode" icon="vscode">

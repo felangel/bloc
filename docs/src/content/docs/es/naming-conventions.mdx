@@ -1,6 +1,7 @@
 ---
 title: Convenciones de Nombres
-description: Descripción general de las convenciones de nombres recomendadas al usar bloc.
+description:
+  Descripción general de las convenciones de nombres recomendadas al usar bloc.
 ---
 
 import EventExamplesGood1 from '~/components/naming-conventions/EventExamplesGood1Snippet.astro';
@@ -9,21 +10,26 @@ import StateExamplesGood1Snippet from '~/components/naming-conventions/StateExam
 import SingleStateExamplesGood1Snippet from '~/components/naming-conventions/SingleStateExamplesGood1Snippet.astro';
 import StateExamplesBad1Snippet from '~/components/naming-conventions/StateExamplesBad1Snippet.astro';
 
-Las siguientes convenciones de nombres son simplemente recomendaciones y son completamente opcionales. Siéntase libre de usar las convenciones de nombres que prefiera. Puede encontrar algunos de los ejemplos/documentación que no siguen las convenciones de nombres principalmente por simplicidad/concisión. Estas convenciones son fuertemente recomendadas para proyectos grandes con múltiples desarrolladores.
+Las siguientes convenciones de nombres son simplemente recomendaciones y son
+completamente opcionales. Siéntase libre de usar las convenciones de nombres que
+prefiera. Puede encontrar algunos de los ejemplos/documentación que no siguen
+las convenciones de nombres principalmente por simplicidad/concisión. Estas
+convenciones son fuertemente recomendadas para proyectos grandes con múltiples
+desarrolladores.
 
 ## Convenciones de Eventos
 
-Los eventos deben ser nombrados en **pasado** porque los eventos son cosas que ya han ocurrido desde la perspectiva del bloc.
+Los eventos deben ser nombrados en **pasado** porque los eventos son cosas que
+ya han ocurrido desde la perspectiva del bloc.
 
 ### Anatomía
 
 `BlocSubject` + `Sustantivo (opcional)` + `Verbo (evento)`
 
-Los eventos de carga inicial deben seguir la convención: `BlocSubject` + `Started`
+Los eventos de carga inicial deben seguir la convención: `BlocSubject` +
+`Started`
 
-:::note
-La clase base del evento debe llamarse: `BlocSubject` + `Event`.
-:::
+:::note La clase base del evento debe llamarse: `BlocSubject` + `Event`. :::
 
 ### Ejemplos
 
@@ -37,7 +43,9 @@ La clase base del evento debe llamarse: `BlocSubject` + `Event`.
 
 ## Convenciones de Estado
 
-Los estados deben ser sustantivos porque un estado es simplemente una instantánea en un momento particular en el tiempo. Hay dos formas comunes de representar el estado: usando subclases o usando una sola clase.
+Los estados deben ser sustantivos porque un estado es simplemente una
+instantánea en un momento particular en el tiempo. Hay dos formas comunes de
+representar el estado: usando subclases o usando una sola clase.
 
 ### Anatomía
 
@@ -45,24 +53,24 @@ Los estados deben ser sustantivos porque un estado es simplemente una instantán
 
 `BlocSubject` + `Verbo (acción)` + `State`
 
-Cuando se representa el estado como múltiples subclases, `State` debe ser uno de los siguientes:
+Cuando se representa el estado como múltiples subclases, `State` debe ser uno de
+los siguientes:
 
 `Initial` | `Success` | `Failure` | `InProgress`
 
-:::note
-Los estados iniciales deben seguir la convención: `BlocSubject` + `Initial`.
-:::
+:::note Los estados iniciales deben seguir la convención: `BlocSubject` +
+`Initial`. :::
 
 #### Clase Única
 
 `BlocSubject` + `State`
 
-Cuando se representa el estado como una sola clase base, se debe usar un enum llamado `BlocSubject` + `Status` para representar el estado:
+Cuando se representa el estado como una sola clase base, se debe usar un enum
+llamado `BlocSubject` + `Status` para representar el estado:
 
 `initial` | `success` | `failure` | `loading`.
 
-:::note
-La clase base del estado siempre debe llamarse: `BlocSubject` + `State`.
+:::note La clase base del estado siempre debe llamarse: `BlocSubject` + `State`.
 :::
 
 ### Ejemplos

@@ -1,6 +1,7 @@
 ---
 title: Modeling State
-description: An overview of several ways to model states when using package:bloc.
+description:
+  An overview of several ways to model states when using package:bloc.
 ---
 
 import ConcreteClassAndStatusEnumSnippet from '~/components/modeling-state/ConcreteClassAndStatusEnumSnippet.astro';
@@ -20,9 +21,12 @@ simplicity/conciseness.
 The following code snippets are focused on the state structure. In practice, you
 may also want to:
 
-- Extend `Equatable` from [`package:equatable`](https://pub.dev/packages/equatable)
-- Annotate the class with `@Data()` from [`package:data_class`](https://pub.dev/packages/data_class)
-- Annotate the class with **@immutable** from [`package:meta`](https://pub.dev/packages/meta)
+- Extend `Equatable` from
+  [`package:equatable`](https://pub.dev/packages/equatable)
+- Annotate the class with `@Data()` from
+  [`package:data_class`](https://pub.dev/packages/data_class)
+- Annotate the class with **@immutable** from
+  [`package:meta`](https://pub.dev/packages/meta)
 - Implement a `copyWith` method
 - Use the `const` keyword for constructors
 
@@ -39,8 +43,10 @@ are not strictly exclusive and/or contain lots of shared properties.
 
 #### Pros
 
-- **Simple**: Easy to manage a single class and a status enum and all properties are readily accessible.
-- **Concise**: Generally requires fewer lines of code as compared to other approaches.
+- **Simple**: Easy to manage a single class and a status enum and all properties
+  are readily accessible.
+- **Concise**: Generally requires fewer lines of code as compared to other
+  approaches.
 
 #### Cons
 
@@ -74,13 +80,15 @@ separate, exclusive states.
   access an invalid property. Each subclass holds its own properties, making it
   clear which properties belong to which state.
 - **Explicit:** Separates shared properties from state-specific properties.
-- **Exhaustive**: Using a `switch` statement for exhaustiveness checks
-  to ensure that each state is explicitly handled.
-  - If you don't want [exhaustive
-    switching](https://dart.dev/language/branches#exhaustiveness-checking) or
-    want to be able to add subtypes later without breaking the API, use the
+- **Exhaustive**: Using a `switch` statement for exhaustiveness checks to ensure
+  that each state is explicitly handled.
+  - If you don't want
+    [exhaustive switching](https://dart.dev/language/branches#exhaustiveness-checking)
+    or want to be able to add subtypes later without breaking the API, use the
     [final](https://dart.dev/language/class-modifiers#final) modifier.
-  - See the [sealed class documentation](https://dart.dev/language/class-modifiers#sealed) for more details.
+  - See the
+    [sealed class documentation](https://dart.dev/language/class-modifiers#sealed)
+    for more details.
 
 #### Cons
 
@@ -94,5 +102,5 @@ separate, exclusive states.
 #### Verdict
 
 This approach works best for well-defined, exclusive states with unique
-properties. This approach provides type safety & exhaustiveness checks and emphasizes
-safety over conciseness and simplicity.
+properties. This approach provides type safety & exhaustiveness checks and
+emphasizes safety over conciseness and simplicity.

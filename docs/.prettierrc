@@ -7,17 +7,7 @@
   "useTabs": true,
   "plugins": ["prettier-plugin-astro"],
   "overrides": [
-    {
-      "files": [".*", "*.json", "*.md", "*.toml", "*.yml"],
-      "options": {
-        "useTabs": false
-      }
-    },
-    {
-      "files": ["*.md", "*.mdx"],
-      "options": {
-        "printWidth": 80
-      }
-    }
+    { "files": [".*", "*.json", "*.md", "*.toml", "*.yml"], "options": { "useTabs": false } },
+    { "files": ["*.md", "*.mdx"], "options": { "printWidth": 80, "proseWrap": "always" } }
   ]
 }
