@@ -21,14 +21,16 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 }
 
 class PostBloc extends Bloc<PostEvent, PostState> {
-  PostBloc({required this.httpClient}) : super(const PostState()) {
+  PostBloc({required http.Client httpClient})
+      : _httpClient = httpClient,
+        super(const PostState()) {
     on<PostFetched>(
       _onFetched,
       transformer: throttleDroppable(throttleDuration),
     );
   }
 
-  final http.Client httpClient;
+  final http.Client _httpClient;
 
   Future<void> _onFetched(
     PostFetched event,
@@ -55,7 +57,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   }
 
   Future<List<Post>> _fetchPosts({required int startIndex}) async {
-    final response = await httpClient.get(
+    final response = await _httpClient.get(
       Uri.https(
         'jsonplaceholder.typicode.com',
         '/posts',

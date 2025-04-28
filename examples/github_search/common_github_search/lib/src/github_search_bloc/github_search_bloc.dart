@@ -9,12 +9,13 @@ EventTransformer<Event> debounce<Event>(Duration duration) {
 }
 
 class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
-  GithubSearchBloc({required this.githubRepository})
-      : super(SearchStateEmpty()) {
+  GithubSearchBloc({required GithubRepository githubRepository})
+      : _githubRepository = githubRepository,
+        super(SearchStateEmpty()) {
     on<TextChanged>(_onTextChanged, transformer: debounce(_duration));
   }
 
-  final GithubRepository githubRepository;
+  final GithubRepository _githubRepository;
 
   Future<void> _onTextChanged(
     TextChanged event,
@@ -27,7 +28,7 @@ class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
     emit(SearchStateLoading());
 
     try {
-      final results = await githubRepository.search(searchTerm);
+      final results = await _githubRepository.search(searchTerm);
       emit(SearchStateSuccess(results.items));
     } catch (error) {
       emit(

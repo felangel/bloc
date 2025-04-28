@@ -11,3 +11,5 @@ dependencies:
   equatable: ^2.0.0
   http: ^1.0.0
   stream_transform: ^2.0.0
+dev_dependencies:
+  bloc_lint: ^0.2.0-dev.0

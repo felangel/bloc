@@ -1,10 +1,8 @@
-include: ../../analysis_options.yaml
+include:
+  - package:bloc_lint/recommended.yaml
+  - ../../analysis_options.yaml
+
 analyzer:
   exclude: [build/**]
   errors:
     uri_has_not_been_generated: ignore
-  # Angular plugin support is in beta. You're welcome to try it and report
-  # issues: https://github.com/dart-lang/angular_analyzer_plugin/issues
-  # plugins:
-    # - angular
-
