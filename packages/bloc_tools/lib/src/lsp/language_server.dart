@@ -26,7 +26,7 @@ class LanguageServer {
       _connection.sendDiagnostics(
         lsp.PublishDiagnosticsParams(
           diagnostics: entry.value.map((d) => d.toLsp()).toList(),
-          uri: Uri.parse(entry.key),
+          uri: p.toUri(entry.key),
         ),
       );
     }

@@ -36,9 +36,10 @@ class Linter {
   /// will be analyzed (both single files and directories are supported).
   Map<String, List<Diagnostic>> analyze({required Uri uri, String? content}) {
     if (content != null) return _analyzeContent(uri, content);
-    final directory = Directory(uri.path);
+    final path = uri.isScheme('file') ? p.fromUri(uri) : uri.path;
+    final directory = Directory(path);
     if (directory.existsSync()) return _analyzeDirectory(directory);
-    final file = File(uri.path);
+    final file = File(path);
     if (file.existsSync()) return _analyzeFile(file);
     return {};
   }
@@ -61,14 +62,15 @@ class Linter {
 
   Map<String, List<Diagnostic>> _analyzeContent(Uri uri, String content) {
     final diagnostics = <Diagnostic>[];
-    final results = {uri.path: diagnostics};
-    final cwd = File(uri.path).parent;
+    final path = uri.isScheme('file') ? p.fromUri(uri) : uri.path;
+    final results = {path: diagnostics};
+    final cwd = File(path).parent;
     final pubspecLock = findPubspecLock(cwd);
     if (pubspecLock == null) return results;
     if (!pubspecLock.packages.keys.contains('bloc')) return results;
     final analysisOptions = findAnalysisOptions(cwd);
     if (analysisOptions == null) return results;
-    if (analysisOptions.excludes.any((e) => e.matches(uri.path))) {
+    if (analysisOptions.excludes.any((e) => e.matches(path))) {
       return results;
     }
     final document = TextDocument(uri: uri, content: content);
