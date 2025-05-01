@@ -7,6 +7,7 @@ import 'package:bloc_tools/src/lsp/language_server.dart';
 import 'package:lsp_server/lsp_server.dart' hide Diagnostic, Position, Range;
 import 'package:lsp_server/lsp_server.dart' as lsp;
 import 'package:mocktail/mocktail.dart';
+import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
 class _MockLinter extends Mock implements Linter {}
@@ -78,7 +79,7 @@ void main() {
         ).thenAnswer((invocation) {
           final uri = invocation.namedArguments[#uri] as Uri;
           return <String, List<Diagnostic>>{
-            '$uri': [diagnostic],
+            p.fromUri(uri): [diagnostic],
           };
         });
       });
@@ -148,7 +149,7 @@ void main() {
           () => connection.sendDiagnostics(
             any(
               that: isA<PublishDiagnosticsParams>()
-                  .having((p) => p.uri, 'uri', rootUri)
+                  .having((p) => p.uri, 'uri', p.toUri(p.fromUri(rootUri)))
                   .having((p) => p.diagnostics, 'diagnostics', [
                     lsp.Diagnostic(
                       range: lsp.Range(
@@ -180,7 +181,7 @@ void main() {
           textDocument: TextDocumentItem(
             languageId: 'dart',
             text: 'void main() {}',
-            uri: Uri.parse('file://main.dart'),
+            uri: p.toUri(p.fromUri(rootUri)),
             version: 1,
           ),
         );
@@ -222,7 +223,7 @@ void main() {
                 as _OnDidChangeTextDocumentHandler;
         final didChangeTextDocumentParams = DidChangeTextDocumentParams(
           textDocument: VersionedTextDocumentIdentifier(
-            uri: Uri.parse('file://main.dart'),
+            uri: p.toUri(p.fromUri(rootUri)),
             version: 1,
           ),
           contentChanges: [
