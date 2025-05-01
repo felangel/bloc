@@ -33,7 +33,7 @@ typedef _OnDidSaveTextDocumentHandler =
 
 void main() {
   group(LanguageServer, () {
-    final rootUri = Uri.parse('file://main.dart');
+    final rootUri = Uri.parse('file:///c:/users/dash/main.dart');
     late Connection connection;
     late Linter linter;
     late LanguageServer languageServer;
