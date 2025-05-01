@@ -1,3 +1,9 @@
+# 0.2.0-dev.1
+
+- fix: package resolution in `include` on windows
+- fix: uri resolution on windows
+- docs: improvements to `README.md`
+
 # 0.2.0-dev.0
 
 - Full rewrite of `pkg:bloc_lint`

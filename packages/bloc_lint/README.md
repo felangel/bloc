@@ -56,7 +56,36 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 
 ---
 
-# All Lint Rules
+# Quick Start
+
+1. Install the [bloc command-line tools](https://pub.dev/packages/bloc_tools)
+
+   ```sh
+   dart pub global activate bloc_tools
+   ```
+
+2. Install the [bloc_lint](https://pub.dev/packages/bloc_lint) package
+
+   ```sh
+   dart pub add --dev bloc_lint:^0.2.0
+   ```
+
+3. Add an `analysis_options.yaml` to the root of your project with the
+   recommended rules
+
+   ```yaml
+   include: package:bloc_lint/recommended.yaml
+   ```
+
+4. Run the linter
+
+   ```sh
+   bloc lint .
+   ```
+
+For more information, check out the [official documentation](https://bloclibrary.dev/lint)
+
+## All Lint Rules
 
 - [avoid_flutter_imports](https://bloclibrary.dev/lint-rules/avoid_flutter_imports)
 - [avoid_public_bloc_methods](https://bloclibrary.dev/lint-rules/avoid_public_bloc_methods)
