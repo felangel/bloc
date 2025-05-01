@@ -70,7 +70,9 @@ class Linter {
     if (!pubspecLock.packages.keys.contains('bloc')) return results;
     final analysisOptions = findAnalysisOptions(cwd);
     if (analysisOptions == null) return results;
-    final relativePath = p.relative(path, from: analysisOptions.file.parent.path).replaceAll(r'\', '/'); 
+    final relativePath = p
+        .relative(path, from: analysisOptions.file.parent.path)
+        .replaceAll(r'\', '/');
     if (analysisOptions.excludes.any((e) => e.matches(relativePath))) {
       return results;
     }
