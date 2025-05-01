@@ -26,7 +26,7 @@ class LanguageServer {
       _connection.sendDiagnostics(
         lsp.PublishDiagnosticsParams(
           diagnostics: entry.value.map((d) => d.toLsp()).toList(),
-          uri: Uri.parse(entry.key),
+          uri: p.toUri(entry.key),
         ),
       );
     }
@@ -57,7 +57,9 @@ class LanguageServer {
       },
       onDidSave: (params) async {
         if (p.basename(params.document.uri.path) == 'analysis_options.yaml') {
-          _reportDiagnostics(uri: File(params.document.uri.path).parent.uri);
+          _reportDiagnostics(
+            uri: File(p.fromUri(params.document.uri)).parent.uri,
+          );
         }
       },
     );

@@ -84,7 +84,7 @@ class AnalysisOptions {
 
   /// Try to parse an analysis_options yaml referenced by the [include].
   static AnalysisOptions? tryInclude(String include, {required Directory cwd}) {
-    final packagePrefix = include.split(p.separator).first;
+    final packagePrefix = include.split('/').first;
     final packageName = packagePrefix.split('package:').last;
     final packageConfigFile = File(
       p.join(cwd.path, '.dart_tool', 'package_config.json'),
