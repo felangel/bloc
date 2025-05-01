@@ -6,7 +6,11 @@ import {
   ServerOptions,
   TransportKind,
 } from "vscode-languageclient/node";
-import { areBlocToolsInstalled, installBlocTools } from "../utils";
+import {
+  blocToolsVersion,
+  getBlocToolsVersion,
+  installBlocTools,
+} from "../utils";
 
 let client: LanguageClient;
 
@@ -17,19 +21,23 @@ const ANALYSIS_OPTIONS_FILE = {
 };
 
 async function tryStartLanguageServer(): Promise<void> {
-  const installed = await areBlocToolsInstalled();
+  const version = await getBlocToolsVersion();
+  const isInstalled = version != null;
 
-  if (!installed) {
+  if (version !== blocToolsVersion) {
     var didInstall = false;
     await window.withProgress(
       {
-        location: ProgressLocation.Window,
-        title: "Installing Bloc Tools",
+        location: ProgressLocation.Notification,
+        title: isInstalled ? "Upgrading Bloc Tools" : "Installing Bloc Tools",
       },
-      async (_) => {
+      async () => {
         try {
           didInstall = await installBlocTools();
-          window.setStatusBarMessage("✓ Bloc Tools Installed", 3000);
+          window.setStatusBarMessage(
+            isInstalled ? "✓ Bloc Tools Upgraded" : "✓ Bloc Tools Installed",
+            3000
+          );
         } catch (err) {
           window.showErrorMessage(`${err}`);
         }
@@ -37,7 +45,11 @@ async function tryStartLanguageServer(): Promise<void> {
     );
 
     if (!didInstall) {
-      window.setStatusBarMessage("✗ Unable to install Bloc Tools", 3000);
+      window.showErrorMessage(
+        isInstalled
+          ? "✗ Unable to upgrade Bloc Tools"
+          : "✗ Unable to install Bloc Tools"
+      );
       return;
     }
   }
@@ -73,7 +85,7 @@ async function tryStartLanguageServer(): Promise<void> {
       location: ProgressLocation.Window,
       title: "Bloc Analysis Server",
     },
-    async (_) => {
+    async () => {
       try {
         await startLanguageServer();
         window.setStatusBarMessage("✓ Bloc Analysis Server", 3000);
