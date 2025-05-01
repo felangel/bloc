@@ -45,7 +45,11 @@ async function tryStartLanguageServer(): Promise<void> {
     );
 
     if (!didInstall) {
-      window.showErrorMessage("✗ Unable to install Bloc Tools");
+      window.showErrorMessage(
+        isInstalled
+          ? "✗ Unable to upgrade Bloc Tools"
+          : "✗ Unable to install Bloc Tools"
+      );
       return;
     }
   }
