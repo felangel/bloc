@@ -1,10 +1,10 @@
 import { exec } from "./exec";
 
-export const areBlocToolsInstalled = async (): Promise<boolean> => {
+export const getBlocToolsVersion = async (): Promise<string | null> => {
   try {
-    await exec("bloc");
-    return true;
+    const result = await exec("bloc --version");
+    return result.trim();
   } catch (_) {
-    return false;
+    return null;
   }
 };
