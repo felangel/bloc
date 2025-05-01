@@ -172,6 +172,89 @@ void main() {
         await subscription.cancel();
         expect(states, const <int>[1, 2, 1]);
       });
+
+      test('undoes multiple steps correctly', () async {
+        final states = <int>[];
+        final cubit = CounterCubit();
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..increment()
+          ..increment()
+          ..undo(2);
+        await cubit.close();
+        await subscription.cancel();
+
+        expect(states, const <int>[1, 2, 3, 2, 1]);
+        expect(cubit.state, 1);
+        expect(cubit.canUndo, isTrue);
+        expect(cubit.canRedo, isTrue);
+      });
+
+      test('undo stops when history is exhausted even if steps remain',
+          () async {
+        final states = <int>[];
+        final cubit = CounterCubit();
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..increment()
+          ..undo(5);
+        await cubit.close();
+        await subscription.cancel();
+
+        expect(states, const <int>[1, 2, 1, 0]);
+        expect(cubit.state, 0);
+        expect(cubit.canUndo, isFalse);
+        expect(cubit.canRedo, isTrue);
+      });
+
+      test('undo with steps: 0 does nothing', () async {
+        final states = <int>[];
+        final cubit = CounterCubit();
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..increment()
+          ..undo(0);
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 2]);
+        expect(cubit.state, 2);
+      });
+
+      test('undo with negative steps does nothing', () async {
+        final states = <int>[];
+        final cubit = CounterCubit();
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..increment()
+          ..undo(-1);
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 2]);
+        expect(cubit.state, 2);
+      });
+
+      test('undo(N) skips states filtered out by shouldReplay', () async {
+        final states = <int>[];
+
+        final cubit = CounterCubit(shouldReplayCallback: (i) => i.isOdd);
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..increment()
+          ..increment()
+          ..increment()
+          ..undo(2);
+
+        await cubit.close();
+        await subscription.cancel();
+
+        expect(states, const <int>[1, 2, 3, 4, 3, 1]);
+        expect(cubit.state, 1);
+      });
     });
 
     group('redo', () {
@@ -289,6 +372,93 @@ void main() {
         await cubit.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 3, 1, 2, 3]);
+      });
+
+      test('redoes multiple steps correctly', () async {
+        final states = <int>[];
+        final cubit = CounterCubit();
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..increment()
+          ..increment()
+          ..undo(3)
+          ..redo(2);
+        await cubit.close();
+        await subscription.cancel();
+
+        expect(states, const <int>[1, 2, 3, 2, 1, 0, 1, 2]);
+        expect(cubit.state, 2);
+        expect(cubit.canUndo, isTrue);
+        expect(cubit.canRedo, isTrue);
+      });
+
+      test('redo stops when redo stack is exhausted even if steps remain',
+          () async {
+        final states = <int>[];
+        final cubit = CounterCubit();
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..increment()
+          ..increment()
+          ..undo(2)
+          ..redo(4);
+        await cubit.close();
+        await subscription.cancel();
+
+        expect(states, const <int>[1, 2, 3, 2, 1, 2, 3]);
+        expect(cubit.state, 3);
+        expect(cubit.canUndo, isTrue);
+        expect(cubit.canRedo, isFalse);
+      });
+
+      test('redo with steps: 0 does nothing', () async {
+        final states = <int>[];
+        final cubit = CounterCubit();
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..undo()
+          ..redo(0);
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 0]);
+        expect(cubit.state, 0);
+      });
+
+      test('redo with negative steps does nothing', () async {
+        final states = <int>[];
+        final cubit = CounterCubit();
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..undo()
+          ..redo(-1);
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 0]);
+        expect(cubit.state, 0);
+      });
+
+      test('redo(N) skips states filtered out by shouldReplay', () async {
+        final states = <int>[];
+
+        final cubit = CounterCubit(shouldReplayCallback: (i) => i.isOdd);
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..increment()
+          ..increment()
+          ..increment()
+          ..undo(4)
+          ..redo();
+
+        await cubit.close();
+        await subscription.cancel();
+
+        expect(states, const <int>[1, 2, 3, 4, 3, 1, 3]);
+        expect(cubit.state, 3);
       });
     });
   });
@@ -487,6 +657,135 @@ void main() {
         await cubit.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 1, 0]);
+      });
+
+      test('undoes multiple steps correctly', () async {
+        final states = <int>[];
+        final cubit = CounterCubitMixin();
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..increment()
+          ..increment()
+          ..undo(2);
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 2, 3, 2, 1]);
+        expect(cubit.state, 1);
+        expect(cubit.canUndo, isTrue);
+        expect(cubit.canRedo, isTrue);
+      });
+
+      test('undo stops when history is exhausted even if steps remain',
+          () async {
+        final states = <int>[];
+        final cubit = CounterCubitMixin();
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..increment()
+          ..undo(5);
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 2, 1, 0]);
+        expect(cubit.state, 0);
+        expect(cubit.canUndo, isFalse);
+        expect(cubit.canRedo, isTrue);
+      });
+
+      test('undo with steps: 0 does nothing', () async {
+        final states = <int>[];
+        final cubit = CounterCubitMixin();
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..increment()
+          ..undo(0);
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 2]);
+        expect(cubit.state, 2);
+      });
+
+      test('undo with negative steps does nothing', () async {
+        final states = <int>[];
+        final cubit = CounterCubitMixin();
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..increment()
+          ..undo(-1);
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 2]);
+        expect(cubit.state, 2);
+      });
+    });
+
+    group('redo', () {
+      test('redoes multiple steps correctly', () async {
+        final states = <int>[];
+        final cubit = CounterCubitMixin();
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..increment()
+          ..increment()
+          ..undo(3)
+          ..redo(2);
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 2, 3, 2, 1, 0, 1, 2]);
+        expect(cubit.state, 2);
+        expect(cubit.canUndo, isTrue);
+        expect(cubit.canRedo, isTrue);
+      });
+
+      test('redo stops when redo stack is exhausted even if steps remain',
+          () async {
+        final states = <int>[];
+        final cubit = CounterCubitMixin();
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..increment()
+          ..increment()
+          ..undo(2)
+          ..redo(4);
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 2, 3, 2, 1, 2, 3]);
+        expect(cubit.state, 3);
+        expect(cubit.canUndo, isTrue);
+        expect(cubit.canRedo, isFalse);
+      });
+
+      test('redo with steps: 0 does nothing', () async {
+        final states = <int>[];
+        final cubit = CounterCubitMixin();
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..undo()
+          ..redo(0);
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 0]);
+        expect(cubit.state, 0);
+      });
+
+      test('redo with negative steps does nothing', () async {
+        final states = <int>[];
+        final cubit = CounterCubitMixin();
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..undo()
+          ..redo(-1);
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 0]);
+        expect(cubit.state, 0);
       });
     });
   });
