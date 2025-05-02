@@ -188,7 +188,7 @@ void main() {
       final counterCubit = CounterCubit();
       var selector = (int state) => state.isEven;
 
-      Widget buildSelector() {
+      Widget buildWidget() {
         return MaterialApp(
           home: BlocSelector<CounterCubit, int, bool>(
             bloc: counterCubit,
@@ -198,7 +198,7 @@ void main() {
         );
       }
 
-      await tester.pumpWidget(buildSelector());
+      await tester.pumpWidget(buildWidget());
       expect(find.text('Selected: true'), findsOneWidget);
 
       counterCubit.increment();
@@ -207,7 +207,7 @@ void main() {
 
       selector = (state) => state.isOdd;
 
-      await tester.pumpWidget(buildSelector());
+      await tester.pumpWidget(buildWidget());
       expect(find.text('Selected: true'), findsOneWidget);
 
       counterCubit.increment();
