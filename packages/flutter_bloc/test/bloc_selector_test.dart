@@ -184,6 +184,33 @@ void main() {
       expect(find.text('isEven: true'), findsNothing);
     });
 
+    testWidgets('rebuild when selector changes', (tester) async {
+      final counterCubit = CounterCubit();
+      late bool Function(int) selector;
+
+      Widget buildSelector() => MaterialApp(
+            home: BlocSelector<CounterCubit, int, bool>(
+              bloc: counterCubit,
+              selector: selector,
+              builder: (context, state) => Text('Selected: $state'),
+            ),
+          );
+
+      counterCubit.increment();
+
+      selector = (state) => state.isEven;
+      await tester.pumpWidget(buildSelector());
+      expect(find.text('Selected: false'), findsOneWidget);
+
+      selector = (state) => state.isOdd;
+      await tester.pumpWidget(buildSelector());
+      expect(find.text('Selected: true'), findsOneWidget);
+
+      counterCubit.increment();
+      await tester.pumpAndSettle();
+      expect(find.text('Selected: false'), findsOneWidget);
+    });
+
     testWidgets('overrides debugFillProperties', (tester) async {
       final builder = DiagnosticPropertiesBuilder();
 
