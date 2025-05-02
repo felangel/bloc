@@ -184,6 +184,38 @@ void main() {
       expect(find.text('isEven: true'), findsNothing);
     });
 
+    testWidgets('rebuilds when selector changes', (tester) async {
+      final counterCubit = CounterCubit();
+      var selector = (int state) => state.isEven;
+
+      Widget buildWidget() {
+        return Directionality(
+          textDirection: TextDirection.ltr,
+          child: BlocSelector<CounterCubit, int, bool>(
+            bloc: counterCubit,
+            selector: selector,
+            builder: (context, state) => Text('Selected: $state'),
+          ),
+        );
+      }
+
+      await tester.pumpWidget(buildWidget());
+      expect(find.text('Selected: true'), findsOneWidget);
+
+      counterCubit.increment();
+      await tester.pumpAndSettle();
+      expect(find.text('Selected: false'), findsOneWidget);
+
+      selector = (state) => state.isOdd;
+
+      await tester.pumpWidget(buildWidget());
+      expect(find.text('Selected: true'), findsOneWidget);
+
+      counterCubit.increment();
+      await tester.pumpAndSettle();
+      expect(find.text('Selected: false'), findsOneWidget);
+    });
+
     testWidgets('overrides debugFillProperties', (tester) async {
       final builder = DiagnosticPropertiesBuilder();
 
