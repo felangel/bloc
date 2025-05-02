@@ -184,7 +184,7 @@ void main() {
       expect(find.text('isEven: true'), findsNothing);
     });
 
-    testWidgets('rebuild when selector changes', (tester) async {
+    testWidgets('rebuilds when selector changes', (tester) async {
       final counterCubit = CounterCubit();
       var selector = (int state) => state.isEven;
 
