@@ -189,8 +189,9 @@ void main() {
       var selector = (int state) => state.isEven;
 
       Widget buildWidget() {
-        return MaterialApp(
-          home: BlocSelector<CounterCubit, int, bool>(
+        return Directionality(
+          textDirection: TextDirection.ltr,
+          child: BlocSelector<CounterCubit, int, bool>(
             bloc: counterCubit,
             selector: selector,
             builder: (context, state) => Text('Selected: $state'),
