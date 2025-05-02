@@ -1,3 +1,22 @@
+# 0.1.0-dev.10
+
+- fix: language server diagnostic uri resolution on windows
+- deps: bump `pkg:bloc_lint` to `^0.2.0-dev.1`
+
+# 0.1.0-dev.9
+
+- feat: add `bloc lint` command
+
+  ```sh
+  $ bloc lint --help
+  Lint Dart source code.
+
+  Usage: bloc lint [arguments]
+  -h, --help    Print this usage information.
+
+  Run "bloc help" to see global options.
+  ```
+
 # 0.1.0-dev.8
 
 - feat: add `bloc new <template>` command

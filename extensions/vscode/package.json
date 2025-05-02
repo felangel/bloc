@@ -2,7 +2,7 @@
   "name": "bloc",
   "displayName": "bloc",
   "description": "Support for the bloc library and provides tools for effectively creating blocs for both Flutter and AngularDart apps.",
-  "version": "6.7.0",
+  "version": "6.8.1",
   "publisher": "FelixAngelov",
   "bugs": {
     "url": "https://github.com/felangel/bloc/issues",
@@ -25,7 +25,8 @@
     "flutter",
     "angulardart",
     "bloc",
-    "state-management"
+    "state-management",
+    "language-server"
   ],
   "icon": "assets/logo.png",
   "activationEvents": [
@@ -41,6 +42,11 @@
             "type": "boolean",
             "default": true,
             "description": "Whether to check if you are using the latest package versions at startup."
+          },
+          "bloc.languageServer.enabled": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether to run the bloc language server at startup."
           },
           "bloc.newBlocTemplate.type": {
             "type": "string",
@@ -247,6 +253,7 @@
     "lodash": "^4.17.19",
     "mkdirp": "^0.5.1",
     "node-fetch": "^2.0.0",
-    "semver": "^6.3.1"
+    "semver": "^6.3.1",
+    "vscode-languageclient": "^7.0.0"
   }
 }

@@ -19,6 +19,7 @@ dependencies:
     path: packages/user_repository
 
 dev_dependencies:
+  bloc_lint: ^0.2.0-dev.0
   bloc_test: ^10.0.0
   flutter_test:
     sdk: flutter

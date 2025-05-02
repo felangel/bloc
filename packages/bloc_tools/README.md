@@ -19,6 +19,28 @@
 
 Tools for building applications using the bloc state management library.
 
+## Sponsors
+
+Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsors/felangel)]
+
+<table style="background-color: white; border: 1px solid black">
+    <tbody>
+        <tr>
+            <td align="center" style="border: 1px solid black">
+                <a href="https://shorebird.dev"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/shorebird.png" width="225"/></a>
+            </td>            
+            <td align="center" style="border: 1px solid black">
+                <a href="https://getstream.io/chat/flutter/tutorial/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_FlutterChat&utm_term=bloc"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/stream.png" width="225"/></a>
+            </td>
+            <td align="center" style="border: 1px solid black">
+                <a href="https://rettelgame.com/"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/rettel.png" width="225"/></a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+---
+
 ## Usage
 
 ```sh
@@ -31,8 +53,10 @@ Global options:
     --version    Print the current version.
 
 Available commands:
-  new   bloc new <subcommand> [arguments]
-        Generate new bloc components.
+  lint   bloc lint [arguments]
+         Lint Dart source code.
+  new    bloc new <subcommand> [arguments]
+         Generate new bloc components.
 
 Run "bloc help <command>" for more information about a command.
 ```

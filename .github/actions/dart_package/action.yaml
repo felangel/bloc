@@ -54,6 +54,10 @@ runs:
       with:
         sdk: ${{inputs.dart_sdk}}
 
+    - name: ⚙️ Setup Bloc Tools
+      shell: ${{ inputs.shell }}
+      run: dart pub global activate bloc_tools
+
     - name: 📦 Install Dependencies
       working-directory: ${{ inputs.working_directory }}
       shell: ${{ inputs.shell }}
@@ -68,6 +72,11 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       shell: ${{ inputs.shell }}
       run: dart analyze --fatal-warnings ${{inputs.analyze_directories}}
+
+    - name: 🔍 Bloc Lint
+      working-directory: ${{ inputs.working_directory }}
+      shell: ${{ inputs.shell }}
+      run: bloc lint ${{inputs.analyze_directories}}
 
     - name: 🧪 Test
       working-directory: ${{ inputs.working_directory }}

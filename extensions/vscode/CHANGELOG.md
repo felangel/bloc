@@ -1,3 +1,13 @@
+# 6.8.1
+
+- feat: improve bloc tools install/upgrade ux
+- fix: various language server bugs on windows
+- deps: upgrade to `bloc_tools: 0.1.0-dev.10`
+
+# 6.8.0
+
+- feat: add language server
+
 # 6.7.0
 
 - deps: upgrade vscode engine to ^1.75.0

@@ -1,0 +1,56 @@
+---
+title: Linter Installation
+description: Installing the bloc linter.
+sidebar:
+  order: 2
+---
+
+import { CardGrid } from '@astrojs/starlight/components';
+import Card from '~/components/landing/Card.astro';
+import InstallBlocToolsSnippet from '~/components/lint/InstallBlocToolsSnippet.astro';
+import BlocToolsLintHelpOutputSnippet from '~/components/lint/BlocToolsLintHelpOutputSnippet.astro';
+import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.astro';
+import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
+
+## Command-Line Tools
+
+To use the linter from the command line, install
+[`package:bloc_tools`](https://pub.dev/packages/bloc_tools) via the following
+command:
+
+<InstallBlocToolsSnippet />
+
+Once the bloc command-line tools have been installed, you can run the bloc
+linter via the `bloc lint` command:
+
+<BlocToolsLintHelpOutputSnippet />
+
+## Preconfigured Rule Sets
+
+To install preconfigured lint rule sets, install
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint) as a dev dependency
+via the following command:
+
+<InstallBlocLintSnippet />
+
+Then, add an `analysis_options.yaml` to the root of your project with the
+recommended rule set:
+
+<BlocLintRecommendedAnalysisOptionsSnippet />
+
+## IDE Integrations
+
+The following IDEs officially support the bloc linter and language server to
+provide instant diagnostics directly within your IDE.
+
+<CardGrid>
+	<Card title="VSCode" icon="vscode">
+		Support for the [Bloc VSCode
+		Extension](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+		is available in v6.8.0.
+	</Card>
+	<Card title="IntelliJ" icon="jetbrains">
+		Support for the [Bloc IntelliJ
+		Plugin](https://plugins.jetbrains.com/plugin/12129-bloc) is coming soon.
+	</Card>
+</CardGrid>

@@ -22,17 +22,22 @@ import {
   wrapWithRepositoryProvider,
 } from "./commands";
 import { analyzeDependencies, setShowContextMenu } from "./utils";
+import { client, DART_FILE, tryStartLanguageServer } from "./language-server";
 
-const DART_MODE = { language: "dart", scheme: "file" };
+export function activate(context: ExtensionContext) {
+  if (
+    workspace.getConfiguration("bloc").get<boolean>("languageServer.enabled")
+  ) {
+    tryStartLanguageServer();
+  }
 
-export function activate(_context: ExtensionContext) {
   if (workspace.getConfiguration("bloc").get<boolean>("checkForUpdates")) {
     analyzeDependencies();
   }
 
   setShowContextMenu();
 
-  _context.subscriptions.push(
+  context.subscriptions.push(
     window.onDidChangeActiveTextEditor((_) => setShowContextMenu()),
     workspace.onDidChangeWorkspaceFolders((_) => setShowContextMenu()),
     workspace.onDidChangeTextDocument(async function (event) {
@@ -44,40 +49,45 @@ export function activate(_context: ExtensionContext) {
     commands.registerCommand("extension.new-cubit", newCubit),
     commands.registerCommand(
       "extension.convert-multibloclistener",
-      convertToMultiBlocListener,
+      convertToMultiBlocListener
     ),
     commands.registerCommand(
       "extension.convert-multiblocprovider",
-      convertToMultiBlocProvider,
+      convertToMultiBlocProvider
     ),
     commands.registerCommand(
       "extension.convert-multirepositoryprovider",
-      convertToMultiRepositoryProvider,
+      convertToMultiRepositoryProvider
     ),
     commands.registerCommand("extension.wrap-blocbuilder", wrapWithBlocBuilder),
     commands.registerCommand(
       "extension.wrap-blocselector",
-      wrapWithBlocSelector,
+      wrapWithBlocSelector
     ),
     commands.registerCommand(
       "extension.wrap-bloclistener",
-      wrapWithBlocListener,
+      wrapWithBlocListener
     ),
     commands.registerCommand(
       "extension.wrap-blocconsumer",
-      wrapWithBlocConsumer,
+      wrapWithBlocConsumer
     ),
     commands.registerCommand(
       "extension.wrap-blocprovider",
-      wrapWithBlocProvider,
+      wrapWithBlocProvider
     ),
     commands.registerCommand(
       "extension.wrap-repositoryprovider",
-      wrapWithRepositoryProvider,
+      wrapWithRepositoryProvider
     ),
     languages.registerCodeActionsProvider(
-      DART_MODE,
-      new BlocCodeActionProvider(),
-    ),
+      DART_FILE,
+      new BlocCodeActionProvider()
+    )
   );
+}
+
+export function deactivate(): Thenable<void> | undefined {
+  if (!client) return undefined;
+  return client.stop();
 }

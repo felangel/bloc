@@ -9,7 +9,7 @@ import 'package:mason/mason.dart';
 /// {@endtemplate}
 class LintCommand extends Command<int> {
   /// {@macro new_command}
-  LintCommand({required Linter linter, required Logger logger})
+  LintCommand({required Logger logger, required Linter linter})
     : _linter = linter,
       _logger = logger;
 

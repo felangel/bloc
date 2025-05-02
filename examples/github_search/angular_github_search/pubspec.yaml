@@ -12,6 +12,7 @@ dependencies:
   ngdart: ^8.0.0-dev.4
 
 dev_dependencies:
+  bloc_lint: ^0.2.0-dev.0
   build_daemon: ^4.0.0
   build_runner: ^2.0.0
   build_web_compilers: ^4.0.0

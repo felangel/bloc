@@ -1,0 +1,24 @@
+---
+import { Code, TabItem, Tabs } from '@astrojs/starlight/components';
+const { name } = Astro.props;
+
+const yamlListCode = `
+bloc:
+  rules:
+    - ${name}
+`;
+const yamlMapCode = `
+bloc:
+  rules:
+    ${name}: true
+`;
+---
+
+<Tabs>
+	<TabItem label="YAML List">
+		<Code code={yamlListCode} lang="yaml" title="analysis_options.yaml" />
+	</TabItem>
+	<TabItem label="YAML Map">
+		<Code code={yamlMapCode} lang="yaml" title="analysis_options.yaml" />
+	</TabItem>
+</Tabs>

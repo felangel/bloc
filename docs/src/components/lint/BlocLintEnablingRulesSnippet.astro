@@ -1,0 +1,12 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+bloc:
+  rules:
+    - avoid_flutter_imports
+    - avoid_public_bloc_methods
+`;
+---
+
+<Code code={code} lang="yaml" title="analysis_options.yaml" />

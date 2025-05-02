@@ -1,0 +1,124 @@
+---
+title: Customizing Lint Rules
+description: Customizing bloc lint rules
+sidebar:
+  order: 4
+---
+
+import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.astro';
+import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
+import BlocLintEnablingRulesSnippet from '~/components/lint/BlocLintEnablingRulesSnippet.astro';
+import BlocLintDisablingRulesSnippet from '~/components/lint/BlocLintDisablingRulesSnippet.astro';
+import BlocLintChangingSeveritySnippet from '~/components/lint/BlocLintChangingSeveritySnippet.astro';
+import ImportFlutterInfoSnippet from '~/components/lint/ImportFlutterInfoSnippet.mdx';
+import ImportFlutterInfoOutputSnippet from '~/components/lint/ImportFlutterInfoOutputSnippet.astro';
+import BlocLintExcludingFilesSnippet from '~/components/lint/BlocLintExcludingFilesSnippet.astro';
+
+You can customize the behavior of the bloc linter by changing the severity of
+individual rules, individually enabling or disabling rules, and excluding files
+from static analysis.
+
+## Enabling and Disabling Rules
+
+The bloc linter supports a growing list of lint rules. Note that lint rules
+don't have to agree with each other. For example, some developers might prefer
+to use blocs (`prefer_bloc`) while others might prefer to use cubits
+(`prefer_cubit`).
+
+:::note
+
+Unlike static analysis, lint rules might contain false positives. Feel free to
+report any false positives or other issues by
+[filing an issue](https://github.com/felangel/bloc/issues/new/choose).
+
+:::
+
+### Enabling Recommended Rules
+
+The bloc library provides a set of recommended lint rules as part of the
+[`bloc_lint`](https://pub.dev/packages/bloc_lint) package.
+
+To enable the recommended set of lints add the `bloc_lint` package as a dev
+dependency:
+
+<InstallBlocLintSnippet />
+
+Then edit your `analysis_options.yaml` to include the rule set:
+
+<BlocLintRecommendedAnalysisOptionsSnippet />
+
+:::note
+
+When a new version of `bloc_lint` is published, code that previously passed
+static analysis might start failing. We recommend updating your code to work
+with the new rules, or you can also optionally enable or disable individual
+rules.
+
+:::
+
+### Enabling Individual Rules
+
+To enable individual rules, add `bloc:` to the `analysis_options.yaml` file as a
+top-level key and `rules:` as a second-level key. On subsequent lines, specify
+the rules you want as a YAML list (prefixed with dashes).
+
+For example:
+
+<BlocLintEnablingRulesSnippet />
+
+### Disabling Individual Rules
+
+If you include an existing rule set such as the `recommended` set, you may want
+to disable one or more included lint rules. Disabling rules is similar to
+enabling them, but requires the use of a YAML map rather than a list.
+
+For example, the following includes the recommended set of lint rules except for
+`avoid_public_bloc_methods` and additionally enables the `prefer_bloc` rule:
+
+<BlocLintDisablingRulesSnippet />
+
+## Customizing Rule Severity
+
+You can adjust the severity of any rule like so:
+
+<BlocLintChangingSeveritySnippet />
+
+Now the same lint rule will be reported with a severity of `info` instead of
+`warning`:
+
+<ImportFlutterInfoSnippet />
+
+The output of the `bloc lint` command should look like:
+
+<ImportFlutterInfoOutputSnippet />
+
+The supported severity options are:
+
+| Severity  | Description                                        |
+| --------- | -------------------------------------------------- |
+| `error`   | Indicates the pattern is not allowed.              |
+| `warning` | Indicates the pattern is suspicious but allowed.   |
+| `info`    | Provides information to users but is not a problem |
+| `hint`    | Proposes a better way of achieving a result.       |
+
+## Excluding Files
+
+Sometimes it's okay for static analysis to fail. For example, you might want to
+ignore warnings or errors reported in generated code that wasn't written by you
+and your team. Just like with official Dart lint rules, you can use the
+`exclude:` analyzer option to exclude files from static analysis.
+
+You can either list individual files or use
+[`glob`](https://pub.dev/packages/glob) patterns.
+
+:::note
+
+All usage of glob patterns should be relative to the directory containing the
+corresponding `analysis_options.yaml` file.
+
+:::
+
+For example, we can exclude all generated Dart code via the following analysis
+options:
+
+<BlocLintExcludingFilesSnippet />

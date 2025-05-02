@@ -1,0 +1,18 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+info[avoid_flutter_imports]: Avoid importing Flutter within bloc instances.
+ --> counter_cubit.dart:2
+  |
+  | import 'package:flutter/material.dart';
+  |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  = hint: Blocs should be decoupled from Flutter.
+ docs: https://bloclibrary.dev/lint-rules/avoid_flutter_imports
+
+1 issue found
+Analyzed 1 file
+`;
+---
+
+<Code code={code} lang="sh" />
