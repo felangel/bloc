@@ -186,23 +186,27 @@ void main() {
 
     testWidgets('rebuild when selector changes', (tester) async {
       final counterCubit = CounterCubit();
-      late bool Function(int) selector;
+      var selector = (int state) => state.isEven;
 
-      Widget buildSelector() => MaterialApp(
-            home: BlocSelector<CounterCubit, int, bool>(
-              bloc: counterCubit,
-              selector: selector,
-              builder: (context, state) => Text('Selected: $state'),
-            ),
-          );
+      Widget buildSelector() {
+        return MaterialApp(
+          home: BlocSelector<CounterCubit, int, bool>(
+            bloc: counterCubit,
+            selector: selector,
+            builder: (context, state) => Text('Selected: $state'),
+          ),
+        );
+      }
+
+      await tester.pumpWidget(buildSelector());
+      expect(find.text('Selected: true'), findsOneWidget);
 
       counterCubit.increment();
-
-      selector = (state) => state.isEven;
-      await tester.pumpWidget(buildSelector());
+      await tester.pumpAndSettle();
       expect(find.text('Selected: false'), findsOneWidget);
 
       selector = (state) => state.isOdd;
+
       await tester.pumpWidget(buildSelector());
       expect(find.text('Selected: true'), findsOneWidget);
 
