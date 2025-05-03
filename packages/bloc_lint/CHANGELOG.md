@@ -1,3 +1,7 @@
+# 0.2.0-dev.2
+
+- feat: add [prefer_void_public_cubit_methods](https://bloclibrary.dev/lint-rules/prefer_void_public_cubit_methods)
+
 # 0.2.0-dev.1
 
 - fix: package resolution in `include` on windows
