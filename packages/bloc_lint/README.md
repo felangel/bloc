@@ -85,6 +85,13 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 
 For more information, check out the [official documentation](https://bloclibrary.dev/lint)
 
+## Recommended Lint Rules
+
+- [avoid_flutter_imports](https://bloclibrary.dev/lint-rules/avoid_flutter_imports)
+- [avoid_public_bloc_methods](https://bloclibrary.dev/lint-rules/avoid_public_bloc_methods)
+- [avoid_public_fields](https://bloclibrary.dev/lint-rules/avoid_public_fields)
+- [prefer_void_public_cubit_methods](https://bloclibrary.dev/lint-rules/prefer_void_public_cubit_methods)
+
 ## All Lint Rules
 
 - [avoid_flutter_imports](https://bloclibrary.dev/lint-rules/avoid_flutter_imports)
@@ -92,6 +99,7 @@ For more information, check out the [official documentation](https://bloclibrary
 - [avoid_public_fields](https://bloclibrary.dev/lint-rules/avoid_public_fields)
 - [prefer_bloc](https://bloclibrary.dev/lint-rules/prefer_bloc)
 - [prefer_cubit](https://bloclibrary.dev/lint-rules/prefer_cubit)
+- [prefer_void_public_cubit_methods](https://bloclibrary.dev/lint-rules/prefer_void_public_cubit_methods)
 
 ## Dart Versions
 
