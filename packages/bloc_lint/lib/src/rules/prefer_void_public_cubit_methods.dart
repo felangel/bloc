@@ -58,8 +58,8 @@ class _Listener extends Listener {
       token: name,
       message: '''
 Prefer void public methods on cubit instances.
-Try adjusting the return type to either `void` or `Future<void>`.''',
-      hint: 'Prefer `void` or `Future<void>` return types.',
+Try adjusting the return type to `void`, `Future<void>`, or `FutureOr<void>`.''',
+      hint: 'Prefer `void` return types.',
     );
   }
 }
