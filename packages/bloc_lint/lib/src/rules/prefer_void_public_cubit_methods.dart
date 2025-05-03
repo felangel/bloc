@@ -76,7 +76,7 @@ String _getReturnType(Token name) {
 
   bool isDone() {
     if (current == null) return true;
-    if (bracketCount == 0) return true;
+    if (bracketCount <= 0) return true;
     return false;
   }
 
