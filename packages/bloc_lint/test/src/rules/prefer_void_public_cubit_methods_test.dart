@@ -117,6 +117,23 @@ class CounterCubit extends Cubit<int> {
     );
 
     lintTest(
+      'does not lint when non-void public methods exist on other classes',
+      rule: PreferVoidPublicCubitMethods.new,
+      path: 'counter_cubit.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+
+class Dash {
+  bool get isCool => true;
+}
+
+class CounterCubit extends Cubit<int> {
+  CounterCubit() : super(0);
+}
+''',
+    );
+
+    lintTest(
       'lints when public getter exists on Cubit (bool)',
       rule: PreferVoidPublicCubitMethods.new,
       path: 'counter_cubit.dart',
