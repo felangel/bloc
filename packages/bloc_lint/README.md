@@ -56,7 +56,7 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 
 ---
 
-# Quick Start
+## Quick Start
 
 1. Install the [bloc command-line tools](https://pub.dev/packages/bloc_tools)
 
