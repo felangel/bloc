@@ -134,4 +134,20 @@
             <category>Bloc</category>
         </intentionAction>
     </extensions>
+
+    <extensions defaultExtensionNs="com.redhat.devtools.lsp4ij">
+        <server id="blocLanguageServer"
+                name="Bloc Language Server"
+                factoryClass="com.bloc.intellij_generator_plugin.language_server.BlocLanguageServerFactory">
+            <description><![CDATA[
+                Official lint rules for development when using the bloc state management library.
+            ]]></description>
+        </server>
+        <fileNamePatternMapping patterns="*.dart"
+                                serverId="blocLanguageServer"
+                                languageId="dart"/>
+        <fileNamePatternMapping patterns="analysis_options.yaml"
+                                serverId="blocLanguageServer"
+                                languageId="yaml"/>
+    </extensions>
 </idea-plugin>
