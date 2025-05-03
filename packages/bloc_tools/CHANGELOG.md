@@ -1,3 +1,7 @@
+# 0.1.0-dev.11
+
+- deps: bump `pkg:bloc_lint` to `^0.2.0-dev.2`
+
 # 0.1.0-dev.10
 
 - fix: language server diagnostic uri resolution on windows
