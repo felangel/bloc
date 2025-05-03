@@ -10,7 +10,6 @@ import 'package:_fe_analyzer_shared/src/scanner/scanner.dart' show scan;
 import 'package:bloc_lint/bloc_lint.dart';
 import 'package:bloc_lint/src/analysis_options.dart';
 import 'package:bloc_lint/src/env.dart';
-import 'package:bloc_lint/src/rules/rules.dart';
 import 'package:collection/collection.dart';
 import 'package:glob/glob.dart';
 import 'package:path/path.dart' as p;
