@@ -8,7 +8,7 @@ export * from "./get-pubspec-path";
 export * from "./get-selected-text";
 export * from "./get-template-setting";
 export * from "./has-dependency";
-export * from "./are-bloc-tools-installed";
+export * from "./get-bloc-tools-version";
 export * from "./install-bloc-tools";
 export * from "./is-dart-installed";
 export * from "./set-show-context-menu";

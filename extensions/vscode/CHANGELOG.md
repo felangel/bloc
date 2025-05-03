@@ -1,3 +1,7 @@
+# 6.8.2
+
+- deps: upgrade to `bloc_tools: 0.1.0-dev.11`
+
 # 6.8.1
 
 - feat: improve bloc tools install/upgrade ux
