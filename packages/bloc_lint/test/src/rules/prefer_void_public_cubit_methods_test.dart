@@ -117,6 +117,22 @@ class CounterCubit extends Cubit<int> {
     );
 
     lintTest(
+      'does not lint for overridden methods',
+      rule: PreferVoidPublicCubitMethods.new,
+      path: 'counter_cubit.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+
+class CounterCubit extends Cubit<int> {
+  CounterCubit() : super(0);
+  
+  @override
+  String toString() => 'CounterCubit';
+}
+''',
+    );
+
+    lintTest(
       'does not lint when non-void public methods exist on other classes',
       rule: PreferVoidPublicCubitMethods.new,
       path: 'counter_cubit.dart',
