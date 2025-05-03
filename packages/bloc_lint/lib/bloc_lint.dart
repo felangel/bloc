@@ -12,7 +12,8 @@ export 'src/rules/rules.dart'
         AvoidPublicBlocMethods,
         AvoidPublicFields,
         PreferBlocLint,
-        PreferCubitLint;
+        PreferCubitLint,
+        PreferVoidPublicCubitMethods;
 export 'src/text_document.dart'
     show
         Position,

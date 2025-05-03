@@ -5,3 +5,4 @@ bloc:
     - avoid_public_fields
     - prefer_bloc
     - prefer_cubit
+    - prefer_void_public_cubit_methods

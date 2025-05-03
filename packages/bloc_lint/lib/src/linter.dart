@@ -21,6 +21,7 @@ final allRules = <String, LintRuleBuilder>{
   AvoidPublicFields.rule: AvoidPublicFields.new,
   PreferBlocLint.rule: PreferBlocLint.new,
   PreferCubitLint.rule: PreferCubitLint.new,
+  PreferVoidPublicCubitMethods.rule: PreferVoidPublicCubitMethods.new,
 };
 
 /// {@template linter}
