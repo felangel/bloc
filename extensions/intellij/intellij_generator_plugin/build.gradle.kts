@@ -6,7 +6,11 @@ plugins {
 }
 
 group = "com.bloc"
-version = "4.0.2"
+version = "4.1.0"
+
+val lsp4ijVersion: String by project
+val lsp4jVersion: String by project
+val caseFormatVersion: String by project
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -15,7 +19,17 @@ java {
 
 repositories {
     mavenCentral()
-
+    exclusiveContent {
+        forRepository {
+            maven {
+                setUrl("https://mvn.falsepattern.com/releases")
+                name = "mavenpattern"
+            }
+        }
+        filter {
+            includeModule("com.redhat.devtools.intellij", "lsp4ij")
+        }
+    }
     intellijPlatform {
         defaultRepositories()
     }
@@ -31,11 +45,14 @@ intellijPlatform {
 
 dependencies {
     intellijPlatform {
-        intellijIdeaCommunity("2022.3")
+        intellijIdeaCommunity("2023.3")
         bundledPlugin("com.intellij.java")
+        plugin("com.redhat.devtools.lsp4ij:$lsp4ijVersion")
     }
     testCompileOnly("junit:junit:4.13.2")
-    implementation("com.fleshgrinder.kotlin:case-format:0.2.0")
+    compileOnly("com.redhat.devtools.intellij:lsp4ij:$lsp4ijVersion")
+    compileOnly("org.eclipse.lsp4j:org.eclipse.lsp4j:$lsp4jVersion")
+    implementation("com.fleshgrinder.kotlin:case-format:$caseFormatVersion")
 }
 
 tasks {
