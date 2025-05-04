@@ -85,7 +85,9 @@
     <extensions defaultExtensionNs="com.intellij">
         <defaultLiveTemplatesProvider
                 implementation="com.bloc.intellij_generator_plugin.live_templates.BlocTemplateProvider"/>
-        <liveTemplateContext implementation="com.bloc.intellij_generator_plugin.live_templates.BlocContext"/>
+        <liveTemplateContext contextId="BLOC"
+                             implementation="com.bloc.intellij_generator_plugin.live_templates.BlocContext"
+        />
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
