@@ -41,12 +41,13 @@
     </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="223" until-build="243.*"/>
+    <idea-version since-build="233" until-build="243.*"/>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
        on how to target different products -->
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.java</depends>
+    <depends>com.redhat.devtools.lsp4ij</depends>
 
     <actions>
         <action class="com.bloc.intellij_generator_plugin.action.GenerateCubitAction"
@@ -75,6 +76,10 @@
                           anchor="last"/>
         </action>
     </actions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <notificationGroup id="Bloc Plugin Notifications" displayType="BALLOON"/>
+    </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
         <defaultLiveTemplatesProvider
@@ -132,5 +137,21 @@
             </className>
             <category>Bloc</category>
         </intentionAction>
+    </extensions>
+
+    <extensions defaultExtensionNs="com.redhat.devtools.lsp4ij">
+        <server id="blocLanguageServer"
+                name="Bloc Language Server"
+                factoryClass="com.bloc.intellij_generator_plugin.language_server.BlocLanguageServerFactory">
+            <description><![CDATA[
+                Official lint rules for development when using the bloc state management library.
+            ]]></description>
+        </server>
+        <fileNamePatternMapping patterns="*.dart"
+                                serverId="blocLanguageServer"
+                                languageId="dart"/>
+        <fileNamePatternMapping patterns="analysis_options.yaml"
+                                serverId="blocLanguageServer"
+                                languageId="yaml"/>
     </extensions>
 </idea-plugin>
