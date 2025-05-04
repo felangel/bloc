@@ -11,6 +11,7 @@
 
     <change-notes><![CDATA[
         <ul>
+          <li>v4.1.0 - Add language server with bloc lint integration</li>
           <li>v4.0.2 - Support for Intellij 2024.2</li>
           <li>v4.0.1 - Support for Intellij 2024</li>
           <li>v4.0.0 - Support for Sealed Classes and Dependency Upgrades</li>
