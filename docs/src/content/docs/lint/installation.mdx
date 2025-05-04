@@ -11,6 +11,7 @@ import InstallBlocToolsSnippet from '~/components/lint/InstallBlocToolsSnippet.a
 import BlocToolsLintHelpOutputSnippet from '~/components/lint/BlocToolsLintHelpOutputSnippet.astro';
 import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.astro';
 import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
+import BlocLintMultipleRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintMultipleRecommendedAnalysisOptionsSnippet.astro';
 
 ## Command-Line Tools
 
@@ -25,9 +26,9 @@ linter via the `bloc lint` command:
 
 <BlocToolsLintHelpOutputSnippet />
 
-## Preconfigured Rule Sets
+## Recommended Rule Set
 
-To install preconfigured lint rule sets, install
+To install the recommended lint rule set, install
 [`package:bloc_lint`](https://pub.dev/packages/bloc_lint) as a dev dependency
 via the following command:
 
@@ -37,6 +38,10 @@ Then, add an `analysis_options.yaml` to the root of your project with the
 recommended rule set:
 
 <BlocLintRecommendedAnalysisOptionsSnippet />
+
+If needed, you can include multiple rule sets by defining them as a list:
+
+<BlocLintMultipleRecommendedAnalysisOptionsSnippet />
 
 ## IDE Integrations
 
@@ -51,6 +56,7 @@ provide instant diagnostics directly within your IDE.
 	</Card>
 	<Card title="IntelliJ" icon="jetbrains">
 		Support for the [Bloc IntelliJ
-		Plugin](https://plugins.jetbrains.com/plugin/12129-bloc) is coming soon.
+		Plugin](https://plugins.jetbrains.com/plugin/12129-bloc) is available in
+		v4.1.0.
 	</Card>
 </CardGrid>
