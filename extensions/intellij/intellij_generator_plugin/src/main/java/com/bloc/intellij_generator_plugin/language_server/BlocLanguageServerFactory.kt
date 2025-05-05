@@ -13,10 +13,14 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
 class BlocLanguageServerFactory : LanguageServerFactory, LanguageServerEnablementSupport {
+    companion object {
+        private const val PROCESS_TIMEOUT_SECONDS: Long = 5
+        private const val TARGET_BLOC_TOOLS_VERSION = "0.1.0-dev.11"
+        private const val MIN_DART_VERSION = "3.7.0"
+    }
+
     private val logger = Logger.getInstance(BlocLanguageServerFactory::class.java)
     private val minVersionAlertShowed = AtomicBoolean(false)
-    private val targetBlocToolsVersion = "0.1.0-dev.11"
-    private val minDartVersion = "3.7.0"
     private val dartVersionRegex = Regex("Dart SDK version: ((?:[0-9]*\\.?)*)")
 
     override fun createConnectionProvider(project: Project): StreamConnectionProvider = BlocLanguageServer()
@@ -26,14 +30,14 @@ class BlocLanguageServerFactory : LanguageServerFactory, LanguageServerEnablemen
         if (dartVersion == null) {
             return false
         }
-        return VersionComparator.isGreaterOrEqualThan(dartVersion, minDartVersion)
+        return VersionComparator.isGreaterOrEqualThan(dartVersion, MIN_DART_VERSION)
     }
 
     private fun getDartVersion(): String? {
         try {
             val commandLine = GeneralCommandLine("dart", "--version")
             val process = commandLine.createProcess()
-            val hasExited = process.waitFor(5, TimeUnit.SECONDS)
+            val hasExited = process.waitFor(PROCESS_TIMEOUT_SECONDS, TimeUnit.SECONDS)
             if (!hasExited || process.exitValue() != 0) return null
             val value = process.inputStream.bufferedReader().readText()
             return dartVersionRegex.find(value)?.groupValues?.get(1)
@@ -47,7 +51,7 @@ class BlocLanguageServerFactory : LanguageServerFactory, LanguageServerEnablemen
         try {
             val commandLine = GeneralCommandLine("bloc", "--version")
             val process = commandLine.createProcess()
-            val hasExited = process.waitFor(5, TimeUnit.SECONDS)
+            val hasExited = process.waitFor(PROCESS_TIMEOUT_SECONDS, TimeUnit.SECONDS)
             if (!hasExited || process.exitValue() != 0) return null
             return process.inputStream.bufferedReader().readLine().orEmpty().trim()
         } catch (e: Exception) {
@@ -61,7 +65,7 @@ class BlocLanguageServerFactory : LanguageServerFactory, LanguageServerEnablemen
         val errorMessage = "Unable to $verb bloc_tools"
         try {
             val commandLine =
-                GeneralCommandLine("dart", "pub", "global", "activate", "bloc_tools", targetBlocToolsVersion)
+                GeneralCommandLine("dart", "pub", "global", "activate", "bloc_tools", TARGET_BLOC_TOOLS_VERSION)
             val process = commandLine.createProcess()
             val exitCode = process.waitFor()
             if (exitCode != 0) {
@@ -91,14 +95,14 @@ class BlocLanguageServerFactory : LanguageServerFactory, LanguageServerEnablemen
             if (minVersionAlertShowed.compareAndSet(false, true)) {
                 showNotification(
                     project,
-                    "The bloc language server requires a newer version of the Dart SDK (>=$minDartVersion).",
+                    "The bloc language server requires a newer version of the Dart SDK (>=$MIN_DART_VERSION).",
                     NotificationType.ERROR
                 )
                 logger.error("Installation doesn't match Dart version requirement")
             }
             return false
         }
-        if (blocToolsVersion != targetBlocToolsVersion) {
+        if (blocToolsVersion != TARGET_BLOC_TOOLS_VERSION) {
             if (!installOrUpgradeBlocTools(project, isUpgrade)) {
                 logger.error("bloc_tools ${if (isUpgrade) "upgrade" else "installation"} failed")
                 return false
