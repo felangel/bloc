@@ -1,5 +1,6 @@
 package com.bloc.intellij_generator_plugin.language_server
 
+import com.bloc.intellij_generator_plugin.util.CommandLineHelper
 import com.bloc.intellij_generator_plugin.util.VersionComparator
 import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.notification.NotificationGroupManager
@@ -9,7 +10,6 @@ import com.intellij.openapi.project.Project
 import com.redhat.devtools.lsp4ij.LanguageServerEnablementSupport
 import com.redhat.devtools.lsp4ij.LanguageServerFactory
 import com.redhat.devtools.lsp4ij.server.StreamConnectionProvider
-import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
 class BlocLanguageServerFactory : LanguageServerFactory, LanguageServerEnablementSupport {
@@ -34,31 +34,15 @@ class BlocLanguageServerFactory : LanguageServerFactory, LanguageServerEnablemen
     }
 
     private fun getDartVersion(): String? {
-        try {
-            val commandLine = GeneralCommandLine("dart", "--version")
-            val process = commandLine.createProcess()
-            val hasExited = process.waitFor(PROCESS_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            if (!hasExited || process.exitValue() != 0) return null
-            val value = process.inputStream.bufferedReader().readText()
-            return dartVersionRegex.find(value)?.groupValues?.get(1)
-        } catch (e: Exception) {
-            logger.debug("dart --version failed: ${e.message}")
+        val value = CommandLineHelper.executeWithTimeout(PROCESS_TIMEOUT_SECONDS, "dart", "--version")
+        if (value.isNullOrBlank()) {
             return null
         }
+        return dartVersionRegex.find(value)?.groupValues?.get(1)
     }
 
-    private fun getBlocToolsVersion(): String? {
-        try {
-            val commandLine = GeneralCommandLine("bloc", "--version")
-            val process = commandLine.createProcess()
-            val hasExited = process.waitFor(PROCESS_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            if (!hasExited || process.exitValue() != 0) return null
-            return process.inputStream.bufferedReader().readLine().orEmpty().trim()
-        } catch (e: Exception) {
-            logger.debug("bloc --version failed: ${e.message}")
-            return null
-        }
-    }
+    private fun getBlocToolsVersion(): String? =
+        CommandLineHelper.executeWithTimeout(PROCESS_TIMEOUT_SECONDS, "bloc", "--version")
 
     private fun installOrUpgradeBlocTools(project: Project, isUpgrade: Boolean): Boolean {
         val verb = if (isUpgrade) "upgrade" else "install"
