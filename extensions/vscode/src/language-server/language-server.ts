@@ -22,7 +22,7 @@ const ANALYSIS_OPTIONS_FILE = {
   scheme: "file",
 };
 
-const DART_SDK_VERSION = "^3.7.0";
+const DART_SDK_CONSTRAINT = "^3.7.0";
 
 async function startLanguageServer() {
   const serverOptions: ServerOptions = {
@@ -74,9 +74,16 @@ async function tryStartLanguageServer(): Promise<void> {
   }
 
   const dartVersion = await getDartVersion();
-  if (dartVersion == null || !semver.satisfies(dartVersion, DART_SDK_VERSION)) {
+  if (!dartVersion) {
     window.showWarningMessage(
-      `The Bloc Language Server requires a newer version of Dart (${DART_SDK_VERSION})`
+      "The Bloc Language Server requires Dart to be installed"
+    );
+    return;
+  }
+
+  if (!semver.satisfies(dartVersion, DART_SDK_CONSTRAINT)) {
+    window.showWarningMessage(
+      `The Bloc Language Server requires a newer version of Dart (${DART_SDK_CONSTRAINT})`
     );
     return;
   }
