@@ -5,7 +5,5 @@ import com.redhat.devtools.lsp4ij.LanguageServerFactory
 import com.redhat.devtools.lsp4ij.server.StreamConnectionProvider
 
 class BlocLanguageServerFactory : LanguageServerFactory {
-    override fun createConnectionProvider(project: Project): StreamConnectionProvider {
-        return BlocLanguageServer(project)
-    }
+    override fun createConnectionProvider(project: Project): StreamConnectionProvider = BlocLanguageServer(project)
 }
