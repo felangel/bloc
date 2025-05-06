@@ -1,3 +1,7 @@
+# 6.8.3
+
+- fix: add Dart SDK constraint for language server
+
 # 6.8.2
 
 - deps: upgrade to `bloc_tools: 0.1.0-dev.11`
