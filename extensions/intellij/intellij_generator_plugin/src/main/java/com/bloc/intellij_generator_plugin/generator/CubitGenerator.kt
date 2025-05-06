@@ -4,7 +4,7 @@ import com.bloc.intellij_generator_plugin.action.BlocTemplateType
 import com.fleshgrinder.extensions.kotlin.toLowerSnakeCase
 import com.fleshgrinder.extensions.kotlin.toUpperCamelCase
 import com.google.common.io.CharStreams
-import org.apache.commons.lang.text.StrSubstitutor
+import org.apache.commons.text.StringSubstitutor
 import java.io.InputStreamReader
 
 abstract class CubitGenerator(
@@ -41,7 +41,7 @@ abstract class CubitGenerator(
     abstract fun fileName(): String
 
     fun generate(): String {
-        val substitutor = StrSubstitutor(templateValues, "{{", "}}", '\\')
+        val substitutor = StringSubstitutor(templateValues, "{{", "}}", '\\')
         return substitutor.replace(templateString)
     }
 

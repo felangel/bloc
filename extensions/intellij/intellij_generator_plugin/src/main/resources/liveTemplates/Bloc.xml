@@ -9,7 +9,7 @@
                   alwaysStopAt="true"/>
         <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
         </context>
     </template>
     <template name="blocconsumer"
@@ -20,7 +20,7 @@
                   alwaysStopAt="true"/>
         <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
         </context>
     </template>
     <template name="bloclistener"
@@ -31,7 +31,7 @@
                   alwaysStopAt="true"/>
         <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
         </context>
     </template>
     <template name="blocprovider"
@@ -42,7 +42,7 @@
                   alwaysStopAt="true"/>
         <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
         </context>
     </template>
     <template name="blocselector"
@@ -55,7 +55,7 @@
         <variable name="SelectedState" expression="" defaultValue="&quot;dynamic&quot;" alwaysStopAt="true"/>
         <variable name="Widget" expression="" defaultValue="&quot;Text(state.toString())&quot;" alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
         </context>
     </template>
     <template name="multibloclistener"
@@ -69,7 +69,7 @@
                   alwaysStopAt="true"/>
         <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
         </context>
     </template>
     <template name="multiblocprovider"
@@ -83,7 +83,7 @@
                   alwaysStopAt="true"/>
         <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
         </context>
     </template>
     <template name="multirepoprovider"
@@ -93,7 +93,7 @@
         <variable name="Subject2" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
         <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
         </context>
     </template>
     <template name="repoprovider"
@@ -102,7 +102,7 @@
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
         <variable name="Container" expression="" defaultValue="&quot;Container()&quot;" alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
         </context>
     </template>
 
@@ -121,7 +121,7 @@
               toShortenFQNames="true">
         <variable name="eventName" expression="" defaultValue="&quot;EventName&quot;" alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
             <option name="DART_TOPLEVEL" value="false"/>
         </context>
     </template>
@@ -168,7 +168,7 @@
         <variable name="EnumBloc" expression="enum(&quot;Bloc&quot;,&quot;Cubit&quot;)" defaultValue="&quot;Bloc&quot;"
                   alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
             <option name="DART_TOPLEVEL" value="false"/>
         </context>
     </template>
@@ -176,7 +176,7 @@
               description="RepositoryProvider.of()" toReformat="false" toShortenFQNames="true">
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
             <option name="DART_TOPLEVEL" value="false"/>
         </context>
     </template>
@@ -189,7 +189,7 @@
         <variable name="enumBlocLowercase" expression="lowercaseAndDash(EnumBloc)" defaultValue="&quot;bloc&quot;"
                   alwaysStopAt="false"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
             <option name="DART_TOPLEVEL" value="false"/>
         </context>
     </template>
@@ -199,7 +199,7 @@
         <variable name="EnumBloc" expression="enum(&quot;Bloc&quot;,&quot;Cubit&quot;)" defaultValue="&quot;Bloc&quot;"
                   alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
             <option name="DART_TOPLEVEL" value="false"/>
         </context>
     </template>
@@ -209,7 +209,7 @@
         <variable name="EnumBloc" expression="enum(&quot;Bloc&quot;,&quot;Cubit&quot;)" defaultValue="&quot;Bloc&quot;"
                   alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
             <option name="DART_TOPLEVEL" value="false"/>
         </context>
     </template>
@@ -223,7 +223,7 @@
         <variable name="enumBlocLowercase" expression="lowercaseAndDash(EnumBloc)" defaultValue="&quot;bloc&quot;"
                   alwaysStopAt="false"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
             <option name="DART_TOPLEVEL" value="false"/>
         </context>
     </template>
@@ -245,19 +245,21 @@
             <option name="DART_TOPLEVEL" value="true"/>
         </context>
     </template>
-    <template name="mockbloc" value="class Mock$Subject$Bloc extends MockBloc&lt;$Subject$Event, $Subject$State&gt; implements $Subject$Bloc {}"
+    <template name="mockbloc"
+              value="class Mock$Subject$Bloc extends MockBloc&lt;$Subject$Event, $Subject$State&gt; implements $Subject$Bloc {}"
               description="Create a mock bloc" toReformat="false" toShortenFQNames="true">
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
             <option name="DART_TOPLEVEL" value="true"/>
         </context>
     </template>
-    <template name="mockcubit" value="class Mock$Subject$Cubit extends MockCubit&lt;$Subject$State&gt; implements $Subject$Cubit {}"
+    <template name="mockcubit"
+              value="class Mock$Subject$Cubit extends MockCubit&lt;$Subject$State&gt; implements $Subject$Cubit {}"
               description="Create a mock cubit" toReformat="false" toShortenFQNames="true">
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
             <option name="DART_TOPLEVEL" value="true"/>
         </context>
     </template>
@@ -265,16 +267,16 @@
               description="Create a fake object" toReformat="false" toShortenFQNames="true">
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true" />
-            <option name="DART_TOPLEVEL" value="true" />
+            <option name="DART" value="true"/>
+            <option name="DART_TOPLEVEL" value="true"/>
         </context>
     </template>
     <template name="mock" value="class Mock$Subject$ extends Mock implements $Subject$ {}"
               description="Create a mock object" toReformat="false" toShortenFQNames="true">
         <variable name="Subject" expression="" defaultValue="&quot;Subject&quot;" alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true" />
-            <option name="DART_TOPLEVEL" value="true" />
+            <option name="DART" value="true"/>
+            <option name="DART_TOPLEVEL" value="true"/>
         </context>
     </template>
 
@@ -284,7 +286,7 @@
         <variable name="CLASS_NAME" expression="dartClassName()" defaultValue="&quot;&quot;" alwaysStopAt="false"/>
         <variable name="stateName" expression="" defaultValue="&quot;stateName&quot;" alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
             <option name="DART_TOPLEVEL" value="false"/>
         </context>
     </template>
@@ -293,7 +295,7 @@
         <variable name="CLASS_NAME" expression="dartClassName()" defaultValue="&quot;&quot;" alwaysStopAt="false"/>
         <variable name="eventName" expression="" defaultValue="&quot;eventName&quot;" alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
             <option name="DART_TOPLEVEL" value="false"/>
         </context>
     </template>
@@ -306,7 +308,7 @@
                   defaultValue="&quot;&quot;" alwaysStopAt="true"/>
         <variable name="eventName" expression="" defaultValue="&quot;eventName&quot;" alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
             <option name="DART_TOPLEVEL" value="false"/>
         </context>
     </template>
@@ -319,7 +321,7 @@
                   defaultValue="&quot;&quot;" alwaysStopAt="true"/>
         <variable name="eventName" expression="" defaultValue="&quot;eventName&quot;" alwaysStopAt="true"/>
         <context>
-            <option name="DART" value="true"/>
+            <option name="BLOC" value="true"/>
             <option name="DART_TOPLEVEL" value="false"/>
         </context>
     </template>
