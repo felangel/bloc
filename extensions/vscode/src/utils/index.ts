@@ -2,6 +2,7 @@ export * from "./analyze-dependencies";
 export * from "./convert-to";
 export * from "./exec";
 export * from "./get-bloc-type";
+export * from "./get-dart-version";
 export * from "./get-latest-package-version";
 export * from "./get-pubspec";
 export * from "./get-pubspec-path";
