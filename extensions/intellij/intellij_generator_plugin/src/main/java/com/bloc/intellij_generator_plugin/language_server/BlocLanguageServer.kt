@@ -24,7 +24,7 @@ class BlocLanguageServer(private val project: Project? = null) :
     private val dartVersionRegex = Regex("Dart SDK version: ((?:[0-9]*\\.?)*)")
 
     override fun start() {
-        if (project != null && checkRequirements(project)) {
+        if (project == null || !checkRequirements(project)) {
             logger.error("Bloc language server could not be started because requirements are not met.")
             return
         }
