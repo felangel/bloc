@@ -49,7 +49,7 @@ dependencies {
         bundledPlugin("com.intellij.java")
         plugin("com.redhat.devtools.lsp4ij:$lsp4ijVersion")
     }
-    testCompileOnly("junit:junit:4.13.2")
+    testImplementation(kotlin("test"))
     compileOnly("com.redhat.devtools.intellij:lsp4ij:$lsp4ijVersion")
     compileOnly("org.eclipse.lsp4j:org.eclipse.lsp4j:$lsp4jVersion")
     implementation("com.fleshgrinder.kotlin:case-format:$caseFormatVersion")
