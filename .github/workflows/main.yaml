@@ -256,7 +256,7 @@ jobs:
         with:
           entrypoint: bin/bloc.dart
           working_directory: packages/${{ matrix.package }}
-          name: bloc_${{ runner.os }})
+          name: bloc_${{ runner.os }}
 
   flutter_package_checks:
     needs: changes
