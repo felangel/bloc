@@ -95,7 +95,7 @@ jobs:
         id: needs_dart_compile_checks
         with:
           filters: |
-            bloc_tools/bin/bloc:
+            bloc_tools:
               - ./.github/workflows/main.yaml
               - packages/bloc_tools/**
 
@@ -240,22 +240,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        executable: ${{ fromJSON(needs.changes.outputs.needs_dart_compile_checks) }}
+        package: ${{ fromJSON(needs.changes.outputs.needs_dart_compile_checks) }}
         os: ["ubuntu-latest", "macos-latest", "windows-latest"]
 
     runs-on: ${{ matrix.os }}
 
-    name: 📦 ${{ matrix.entrypoint }}
+    name: 📦 ${{ matrix.package }}
 
     steps:
       - name: 📚 Git Checkout
         uses: actions/checkout@v4
 
-      - name: 📦 Compile ${{ matrix.executable }} for ${{ runner.os }}
+      - name: 📦 Compile ${{ matrix.package }} for ${{ runner.os }}
         uses: ./.github/actions/dart_compile
         with:
-          entrypoint: ./packages/${{ matrix.executable }}
-          name: $(echo basename ${{ matrix.executable }}_${{ runner.os }})
+          entrypoint: ./packages/${{ matrix.package }}/bin/bloc.dart
+          working_directory: packages/${{ matrix.package }}
+          name: bloc_${{ runner.os }})
 
   flutter_package_checks:
     needs: changes

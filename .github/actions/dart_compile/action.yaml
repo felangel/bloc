@@ -6,6 +6,10 @@ inputs:
     required: false
     default: "stable"
     description: "The dart sdk version to use"
+  working_directory:
+    required: false
+    default: "."
+    description: The working directory for this workflow
   entrypoint:
     required: true
     description: The path to the Dart entrypoint
@@ -22,6 +26,7 @@ runs:
         sdk: ${{inputs.dart_sdk}}
 
     - name: 📦 Compile
+      working-directory: ${{ inputs.working_directory }}
       shell: ${{ inputs.shell }}
       run: |
         mkdir ${{ runner.temp }}/executable
