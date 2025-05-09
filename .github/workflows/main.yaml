@@ -254,8 +254,8 @@ jobs:
       - name: 📦 Compile ${{ matrix.executable }}
         uses: ./.github/actions/dart_compile
         with:
-          entrypoint: packages/${{ matrix.executable }}
-          name: $(echo basename ${{ matrix.executable}}_${{ runner.os }})
+          entrypoint: ./packages/${{ matrix.executable }}
+          name: $(echo basename ${{ matrix.executable }}_${{ runner.os }})
 
   flutter_package_checks:
     needs: changes
