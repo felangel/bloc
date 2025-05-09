@@ -96,6 +96,7 @@ jobs:
         with:
           filters: |
             bloc_tools/bin/bloc:
+              - ./.github/workflows/main.yaml
               - packages/bloc_tools/**
 
       - uses: dorny/paths-filter@v3
@@ -244,7 +245,7 @@ jobs:
 
     runs-on: ${{ matrix.os }}
 
-    name: 📦 ${{ matrix.package }}
+    name: 📦 ${{ matrix.entrypoint }}
 
     steps:
       - name: 📚 Git Checkout
