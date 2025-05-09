@@ -254,7 +254,7 @@ jobs:
       - name: 📦 Compile ${{ matrix.package }} for ${{ runner.os }}
         uses: ./.github/actions/dart_compile
         with:
-          entrypoint: ./packages/${{ matrix.package }}/bin/bloc.dart
+          entrypoint: bin/bloc.dart
           working_directory: packages/${{ matrix.package }}
           name: bloc_${{ runner.os }})
 
