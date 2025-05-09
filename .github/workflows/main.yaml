@@ -95,7 +95,7 @@ jobs:
         id: needs_dart_compile_checks
         with:
           filters: |
-            bloc_tools:
+            bloc_tools/bin/bloc:
               - packages/bloc_tools/**
 
       - uses: dorny/paths-filter@v3
@@ -239,7 +239,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        package: ${{ fromJSON(needs.changes.outputs.needs_dart_compile_checks) }}
+        executable: ${{ fromJSON(needs.changes.outputs.needs_dart_compile_checks) }}
         os: ["ubuntu-latest", "macos-latest", "windows-latest"]
 
     runs-on: ${{ matrix.os }}
@@ -250,12 +250,11 @@ jobs:
       - name: 📚 Git Checkout
         uses: actions/checkout@v4
 
-      - name: 📦 Compile ${{ matrix.package }}
+      - name: 📦 Compile ${{ matrix.executable }}
         uses: ./.github/actions/dart_compile
         with:
-          entrypoint: ${{ matrix.package }}/bin/bloc.dart
-          output_dir: ${{ matrix.package }}/bin
-          name: bloc_${{ runner.os }}.exe
+          entrypoint: ${{ matrix.executable }}
+          name: $(echo basename ${{ matrix.exeuctable}}_${{ runner.os }})
 
   flutter_package_checks:
     needs: changes
