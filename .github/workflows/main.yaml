@@ -245,13 +245,13 @@ jobs:
 
     runs-on: ${{ matrix.os }}
 
-    name: 📦 ${{ matrix.package }}
+    name: ⚙️ ${{ matrix.package }}
 
     steps:
       - name: 📚 Git Checkout
         uses: actions/checkout@v4
 
-      - name: 📦 Compile ${{ matrix.package }} for ${{ runner.os }}
+      - name: ⚙️ Compile ${{ matrix.package }} for ${{ runner.os }}
         uses: ./.github/actions/dart_compile
         with:
           entrypoint: bin/bloc.dart

@@ -25,7 +25,12 @@ runs:
       with:
         sdk: ${{inputs.dart_sdk}}
 
-    - name: 📦 Compile
+    - name: 📦 Install Dependencies
+      working-directory: ${{ inputs.working_directory }}
+      shell: ${{ inputs.shell }}
+      run: dart pub get
+
+    - name: ⚙️ Compile
       working-directory: ${{ inputs.working_directory }}
       shell: ${{ inputs.shell }}
       run: |
