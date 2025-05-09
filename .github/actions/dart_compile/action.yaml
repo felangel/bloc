@@ -1,0 +1,35 @@
+name: Dart Compile Workflow
+description: Compile Dart Executables
+
+inputs:
+  dart_sdk:
+    required: false
+    default: "stable"
+    description: "The dart sdk version to use"
+  entrypoint:
+    required: true
+    description: The path to the Dart entrypoint
+  output_dir:
+    required: true
+    description: The path to the generated artifact
+  name:
+    required: true
+    description: The name of the executable
+
+runs:
+  using: "composite"
+  steps:
+    - name: 🎯 Setup Dart
+      uses: dart-lang/setup-dart@v1
+      with:
+        sdk: ${{inputs.dart_sdk}}
+
+    - name: 📦 Compile
+      shell: ${{ inputs.shell }}
+      run: dart compile exe ${{ inputs.entrypoint }} -o ${{ inputs.output_dir }}/${{ inputs.name }}
+
+    - name: ⬆️ Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.name }}
+        path: ${{ inputs.output_dir }}/${{ inputs.name }}
