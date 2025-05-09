@@ -251,7 +251,7 @@ jobs:
       - name: 📚 Git Checkout
         uses: actions/checkout@v4
 
-      - name: 📦 Compile ${{ matrix.executable }}
+      - name: 📦 Compile ${{ matrix.executable }} for ${{ runner.os }}
         uses: ./.github/actions/dart_compile
         with:
           entrypoint: ./packages/${{ matrix.executable }}
