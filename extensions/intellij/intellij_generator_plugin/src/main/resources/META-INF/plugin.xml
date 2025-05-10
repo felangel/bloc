@@ -11,6 +11,7 @@
 
     <change-notes><![CDATA[
         <ul>
+          <li>v4.1.2 - Fix language server execution on Windows and New Bloc/Cubit Actions</li>
           <li>v4.1.1 - Add Dart SDK constraint to language server</li>
           <li>v4.1.0 - Add language server with bloc lint integration</li>
           <li>v4.0.2 - Support for Intellij 2024.2</li>
