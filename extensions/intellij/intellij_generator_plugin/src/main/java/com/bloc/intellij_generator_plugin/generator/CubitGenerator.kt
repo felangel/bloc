@@ -32,7 +32,7 @@ abstract class CubitGenerator(
             }
             val resource = "/templates/$templateFolder/$templateName.dart.template"
             val resourceAsStream = CubitGenerator::class.java.getResourceAsStream(resource)
-            templateString = CharStreams.toString(InputStreamReader(resourceAsStream!!, Charsets.UTF_8))
+            templateString = CharStreams.toString(InputStreamReader(resourceAsStream!!, Charsets.UTF_8)).replace("\r\n", "\n").replace("\r","\n");
         } catch (e: Exception) {
             throw RuntimeException(e)
         }
