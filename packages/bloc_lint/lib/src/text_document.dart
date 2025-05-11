@@ -34,7 +34,7 @@ class TextDocument {
   Uri get uri => _uri;
 
   /// Returns a list of rules ignored for the current file.
-  Set<String> get ignoredForFile {
+  Set<String> get ignoreForFile {
     final result = <String>{};
     final matches = _ignoreForFileRegExp.allMatches(_content);
     if (matches.isEmpty) return result;

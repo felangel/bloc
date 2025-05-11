@@ -149,7 +149,7 @@ void main() {
     });
   });
 
-  group('ignoredForFile', () {
+  group('ignoreForFile', () {
     test('returns empty when no file ignores exist', () {
       final document = TextDocument(
         uri: Uri.parse('counter_bloc.dart'),
@@ -159,7 +159,7 @@ void main() {
 }
 ''',
       );
-      expect(document.ignoredForFile, isEmpty);
+      expect(document.ignoreForFile, isEmpty);
     });
 
     test('detects ignore_for_file at start of file', () {
@@ -172,7 +172,7 @@ void main() {
 }
 ''',
       );
-      expect(document.ignoredForFile, equals({'prefer_bloc', 'prefer_cubit'}));
+      expect(document.ignoreForFile, equals({'prefer_bloc', 'prefer_cubit'}));
     });
 
     test('detects multiple ignore_for_file', () {
@@ -186,7 +186,7 @@ void main() {
 }
 ''',
       );
-      expect(document.ignoredForFile, equals({'prefer_bloc', 'prefer_cubit'}));
+      expect(document.ignoreForFile, equals({'prefer_bloc', 'prefer_cubit'}));
     });
 
     test('ignore_for_file throughout file', () {
@@ -200,7 +200,7 @@ void main() {
 // ignore_for_file: prefer_cubit
 ''',
       );
-      expect(document.ignoredForFile, equals({'prefer_bloc', 'prefer_cubit'}));
+      expect(document.ignoreForFile, equals({'prefer_bloc', 'prefer_cubit'}));
     });
   });
 }
