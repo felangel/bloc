@@ -24,6 +24,8 @@ class TextDocument {
     multiLine: true,
   );
 
+  static final _ignoreForLineRegExp = RegExp(r'^//\s*ignore:(.*)$');
+
   final Uri _uri;
   final String _content;
   List<int>? _lineOffsets;
@@ -32,6 +34,51 @@ class TextDocument {
   /// indicating that they represent files on disk. However, some documents may
   /// have other schemes indicating that they are not available on disk.
   Uri get uri => _uri;
+
+  /// Whether the line for the current range contains an // ignore: for the given rule.
+  bool hasLineIgnore({required Range range, required String rule}) {
+    return _hasIgnoreAboveLine(range: range, rule: rule) ||
+        _hasIgnoreAfterLine(range: range, rule: rule);
+  }
+
+  bool _hasIgnoreAboveLine({required Range range, required String rule}) {
+    final previousLine = range.start.line - 1;
+    if (previousLine < 0) return false;
+    final line = getText(
+      range: Range(
+        start: Position(character: 0, line: previousLine),
+        end: Position(character: _content.length, line: previousLine),
+      ),
+    );
+    final lineIgnores = _lineIgnores(line);
+    return lineIgnores.contains(rule);
+  }
+
+  bool _hasIgnoreAfterLine({required Range range, required String rule}) {
+    final afterText = getText(
+      range: Range(
+        start: Position(character: range.end.character, line: range.end.line),
+        end: Position(character: _content.length, line: range.end.line),
+      ),
+    );
+    final index = afterText.indexOf('// ignore:');
+    if (index == -1) return false;
+    final line = afterText.substring(index);
+    final lineIgnores = _lineIgnores(line);
+    return lineIgnores.contains(rule);
+  }
+
+  Set<String> _lineIgnores(String line) {
+    final result = <String>{};
+    final matches = _ignoreForLineRegExp.allMatches(line);
+    if (matches.isEmpty) return result;
+    for (final match in matches) {
+      final contents = match.group(1);
+      if (contents == null) continue;
+      result.addAll(contents.split(',').map((segment) => segment.trim()));
+    }
+    return result;
+  }
 
   /// Returns a list of rules ignored for the current file.
   Set<String> get ignoreForFile {

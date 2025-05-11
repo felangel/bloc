@@ -166,27 +166,33 @@ void main() {
       final document = TextDocument(
         uri: Uri.parse('counter_bloc.dart'),
         content: '''
-// ignore_for_file: prefer_bloc, prefer_cubit
+// ignore_for_file: ${PreferBlocLint.rule}, ${PreferCubitLint.rule}
 void main() {
   print("hello world");
 }
 ''',
       );
-      expect(document.ignoreForFile, equals({'prefer_bloc', 'prefer_cubit'}));
+      expect(
+        document.ignoreForFile,
+        equals({PreferBlocLint.rule, PreferCubitLint.rule}),
+      );
     });
 
     test('detects multiple ignore_for_file', () {
       final document = TextDocument(
         uri: Uri.parse('counter_bloc.dart'),
         content: '''
-// ignore_for_file: prefer_bloc
-// ignore_for_file: prefer_cubit
+// ignore_for_file: ${PreferBlocLint.rule}
+// ignore_for_file: ${PreferCubitLint.rule}
 void main() {
   print("hello world");
 }
 ''',
       );
-      expect(document.ignoreForFile, equals({'prefer_bloc', 'prefer_cubit'}));
+      expect(
+        document.ignoreForFile,
+        equals({PreferBlocLint.rule, PreferCubitLint.rule}),
+      );
     });
 
     test('ignore_for_file throughout file', () {
@@ -194,13 +200,150 @@ void main() {
         uri: Uri.parse('counter_bloc.dart'),
         content: '''
 void main() {
-// ignore_for_file: prefer_bloc
+// ignore_for_file: ${PreferBlocLint.rule}
   print("hello world");
 }
-// ignore_for_file: prefer_cubit
+// ignore_for_file: ${PreferCubitLint.rule}
 ''',
       );
-      expect(document.ignoreForFile, equals({'prefer_bloc', 'prefer_cubit'}));
+      expect(
+        document.ignoreForFile,
+        equals({PreferBlocLint.rule, PreferCubitLint.rule}),
+      );
+    });
+  });
+
+  group('hasLineIgnore', () {
+    test('returns false when no ignore exists', () {
+      final document = TextDocument(
+        uri: Uri.parse('counter_cubit.dart'),
+        content: '''
+import 'package:flutter/material.dart';
+''',
+      );
+      const range = Range(
+        start: Position(character: 0, line: 0),
+        end: Position(character: 39, line: 0),
+      );
+      expect(
+        document.hasLineIgnore(range: range, rule: AvoidFlutterImports.rule),
+        isFalse,
+      );
+    });
+
+    test('returns false when ignore not found (above)', () {
+      final document = TextDocument(
+        uri: Uri.parse('counter_cubit.dart'),
+        content: '''
+// ignore: ${PreferBlocLint.rule}, ${PreferCubitLint.rule}
+import 'package:flutter/material.dart';''',
+      );
+      const range = Range(
+        start: Position(character: 0, line: 1),
+        end: Position(character: 39, line: 1),
+      );
+      expect(
+        document.hasLineIgnore(range: range, rule: AvoidFlutterImports.rule),
+        isFalse,
+      );
+      expect(
+        document.hasLineIgnore(range: range, rule: PreferBlocLint.rule),
+        isTrue,
+      );
+      expect(
+        document.hasLineIgnore(range: range, rule: PreferCubitLint.rule),
+        isTrue,
+      );
+    });
+
+    test('returns false when ignore not found (after)', () {
+      final document = TextDocument(
+        uri: Uri.parse('counter_cubit.dart'),
+        content: '''
+import 'package:flutter/material.dart'; // ignore: ${PreferBlocLint.rule}, ${PreferCubitLint.rule}''',
+      );
+      const range = Range(
+        start: Position(character: 0, line: 0),
+        end: Position(character: 39, line: 0),
+      );
+      expect(
+        document.hasLineIgnore(range: range, rule: AvoidFlutterImports.rule),
+        isFalse,
+      );
+      expect(
+        document.hasLineIgnore(range: range, rule: PreferBlocLint.rule),
+        isTrue,
+      );
+      expect(
+        document.hasLineIgnore(range: range, rule: PreferCubitLint.rule),
+        isTrue,
+      );
+    });
+
+    test('returns true when ignore exists above', () {
+      final document = TextDocument(
+        uri: Uri.parse('counter_cubit.dart'),
+        content: '''
+// ignore: ${AvoidFlutterImports.rule}
+import 'package:flutter/material.dart';''',
+      );
+      const range = Range(
+        start: Position(character: 0, line: 1),
+        end: Position(character: 39, line: 1),
+      );
+      expect(
+        document.hasLineIgnore(range: range, rule: AvoidFlutterImports.rule),
+        isTrue,
+      );
+    });
+
+    test('returns true when multiple ignores exists above', () {
+      final document = TextDocument(
+        uri: Uri.parse('counter_cubit.dart'),
+        content: '''
+// ignore: ${PreferBlocLint.rule}, ${AvoidFlutterImports.rule}
+import 'package:flutter/material.dart';''',
+      );
+      const range = Range(
+        start: Position(character: 0, line: 1),
+        end: Position(character: 39, line: 1),
+      );
+      expect(
+        document.hasLineIgnore(range: range, rule: AvoidFlutterImports.rule),
+        isTrue,
+      );
+    });
+
+    test('returns true when ignore exists after', () {
+      final document = TextDocument(
+        uri: Uri.parse('counter_cubit.dart'),
+        content: '''
+import 'package:flutter/material.dart'; // ignore: ${AvoidFlutterImports.rule}''',
+      );
+      const range = Range(
+        start: Position(character: 0, line: 0),
+        end: Position(character: 39, line: 0),
+      );
+      expect(
+        document.hasLineIgnore(range: range, rule: AvoidFlutterImports.rule),
+        isTrue,
+      );
+    });
+
+    test('returns true when multiple ignores exists after', () {
+      final document = TextDocument(
+        uri: Uri.parse('counter_cubit.dart'),
+        content: '''
+import 'package:flutter/material.dart'; // ignore: ${PreferBlocLint.rule}, ${AvoidFlutterImports.rule}''',
+      );
+      const range = Range(
+        start: Position(character: 0, line: 0),
+        end: Position(character: 39, line: 0),
+      );
+      expect(
+        document.hasLineIgnore(range: range, rule: AvoidFlutterImports.rule),
+        isTrue,
+      );
     });
   });
 }
