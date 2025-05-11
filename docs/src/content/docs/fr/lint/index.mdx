@@ -1,0 +1,70 @@
+---
+title: Vue d'ensemble du Linter
+description: Introduction à bloc_lint.
+sidebar:
+  order: 1
+---
+
+import AvoidFlutterImportsWarningSnippet from '~/components/lint/ImportFlutterWarningSnippet.mdx';
+import AvoidFlutterImportsWarningOutputSnippet from '~/components/lint/ImportFlutterWarningOutputSnippet.astro';
+import InstallBlocToolsSnippet from '~/components/lint/InstallBlocToolsSnippet.astro';
+import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.astro';
+import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
+import RunBlocLintInCurrentDirectorySnippet from '~/components/lint/RunBlocLintInCurrentDirectorySnippet.astro';
+
+La vérification de code (linting) est un processus d'analyse statique du code
+qui permet d'identifier les bugs potentiels ainsi que les erreurs
+programmatiques et stylistiques.
+
+Bloc dispose d'un linter intégré, qui peut être utilisé via votre IDE ou la
+[CLI `bloc`](https://pub.dev/packages/bloc_tools) avec la commande `bloc lint`.
+
+Grâce au linter bloc, vous pouvez améliorer la qualité de votre codebase et
+assurer la cohérence sans avoir à écrire une seule ligne de code.
+
+Par exemple, si vous importez accidentellement une dépendance Flutter dans votre
+cubit :
+
+<AvoidFlutterImportsWarningSnippet />
+
+S'il est correctement configuré, le linter bloc pointera du doigt l'`import` et
+produira l'avertissement suivant.
+
+<AvoidFlutterImportsWarningOutputSnippet />
+
+Dans les sections suivantes, nous verrons comment installer, configurer et
+personnaliser le linter bloc pour que vous puissiez profiter des avantages de
+l'analyse statique.
+
+## Démarrage rapide
+
+Commencez à utiliser le linter bloc en quelques étapes simples et rapides.
+
+:::note
+
+Pour commencer à utiliser bloc, vous devez avoir le
+[SDK Dart](https://dart.dev/get-dart) installé sur votre machine.
+
+:::
+
+1. Installez la [CLI bloc](https://pub.dev/packages/bloc_tools)
+
+   <InstallBlocToolsSnippet />
+
+1. Installez le [package bloc_lint](https://pub.dev/packages/bloc_lint)
+
+   <InstallBlocLintSnippet />
+
+1. Ajoutez un fichier `analysis_options.yaml` à la racine de votre projet avec
+   les règles recommandées
+
+   <BlocLintRecommendedAnalysisOptionsSnippet />
+
+1. Exécutez le linter
+
+   <RunBlocLintInCurrentDirectorySnippet />
+
+Félicitations, c'est tout ce qu'il y avait à faire 🎉
+
+Continuez la lecture de cette documentation pour un aperçu plus approfondi de la
+configuration et de la personnalisation du linter bloc.
