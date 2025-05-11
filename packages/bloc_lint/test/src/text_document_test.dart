@@ -148,4 +148,59 @@ void main() {
       expect(otherFile.type.isOther, isTrue);
     });
   });
+
+  group('ignoredForFile', () {
+    test('returns empty when no file ignores exist', () {
+      final document = TextDocument(
+        uri: Uri.parse('counter_bloc.dart'),
+        content: '''
+void main() {
+  print("hello world");
+}
+''',
+      );
+      expect(document.ignoredForFile, isEmpty);
+    });
+
+    test('detects ignore_for_file at start of file', () {
+      final document = TextDocument(
+        uri: Uri.parse('counter_bloc.dart'),
+        content: '''
+// ignore_for_file: prefer_bloc, prefer_cubit
+void main() {
+  print("hello world");
+}
+''',
+      );
+      expect(document.ignoredForFile, equals({'prefer_bloc', 'prefer_cubit'}));
+    });
+
+    test('detects multiple ignore_for_file', () {
+      final document = TextDocument(
+        uri: Uri.parse('counter_bloc.dart'),
+        content: '''
+// ignore_for_file: prefer_bloc
+// ignore_for_file: prefer_cubit
+void main() {
+  print("hello world");
+}
+''',
+      );
+      expect(document.ignoredForFile, equals({'prefer_bloc', 'prefer_cubit'}));
+    });
+
+    test('ignore_for_file throughout file', () {
+      final document = TextDocument(
+        uri: Uri.parse('counter_bloc.dart'),
+        content: '''
+void main() {
+// ignore_for_file: prefer_bloc
+  print("hello world");
+}
+// ignore_for_file: prefer_cubit
+''',
+      );
+      expect(document.ignoredForFile, equals({'prefer_bloc', 'prefer_cubit'}));
+    });
+  });
 }

@@ -78,8 +78,11 @@ class Linter {
       return results;
     }
     final document = TextDocument(uri: uri, content: content);
+    final ignoredForFile = document.ignoredForFile;
+    final enabledRules = {...analysisOptions.lintRules}
+      ..removeWhere((rule) => ignoredForFile.contains(rule.name));
     final tokens = scan(utf8.encode(content)).tokens;
-    for (final rule in analysisOptions.lintRules) {
+    for (final rule in enabledRules) {
       final context = LintContext._(rule: rule, document: document);
       final listener = rule.create(context);
       if (listener == null) continue;
