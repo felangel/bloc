@@ -158,6 +158,7 @@ class LintContext {
     required String message,
     String hint = '',
   }) {
+    if (document.hasLineIgnore(range: range, rule: _rule.name)) return;
     _diagnostics.add(
       Diagnostic(
         range: range,

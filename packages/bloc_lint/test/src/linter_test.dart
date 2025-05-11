@@ -134,5 +134,37 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 ''',
       );
     });
+
+    lintTest(
+      'does not report when rule is ignored for line (above)',
+      rule: AvoidFlutterImports.new,
+      path: 'counter_bloc.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+
+// ignore: ${AvoidFlutterImports.rule}
+import 'package:flutter/material.dart';
+
+enum CounterEvent { increment, decrement }
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+}
+''',
+    );
+
+    lintTest(
+      'does not report when rule is ignored for line (after)',
+      rule: AvoidFlutterImports.new,
+      path: 'counter_bloc.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart'; // ignore: ${AvoidFlutterImports.rule}
+
+enum CounterEvent { increment, decrement }
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+}
+''',
+    );
   });
 }
