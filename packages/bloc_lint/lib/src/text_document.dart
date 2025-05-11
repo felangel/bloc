@@ -18,6 +18,12 @@ class TextDocument {
     : _uri = uri,
       _content = content;
 
+  static final _ignoreForFileRegExp = RegExp(
+    r'^//\s*ignore_for_file:(.*?)$',
+    dotAll: true,
+    multiLine: true,
+  );
+
   final Uri _uri;
   final String _content;
   List<int>? _lineOffsets;
@@ -26,6 +32,19 @@ class TextDocument {
   /// indicating that they represent files on disk. However, some documents may
   /// have other schemes indicating that they are not available on disk.
   Uri get uri => _uri;
+
+  /// Returns a list of rules ignored for the current file.
+  Set<String> get ignoreForFile {
+    final result = <String>{};
+    final matches = _ignoreForFileRegExp.allMatches(_content);
+    if (matches.isEmpty) return result;
+    for (final match in matches) {
+      final contents = match.group(1);
+      if (contents == null) continue;
+      result.addAll(contents.split(',').map((segment) => segment.trim()));
+    }
+    return result;
+  }
 
   /// Get the text of this document. Provide a [Range] to get a substring.
   String getText({Range? range}) {

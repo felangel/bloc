@@ -5,6 +5,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
+import 'lint_test_helper.dart';
+
 class _MockLintRule extends Mock implements LintRule {}
 
 class _MockListener extends Mock implements Listener {}
@@ -115,6 +117,22 @@ bloc:
           equals({main.path: <Diagnostic>[], other.path: <Diagnostic>[]}),
         );
       });
+
+      lintTest(
+        'does not report when rule is ignored for file',
+        rule: AvoidFlutterImports.new,
+        path: 'counter_bloc.dart',
+        content: '''
+// ignore_for_file: ${AvoidFlutterImports.rule}
+import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+
+enum CounterEvent { increment, decrement }
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+}
+''',
+      );
     });
   });
 }
