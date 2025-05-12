@@ -208,8 +208,7 @@ class LintContext {
   }
 }
 
-/// Extension that provides a helper for detecting type=lint.
-extension TypeLintX on Set<String> {
+extension on Set<String> {
   /// Whether the set of strings contains `type=lint`.
   bool get containsTypeLint => contains('type=lint');
 }
