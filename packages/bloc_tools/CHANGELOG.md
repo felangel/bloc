@@ -1,3 +1,7 @@
+# 0.1.0-dev.12
+
+- deps: bump `pkg:bloc_lint` to `^0.2.0-dev.3`
+
 # 0.1.0-dev.11
 
 - deps: bump `pkg:bloc_lint` to `^0.2.0-dev.2`
