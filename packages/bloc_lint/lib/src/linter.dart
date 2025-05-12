@@ -79,6 +79,7 @@ class Linter {
     }
     final document = TextDocument(uri: uri, content: content);
     final ignoreForFile = document.ignoreForFile;
+    if (ignoreForFile.containsTypeLint) return results;
     final enabledRules = {...analysisOptions.lintRules}
       ..removeWhere((rule) => ignoreForFile.contains(rule.name));
     final tokens = scan(utf8.encode(content)).tokens;
@@ -158,7 +159,8 @@ class LintContext {
     required String message,
     String hint = '',
   }) {
-    if (document.hasLineIgnore(range: range, rule: _rule.name)) return;
+    final ignore = document.ignoreForLine(range: range);
+    if (ignore.containsTypeLint || ignore.contains(_rule.name)) return;
     _diagnostics.add(
       Diagnostic(
         range: range,
@@ -204,4 +206,9 @@ class LintContext {
       hint: hint,
     );
   }
+}
+
+extension on Set<String> {
+  /// Whether the set of strings contains `type=lint`.
+  bool get containsTypeLint => contains('type=lint');
 }
