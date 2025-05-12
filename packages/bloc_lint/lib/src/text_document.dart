@@ -81,6 +81,7 @@ class TextDocument {
   }
 
   /// Returns a list of rules ignored for the current file.
+  /// e.g. // ignore_for_file: avoid_flutter_imports, prefer_bloc
   Set<String> get ignoreForFile {
     final result = <String>{};
     final matches = _ignoreForFileRegExp.allMatches(_content);

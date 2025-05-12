@@ -159,8 +159,8 @@ class LintContext {
     required String message,
     String hint = '',
   }) {
-    final lineIgnore = document.ignoreForLine(range: range);
-    if (lineIgnore.containsTypeLint || lineIgnore.contains(_rule.name)) return;
+    final ignore = document.ignoreForLine(range: range);
+    if (ignore.containsTypeLint || ignore.contains(_rule.name)) return;
     _diagnostics.add(
       Diagnostic(
         range: range,
