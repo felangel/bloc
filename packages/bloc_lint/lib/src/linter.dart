@@ -208,11 +208,8 @@ class LintContext {
   }
 }
 
-/// The type=lint specifier used to ignore all lint rules.
-const typeLint = 'type=lint';
-
 /// Extension that provides a helper for detecting type=lint.
 extension TypeLintX on Set<String> {
   /// Whether the set of strings contains `type=lint`.
-  bool get containsTypeLint => contains(typeLint);
+  bool get containsTypeLint => contains('type=lint');
 }
