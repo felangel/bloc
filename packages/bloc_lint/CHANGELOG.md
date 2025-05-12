@@ -1,3 +1,8 @@
+# 0.2.0-dev.3
+
+- feat: add support for `// ignore`
+- feat: add support for `// ignore_for_file`
+
 # 0.2.0-dev.2
 
 - feat: add [prefer_void_public_cubit_methods](https://bloclibrary.dev/lint-rules/prefer_void_public_cubit_methods)
