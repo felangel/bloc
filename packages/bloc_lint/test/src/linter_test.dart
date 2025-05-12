@@ -136,6 +136,39 @@ class CounterBloc extends Bloc<CounterEvent, int> {
     });
 
     lintTest(
+      'does not report when ignore_for_file contains type=lint',
+      rule: AvoidFlutterImports.new,
+      path: 'counter_bloc.dart',
+      content: '''
+// ignore_for_file: type=lint
+import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+
+enum CounterEvent { increment, decrement }
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+}
+''',
+    );
+
+    lintTest(
+      'does not report when //ignore: type=lint above',
+      rule: AvoidFlutterImports.new,
+      path: 'counter_bloc.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+
+// ignore: type=lint
+import 'package:flutter/material.dart';
+
+enum CounterEvent { increment, decrement }
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+}
+''',
+    );
+
+    lintTest(
       'does not report when rule is ignored for line (above)',
       rule: AvoidFlutterImports.new,
       path: 'counter_bloc.dart',
@@ -144,6 +177,21 @@ import 'package:bloc/bloc.dart';
 
 // ignore: ${AvoidFlutterImports.rule}
 import 'package:flutter/material.dart';
+
+enum CounterEvent { increment, decrement }
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+}
+''',
+    );
+
+    lintTest(
+      'does not report when //ignore: type=lint after',
+      rule: AvoidFlutterImports.new,
+      path: 'counter_bloc.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart'; // ignore: type=lint
 
 enum CounterEvent { increment, decrement }
 class CounterBloc extends Bloc<CounterEvent, int> {

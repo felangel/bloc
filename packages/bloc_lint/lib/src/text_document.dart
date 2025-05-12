@@ -36,25 +36,26 @@ class TextDocument {
   Uri get uri => _uri;
 
   /// Whether the line for the current range contains an // ignore: for the given rule.
-  bool hasLineIgnore({required Range range, required String rule}) {
-    return _hasIgnoreAboveLine(range: range, rule: rule) ||
-        _hasIgnoreAfterLine(range: range, rule: rule);
+  Set<String> ignoreForLine({required Range range}) {
+    return {
+      ..._ignoresAboveLine(range: range),
+      ..._ignoresAfterLine(range: range),
+    };
   }
 
-  bool _hasIgnoreAboveLine({required Range range, required String rule}) {
+  Set<String> _ignoresAboveLine({required Range range}) {
     final previousLine = range.start.line - 1;
-    if (previousLine < 0) return false;
+    if (previousLine < 0) return const <String>{};
     final line = getText(
       range: Range(
         start: Position(character: 0, line: previousLine),
         end: Position(character: _content.length, line: previousLine),
       ),
     );
-    final lineIgnores = _lineIgnores(line);
-    return lineIgnores.contains(rule);
+    return _lineIgnores(line);
   }
 
-  bool _hasIgnoreAfterLine({required Range range, required String rule}) {
+  Set<String> _ignoresAfterLine({required Range range}) {
     final afterText = getText(
       range: Range(
         start: Position(character: range.end.character, line: range.end.line),
@@ -62,10 +63,9 @@ class TextDocument {
       ),
     );
     final index = afterText.indexOf('// ignore:');
-    if (index == -1) return false;
+    if (index == -1) return const <String>{};
     final line = afterText.substring(index);
-    final lineIgnores = _lineIgnores(line);
-    return lineIgnores.contains(rule);
+    return _lineIgnores(line);
   }
 
   Set<String> _lineIgnores(String line) {
