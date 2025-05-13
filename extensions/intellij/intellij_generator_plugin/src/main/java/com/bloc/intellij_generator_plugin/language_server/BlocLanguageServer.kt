@@ -15,7 +15,7 @@ class BlocLanguageServer(private val project: Project? = null) :
 
     companion object {
         private const val PROCESS_TIMEOUT_SECONDS: Long = 5
-        private const val TARGET_BLOC_TOOLS_VERSION = "0.1.0-dev.11"
+        private const val TARGET_BLOC_TOOLS_VERSION = "0.1.0-dev.12"
         private const val MIN_DART_VERSION = "3.7.0"
     }
 
