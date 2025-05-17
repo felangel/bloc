@@ -218,21 +218,21 @@ jobs:
 
     runs-on: ${{ matrix.os }}
 
-    name: 🧪 ${{ matrix.package }}
+    name: 🧪 ${{ matrix.package }} (${{ runner.os }})
 
     steps:
       - name: 📚 Git Checkout
         uses: actions/checkout@v4
 
-      - name: 🎯 Setup Dart
-        uses: dart-lang/setup-dart@v1
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
 
       - name: ⚙️ Setup Bloc Tools
         uses: felangel/setup-bloc-tools@v0
 
       - name: 📦 Install Dependencies
         working-directory: packages/${{ matrix.package }}/e2e
-        run: dart pub get
+        run: flutter pub get
 
       - name: 🧪 E2E
         working-directory: packages/${{ matrix.package }}/e2e
