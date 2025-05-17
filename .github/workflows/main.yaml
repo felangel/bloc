@@ -60,9 +60,7 @@ jobs:
         with:
           filters: |
             bloc_tools:
-              - ./.github/codecov.yml
               - ./.github/workflows/main.yaml
-              - ./.github/actions/dart_package/action.yaml
               - packages/bloc_tools/**
 
       - uses: dorny/paths-filter@v3
