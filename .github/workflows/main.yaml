@@ -65,7 +65,7 @@ jobs:
 
       - uses: dorny/paths-filter@v3
         name: Dart Package Detection
-        id: needs_dart_e2e_tests
+        id: needs_dart_package_checks
         with:
           filters: |
             angular_bloc:
