@@ -1,5 +1,4 @@
 // ignore_for_file: avoid_print, require_trailing_commas
-
 import 'dart:io';
 import 'package:path/path.dart' as p;
 
@@ -42,7 +41,7 @@ $actual
 String flutterCreate() {
   final tempDir = Directory.systemTemp.createTempSync();
   const projectName = 'example';
-  _exec('flutter', [
+  exec('flutter', [
     'create',
     '-e',
     projectName,
@@ -50,7 +49,7 @@ String flutterCreate() {
   return p.join(tempDir.path, projectName);
 }
 
-String _exec(
+String exec(
   String executable,
   List<String> arguments, {
   String? workingDirectory,
@@ -73,11 +72,11 @@ stderr: ${result.stderr}
 }
 
 void installBloc(String projectRoot) {
-  _exec('flutter', ['pub', 'add', 'bloc'], workingDirectory: projectRoot);
+  exec('flutter', ['pub', 'add', 'bloc'], workingDirectory: projectRoot);
 }
 
 void installBlocLint(String projectRoot) {
-  _exec('flutter', [
+  exec('flutter', [
     'pub',
     'add',
     '--dev',
@@ -103,7 +102,7 @@ class CounterCubit extends Cubit<int> {
 }
 
 String lint(String projectRoot) {
-  return _exec(
+  return exec(
     'bloc',
     ['lint', '.'],
     workingDirectory: projectRoot,
