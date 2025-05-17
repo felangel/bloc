@@ -218,7 +218,7 @@ jobs:
 
     runs-on: ${{ matrix.os }}
 
-    name: 🧪 ${{ matrix.package }} (${{ runner.os }})
+    name: 🧪 ${{ matrix.package }} (${{ matrix.os }})
 
     steps:
       - name: 📚 Git Checkout
