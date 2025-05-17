@@ -26,7 +26,8 @@ jobs:
 
     outputs:
       needs_angular_dart_example_checks: ${{ steps.needs_angular_dart_example_checks.outputs.changes }}
-      needs_dart_package_checks: ${{ steps.needs_dart_package_checks.outputs.changes }}
+      needs_bloc_tools_e2e_checks: ${{ steps.needs_bloc_tools_e2e_checks.outputs.changes }}
+      needs_dart_e2e_tests: ${{ steps.needs_dart_e2e_tests.outputs.changes }}
       needs_flutter_package_checks: ${{ steps.needs_flutter_package_checks.outputs.changes }}
       needs_flutter_example_checks: ${{ steps.needs_flutter_example_checks.outputs.changes }}
       needs_docs_checks: ${{ steps.needs_docs_checks.outputs.changes }}
@@ -54,8 +55,19 @@ jobs:
               - examples/github_search/angular_github_search/**
 
       - uses: dorny/paths-filter@v3
+        name: Bloc Tools E2E Detection
+        id: needs_bloc_tools_e2e_checks
+        with:
+          filters: |
+            bloc_tools:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/dart_package/action.yaml
+              - packages/bloc_tools/**
+
+      - uses: dorny/paths-filter@v3
         name: Dart Package Detection
-        id: needs_dart_package_checks
+        id: needs_dart_e2e_tests
         with:
           filters: |
             angular_bloc:
@@ -196,14 +208,46 @@ jobs:
             - examples/**
             - docs/**
 
-  dart_package_checks:
+  bloc_tools_e2e_checks:
     needs: changes
-    if: ${{ needs.changes.outputs.needs_dart_package_checks != '[]' }}
+    if: ${{ needs.changes.outputs.needs_bloc_tools_e2e_checks != '[]' }}
 
     strategy:
       fail-fast: false
       matrix:
-        package: ${{ fromJSON(needs.changes.outputs.needs_dart_package_checks) }}
+        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+        package: ${{ fromJSON(needs.changes.outputs.needs_bloc_tools_e2e_checks) }}
+
+    runs-on: ${{ matrix.os }}
+
+    name: 🧪 ${{ matrix.package }}
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v4
+
+      - name: 🎯 Setup Dart
+        uses: dart-lang/setup-dart@v1
+
+      - name: ⚙️ Setup Bloc Tools
+        uses: felangel/setup-bloc-tools@v0
+
+      - name: 📦 Install Dependencies
+        working-directory: packages/${{ matrix.package }}/e2e
+        run: dart pub get
+
+      - name: 🧪 E2E
+        working-directory: packages/${{ matrix.package }}/e2e
+        run: dart run main.dart
+
+  dart_package_checks:
+    needs: changes
+    if: ${{ needs.changes.outputs.needs_dart_e2e_tests != '[]' }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(needs.changes.outputs.needs_dart_e2e_tests) }}
 
     runs-on: ubuntu-latest
 
@@ -327,12 +371,13 @@ jobs:
   build:
     needs:
       [
-        semantic_pull_request,
-        dart_package_checks,
-        flutter_package_checks,
         angular_dart_example_checks,
-        flutter_example_checks,
+        bloc_tools_e2e_checks,
+        dart_package_checks,
         docs_checks,
+        flutter_example_checks,
+        flutter_package_checks,
+        semantic_pull_request,
       ]
 
     if: ${{ always() }}
