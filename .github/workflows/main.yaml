@@ -27,7 +27,7 @@ jobs:
     outputs:
       needs_angular_dart_example_checks: ${{ steps.needs_angular_dart_example_checks.outputs.changes }}
       needs_bloc_tools_e2e_checks: ${{ steps.needs_bloc_tools_e2e_checks.outputs.changes }}
-      needs_dart_e2e_tests: ${{ steps.needs_dart_e2e_tests.outputs.changes }}
+      needs_dart_package_checks: ${{ steps.needs_dart_package_checks.outputs.changes }}
       needs_flutter_package_checks: ${{ steps.needs_flutter_package_checks.outputs.changes }}
       needs_flutter_example_checks: ${{ steps.needs_flutter_example_checks.outputs.changes }}
       needs_docs_checks: ${{ steps.needs_docs_checks.outputs.changes }}
@@ -240,12 +240,12 @@ jobs:
 
   dart_package_checks:
     needs: changes
-    if: ${{ needs.changes.outputs.needs_dart_e2e_tests != '[]' }}
+    if: ${{ needs.changes.outputs.needs_dart_package_checks != '[]' }}
 
     strategy:
       fail-fast: false
       matrix:
-        package: ${{ fromJSON(needs.changes.outputs.needs_dart_e2e_tests) }}
+        package: ${{ fromJSON(needs.changes.outputs.needs_dart_package_checks) }}
 
     runs-on: ubuntu-latest
 
