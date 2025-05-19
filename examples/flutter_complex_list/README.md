@@ -1,4 +1,4 @@
-[![build](https://github.com/felangel/bloc/workflows/build/badge.svg)](https://github.com/felangel/bloc/actions)
+[![build](https://github.com/felangel/bloc/actions/workflows/main.yaml/badge.svg)](https://github.com/felangel/bloc/actions)
 
 # flutter_complex_list
 
