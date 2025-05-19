@@ -59,6 +59,7 @@ String exec(
     executable,
     arguments,
     workingDirectory: workingDirectory,
+    runInShell: Platform.isWindows,
   );
   if (result.exitCode != exitCode) {
     throw Exception('''
