@@ -81,7 +81,7 @@ void installBlocLint(String projectRoot) {
     'pub',
     'add',
     '--dev',
-    'bloc_lint:^0.2.0-dev',
+    'bloc_lint:^0.2.0-dev.3',
   ], workingDirectory: projectRoot);
 }
 
