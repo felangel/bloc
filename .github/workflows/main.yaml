@@ -228,7 +228,7 @@ jobs:
         uses: subosito/flutter-action@v2
 
       - name: ⚙️ Setup Bloc Tools
-        uses: felangel/setup-bloc-tools@v0
+        run: dart pub global activate --source path ./packages/bloc_tools
 
       - name: 📦 Install Dependencies
         working-directory: packages/${{ matrix.package }}/e2e
