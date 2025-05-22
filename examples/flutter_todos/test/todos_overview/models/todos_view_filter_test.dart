@@ -42,8 +42,7 @@ void main() {
         },
       );
 
-      test(
-          'returns true when filter is .completedOnly '
+      test('returns true when filter is .completedOnly '
           'and the todo is completed', () {
         expect(
           TodosViewFilter.completedOnly.apply(incompleteTodo),

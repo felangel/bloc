@@ -13,12 +13,12 @@ void main() => runApp(TickerApp());
 class TickerApp extends MaterialApp {
   /// {@macro ticker_app}
   TickerApp({super.key})
-      : super(
-          home: BlocProvider(
-            create: (_) => TickerBloc(Ticker()),
-            child: const TickerPage(),
-          ),
-        );
+    : super(
+        home: BlocProvider(
+          create: (_) => TickerBloc(Ticker()),
+          child: const TickerPage(),
+        ),
+      );
 }
 
 /// {@template ticker_page}
@@ -38,11 +38,13 @@ class TickerPage extends StatelessWidget {
         child: BlocBuilder<TickerBloc, TickerState>(
           builder: (context, state) {
             return switch (state) {
-              TickerInitial() =>
-                const Text('Press the floating button to start.'),
+              TickerInitial() => const Text(
+                'Press the floating button to start.',
+              ),
               TickerTickSuccess() => Text('Tick #${state.count}'),
-              TickerComplete() =>
-                const Text('Complete! Press the floating button to restart.')
+              TickerComplete() => const Text(
+                'Complete! Press the floating button to restart.',
+              ),
             };
           },
         ),

@@ -5,10 +5,10 @@ import 'package:flutter_complex_list/repository.dart';
 
 class App extends MaterialApp {
   App({required Repository repository, super.key})
-      : super(
-          home: RepositoryProvider.value(
-            value: repository,
-            child: const ComplexListPage(),
-          ),
-        );
+    : super(
+        home: RepositoryProvider.value(
+          value: repository,
+          child: const ComplexListPage(),
+        ),
+      );
 }

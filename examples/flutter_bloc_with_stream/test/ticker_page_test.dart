@@ -46,8 +46,7 @@ void main() {
       expect(find.text('Tick #$tickCount'), findsOneWidget);
     });
 
-    testWidgets(
-        'adds ticker started '
+    testWidgets('adds ticker started '
         'when start ticker floating action button is pressed', (tester) async {
       when(() => tickerBloc.state).thenReturn(TickerInitial());
       await tester.pumpTickerPage(tickerBloc);
@@ -56,8 +55,7 @@ void main() {
       verify(() => tickerBloc.add(TickerStarted())).called(1);
     });
 
-    testWidgets(
-        'tick count periodically increments '
+    testWidgets('tick count periodically increments '
         'every 1 second', (tester) async {
       whenListen(
         tickerBloc,

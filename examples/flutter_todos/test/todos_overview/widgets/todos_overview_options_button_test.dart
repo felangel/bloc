@@ -82,8 +82,9 @@ void main() {
 
       group('mark all todos button', () {
         testWidgets('is disabled when there are no todos', (tester) async {
-          when(() => todosOverviewBloc.state)
-              .thenReturn(const TodosOverviewState(todos: []));
+          when(
+            () => todosOverviewBloc.state,
+          ).thenReturn(const TodosOverviewState(todos: []));
           await tester.pumpApp(buildSubject());
           await tester.openPopup();
 
@@ -167,8 +168,9 @@ void main() {
             );
 
             verify(
-              () => todosOverviewBloc
-                  .add(const TodosOverviewToggleAllRequested()),
+              () => todosOverviewBloc.add(
+                const TodosOverviewToggleAllRequested(),
+              ),
             ).called(1);
           },
         );
@@ -178,8 +180,9 @@ void main() {
         testWidgets(
           'is disabled when there are no completed todos',
           (tester) async {
-            when(() => todosOverviewBloc.state)
-                .thenReturn(const TodosOverviewState(todos: []));
+            when(
+              () => todosOverviewBloc.state,
+            ).thenReturn(const TodosOverviewState(todos: []));
             await tester.pumpApp(buildSubject());
             await tester.openPopup();
 
@@ -241,8 +244,9 @@ void main() {
             );
 
             verify(
-              () => todosOverviewBloc
-                  .add(const TodosOverviewClearCompletedRequested()),
+              () => todosOverviewBloc.add(
+                const TodosOverviewClearCompletedRequested(),
+              ),
             ).called(1);
           },
         );
