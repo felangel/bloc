@@ -229,9 +229,6 @@ jobs:
           codecov_token: ${{ secrets.CODECOV_TOKEN }}
           working_directory: packages/${{ matrix.package }}
           min_coverage: 100
-          # TODO: remove once bloc v9 is published
-          # https://github.com/dart-lang/pana/issues/1254
-          collect_score: false
 
   bloc_tools_compile_checks:
     needs: changes

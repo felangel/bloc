@@ -148,4 +148,117 @@ void main() {
       expect(otherFile.type.isOther, isTrue);
     });
   });
+
+  group('ignoreForFile', () {
+    test('returns empty when no file ignores exist', () {
+      final document = TextDocument(
+        uri: Uri.parse('counter_bloc.dart'),
+        content: '''
+void main() {
+  print("hello world");
+}
+''',
+      );
+      expect(document.ignoreForFile, isEmpty);
+    });
+
+    test('detects ignore_for_file at start of file', () {
+      final document = TextDocument(
+        uri: Uri.parse('counter_bloc.dart'),
+        content: '''
+// ignore_for_file: ${PreferBlocLint.rule}, ${PreferCubitLint.rule}
+void main() {
+  print("hello world");
+}
+''',
+      );
+      expect(
+        document.ignoreForFile,
+        equals({PreferBlocLint.rule, PreferCubitLint.rule}),
+      );
+    });
+
+    test('detects multiple ignore_for_file', () {
+      final document = TextDocument(
+        uri: Uri.parse('counter_bloc.dart'),
+        content: '''
+// ignore_for_file: ${PreferBlocLint.rule}
+// ignore_for_file: ${PreferCubitLint.rule}
+void main() {
+  print("hello world");
+}
+''',
+      );
+      expect(
+        document.ignoreForFile,
+        equals({PreferBlocLint.rule, PreferCubitLint.rule}),
+      );
+    });
+
+    test('ignore_for_file throughout file', () {
+      final document = TextDocument(
+        uri: Uri.parse('counter_bloc.dart'),
+        content: '''
+void main() {
+// ignore_for_file: ${PreferBlocLint.rule}
+  print("hello world");
+}
+// ignore_for_file: ${PreferCubitLint.rule}
+''',
+      );
+      expect(
+        document.ignoreForFile,
+        equals({PreferBlocLint.rule, PreferCubitLint.rule}),
+      );
+    });
+  });
+
+  group('ignoreForLine', () {
+    test('returns empty when no ignore exists', () {
+      final document = TextDocument(
+        uri: Uri.parse('counter_cubit.dart'),
+        content: '''
+import 'package:flutter/material.dart';
+''',
+      );
+      const range = Range(
+        start: Position(character: 0, line: 0),
+        end: Position(character: 39, line: 0),
+      );
+      expect(document.ignoreForLine(range: range), isEmpty);
+    });
+
+    test('returns ignores above line', () {
+      final document = TextDocument(
+        uri: Uri.parse('counter_cubit.dart'),
+        content: '''
+// ignore: ${PreferBlocLint.rule}, ${PreferCubitLint.rule}
+import 'package:flutter/material.dart';''',
+      );
+      const range = Range(
+        start: Position(character: 0, line: 1),
+        end: Position(character: 39, line: 1),
+      );
+      expect(
+        document.ignoreForLine(range: range),
+        equals({PreferBlocLint.rule, PreferCubitLint.rule}),
+      );
+    });
+
+    test('returns ignores after line', () {
+      final document = TextDocument(
+        uri: Uri.parse('counter_cubit.dart'),
+        content: '''
+import 'package:flutter/material.dart'; // ignore: ${PreferBlocLint.rule}, ${PreferCubitLint.rule}''',
+      );
+      const range = Range(
+        start: Position(character: 0, line: 0),
+        end: Position(character: 39, line: 0),
+      );
+      expect(
+        document.ignoreForLine(range: range),
+        equals({PreferBlocLint.rule, PreferCubitLint.rule}),
+      );
+    });
+  });
 }

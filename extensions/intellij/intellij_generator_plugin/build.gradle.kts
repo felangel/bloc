@@ -1,16 +1,19 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     java
     id("org.jetbrains.intellij.platform") version "2.5.0"
-    kotlin("jvm") version "1.9.25"
+    kotlin("jvm") version "2.1.0"
     idea
 }
 
 group = "com.bloc"
-version = "4.1.1"
+version = "4.1.4"
 
 val lsp4ijVersion: String by project
 val lsp4jVersion: String by project
 val caseFormatVersion: String by project
+val apacheCommonsTextVersion: String by project
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -53,14 +56,19 @@ dependencies {
     compileOnly("com.redhat.devtools.intellij:lsp4ij:$lsp4ijVersion")
     compileOnly("org.eclipse.lsp4j:org.eclipse.lsp4j:$lsp4jVersion")
     implementation("com.fleshgrinder.kotlin:case-format:$caseFormatVersion")
+    implementation("org.apache.commons:commons-text:$apacheCommonsTextVersion")
 }
 
 tasks {
     compileKotlin {
-        kotlinOptions.jvmTarget = "17"
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
     }
 
     compileTestKotlin {
-        kotlinOptions.jvmTarget = "17"
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
     }
 }

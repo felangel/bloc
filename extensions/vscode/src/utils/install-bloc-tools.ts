@@ -1,6 +1,6 @@
 import { exec, isDartInstalled } from ".";
 
-export const BLOC_TOOLS_VERSION = "0.1.0-dev.11";
+export const BLOC_TOOLS_VERSION = "0.1.0-dev.12";
 export const installBlocTools = async (): Promise<boolean> => {
   const canInstall = await isDartInstalled();
   if (!canInstall) return false;
