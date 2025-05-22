@@ -27,7 +27,7 @@ jobs:
     outputs:
       needs_angular_dart_example_checks: ${{ steps.needs_angular_dart_example_checks.outputs.changes }}
       needs_dart_package_checks: ${{ steps.needs_dart_package_checks.outputs.changes }}
-      needs_dart_compile_checks: ${{ steps.needs_dart_compile_checks.outputs.changes }}
+      needs_bloc_tools_compile_checks: ${{ steps.needs_bloc_tools_compile_checks.outputs.changes }}
       needs_flutter_package_checks: ${{ steps.needs_flutter_package_checks.outputs.changes }}
       needs_flutter_example_checks: ${{ steps.needs_flutter_example_checks.outputs.changes }}
       needs_docs_checks: ${{ steps.needs_docs_checks.outputs.changes }}
@@ -91,8 +91,8 @@ jobs:
               - packages/bloc/**
 
       - uses: dorny/paths-filter@v3
-        name: Dart Compile Detection
-        id: needs_dart_compile_checks
+        name: Bloc Tools Compile Detection
+        id: needs_bloc_tools_compile_checks
         with:
           filters: |
             bloc_tools:
@@ -233,29 +233,28 @@ jobs:
           # https://github.com/dart-lang/pana/issues/1254
           collect_score: false
 
-  dart_compile_checks:
+  bloc_tools_compile_checks:
     needs: changes
-    if: ${{ needs.changes.outputs.needs_dart_compile_checks != '[]' }}
+    if: ${{ needs.changes.outputs.needs_bloc_tools_compile_checks != '[]' }}
 
     strategy:
       fail-fast: false
       matrix:
-        package: ${{ fromJSON(needs.changes.outputs.needs_dart_compile_checks) }}
         os: ["ubuntu-latest", "macos-latest", "windows-latest"]
 
     runs-on: ${{ matrix.os }}
 
-    name: ⚙️ ${{ matrix.package }}
+    name: ⚙️ Compile Bloc Tools
 
     steps:
       - name: 📚 Git Checkout
         uses: actions/checkout@v4
 
-      - name: ⚙️ Compile ${{ matrix.package }} for ${{ runner.os }}
+      - name: ⚙️ Compile Bloc Tools for ${{ runner.os }}
         uses: ./.github/actions/dart_compile
         with:
           entrypoint: bin/bloc.dart
-          working_directory: packages/${{ matrix.package }}
+          working_directory: packages/bloc_tools
           name: bloc_${{ runner.os }}
 
   flutter_package_checks:
@@ -367,7 +366,7 @@ jobs:
       [
         semantic_pull_request,
         dart_package_checks,
-        dart_compile_checks,
+        bloc_tools_compile_checks,
         flutter_package_checks,
         angular_dart_example_checks,
         flutter_example_checks,
