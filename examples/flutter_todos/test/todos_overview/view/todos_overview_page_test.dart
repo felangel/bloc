@@ -301,8 +301,9 @@ void main() {
 
           final todo = mockTodos.first;
 
-          final todoListTile =
-              tester.widget<TodoListTile>(find.byType(TodoListTile).first);
+          final todoListTile = tester.widget<TodoListTile>(
+            find.byType(TodoListTile).first,
+          );
           todoListTile.onToggleCompleted!(!todo.isCompleted);
 
           verify(

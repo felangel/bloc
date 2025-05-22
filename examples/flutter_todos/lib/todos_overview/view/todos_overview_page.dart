@@ -72,9 +72,9 @@ class TodosOverviewView extends StatelessWidget {
                       label: l10n.todosOverviewUndoDeletionButtonText,
                       onPressed: () {
                         messenger.hideCurrentSnackBar();
-                        context
-                            .read<TodosOverviewBloc>()
-                            .add(const TodosOverviewUndoDeletionRequested());
+                        context.read<TodosOverviewBloc>().add(
+                          const TodosOverviewUndoDeletionRequested(),
+                        );
                       },
                     ),
                   ),
@@ -108,16 +108,16 @@ class TodosOverviewView extends StatelessWidget {
                     todo: todo,
                     onToggleCompleted: (isCompleted) {
                       context.read<TodosOverviewBloc>().add(
-                            TodosOverviewTodoCompletionToggled(
-                              todo: todo,
-                              isCompleted: isCompleted,
-                            ),
-                          );
+                        TodosOverviewTodoCompletionToggled(
+                          todo: todo,
+                          isCompleted: isCompleted,
+                        ),
+                      );
                     },
                     onDismissed: (_) {
-                      context
-                          .read<TodosOverviewBloc>()
-                          .add(TodosOverviewTodoDeleted(todo));
+                      context.read<TodosOverviewBloc>().add(
+                        TodosOverviewTodoDeleted(todo),
+                      );
                     },
                     onTap: () {
                       Navigator.of(context).push(

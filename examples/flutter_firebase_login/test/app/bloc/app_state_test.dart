@@ -8,14 +8,12 @@ class MockUser extends Mock implements User {}
 
 void main() {
   group(AppState, () {
-    test(
-        'returns state with status unauthenticated '
+    test('returns state with status unauthenticated '
         'when user is empty', () {
       expect(AppState().status, equals(AppStatus.unauthenticated));
     });
 
-    test(
-        'returns state with status authenticated and user '
+    test('returns state with status authenticated and user '
         'when user is not empty', () {
       final user = MockUser();
       final state = AppState(user: user);

@@ -15,7 +15,7 @@ final class NewCarState extends Equatable {
   const NewCarState.brandsLoadInProgress() : this._();
 
   const NewCarState.brandsLoadSuccess({required List<String> brands})
-      : this._(brands: brands);
+    : this._(brands: brands);
 
   const NewCarState.modelsLoadInProgress({
     required List<String> brands,
@@ -42,12 +42,12 @@ final class NewCarState extends Equatable {
     required String? model,
     required List<String> years,
   }) : this._(
-          brands: brands,
-          brand: brand,
-          models: models,
-          model: model,
-          years: years,
-        );
+         brands: brands,
+         brand: brand,
+         models: models,
+         model: model,
+         years: years,
+       );
 
   NewCarState copyWith({
     List<String>? brands,

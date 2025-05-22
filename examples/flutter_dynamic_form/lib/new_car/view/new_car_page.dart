@@ -130,8 +130,9 @@ class _FormSubmitButton extends StatelessWidget {
         ..hideCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
-            content:
-                Text('Submitted ${state.brand} ${state.model} ${state.year}'),
+            content: Text(
+              'Submitted ${state.brand} ${state.model} ${state.year}',
+            ),
           ),
         );
     }

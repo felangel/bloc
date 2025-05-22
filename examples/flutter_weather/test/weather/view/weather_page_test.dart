@@ -33,8 +33,9 @@ void main() {
       weatherCubit = MockWeatherCubit();
     });
 
-    testWidgets('renders WeatherEmpty for WeatherStatus.initial',
-        (tester) async {
+    testWidgets('renders WeatherEmpty for WeatherStatus.initial', (
+      tester,
+    ) async {
       when(() => weatherCubit.state).thenReturn(WeatherState());
       await tester.pumpWidget(
         BlocProvider.value(
@@ -45,8 +46,9 @@ void main() {
       expect(find.byType(WeatherEmpty), findsOneWidget);
     });
 
-    testWidgets('renders WeatherLoading for WeatherStatus.loading',
-        (tester) async {
+    testWidgets('renders WeatherLoading for WeatherStatus.loading', (
+      tester,
+    ) async {
       when(() => weatherCubit.state).thenReturn(
         WeatherState(
           status: WeatherStatus.loading,
@@ -61,8 +63,9 @@ void main() {
       expect(find.byType(WeatherLoading), findsOneWidget);
     });
 
-    testWidgets('renders WeatherPopulated for WeatherStatus.success',
-        (tester) async {
+    testWidgets('renders WeatherPopulated for WeatherStatus.success', (
+      tester,
+    ) async {
       when(() => weatherCubit.state).thenReturn(
         WeatherState(
           status: WeatherStatus.success,
@@ -78,8 +81,9 @@ void main() {
       expect(find.byType(WeatherPopulated), findsOneWidget);
     });
 
-    testWidgets('renders WeatherError for WeatherStatus.failure',
-        (tester) async {
+    testWidgets('renders WeatherError for WeatherStatus.failure', (
+      tester,
+    ) async {
       when(() => weatherCubit.state).thenReturn(
         WeatherState(
           status: WeatherStatus.failure,
@@ -111,8 +115,9 @@ void main() {
       expect(find.byType(WeatherPopulated), findsOneWidget);
     });
 
-    testWidgets('navigates to SettingsPage when settings icon is tapped',
-        (tester) async {
+    testWidgets('navigates to SettingsPage when settings icon is tapped', (
+      tester,
+    ) async {
       when(() => weatherCubit.state).thenReturn(WeatherState());
       await tester.pumpWidget(
         BlocProvider.value(
@@ -125,8 +130,9 @@ void main() {
       expect(find.byType(SettingsPage), findsOneWidget);
     });
 
-    testWidgets('navigates to SearchPage when search button is tapped',
-        (tester) async {
+    testWidgets('navigates to SearchPage when search button is tapped', (
+      tester,
+    ) async {
       when(() => weatherCubit.state).thenReturn(WeatherState());
       await tester.pumpWidget(
         BlocProvider.value(

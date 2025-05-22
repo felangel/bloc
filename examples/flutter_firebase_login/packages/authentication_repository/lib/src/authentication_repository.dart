@@ -156,9 +156,9 @@ class AuthenticationRepository {
     CacheClient? cache,
     firebase_auth.FirebaseAuth? firebaseAuth,
     GoogleSignIn? googleSignIn,
-  })  : _cache = cache ?? CacheClient(),
-        _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
-        _googleSignIn = googleSignIn ?? GoogleSignIn.standard();
+  }) : _cache = cache ?? CacheClient(),
+       _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
+       _googleSignIn = googleSignIn ?? GoogleSignIn.standard();
 
   final CacheClient _cache;
   final firebase_auth.FirebaseAuth _firebaseAuth;

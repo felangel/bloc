@@ -10,8 +10,9 @@ class TodosOverviewFilterButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
-    final activeFilter =
-        context.select((TodosOverviewBloc bloc) => bloc.state.filter);
+    final activeFilter = context.select(
+      (TodosOverviewBloc bloc) => bloc.state.filter,
+    );
 
     return PopupMenuButton<TodosViewFilter>(
       shape: const ContinuousRectangleBorder(
@@ -20,9 +21,9 @@ class TodosOverviewFilterButton extends StatelessWidget {
       initialValue: activeFilter,
       tooltip: l10n.todosOverviewFilterTooltip,
       onSelected: (filter) {
-        context
-            .read<TodosOverviewBloc>()
-            .add(TodosOverviewFilterChanged(filter));
+        context.read<TodosOverviewBloc>().add(
+          TodosOverviewFilterChanged(filter),
+        );
       },
       itemBuilder: (context) {
         return [

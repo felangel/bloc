@@ -8,8 +8,8 @@ part 'new_car_state.dart';
 
 class NewCarBloc extends Bloc<NewCarEvent, NewCarState> {
   NewCarBloc({required NewCarRepository newCarRepository})
-      : _newCarRepository = newCarRepository,
-        super(const NewCarState.initial()) {
+    : _newCarRepository = newCarRepository,
+      super(const NewCarState.initial()) {
     on<NewCarEvent>(_onEvent, transformer: sequential());
   }
 
