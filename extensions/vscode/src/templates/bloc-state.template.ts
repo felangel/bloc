@@ -4,11 +4,16 @@ import { BlocType } from "../utils";
 export function getBlocStateTemplate(
   blocName: string,
   type: BlocType,
-  useSealedClasses: boolean
+  useSealedClasses: boolean,
+  useUnionTypes: boolean,
 ): string {
   switch (type) {
     case BlocType.Freezed:
-      return getFreezedBlocStateTemplate(blocName);
+      return getFreezedBlocStateTemplate(
+        blocName,
+        useSealedClasses,
+        useUnionTypes,
+      );
     case BlocType.Equatable:
       return getEquatableBlocStateTemplate(blocName, useSealedClasses);
     default:
@@ -54,14 +59,29 @@ ${subclassPrefix}class ${pascalCaseBlocName}Initial extends ${pascalCaseBlocName
 `;
 }
 
-function getFreezedBlocStateTemplate(blocName: string): string {
+function getFreezedBlocStateTemplate(
+  blocName: string,
+  useSealedClasses: boolean,
+  useUnionTypes: boolean,
+): string {
   const pascalCaseBlocName = changeCase.pascalCase(blocName) + "State";
   const snakeCaseBlocName = changeCase.snakeCase(blocName);
+  const classPrefix = useSealedClasses ? "sealed " : "";
+
+  if (useUnionTypes) {
+    return `part of '${snakeCaseBlocName}_bloc.dart';
+
+@freezed
+${classPrefix}class ${pascalCaseBlocName} with _\$${pascalCaseBlocName} {
+  const factory ${pascalCaseBlocName}.initial() = _Initial;
+}
+`;
+  }
   return `part of '${snakeCaseBlocName}_bloc.dart';
 
 @freezed
-class ${pascalCaseBlocName} with _\$${pascalCaseBlocName} {
-  const factory ${pascalCaseBlocName}.initial() = _Initial;
+${classPrefix}class ${pascalCaseBlocName} with _\$${pascalCaseBlocName} {
+  const factory ${pascalCaseBlocName}() = _${pascalCaseBlocName};
 }
 `;
 }
