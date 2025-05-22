@@ -8,8 +8,8 @@ part 'catalog_state.dart';
 
 class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   CatalogBloc({required ShoppingRepository shoppingRepository})
-      : _shoppingRepository = shoppingRepository,
-        super(CatalogLoading()) {
+    : _shoppingRepository = shoppingRepository,
+      super(CatalogLoading()) {
     on<CatalogStarted>(_onStarted);
   }
 

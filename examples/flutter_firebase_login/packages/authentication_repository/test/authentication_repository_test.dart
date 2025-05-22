@@ -119,8 +119,7 @@ void main() {
         );
       });
 
-      test(
-          'throws SignUpWithEmailAndPasswordFailure '
+      test('throws SignUpWithEmailAndPasswordFailure '
           'when createUserWithEmailAndPassword throws', () async {
         when(
           () => firebaseAuth.createUserWithEmailAndPassword(
@@ -142,17 +141,22 @@ void main() {
       setUp(() {
         final googleSignInAuthentication = MockGoogleSignInAuthentication();
         final googleSignInAccount = MockGoogleSignInAccount();
-        when(() => googleSignInAuthentication.accessToken)
-            .thenReturn(accessToken);
+        when(
+          () => googleSignInAuthentication.accessToken,
+        ).thenReturn(accessToken);
         when(() => googleSignInAuthentication.idToken).thenReturn(idToken);
-        when(() => googleSignInAccount.authentication)
-            .thenAnswer((_) async => googleSignInAuthentication);
-        when(() => googleSignIn.signIn())
-            .thenAnswer((_) async => googleSignInAccount);
-        when(() => firebaseAuth.signInWithCredential(any()))
-            .thenAnswer((_) => Future.value(MockUserCredential()));
-        when(() => firebaseAuth.signInWithPopup(any()))
-            .thenAnswer((_) => Future.value(MockUserCredential()));
+        when(
+          () => googleSignInAccount.authentication,
+        ).thenAnswer((_) async => googleSignInAuthentication);
+        when(
+          () => googleSignIn.signIn(),
+        ).thenAnswer((_) async => googleSignInAccount);
+        when(
+          () => firebaseAuth.signInWithCredential(any()),
+        ).thenAnswer((_) => Future.value(MockUserCredential()));
+        when(
+          () => firebaseAuth.signInWithPopup(any()),
+        ).thenAnswer((_) => Future.value(MockUserCredential()));
       });
 
       test('calls signIn authentication, and signInWithCredential', () async {
@@ -162,42 +166,46 @@ void main() {
       });
 
       test(
-          'throws LogInWithGoogleFailure and calls signIn authentication, and '
-          'signInWithPopup when authCredential is null and kIsWeb is true',
-          () async {
-        authenticationRepository.isWeb = true;
-        await expectLater(
-          () => authenticationRepository.logInWithGoogle(),
-          throwsA(isA<LogInWithGoogleFailure>()),
-        );
-        verifyNever(() => googleSignIn.signIn());
-        verify(() => firebaseAuth.signInWithPopup(any())).called(1);
-      });
+        'throws LogInWithGoogleFailure and calls signIn authentication, and '
+        'signInWithPopup when authCredential is null and kIsWeb is true',
+        () async {
+          authenticationRepository.isWeb = true;
+          await expectLater(
+            () => authenticationRepository.logInWithGoogle(),
+            throwsA(isA<LogInWithGoogleFailure>()),
+          );
+          verifyNever(() => googleSignIn.signIn());
+          verify(() => firebaseAuth.signInWithPopup(any())).called(1);
+        },
+      );
 
       test(
-          'successfully calls signIn authentication, and '
-          'signInWithPopup when authCredential is not null and kIsWeb is true',
-          () async {
-        final credential = MockUserCredential();
-        when(() => firebaseAuth.signInWithPopup(any()))
-            .thenAnswer((_) async => credential);
-        when(() => credential.credential).thenReturn(FakeAuthCredential());
-        authenticationRepository.isWeb = true;
-        await expectLater(
-          authenticationRepository.logInWithGoogle(),
-          completes,
-        );
-        verifyNever(() => googleSignIn.signIn());
-        verify(() => firebaseAuth.signInWithPopup(any())).called(1);
-      });
+        'successfully calls signIn authentication, and '
+        'signInWithPopup when authCredential is not null and kIsWeb is true',
+        () async {
+          final credential = MockUserCredential();
+          when(
+            () => firebaseAuth.signInWithPopup(any()),
+          ).thenAnswer((_) async => credential);
+          when(() => credential.credential).thenReturn(FakeAuthCredential());
+          authenticationRepository.isWeb = true;
+          await expectLater(
+            authenticationRepository.logInWithGoogle(),
+            completes,
+          );
+          verifyNever(() => googleSignIn.signIn());
+          verify(() => firebaseAuth.signInWithPopup(any())).called(1);
+        },
+      );
 
       test('succeeds when signIn succeeds', () {
         expect(authenticationRepository.logInWithGoogle(), completes);
       });
 
       test('throws LogInWithGoogleFailure when exception occurs', () async {
-        when(() => firebaseAuth.signInWithCredential(any()))
-            .thenThrow(Exception());
+        when(
+          () => firebaseAuth.signInWithCredential(any()),
+        ).thenThrow(Exception());
         expect(
           authenticationRepository.logInWithGoogle(),
           throwsA(isA<LogInWithGoogleFailure>()),
@@ -238,8 +246,7 @@ void main() {
         );
       });
 
-      test(
-          'throws LogInWithEmailAndPasswordFailure '
+      test('throws LogInWithEmailAndPasswordFailure '
           'when signInWithEmailAndPassword throws', () async {
         when(
           () => firebaseAuth.signInWithEmailAndPassword(
@@ -277,8 +284,9 @@ void main() {
 
     group('user', () {
       test('emits User.empty when firebase user is null', () async {
-        when(() => firebaseAuth.authStateChanges())
-            .thenAnswer((_) => Stream.value(null));
+        when(
+          () => firebaseAuth.authStateChanges(),
+        ).thenAnswer((_) => Stream.value(null));
         await expectLater(
           authenticationRepository.user,
           emitsInOrder(const <User>[User.empty]),
@@ -290,8 +298,9 @@ void main() {
         when(() => firebaseUser.uid).thenReturn(_mockFirebaseUserUid);
         when(() => firebaseUser.email).thenReturn(_mockFirebaseUserEmail);
         when(() => firebaseUser.photoURL).thenReturn(null);
-        when(() => firebaseAuth.authStateChanges())
-            .thenAnswer((_) => Stream.value(firebaseUser));
+        when(
+          () => firebaseAuth.authStateChanges(),
+        ).thenAnswer((_) => Stream.value(firebaseUser));
         await expectLater(
           authenticationRepository.user,
           emitsInOrder(const <User>[user]),

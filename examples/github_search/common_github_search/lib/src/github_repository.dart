@@ -4,8 +4,8 @@ import 'package:common_github_search/common_github_search.dart';
 
 class GithubRepository {
   GithubRepository({GithubCache? cache, GithubClient? client})
-      : _cache = cache ?? GithubCache(),
-        _client = client ?? GithubClient();
+    : _cache = cache ?? GithubCache(),
+      _client = client ?? GithubClient();
 
   final GithubCache _cache;
   final GithubClient _client;

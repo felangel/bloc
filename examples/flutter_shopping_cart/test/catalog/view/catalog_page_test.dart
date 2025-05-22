@@ -18,8 +18,7 @@ void main() {
   });
 
   group('CatalogPage', () {
-    testWidgets(
-        'renders SliverFillRemaining with loading indicator '
+    testWidgets('renders SliverFillRemaining with loading indicator '
         'when catalog is loading', (tester) async {
       when(() => catalogBloc.state).thenReturn(CatalogLoading());
       await tester.pumpApp(
@@ -35,8 +34,7 @@ void main() {
       );
     });
 
-    testWidgets(
-        'renders SliverList with two items '
+    testWidgets('renders SliverList with two items '
         'when catalog is loaded', (tester) async {
       final catalog = Catalog(itemNames: const ['item #1', 'item #2']);
       when(() => catalogBloc.state).thenReturn(CatalogLoaded(catalog));
@@ -51,8 +49,7 @@ void main() {
       expect(find.byType(CatalogListItem), findsNWidgets(2));
     });
 
-    testWidgets(
-        'renders error text '
+    testWidgets('renders error text '
         'when catalog fails to load', (tester) async {
       when(() => catalogBloc.state).thenReturn(CatalogError());
       await tester.pumpApp(
@@ -66,8 +63,7 @@ void main() {
 
   group('AddButton', () {
     final mockItem = Item(1, 'item #1');
-    testWidgets(
-        'renders CircularProgressIndicator when '
+    testWidgets('renders CircularProgressIndicator when '
         'cart is loading', (tester) async {
       when(() => cartBloc.state).thenReturn(CartLoading());
       await tester.pumpApp(
@@ -77,8 +73,7 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets(
-        "renders 'Add' text button "
+    testWidgets("renders 'Add' text button "
         'when item is not in the cart', (tester) async {
       when(() => cartBloc.state).thenReturn(const CartLoaded());
       await tester.pumpApp(
@@ -89,8 +84,7 @@ void main() {
       expect(find.byIcon(Icons.check), findsNothing);
     });
 
-    testWidgets(
-        'renders check icon '
+    testWidgets('renders check icon '
         'when item is already added to cart', (tester) async {
       when(() => cartBloc.state).thenReturn(
         CartLoaded(cart: Cart(items: [mockItem])),

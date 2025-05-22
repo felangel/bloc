@@ -28,11 +28,11 @@ class Todo extends Equatable {
     String? id,
     this.description = '',
     this.isCompleted = false,
-  })  : assert(
-          id == null || id.isNotEmpty,
-          'id must either be null or not empty',
-        ),
-        id = id ?? const Uuid().v4();
+  }) : assert(
+         id == null || id.isNotEmpty,
+         'id must either be null or not empty',
+       ),
+       id = id ?? const Uuid().v4();
 
   /// The unique identifier of the `todo`.
   ///

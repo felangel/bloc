@@ -37,11 +37,14 @@ class LocalStorageTodosApi extends TodosApi {
   void _init() {
     final todosJson = _getValue(kTodosCollectionKey);
     if (todosJson != null) {
-      final todos = List<Map<dynamic, dynamic>>.from(
-        json.decode(todosJson) as List,
-      )
-          .map((jsonMap) => Todo.fromJson(Map<String, dynamic>.from(jsonMap)))
-          .toList();
+      final todos =
+          List<Map<dynamic, dynamic>>.from(
+                json.decode(todosJson) as List,
+              )
+              .map(
+                (jsonMap) => Todo.fromJson(Map<String, dynamic>.from(jsonMap)),
+              )
+              .toList();
       _todoStreamController.add(todos);
     } else {
       _todoStreamController.add(const []);
@@ -94,8 +97,9 @@ class LocalStorageTodosApi extends TodosApi {
   @override
   Future<int> completeAll({required bool isCompleted}) async {
     final todos = [..._todoStreamController.value];
-    final changedTodosAmount =
-        todos.where((t) => t.isCompleted != isCompleted).length;
+    final changedTodosAmount = todos
+        .where((t) => t.isCompleted != isCompleted)
+        .length;
     final newTodos = [
       for (final todo in todos) todo.copyWith(isCompleted: isCompleted),
     ];

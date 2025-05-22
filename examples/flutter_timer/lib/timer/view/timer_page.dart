@@ -46,15 +46,16 @@ class TimerText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final duration = context.select((TimerBloc bloc) => bloc.state.duration);
-    final minutesStr =
-        ((duration / 60) % 60).floor().toString().padLeft(2, '0');
+    final minutesStr = ((duration / 60) % 60).floor().toString().padLeft(
+      2,
+      '0',
+    );
     final secondsStr = (duration % 60).toString().padLeft(2, '0');
     return Text(
       '$minutesStr:$secondsStr',
-      style: Theme.of(context)
-          .textTheme
-          .displayLarge
-          ?.copyWith(fontWeight: FontWeight.w500),
+      style: Theme.of(
+        context,
+      ).textTheme.displayLarge?.copyWith(fontWeight: FontWeight.w500),
     );
   }
 }
@@ -72,49 +73,49 @@ class Actions extends StatelessWidget {
           children: [
             ...switch (state) {
               TimerInitial() => [
-                  FloatingActionButton(
-                    child: const Icon(Icons.play_arrow),
-                    onPressed: () => context
-                        .read<TimerBloc>()
-                        .add(TimerStarted(duration: state.duration)),
+                FloatingActionButton(
+                  child: const Icon(Icons.play_arrow),
+                  onPressed: () => context.read<TimerBloc>().add(
+                    TimerStarted(duration: state.duration),
                   ),
-                ],
+                ),
+              ],
               TimerRunInProgress() => [
-                  FloatingActionButton(
-                    child: const Icon(Icons.pause),
-                    onPressed: () {
-                      context.read<TimerBloc>().add(const TimerPaused());
-                    },
-                  ),
-                  FloatingActionButton(
-                    child: const Icon(Icons.replay),
-                    onPressed: () {
-                      context.read<TimerBloc>().add(const TimerReset());
-                    },
-                  ),
-                ],
+                FloatingActionButton(
+                  child: const Icon(Icons.pause),
+                  onPressed: () {
+                    context.read<TimerBloc>().add(const TimerPaused());
+                  },
+                ),
+                FloatingActionButton(
+                  child: const Icon(Icons.replay),
+                  onPressed: () {
+                    context.read<TimerBloc>().add(const TimerReset());
+                  },
+                ),
+              ],
               TimerRunPause() => [
-                  FloatingActionButton(
-                    child: const Icon(Icons.play_arrow),
-                    onPressed: () {
-                      context.read<TimerBloc>().add(const TimerResumed());
-                    },
-                  ),
-                  FloatingActionButton(
-                    child: const Icon(Icons.replay),
-                    onPressed: () {
-                      context.read<TimerBloc>().add(const TimerReset());
-                    },
-                  ),
-                ],
+                FloatingActionButton(
+                  child: const Icon(Icons.play_arrow),
+                  onPressed: () {
+                    context.read<TimerBloc>().add(const TimerResumed());
+                  },
+                ),
+                FloatingActionButton(
+                  child: const Icon(Icons.replay),
+                  onPressed: () {
+                    context.read<TimerBloc>().add(const TimerReset());
+                  },
+                ),
+              ],
               TimerRunComplete() => [
-                  FloatingActionButton(
-                    child: const Icon(Icons.replay),
-                    onPressed: () {
-                      context.read<TimerBloc>().add(const TimerReset());
-                    },
-                  ),
-                ]
+                FloatingActionButton(
+                  child: const Icon(Icons.replay),
+                  onPressed: () {
+                    context.read<TimerBloc>().add(const TimerReset());
+                  },
+                ),
+              ],
             },
           ],
         );

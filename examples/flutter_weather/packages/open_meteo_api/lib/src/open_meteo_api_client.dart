@@ -22,7 +22,7 @@ class WeatherNotFoundFailure implements Exception {}
 class OpenMeteoApiClient {
   /// {@macro open_meteo_api_client}
   OpenMeteoApiClient({http.Client? httpClient})
-      : _httpClient = httpClient ?? http.Client();
+    : _httpClient = httpClient ?? http.Client();
 
   static const _baseUrlWeather = 'api.open-meteo.com';
   static const _baseUrlGeocoding = 'geocoding-api.open-meteo.com';

@@ -65,8 +65,9 @@ void main() {
         verify(() => loginCubit.passwordChanged(validPassword)).called(1);
       });
 
-      testWidgets('logInWithCredentials when login button is pressed',
-          (tester) async {
+      testWidgets('logInWithCredentials when login button is pressed', (
+        tester,
+      ) async {
         when(() => loginCubit.state).thenReturn(
           const LoginState().withEmail(validEmail).withPassword(validPassword),
         );
@@ -84,26 +85,29 @@ void main() {
         verify(() => loginCubit.logInWithCredentials()).called(1);
       });
 
-      testWidgets('logInWithGoogle when sign in with google button is pressed',
-          (tester) async {
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: BlocProvider.value(
-                value: loginCubit,
-                child: const LoginForm(),
+      testWidgets(
+        'logInWithGoogle when sign in with google button is pressed',
+        (tester) async {
+          await tester.pumpWidget(
+            MaterialApp(
+              home: Scaffold(
+                body: BlocProvider.value(
+                  value: loginCubit,
+                  child: const LoginForm(),
+                ),
               ),
             ),
-          ),
-        );
-        await tester.tap(find.byKey(signInWithGoogleButtonKey));
-        verify(() => loginCubit.logInWithGoogle()).called(1);
-      });
+          );
+          await tester.tap(find.byKey(signInWithGoogleButtonKey));
+          verify(() => loginCubit.logInWithGoogle()).called(1);
+        },
+      );
     });
 
     group('renders', () {
-      testWidgets('AuthenticationFailure SnackBar when submission fails',
-          (tester) async {
+      testWidgets('AuthenticationFailure SnackBar when submission fails', (
+        tester,
+      ) async {
         whenListen(
           loginCubit,
           Stream.fromIterable(<LoginState>[
@@ -125,8 +129,9 @@ void main() {
         expect(find.text('Authentication Failure'), findsOneWidget);
       });
 
-      testWidgets('invalid email error text when email is invalid',
-          (tester) async {
+      testWidgets('invalid email error text when email is invalid', (
+        tester,
+      ) async {
         when(() => loginCubit.state).thenReturn(
           const LoginState().withEmail(invalidEmail),
         );
@@ -143,8 +148,9 @@ void main() {
         expect(find.text('invalid email'), findsOneWidget);
       });
 
-      testWidgets('invalid password error text when password is invalid',
-          (tester) async {
+      testWidgets('invalid password error text when password is invalid', (
+        tester,
+      ) async {
         when(() => loginCubit.state).thenReturn(
           const LoginState().withPassword(invalidPassword),
         );
@@ -161,8 +167,9 @@ void main() {
         expect(find.text('invalid password'), findsOneWidget);
       });
 
-      testWidgets('disabled login button when status is not validated',
-          (tester) async {
+      testWidgets('disabled login button when status is not validated', (
+        tester,
+      ) async {
         when(() => loginCubit.state).thenReturn(const LoginState());
         await tester.pumpWidget(
           MaterialApp(
@@ -180,8 +187,9 @@ void main() {
         expect(loginButton.enabled, isFalse);
       });
 
-      testWidgets('enabled login button when status is validated',
-          (tester) async {
+      testWidgets('enabled login button when status is validated', (
+        tester,
+      ) async {
         when(() => loginCubit.state).thenReturn(
           const LoginState().withEmail(validEmail).withPassword(validPassword),
         );
@@ -217,8 +225,9 @@ void main() {
     });
 
     group('navigates', () {
-      testWidgets('to SignUpPage when Create Account is pressed',
-          (tester) async {
+      testWidgets('to SignUpPage when Create Account is pressed', (
+        tester,
+      ) async {
         await tester.pumpWidget(
           RepositoryProvider<AuthenticationRepository>(
             create: (_) => MockAuthenticationRepository(),
