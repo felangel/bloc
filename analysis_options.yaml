@@ -13,6 +13,10 @@ analyzer:
     missing_return: error
     record_literal_one_positional_no_trailing_comma: error
 
+formatter:
+  page_width: 80
+  trailing_commas: preserve
+
 linter:
   rules:
     - always_declare_return_types
