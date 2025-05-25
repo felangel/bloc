@@ -8,6 +8,7 @@ export const installBlocTools = async (
 ): Promise<boolean> => {
   try {
     const os = getOS();
+    if (os === OperatingSystem.unknown) return false;
     await downloadFile(
       Uri.parse(
         `https://github.com/felangel/bloc/releases/download/bloc_tools-v${BLOC_TOOLS_VERSION}/bloc_${os}`
