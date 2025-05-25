@@ -28,7 +28,7 @@ export function activate(context: ExtensionContext) {
   if (
     workspace.getConfiguration("bloc").get<boolean>("languageServer.enabled")
   ) {
-    tryStartLanguageServer();
+    tryStartLanguageServer(context);
   }
 
   if (workspace.getConfiguration("bloc").get<boolean>("checkForUpdates")) {
