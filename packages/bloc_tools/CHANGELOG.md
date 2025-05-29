@@ -1,3 +1,8 @@
+# 0.1.0-dev.13
+
+- fix: various bug fixes for Windows
+- deps: bump `pkg:bloc_lint` to `^0.2.0-dev.4`
+
 # 0.1.0-dev.12
 
 - deps: bump `pkg:bloc_lint` to `^0.2.0-dev.3`
