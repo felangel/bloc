@@ -11,6 +11,7 @@
 
     <change-notes><![CDATA[
         <ul>
+          <li>v4.1.4 - Include environment during command execution</li>
           <li>v4.1.3 - Bump bloc_tools version to 0.1.0-dev.12</li>
           <li>v4.1.2 - Fix language server execution on Windows and New Bloc/Cubit Actions</li>
           <li>v4.1.1 - Add Dart SDK constraint to language server</li>

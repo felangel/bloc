@@ -79,10 +79,10 @@ final class SignUpState extends Equatable {
 
   @override
   List<Object?> get props => [
-        email,
-        password,
-        confirmedPassword,
-        status,
-        errorMessage,
-      ];
+    email,
+    password,
+    confirmedPassword,
+    status,
+    errorMessage,
+  ];
 }

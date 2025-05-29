@@ -7,6 +7,7 @@ import com.bloc.intellij_generator_plugin.util.VersionComparator
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
+import com.intellij.util.EnvironmentUtil
 import com.redhat.devtools.lsp4ij.server.OSProcessStreamConnectionProvider
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -79,7 +80,16 @@ class BlocLanguageServer(private val project: Project? = null) :
         val errorMessage = "Unable to $verb bloc_tools"
         try {
             val commandLine =
-                MultiplatformCommandLine("dart", "pub", "global", "activate", "bloc_tools", TARGET_BLOC_TOOLS_VERSION)
+                MultiplatformCommandLine(
+                    "dart",
+                    "pub",
+                    "global",
+                    "activate",
+                    "bloc_tools",
+                    TARGET_BLOC_TOOLS_VERSION
+                ).withEnvironment(
+                    EnvironmentUtil.getEnvironmentMap()
+                )
             val process = commandLine.createProcess()
             val exitCode = process.waitFor()
             if (exitCode != 0) {

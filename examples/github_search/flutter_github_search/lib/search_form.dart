@@ -75,9 +75,10 @@ class _SearchBody extends StatelessWidget {
           SearchStateEmpty() => const Text('Please enter a term to begin'),
           SearchStateLoading() => const CircularProgressIndicator.adaptive(),
           SearchStateError() => Text(state.error),
-          SearchStateSuccess() => state.items.isEmpty
-              ? const Text('No Results')
-              : Expanded(child: _SearchResults(items: state.items)),
+          SearchStateSuccess() =>
+            state.items.isEmpty
+                ? const Text('No Results')
+                : Expanded(child: _SearchResults(items: state.items)),
         };
       },
     );

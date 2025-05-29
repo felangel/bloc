@@ -48,8 +48,9 @@ void main() {
       expect(find.byIcon(Icons.play_arrow), findsOneWidget);
     });
 
-    testWidgets('renders pause and reset button when timer is in progress',
-        (tester) async {
+    testWidgets('renders pause and reset button when timer is in progress', (
+      tester,
+    ) async {
       when(() => timerBloc.state).thenReturn(const TimerRunInProgress(59));
       await tester.pumpTimerView(timerBloc);
       expect(find.text('00:59'), findsOneWidget);
@@ -57,8 +58,9 @@ void main() {
       expect(find.byIcon(Icons.replay), findsOneWidget);
     });
 
-    testWidgets('renders play and reset button when timer is paused',
-        (tester) async {
+    testWidgets('renders play and reset button when timer is paused', (
+      tester,
+    ) async {
       when(() => timerBloc.state).thenReturn(const TimerRunPause(600));
       await tester.pumpTimerView(timerBloc);
       expect(find.text('10:00'), findsOneWidget);
@@ -73,8 +75,9 @@ void main() {
       expect(find.byIcon(Icons.replay), findsOneWidget);
     });
 
-    testWidgets('timer started when play arrow button is pressed',
-        (tester) async {
+    testWidgets('timer started when play arrow button is pressed', (
+      tester,
+    ) async {
       when(() => timerBloc.state).thenReturn(const TimerInitial(60));
       await tester.pumpTimerView(timerBloc);
       await tester.tap(find.byIcon(Icons.play_arrow));
@@ -87,8 +90,7 @@ void main() {
       ).called(1);
     });
 
-    testWidgets(
-        'timer pauses when pause button is pressed '
+    testWidgets('timer pauses when pause button is pressed '
         'while timer is in progress', (tester) async {
       when(() => timerBloc.state).thenReturn(const TimerRunInProgress(30));
       await tester.pumpTimerView(timerBloc);
@@ -96,8 +98,7 @@ void main() {
       verify(() => timerBloc.add(const TimerPaused())).called(1);
     });
 
-    testWidgets(
-        'timer resets when replay button is pressed '
+    testWidgets('timer resets when replay button is pressed '
         'while timer is in progress', (tester) async {
       when(() => timerBloc.state).thenReturn(const TimerRunInProgress(30));
       await tester.pumpTimerView(timerBloc);
@@ -105,8 +106,7 @@ void main() {
       verify(() => timerBloc.add(const TimerReset())).called(1);
     });
 
-    testWidgets(
-        'timer resumes when play arrow button is pressed '
+    testWidgets('timer resumes when play arrow button is pressed '
         'while timer is paused', (tester) async {
       when(() => timerBloc.state).thenReturn(const TimerRunPause(30));
       await tester.pumpTimerView(timerBloc);
@@ -114,8 +114,7 @@ void main() {
       verify(() => timerBloc.add(const TimerResumed())).called(1);
     });
 
-    testWidgets(
-        'timer resets when reset button is pressed '
+    testWidgets('timer resets when reset button is pressed '
         'while timer is paused', (tester) async {
       when(() => timerBloc.state).thenReturn(const TimerRunPause(30));
       await tester.pumpTimerView(timerBloc);
@@ -123,8 +122,7 @@ void main() {
       verify(() => timerBloc.add(const TimerReset())).called(1);
     });
 
-    testWidgets(
-        'timer resets when reset button is pressed '
+    testWidgets('timer resets when reset button is pressed '
         'when timer is finished', (tester) async {
       when(() => timerBloc.state).thenReturn(const TimerRunComplete());
       await tester.pumpTimerView(timerBloc);
@@ -132,8 +130,9 @@ void main() {
       verify(() => timerBloc.add(const TimerReset())).called(1);
     });
 
-    testWidgets('actions are not rebuilt when timer is running',
-        (tester) async {
+    testWidgets('actions are not rebuilt when timer is running', (
+      tester,
+    ) async {
       final controller = StreamController<TimerState>();
       whenListen(
         timerBloc,

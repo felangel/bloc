@@ -74,8 +74,9 @@ class _HomeTabButton extends StatelessWidget {
     return IconButton(
       onPressed: () => context.read<HomeCubit>().setTab(value),
       iconSize: 32,
-      color:
-          groupValue != value ? null : Theme.of(context).colorScheme.secondary,
+      color: groupValue != value
+          ? null
+          : Theme.of(context).colorScheme.secondary,
       icon: icon,
     );
   }

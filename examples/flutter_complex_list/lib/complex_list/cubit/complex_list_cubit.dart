@@ -9,8 +9,8 @@ part 'complex_list_state.dart';
 
 class ComplexListCubit extends Cubit<ComplexListState> {
   ComplexListCubit({required Repository repository})
-      : _repository = repository,
-        super(const ComplexListState.loading());
+    : _repository = repository,
+      super(const ComplexListState.loading());
 
   final Repository _repository;
 
