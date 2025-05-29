@@ -64,7 +64,7 @@ class Linter {
   Map<String, List<Diagnostic>> _analyzeContent(Uri uri, String content) {
     final diagnostics = <Diagnostic>[];
     final path = uri.canonicalizedPath;
-    final diagnosticPath = path.startsWith(r'\\?\') ? path.substring(3) : path;
+    final diagnosticPath = path.startsWith(r'\\?\') ? path.substring(4) : path;
     final results = {diagnosticPath: diagnostics};
     final cwd = File(path).parent;
     final pubspecLock = findPubspecLock(cwd);
