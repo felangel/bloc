@@ -242,6 +242,8 @@ jobs:
 
       - name: 🐦 Setup Flutter
         uses: subosito/flutter-action@v2
+        with:
+          cache: true
 
       - name: ⚙️ Setup Bloc Tools
         run: dart pub global activate --source path ./packages/bloc_tools
