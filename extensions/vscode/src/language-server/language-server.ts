@@ -1,5 +1,4 @@
-import * as semver from "semver";
-import { ProgressLocation, window } from "vscode";
+import { ExtensionContext, ProgressLocation, window } from "vscode";
 import {
   LanguageClient,
   LanguageClientOptions,
@@ -7,12 +6,7 @@ import {
   ServerOptions,
   TransportKind,
 } from "vscode-languageclient/node";
-import {
-  BLOC_TOOLS_VERSION,
-  getBlocToolsVersion,
-  getDartVersion,
-  installBlocTools,
-} from "../utils";
+import { getBlocToolsExecutable, installBlocTools } from "../utils";
 
 let client: LanguageClient;
 
@@ -22,11 +16,9 @@ const ANALYSIS_OPTIONS_FILE = {
   scheme: "file",
 };
 
-const DART_SDK_CONSTRAINT = "^3.7.0";
-
-async function startLanguageServer() {
+async function startLanguageServer(executable: string) {
   const serverOptions: ServerOptions = {
-    command: "bloc",
+    command: `"${executable}"`,
     args: ["language-server"],
     options: {
       env: process.env,
@@ -50,7 +42,7 @@ async function startLanguageServer() {
   return client.start();
 }
 
-async function startLanguageServerWithProgress() {
+async function startLanguageServerWithProgress(executable: string) {
   window.withProgress(
     {
       location: ProgressLocation.Window,
@@ -58,7 +50,7 @@ async function startLanguageServerWithProgress() {
     },
     async () => {
       try {
-        await startLanguageServer();
+        await startLanguageServer(executable);
         window.setStatusBarMessage("✓ Bloc Analysis Server", 3000);
       } catch (err) {
         window.showErrorMessage(`${err}`);
@@ -67,61 +59,34 @@ async function startLanguageServerWithProgress() {
   );
 }
 
-async function tryStartLanguageServer(): Promise<void> {
-  const blocToolsVersion = await getBlocToolsVersion();
-  if (blocToolsVersion == BLOC_TOOLS_VERSION) {
-    return startLanguageServerWithProgress();
-  }
+async function tryStartLanguageServer(
+  context: ExtensionContext
+): Promise<void> {
+  const executable = await getBlocToolsExecutable(context);
+  if (executable) return startLanguageServerWithProgress(executable);
 
-  const dartVersion = await getDartVersion();
-  if (!dartVersion) {
-    window.showWarningMessage(
-      "The Bloc Language Server requires Dart to be installed"
-    );
-    return;
-  }
-
-  if (!semver.satisfies(dartVersion, DART_SDK_CONSTRAINT)) {
-    window.showWarningMessage(
-      `The Bloc Language Server requires a newer version of Dart (${DART_SDK_CONSTRAINT})`
-    );
-    return;
-  }
-
-  const areBlocToolsInstalled = blocToolsVersion != null;
-  var didActivate = false;
   await window.withProgress(
     {
       location: ProgressLocation.Notification,
-      title: areBlocToolsInstalled
-        ? "Upgrading the Bloc Language Server"
-        : "Installing the Bloc Language Server",
+      title: "Installing the Bloc Language Server",
     },
     async () => {
       try {
-        didActivate = await installBlocTools();
-        window.setStatusBarMessage(
-          areBlocToolsInstalled
-            ? "Bloc Language Server upgraded"
-            : "Bloc Language Server installed",
-          3000
-        );
+        await installBlocTools(context);
+        window.setStatusBarMessage("Bloc Language Server installed", 3000);
       } catch (err) {
         window.showErrorMessage(`${err}`);
       }
     }
   );
 
-  if (!didActivate) {
-    window.showErrorMessage(
-      areBlocToolsInstalled
-        ? "Failed to upgrade the Bloc Language Server"
-        : "Failed to install the Bloc Language Server"
-    );
+  const installedExecutable = await getBlocToolsExecutable(context);
+  if (!installedExecutable) {
+    window.showErrorMessage("Failed to install the Bloc Language Server");
     return;
   }
 
-  return startLanguageServerWithProgress();
+  return startLanguageServerWithProgress(installedExecutable);
 }
 
 export { client, tryStartLanguageServer };
