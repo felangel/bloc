@@ -62,6 +62,7 @@ class Linter {
   }
 
   Map<String, List<Diagnostic>> _analyzeContent(Uri uri, String content) {
+    print('_analyzeContent ${uri.path}');
     final diagnostics = <Diagnostic>[];
     final path = uri.canonicalizedPath;
     final results = {path: diagnostics};
