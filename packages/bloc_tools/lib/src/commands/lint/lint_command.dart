@@ -75,7 +75,7 @@ extension on String {
     /// `package:path`.
     /// However, it does not change the ASCII case of the path.
     /// See https://github.com/dart-lang/path/issues/102.
-    return Uri.tryParse(p.normalize(p.absolute(this)).replaceAll(r'\', '/'));
+    return Uri.tryParse(p.normalize(p.absolute(this)));
   }
 }
 
