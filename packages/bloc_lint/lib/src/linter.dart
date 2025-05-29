@@ -137,7 +137,9 @@ extension on FileSystemEntity {
 extension on Uri {
   String get canonicalizedPath {
     final path = isScheme('file') ? p.fromUri(this) : this.path;
-    final canonicalizedPath = p.normalize(p.absolute(path));
+    final canonicalizedPath = p
+        .normalize(p.absolute(path))
+        .replaceAll(r'\', '/');
     // Support long file paths on Windows
     // https://github.com/dart-lang/sdk/issues/27825
     if (Platform.isWindows) return r'\\?\' + canonicalizedPath;
