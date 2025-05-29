@@ -104,7 +104,7 @@ class AnalysisOptions {
     if (fullUri == null) return null;
     var path = include.split(packagePrefix).last;
     if (path.startsWith(p.separator)) path = path.substring(1);
-    var resolvedPath = fullUri.path + path;
+    var resolvedPath = p.fromUri(fullUri) + path;
     if (!p.isAbsolute(resolvedPath)) {
       resolvedPath = p.join(packageConfigFile.parent.path, resolvedPath);
     }
