@@ -2,7 +2,7 @@ import { type } from "node:os";
 import { ExtensionContext, Uri } from "vscode";
 import { downloadFile } from ".";
 
-export const BLOC_TOOLS_VERSION = "0.1.0-dev.12";
+export const BLOC_TOOLS_VERSION = "0.1.0-dev.13";
 export const installBlocTools = async (
   context: ExtensionContext
 ): Promise<boolean> => {

@@ -1,3 +1,8 @@
+# 6.8.5
+
+- fix: install precompiled `bloc_tools` executable
+- deps: upgrade to `bloc_tools: 0.1.0-dev.13`
+
 # 6.8.4
 
 - deps: upgrade to `bloc_tools: 0.1.0-dev.12`
