@@ -37,7 +37,7 @@ class Linter {
   /// will be analyzed (both single files and directories are supported).
   Map<String, List<Diagnostic>> analyze({required Uri uri, String? content}) {
     if (content != null) return _analyzeContent(uri, content);
-    final path = uri.canonicalizedPath;
+    final path = uri.canonicalizedPath.toLongPath();
     final directory = Directory(path);
     if (directory.existsSync()) return _analyzeDirectory(directory);
     final file = File(path);
@@ -146,7 +146,7 @@ extension on String {
 extension on Uri {
   String get canonicalizedPath {
     final path = isScheme('file') ? p.fromUri(this) : this.path;
-    return p.normalize(p.absolute(path)).replaceAll(r'\', '/');
+    return p.normalize(p.absolute(path));
   }
 }
 
