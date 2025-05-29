@@ -26,6 +26,7 @@ jobs:
 
     outputs:
       needs_angular_dart_example_checks: ${{ steps.needs_angular_dart_example_checks.outputs.changes }}
+      needs_bloc_tools_e2e_checks: ${{ steps.needs_bloc_tools_e2e_checks.outputs.changes }}
       needs_dart_package_checks: ${{ steps.needs_dart_package_checks.outputs.changes }}
       needs_bloc_tools_compile_checks: ${{ steps.needs_bloc_tools_compile_checks.outputs.changes }}
       needs_flutter_package_checks: ${{ steps.needs_flutter_package_checks.outputs.changes }}
@@ -53,6 +54,15 @@ jobs:
               - ./.github/workflows/main.yaml
               - ./.github/actions/dart_package/action.yaml
               - examples/github_search/angular_github_search/**
+
+      - uses: dorny/paths-filter@v3
+        name: Bloc Tools E2E Detection
+        id: needs_bloc_tools_e2e_checks
+        with:
+          filters: |
+            bloc_tools:
+              - ./.github/workflows/main.yaml
+              - packages/bloc_tools/**
 
       - uses: dorny/paths-filter@v3
         name: Dart Package Detection
@@ -205,6 +215,40 @@ jobs:
             - ./.github/actions/astro_site/action.yaml
             - examples/**
             - docs/**
+
+  bloc_tools_e2e_checks:
+    needs: changes
+    if: ${{ needs.changes.outputs.needs_bloc_tools_e2e_checks != '[]' }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+        package: ${{ fromJSON(needs.changes.outputs.needs_bloc_tools_e2e_checks) }}
+
+    runs-on: ${{ matrix.os }}
+
+    name: 🧪 ${{ matrix.package }} (${{ matrix.os }})
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v4
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
+
+      - name: ⚙️ Setup Bloc Tools
+        run: dart pub global activate --source path ./packages/bloc_tools
+
+      - name: 📦 Install Dependencies
+        working-directory: packages/${{ matrix.package }}/e2e
+        run: flutter pub get
+
+      - name: 🧪 E2E
+        working-directory: packages/${{ matrix.package }}/e2e
+        run: dart run main.dart
 
   dart_package_checks:
     needs: changes
@@ -361,13 +405,14 @@ jobs:
   build:
     needs:
       [
-        semantic_pull_request,
-        dart_package_checks,
-        bloc_tools_compile_checks,
-        flutter_package_checks,
         angular_dart_example_checks,
-        flutter_example_checks,
+        bloc_tools_compile_checks,
+        bloc_tools_e2e_checks,
+        dart_package_checks,
         docs_checks,
+        flutter_example_checks,
+        flutter_package_checks,
+        semantic_pull_request,
       ]
 
     if: ${{ always() }}

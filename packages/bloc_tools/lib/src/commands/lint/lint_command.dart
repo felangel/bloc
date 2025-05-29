@@ -70,7 +70,13 @@ Analyzed $fileCount ${fileCount == 1 ? 'file' : 'files'}''');
 }
 
 extension on String {
-  Uri? toUri() => Uri.tryParse(p.canonicalize(this));
+  Uri? toUri() {
+    /// This function implements the behavior of `canonicalize` from
+    /// `package:path`.
+    /// However, it does not change the ASCII case of the path.
+    /// See https://github.com/dart-lang/path/issues/102.
+    return Uri.tryParse(p.normalize(p.absolute(this)).replaceAll(r'\', '/'));
+  }
 }
 
 extension on Severity {
@@ -90,7 +96,9 @@ extension on Severity {
 
 extension on Diagnostic {
   String prettify(String path, TextDocument document) {
-    final relativePath = p.relative(path, from: Directory.current.path);
+    final relativePath = p
+        .relative(path, from: Directory.current.path)
+        .replaceAll(r'\', '/');
     final style = severity.toStyle();
     final text = document.getText(
       range: Range(

@@ -37,7 +37,7 @@ class Linter {
   /// will be analyzed (both single files and directories are supported).
   Map<String, List<Diagnostic>> analyze({required Uri uri, String? content}) {
     if (content != null) return _analyzeContent(uri, content);
-    final path = uri.isScheme('file') ? p.fromUri(uri) : uri.path;
+    final path = uri.canonicalizedPath.toLongPath();
     final directory = Directory(path);
     if (directory.existsSync()) return _analyzeDirectory(directory);
     final file = File(path);
@@ -63,8 +63,9 @@ class Linter {
 
   Map<String, List<Diagnostic>> _analyzeContent(Uri uri, String content) {
     final diagnostics = <Diagnostic>[];
-    final path = uri.isScheme('file') ? p.fromUri(uri) : uri.path;
-    final results = {path: diagnostics};
+    final canonicalizedPath = uri.canonicalizedPath;
+    final results = {canonicalizedPath: diagnostics};
+    final path = canonicalizedPath.toLongPath();
     final cwd = File(path).parent;
     final pubspecLock = findPubspecLock(cwd);
     if (pubspecLock == null) return results;
@@ -130,6 +131,22 @@ extension on FileSystemEntity {
         p.extension(path) == '.dart' &&
         !p.basename(path).endsWith('.g.dart') &&
         !p.split(path).contains('.dart_tool');
+  }
+}
+
+extension on String {
+  String toLongPath() {
+    // Support long file paths on Windows
+    // https://github.com/dart-lang/sdk/issues/27825
+    if (Platform.isWindows) return r'\\?\' + this;
+    return this;
+  }
+}
+
+extension on Uri {
+  String get canonicalizedPath {
+    final path = isScheme('file') ? p.fromUri(this) : this.path;
+    return p.normalize(p.absolute(path));
   }
 }
 
