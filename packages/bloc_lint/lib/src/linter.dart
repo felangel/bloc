@@ -72,7 +72,7 @@ class Linter {
     if (pubspecLock == null) return results;
     if (!pubspecLock.packages.keys.contains('bloc')) return results;
     final analysisOptions = findAnalysisOptions(cwd);
-    print(analysisOptions);
+    print(analysisOptions?.yaml.toJson());
     if (analysisOptions == null) return results;
     final relativePath = p
         .relative(path, from: analysisOptions.file.parent.path)
