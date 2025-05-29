@@ -62,17 +62,14 @@ class Linter {
   }
 
   Map<String, List<Diagnostic>> _analyzeContent(Uri uri, String content) {
-    print('_analyzeContent ${uri.path}');
     final diagnostics = <Diagnostic>[];
     final path = uri.canonicalizedPath;
     final results = {path: diagnostics};
     final cwd = File(path).parent;
     final pubspecLock = findPubspecLock(cwd);
-    print(pubspecLock?.packages.keys.contains('bloc'));
     if (pubspecLock == null) return results;
     if (!pubspecLock.packages.keys.contains('bloc')) return results;
     final analysisOptions = findAnalysisOptions(cwd);
-    print(analysisOptions?.yaml.toJson());
     if (analysisOptions == null) return results;
     final relativePath = p
         .relative(path, from: analysisOptions.file.parent.path)
@@ -87,12 +84,10 @@ class Linter {
       ..removeWhere((rule) => ignoreForFile.contains(rule.name));
     final tokens = scan(utf8.encode(content)).tokens;
     for (final rule in enabledRules) {
-      print(rule.name);
       final context = LintContext._(rule: rule, document: document);
       final listener = rule.create(context);
       if (listener == null) continue;
       Parser(listener).parseUnit(tokens);
-      print(context.diagnostics);
       diagnostics.addAll(context.diagnostics);
     }
     return results;
