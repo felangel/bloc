@@ -37,9 +37,6 @@ Usage: bloc lint [OPTIONS] [files]...''');
     }
 
     final uris = rest.map((path) => path.toUri()).whereType<Uri>();
-    for (final uri in uris) {
-      print(uri.path); // ignore: avoid_print
-    }
     final diagnostics = uris
         .map((uri) => _linter.analyze(uri: uri))
         .fold(<String, List<Diagnostic>>{}, (prev, curr) => {...prev, ...curr});
