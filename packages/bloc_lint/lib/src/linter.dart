@@ -65,7 +65,7 @@ class Linter {
     final diagnostics = <Diagnostic>[];
     final canonicalizedPath = uri.canonicalizedPath;
     final results = {canonicalizedPath: diagnostics};
-    final path = canonicalizedPath.toLongPath().replaceAll(r'\', '/');
+    final path = canonicalizedPath.toLongPath();
     final cwd = File(path).parent;
     final pubspecLock = findPubspecLock(cwd);
     if (pubspecLock == null) return results;
@@ -146,7 +146,7 @@ extension on String {
 extension on Uri {
   String get canonicalizedPath {
     final path = isScheme('file') ? p.fromUri(this) : this.path;
-    return p.normalize(p.absolute(path));
+    return p.normalize(p.absolute(path)).replaceAll(r'\', '/');
   }
 }
 
