@@ -63,9 +63,9 @@ class Linter {
 
   Map<String, List<Diagnostic>> _analyzeContent(Uri uri, String content) {
     final diagnostics = <Diagnostic>[];
-    final path = uri.canonicalizedPath;
-    final diagnosticPath = path.startsWith(r'\\?\') ? path.substring(4) : path;
-    final results = {diagnosticPath: diagnostics};
+    final canonicalizedPath = uri.canonicalizedPath;
+    final results = {canonicalizedPath: diagnostics};
+    final path = canonicalizedPath.toLongPath().replaceAll(r'\', '/');
     final cwd = File(path).parent;
     final pubspecLock = findPubspecLock(cwd);
     if (pubspecLock == null) return results;
@@ -134,16 +134,19 @@ extension on FileSystemEntity {
   }
 }
 
+extension on String {
+  String toLongPath() {
+    // Support long file paths on Windows
+    // https://github.com/dart-lang/sdk/issues/27825
+    if (Platform.isWindows) return r'\\?\' + this;
+    return this;
+  }
+}
+
 extension on Uri {
   String get canonicalizedPath {
     final path = isScheme('file') ? p.fromUri(this) : this.path;
-    final canonicalizedPath = p
-        .normalize(p.absolute(path))
-        .replaceAll(r'\', '/');
-    // Support long file paths on Windows
-    // https://github.com/dart-lang/sdk/issues/27825
-    if (Platform.isWindows) return r'\\?\' + canonicalizedPath;
-    return canonicalizedPath;
+    return p.normalize(p.absolute(path));
   }
 }
 
