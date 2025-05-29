@@ -96,7 +96,9 @@ extension on Severity {
 
 extension on Diagnostic {
   String prettify(String path, TextDocument document) {
-    final relativePath = p.relative(path, from: Directory.current.path);
+    final relativePath = p
+        .relative(path, from: Directory.current.path)
+        .replaceAll(r'\', '/');
     final style = severity.toStyle();
     final text = document.getText(
       range: Range(
