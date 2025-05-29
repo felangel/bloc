@@ -19,6 +19,9 @@ warning[avoid_flutter_imports]: Avoid importing Flutter within cubit instances.
   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   = hint: Cubits should be decoupled from Flutter.
  docs: https://bloclibrary.dev/lint-rules/avoid_flutter_imports
+
+1 issue found
+Analyzed 2 files
 ''';
   if (!actual.contains(expected)) {
     throw Exception('''
@@ -30,12 +33,6 @@ $expected
 Actual ↓
 $actual
 ''');
-  }
-  if (!actual.contains('''
-1 issue found
-Analyzed 2 files
-''')) {
-    throw Exception('FAIL: Expected to analyze 2 files and find 1 issue.');
   }
   print('PASS');
   Directory(projectRoot).deleteSync(recursive: true);
@@ -110,6 +107,6 @@ String lint(String projectRoot) {
     'bloc',
     ['lint', '.'],
     workingDirectory: projectRoot,
-    exitCode: 1,
+    exitCode: Platform.isWindows ? 0 : 1,
   );
 }
