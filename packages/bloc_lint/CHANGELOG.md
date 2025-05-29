@@ -1,3 +1,7 @@
+# 0.2.0-dev.4
+
+- fix: various bug fixes for Windows
+
 # 0.2.0-dev.3
 
 - feat: add support for `// ignore`
