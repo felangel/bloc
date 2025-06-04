@@ -16,6 +16,12 @@ inputs:
   name:
     required: true
     description: The name of the executable
+  os:
+    required: true
+    description: The operating system to compile for
+  arch:
+    required: true
+    description: The architecture to compile for
 
 runs:
   using: "composite"
@@ -30,12 +36,12 @@ runs:
       shell: ${{ inputs.shell }}
       run: dart pub get
 
-    - name: ⚙️ Compile
+    - name: ⚙️ Compile (${{ inputs.os }}, ${{ inputs.arch }})
       working-directory: ${{ inputs.working_directory }}
       shell: ${{ inputs.shell }}
       run: |
         mkdir ${{ runner.temp }}/executable
-        dart compile exe ${{ inputs.entrypoint }} -o ${{ runner.temp }}/executable/out
+        dart compile exe --target-os ${{ inputs.os }} --target-arch ${{ inputs.arch }} ${{ inputs.entrypoint }} -o ${{ runner.temp }}/executable/out
 
     - name: ⬆️ Upload Artifact
       uses: actions/upload-artifact@v4
