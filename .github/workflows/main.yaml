@@ -299,12 +299,15 @@ jobs:
       - name: 📚 Git Checkout
         uses: actions/checkout@v4
 
-      - name: ⚙️ Compile Bloc Tools for ${{ runner.os }}
+      - name: ⚙️ Compile Bloc Tools for ${{ runner.os }} ${{ runner.arch }}
         uses: ./.github/actions/dart_compile
         with:
           entrypoint: bin/bloc.dart
           working_directory: packages/bloc_tools
-          name: bloc_${{ runner.os }}
+          name: bloc_${{ runner.os }}_${{ runner.arch }}
+          os: ${{ runner.os }}
+          arch: ${{ runner.arch }}
+
 
   flutter_package_checks:
     needs: changes
