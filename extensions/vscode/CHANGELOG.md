@@ -1,6 +1,6 @@
 # 6.8.6
 
-- fix: use target-specific bloc_tools executables (supports arm64 and x64)
+- fix: support for x64 and arm64 `bloc_tools` executables
 
 # 6.8.5
 
