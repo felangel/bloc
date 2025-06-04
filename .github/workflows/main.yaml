@@ -289,9 +289,8 @@ jobs:
             { "runs-on": "macos-latest", "os": "macos", "arch": "arm64" },
             { "runs-on": "windows-latest", "os": "windows", "arch": "x64" },
           ]
-        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
 
-    runs-on: ${{ matrix.runs-on }}
+    runs-on: ${{ matrix.config.runs-on }}
 
     name: ⚙️ Compile Bloc Tools
 
@@ -299,15 +298,14 @@ jobs:
       - name: 📚 Git Checkout
         uses: actions/checkout@v4
 
-      - name: ⚙️ Compile Bloc Tools for ${{ runner.os }} ${{ runner.arch }}
+      - name: ⚙️ Compile Bloc Tools for ${{ matrix.config.os }} ${{ matrix.config.arch }}
         uses: ./.github/actions/dart_compile
         with:
           entrypoint: bin/bloc.dart
           working_directory: packages/bloc_tools
-          name: bloc_${{ runner.os }}_${{ runner.arch }}
-          os: ${{ runner.os }}
-          arch: ${{ runner.arch }}
-
+          name: bloc_${{ matrix.config.os }}_${{ matrix.config.arch }}
+          os: ${{ matrix.config.os }}
+          arch: ${{ matrix.config.arch }}
 
   flutter_package_checks:
     needs: changes
