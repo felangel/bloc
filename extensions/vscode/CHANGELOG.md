@@ -1,3 +1,7 @@
+# 6.8.6
+
+- fix: use target-specific bloc_tools executables (supports arm64 and x64)
+
 # 6.8.5
 
 - fix: install precompiled `bloc_tools` executable
