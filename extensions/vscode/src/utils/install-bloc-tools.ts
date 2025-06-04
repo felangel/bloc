@@ -1,4 +1,4 @@
-import { type } from "node:os";
+import { arch, type } from "node:os";
 import { ExtensionContext, Uri } from "vscode";
 import { downloadFile } from ".";
 
@@ -9,9 +9,11 @@ export const installBlocTools = async (
   try {
     const os = getOS();
     if (os === OperatingSystem.unknown) return false;
+    const arch = getArch();
+    if (arch == Architecture.unknown) return false;
     await downloadFile(
       Uri.parse(
-        `https://github.com/felangel/bloc/releases/download/bloc_tools-v${BLOC_TOOLS_VERSION}/bloc_${os}`
+        `https://github.com/felangel/bloc/releases/download/bloc_tools-v${BLOC_TOOLS_VERSION}/bloc_${os}_${arch}`
       ),
       `bloc_${BLOC_TOOLS_VERSION}`,
       context
@@ -23,8 +25,8 @@ export const installBlocTools = async (
 };
 
 function getOS(): OperatingSystem {
-  const osType = type();
-  switch (osType) {
+  const hostOS = type();
+  switch (hostOS) {
     case "Linux":
       return OperatingSystem.linux;
     case "Darwin":
@@ -35,9 +37,26 @@ function getOS(): OperatingSystem {
   return OperatingSystem.unknown;
 }
 
+function getArch(): Architecture {
+  const hostArch = arch();
+  switch (hostArch) {
+    case "arm64":
+      return Architecture.arm64;
+    case "x64":
+      return Architecture.x64;
+  }
+  return Architecture.unknown;
+}
+
 enum OperatingSystem {
   linux = "linux",
   macos = "macos",
   windows = "windows",
+  unknown = "-",
+}
+
+enum Architecture {
+  arm64 = "arm64",
+  x64 = "x64",
   unknown = "-",
 }
