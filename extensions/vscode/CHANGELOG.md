@@ -1,3 +1,7 @@
+# 6.8.6
+
+- fix: support for x64 and arm64 `bloc_tools` executables
+
 # 6.8.5
 
 - fix: install precompiled `bloc_tools` executable
