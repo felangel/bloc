@@ -95,8 +95,8 @@ import 'package:bloc/bloc.dart';
 enum CounterEvent { increment, decrement }
 class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc() : super(0);
-  void _foo() => switch ('foo') {
-    String() => 'bar',
+  bool _isEven(int x) => switch (x) {
+    int() => false,
   };
 }
 ''',
