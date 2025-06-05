@@ -1,3 +1,7 @@
+# 0.2.0-dev.5
+
+- fix: `avoid_public_bloc_methods` false positive when using switch expressions
+
 # 0.2.0-dev.4
 
 - fix: various bug fixes for Windows
