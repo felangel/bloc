@@ -149,6 +149,7 @@ void blocTest<B extends EmittableStateStreamableSource<State>, State>(
   dynamic Function()? errors,
   FutureOr<void> Function()? tearDown,
   dynamic tags,
+  bool allowInitialState = false,
 }) {
   test.test(
     description,
@@ -164,6 +165,7 @@ void blocTest<B extends EmittableStateStreamableSource<State>, State>(
         verify: verify,
         errors: errors,
         tearDown: tearDown,
+        allowInitialState: allowInitialState,
       );
     },
     tags: tags,
@@ -184,6 +186,7 @@ Future<void> testBloc<B extends EmittableStateStreamableSource<State>, State>({
   dynamic Function(B bloc)? verify,
   dynamic Function()? errors,
   FutureOr<void> Function()? tearDown,
+  bool allowInitialState = false,
 }) async {
   var shallowEquality = false;
   final unhandledErrors = <Object>[];
@@ -199,6 +202,9 @@ Future<void> testBloc<B extends EmittableStateStreamableSource<State>, State>({
       await setUp?.call();
       final states = <State>[];
       final bloc = build();
+      if (allowInitialState && bloc.state != null) {
+        states.add(bloc.state);
+      }
       // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
       if (seed != null) bloc.emit(seed());
       final subscription = bloc.stream.skip(skip).listen(states.add);

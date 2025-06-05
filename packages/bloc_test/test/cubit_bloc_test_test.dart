@@ -16,10 +16,25 @@ void main() {
       );
 
       blocTest<CounterCubit, int>(
+        'emits [0] when nothing is called but initial state is tracked',
+        build: () => CounterCubit(),
+        allowInitialState: true,
+        expect: () => <int>[0],
+      );
+
+      blocTest<CounterCubit, int>(
         'emits [1] when increment is called',
         build: () => CounterCubit(),
         act: (cubit) => cubit.increment(),
         expect: () => <int>[1],
+      );
+
+      blocTest<CounterCubit, int>(
+        'emits [0, 1] when increment is called while initial state was tracked',
+        build: () => CounterCubit(),
+        allowInitialState: true,
+        act: (cubit) => cubit.increment(),
+        expect: () => <int>[0, 1],
       );
 
       blocTest<CounterCubit, int>(
@@ -113,10 +128,25 @@ void main() {
       );
 
       blocTest<InstantEmitCubit, int>(
+        'emits [1] when initial state is tracked.',
+        build: () => InstantEmitCubit(),
+        allowInitialState: true,
+        expect: () => <int>[1],
+      );
+
+      blocTest<InstantEmitCubit, int>(
         'emits [2] when increment is called',
         build: () => InstantEmitCubit(),
         act: (cubit) => cubit.increment(),
         expect: () => <int>[2],
+      );
+
+      blocTest<InstantEmitCubit, int>(
+        'emits [1, 2] when increment is called while initial state was also tracked.',
+        build: () => InstantEmitCubit(),
+        allowInitialState: true,
+        act: (cubit) => cubit.increment(),
+        expect: () => <int>[1, 2],
       );
 
       blocTest<InstantEmitCubit, int>(
