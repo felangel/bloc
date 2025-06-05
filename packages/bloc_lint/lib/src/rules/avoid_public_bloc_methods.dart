@@ -62,6 +62,7 @@ class _Listener extends Listener {
     if (!(enclosingDeclarationName?.endsWith('Bloc') ?? false)) {
       return;
     }
+    if (name is BeginToken && name.previous?.type == Keyword.SWITCH) return;
     final methodName = name.lexeme;
     if (enclosingDeclarationName == methodName) return;
     if (allowedMethods.contains(methodName)) return;

@@ -84,5 +84,22 @@ class CounterCubit extends Cubit<int> {
 }
 ''',
     );
+
+    lintTest(
+      'does not lint on internal switch expression',
+      rule: AvoidPublicBlocMethods.new,
+      path: 'counter_bloc.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+
+enum CounterEvent { increment, decrement }
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+  bool _isEven(int x) => switch (x) {
+    int() => false,
+  };
+}
+''',
+    );
   });
 }
