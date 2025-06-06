@@ -106,6 +106,7 @@ jobs:
         with:
           filters: |
             bloc_tools:
+              - ./.github/actions/dart_compile/action.yaml
               - ./.github/workflows/main.yaml
               - packages/bloc_tools/**
 
