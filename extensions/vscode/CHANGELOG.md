@@ -1,3 +1,7 @@
+# 6.8.7
+
+- deps: upgrade to `bloc_tools: 0.1.0-dev.15`
+
 # 6.8.6
 
 - fix: support for x64 and arm64 `bloc_tools` executables
