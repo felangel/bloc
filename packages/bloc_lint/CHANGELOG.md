@@ -1,3 +1,8 @@
+# 0.2.0-dev.6
+
+- fix: `prefer_void_public_cubit_methods` false positive when using switch expressions
+- fix: `avoid_public_bloc_methods` false positive when using switch expressions
+
 # 0.2.0-dev.5
 
 - fix: `avoid_public_bloc_methods` false positive when using switch expressions
