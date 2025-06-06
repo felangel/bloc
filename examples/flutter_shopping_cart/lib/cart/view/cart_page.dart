@@ -43,7 +43,7 @@ class CartList extends StatelessWidget {
           CartError() => const Text('Something went wrong!'),
           CartLoaded() => ListView.separated(
             itemCount: state.cart.items.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 4),
+            separatorBuilder: (_, _) => const SizedBox(height: 4),
             itemBuilder: (context, index) {
               final item = state.cart.items[index];
               return Material(
