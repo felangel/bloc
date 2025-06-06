@@ -60,7 +60,7 @@ void main() {
     void Function() overridePrint(void Function() fn) {
       return () {
         final spec = ZoneSpecification(
-          print: (_, __, ___, String msg) {
+          print: (_, _, _, String msg) {
             printLogs.add(msg);
           },
         );
