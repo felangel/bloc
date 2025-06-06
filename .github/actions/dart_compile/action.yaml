@@ -41,10 +41,10 @@ runs:
       shell: ${{ inputs.shell }}
       run: |
         mkdir ${{ runner.temp }}/executable
-        dart compile exe --target-os ${{ inputs.os }} --target-arch ${{ inputs.arch }} ${{ inputs.entrypoint }} -o ${{ runner.temp }}/executable/out
+        dart compile exe --target-os ${{ inputs.os }} --target-arch ${{ inputs.arch }} ${{ inputs.entrypoint }} -o ${{ runner.temp }}/executable/${{ inputs.name }}
 
     - name: ⬆️ Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.name }}
-        path: ${{ runner.temp }}/executable/out
+        path: ${{ runner.temp }}/executable/${{ inputs.name }}
