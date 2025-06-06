@@ -261,5 +261,23 @@ class CounterCubit extends Cubit<int> {
 }
 ''',
     );
+
+    lintTest(
+      'does not lint on internal switch expression',
+      rule: PreferVoidPublicCubitMethods.new,
+      path: 'counter_cubit.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+
+class ToggleCubit extends Cubit<bool> {
+  ToggleCubit() : super(false);
+
+  void toggle() => switch (state) {
+    true => emit(false),
+    false => emit(true),
+  };
+}
+''',
+    );
   });
 }

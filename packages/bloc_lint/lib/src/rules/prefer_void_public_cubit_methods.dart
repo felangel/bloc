@@ -49,6 +49,7 @@ class _Listener extends Listener {
     if (!(enclosingDeclarationName?.endsWith('Cubit') ?? false)) {
       return;
     }
+    if (name.previous?.type == Keyword.SWITCH) return;
     final methodName = name.lexeme;
     if (enclosingDeclarationName == methodName) return;
     if (methodName.startsWith('_')) return;
