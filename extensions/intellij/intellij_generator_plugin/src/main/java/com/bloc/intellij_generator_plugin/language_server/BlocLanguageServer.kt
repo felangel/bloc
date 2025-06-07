@@ -79,7 +79,7 @@ class BlocLanguageServer(private val project: Project? = null) {
             return null
         }
 
-        val fileName = "bloc_${os.value}_${arch.value}" + if (os == OperatingSystem.Windows) ".exe" else ""
+        val fileName = "bloc_${os.value}_${arch.value}";
         val cacheDir = getCacheDirectory();
         val executableFile = File(cacheDir, fileName)
 
