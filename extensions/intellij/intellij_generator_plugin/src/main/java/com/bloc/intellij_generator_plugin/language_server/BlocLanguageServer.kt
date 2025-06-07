@@ -1,107 +1,141 @@
 package com.bloc.intellij_generator_plugin.language_server
 
 import com.bloc.intellij_generator_plugin.util.BlocPluginNotification
-import com.bloc.intellij_generator_plugin.util.CommandLineHelper
 import com.bloc.intellij_generator_plugin.util.MultiplatformCommandLine
-import com.bloc.intellij_generator_plugin.util.VersionComparator
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
-import com.intellij.util.EnvironmentUtil
+import com.intellij.openapi.progress.ProgressManager
 import com.redhat.devtools.lsp4ij.server.OSProcessStreamConnectionProvider
-import java.util.concurrent.atomic.AtomicBoolean
+import com.redhat.devtools.lsp4ij.server.StreamConnectionProvider
+import com.intellij.openapi.application.PathManager
+import java.io.File
+import java.io.FileOutputStream
+import java.net.URL
+import java.net.URI
 
-class BlocLanguageServer(private val project: Project? = null) :
-    OSProcessStreamConnectionProvider(MultiplatformCommandLine("bloc", "language-server")) {
+private const val BLOC_TOOLS_VERSION = "0.1.0-dev.15"
+
+enum class OperatingSystem(val value: String) {
+    Linux("linux"),
+    MacOS("macos"),
+    Windows("windows"),
+    Unknown("-");
 
     companion object {
-        private const val PROCESS_TIMEOUT_SECONDS: Long = 5
-        private const val TARGET_BLOC_TOOLS_VERSION = "0.1.0-dev.12"
-        private const val MIN_DART_VERSION = "3.7.0"
+        fun fromSystemProperty(): OperatingSystem {
+            val os = System.getProperty("os.name").lowercase()
+            return when {
+                os.contains("win") -> Windows
+                os.contains("mac") -> MacOS
+                os.contains("nix") || os.contains("nux") || os.contains("aix") -> Linux
+                else -> Unknown
+            }
+        }
     }
+}
 
+enum class Architecture(val value: String) {
+    X64("x64"),
+    Arm64("arm64"),
+    Unknown("-");
+
+    companion object {
+        fun fromSystemProperty(): Architecture {
+            val arch = System.getProperty("os.arch").lowercase()
+            return when (arch) {
+                in listOf("amd64", "x86_64") -> X64
+                in listOf("aarch64", "arm64") -> Arm64
+                else -> Unknown
+            }
+        }
+    }
+}
+
+class BlocLanguageServer(private val project: Project? = null) {
     private val logger = Logger.getInstance(BlocLanguageServer::class.java)
-    private val minVersionAlertShowed = AtomicBoolean(false)
-    private val dartVersionRegex = Regex("Dart SDK version: ((?:[0-9]*\\.?)*)")
+    private var provider: OSProcessStreamConnectionProvider? = null
 
-    override fun start() {
-        if (project == null || !checkRequirements(project)) {
-            logger.error("Bloc language server could not be started because requirements are not met.")
-            return
-        }
-
-        super.start()
-    }
-
-    fun checkRequirements(project: Project): Boolean {
-        if (!hasRequiredDartVersion()) {
-            if (minVersionAlertShowed.compareAndSet(false, true)) {
-                BlocPluginNotification.notify(
-                    project,
-                    "The bloc language server requires a newer version of the Dart SDK (>=$MIN_DART_VERSION).",
-                    NotificationType.ERROR
-                )
-                logger.error("Installation doesn't match Dart version requirement")
-            }
-            return false
-        }
-        val blocToolsVersion = getBlocToolsVersion()
-        val isUpgrade = blocToolsVersion != null
-        if (blocToolsVersion != TARGET_BLOC_TOOLS_VERSION) {
-            if (!installOrUpgradeBlocTools(project, isUpgrade)) {
-                logger.error("bloc_tools ${if (isUpgrade) "upgrade" else "installation"} failed")
-                return false
-            }
-        }
-        return true
-    }
-
-    private fun hasRequiredDartVersion(): Boolean {
-        val dartVersion = getDartVersion()
-        if (dartVersion == null) {
-            return false
-        }
-        return VersionComparator.isGreaterOrEqualThan(dartVersion, MIN_DART_VERSION)
-    }
-
-    private fun getDartVersion(): String? {
-        val value = CommandLineHelper.executeWithTimeout(PROCESS_TIMEOUT_SECONDS, "dart", "--version")
-        if (value.isNullOrBlank()) {
+    fun getConnectionProvider(): StreamConnectionProvider? {
+        if (project == null) {
+            logger.error("Bloc language server could not be started because no project was detected.")
             return null
         }
-        return dartVersionRegex.find(value)?.groupValues?.get(1)
+
+        val executable = getBlocToolsExecutable(project)
+        if (executable == null) return null
+
+        val commandLine = MultiplatformCommandLine(executable, "language-server")
+        provider = OSProcessStreamConnectionProvider(commandLine)
+        return provider
     }
 
-    private fun getBlocToolsVersion(): String? =
-        CommandLineHelper.executeWithTimeout(PROCESS_TIMEOUT_SECONDS, "bloc", "--version")
+    private fun getBlocToolsExecutable(project: Project): String? {
+        val os = OperatingSystem.fromSystemProperty()
+        val arch = Architecture.fromSystemProperty()
 
-    private fun installOrUpgradeBlocTools(project: Project, isUpgrade: Boolean): Boolean {
-        val verb = if (isUpgrade) "upgrade" else "install"
-        val errorMessage = "Unable to $verb bloc_tools"
-        try {
-            val commandLine =
-                MultiplatformCommandLine(
-                    "dart",
-                    "pub",
-                    "global",
-                    "activate",
-                    "bloc_tools",
-                    TARGET_BLOC_TOOLS_VERSION
-                ).withEnvironment(
-                    EnvironmentUtil.getEnvironmentMap()
-                )
-            val process = commandLine.createProcess()
-            val exitCode = process.waitFor()
-            if (exitCode != 0) {
-                logger.error("bloc_tools activation exited with code: $exitCode")
-                BlocPluginNotification.notify(project, errorMessage, NotificationType.ERROR)
-                return false
-            }
-            return true
-        } catch (e: Exception) {
-            logger.error("bloc_tools activation failed: ${e.message}")
-            BlocPluginNotification.notify(project, "$errorMessage: ${e.message}", NotificationType.ERROR)
-            return false
+        if (os == OperatingSystem.Unknown || arch == Architecture.Unknown) {
+            logger.warn("Unsupported OS or architecture")
+            return null
         }
+
+        val fileName = "bloc_${os.value}_${arch.value}" + if (os == OperatingSystem.Windows) ".exe" else ""
+        val cacheDir = getCacheDirectory();
+        val executableFile = File(cacheDir, fileName)
+
+        if (executableFile.exists()) {
+            logger.info("Found cached executable at ${executableFile.absolutePath}")
+            return executableFile.absolutePath
+        }
+
+        val success = ProgressManager.getInstance().runProcessWithProgressSynchronously(
+            {
+                try {
+                    val uri =
+                        URI("https://github.com/felangel/bloc/releases/download/bloc_tools-v$BLOC_TOOLS_VERSION/$fileName")
+                    cacheDir.mkdirs()
+                    downloadFile(uri.toURL(), executableFile)
+                    makeExecutable(executableFile)
+                } catch (e: Exception) {
+                    logger.error("Failed to download bloc tools", e)
+                }
+
+            }, "Installing the Bloc Language Server",
+            false,
+            project
+        )
+
+        if (success && executableFile.exists()) {
+            BlocPluginNotification.notify(project, "Bloc Language Server installed", NotificationType.INFORMATION)
+            return executableFile.absolutePath
+        }
+
+        BlocPluginNotification.notify(
+            project,
+            "Failed to install the Bloc Language Server. See logs for details.",
+            NotificationType.ERROR
+        )
+
+        return null;
+    }
+
+    private fun makeExecutable(file: File) {
+        if (!file.setExecutable(true, false)) {
+            logger.error("Failed to set executable: ${file.absolutePath}")
+        }
+    }
+
+    private fun downloadFile(url: URL, outputFile: File) {
+        url.openStream().use { input ->
+            FileOutputStream(outputFile).use { output ->
+                input.copyTo(output)
+            }
+        }
+    }
+
+    private fun getCacheDirectory(): File {
+        val pluginCacheDir = File(PathManager.getSystemPath(), "bloc-tools/$BLOC_TOOLS_VERSION")
+        pluginCacheDir.mkdirs()
+        return pluginCacheDir
     }
 }
