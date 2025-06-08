@@ -16,7 +16,7 @@ class BlocLanguageServerInstaller : LanguageServerInstallerBase() {
 
     @Throws(Exception::class)
     override fun install(indicator: ProgressIndicator) {
-        progress("Downloading bloc tools...", indicator)
+        progress("Installing bloc tools...", indicator)
         val installed = languageServer.installBlocTools()
         ProgressManager.checkCanceled()
         if (!installed) throw Exception("Failed to install bloc tools")
