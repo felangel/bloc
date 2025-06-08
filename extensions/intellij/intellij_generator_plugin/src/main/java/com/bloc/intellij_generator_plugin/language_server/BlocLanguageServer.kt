@@ -1,6 +1,6 @@
 package com.bloc.intellij_generator_plugin.language_server
 
-import com.bloc.intellij_generator_plugin.util.MultiplatformCommandLine
+import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.openapi.diagnostic.Logger
 import com.redhat.devtools.lsp4ij.server.OSProcessStreamConnectionProvider
 import com.redhat.devtools.lsp4ij.server.StreamConnectionProvider
@@ -58,8 +58,7 @@ class BlocLanguageServer() {
     }
 
     fun installBlocTools(): Boolean {
-        val executableFile = getBlocToolsExecutableFile()
-        if (executableFile == null) return false
+        val executableFile = getBlocToolsExecutableFile() ?: return false
         try {
             val uri =
                 URI("https://github.com/felangel/bloc/releases/download/bloc_tools-v$BLOC_TOOLS_VERSION/${executableFile.name}")
@@ -74,11 +73,10 @@ class BlocLanguageServer() {
     }
 
     fun getConnectionProvider(): StreamConnectionProvider? {
-        val executable = getBlocToolsExecutableFile()
-        if (executable == null) return null
+        val executable = getBlocToolsExecutableFile() ?: return null
         if (!executable.exists()) return null
 
-        val commandLine = MultiplatformCommandLine(executable.absolutePath, "language-server")
+        val commandLine = GeneralCommandLine(executable.absolutePath, "language-server")
         provider = OSProcessStreamConnectionProvider(commandLine)
         return provider
     }
