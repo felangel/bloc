@@ -1,11 +1,7 @@
 package com.bloc.intellij_generator_plugin.language_server
 
-import com.bloc.intellij_generator_plugin.util.BlocPluginNotification
 import com.bloc.intellij_generator_plugin.util.MultiplatformCommandLine
-import com.intellij.notification.NotificationType
 import com.intellij.openapi.diagnostic.Logger
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.progress.ProgressManager
 import com.redhat.devtools.lsp4ij.server.OSProcessStreamConnectionProvider
 import com.redhat.devtools.lsp4ij.server.StreamConnectionProvider
 import com.intellij.openapi.application.PathManager
@@ -52,25 +48,42 @@ enum class Architecture(val value: String) {
     }
 }
 
-class BlocLanguageServer(private val project: Project? = null) {
+class BlocLanguageServer() {
     private val logger = Logger.getInstance(BlocLanguageServer::class.java)
     private var provider: OSProcessStreamConnectionProvider? = null
 
-    fun getConnectionProvider(): StreamConnectionProvider? {
-        if (project == null) {
-            logger.error("Bloc language server could not be started because no project was detected.")
-            return null
+    fun areBlocToolsInstalled(): Boolean {
+        val executable = getBlocToolsExecutableFile()
+        return executable?.exists() == true
+    }
+
+    fun installBlocTools(): Boolean {
+        val executableFile = getBlocToolsExecutableFile()
+        if (executableFile == null) return false
+        try {
+            val uri =
+                URI("https://github.com/felangel/bloc/releases/download/bloc_tools-v$BLOC_TOOLS_VERSION/${executableFile.name}")
+            val cacheDir = getCacheDirectory()
+            cacheDir.mkdirs()
+            downloadFile(uri.toURL(), executableFile)
+            makeExecutable(executableFile)
+        } catch (e: Exception) {
+            logger.error("Failed to download bloc tools", e)
         }
+        return executableFile.exists()
+    }
 
-        val executable = getBlocToolsExecutable(project)
+    fun getConnectionProvider(): StreamConnectionProvider? {
+        val executable = getBlocToolsExecutableFile()
         if (executable == null) return null
+        if (!executable.exists()) return null
 
-        val commandLine = MultiplatformCommandLine(executable, "language-server")
+        val commandLine = MultiplatformCommandLine(executable.absolutePath, "language-server")
         provider = OSProcessStreamConnectionProvider(commandLine)
         return provider
     }
 
-    private fun getBlocToolsExecutable(project: Project): String? {
+    private fun getBlocToolsExecutableFile(): File? {
         val os = OperatingSystem.fromSystemProperty()
         val arch = Architecture.fromSystemProperty()
 
@@ -79,44 +92,9 @@ class BlocLanguageServer(private val project: Project? = null) {
             return null
         }
 
-        val fileName = "bloc_${os.value}_${arch.value}";
-        val cacheDir = getCacheDirectory();
-        val executableFile = File(cacheDir, fileName)
-
-        if (executableFile.exists()) {
-            logger.info("Found cached executable at ${executableFile.absolutePath}")
-            return executableFile.absolutePath
-        }
-
-        val success = ProgressManager.getInstance().runProcessWithProgressSynchronously(
-            {
-                try {
-                    val uri =
-                        URI("https://github.com/felangel/bloc/releases/download/bloc_tools-v$BLOC_TOOLS_VERSION/$fileName")
-                    cacheDir.mkdirs()
-                    downloadFile(uri.toURL(), executableFile)
-                    makeExecutable(executableFile)
-                } catch (e: Exception) {
-                    logger.error("Failed to download bloc tools", e)
-                }
-
-            }, "Installing the Bloc Language Server",
-            false,
-            project
-        )
-
-        if (success && executableFile.exists()) {
-            BlocPluginNotification.notify(project, "Bloc Language Server installed", NotificationType.INFORMATION)
-            return executableFile.absolutePath
-        }
-
-        BlocPluginNotification.notify(
-            project,
-            "Failed to install the Bloc Language Server. See logs for details.",
-            NotificationType.ERROR
-        )
-
-        return null;
+        val fileName = "bloc_${os.value}_${arch.value}"
+        val cacheDir = getCacheDirectory()
+        return File(cacheDir, fileName)
     }
 
     private fun makeExecutable(file: File) {
