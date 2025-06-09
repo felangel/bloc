@@ -125,7 +125,7 @@ You can override the global storage instance for specific `HydratedBloc` or `Hyd
 
 ```dart
 class CounterCubit extends HydratedCubit<int> {
-  CounterCubit() : super(0, storage: EncryptedStorage());
+  CounterCubit() : super(0, EncryptedStorage());
 
   void increment() => emit(state + 1);
 
