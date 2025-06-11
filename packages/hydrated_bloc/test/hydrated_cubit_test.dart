@@ -411,14 +411,14 @@ void main() {
         runZonedGuarded(() async {
           final expectedError = Exception('oops');
           const change = Change(currentState: 0, nextState: 0);
-          final bloc = MyHydratedCubitWithCustomStorage(storage);
+          final cubit = MyHydratedCubitWithCustomStorage(storage);
           when(
             () => storage.write(any(), any<dynamic>()),
           ).thenThrow(expectedError);
-          bloc.onChange(change);
+          cubit.onChange(change);
           await Future<void>.delayed(const Duration(milliseconds: 300));
           // ignore: invalid_use_of_protected_member
-          verify(() => bloc.onError(expectedError, any())).called(2);
+          verify(() => cubit.onError(expectedError, any())).called(2);
         }, (error, stackTrace) {
           expect(error.toString(), 'Exception: oops');
           expect(stackTrace, isNotNull);
