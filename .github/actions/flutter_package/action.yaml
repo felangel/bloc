@@ -53,6 +53,9 @@ runs:
       shell: ${{ inputs.shell }}
       run: flutter pub get
 
+    - name: ⚙️ Setup Bloc Tools
+      uses: felangel/setup-bloc-tools@v0
+
     - name: ✨ Format
       working-directory: ${{ inputs.working_directory }}
       shell: ${{ inputs.shell }}
@@ -62,6 +65,11 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       shell: ${{ inputs.shell }}
       run: dart analyze --fatal-warnings ${{inputs.analyze_directories}}
+
+    - name: 🔍 Bloc Lint
+      working-directory: ${{ inputs.working_directory }}
+      shell: ${{ inputs.shell }}
+      run: bloc lint ${{inputs.analyze_directories}}
 
     - name: 🧪 Test
       working-directory: ${{ inputs.working_directory }}

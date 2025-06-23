@@ -34,8 +34,7 @@ void main() {
   });
 
   group('CartList', () {
-    testWidgets(
-        'renders CircularProgressIndicator '
+    testWidgets('renders CircularProgressIndicator '
         'when cart is loading', (tester) async {
       when(() => cartBloc.state).thenReturn(CartLoading());
       await tester.pumpApp(
@@ -45,11 +44,11 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets(
-        'renders 3 ListTile '
+    testWidgets('renders 3 ListTile '
         'when cart is loaded with three items', (tester) async {
-      when(() => cartBloc.state)
-          .thenReturn(CartLoaded(cart: Cart(items: mockItems)));
+      when(
+        () => cartBloc.state,
+      ).thenReturn(CartLoaded(cart: Cart(items: mockItems)));
       await tester.pumpApp(
         cartBloc: cartBloc,
         child: CartList(),
@@ -57,8 +56,7 @@ void main() {
       expect(find.byType(ListTile), findsNWidgets(3));
     });
 
-    testWidgets(
-        'renders error text '
+    testWidgets('renders error text '
         'when cart fails to load', (tester) async {
       when(() => cartBloc.state).thenReturn(CartError());
       await tester.pumpApp(
@@ -70,8 +68,7 @@ void main() {
   });
 
   group('CartTotal', () {
-    testWidgets(
-        'renders CircularProgressIndicator '
+    testWidgets('renders CircularProgressIndicator '
         'when cart is loading', (tester) async {
       when(() => cartBloc.state).thenReturn(CartLoading());
       await tester.pumpApp(
@@ -81,11 +78,11 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets(
-        'renders total price '
+    testWidgets('renders total price '
         'when cart is loaded with three items', (tester) async {
-      when(() => cartBloc.state)
-          .thenReturn(CartLoaded(cart: Cart(items: mockItems)));
+      when(
+        () => cartBloc.state,
+      ).thenReturn(CartLoaded(cart: Cart(items: mockItems)));
       await tester.pumpApp(
         cartBloc: cartBloc,
         child: CartTotal(),
@@ -93,8 +90,7 @@ void main() {
       expect(find.text('\$${42 * 3}'), findsOneWidget);
     });
 
-    testWidgets(
-        'renders error text '
+    testWidgets('renders error text '
         'when cart fails to load', (tester) async {
       when(() => cartBloc.state).thenReturn(CartError());
       await tester.pumpApp(
@@ -104,11 +100,11 @@ void main() {
       expect(find.text('Something went wrong!'), findsOneWidget);
     });
 
-    testWidgets(
-        'renders SnackBar after '
+    testWidgets('renders SnackBar after '
         "tapping the 'BUY' button", (tester) async {
-      when(() => cartBloc.state)
-          .thenReturn(CartLoaded(cart: Cart(items: mockItems)));
+      when(
+        () => cartBloc.state,
+      ).thenReturn(CartLoaded(cart: Cart(items: mockItems)));
       await tester.pumpApp(
         cartBloc: cartBloc,
         child: Scaffold(body: CartTotal()),

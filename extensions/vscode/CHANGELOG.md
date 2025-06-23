@@ -1,3 +1,38 @@
+# 6.8.7
+
+- deps: upgrade to `bloc_tools: 0.1.0-dev.15`
+
+# 6.8.6
+
+- fix: support for x64 and arm64 `bloc_tools` executables
+
+# 6.8.5
+
+- fix: install precompiled `bloc_tools` executable
+- deps: upgrade to `bloc_tools: 0.1.0-dev.13`
+
+# 6.8.4
+
+- deps: upgrade to `bloc_tools: 0.1.0-dev.12`
+
+# 6.8.3
+
+- fix: add Dart SDK constraint for language server
+
+# 6.8.2
+
+- deps: upgrade to `bloc_tools: 0.1.0-dev.11`
+
+# 6.8.1
+
+- feat: improve bloc tools install/upgrade ux
+- fix: various language server bugs on windows
+- deps: upgrade to `bloc_tools: 0.1.0-dev.10`
+
+# 6.8.0
+
+- feat: add language server
+
 # 6.7.0
 
 - deps: upgrade vscode engine to ^1.75.0

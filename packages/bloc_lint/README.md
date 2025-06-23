@@ -4,7 +4,7 @@
 
 <p align="center">
 <a href="https://pub.dev/packages/bloc_lint"><img src="https://img.shields.io/pub/v/bloc_lint.svg" alt="Pub"></a>
-<a href="https://github.com/felangel/bloc/actions"><img src="https://github.com/felangel/bloc/workflows/build/badge.svg" alt="build"></a>
+<a href="https://github.com/felangel/bloc/actions"><img src="https://github.com/felangel/bloc/actions/workflows/main.yaml/badge.svg" alt="build"></a>
 <a href="https://codecov.io/gh/felangel/bloc"><img src="https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg" alt="codecov"></a>
 <a href="https://github.com/felangel/bloc"><img src="https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Star on Github"></a>
 <a href="https://flutter.dev/docs/development/data-and-backend/state-mgmt/options#bloc--rx"><img src="https://img.shields.io/badge/flutter-website-deepskyblue.svg" alt="Flutter Website"></a>
@@ -23,6 +23,8 @@ Official lint rules for development when using the bloc state management library
 
 This package is built to work with:
 
+- [bloc](https://pub.dev/packages/bloc)
+- [bloc_tools](https://pub.dev/packages/bloc_tools)
 - [flutter_bloc](https://pub.dev/packages/flutter_bloc)
 - [angular_bloc](https://pub.dev/packages/angular_bloc)
 - [bloc_concurrency](https://pub.dev/packages/bloc_concurrency)
@@ -41,20 +43,12 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
         <tr>
             <td align="center" style="border: 1px solid black">
                 <a href="https://shorebird.dev"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/shorebird.png" width="225"/></a>
-            </td>
-            <td align="center" style="border: 1px solid black">
-                <a href="https://www.monterail.com/services/flutter-development/?utm_source=bloc&utm_medium=logo&utm_campaign=flutter"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/monterail.png" width="225"/></a>
-            </td>
+            </td>            
             <td align="center" style="border: 1px solid black">
                 <a href="https://getstream.io/chat/flutter/tutorial/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Github_Jan2022_FlutterChat&utm_term=bloc"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/stream.png" width="225"/></a>
             </td>
-        </tr>
-        <tr>
             <td align="center" style="border: 1px solid black">
-                <a href="https://www.miquido.com/flutter-development-company/?utm_source=github&utm_medium=sponsorship&utm_campaign=bloc-silver-tier&utm_term=flutter-development-company&utm_content=miquido-logo"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/miquido.png" width="225"/></a>
-            </td>            
-            <td align="center" style="border: 1px solid black">
-                <a href="https://www.netguru.com/services/flutter-app-development?utm_campaign=%5BS%5D%5BMob%5D%20Flutter&utm_source=github&utm_medium=sponsorship&utm_term=bloclibrary"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/netguru.png" width="225"/></a>
+                <a href="https://rettelgame.com/"><img src="https://raw.githubusercontent.com/felangel/bloc/master/assets/sponsors/rettel.png" width="225"/></a>
             </td>
         </tr>
     </tbody>
@@ -62,9 +56,54 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 
 ---
 
+## Quick Start
+
+1. Install the [bloc command-line tools](https://pub.dev/packages/bloc_tools)
+
+   ```sh
+   dart pub global activate bloc_tools
+   ```
+
+2. Install the [bloc_lint](https://pub.dev/packages/bloc_lint) package
+
+   ```sh
+   dart pub add --dev bloc_lint:^0.2.0
+   ```
+
+3. Add an `analysis_options.yaml` to the root of your project with the
+   recommended rules
+
+   ```yaml
+   include: package:bloc_lint/recommended.yaml
+   ```
+
+4. Run the linter
+
+   ```sh
+   bloc lint .
+   ```
+
+For more information, check out the [official documentation](https://bloclibrary.dev/lint)
+
+## Recommended Lint Rules
+
+- [avoid_flutter_imports](https://bloclibrary.dev/lint-rules/avoid_flutter_imports)
+- [avoid_public_bloc_methods](https://bloclibrary.dev/lint-rules/avoid_public_bloc_methods)
+- [avoid_public_fields](https://bloclibrary.dev/lint-rules/avoid_public_fields)
+- [prefer_void_public_cubit_methods](https://bloclibrary.dev/lint-rules/prefer_void_public_cubit_methods)
+
+## All Lint Rules
+
+- [avoid_flutter_imports](https://bloclibrary.dev/lint-rules/avoid_flutter_imports)
+- [avoid_public_bloc_methods](https://bloclibrary.dev/lint-rules/avoid_public_bloc_methods)
+- [avoid_public_fields](https://bloclibrary.dev/lint-rules/avoid_public_fields)
+- [prefer_bloc](https://bloclibrary.dev/lint-rules/prefer_bloc)
+- [prefer_cubit](https://bloclibrary.dev/lint-rules/prefer_cubit)
+- [prefer_void_public_cubit_methods](https://bloclibrary.dev/lint-rules/prefer_void_public_cubit_methods)
+
 ## Dart Versions
 
-- Dart 2: >= 2.12
+- Dart 3: >= 3.7.0
 
 ## Maintainers
 

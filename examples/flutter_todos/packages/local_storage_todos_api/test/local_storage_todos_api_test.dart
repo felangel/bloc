@@ -186,10 +186,12 @@ void main() {
 
     group('completeAll', () {
       test('sets isCompleted on all todos to provided value', () {
-        final newTodos =
-            todos.map((todo) => todo.copyWith(isCompleted: true)).toList();
-        final changedTodosAmount =
-            todos.where((todo) => !todo.isCompleted).length;
+        final newTodos = todos
+            .map((todo) => todo.copyWith(isCompleted: true))
+            .toList();
+        final changedTodosAmount = todos
+            .where((todo) => !todo.isCompleted)
+            .length;
 
         final subject = createSubject();
 

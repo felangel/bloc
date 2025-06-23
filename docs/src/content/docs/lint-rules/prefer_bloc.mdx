@@ -1,0 +1,48 @@
+---
+title: Prefer Bloc
+description: The prefer_bloc rule.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/prefer_bloc/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/prefer_bloc/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+</div>
+
+Prefer using `Bloc` instances of `Cubit` instances.
+
+## Rationale
+
+This rule is purely a stylistic rule. In some cases, teams may prefer to
+standardize on just using `Bloc` instances throughout their entire application
+for consistency.
+
+:::tip
+
+Learn more about the benefits of `Bloc` in
+[Core Concepts](/bloc-concepts/#bloc-advantages).
+
+:::
+
+## Examples
+
+**Avoid** using `Cubit` instances.
+
+**BAD**:
+
+<BadSnippet />
+
+**GOOD**:
+
+<GoodSnippet />
+
+## Enable
+
+To enable the `prefer_bloc` rule, add it to your `analysis_options.yaml` under
+`bloc` > `rules`:
+
+<EnableRuleSnippet name="prefer_bloc" />

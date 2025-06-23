@@ -2,7 +2,7 @@
   "name": "bloc",
   "displayName": "bloc",
   "description": "Support for the bloc library and provides tools for effectively creating blocs for both Flutter and AngularDart apps.",
-  "version": "6.7.0",
+  "version": "6.8.7",
   "publisher": "FelixAngelov",
   "bugs": {
     "url": "https://github.com/felangel/bloc/issues",
@@ -25,7 +25,8 @@
     "flutter",
     "angulardart",
     "bloc",
-    "state-management"
+    "state-management",
+    "language-server"
   ],
   "icon": "assets/logo.png",
   "activationEvents": [
@@ -41,6 +42,11 @@
             "type": "boolean",
             "default": true,
             "description": "Whether to check if you are using the latest package versions at startup."
+          },
+          "bloc.languageServer.enabled": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether to run the bloc language server at startup."
           },
           "bloc.newBlocTemplate.type": {
             "type": "string",
@@ -234,19 +240,24 @@
     "@types/node-fetch": "^2.0.0",
     "@types/rimraf": "^2.0.2",
     "@types/semver": "^6.0.2",
+    "@types/uuid": "^8.3.4",
     "@types/vscode": "^1.56.0",
     "ts-loader": "^9.4.2",
     "tslint": "^5.12.1",
-    "typescript": "^3.5.1",
+    "typescript": "^5.0.0",
     "webpack": "^5.94.0",
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
+    "axios": "^1.9.0",
     "change-case": "^4.1.2",
     "js-yaml": "^3.13.1",
     "lodash": "^4.17.19",
     "mkdirp": "^0.5.1",
     "node-fetch": "^2.0.0",
-    "semver": "^6.3.1"
+    "rimraf": "^3.0.2",
+    "semver": "^6.3.1",
+    "uuid": "^8.3.2",
+    "vscode-languageclient": "^7.0.0"
   }
 }

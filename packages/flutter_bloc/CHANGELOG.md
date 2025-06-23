@@ -1,3 +1,7 @@
+# 9.1.1
+
+- fix: `BlocSelector` rebuilds when `selector` changes ([#4415](https://github.com/felangel/bloc/pull/4415))
+
 # 9.1.0
 
 - feat: expose `dispose` callback on `RepositoryProvider` ([#4356](https://github.com/felangel/bloc/pull/4356))

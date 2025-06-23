@@ -4,7 +4,7 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=3.6.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
   bloc: ^9.0.0
@@ -17,3 +17,5 @@ dependencies:
 
 flutter:
   uses-material-design: true
+dev_dependencies:
+  bloc_lint: ^0.2.0-dev.0

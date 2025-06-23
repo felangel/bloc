@@ -1,0 +1,45 @@
+---
+title: Avoid Public Bloc Methods
+description: The avoid_public_bloc_methods rule.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/avoid_public_bloc_methods/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/avoid_public_bloc_methods/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+	<Badge text="recommended" variant="success" />
+</div>
+
+Avoid exposing public methods on `Bloc` instances.
+
+## Rationale
+
+Blocs react to incoming events and emit outgoing states. As a result, the
+recommended way of communicating with a bloc instance is via the `add` method.
+In most cases, there's no need to create additional abstractions on top of the
+`add` API.
+
+![Bloc Architecture](~/assets/concepts/bloc_architecture_full.png)
+
+## Examples
+
+**DO NOT** expose public methods on bloc instances.
+
+**BAD**:
+
+<BadSnippet />
+
+**GOOD**:
+
+<GoodSnippet />
+
+## Enable
+
+To enable the `avoid_public_bloc_methods` rule, add it to your
+`analysis_options.yaml` under `bloc` > `rules`:
+
+<EnableRuleSnippet name="avoid_public_bloc_methods" />

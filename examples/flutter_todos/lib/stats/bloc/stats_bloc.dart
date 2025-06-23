@@ -8,8 +8,8 @@ part 'stats_state.dart';
 class StatsBloc extends Bloc<StatsEvent, StatsState> {
   StatsBloc({
     required TodosRepository todosRepository,
-  })  : _todosRepository = todosRepository,
-        super(const StatsState()) {
+  }) : _todosRepository = todosRepository,
+       super(const StatsState()) {
     on<StatsSubscriptionRequested>(_onSubscriptionRequested);
   }
 
@@ -28,7 +28,7 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
         completedTodos: todos.where((todo) => todo.isCompleted).length,
         activeTodos: todos.where((todo) => !todo.isCompleted).length,
       ),
-      onError: (_, __) => state.copyWith(status: StatsStatus.failure),
+      onError: (_, _) => state.copyWith(status: StatsStatus.failure),
     );
   }
 }

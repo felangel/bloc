@@ -11,6 +11,12 @@
 
     <change-notes><![CDATA[
         <ul>
+          <li>v4.1.5 - Use precompiled bloc_tools executable for LSP</li>
+          <li>v4.1.4 - Include environment during command execution</li>
+          <li>v4.1.3 - Bump bloc_tools version to 0.1.0-dev.12</li>
+          <li>v4.1.2 - Fix language server execution on Windows and New Bloc/Cubit Actions</li>
+          <li>v4.1.1 - Add Dart SDK constraint to language server</li>
+          <li>v4.1.0 - Add language server with bloc lint integration</li>
           <li>v4.0.2 - Support for Intellij 2024.2</li>
           <li>v4.0.1 - Support for Intellij 2024</li>
           <li>v4.0.0 - Support for Sealed Classes and Dependency Upgrades</li>
@@ -41,12 +47,13 @@
     </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="223" until-build="243.*"/>
+    <idea-version since-build="233" until-build="243.*"/>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
        on how to target different products -->
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.java</depends>
+    <depends>com.redhat.devtools.lsp4ij</depends>
 
     <actions>
         <action class="com.bloc.intellij_generator_plugin.action.GenerateCubitAction"
@@ -77,9 +84,14 @@
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
-        <defaultLiveTemplatesProvider
-                implementation="com.bloc.intellij_generator_plugin.live_templates.BlocTemplateProvider"/>
-        <liveTemplateContext implementation="com.bloc.intellij_generator_plugin.live_templates.BlocContext"/>
+        <notificationGroup id="Bloc Plugin Notifications" displayType="BALLOON"/>
+    </extensions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <defaultLiveTemplates file="/liveTemplates/Bloc.xml"/>
+        <liveTemplateContext contextId="BLOC"
+                             implementation="com.bloc.intellij_generator_plugin.live_templates.BlocContext"
+        />
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -132,5 +144,21 @@
             </className>
             <category>Bloc</category>
         </intentionAction>
+    </extensions>
+
+    <extensions defaultExtensionNs="com.redhat.devtools.lsp4ij">
+        <server id="blocLanguageServer"
+                name="Bloc Language Server"
+                factoryClass="com.bloc.intellij_generator_plugin.language_server.BlocLanguageServerFactory">
+            <description><![CDATA[
+                Official lint rules for development when using the bloc state management library.
+            ]]></description>
+        </server>
+        <fileNamePatternMapping patterns="*.dart"
+                                serverId="blocLanguageServer"
+                                languageId="dart"/>
+        <fileNamePatternMapping patterns="analysis_options.yaml"
+                                serverId="blocLanguageServer"
+                                languageId="yaml"/>
     </extensions>
 </idea-plugin>

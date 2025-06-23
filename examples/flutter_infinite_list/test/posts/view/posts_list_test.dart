@@ -35,16 +35,14 @@ void main() {
   });
 
   group('PostsList', () {
-    testWidgets(
-        'renders CircularProgressIndicator '
+    testWidgets('renders CircularProgressIndicator '
         'when post status is initial', (tester) async {
       when(() => postBloc.state).thenReturn(const PostState());
       await tester.pumpPostsList(postBloc);
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets(
-        'renders no posts text '
+    testWidgets('renders no posts text '
         'when post status is success but with 0 posts', (tester) async {
       when(() => postBloc.state).thenReturn(
         const PostState(status: PostStatus.success, hasReachedMax: true),
@@ -54,21 +52,23 @@ void main() {
     });
 
     testWidgets(
-        'renders 5 posts and a bottom loader when post max is not reached yet',
-        (tester) async {
-      when(() => postBloc.state).thenReturn(
-        PostState(
-          status: PostStatus.success,
-          posts: mockPosts,
-        ),
-      );
-      await tester.pumpPostsList(postBloc);
-      expect(find.byType(PostListItem), findsNWidgets(5));
-      expect(find.byType(BottomLoader), findsOneWidget);
-    });
+      'renders 5 posts and a bottom loader when post max is not reached yet',
+      (tester) async {
+        when(() => postBloc.state).thenReturn(
+          PostState(
+            status: PostStatus.success,
+            posts: mockPosts,
+          ),
+        );
+        await tester.pumpPostsList(postBloc);
+        expect(find.byType(PostListItem), findsNWidgets(5));
+        expect(find.byType(BottomLoader), findsOneWidget);
+      },
+    );
 
-    testWidgets('does not render bottom loader when post max is reached',
-        (tester) async {
+    testWidgets('does not render bottom loader when post max is reached', (
+      tester,
+    ) async {
       when(() => postBloc.state).thenReturn(
         PostState(
           status: PostStatus.success,
@@ -80,8 +80,9 @@ void main() {
       expect(find.byType(BottomLoader), findsNothing);
     });
 
-    testWidgets('fetches more posts when scrolled to the bottom',
-        (tester) async {
+    testWidgets('fetches more posts when scrolled to the bottom', (
+      tester,
+    ) async {
       when(() => postBloc.state).thenReturn(
         PostState(
           status: PostStatus.success,

@@ -1,0 +1,17 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+import 'package:bloc/bloc.dart';
+
+enum CounterEvent { increment };
+
+class CounterBloc extends Bloc<CounterEvent, int> { 
+  CounterBloc() : super(0) {
+    on<CounterEvent>((event, emit) => emit(state + 1));
+  }
+}
+`;
+---
+
+<Code code={code} lang="dart" title="counter_bloc.dart" />

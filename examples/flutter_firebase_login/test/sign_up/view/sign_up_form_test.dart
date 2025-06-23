@@ -3,28 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebase_login/sign_up/sign_up.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:form_inputs/form_inputs.dart';
-import 'package:formz/formz.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockSignUpCubit extends MockCubit<SignUpState> implements SignUpCubit {}
-
-class MockEmail extends Mock implements Email {}
-
-class MockPassword extends Mock implements Password {}
-
-class MockConfirmedPassword extends Mock implements ConfirmedPassword {}
 
 void main() {
   const signUpButtonKey = Key('signUpForm_continue_raisedButton');
   const emailInputKey = Key('signUpForm_emailInput_textField');
   const passwordInputKey = Key('signUpForm_passwordInput_textField');
-  const confirmedPasswordInputKey =
-      Key('signUpForm_confirmedPasswordInput_textField');
+  const confirmedPasswordInputKey = Key(
+    'signUpForm_confirmedPasswordInput_textField',
+  );
 
-  const testEmail = 'test@gmail.com';
-  const testPassword = 'testP@ssw0rd1';
-  const testConfirmedPassword = 'testP@ssw0rd1';
+  const validEmail = 'test@gmail.com';
+  const validPassword = 'Test1234';
+  const invalidEmail = 'invalid';
+  const invalidPassword = 'invalid';
 
   group('SignUpForm', () {
     late SignUpCubit signUpCubit;
@@ -47,8 +41,8 @@ void main() {
             ),
           ),
         );
-        await tester.enterText(find.byKey(emailInputKey), testEmail);
-        verify(() => signUpCubit.emailChanged(testEmail)).called(1);
+        await tester.enterText(find.byKey(emailInputKey), validEmail);
+        verify(() => signUpCubit.emailChanged(validEmail)).called(1);
       });
 
       testWidgets('passwordChanged when password changes', (tester) async {
@@ -62,12 +56,13 @@ void main() {
             ),
           ),
         );
-        await tester.enterText(find.byKey(passwordInputKey), testPassword);
-        verify(() => signUpCubit.passwordChanged(testPassword)).called(1);
+        await tester.enterText(find.byKey(passwordInputKey), validPassword);
+        verify(() => signUpCubit.passwordChanged(validPassword)).called(1);
       });
 
-      testWidgets('confirmedPasswordChanged when confirmedPassword changes',
-          (tester) async {
+      testWidgets('confirmedPasswordChanged when confirmedPassword changes', (
+        tester,
+      ) async {
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -80,17 +75,21 @@ void main() {
         );
         await tester.enterText(
           find.byKey(confirmedPasswordInputKey),
-          testConfirmedPassword,
+          validPassword,
         );
         verify(
-          () => signUpCubit.confirmedPasswordChanged(testConfirmedPassword),
+          () => signUpCubit.confirmedPasswordChanged(validPassword),
         ).called(1);
       });
 
-      testWidgets('signUpFormSubmitted when sign up button is pressed',
-          (tester) async {
+      testWidgets('signUpFormSubmitted when sign up button is pressed', (
+        tester,
+      ) async {
         when(() => signUpCubit.state).thenReturn(
-          const SignUpState(isValid: true),
+          const SignUpState()
+              .withEmail(validEmail)
+              .withPassword(validPassword)
+              .withConfirmedPassword(validPassword),
         );
         await tester.pumpWidget(
           MaterialApp(
@@ -108,13 +107,14 @@ void main() {
     });
 
     group('renders', () {
-      testWidgets('Sign Up Failure SnackBar when submission fails',
-          (tester) async {
+      testWidgets('Sign Up Failure SnackBar when submission fails', (
+        tester,
+      ) async {
         whenListen(
           signUpCubit,
-          Stream.fromIterable(const <SignUpState>[
-            SignUpState(status: FormzSubmissionStatus.inProgress),
-            SignUpState(status: FormzSubmissionStatus.failure),
+          Stream.fromIterable(<SignUpState>[
+            const SignUpState(),
+            const SignUpState().withSubmissionFailure(),
           ]),
         );
         await tester.pumpWidget(
@@ -131,11 +131,15 @@ void main() {
         expect(find.text('Sign Up Failure'), findsOneWidget);
       });
 
-      testWidgets('invalid email error text when email is invalid',
-          (tester) async {
-        final email = MockEmail();
-        when(() => email.displayError).thenReturn(EmailValidationError.invalid);
-        when(() => signUpCubit.state).thenReturn(SignUpState(email: email));
+      testWidgets('invalid email error text when email is invalid', (
+        tester,
+      ) async {
+        when(() => signUpCubit.state).thenReturn(
+          const SignUpState()
+              .withEmail(invalidEmail)
+              .withPassword(validPassword)
+              .withConfirmedPassword(validPassword),
+        );
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -149,14 +153,14 @@ void main() {
         expect(find.text('invalid email'), findsOneWidget);
       });
 
-      testWidgets('invalid password error text when password is invalid',
-          (tester) async {
-        final password = MockPassword();
-        when(
-          () => password.displayError,
-        ).thenReturn(PasswordValidationError.invalid);
-        when(() => signUpCubit.state)
-            .thenReturn(SignUpState(password: password));
+      testWidgets('invalid password error text when password is invalid', (
+        tester,
+      ) async {
+        when(() => signUpCubit.state).thenReturn(
+          const SignUpState()
+              .withEmail(validEmail)
+              .withPassword(invalidPassword),
+        );
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -170,15 +174,11 @@ void main() {
         expect(find.text('invalid password'), findsOneWidget);
       });
 
-      testWidgets(
-          'invalid confirmedPassword error text'
+      testWidgets('invalid confirmedPassword error text'
           ' when confirmedPassword is invalid', (tester) async {
-        final confirmedPassword = MockConfirmedPassword();
-        when(
-          () => confirmedPassword.displayError,
-        ).thenReturn(ConfirmedPasswordValidationError.invalid);
-        when(() => signUpCubit.state)
-            .thenReturn(SignUpState(confirmedPassword: confirmedPassword));
+        when(() => signUpCubit.state).thenReturn(
+          const SignUpState().withConfirmedPassword(invalidPassword),
+        );
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -192,8 +192,9 @@ void main() {
         expect(find.text('passwords do not match'), findsOneWidget);
       });
 
-      testWidgets('disabled sign up button when status is not validated',
-          (tester) async {
+      testWidgets('disabled sign up button when status is not validated', (
+        tester,
+      ) async {
         when(() => signUpCubit.state).thenReturn(const SignUpState());
         await tester.pumpWidget(
           MaterialApp(
@@ -211,10 +212,14 @@ void main() {
         expect(signUpButton.enabled, isFalse);
       });
 
-      testWidgets('enabled sign up button when status is validated',
-          (tester) async {
+      testWidgets('enabled sign up button when status is validated', (
+        tester,
+      ) async {
         when(() => signUpCubit.state).thenReturn(
-          const SignUpState(isValid: true),
+          const SignUpState()
+              .withEmail(validEmail)
+              .withPassword(validPassword)
+              .withConfirmedPassword(validPassword),
         );
         await tester.pumpWidget(
           MaterialApp(
@@ -234,13 +239,22 @@ void main() {
     });
 
     group('navigates', () {
-      testWidgets('back to previous page when submission status is success',
-          (tester) async {
+      testWidgets('back to previous page when submission status is success', (
+        tester,
+      ) async {
         whenListen(
           signUpCubit,
-          Stream.fromIterable(const <SignUpState>[
-            SignUpState(status: FormzSubmissionStatus.inProgress),
-            SignUpState(status: FormzSubmissionStatus.success),
+          Stream.fromIterable(<SignUpState>[
+            const SignUpState()
+                .withEmail(validEmail)
+                .withPassword(validPassword)
+                .withConfirmedPassword(validPassword)
+                .withSubmissionInProgress(),
+            const SignUpState()
+                .withEmail(validEmail)
+                .withPassword(validPassword)
+                .withConfirmedPassword(validPassword)
+                .withSubmissionSuccess(),
           ]),
         );
         await tester.pumpWidget(

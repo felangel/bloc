@@ -1,6 +1,8 @@
 dependency_overrides:
   bloc:
     path: ../../packages/bloc
+  bloc_lint:
+    path: ../../packages/bloc_lint
   bloc_test:
     path: ../../packages/bloc_test
   flutter_bloc:

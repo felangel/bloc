@@ -42,25 +42,25 @@ class CartList extends StatelessWidget {
           CartLoading() => const CircularProgressIndicator(),
           CartError() => const Text('Something went wrong!'),
           CartLoaded() => ListView.separated(
-              itemCount: state.cart.items.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 4),
-              itemBuilder: (context, index) {
-                final item = state.cart.items[index];
-                return Material(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  clipBehavior: Clip.hardEdge,
-                  child: ListTile(
-                    leading: const Icon(Icons.done),
-                    title: Text(item.name, style: itemNameStyle),
-                    onLongPress: () {
-                      context.read<CartBloc>().add(CartItemRemoved(item));
-                    },
-                  ),
-                );
-              },
-            ),
+            itemCount: state.cart.items.length,
+            separatorBuilder: (_, _) => const SizedBox(height: 4),
+            itemBuilder: (context, index) {
+              final item = state.cart.items[index];
+              return Material(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                clipBehavior: Clip.hardEdge,
+                child: ListTile(
+                  leading: const Icon(Icons.done),
+                  title: Text(item.name, style: itemNameStyle),
+                  onLongPress: () {
+                    context.read<CartBloc>().add(CartItemRemoved(item));
+                  },
+                ),
+              );
+            },
+          ),
         };
       },
     );
@@ -72,8 +72,9 @@ class CartTotal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hugeStyle =
-        Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 48);
+    final hugeStyle = Theme.of(
+      context,
+    ).textTheme.displayLarge?.copyWith(fontSize: 48);
 
     return SizedBox(
       height: 200,
@@ -86,8 +87,10 @@ class CartTotal extends StatelessWidget {
                 return switch (state) {
                   CartLoading() => const CircularProgressIndicator(),
                   CartError() => const Text('Something went wrong!'),
-                  CartLoaded() =>
-                    Text('\$${state.cart.totalPrice}', style: hugeStyle),
+                  CartLoaded() => Text(
+                    '\$${state.cart.totalPrice}',
+                    style: hugeStyle,
+                  ),
                 };
               },
             ),

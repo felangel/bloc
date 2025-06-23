@@ -26,7 +26,9 @@ jobs:
 
     outputs:
       needs_angular_dart_example_checks: ${{ steps.needs_angular_dart_example_checks.outputs.changes }}
+      needs_bloc_tools_e2e_checks: ${{ steps.needs_bloc_tools_e2e_checks.outputs.changes }}
       needs_dart_package_checks: ${{ steps.needs_dart_package_checks.outputs.changes }}
+      needs_bloc_tools_compile_checks: ${{ steps.needs_bloc_tools_compile_checks.outputs.changes }}
       needs_flutter_package_checks: ${{ steps.needs_flutter_package_checks.outputs.changes }}
       needs_flutter_example_checks: ${{ steps.needs_flutter_example_checks.outputs.changes }}
       needs_docs_checks: ${{ steps.needs_docs_checks.outputs.changes }}
@@ -54,6 +56,15 @@ jobs:
               - examples/github_search/angular_github_search/**
 
       - uses: dorny/paths-filter@v3
+        name: Bloc Tools E2E Detection
+        id: needs_bloc_tools_e2e_checks
+        with:
+          filters: |
+            bloc_tools:
+              - ./.github/workflows/main.yaml
+              - packages/bloc_tools/**
+
+      - uses: dorny/paths-filter@v3
         name: Dart Package Detection
         id: needs_dart_package_checks
         with:
@@ -68,6 +79,11 @@ jobs:
               - ./.github/workflows/main.yaml
               - ./.github/actions/dart_package/action.yaml
               - packages/bloc_concurrency/**
+            bloc_lint:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/dart_package/action.yaml
+              - packages/bloc_lint/**
             bloc_test:
               - ./.github/codecov.yml
               - ./.github/workflows/main.yaml
@@ -83,6 +99,16 @@ jobs:
               - ./.github/workflows/main.yaml
               - ./.github/actions/dart_package/action.yaml
               - packages/bloc/**
+
+      - uses: dorny/paths-filter@v3
+        name: Bloc Tools Compile Detection
+        id: needs_bloc_tools_compile_checks
+        with:
+          filters: |
+            bloc_tools:
+              - ./.github/actions/dart_compile/action.yaml
+              - ./.github/workflows/main.yaml
+              - packages/bloc_tools/**
 
       - uses: dorny/paths-filter@v3
         name: Flutter Package Detection
@@ -191,6 +217,40 @@ jobs:
             - examples/**
             - docs/**
 
+  bloc_tools_e2e_checks:
+    needs: changes
+    if: ${{ needs.changes.outputs.needs_bloc_tools_e2e_checks != '[]' }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+        package: ${{ fromJSON(needs.changes.outputs.needs_bloc_tools_e2e_checks) }}
+
+    runs-on: ${{ matrix.os }}
+
+    name: 🧪 ${{ matrix.package }} (${{ matrix.os }})
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v4
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          cache: true
+
+      - name: ⚙️ Setup Bloc Tools
+        run: dart pub global activate --source path ./packages/bloc_tools
+
+      - name: 📦 Install Dependencies
+        working-directory: packages/${{ matrix.package }}/e2e
+        run: flutter pub get
+
+      - name: 🧪 E2E
+        working-directory: packages/${{ matrix.package }}/e2e
+        run: dart run main.dart
+
   dart_package_checks:
     needs: changes
     if: ${{ needs.changes.outputs.needs_dart_package_checks != '[]' }}
@@ -214,9 +274,39 @@ jobs:
           codecov_token: ${{ secrets.CODECOV_TOKEN }}
           working_directory: packages/${{ matrix.package }}
           min_coverage: 100
-          # TODO: remove once bloc v9 is published
-          # https://github.com/dart-lang/pana/issues/1254
-          collect_score: false
+
+  bloc_tools_compile_checks:
+    needs: changes
+    if: ${{ needs.changes.outputs.needs_bloc_tools_compile_checks != '[]' }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          [
+            { "runs-on": "ubuntu-latest", "os": "linux", "arch": "x64" },
+            { "runs-on": "ubuntu-latest", "os": "linux", "arch": "arm64" },
+            { "runs-on": "macos-13", "os": "macos", "arch": "x64" },
+            { "runs-on": "macos-latest", "os": "macos", "arch": "arm64" },
+            { "runs-on": "windows-latest", "os": "windows", "arch": "x64" },
+          ]
+
+    runs-on: ${{ matrix.config.runs-on }}
+
+    name: ⚙️ Compile Bloc Tools
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Compile Bloc Tools for ${{ matrix.config.os }} ${{ matrix.config.arch }}
+        uses: ./.github/actions/dart_compile
+        with:
+          entrypoint: bin/bloc.dart
+          working_directory: packages/bloc_tools
+          name: bloc_${{ matrix.config.os }}_${{ matrix.config.arch }}
+          os: ${{ matrix.config.os }}
+          arch: ${{ matrix.config.arch }}
 
   flutter_package_checks:
     needs: changes
@@ -241,9 +331,6 @@ jobs:
           codecov_token: ${{ secrets.CODECOV_TOKEN }}
           working_directory: packages/${{ matrix.package }}
           min_coverage: 100
-          # TODO: remove once bloc v9 is published
-          # https://github.com/dart-lang/pana/issues/1254
-          collect_score: false
 
   angular_dart_example_checks:
     needs: changes
@@ -328,12 +415,14 @@ jobs:
   build:
     needs:
       [
-        semantic_pull_request,
-        dart_package_checks,
-        flutter_package_checks,
         angular_dart_example_checks,
-        flutter_example_checks,
+        bloc_tools_compile_checks,
+        bloc_tools_e2e_checks,
+        dart_package_checks,
         docs_checks,
+        flutter_example_checks,
+        flutter_package_checks,
+        semantic_pull_request,
       ]
 
     if: ${{ always() }}

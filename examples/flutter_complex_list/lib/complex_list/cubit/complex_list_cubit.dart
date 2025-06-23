@@ -8,14 +8,15 @@ import 'package:flutter_complex_list/repository.dart';
 part 'complex_list_state.dart';
 
 class ComplexListCubit extends Cubit<ComplexListState> {
-  ComplexListCubit({required this.repository})
-      : super(const ComplexListState.loading());
+  ComplexListCubit({required Repository repository})
+    : _repository = repository,
+      super(const ComplexListState.loading());
 
-  final Repository repository;
+  final Repository _repository;
 
   Future<void> fetchList() async {
     try {
-      final items = await repository.fetchItems();
+      final items = await _repository.fetchItems();
       emit(ComplexListState.success(items));
     } on Exception {
       emit(const ComplexListState.failure());
@@ -30,7 +31,7 @@ class ComplexListCubit extends Cubit<ComplexListState> {
     emit(ComplexListState.success(deleteInProgress));
 
     unawaited(
-      repository.deleteItem(id).then((_) {
+      _repository.deleteItem(id).then((_) {
         final deleteSuccess = List.of(state.items)
           ..removeWhere((element) => element.id == id);
         emit(ComplexListState.success(deleteSuccess));

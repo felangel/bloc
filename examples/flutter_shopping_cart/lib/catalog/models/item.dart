@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class Item extends Equatable {
   Item(this.id, this.name)
-      : color = Colors.primaries[id % Colors.primaries.length];
+    : color = Colors.primaries[id % Colors.primaries.length];
 
   final int id;
   final String name;

@@ -1,6 +1,8 @@
 import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
-import 'package:bloc_tools/src/commands/new/new.dart';
+import 'package:bloc_lint/bloc_lint.dart';
+import 'package:bloc_tools/src/commands/commands.dart';
+import 'package:bloc_tools/src/lsp/language_server.dart';
 import 'package:bloc_tools/src/version.dart';
 import 'package:mason/mason.dart' show ExitCode, Logger, lightCyan, lightYellow;
 import 'package:pub_updater/pub_updater.dart';
@@ -13,16 +15,24 @@ const packageName = 'bloc_tools';
 /// {@endtemplate}
 class BlocToolsCommandRunner extends CommandRunner<int> {
   /// {@macro bloc_tools_command_runner}
-  BlocToolsCommandRunner({Logger? logger, PubUpdater? pubUpdater})
-    : _logger = logger ?? Logger(),
-      _pubUpdater = pubUpdater ?? PubUpdater(),
-      super('bloc', 'Command Line Tools for the Bloc Library.') {
+  BlocToolsCommandRunner({
+    Logger? logger,
+    PubUpdater? pubUpdater,
+    Linter linter = const Linter(),
+    LanguageServer Function()? languageServerBuilder,
+  }) : _logger = logger ?? Logger(),
+       _pubUpdater = pubUpdater ?? PubUpdater(),
+       super('bloc', 'Command Line Tools for the Bloc Library.') {
     argParser.addFlag(
       'version',
       negatable: false,
       help: 'Print the current version.',
     );
+    addCommand(
+      LanguageServerCommand(languageServerBuilder: languageServerBuilder),
+    );
     addCommand(NewCommand(logger: _logger));
+    addCommand(LintCommand(linter: linter, logger: _logger));
   }
 
   final Logger _logger;
@@ -58,6 +68,8 @@ class BlocToolsCommandRunner extends CommandRunner<int> {
     } else {
       exitCode = await super.runCommand(topLevelResults);
     }
+    // Avoid disrupting stdout when running the language server.
+    if (topLevelResults.command?.name == 'language-server') return exitCode;
     await _checkForUpdates();
     return exitCode;
   }

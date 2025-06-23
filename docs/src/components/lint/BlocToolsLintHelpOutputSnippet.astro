@@ -1,0 +1,15 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+$ bloc lint --help
+Lint Dart source code.
+
+Usage: bloc lint [arguments]
+-h, --help    Print this usage information.
+
+Run "bloc help" to see global options.
+`;
+---
+
+<Code code={code} lang="sh" />

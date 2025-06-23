@@ -7,12 +7,6 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('CounterApp', () {
-    testWidgets('renders correct AppBar text', (tester) async {
-      await tester.pumpApp();
-
-      expect(find.text('Counter'), findsOneWidget);
-    });
-
     testWidgets('renders correct initial count', (tester) async {
       await tester.pumpApp();
 

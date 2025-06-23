@@ -1,0 +1,13 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+include: package:bloc_lint/recommended.yaml
+bloc:
+  rules:
+    avoid_public_bloc_methods: false
+    prefer_bloc: true
+`;
+---
+
+<Code code={code} lang="yaml" title="analysis_options.yaml" />

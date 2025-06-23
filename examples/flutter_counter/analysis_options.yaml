@@ -1,1 +1,3 @@
-include: ../../analysis_options.yaml
+include:
+  - package:bloc_lint/recommended.yaml
+  - ../../analysis_options.yaml
