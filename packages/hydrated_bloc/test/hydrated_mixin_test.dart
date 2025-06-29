@@ -31,7 +31,7 @@ void main() {
         expect(cubit.state, 42);
       });
 
-      group('onHydrationError', () {
+      group('onError', () {
         test('gets called when an issue with the hydration happens', () {
           var called = false;
           final cubit = MyCubit();
@@ -40,7 +40,7 @@ void main() {
 
           cubit.hydrate(
             storage: storage,
-            onHydrationError: (_, __) {
+            onError: (_, __) {
               called = true;
               return HydrationErrorBehavior.retain;
             },
@@ -56,9 +56,7 @@ void main() {
 
             cubit.hydrate(
               storage: storage,
-              onHydrationError: (_, __) {
-                return HydrationErrorBehavior.retain;
-              },
+              onError: (_, __) => HydrationErrorBehavior.retain,
             );
             expect(cubit.state, 0);
             verifyNever(() => storage.write(any(), any<dynamic>()));
@@ -71,7 +69,7 @@ void main() {
 
             cubit.hydrate(
               storage: storage,
-              onHydrationError: (_, __) {
+              onError: (_, __) {
                 cubit.emit(-1);
                 return HydrationErrorBehavior.retain;
               },
@@ -81,14 +79,14 @@ void main() {
           });
 
           test('new states are not stored until the hydration succeds', () {
-            final cubit = MyCubit();
+            var cubit = MyCubit();
             // Return an invalid value, the number is a string.
             when(() => storage.read('MyCubit')).thenReturn({'value': '42'});
 
             cubit
               ..hydrate(
                 storage: storage,
-                onHydrationError: (_, __) {
+                onError: (_, __) {
                   cubit.emit(-1);
                   return HydrationErrorBehavior.retain;
                 },
@@ -99,12 +97,11 @@ void main() {
             verifyNever(() => storage.write(any(), any<dynamic>()));
 
             when(() => storage.read('MyCubit')).thenReturn({'value': 42});
-            cubit.hydrate(
-              storage: storage,
-              onHydrationError: (_, __) {
-                return HydrationErrorBehavior.retain;
-              },
-            );
+            cubit = MyCubit()
+              ..hydrate(
+                storage: storage,
+                onError: (_, __) => HydrationErrorBehavior.retain,
+              );
 
             expect(cubit.state, 42);
             verify(() => storage.write('MyCubit', {'value': 42})).called(1);
