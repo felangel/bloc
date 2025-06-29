@@ -1,3 +1,8 @@
+# 0.2.0
+
+- chore: stable `0.2.0` release 🎉
+- fix: ignore `.fvm`
+
 # 0.2.0-dev.6
 
 - fix: `prefer_void_public_cubit_methods` false positive when using switch expressions
