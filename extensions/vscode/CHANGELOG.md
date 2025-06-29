@@ -1,3 +1,9 @@
+# 6.8.8
+
+- deps: upgrade to `bloc_tools: 0.1.0-dev.16`
+  - fix: increased CPU usage when using `fvm`
+- deps: various dependency upgrades
+
 # 6.8.7
 
 - deps: upgrade to `bloc_tools: 0.1.0-dev.15`
