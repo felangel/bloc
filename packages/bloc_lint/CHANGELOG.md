@@ -1,6 +1,7 @@
 # 0.2.0
 
 - chore: stable `0.2.0` release 🎉
+- chore: various dependency upgrades
 - fix: ignore `.fvm`
 
 # 0.2.0-dev.6
