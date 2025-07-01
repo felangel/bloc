@@ -1,0 +1,25 @@
+name: movable_ball
+description: A new Flutter project called movable_ball.
+
+environment:
+  sdk: ">=3.8.0 <4.0.0"
+
+dependencies:
+  bloc_concurrency: ^0.3.0
+  equatable: ^2.0.7
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^9.1.1
+  replay_bloc: ^0.3.0
+  rxdart: ^0.28.0
+  
+  
+
+dev_dependencies:
+  flutter_lints: ^3.0.0
+  flutter_test:
+    sdk: flutter
+  
+
+flutter:
+  uses-material-design: true
