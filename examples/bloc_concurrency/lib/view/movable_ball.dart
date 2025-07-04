@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movable_ball/bloc/index.dart';
-import 'package:movable_ball/bridge_tab.dart';
+import 'package:movable_ball/view/bridge_tab.dart';
 
 /// Demo app for movable balls crossing a bridge using different
 ///  BLoC concurrency strategies.

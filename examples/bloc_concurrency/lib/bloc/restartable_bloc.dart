@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movable_ball/bloc/base_bridget_bloc.dart';
 import 'package:movable_ball/bloc/bridge_event.dart';
 import 'package:movable_ball/bloc/bridge_state.dart';
-import 'package:movable_ball/data/ball.dart';
+import 'package:movable_ball/models/ball.dart';
 
 // Restartable BLoC - Latest ball cancels previous ones
 /// This BLoC allows only the latest ball to cross the bridge,
@@ -51,6 +51,16 @@ class RestartableBloc extends BaseBridgeBloc {
       ),
     );
 
-    await animateBall(event.ballId, Colors.purple);
+    // Use try-catch to handle potential close errors
+    try {
+      if (!isClosed) {
+        await animateBall(event.ballId, Colors.purple);
+      }
+    } catch (e) {
+      // Ignore errors if bloc is closed during animation
+      if (!e.toString().contains('Cannot add new events after calling close')) {
+        rethrow;
+      }
+    }
   }
 }

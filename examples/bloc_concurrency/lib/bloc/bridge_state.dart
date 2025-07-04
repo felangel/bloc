@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:movable_ball/data/ball.dart';
+import 'package:movable_ball/models/ball.dart';
 
 /// Represents the state of the bridge in the BLoC architecture.
 class BridgeState extends Equatable {

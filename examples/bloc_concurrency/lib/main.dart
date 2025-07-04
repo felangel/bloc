@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movable_ball/movable_ball.dart';
+import 'package:movable_ball/view/movable_ball.dart';
 
 void main() {
   runApp(const MyApp());

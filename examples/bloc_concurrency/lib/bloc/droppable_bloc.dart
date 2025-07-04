@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movable_ball/bloc/base_bridget_bloc.dart';
 import 'package:movable_ball/bloc/bridge_event.dart';
 import 'package:movable_ball/bloc/bridge_state.dart';
-import 'package:movable_ball/data/ball.dart';
+import 'package:movable_ball/models/ball.dart';
 
 // Droppable BLoC - Drop balls while one is crossing
 /// This BLoC allows only one ball to cross the bridge at a time.
@@ -46,6 +46,16 @@ class DroppableBloc extends BaseBridgeBloc {
       ),
     );
 
-    await animateBall(event.ballId, Colors.orange);
+    // Use try-catch to handle potential close errors
+    try {
+      if (!isClosed) {
+        await animateBall(event.ballId, Colors.orange);
+      }
+    } catch (e) {
+      // Ignore errors if bloc is closed during animation
+      if (!e.toString().contains('Cannot add new events after calling close')) {
+        rethrow;
+      }
+    }
   }
 }

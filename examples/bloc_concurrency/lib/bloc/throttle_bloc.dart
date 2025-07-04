@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movable_ball/bloc/base_bridget_bloc.dart';
 import 'package:movable_ball/bloc/bridge_event.dart';
 import 'package:movable_ball/bloc/bridge_state.dart';
-import 'package:movable_ball/data/ball.dart';
+import 'package:movable_ball/models/ball.dart';
 import 'package:rxdart/rxdart.dart';
 
 /// BLoC that implements throttle behavior for sending balls across the bridge.
@@ -41,6 +41,16 @@ class ThrottleBloc extends BaseBridgeBloc {
       ),
     );
 
-    await animateBall(event.ballId, Colors.indigo);
+    // Use try-catch to handle potential close errors
+    try {
+      if (!isClosed) {
+        await animateBall(event.ballId, Colors.indigo);
+      }
+    } catch (e) {
+      // Ignore errors if bloc is closed during animation
+      if (!e.toString().contains('Cannot add new events after calling close')) {
+        rethrow;
+      }
+    }
   }
 }
