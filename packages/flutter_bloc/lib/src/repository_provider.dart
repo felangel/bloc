@@ -19,7 +19,7 @@ import 'package:provider/provider.dart';
 ///
 /// ```dart
 /// RepositoryProvider(
-///   lazy: false,`
+///   lazy: false,
 ///   create: (context) => RepositoryA(),
 ///   child: ChildA(),
 /// );
