@@ -102,7 +102,17 @@
             <category>Bloc</category>
         </intentionAction>
         <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithCubitProviderIntentionAction
+            </className>
+            <category>Bloc</category>
+        </intentionAction>
+        <intentionAction>
             <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithBlocBuilderIntentionAction
+            </className>
+            <category>Bloc</category>
+        </intentionAction>
+        <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithCubitBuilderIntentionAction
             </className>
             <category>Bloc</category>
         </intentionAction>
@@ -112,12 +122,27 @@
             <category>Bloc</category>
         </intentionAction>
         <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithCubitSelectorIntentionAction
+            </className>
+            <category>Bloc</category>
+        </intentionAction>
+        <intentionAction>
             <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithBlocListenerIntentionAction
             </className>
             <category>Bloc</category>
         </intentionAction>
         <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithCubitListenerIntentionAction
+            </className>
+            <category>Bloc</category>
+        </intentionAction>
+        <intentionAction>
             <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithBlocConsumerIntentionAction
+            </className>
+            <category>Bloc</category>
+        </intentionAction>
+        <intentionAction>
+            <className>com.bloc.intellij_generator_plugin.intention_action.BlocWrapWithCubitConsumerIntentionAction
             </className>
             <category>Bloc</category>
         </intentionAction>
