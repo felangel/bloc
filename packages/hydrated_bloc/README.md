@@ -137,7 +137,7 @@ class CounterCubit extends HydratedCubit<int> {
 }
 ```
 
-## Handling Hydration Error
+## Handling Hydration Errors
 
 You can optionally, pass a custom `onError` callback to `hydrate` in order to handle any hydration errors and/or customize the caching behavior when a hydration error occurs.
 
