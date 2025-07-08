@@ -151,7 +151,7 @@ mixin HydratedMixin<State> on BlocBase<State> {
   /// }
   /// ```
   ///
-  /// Optionally, override `onError` to handle hydration errors:
+  /// Optionally, pass a custom `onError` callback to handle hydration errors:
   ///
   /// ```dart
   /// class CounterBloc extends Bloc<CounterEvent, int> with HydratedMixin {
