@@ -1,5 +1,5 @@
 ---
-title: Modeling State 
+title: Modeling State
 description:
   package:bloc을 사용할 때 상태를 모델링하는 다양한 방법에 대한 개요입니다.
 ---
@@ -32,10 +32,10 @@ import SealedClassAndSubclassesSnippet from '~/components/modeling-state/SealedC
 
 ## Concrete Class and Status Enum
 
-이 접근 방식은 모든 상태에 대한 **single concreate class**와 다양한 상태를 나타내는
-`enum`으로 구성됩니다. 속성들은 nullable이며 현재 상태에 따라 처리됩니다. 이
-접근 방식은 엄격하게 배타적이지 않고/또는 많은 공유 속성을 포함하는 상태에 가장
-적합합니다.
+이 접근 방식은 모든 상태에 대한 **single concreate class**와 다양한 상태를
+나타내는 `enum`으로 구성됩니다. 속성들은 nullable이며 현재 상태에 따라
+처리됩니다. 이 접근 방식은 엄격하게 배타적이지 않고/또는 많은 공유 속성을
+포함하는 상태에 가장 적합합니다.
 
 <ConcreteClassAndStatusEnumSnippet />
 
