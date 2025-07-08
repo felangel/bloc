@@ -218,7 +218,16 @@ Future<void> testBloc<B extends EmittableStateStreamableSource<State>, State>({
           test.expect(states, test.wrapMatcher(expected));
         } on test.TestFailure catch (e) {
           if (shallowEquality || expected is! List<State>) rethrow;
-          final diff = _diff(expected: expected, actual: states);
+          final diff = _diff(
+            expected: expected,
+            actual: states,
+            // using the environment is okay since we do not have access to cli params in a test
+            // ignore: do_not_use_environment
+            colorOutput: const bool.fromEnvironment(
+              'BLOC_TEST_COLOR_OUTPUT',
+              defaultValue: true,
+            ),
+          );
           final message = '${e.message}\n$diff';
           // ignore: only_throw_errors
           throw test.TestFailure(message);
@@ -271,23 +280,29 @@ class _TestBlocObserver extends BlocObserver {
   }
 }
 
-String _diff({required dynamic expected, required dynamic actual}) {
+String _diff({
+  required dynamic expected,
+  required dynamic actual,
+  required bool colorOutput,
+}) {
   final buffer = StringBuffer();
   final differences = diff(expected.toString(), actual.toString());
   buffer
     ..writeln('${"=" * 4} diff ${"=" * 40}')
     ..writeln()
-    ..writeln(differences.toPrettyString())
+    ..writeln(differences.toPrettyString(useColor: colorOutput))
     ..writeln()
     ..writeln('${"=" * 4} end diff ${"=" * 36}');
   return buffer.toString();
 }
 
 extension on List<Diff> {
-  String toPrettyString() {
-    String identical(String str) => '\u001b[90m$str\u001B[0m';
-    String deletion(String str) => '\u001b[31m[-$str-]\u001B[0m';
-    String insertion(String str) => '\u001b[32m{+$str+}\u001B[0m';
+  String toPrettyString({required bool useColor}) {
+    String identical(String str) => useColor ? '\u001b[90m$str\u001B[0m' : str;
+    String deletion(String str) =>
+        useColor ? '\u001b[31m[-$str-]\u001B[0m' : str;
+    String insertion(String str) =>
+        useColor ? '\u001b[32m{+$str+}\u001B[0m' : str;
 
     final buffer = StringBuffer();
     for (final difference in this) {
