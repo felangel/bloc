@@ -130,7 +130,8 @@ extension on FileSystemEntity {
     return this is File &&
         p.extension(path) == '.dart' &&
         !p.basename(path).endsWith('.g.dart') &&
-        !p.split(path).contains('.dart_tool');
+        !p.split(path).contains('.dart_tool') &&
+        !p.split(path).contains('.fvm');
   }
 }
 
