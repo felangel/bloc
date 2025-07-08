@@ -300,8 +300,8 @@ mixin HydratedMixin<State> on BlocBase<State> {
   /// Storage prefix which can be overridden to provide a custom
   /// storage namespace.
   /// Defaults to [runtimeType] but should be overridden in cases
-  /// where stored data should be resilient to obfuscation or persist
-  /// between debug/release builds.
+  /// where stored data should be resilient to obfuscation, minification (web)
+  /// or persist between debug/release builds.
   String get storagePrefix => runtimeType.toString();
 
   /// `storageToken` is used as registration token for hydrated storage.
