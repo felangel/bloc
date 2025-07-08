@@ -165,7 +165,6 @@ Any `storageDirectory` can be used when creating an instance of `HydratedStorage
 final storage = await HydratedStorage.build(
   storageDirectory: await getApplicationDocumentsDirectory(),
 );
-````
 
 ## Custom Hydrated Storage
 
