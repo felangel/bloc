@@ -137,6 +137,26 @@ class CounterCubit extends HydratedCubit<int> {
 }
 ```
 
+## Handling Hydration Errors
+
+You can optionally pass a custom `onError` callback to `hydrate` in order to handle any hydration errors and/or customize the caching behavior when a hydration error occurs.
+
+```dart
+class CounterBloc extends Bloc<CounterEvent, int> with HydratedMixin {
+  CounterBloc() : super(0) {
+    hydrate(
+      onError: (error, stackTrace) {
+        // Do something in response to hydration errors.
+        // Must return a `HydrationErrorBehavior` to specify whether subsequent
+        // state changes should be persisted.
+        return HydrationErrorBehavior.retain; // Retain the previous state.
+      }
+    );
+  }
+  ...
+}
+```
+
 ## Custom Storage Directory
 
 Any `storageDirectory` can be used when creating an instance of `HydratedStorage`:

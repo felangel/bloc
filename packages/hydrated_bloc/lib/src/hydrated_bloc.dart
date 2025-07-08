@@ -5,6 +5,34 @@ import 'dart:async';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
 
+/// Describes the various caching behaviors when a hydration error occurs.
+enum HydrationErrorBehavior {
+  /// Overwrite the cached state when a hydration error occurs.
+  /// Any newly emitted states will be persisted which means previously cached
+  /// state will be overwritten. This is the default behavior.
+  overwrite,
+
+  /// Retain the cached state when a hydration error occurs.
+  /// Any newly emitted states will not be persisted until hydrate succeeds
+  /// which means the previously cached state will be retained.
+  retain,
+}
+
+/// Signature of the `onError` callback during `hydrate`.
+typedef OnHydrationError = HydrationErrorBehavior Function(
+  Object error,
+  StackTrace stackTrace,
+);
+
+const _defaultHydrationErrorBehavior = HydrationErrorBehavior.overwrite;
+
+HydrationErrorBehavior _defaultOnHydrationError(
+  Object error,
+  StackTrace stackTrace,
+) {
+  return _defaultHydrationErrorBehavior;
+}
+
 /// {@template hydrated_bloc}
 /// Specialized [Bloc] which handles initializing the [Bloc] state
 /// based on the persisted state. This allows state to be persisted
@@ -102,9 +130,13 @@ abstract class HydratedCubit<State> extends Cubit<State>
 ///
 /// * [HydratedBloc] to enable automatic state persistence/restoration with [Bloc]
 /// * [HydratedCubit] to enable automatic state persistence/restoration with [Cubit]
+/// * [HydrationErrorBehavior] to customize state persistence during hydration
+///   errors.
 ///
 mixin HydratedMixin<State> on BlocBase<State> {
   late final Storage __storage;
+  HydrationErrorBehavior? _errorBehavior;
+  var _onErrorCallbackInProgress = false;
 
   /// Populates the internal state storage with the latest state.
   /// This should be called when using the [HydratedMixin]
@@ -118,23 +150,53 @@ mixin HydratedMixin<State> on BlocBase<State> {
   ///  ...
   /// }
   /// ```
-  void hydrate({Storage? storage}) {
+  ///
+  /// Optionally, pass a custom `onError` callback to handle hydration errors:
+  ///
+  /// ```dart
+  /// class CounterBloc extends Bloc<CounterEvent, int> with HydratedMixin {
+  ///  CounterBloc() : super(0) {
+  ///    hydrate(
+  ///      onError: (error, stackTrace) {
+  ///        // Do something in response to hydration errors.
+  ///        // Must return a `HydrationErrorBehavior` to specify whether subsequent
+  ///        // state changes should be persisted.
+  ///        return HydrationErrorBehavior.retain; // Retain the previous state.
+  ///      }
+  ///    );
+  ///  }
+  ///  ...
+  /// }
+  /// ```
+  void hydrate({
+    Storage? storage,
+    OnHydrationError onError = _defaultOnHydrationError,
+  }) {
     __storage = storage ??= HydratedBloc.storage;
     try {
       final stateJson = __storage.read(storageToken) as Map<dynamic, dynamic>?;
       _state = stateJson != null ? _fromJson(stateJson) : super.state;
+      _errorBehavior = null;
     } catch (error, stackTrace) {
-      onError(error, stackTrace);
+      this.onError(error, stackTrace);
       _state = super.state;
+      _onErrorCallbackInProgress = true;
+      _errorBehavior = onError(error, stackTrace);
+    } finally {
+      _onErrorCallbackInProgress = false;
     }
+
+    if (_errorBehavior == HydrationErrorBehavior.retain) return;
 
     try {
       final stateJson = _toJson(state);
       if (stateJson != null) {
-        __storage.write(storageToken, stateJson).then((_) {}, onError: onError);
+        __storage
+            .write(storageToken, stateJson)
+            .then((_) {}, onError: this.onError);
       }
     } catch (error, stackTrace) {
-      onError(error, stackTrace);
+      this.onError(error, stackTrace);
       if (error is StorageNotFound) rethrow;
     }
   }
@@ -148,6 +210,11 @@ mixin HydratedMixin<State> on BlocBase<State> {
   void onChange(Change<State> change) {
     super.onChange(change);
     final state = change.nextState;
+    _state = state;
+
+    if (_onErrorCallbackInProgress) return;
+    if (_errorBehavior == HydrationErrorBehavior.retain) return;
+
     try {
       final stateJson = _toJson(state);
       if (stateJson != null) {
@@ -157,7 +224,6 @@ mixin HydratedMixin<State> on BlocBase<State> {
       onError(error, stackTrace);
       rethrow;
     }
-    _state = state;
   }
 
   State? _fromJson(dynamic json) {
