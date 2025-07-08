@@ -141,7 +141,7 @@ class CounterCubit extends HydratedCubit<int> {
 
 You can optionally, pass a custom `onError` callback to `hydrate` in order to handle any hydration errors and/or customize the caching behavior when a hydration error occurs.
 
-````dart
+```dart
 class CounterBloc extends Bloc<CounterEvent, int> with HydratedMixin {
   CounterBloc() : super(0) {
     hydrate(
@@ -246,4 +246,3 @@ testWidgets('...', (tester) async {
 ## Maintainers
 
 - [Felix Angelov](https://github.com/felangel)
-````
