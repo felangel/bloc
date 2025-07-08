@@ -23,37 +23,69 @@ void main() {
     });
 
     group('hydrate', () {
-      test('can hydrate', () {
+      test('restores state from cache', () {
         final cubit = MyCubit();
         when(() => storage.read('MyCubit')).thenReturn({'value': 42});
-
         cubit.hydrate(storage: storage);
         expect(cubit.state, 42);
       });
 
+      test('uses initial state on error by default', () {
+        when(() => storage.read('MyCubit')).thenReturn({'value': '42'});
+        final cubit = MyCubit()..hydrate(storage: storage);
+        expect(cubit.state, 0);
+        verify(() => storage.write('MyCubit', {'value': 0})).called(1);
+      });
+
       group('onError', () {
-        test('gets called when an issue with the hydration happens', () {
-          var called = false;
+        test('is called when an exception occurs during hydration', () {
           final cubit = MyCubit();
-          // Return an invalid value, the number is a string.
+          var onErrorCallCount = 0;
+
           when(() => storage.read('MyCubit')).thenReturn({'value': '42'});
 
           cubit.hydrate(
             storage: storage,
             onError: (_, __) {
-              called = true;
-              return HydrationErrorBehavior.retain;
+              onErrorCallCount++;
+              return HydrationErrorBehavior.overwrite;
             },
           );
-          expect(called, isTrue);
+          expect(onErrorCallCount, equals(1));
         });
 
-        group('when returning HydrationErrorBehavior.retain', () {
-          test("don't store the initial state", () {
+        group('when error behavior is HydrationErrorBehavior.overwrite', () {
+          test('storage.write is always called', () {
             final cubit = MyCubit();
-            // Return an invalid value, the number is a string.
+            when(() => storage.read('MyCubit')).thenReturn({'value': '42'});
+            cubit.hydrate(
+              storage: storage,
+              onError: (_, __) => HydrationErrorBehavior.overwrite,
+            );
+            expect(cubit.state, 0);
+            verify(() => storage.write('MyCubit', {'value': 0})).called(1);
+          });
+
+          test('states emitted in onError are persisted', () {
+            final cubit = MyCubit();
             when(() => storage.read('MyCubit')).thenReturn({'value': '42'});
 
+            cubit.hydrate(
+              storage: storage,
+              onError: (_, __) {
+                cubit.emit(-1);
+                return HydrationErrorBehavior.overwrite;
+              },
+            );
+            expect(cubit.state, -1);
+            verify(() => storage.write('MyCubit', {'value': -1})).called(1);
+          });
+        });
+
+        group('when error behavior is HydrationErrorBehavior.retain', () {
+          test('storage.write is never called', () {
+            final cubit = MyCubit();
+            when(() => storage.read('MyCubit')).thenReturn({'value': '42'});
             cubit.hydrate(
               storage: storage,
               onError: (_, __) => HydrationErrorBehavior.retain,
@@ -62,9 +94,8 @@ void main() {
             verifyNever(() => storage.write(any(), any<dynamic>()));
           });
 
-          test('can emit states on the callback, which will not be saved', () {
+          test('states emitted in onError are not persisted', () {
             final cubit = MyCubit();
-            // Return an invalid value, the number is a string.
             when(() => storage.read('MyCubit')).thenReturn({'value': '42'});
 
             cubit.hydrate(
@@ -74,14 +105,14 @@ void main() {
                 return HydrationErrorBehavior.retain;
               },
             );
+
             expect(cubit.state, -1);
             verifyNever(() => storage.write(any(), any<dynamic>()));
           });
 
-          test('new states are not stored until the hydration succeds', () {
-            var cubit = MyCubit();
-            // Return an invalid value, the number is a string.
+          test('state changes are not persisted until hydration succeeds', () {
             when(() => storage.read('MyCubit')).thenReturn({'value': '42'});
+            var cubit = MyCubit();
 
             cubit
               ..hydrate(

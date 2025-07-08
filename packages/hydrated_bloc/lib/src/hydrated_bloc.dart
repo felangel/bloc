@@ -5,13 +5,17 @@ import 'dart:async';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
 
-/// Describes the various behaviors when a hydration error occurs.
+/// Describes the various caching behaviors when a hydration error occurs.
 enum HydrationErrorBehavior {
-  /// Retain the cached state when a hydration error occurs.
-  retain,
+  /// Overwrite the cached state when a hydration error occurs.
+  /// Any newly emitted states will be persisted which means previously cached
+  /// state will be overwritten. This is the default behavior.
+  overwrite,
 
-  /// Reset the cached state when a hydration error occurs.
-  reset,
+  /// Retain the cached state when a hydration error occurs.
+  /// Any newly emitted states will not be persisted until hydrate succeeds
+  /// which means the previously cached state will be retained.
+  retain,
 }
 
 /// Signature of the `onError` callback during `hydrate`.
@@ -20,7 +24,7 @@ typedef OnHydrationError = HydrationErrorBehavior Function(
   StackTrace stackTrace,
 );
 
-const _defaultHydrationErrorBehavior = HydrationErrorBehavior.reset;
+const _defaultHydrationErrorBehavior = HydrationErrorBehavior.overwrite;
 
 HydrationErrorBehavior _defaultOnHydrationError(
   Object error,
@@ -126,6 +130,8 @@ abstract class HydratedCubit<State> extends Cubit<State>
 ///
 /// * [HydratedBloc] to enable automatic state persistence/restoration with [Bloc]
 /// * [HydratedCubit] to enable automatic state persistence/restoration with [Cubit]
+/// * [HydrationErrorBehavior] to customize state persistence during hydration
+///   errors.
 ///
 mixin HydratedMixin<State> on BlocBase<State> {
   late final Storage __storage;
@@ -140,6 +146,24 @@ mixin HydratedMixin<State> on BlocBase<State> {
   /// class CounterBloc extends Bloc<CounterEvent, int> with HydratedMixin {
   ///  CounterBloc() : super(0) {
   ///    hydrate();
+  ///  }
+  ///  ...
+  /// }
+  /// ```
+  ///
+  /// Optionally, override `onError` to handle hydration errors:
+  ///
+  /// ```dart
+  /// class CounterBloc extends Bloc<CounterEvent, int> with HydratedMixin {
+  ///  CounterBloc() : super(0) {
+  ///    hydrate(
+  ///      onError: (error, stackTrace) {
+  ///        // Do something in response to hydration errors.
+  ///        // Must return a `HydrationErrorBehavior` to specify whether subsequent
+  ///        // state changes should be persisted.
+  ///        return HydrationErrorBehavior.retain; // Retain the previous state.
+  ///      }
+  ///    );
   ///  }
   ///  ...
   /// }
