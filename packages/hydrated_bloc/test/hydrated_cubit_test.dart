@@ -88,6 +88,19 @@ class MyMultiHydratedCubit extends HydratedCubit<int> {
   int? fromJson(dynamic json) => json['value'] as int?;
 }
 
+class MyHydratedCubitWithCustomStorage extends HydratedCubit<int> {
+  MyHydratedCubitWithCustomStorage(Storage storage)
+      : super(0, storage: storage);
+
+  @override
+  Map<String, int>? toJson(int state) {
+    return {'value': state};
+  }
+
+  @override
+  int? fromJson(Map<String, dynamic> json) => json['value'] as int?;
+}
+
 void main() {
   group('HydratedCubit', () {
     late Storage storage;
@@ -377,6 +390,71 @@ void main() {
         final dynamic initialStateB = secondCaptured.first;
 
         expect(initialStateB, cachedState);
+      });
+    });
+
+    group('MyHydratedCubitWithCustomStorage', () {
+      setUp(() {
+        HydratedBloc.storage = null;
+      });
+
+      test('should call storage.write when onChange is called', () {
+        const expected = <String, int>{'value': 0};
+        const change = Change(currentState: 0, nextState: 0);
+        MyHydratedCubitWithCustomStorage(storage).onChange(change);
+        verify(
+          () => storage.write('MyHydratedCubitWithCustomStorage', expected),
+        ).called(2);
+      });
+
+      test('should call onError when storage.write throws', () {
+        runZonedGuarded(() async {
+          final expectedError = Exception('oops');
+          const change = Change(currentState: 0, nextState: 0);
+          final cubit = MyHydratedCubitWithCustomStorage(storage);
+          when(
+            () => storage.write(any(), any<dynamic>()),
+          ).thenThrow(expectedError);
+          cubit.onChange(change);
+          await Future<void>.delayed(const Duration(milliseconds: 300));
+          // ignore: invalid_use_of_protected_member
+          verify(() => cubit.onError(expectedError, any())).called(2);
+        }, (error, stackTrace) {
+          expect(error.toString(), 'Exception: oops');
+          expect(stackTrace, isNotNull);
+        });
+      });
+
+      test('stores initial state when instantiated', () {
+        MyHydratedCubitWithCustomStorage(storage);
+        verify(
+          () => storage.write('MyHydratedCubitWithCustomStorage', {'value': 0}),
+        ).called(1);
+      });
+
+      test('initial state should return 0 when fromJson returns null', () {
+        when<dynamic>(() => storage.read(any())).thenReturn(null);
+        expect(MyHydratedCubitWithCustomStorage(storage).state, 0);
+        verify<dynamic>(
+          () => storage.read('MyHydratedCubitWithCustomStorage'),
+        ).called(1);
+      });
+
+      test('initial state should return 101 when fromJson returns 101', () {
+        when<dynamic>(() => storage.read(any())).thenReturn({'value': 101});
+        expect(MyHydratedCubitWithCustomStorage(storage).state, 101);
+        verify<dynamic>(
+          () => storage.read('MyHydratedCubitWithCustomStorage'),
+        ).called(1);
+      });
+
+      group('clear', () {
+        test('calls delete on custom storage', () async {
+          await MyHydratedCubitWithCustomStorage(storage).clear();
+          verify(
+            () => storage.delete('MyHydratedCubitWithCustomStorage'),
+          ).called(1);
+        });
       });
     });
   });
