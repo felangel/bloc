@@ -10,7 +10,6 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
-  replay_bloc: ^0.3.0
   rxdart: ^0.28.0
   
   
