@@ -143,6 +143,7 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 - [I/O Pinball](https://github.com/flutter/pinball) - an example of how to use the `bloc` and `flutter_bloc` packages to create a pinball web app -- made for Google I/O 2022.
 - [I/O Holobooth](https://github.com/flutter/holobooth) - an example of how to use the `bloc` and `flutter_bloc` packages to create a virtual photobooth experience -- made for Flutter Forward.
 - [I/O Flip](https://github.com/flutter/io_flip) - an example of how to use the `bloc`, `flutter_bloc`, and `flame_bloc` packages to create a card game -- made for Google I/O 2023.
+- [Movable Ball](https://github.com/felangel/bloc/tree/master/examples/bloc_concurrency) - an example for illustrating all the bloc concurrency transformers using the `bloc_concurrency` and `flutter_bloc` packages.
 
 ### Web
 
