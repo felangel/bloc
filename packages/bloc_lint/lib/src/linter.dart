@@ -22,6 +22,7 @@ final allRules = <String, LintRuleBuilder>{
   PreferBlocLint.rule: PreferBlocLint.new,
   PreferCubitLint.rule: PreferCubitLint.new,
   PreferVoidPublicCubitMethods.rule: PreferVoidPublicCubitMethods.new,
+  PreferContextExtensions.rule: PreferContextExtensions.new,
 };
 
 /// {@template linter}
