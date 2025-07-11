@@ -2,6 +2,7 @@ export 'avoid_flutter_imports.dart';
 export 'avoid_public_bloc_methods.dart';
 export 'avoid_public_fields.dart';
 export 'prefer_bloc.dart';
+export 'prefer_context_extensions.dart';
 export 'prefer_cubit.dart';
 export 'prefer_file_naming_conventions.dart';
 export 'prefer_void_public_cubit_methods.dart';

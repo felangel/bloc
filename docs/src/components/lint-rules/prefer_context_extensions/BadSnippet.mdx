@@ -1,0 +1,21 @@
+import { Code } from '@astrojs/starlight/components';
+import { transformerMetaHighlight } from '@shikijs/transformers';
+
+<Code
+	code={`
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class Sample extends StatelessWidget {
+    const Sample({super.key});
+
+    @override
+    Widget build(BuildContext context) {
+        final cubit = BlocProvider.of<CounterCubit>(context);
+        return Container();
+    }
+}
+`}
+lang="dart" title="sample.dart"
+transformers={[transformerMetaHighlight()]} class='warning' meta="{9}"
+/>
