@@ -215,16 +215,8 @@ Consider overriding `storagePrefix` in production for more resilient, persistent
 class CounterCubit extends HydratedCubit<int> {
   CounterCubit() : super(0);
 
-  void increment() => emit(state + 1);
-
   @override
   String get storagePrefix => 'CounterCubit';
-
-  @override
-  int fromJson(Map<String, dynamic> json) => json['value'] as int;
-
-  @override
-  Map<String, int> toJson(int state) => { 'value': state };
 }
 ```
 
