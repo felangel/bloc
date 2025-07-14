@@ -204,11 +204,12 @@ runApp(MyApp());
 ```
 
 ## Custom Storage Prefix
+
 The `storagePrefix` defines the unique storage namespace for your `HydratedBloc` or `HydratedCubit`.
 
-By default, it uses `runtimeType`, which isn't resilient to obfuscation or minification in production. If `runtimeType` changes, your app loses saved state. This is critical for web apps, where code changes frequently alter the minified runtimeType.
+By default, it uses `runtimeType`, which isn't resilient to obfuscation or minification in production. If `runtimeType` changes, your saved state will be lost. This is especially relevant for web apps, where code changes frequently alter the minified `runtimeType`.
 
-Always override `storagePrefix` in production for stable, persistent storage.
+Consider overriding `storagePrefix` in production for more resilient, persistent storage.
 
 ```dart
 class CounterCubit extends HydratedCubit<int> {
@@ -217,7 +218,7 @@ class CounterCubit extends HydratedCubit<int> {
   void increment() => emit(state + 1);
 
   @override
-  String get storagePrefix => 'counter_cubit';
+  String get storagePrefix => 'CounterCubit';
 
   @override
   int fromJson(Map<String, dynamic> json) => json['value'] as int;
