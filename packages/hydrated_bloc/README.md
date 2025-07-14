@@ -203,6 +203,23 @@ HydratedBloc.storage = MyHydratedStorage();
 runApp(MyApp());
 ```
 
+## Custom Storage Prefix
+
+The `storagePrefix` defines the unique storage namespace for your `HydratedBloc` or `HydratedCubit`.
+
+By default, it uses `runtimeType`, which isn't resilient to obfuscation or minification in production. If `runtimeType` changes, your saved state will be lost. This is especially relevant for web apps, where code changes frequently alter the minified `runtimeType`.
+
+Consider overriding `storagePrefix` in production for more resilient, persistent storage.
+
+```dart
+class CounterCubit extends HydratedCubit<int> {
+  CounterCubit() : super(0);
+
+  @override
+  String get storagePrefix => 'CounterCubit';
+}
+```
+
 ## Testing
 
 When writing unit tests for code that uses `HydratedBloc`, it is recommended to stub the `Storage` implementation using `package:mocktail`.
