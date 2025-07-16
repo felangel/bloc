@@ -1,23 +1,23 @@
+import 'package:bloc_concurrency_demo/view/task_scheduler_demo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:movable_ball/view/movable_ball.dart';
 
 void main() {
-  group('MovableBallDemo Tests', () {
+  group('TaskSchedulerDemo Tests', () {
     testWidgets('main app renders correctly', (tester) async {
       // Set a larger screen size for testing
       await tester.binding.setSurfaceSize(const Size(800, 1200));
 
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(body: MovableBallDemo()),
+          home: Scaffold(body: TaskSchedulerDemo()),
         ),
       );
 
       // Wait for all animations and async operations to complete
       await tester.pumpAndSettle();
 
-      expect(find.byType(MovableBallDemo), findsOneWidget);
+      expect(find.byType(TaskSchedulerDemo), findsOneWidget);
 
       // Test that tabs are present
       expect(find.text('Sequential'), findsOneWidget);
@@ -36,7 +36,7 @@ void main() {
 
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(body: MovableBallDemo()),
+          home: Scaffold(body: TaskSchedulerDemo()),
         ),
       );
 
@@ -46,26 +46,25 @@ void main() {
       await tester.tap(find.text('Concurrent'));
       await tester.pumpAndSettle();
 
-      // Check that concurrent bridge is visible
-      expect(find.text('🟢 Concurrent Bridge'), findsOneWidget);
+      expect(find.text('Concurrent Tasks'), findsOneWidget);
 
       addTearDown(() => tester.binding.setSurfaceSize(null));
     });
 
-    testWidgets('bridge tab shows send ball button', (tester) async {
+    testWidgets('bridge tab shows perform task button', (tester) async {
       await tester.binding.setSurfaceSize(const Size(800, 1200));
 
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(body: MovableBallDemo()),
+          home: Scaffold(body: TaskSchedulerDemo()),
         ),
       );
 
       await tester.pumpAndSettle();
 
-      // Should find send ball button
-      expect(find.textContaining('Send Ball'), findsOneWidget);
-      expect(find.text('Reset'), findsOneWidget);
+      // Tap on Concurrent tab
+      expect(find.textContaining('PERFORM TASK'), findsOneWidget);
+      expect(find.text('CLEAR TASKS'), findsOneWidget);
 
       addTearDown(() => tester.binding.setSurfaceSize(null));
     });

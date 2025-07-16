@@ -1,14 +1,14 @@
+import 'package:bloc_concurrency_demo/view/task_scheduler_demo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:movable_ball/view/movable_ball.dart';
 
 void main() {
   testWidgets('main ...', (tester) async {
     await tester.pumpWidget(
       const MaterialApp(
-        home: Scaffold(body: MovableBallDemo()),
+        home: Scaffold(body: TaskSchedulerDemo()),
       ),
     );
-    expect(find.byType(MovableBallDemo), findsOneWidget);
+    expect(find.byType(TaskSchedulerDemo), findsOneWidget);
   });
 }

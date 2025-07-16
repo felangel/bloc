@@ -1,5 +1,5 @@
-name: movable_ball
-description: A new Flutter project called movable_ball.
+name: bloc_concurrency_demo
+description: A new Flutter project called bloc concurrency demo.
 
 environment:
   sdk: ">=3.8.0 <4.0.0"

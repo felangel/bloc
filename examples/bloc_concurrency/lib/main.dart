@@ -1,5 +1,5 @@
+import 'package:bloc_concurrency_demo/view/task_scheduler_demo.dart';
 import 'package:flutter/material.dart';
-import 'package:movable_ball/view/movable_ball.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,9 +13,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Bloc Concurrency Demo - Movable Balls',
+      title: 'Bloc Concurrency Demo - Task Scheduler',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const MovableBallDemo(),
+      debugShowCheckedModeBanner: false,
+      home: const TaskSchedulerDemo(),
     );
   }
 }
