@@ -61,8 +61,12 @@ HydrationErrorBehavior _defaultOnHydrationError(
 abstract class HydratedBloc<Event, State> extends Bloc<Event, State>
     with HydratedMixin {
   /// {@macro hydrated_bloc}
-  HydratedBloc(State state, {Storage? storage}) : super(state) {
-    hydrate(storage: storage);
+  HydratedBloc(
+    State state, {
+    Storage? storage,
+    OnHydrationError onError = _defaultOnHydrationError,
+  }) : super(state) {
+    hydrate(storage: storage, onError: onError);
   }
 
   static Storage? _storage;
@@ -103,8 +107,12 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State>
 abstract class HydratedCubit<State> extends Cubit<State>
     with HydratedMixin<State> {
   /// {@macro hydrated_cubit}
-  HydratedCubit(State state, {Storage? storage}) : super(state) {
-    hydrate(storage: storage);
+  HydratedCubit(
+    State state, {
+    Storage? storage,
+    OnHydrationError onError = _defaultOnHydrationError,
+  }) : super(state) {
+    hydrate(storage: storage, onError: onError);
   }
 }
 
