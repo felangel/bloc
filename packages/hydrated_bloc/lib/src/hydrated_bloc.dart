@@ -64,9 +64,9 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State>
   HydratedBloc(
     State state, {
     Storage? storage,
-    OnHydrationError onError = _defaultOnHydrationError,
+    OnHydrationError onHydrationError = _defaultOnHydrationError,
   }) : super(state) {
-    hydrate(storage: storage, onError: onError);
+    hydrate(storage: storage, onError: onHydrationError);
   }
 
   static Storage? _storage;
@@ -110,9 +110,9 @@ abstract class HydratedCubit<State> extends Cubit<State>
   HydratedCubit(
     State state, {
     Storage? storage,
-    OnHydrationError onError = _defaultOnHydrationError,
+    OnHydrationError onHydrationError = _defaultOnHydrationError,
   }) : super(state) {
-    hydrate(storage: storage, onError: onError);
+    hydrate(storage: storage, onError: onHydrationError);
   }
 }
 
