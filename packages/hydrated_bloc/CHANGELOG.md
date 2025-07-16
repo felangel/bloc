@@ -2,9 +2,9 @@
 
 - feat: add `onError` and `HydrationErrorBehavior` to `hydrate` ([#4390](https://github.com/felangel/bloc/pull/4390))
 - docs: improve `storagePrefix` documentation ([#4559](https://github.com/felangel/bloc/pull/4559))
-- chore: update example to `flutter_bloc` v9.1.0 ([#4368](https://github.com/felangel/bloc/pull/4368))
 - chore: update build status badge ([#4502](https://github.com/felangel/bloc/pull/4502))
 - chore: update sponsors ([#4418](https://github.com/felangel/bloc/pull/4418))
+- chore: update example to `flutter_bloc` v9.1.0 ([#4368](https://github.com/felangel/bloc/pull/4368))
 
 # 10.0.0
 
