@@ -1,3 +1,7 @@
+# 10.1.1
+
+- fix: make `defaultOnHydrationError` public ([#4567](https://github.com/felangel/bloc/issues/4567))
+
 # 10.1.0
 
 - feat: add `onError` and `HydrationErrorBehavior` to `hydrate` ([#4390](https://github.com/felangel/bloc/pull/4390))
