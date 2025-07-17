@@ -24,13 +24,13 @@ typedef OnHydrationError = HydrationErrorBehavior Function(
   StackTrace stackTrace,
 );
 
-const _defaultHydrationErrorBehavior = HydrationErrorBehavior.overwrite;
-
-HydrationErrorBehavior _defaultOnHydrationError(
+/// The default hydration `onError` implementation.
+/// Returns [HydrationErrorBehavior.overwrite].
+HydrationErrorBehavior defaultOnHydrationError(
   Object error,
   StackTrace stackTrace,
 ) {
-  return _defaultHydrationErrorBehavior;
+  return HydrationErrorBehavior.overwrite;
 }
 
 /// {@template hydrated_bloc}
@@ -170,7 +170,7 @@ mixin HydratedMixin<State> on BlocBase<State> {
   /// ```
   void hydrate({
     Storage? storage,
-    OnHydrationError onError = _defaultOnHydrationError,
+    OnHydrationError onError = defaultOnHydrationError,
   }) {
     __storage = storage ??= HydratedBloc.storage;
     try {
