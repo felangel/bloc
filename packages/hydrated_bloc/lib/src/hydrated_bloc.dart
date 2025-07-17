@@ -24,13 +24,13 @@ typedef OnHydrationError = HydrationErrorBehavior Function(
   StackTrace stackTrace,
 );
 
-const _defaultHydrationErrorBehavior = HydrationErrorBehavior.overwrite;
-
-HydrationErrorBehavior _defaultOnHydrationError(
+/// The default hydration `onError` implementation.
+/// Returns [HydrationErrorBehavior.overwrite].
+HydrationErrorBehavior defaultOnHydrationError(
   Object error,
   StackTrace stackTrace,
 ) {
-  return _defaultHydrationErrorBehavior;
+  return HydrationErrorBehavior.overwrite;
 }
 
 /// {@template hydrated_bloc}
@@ -61,8 +61,12 @@ HydrationErrorBehavior _defaultOnHydrationError(
 abstract class HydratedBloc<Event, State> extends Bloc<Event, State>
     with HydratedMixin {
   /// {@macro hydrated_bloc}
-  HydratedBloc(State state, {Storage? storage}) : super(state) {
-    hydrate(storage: storage);
+  HydratedBloc(
+    State state, {
+    Storage? storage,
+    OnHydrationError onHydrationError = defaultOnHydrationError,
+  }) : super(state) {
+    hydrate(storage: storage, onError: onHydrationError);
   }
 
   static Storage? _storage;
@@ -103,8 +107,12 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State>
 abstract class HydratedCubit<State> extends Cubit<State>
     with HydratedMixin<State> {
   /// {@macro hydrated_cubit}
-  HydratedCubit(State state, {Storage? storage}) : super(state) {
-    hydrate(storage: storage);
+  HydratedCubit(
+    State state, {
+    Storage? storage,
+    OnHydrationError onHydrationError = defaultOnHydrationError,
+  }) : super(state) {
+    hydrate(storage: storage, onError: onHydrationError);
   }
 }
 
@@ -170,7 +178,7 @@ mixin HydratedMixin<State> on BlocBase<State> {
   /// ```
   void hydrate({
     Storage? storage,
-    OnHydrationError onError = _defaultOnHydrationError,
+    OnHydrationError onError = defaultOnHydrationError,
   }) {
     __storage = storage ??= HydratedBloc.storage;
     try {
