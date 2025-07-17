@@ -41,3 +41,15 @@ class UpdateTaskStatusEvent extends TaskEvent {
   @override
   List<Object> get props => [taskId, status];
 }
+
+/// Represents an event to trigger task with UI feedback
+class TriggerTaskEvent extends TaskEvent {
+  /// Creates an instance of [TriggerTaskEvent].
+  const TriggerTaskEvent(this.taskId);
+
+  /// The unique identifier for the task
+  final int taskId;
+
+  @override
+  List<Object> get props => [taskId];
+}

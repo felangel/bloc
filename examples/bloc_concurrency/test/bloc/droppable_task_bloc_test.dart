@@ -22,20 +22,22 @@ void main() {
 
     test('should drop new tasks when one is already running', () async {
       // Send first task
-      bloc.add(const PerformTaskEvent(1));
+      bloc.add(const TriggerTaskEvent(1));
       await Future<void>.delayed(const Duration(milliseconds: 100));
 
       // Send more tasks quickly
       bloc
-        ..add(const PerformTaskEvent(2))
-        ..add(const PerformTaskEvent(3));
+        ..add(const TriggerTaskEvent(2))
+        ..add(const TriggerTaskEvent(3));
 
       await Future<void>.delayed(const Duration(milliseconds: 100));
 
-      expect(bloc.state.tasks.length, 1);
+      expect(bloc.state.tasks.length, 3);
 
-      // First task should be running, others dropped
+      // First task should be running
       expect(bloc.state.tasks.first.status, TaskStatus.running);
+
+      // Subsequent tasks should be dropped
       expect(
         bloc.state.tasks.skip(1).every((t) => t.status == TaskStatus.dropped),
         true,
@@ -48,10 +50,10 @@ void main() {
       );
     });
 
-    blocTest<DroppableTaskBloc, TaskState>(
+    blocTest(
       'should process first task normally when no task is running',
       build: DroppableTaskBloc.new,
-      act: (bloc) => bloc.add(const PerformTaskEvent(1)),
+      act: (bloc) => bloc.add(const TriggerTaskEvent(1)),
       verify: (bloc) {
         expect(bloc.state.totalTasksPerformed, 1);
         expect(bloc.state.tasks.length, 1);
@@ -59,5 +61,23 @@ void main() {
         expect(bloc.state.tasks.first.color, Colors.orange);
       },
     );
+
+    test('should immediately drop tasks when another is running', () async {
+      // Start first task
+      bloc.add(const TriggerTaskEvent(1));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+
+      // Try to add another task while first is running
+      bloc.add(const TriggerTaskEvent(2));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+
+      expect(bloc.state.tasks.length, 2);
+      expect(bloc.state.tasks.first.status, TaskStatus.running);
+      expect(bloc.state.tasks.last.status, TaskStatus.dropped);
+      expect(
+        bloc.state.tasks.last.statusMessage,
+        'Dropped - Another task is running',
+      );
+    });
   });
 }

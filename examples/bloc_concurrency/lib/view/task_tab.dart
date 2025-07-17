@@ -33,9 +33,13 @@ class TaskTabState<T extends BaseTaskBloc> extends State<TaskTab<T>> {
   int taskCounter = 1;
 
   void _sendTaskEvent() {
-    context.read<T>().add(
-      PerformTaskEvent(taskCounter),
-    );
+    // For concurrent and restartable, use PerformTaskEvent directly
+    if (T == ConcurrentTaskBloc || T == RestartableTaskBloc) {
+      context.read<T>().add(PerformTaskEvent(taskCounter));
+    } else {
+      // For others, use TriggerTaskEvent to show queue/drop behavior
+      context.read<T>().add(TriggerTaskEvent(taskCounter));
+    }
     taskCounter++;
   }
 

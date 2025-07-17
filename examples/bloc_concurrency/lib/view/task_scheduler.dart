@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Demo app for task scheduling using different BLoC concurrency strategies.
-class TaskSchedulerDemo extends StatefulWidget {
-  /// Creates an instance of [TaskSchedulerDemo].
-  const TaskSchedulerDemo({super.key});
+class TaskScheduler extends StatefulWidget {
+  /// Creates an instance of [TaskScheduler].
+  const TaskScheduler({super.key});
 
   @override
-  State<TaskSchedulerDemo> createState() => _TaskSchedulerDemoState();
+  State<TaskScheduler> createState() => _TaskSchedulerState();
 }
 
-class _TaskSchedulerDemoState extends State<TaskSchedulerDemo>
+class _TaskSchedulerState extends State<TaskScheduler>
     with TickerProviderStateMixin {
   late TabController _tabController;
 
@@ -84,7 +84,7 @@ class _TaskSchedulerDemoState extends State<TaskSchedulerDemo>
             ),
             TaskTab<DebounceTaskBloc>(
               title: 'Debounce Tasks',
-              description: 'Tasks are delayed until a quiet period (2000ms)',
+              description: 'Tasks are delayed until a quiet period (2s)',
               color: Colors.deepOrange,
             ),
             TaskTab<ThrottleTaskBloc>(

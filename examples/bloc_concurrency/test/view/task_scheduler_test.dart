@@ -1,23 +1,23 @@
-import 'package:bloc_concurrency_demo/view/task_scheduler_demo.dart';
+import 'package:bloc_concurrency_demo/view/task_scheduler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('TaskSchedulerDemo Tests', () {
+  group('TaskScheduler Tests', () {
     testWidgets('main app renders correctly', (tester) async {
       // Set a larger screen size for testing
       await tester.binding.setSurfaceSize(const Size(800, 1200));
 
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(body: TaskSchedulerDemo()),
+          home: Scaffold(body: TaskScheduler()),
         ),
       );
 
       // Wait for all animations and async operations to complete
       await tester.pumpAndSettle();
 
-      expect(find.byType(TaskSchedulerDemo), findsOneWidget);
+      expect(find.byType(TaskScheduler), findsOneWidget);
 
       // Test that tabs are present
       expect(find.text('Sequential'), findsOneWidget);
@@ -36,7 +36,7 @@ void main() {
 
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(body: TaskSchedulerDemo()),
+          home: Scaffold(body: TaskScheduler()),
         ),
       );
 
@@ -56,7 +56,7 @@ void main() {
 
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(body: TaskSchedulerDemo()),
+          home: Scaffold(body: TaskScheduler()),
         ),
       );
 

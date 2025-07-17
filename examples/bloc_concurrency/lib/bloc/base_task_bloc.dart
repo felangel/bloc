@@ -46,7 +46,6 @@ abstract class BaseTaskBloc extends Bloc<TaskEvent, TaskState> {
     Color taskColor,
     Emitter<TaskState> emit,
   ) async {
-    // Add task as running
     final runningTask = Task(
       id: taskId,
       status: TaskStatus.running,

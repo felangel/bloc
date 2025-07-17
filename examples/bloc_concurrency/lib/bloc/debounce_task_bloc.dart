@@ -4,6 +4,7 @@ part of 'base_task_bloc.dart';
 class DebounceTaskBloc extends BaseTaskBloc {
   /// Creates an instance of [DebounceTaskBloc].
   DebounceTaskBloc() : super() {
+    on<TriggerTaskEvent>(_onTriggerTask);
     on<PerformTaskEvent>(
       _onPerformTask,
       transformer: (events, mapper) => events
@@ -12,19 +13,36 @@ class DebounceTaskBloc extends BaseTaskBloc {
     );
   }
 
+  void _onTriggerTask(TriggerTaskEvent event, Emitter<TaskState> emit) {
+    /// Add a waiting task to the timeline
+    final waitingTask = Task(
+      id: event.taskId,
+      status: TaskStatus.waiting,
+      startTime: DateTime.now(),
+      statusMessage: 'Waiting for debounce period to complete (2s)',
+    );
+
+    final updatedTasks = [...state.tasks, waitingTask];
+    emit(
+      state.copyWith(
+        tasks: updatedTasks,
+        totalTasksPerformed: state.totalTasksPerformed + 1,
+      ),
+    );
+
+    /// Trigger the task after debounce period
+    add(PerformTaskEvent(event.taskId));
+  }
+
   Future<void> _onPerformTask(
     PerformTaskEvent event,
     Emitter<TaskState> emit,
   ) async {
-    emit(state.copyWith(totalTasksPerformed: state.totalTasksPerformed + 1));
-
-    // Use try-catch to handle potential close errors
     try {
       if (!isClosed) {
         await simulateTaskExecution(event.taskId, Colors.deepOrange, emit);
       }
     } catch (e) {
-      // Ignore errors if bloc is closed during animation
       if (!e.toString().contains('Cannot add new events after calling close')) {
         rethrow;
       }

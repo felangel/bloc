@@ -4,14 +4,12 @@ part of 'base_task_bloc.dart';
 class SequentialTaskBloc extends BaseTaskBloc {
   /// Creates an instance of [SequentialTaskBloc].
   SequentialTaskBloc() : super() {
+    on<TriggerTaskEvent>(_onTriggerTask);
     on<PerformTaskEvent>(_onPerformTask, transformer: sequential());
   }
 
-  Future<void> _onPerformTask(
-    PerformTaskEvent event,
-    Emitter<TaskState> emit,
-  ) async {
-    // Add waiting task first
+  void _onTriggerTask(TriggerTaskEvent event, Emitter<TaskState> emit) {
+    /// Add a waiting task to the timeline
     final waitingTask = Task(
       id: event.taskId,
       status: TaskStatus.waiting,
@@ -27,13 +25,19 @@ class SequentialTaskBloc extends BaseTaskBloc {
       ),
     );
 
-    // Use try-catch to handle potential close errors
+    /// Then add the actual perform event
+    add(PerformTaskEvent(event.taskId));
+  }
+
+  Future<void> _onPerformTask(
+    PerformTaskEvent event,
+    Emitter<TaskState> emit,
+  ) async {
     try {
       if (!isClosed) {
         await simulateTaskExecution(event.taskId, Colors.blue, emit);
       }
     } catch (e) {
-      // Ignore errors if bloc is closed during animation
       if (!e.toString().contains('Cannot add new events after calling close')) {
         rethrow;
       }

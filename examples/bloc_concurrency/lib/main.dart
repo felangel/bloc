@@ -1,4 +1,4 @@
-import 'package:bloc_concurrency_demo/view/task_scheduler_demo.dart';
+import 'package:bloc_concurrency_demo/view/task_scheduler.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       title: 'Bloc Concurrency Demo - Task Scheduler',
       theme: ThemeData(primarySwatch: Colors.blue),
       debugShowCheckedModeBanner: false,
-      home: const TaskSchedulerDemo(),
+      home: const TaskScheduler(),
     );
   }
 }

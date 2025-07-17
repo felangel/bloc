@@ -23,5 +23,13 @@ void main() {
         );
       });
     });
+    group('TriggerTaskEvent', () {
+      test('supports value comparisons', () {
+        expect(
+          const TriggerTaskEvent(taskId),
+          const TriggerTaskEvent(taskId),
+        );
+      });
+    });
   });
 }

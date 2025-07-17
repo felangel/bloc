@@ -4,19 +4,18 @@ part of 'base_task_bloc.dart';
 class DroppableTaskBloc extends BaseTaskBloc {
   /// Creates an instance of [DroppableTaskBloc].
   DroppableTaskBloc() : super() {
+    on<TriggerTaskEvent>(_onTriggerTask);
     on<PerformTaskEvent>(_onPerformTask, transformer: droppable());
   }
-  Future<void> _onPerformTask(
-    PerformTaskEvent event,
-    Emitter<TaskState> emit,
-  ) async {
+
+  void _onTriggerTask(TriggerTaskEvent event, Emitter<TaskState> emit) {
     // Check if any task is already running
     final hasRunningTask = state.tasks.any(
       (task) => task.status == TaskStatus.running,
     );
 
     if (hasRunningTask) {
-      // Add dropped task to show it was dropped
+      /// Add a dropped task to the timeline
       final droppedTask = Task(
         id: event.taskId,
         status: TaskStatus.dropped,
@@ -27,17 +26,23 @@ class DroppableTaskBloc extends BaseTaskBloc {
 
       final updatedTasks = [...state.tasks, droppedTask];
       emit(state.copyWith(tasks: updatedTasks));
-      return;
+      return; // Exit early if a task is running
     }
 
+    // Add the actual perform event if no task is running
     emit(state.copyWith(totalTasksPerformed: state.totalTasksPerformed + 1));
-    // Use try-catch to handle potential close errors
+    add(PerformTaskEvent(event.taskId));
+  }
+
+  Future<void> _onPerformTask(
+    PerformTaskEvent event,
+    Emitter<TaskState> emit,
+  ) async {
     try {
       if (!isClosed) {
         await simulateTaskExecution(event.taskId, Colors.orange, emit);
       }
     } catch (e) {
-      // Ignore errors if bloc is closed during animation
       if (!e.toString().contains('Cannot add new events after calling close')) {
         rethrow;
       }
