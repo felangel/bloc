@@ -214,5 +214,35 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ''',
     );
+
+    lintTest(
+      'does not report when file is generated',
+      rule: AvoidFlutterImports.new,
+      path: 'counter_bloc.g.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+
+enum CounterEvent { increment, decrement }
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+}
+''',
+    );
+
+    lintTest(
+      'does not report when file is in a dot directory',
+      rule: AvoidFlutterImports.new,
+      path: '.fvm/counter_bloc.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+
+enum CounterEvent { increment, decrement }
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+}
+''',
+    );
   });
 }

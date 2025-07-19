@@ -36,12 +36,14 @@ class Linter {
   /// [content] is provided, it will be explicitly analyzed, otherwise the [uri]
   /// will be analyzed (both single files and directories are supported).
   Map<String, List<Diagnostic>> analyze({required Uri uri, String? content}) {
-    if (content != null) return _analyzeContent(uri, content);
     final path = uri.canonicalizedPath.toLongPath();
     final directory = Directory(path);
     if (directory.existsSync()) return _analyzeDirectory(directory);
     final file = File(path);
-    if (file.existsSync()) return _analyzeFile(file);
+    if (file.existsSync() && file.isLintableDartFile) {
+      if (content != null) return _analyzeContent(uri, content);
+      return _analyzeFile(file);
+    }
     return {};
   }
 
@@ -130,8 +132,7 @@ extension on FileSystemEntity {
     return this is File &&
         p.extension(path) == '.dart' &&
         !p.basename(path).endsWith('.g.dart') &&
-        !p.split(path).contains('.dart_tool') &&
-        !p.split(path).contains('.fvm');
+        !p.split(path).any((segment) => segment.startsWith('.'));
   }
 }
 
