@@ -12,10 +12,7 @@ class AvoidPublicFields extends LintRule {
   static const rule = 'avoid_public_fields';
 
   @override
-  Listener? create(LintContext context) {
-    if (context.document.type.isOther) return null;
-    return _Listener(context);
-  }
+  Listener? create(LintContext context) => _Listener(context);
 }
 
 class _Listener extends Listener {

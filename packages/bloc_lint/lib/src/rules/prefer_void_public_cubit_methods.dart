@@ -12,10 +12,7 @@ class PreferVoidPublicCubitMethods extends LintRule {
   static const rule = 'prefer_void_public_cubit_methods';
 
   @override
-  Listener? create(LintContext context) {
-    if (!context.document.type.isCubit) return null;
-    return _Listener(context);
-  }
+  Listener? create(LintContext context) => _Listener(context);
 }
 
 class _Listener extends Listener {
