@@ -132,7 +132,7 @@ extension on FileSystemEntity {
     return this is File &&
         p.extension(path) == '.dart' &&
         !p.basename(path).endsWith('.g.dart') &&
-        p.split(path).none((segment) => segment.startsWith('.'));
+        !p.split(path).any((segment) => segment.startsWith('.'));
   }
 }
 
