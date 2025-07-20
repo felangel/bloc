@@ -1,3 +1,4 @@
+export 'avoid_context_extensions.dart';
 export 'avoid_flutter_imports.dart';
 export 'avoid_public_bloc_methods.dart';
 export 'avoid_public_fields.dart';

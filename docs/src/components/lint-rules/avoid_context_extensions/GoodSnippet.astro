@@ -1,0 +1,33 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class CounterWidget extends StatelessWidget {
+  const CounterWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        BlocBuilder<CounterBloc, int>(
+          builder: (context, state) {
+            return Text('Count: \$state');
+          },
+        ),
+        ElevatedButton(
+          onPressed: () {
+            BlocProvider.of<CounterBloc>(context).add(CounterIncrement());
+          },
+          child: const Text('Increment'),
+        ),
+      ],
+    );
+  }
+}
+`;
+---
+
+<Code code={code} lang="dart" title="counter_page.dart" /> 
