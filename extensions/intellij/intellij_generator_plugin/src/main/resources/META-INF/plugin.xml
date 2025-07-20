@@ -11,6 +11,7 @@
 
     <change-notes><![CDATA[
         <ul>
+          <li>v4.1.7 - Various linter improvements and performance optimizations</li>
           <li>v4.1.6 - Fix increased CPU usage when using fvm</li>
           <li>v4.1.5 - Use precompiled bloc_tools executable for LSP</li>
           <li>v4.1.4 - Include environment during command execution</li>
