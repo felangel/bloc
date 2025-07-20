@@ -43,8 +43,10 @@ void lintTest(
     const linter = Linter();
     final lintRule = rule();
     final tempDir = Directory.systemTemp.createTempSync();
-    final tempFile = File(p.join(tempDir.path, path))
-      ..writeAsStringSync(content);
+    final tempFile =
+        File(p.join(tempDir.path, path))
+          ..createSync(recursive: true)
+          ..writeAsStringSync(content);
     File(p.join(tempDir.path, 'analysis_options.yaml')).writeAsStringSync('''
 bloc:
   rules:

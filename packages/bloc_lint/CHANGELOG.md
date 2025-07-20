@@ -1,3 +1,9 @@
+# 0.2.1
+
+- feat: ignore dot directories
+- fix: include bloc/cubit instances defined in any file
+- chore: various dependency upgrades
+
 # 0.2.0
 
 - chore: stable `0.2.0` release 🎉

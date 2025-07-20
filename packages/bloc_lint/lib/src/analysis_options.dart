@@ -66,8 +66,7 @@ class AnalysisOptions {
   /// Try to parse [file] and return `null` if parsing fails.
   static AnalysisOptions? tryParse(File file) {
     try {
-      final options = AnalysisOptions.parse(file);
-      return options;
+      return AnalysisOptions.parse(file);
     } on Exception {
       return null;
     }

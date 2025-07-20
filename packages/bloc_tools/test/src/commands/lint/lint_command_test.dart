@@ -59,7 +59,7 @@ void main() {
         completion(equals(ExitCode.usage.code)),
       );
       verify(
-        () => logger.info(any(that: contains('No target files found.'))),
+        () => logger.info(any(that: contains('No files found.'))),
       ).called(1);
     });
 

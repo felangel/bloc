@@ -150,6 +150,24 @@ class CounterCubit extends Cubit<int> {
     );
 
     lintTest(
+      'lints when file name does not follow naming conventions',
+      rule: PreferVoidPublicCubitMethods.new,
+      path: 'main.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+
+class CounterCubit extends Cubit<int> {
+  CounterCubit() : super(0);
+
+  void increment() => emit(state + 1);
+
+  bool get isEven => state.isEven;
+           ^^^^^^
+}
+''',
+    );
+
+    lintTest(
       'lints when public getter exists on Cubit (bool)',
       rule: PreferVoidPublicCubitMethods.new,
       path: 'counter_cubit.dart',

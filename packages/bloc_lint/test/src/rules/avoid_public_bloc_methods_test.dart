@@ -23,6 +23,23 @@ class CounterBloc extends Bloc<CounterEvent, int> {
     );
 
     lintTest(
+      'lints when file name does not follow naming conventions',
+      rule: AvoidPublicBlocMethods.new,
+      path: 'main.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+
+enum CounterEvent { increment, decrement }
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+
+  void foo() { print ('foo'); }
+       ^^^
+}
+''',
+    );
+
+    lintTest(
       'does not lint when no public methods exist',
       rule: AvoidPublicBlocMethods.new,
       path: 'counter_bloc.dart',

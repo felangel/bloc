@@ -41,6 +41,55 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 
 ---
 
+## Installing
+
+```sh
+dart pub global activate bloc_tools
+```
+
+## Commands
+
+### `$ bloc lint [files...]`
+
+Analyze Dart source code using the official bloc linter to improve code quality and enforce consistency.
+
+**Usage**
+
+```sh
+# Lint the current directory
+bloc lint .
+
+# Lint multiple files
+bloc lint ./path/to/bloc.dart ./path/to/cubit.dart
+```
+
+Check out the [official documentation](https://bloclibrary.dev/lint/) for information.
+
+### `$ bloc new [component]`
+
+Create new bloc/cubit components from various templates.
+
+**Usage**
+
+```sh
+# Create a CounterBloc
+bloc new bloc --name counter
+
+# Create a CounterCubit
+bloc new cubit --name counter
+```
+
+**Components**
+
+| Component      | Description                  |
+| -------------- | ---------------------------- |
+| bloc           | Generate a new Bloc          |
+| cubit          | Generate a new Cubit         |
+| hydrated_bloc  | Generate a new HydratedBloc  |
+| hydrated_cubit | Generate a new HydratedCubit |
+| replay_bloc    | Generate a new ReplayBloc    |
+| replay_cubit   | Generate a new ReplayCubit   |
+
 ## Usage
 
 ```sh

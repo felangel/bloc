@@ -10,7 +10,7 @@ import java.io.FileOutputStream
 import java.net.URL
 import java.net.URI
 
-private const val BLOC_TOOLS_VERSION = "0.1.0-dev.16"
+private const val BLOC_TOOLS_VERSION = "0.1.0-dev.17"
 
 enum class OperatingSystem(val value: String) {
     Linux("linux"),

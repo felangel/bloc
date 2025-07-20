@@ -23,6 +23,23 @@ class CounterBloc extends Bloc<CounterEvent, int> {
     );
 
     lintTest(
+      'lints when file name does not follow naming conventions',
+      rule: AvoidPublicFields.new,
+      path: 'main.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+
+enum CounterEvent { increment, decrement }
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+
+  var count = 0;
+  ^^^^^^^^^^^^^
+}
+''',
+    );
+
+    lintTest(
       'lints when cubit contains a public, mutable field',
       rule: AvoidPublicFields.new,
       path: 'counter_cubit.dart',

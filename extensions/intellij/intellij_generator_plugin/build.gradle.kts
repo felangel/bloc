@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.bloc"
-version = "4.1.6"
+version = "4.1.7"
 
 val lsp4ijVersion: String by project
 val lsp4jVersion: String by project
