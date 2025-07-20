@@ -54,8 +54,7 @@ runs:
       run: flutter pub get
 
     - name: ⚙️ Setup Bloc Tools
-      shell: ${{ inputs.shell }}
-      run: dart pub global activate bloc_tools
+      uses: felangel/setup-bloc-tools@v0
 
     - name: ✨ Format
       working-directory: ${{ inputs.working_directory }}

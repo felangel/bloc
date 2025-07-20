@@ -119,9 +119,9 @@ class _ProfileNameFormState extends State<ProfileNameForm> {
               ),
               ElevatedButton(
                 onPressed: _name.isNotEmpty
-                    ? () => context
-                        .read<ProfileWizardBloc>()
-                        .add(ProfileWizardNameSubmitted(_name))
+                    ? () => context.read<ProfileWizardBloc>().add(
+                        ProfileWizardNameSubmitted(_name),
+                      )
                     : null,
                 child: const Text('Continue'),
               ),
@@ -164,9 +164,9 @@ class _ProfileAgeFormState extends State<ProfileAgeForm> {
               ),
               ElevatedButton(
                 onPressed: _age != null
-                    ? () => context
-                        .read<ProfileWizardBloc>()
-                        .add(ProfileWizardAgeSubmitted(_age))
+                    ? () => context.read<ProfileWizardBloc>().add(
+                        ProfileWizardAgeSubmitted(_age),
+                      )
                     : null,
                 child: const Text('Continue'),
               ),

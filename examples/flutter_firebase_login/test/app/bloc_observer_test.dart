@@ -70,7 +70,7 @@ final logs = <String>[];
 void Function() overridePrint(void Function() testFn) {
   return () {
     final spec = ZoneSpecification(
-      print: (_, __, ___, String msg) => logs.add(msg),
+      print: (_, _, _, String msg) => logs.add(msg),
     );
     return Zone.current.fork(specification: spec).run<void>(testFn);
   };

@@ -9,8 +9,8 @@ part 'app_state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({required AuthenticationRepository authenticationRepository})
-      : _authenticationRepository = authenticationRepository,
-        super(AppState(user: authenticationRepository.currentUser)) {
+    : _authenticationRepository = authenticationRepository,
+      super(AppState(user: authenticationRepository.currentUser)) {
     on<AppUserSubscriptionRequested>(_onUserSubscriptionRequested);
     on<AppLogoutPressed>(_onLogoutPressed);
   }

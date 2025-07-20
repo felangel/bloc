@@ -18,6 +18,14 @@ class TextDocument {
     : _uri = uri,
       _content = content;
 
+  static final _ignoreForFileRegExp = RegExp(
+    r'^//\s*ignore_for_file:(.*?)$',
+    dotAll: true,
+    multiLine: true,
+  );
+
+  static final _ignoreForLineRegExp = RegExp(r'^//\s*ignore:(.*)$');
+
   final Uri _uri;
   final String _content;
   List<int>? _lineOffsets;
@@ -26,6 +34,65 @@ class TextDocument {
   /// indicating that they represent files on disk. However, some documents may
   /// have other schemes indicating that they are not available on disk.
   Uri get uri => _uri;
+
+  /// Whether the line for the current range contains an // ignore: for the given rule.
+  Set<String> ignoreForLine({required Range range}) {
+    return {
+      ..._ignoresAboveLine(range: range),
+      ..._ignoresAfterLine(range: range),
+    };
+  }
+
+  Set<String> _ignoresAboveLine({required Range range}) {
+    final previousLine = range.start.line - 1;
+    if (previousLine < 0) return const <String>{};
+    final line = getText(
+      range: Range(
+        start: Position(character: 0, line: previousLine),
+        end: Position(character: _content.length, line: previousLine),
+      ),
+    );
+    return _lineIgnores(line);
+  }
+
+  Set<String> _ignoresAfterLine({required Range range}) {
+    final afterText = getText(
+      range: Range(
+        start: Position(character: range.end.character, line: range.end.line),
+        end: Position(character: _content.length, line: range.end.line),
+      ),
+    );
+    final index = afterText.indexOf('// ignore:');
+    if (index == -1) return const <String>{};
+    final line = afterText.substring(index);
+    return _lineIgnores(line);
+  }
+
+  Set<String> _lineIgnores(String line) {
+    final result = <String>{};
+    final matches = _ignoreForLineRegExp.allMatches(line);
+    if (matches.isEmpty) return result;
+    for (final match in matches) {
+      final contents = match.group(1);
+      if (contents == null) continue;
+      result.addAll(contents.split(',').map((segment) => segment.trim()));
+    }
+    return result;
+  }
+
+  /// Returns a list of rules ignored for the current file.
+  /// e.g. // ignore_for_file: avoid_flutter_imports, prefer_bloc
+  Set<String> get ignoreForFile {
+    final result = <String>{};
+    final matches = _ignoreForFileRegExp.allMatches(_content);
+    if (matches.isEmpty) return result;
+    for (final match in matches) {
+      final contents = match.group(1);
+      if (contents == null) continue;
+      result.addAll(contents.split(',').map((segment) => segment.trim()));
+    }
+    return result;
+  }
 
   /// Get the text of this document. Provide a [Range] to get a substring.
   String getText({Range? range}) {

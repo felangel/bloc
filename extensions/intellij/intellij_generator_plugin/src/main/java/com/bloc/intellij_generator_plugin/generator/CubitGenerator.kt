@@ -4,7 +4,7 @@ import com.bloc.intellij_generator_plugin.action.BlocTemplateType
 import com.fleshgrinder.extensions.kotlin.toLowerSnakeCase
 import com.fleshgrinder.extensions.kotlin.toUpperCamelCase
 import com.google.common.io.CharStreams
-import org.apache.commons.lang.text.StrSubstitutor
+import org.apache.commons.text.StringSubstitutor
 import java.io.InputStreamReader
 
 abstract class CubitGenerator(
@@ -32,7 +32,7 @@ abstract class CubitGenerator(
             }
             val resource = "/templates/$templateFolder/$templateName.dart.template"
             val resourceAsStream = CubitGenerator::class.java.getResourceAsStream(resource)
-            templateString = CharStreams.toString(InputStreamReader(resourceAsStream!!, Charsets.UTF_8))
+            templateString = CharStreams.toString(InputStreamReader(resourceAsStream!!, Charsets.UTF_8)).replace("\r\n", "\n").replace("\r","\n");
         } catch (e: Exception) {
             throw RuntimeException(e)
         }
@@ -41,7 +41,7 @@ abstract class CubitGenerator(
     abstract fun fileName(): String
 
     fun generate(): String {
-        val substitutor = StrSubstitutor(templateValues, "{{", "}}", '\\')
+        val substitutor = StringSubstitutor(templateValues, "{{", "}}", '\\')
         return substitutor.replace(templateString)
     }
 

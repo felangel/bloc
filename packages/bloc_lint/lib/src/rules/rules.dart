@@ -3,3 +3,4 @@ export 'avoid_public_bloc_methods.dart';
 export 'avoid_public_fields.dart';
 export 'prefer_bloc_lint.dart';
 export 'prefer_cubit_lint.dart';
+export 'prefer_void_public_cubit_methods.dart';

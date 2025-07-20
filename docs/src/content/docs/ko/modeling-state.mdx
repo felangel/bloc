@@ -1,0 +1,100 @@
+---
+title: Modeling State
+description:
+  package:bloc을 사용할 때 상태를 모델링하는 다양한 방법에 대한 개요입니다.
+---
+
+import ConcreteClassAndStatusEnumSnippet from '~/components/modeling-state/ConcreteClassAndStatusEnumSnippet.astro';
+import SealedClassAndSubclassesSnippet from '~/components/modeling-state/SealedClassAndSubclassesSnippet.astro';
+
+애플리케이션의 상태를 구조화할 때는 여러 가지 다른 접근 방식이 있습니다. 각각은
+고유한 장점과 단점이 있습니다. 이 섹션에서는 여러 접근 방식, 장단점, 그리고
+각각을 언제 사용해야 하는지 살펴보겠습니다.
+
+다음 접근 방식들은 단순히 권장사항이며 완전히 선택사항입니다. 원하는 접근 방식을
+자유롭게 사용하세요. 일부 예제/문서가 주로 간단함/간결함을 위해 이러한 접근
+방식을 따르지 않을 수 있음을 알 수 있을 것입니다.
+
+:::tip
+
+다음 코드 스니펫들은 상태 구조에 중점을 둡니다. 실제로는 다음도 원할 수
+있습니다:
+
+- [`package:equatable`](https://pub.dev/packages/equatable)의 `Equatable` 확장
+- [`package:data_class`](https://pub.dev/packages/data_class)의 `@Data()`로
+  클래스 주석 처리
+- [`package:meta`](https://pub.dev/packages/meta)의 **@immutable**로 클래스 주석
+  처리
+- `copyWith` 메서드 구현
+- 생성자에 `const` 키워드 사용
+
+:::
+
+## Concrete Class and Status Enum
+
+이 접근 방식은 모든 상태에 대한 **single concreate class**와 다양한 상태를
+나타내는 `enum`으로 구성됩니다. 속성들은 nullable이며 현재 상태에 따라
+처리됩니다. 이 접근 방식은 엄격하게 배타적이지 않고/또는 많은 공유 속성을
+포함하는 상태에 가장 적합합니다.
+
+<ConcreteClassAndStatusEnumSnippet />
+
+#### 장점
+
+- **간단함**: 단일 클래스와 상태 enum을 관리하기 쉽고 모든 속성에 쉽게 접근할 수
+  있습니다.
+- **간결함**: 일반적으로 다른 접근 방식에 비해 더 적은 코드 라인이 필요합니다.
+
+#### 단점
+
+- **타입 안전하지 않음**: 속성에 접근하기 전에 `상태`를 확인해야 합니다.
+  `emit`으로 잘못된 상태를 발생시킬 가능성이 있어 버그로 이어질 수 있습니다.
+  특정 상태의 속성들은 nullable이므로 처리하기 번거로울 수 있고 강제 언래핑이나
+  null 검사를 수행해야 합니다. 이러한 단점 중 일부는 단위 테스트와 특수화된
+  명명된 생성자를 작성하여 완화할 수 있습니다.
+- **비대함**: 시간이 지남에 따라 많은 속성으로 비대해질 수 있는 단일 상태로
+  이어집니다.
+
+#### 결론
+
+이 접근 방식은 간단한 상태나 요구사항이 배타적이지 않은 상태를 호출할 때(예:
+오류가 발생했을 때 스낵바를 표시하면서 마지막 성공한 상태의 이전 데이터를 계속
+표시) 가장 잘 작동합니다. 이 접근 방식은 타입 안전성을 희생하여 유연성과
+간결성을 제공합니다.
+
+## Sealed Class and Subclasses
+
+이 접근 방식은 공유 속성을 포함하는 **sealed class**와 분리된 상태에 대한 여러
+하위 클래스로 구성됩니다. 이 접근 방식은 분리되고 배타적인 상태에 이상적입니다.
+
+<SealedClassAndSubclassesSnippet />
+
+#### 장점
+
+- **타입 안전함**: 코드는 컴파일 타임에 안전하며 잘못된 속성에 실수로 접근할 수
+  없습니다. 각 하위 클래스는 자체 속성을 포함하므로 어떤 속성이 어떤 상태에
+  속하는지 명확합니다.
+- **명시적**: 공유 속성을 상태별 속성과 분리합니다.
+- **완전함**: 완전한 검사를 위한 `switch` 문 사용은 각 상태가 명시적으로
+  처리되도록 보장합니다.
+  - [완전성 검사](https://dart.dev/language/branches#exhaustiveness-checking)를
+    원하지 않거나 나중에 API를 깨뜨리지 않고 하위 타입을 추가할 수 있게 하려면
+    [final](https://dart.dev/language/class-modifiers#final) 수정자를
+    사용하세요.
+  - 자세한 내용은
+    [봉인 클래스 문서](https://dart.dev/language/class-modifiers#sealed)를
+    참조하세요.
+
+#### 단점
+
+- **장황함**: 더 많은 코드가 필요합니다(상태당 하나의 기본 클래스와 하위
+  클래스). 또한 하위 클래스 간 공유 속성에 대한 중복 코드가 필요할 수 있습니다.
+- **복잡성**: 새 속성을 추가하려면 각 하위 클래스와 기본 클래스를 업데이트해야
+  하므로 번거로울 수 있고 상태의 복잡성이 증가할 수 있습니다. 또한 속성에
+  접근하기 위해 불필요한/과도한 타입 검사가 필요할 수 있습니다.
+
+#### 결론
+
+이 접근 방식은 고유한 속성을 가진 잘 정의되고 배타적인 상태에 가장 잘
+작동합니다. 이 접근 방식은 간결함과 단순성을 희생하여 타입 안전성과 완전한
+검사를 제공하며 안전성을 강조합니다.

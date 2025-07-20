@@ -4,7 +4,7 @@
 
 <p align="center">
 <a href="https://pub.dev/packages/bloc_tools"><img src="https://img.shields.io/pub/v/bloc_tools.svg" alt="Pub"></a>
-<a href="https://github.com/felangel/bloc/actions"><img src="https://github.com/felangel/bloc/workflows/build/badge.svg" alt="build"></a>
+<a href="https://github.com/felangel/bloc/actions"><img src="https://github.com/felangel/bloc/actions/workflows/main.yaml/badge.svg" alt="build"></a>
 <a href="https://codecov.io/gh/felangel/bloc"><img src="https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg" alt="codecov"></a>
 <a href="https://github.com/felangel/bloc"><img src="https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Star on Github"></a>
 <a href="https://flutter.dev/docs/development/data-and-backend/state-mgmt/options#bloc--rx"><img src="https://img.shields.io/badge/flutter-website-deepskyblue.svg" alt="Flutter Website"></a>
@@ -40,6 +40,55 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 </table>
 
 ---
+
+## Installing
+
+```sh
+dart pub global activate bloc_tools
+```
+
+## Commands
+
+### `$ bloc lint [files...]`
+
+Analyze Dart source code using the official bloc linter to improve code quality and enforce consistency.
+
+**Usage**
+
+```sh
+# Lint the current directory
+bloc lint .
+
+# Lint multiple files
+bloc lint ./path/to/bloc.dart ./path/to/cubit.dart
+```
+
+Check out the [official documentation](https://bloclibrary.dev/lint/) for information.
+
+### `$ bloc new [component]`
+
+Create new bloc/cubit components from various templates.
+
+**Usage**
+
+```sh
+# Create a CounterBloc
+bloc new bloc --name counter
+
+# Create a CounterCubit
+bloc new cubit --name counter
+```
+
+**Components**
+
+| Component      | Description                  |
+| -------------- | ---------------------------- |
+| bloc           | Generate a new Bloc          |
+| cubit          | Generate a new Cubit         |
+| hydrated_bloc  | Generate a new HydratedBloc  |
+| hydrated_cubit | Generate a new HydratedCubit |
+| replay_bloc    | Generate a new ReplayBloc    |
+| replay_cubit   | Generate a new ReplayCubit   |
 
 ## Usage
 

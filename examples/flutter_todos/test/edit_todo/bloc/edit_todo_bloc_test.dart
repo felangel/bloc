@@ -162,8 +162,9 @@ void main() {
       blocTest<EditTodoBloc, EditTodoState>(
         'emits new state with error if save to repository fails',
         build: () {
-          when(() => todosRepository.saveTodo(any()))
-              .thenThrow(Exception('oops'));
+          when(
+            () => todosRepository.saveTodo(any()),
+          ).thenThrow(Exception('oops'));
           return buildBloc();
         },
         seed: () => const EditTodoState(

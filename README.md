@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-<a href="https://github.com/felangel/bloc/actions"><img src="https://github.com/felangel/bloc/workflows/build/badge.svg" alt="build"></a>
+<a href="https://github.com/felangel/bloc/actions"><img src="https://github.com/felangel/bloc/actions/workflows/main.yaml/badge.svg" alt="build"></a>
 <a href="https://codecov.io/gh/felangel/bloc"><img src="https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg" alt="codecov"></a>
 <a href="https://github.com/felangel/bloc"><img src="https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Star on Github"></a>
 <a href="https://flutter.dev/docs/development/data-and-backend/state-mgmt/options#bloc--rx"><img src="https://img.shields.io/badge/flutter-website-deepskyblue.svg" alt="Flutter Website"></a>
@@ -20,15 +20,15 @@ A predictable state management library that helps implement the BLoC design patt
 
 | Package                                                                                    | Pub                                                                                                            |
 | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| [angular_bloc](https://github.com/felangel/bloc/tree/master/packages/angular_bloc)         | [![pub package](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dev/packages/angular_bloc)         |
 | [bloc](https://github.com/felangel/bloc/tree/master/packages/bloc)                         | [![pub package](https://img.shields.io/pub/v/bloc.svg)](https://pub.dev/packages/bloc)                         |
-| [bloc_test](https://github.com/felangel/bloc/tree/master/packages/bloc_test)               | [![pub package](https://img.shields.io/pub/v/bloc_test.svg)](https://pub.dev/packages/bloc_test)               |
 | [bloc_concurrency](https://github.com/felangel/bloc/tree/master/packages/bloc_concurrency) | [![pub package](https://img.shields.io/pub/v/bloc_concurrency.svg)](https://pub.dev/packages/bloc_concurrency) |
 | [bloc_lint](https://github.com/felangel/bloc/tree/master/packages/bloc_lint)               | [![pub package](https://img.shields.io/pub/v/bloc_lint.svg)](https://pub.dev/packages/bloc_lint)               |
+| [bloc_test](https://github.com/felangel/bloc/tree/master/packages/bloc_test)               | [![pub package](https://img.shields.io/pub/v/bloc_test.svg)](https://pub.dev/packages/bloc_test)               |
+| [bloc_tools](https://github.com/felangel/bloc/tree/master/packages/bloc_tools)             | [![pub package](https://img.shields.io/pub/v/bloc_tools.svg)](https://pub.dev/packages/bloc_tools)             |
 | [flutter_bloc](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc)         | [![pub package](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dev/packages/flutter_bloc)         |
-| [angular_bloc](https://github.com/felangel/bloc/tree/master/packages/angular_bloc)         | [![pub package](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dev/packages/angular_bloc)         |
 | [hydrated_bloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc)       | [![pub package](https://img.shields.io/pub/v/hydrated_bloc.svg)](https://pub.dev/packages/hydrated_bloc)       |
 | [replay_bloc](https://github.com/felangel/bloc/tree/master/packages/replay_bloc)           | [![pub package](https://img.shields.io/pub/v/replay_bloc.svg)](https://pub.dev/packages/replay_bloc)           |
-| [bloc_tools](https://github.com/felangel/bloc/tree/master/packages/bloc_tools)             | [![pub package](https://img.shields.io/pub/v/bloc_tools.svg)](https://pub.dev/packages/bloc_tools)             |
 
 ---
 
@@ -63,11 +63,13 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 ## Documentation
 
 - [Official Documentation](https://bloclibrary.dev)
-- [Bloc Package](https://github.com/felangel/bloc/tree/master/packages/bloc/README.md)
-- [Bloc Test Package](https://github.com/felangel/bloc/tree/master/packages/bloc_test/README.md)
-- [Bloc Concurrency Package](https://github.com/felangel/bloc/tree/master/packages/bloc_concurrency/README.md)
-- [Flutter Bloc Package](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc/README.md)
 - [Angular Bloc Package](https://github.com/felangel/bloc/tree/master/packages/angular_bloc/README.md)
+- [Bloc Package](https://github.com/felangel/bloc/tree/master/packages/bloc/README.md)
+- [Bloc Concurrency Package](https://github.com/felangel/bloc/tree/master/packages/bloc_concurrency/README.md)
+- [Bloc Lint Package](https://github.com/felangel/bloc/tree/master/packages/bloc_lint/README.md)
+- [Bloc Test Package](https://github.com/felangel/bloc/tree/master/packages/bloc_test/README.md)
+- [Bloc Tools Package](https://github.com/felangel/bloc/tree/master/packages/bloc_tools/README.md)
+- [Flutter Bloc Package](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc/README.md)
 - [Hydrated Bloc Package](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc/README.md)
 - [Replay Bloc Package](https://github.com/felangel/bloc/tree/master/packages/replay_bloc/README.md)
 

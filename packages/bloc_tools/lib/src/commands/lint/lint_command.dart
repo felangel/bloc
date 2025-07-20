@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:args/command_runner.dart';
 import 'package:bloc_lint/bloc_lint.dart';
 import 'package:mason/mason.dart';
+import 'package:path/path.dart' as p;
 
 /// {@template new_command}
 /// The `bloc lint` command lints Dart source code.
@@ -31,18 +32,18 @@ class LintCommand extends Command<int> {
     if (rest.isEmpty) {
       _logger.info('''
 ${styleBold.wrap(lightRed.wrap('error'))}: No files specified.
-Usage: bloc lint [OPTIONS] [files]...''');
+Usage: bloc lint [options] [files]...''');
       return ExitCode.usage.code;
     }
 
-    final uris = rest.map(Uri.tryParse).whereType<Uri>();
+    final uris = rest.map((path) => path.toUri()).whereType<Uri>();
     final diagnostics = uris
         .map((uri) => _linter.analyze(uri: uri))
         .fold(<String, List<Diagnostic>>{}, (prev, curr) => {...prev, ...curr});
 
     if (diagnostics.isEmpty) {
       _logger.info(
-        '${styleBold.wrap(lightRed.wrap('error'))}: No target files found.',
+        '${styleBold.wrap(lightRed.wrap('error'))}: No files found.',
       );
       return ExitCode.usage.code;
     }
@@ -68,6 +69,16 @@ Analyzed $fileCount ${fileCount == 1 ? 'file' : 'files'}''');
   }
 }
 
+extension on String {
+  Uri? toUri() {
+    /// This function implements the behavior of `canonicalize` from
+    /// `package:path`.
+    /// However, it does not change the ASCII case of the path.
+    /// See https://github.com/dart-lang/path/issues/102.
+    return Uri.tryParse(p.normalize(p.absolute(this)).replaceAll(r'\', '/'));
+  }
+}
+
 extension on Severity {
   String? Function(String? value, {bool forScript}) toStyle() {
     switch (this) {
@@ -85,6 +96,9 @@ extension on Severity {
 
 extension on Diagnostic {
   String prettify(String path, TextDocument document) {
+    final relativePath = p
+        .relative(path, from: Directory.current.path)
+        .replaceAll(r'\', '/');
     final style = severity.toStyle();
     final text = document.getText(
       range: Range(
@@ -101,7 +115,7 @@ extension on Diagnostic {
     }
     return [
       '''${styleBold.wrap(style('${severity.name}[$code]'))}: ${styleBold.wrap(message)}''',
-      ''' ${darkGray.wrap('-->')} ${darkGray.wrap(path)}${darkGray.wrap(':${range.start.line + 1}')}''',
+      ''' ${darkGray.wrap('-->')} ${darkGray.wrap(relativePath)}${darkGray.wrap(':${range.start.line + 1}')}''',
       '''  ${darkGray.wrap('|')}''',
       '''  ${darkGray.wrap('|')} $text''',
       '''  ${darkGray.wrap('|')} ${style(highlight.toString())}''',

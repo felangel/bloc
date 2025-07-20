@@ -11,7 +11,7 @@ final class ComplexListState extends Equatable {
   const ComplexListState.loading() : this._();
 
   const ComplexListState.success(List<Item> items)
-      : this._(status: ListStatus.success, items: items);
+    : this._(status: ListStatus.success, items: items);
 
   const ComplexListState.failure() : this._(status: ListStatus.failure);
 

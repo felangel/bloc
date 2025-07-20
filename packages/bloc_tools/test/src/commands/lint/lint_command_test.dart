@@ -59,7 +59,18 @@ void main() {
         completion(equals(ExitCode.usage.code)),
       );
       verify(
-        () => logger.info(any(that: contains('No target files found.'))),
+        () => logger.info(any(that: contains('No files found.'))),
+      ).called(1);
+    });
+
+    test('canonicalizes paths before reporting diagnostics', () async {
+      when(() => linter.analyze(uri: any(named: 'uri'))).thenAnswer((_) => {});
+      await expectLater(
+        runner.run(['lint', '.']),
+        completion(equals(ExitCode.usage.code)),
+      );
+      verify(
+        () => linter.analyze(uri: Uri.parse(Directory.current.absolute.path)),
       ).called(1);
     });
 

@@ -17,19 +17,19 @@ class CatalogPage extends StatelessWidget {
             builder: (context, state) {
               return switch (state) {
                 CatalogLoading() => const SliverFillRemaining(
-                    child: Center(child: CircularProgressIndicator()),
-                  ),
+                  child: Center(child: CircularProgressIndicator()),
+                ),
                 CatalogError() => const SliverFillRemaining(
-                    child: Text('Something went wrong!'),
-                  ),
+                  child: Text('Something went wrong!'),
+                ),
                 CatalogLoaded() => SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) => CatalogListItem(
-                        state.catalog.getByPosition(index),
-                      ),
-                      childCount: state.catalog.itemNames.length,
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => CatalogListItem(
+                      state.catalog.getByPosition(index),
                     ),
-                  )
+                    childCount: state.catalog.itemNames.length,
+                  ),
+                ),
               };
             },
           ),
@@ -53,21 +53,21 @@ class AddButton extends StatelessWidget {
           CartLoading() => const CircularProgressIndicator(),
           CartError() => const Text('Something went wrong!'),
           CartLoaded() => Builder(
-              builder: (context) {
-                final isInCart = state.cart.items.contains(item);
-                return TextButton(
-                  style: TextButton.styleFrom(
-                    disabledForegroundColor: theme.primaryColor,
-                  ),
-                  onPressed: isInCart
-                      ? null
-                      : () => context.read<CartBloc>().add(CartItemAdded(item)),
-                  child: isInCart
-                      ? const Icon(Icons.check, semanticLabel: 'ADDED')
-                      : const Text('ADD'),
-                );
-              },
-            )
+            builder: (context) {
+              final isInCart = state.cart.items.contains(item);
+              return TextButton(
+                style: TextButton.styleFrom(
+                  disabledForegroundColor: theme.primaryColor,
+                ),
+                onPressed: isInCart
+                    ? null
+                    : () => context.read<CartBloc>().add(CartItemAdded(item)),
+                child: isInCart
+                    ? const Icon(Icons.check, semanticLabel: 'ADDED')
+                    : const Text('ADD'),
+              );
+            },
+          ),
         };
       },
     );

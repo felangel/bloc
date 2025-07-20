@@ -3,7 +3,7 @@ import 'package:formz/formz.dart';
 /// Validation errors for the [ConfirmedPassword] [FormzInput].
 enum ConfirmedPasswordValidationError {
   /// Generic invalid error.
-  invalid
+  invalid,
 }
 
 /// {@template confirmed_password}
@@ -16,7 +16,7 @@ class ConfirmedPassword
 
   /// {@macro confirmed_password}
   const ConfirmedPassword.dirty({required this.password, String value = ''})
-      : super.dirty(value);
+    : super.dirty(value);
 
   /// The original password.
   final String password;

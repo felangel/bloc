@@ -1,4 +1,4 @@
-import { ProgressLocation, window } from "vscode";
+import { ExtensionContext, ProgressLocation, window } from "vscode";
 import {
   LanguageClient,
   LanguageClientOptions,
@@ -6,11 +6,7 @@ import {
   ServerOptions,
   TransportKind,
 } from "vscode-languageclient/node";
-import {
-  blocToolsVersion,
-  getBlocToolsVersion,
-  installBlocTools,
-} from "../utils";
+import { getBlocToolsExecutable, installBlocTools } from "../utils";
 
 let client: LanguageClient;
 
@@ -20,66 +16,33 @@ const ANALYSIS_OPTIONS_FILE = {
   scheme: "file",
 };
 
-async function tryStartLanguageServer(): Promise<void> {
-  const version = await getBlocToolsVersion();
-  const isInstalled = version != null;
+async function startLanguageServer(executable: string) {
+  const serverOptions: ServerOptions = {
+    command: `"${executable}"`,
+    args: ["language-server"],
+    options: {
+      env: process.env,
+      shell: true,
+    },
+    transport: TransportKind.stdio,
+  };
 
-  if (version !== blocToolsVersion) {
-    var didInstall = false;
-    await window.withProgress(
-      {
-        location: ProgressLocation.Notification,
-        title: isInstalled ? "Upgrading Bloc Tools" : "Installing Bloc Tools",
-      },
-      async () => {
-        try {
-          didInstall = await installBlocTools();
-          window.setStatusBarMessage(
-            isInstalled ? "✓ Bloc Tools Upgraded" : "✓ Bloc Tools Installed",
-            3000
-          );
-        } catch (err) {
-          window.showErrorMessage(`${err}`);
-        }
-      }
-    );
+  const clientOptions: LanguageClientOptions = {
+    revealOutputChannelOn: RevealOutputChannelOn.Info,
+    documentSelector: [DART_FILE, ANALYSIS_OPTIONS_FILE],
+  };
 
-    if (!didInstall) {
-      window.showErrorMessage(
-        isInstalled
-          ? "✗ Unable to upgrade Bloc Tools"
-          : "✗ Unable to install Bloc Tools"
-      );
-      return;
-    }
-  }
+  client = new LanguageClient(
+    "blocAnalysisLSP",
+    "Bloc Analysis Server",
+    serverOptions,
+    clientOptions
+  );
 
-  async function startLanguageServer() {
-    const serverOptions: ServerOptions = {
-      command: "bloc",
-      args: ["language-server"],
-      options: {
-        env: process.env,
-        shell: true,
-      },
-      transport: TransportKind.stdio,
-    };
+  return client.start();
+}
 
-    const clientOptions: LanguageClientOptions = {
-      revealOutputChannelOn: RevealOutputChannelOn.Info,
-      documentSelector: [DART_FILE, ANALYSIS_OPTIONS_FILE],
-    };
-
-    client = new LanguageClient(
-      "blocAnalysisLSP",
-      "Bloc Analysis Server",
-      serverOptions,
-      clientOptions
-    );
-
-    return client.start();
-  }
-
+async function startLanguageServerWithProgress(executable: string) {
   window.withProgress(
     {
       location: ProgressLocation.Window,
@@ -87,7 +50,7 @@ async function tryStartLanguageServer(): Promise<void> {
     },
     async () => {
       try {
-        await startLanguageServer();
+        await startLanguageServer(executable);
         window.setStatusBarMessage("✓ Bloc Analysis Server", 3000);
       } catch (err) {
         window.showErrorMessage(`${err}`);
@@ -96,4 +59,34 @@ async function tryStartLanguageServer(): Promise<void> {
   );
 }
 
-export { tryStartLanguageServer, client };
+async function tryStartLanguageServer(
+  context: ExtensionContext
+): Promise<void> {
+  const executable = await getBlocToolsExecutable(context);
+  if (executable) return startLanguageServerWithProgress(executable);
+
+  await window.withProgress(
+    {
+      location: ProgressLocation.Notification,
+      title: "Installing the Bloc Language Server",
+    },
+    async () => {
+      try {
+        await installBlocTools(context);
+        window.setStatusBarMessage("Bloc Language Server installed", 3000);
+      } catch (err) {
+        window.showErrorMessage(`${err}`);
+      }
+    }
+  );
+
+  const installedExecutable = await getBlocToolsExecutable(context);
+  if (!installedExecutable) {
+    window.showErrorMessage("Failed to install the Bloc Language Server");
+    return;
+  }
+
+  return startLanguageServerWithProgress(installedExecutable);
+}
+
+export { client, tryStartLanguageServer };

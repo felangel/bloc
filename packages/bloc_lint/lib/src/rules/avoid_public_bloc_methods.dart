@@ -12,10 +12,7 @@ class AvoidPublicBlocMethods extends LintRule {
   static const rule = 'avoid_public_bloc_methods';
 
   @override
-  Listener? create(LintContext context) {
-    if (!context.document.type.isBloc) return null;
-    return _Listener(context);
-  }
+  Listener? create(LintContext context) => _Listener(context);
 }
 
 class _Listener extends Listener {
@@ -62,6 +59,7 @@ class _Listener extends Listener {
     if (!(enclosingDeclarationName?.endsWith('Bloc') ?? false)) {
       return;
     }
+    if (name.previous?.type == Keyword.SWITCH) return;
     final methodName = name.lexeme;
     if (enclosingDeclarationName == methodName) return;
     if (allowedMethods.contains(methodName)) return;

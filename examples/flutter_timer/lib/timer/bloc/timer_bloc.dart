@@ -9,8 +9,8 @@ part 'timer_state.dart';
 
 class TimerBloc extends Bloc<TimerEvent, TimerState> {
   TimerBloc({required Ticker ticker})
-      : _ticker = ticker,
-        super(const TimerInitial(_duration)) {
+    : _ticker = ticker,
+      super(const TimerInitial(_duration)) {
     on<TimerStarted>(_onStarted);
     on<TimerPaused>(_onPaused);
     on<TimerResumed>(_onResumed);

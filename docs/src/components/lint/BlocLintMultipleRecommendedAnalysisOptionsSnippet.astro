@@ -1,0 +1,11 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+include:
+    - package:very_good_analysis/analysis_options.yaml
+    - package:bloc_lint/recommended.yaml
+`;
+---
+
+<Code code={code} lang="yaml" title="analysis_options.yaml" />

@@ -9,8 +9,8 @@ part 'todos_overview_state.dart';
 class TodosOverviewBloc extends Bloc<TodosOverviewEvent, TodosOverviewState> {
   TodosOverviewBloc({
     required TodosRepository todosRepository,
-  })  : _todosRepository = todosRepository,
-        super(const TodosOverviewState()) {
+  }) : _todosRepository = todosRepository,
+       super(const TodosOverviewState()) {
     on<TodosOverviewSubscriptionRequested>(_onSubscriptionRequested);
     on<TodosOverviewTodoCompletionToggled>(_onTodoCompletionToggled);
     on<TodosOverviewTodoDeleted>(_onTodoDeleted);
@@ -34,7 +34,7 @@ class TodosOverviewBloc extends Bloc<TodosOverviewEvent, TodosOverviewState> {
         status: () => TodosOverviewStatus.success,
         todos: () => todos,
       ),
-      onError: (_, __) => state.copyWith(
+      onError: (_, _) => state.copyWith(
         status: () => TodosOverviewStatus.failure,
       ),
     );

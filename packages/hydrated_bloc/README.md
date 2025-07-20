@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/felangel/bloc/actions"><img src="https://github.com/felangel/bloc/workflows/build/badge.svg" alt="build"></a>
+  <a href="https://github.com/felangel/bloc/actions"><img src="https://github.com/felangel/bloc/actions/workflows/main.yaml/badge.svg" alt="build"></a>
   <a href="https://codecov.io/gh/felangel/bloc"><img src="https://codecov.io/gh/felangel/bloc/branch/master/graph/badge.svg" alt="codecov"></a>
   <a href="https://github.com/felangel/bloc"><img src="https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Star on Github"></a>
   <a href="https://flutter.dev/docs/development/data-and-backend/state-mgmt/options#bloc--rx"><img src="https://img.shields.io/badge/flutter-website-deepskyblue.svg" alt="Flutter Website"></a>
@@ -137,6 +137,26 @@ class CounterCubit extends HydratedCubit<int> {
 }
 ```
 
+## Handling Hydration Errors
+
+You can optionally pass a custom `onError` callback to `hydrate` in order to handle any hydration errors and/or customize the caching behavior when a hydration error occurs.
+
+```dart
+class CounterBloc extends Bloc<CounterEvent, int> with HydratedMixin {
+  CounterBloc() : super(0) {
+    hydrate(
+      onError: (error, stackTrace) {
+        // Do something in response to hydration errors.
+        // Must return a `HydrationErrorBehavior` to specify whether subsequent
+        // state changes should be persisted.
+        return HydrationErrorBehavior.retain; // Retain the previous state.
+      }
+    );
+  }
+  ...
+}
+```
+
 ## Custom Storage Directory
 
 Any `storageDirectory` can be used when creating an instance of `HydratedStorage`:
@@ -181,6 +201,23 @@ class MyHydratedStorage implements Storage {
 // main.dart
 HydratedBloc.storage = MyHydratedStorage();
 runApp(MyApp());
+```
+
+## Custom Storage Prefix
+
+The `storagePrefix` defines the unique storage namespace for your `HydratedBloc` or `HydratedCubit`.
+
+By default, it uses `runtimeType`, which isn't resilient to obfuscation or minification in production. If `runtimeType` changes, your saved state will be lost. This is especially relevant for web apps, where code changes frequently alter the minified `runtimeType`.
+
+Consider overriding `storagePrefix` in production for more resilient, persistent storage.
+
+```dart
+class CounterCubit extends HydratedCubit<int> {
+  CounterCubit() : super(0);
+
+  @override
+  String get storagePrefix => 'CounterCubit';
+}
 ```
 
 ## Testing

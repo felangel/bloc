@@ -4,7 +4,7 @@
 
 <p align="center">
 <a href="https://pub.dev/packages/bloc_lint"><img src="https://img.shields.io/pub/v/bloc_lint.svg" alt="Pub"></a>
-<a href="https://github.com/felangel/bloc/actions"><img src="https://github.com/felangel/bloc/workflows/build/badge.svg" alt="build"></a>
+<a href="https://github.com/felangel/bloc/actions"><img src="https://github.com/felangel/bloc/actions/workflows/main.yaml/badge.svg" alt="build"></a>
 <a href="https://codecov.io/gh/felangel/bloc"><img src="https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg" alt="codecov"></a>
 <a href="https://github.com/felangel/bloc"><img src="https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Star on Github"></a>
 <a href="https://flutter.dev/docs/development/data-and-backend/state-mgmt/options#bloc--rx"><img src="https://img.shields.io/badge/flutter-website-deepskyblue.svg" alt="Flutter Website"></a>
@@ -56,7 +56,7 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 
 ---
 
-# Quick Start
+## Quick Start
 
 1. Install the [bloc command-line tools](https://pub.dev/packages/bloc_tools)
 
@@ -85,6 +85,13 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 
 For more information, check out the [official documentation](https://bloclibrary.dev/lint)
 
+## Recommended Lint Rules
+
+- [avoid_flutter_imports](https://bloclibrary.dev/lint-rules/avoid_flutter_imports)
+- [avoid_public_bloc_methods](https://bloclibrary.dev/lint-rules/avoid_public_bloc_methods)
+- [avoid_public_fields](https://bloclibrary.dev/lint-rules/avoid_public_fields)
+- [prefer_void_public_cubit_methods](https://bloclibrary.dev/lint-rules/prefer_void_public_cubit_methods)
+
 ## All Lint Rules
 
 - [avoid_flutter_imports](https://bloclibrary.dev/lint-rules/avoid_flutter_imports)
@@ -92,6 +99,7 @@ For more information, check out the [official documentation](https://bloclibrary
 - [avoid_public_fields](https://bloclibrary.dev/lint-rules/avoid_public_fields)
 - [prefer_bloc](https://bloclibrary.dev/lint-rules/prefer_bloc)
 - [prefer_cubit](https://bloclibrary.dev/lint-rules/prefer_cubit)
+- [prefer_void_public_cubit_methods](https://bloclibrary.dev/lint-rules/prefer_void_public_cubit_methods)
 
 ## Dart Versions
 

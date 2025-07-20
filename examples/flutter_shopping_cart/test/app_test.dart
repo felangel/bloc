@@ -29,8 +29,7 @@ void main() {
       expect(find.byType(CatalogPage), findsOneWidget);
     });
 
-    testWidgets(
-        'can navigate back and forth '
+    testWidgets('can navigate back and forth '
         'between CartPage and CatalogPage', (tester) async {
       await tester.pumpWidget(App(shoppingRepository: shoppingRepository));
 

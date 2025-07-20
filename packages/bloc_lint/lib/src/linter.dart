@@ -21,6 +21,7 @@ final allRules = <String, LintRuleBuilder>{
   AvoidPublicFields.rule: AvoidPublicFields.new,
   PreferBlocLint.rule: PreferBlocLint.new,
   PreferCubitLint.rule: PreferCubitLint.new,
+  PreferVoidPublicCubitMethods.rule: PreferVoidPublicCubitMethods.new,
 };
 
 /// {@template linter}
@@ -35,12 +36,14 @@ class Linter {
   /// [content] is provided, it will be explicitly analyzed, otherwise the [uri]
   /// will be analyzed (both single files and directories are supported).
   Map<String, List<Diagnostic>> analyze({required Uri uri, String? content}) {
-    if (content != null) return _analyzeContent(uri, content);
-    final path = uri.isScheme('file') ? p.fromUri(uri) : uri.path;
+    final path = uri.canonicalizedPath.toLongPath();
     final directory = Directory(path);
     if (directory.existsSync()) return _analyzeDirectory(directory);
     final file = File(path);
-    if (file.existsSync()) return _analyzeFile(file);
+    if (file.existsSync() && file.isLintableDartFile) {
+      if (content != null) return _analyzeContent(uri, content);
+      return _analyzeFile(file);
+    }
     return {};
   }
 
@@ -62,8 +65,9 @@ class Linter {
 
   Map<String, List<Diagnostic>> _analyzeContent(Uri uri, String content) {
     final diagnostics = <Diagnostic>[];
-    final path = uri.isScheme('file') ? p.fromUri(uri) : uri.path;
-    final results = {path: diagnostics};
+    final canonicalizedPath = uri.canonicalizedPath;
+    final results = {canonicalizedPath: diagnostics};
+    final path = canonicalizedPath.toLongPath();
     final cwd = File(path).parent;
     final pubspecLock = findPubspecLock(cwd);
     if (pubspecLock == null) return results;
@@ -77,8 +81,12 @@ class Linter {
       return results;
     }
     final document = TextDocument(uri: uri, content: content);
+    final ignoreForFile = document.ignoreForFile;
+    if (ignoreForFile.containsTypeLint) return results;
+    final enabledRules = {...analysisOptions.lintRules}
+      ..removeWhere((rule) => ignoreForFile.contains(rule.name));
     final tokens = scan(utf8.encode(content)).tokens;
-    for (final rule in analysisOptions.lintRules) {
+    for (final rule in enabledRules) {
       final context = LintContext._(rule: rule, document: document);
       final listener = rule.create(context);
       if (listener == null) continue;
@@ -124,7 +132,23 @@ extension on FileSystemEntity {
     return this is File &&
         p.extension(path) == '.dart' &&
         !p.basename(path).endsWith('.g.dart') &&
-        !p.split(path).contains('.dart_tool');
+        !p.split(path).any((segment) => segment.startsWith('.'));
+  }
+}
+
+extension on String {
+  String toLongPath() {
+    // Support long file paths on Windows
+    // https://github.com/dart-lang/sdk/issues/27825
+    if (Platform.isWindows) return r'\\?\' + this;
+    return this;
+  }
+}
+
+extension on Uri {
+  String get canonicalizedPath {
+    final path = isScheme('file') ? p.fromUri(this) : this.path;
+    return p.normalize(p.absolute(path));
   }
 }
 
@@ -154,6 +178,8 @@ class LintContext {
     required String message,
     String hint = '',
   }) {
+    final ignore = document.ignoreForLine(range: range);
+    if (ignore.containsTypeLint || ignore.contains(_rule.name)) return;
     _diagnostics.add(
       Diagnostic(
         range: range,
@@ -199,4 +225,9 @@ class LintContext {
       hint: hint,
     );
   }
+}
+
+extension on Set<String> {
+  /// Whether the set of strings contains `type=lint`.
+  bool get containsTypeLint => contains('type=lint');
 }

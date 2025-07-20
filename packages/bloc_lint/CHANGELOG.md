@@ -1,3 +1,37 @@
+# 0.2.1
+
+- feat: ignore dot directories
+- fix: include bloc/cubit instances defined in any file
+- chore: various dependency upgrades
+
+# 0.2.0
+
+- chore: stable `0.2.0` release 🎉
+- chore: various dependency upgrades
+- fix: ignore `.fvm`
+
+# 0.2.0-dev.6
+
+- fix: `prefer_void_public_cubit_methods` false positive when using switch expressions
+- fix: `avoid_public_bloc_methods` false positive when using switch expressions
+
+# 0.2.0-dev.5
+
+- fix: `avoid_public_bloc_methods` false positive when using switch expressions
+
+# 0.2.0-dev.4
+
+- fix: various bug fixes for Windows
+
+# 0.2.0-dev.3
+
+- feat: add support for `// ignore`
+- feat: add support for `// ignore_for_file`
+
+# 0.2.0-dev.2
+
+- feat: add [prefer_void_public_cubit_methods](https://bloclibrary.dev/lint-rules/prefer_void_public_cubit_methods)
+
 # 0.2.0-dev.1
 
 - fix: package resolution in `include` on windows

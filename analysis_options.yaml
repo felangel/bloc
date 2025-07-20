@@ -13,6 +13,10 @@ analyzer:
     missing_return: error
     record_literal_one_positional_no_trailing_comma: error
 
+formatter:
+  page_width: 80
+  trailing_commas: preserve
+
 linter:
   rules:
     - always_declare_return_types
@@ -163,6 +167,7 @@ linter:
     - sort_constructors_first
     - sort_pub_dependencies
     - sort_unnamed_constructors_first
+    - strict_top_level_inference
     - test_types_in_equals
     - throw_in_finally
     - tighten_type_of_initializing_formals
@@ -193,6 +198,7 @@ linter:
     - unnecessary_string_interpolations
     - unnecessary_this
     - unnecessary_to_list_in_spreads
+    - unnecessary_underscores
     - unreachable_from_main
     - unrelated_type_equality_checks
     - unsafe_html
