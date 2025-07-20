@@ -1,0 +1,57 @@
+---
+title: Prefer File Naming Conventions
+description: The prefer_file_naming_conventions rule.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/prefer_file_naming_conventions/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/prefer_file_naming_conventions/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+	<Badge text="recommended" variant="success" />
+</div>
+
+Prefer following file naming conventions.
+
+:::note
+
+This lint rule was introduced in version `0.3.0` of
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint)
+
+:::
+
+## Rationale
+
+For consistency, ease of maintenance, and separation of concerns prefer to
+define bloc and cubit instances in their respective Dart files instead of
+inlining them.
+
+:::tip
+
+Consider using the `bloc new <component>` command from
+[package:bloc_tools](https://pub.dev/packages/bloc_tools) to quickly and
+consistently generate new bloc/cubit instances.
+
+:::
+
+## Examples
+
+**Prefer** declaring bloc/cubit instances in their own respective files.
+
+**GOOD**:
+
+<GoodSnippet />
+
+**BAD**:
+
+<BadSnippet />
+
+## Enable
+
+To enable the `prefer_file_naming_conventions` rule, add it to your
+`analysis_options.yaml` under `bloc` > `rules`:
+
+<EnableRuleSnippet name="prefer_file_naming_conventions" />
