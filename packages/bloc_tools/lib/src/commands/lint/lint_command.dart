@@ -32,7 +32,7 @@ class LintCommand extends Command<int> {
     if (rest.isEmpty) {
       _logger.info('''
 ${styleBold.wrap(lightRed.wrap('error'))}: No files specified.
-Usage: bloc lint [OPTIONS] [files]...''');
+Usage: bloc lint [options] [files]...''');
       return ExitCode.usage.code;
     }
 
@@ -43,7 +43,7 @@ Usage: bloc lint [OPTIONS] [files]...''');
 
     if (diagnostics.isEmpty) {
       _logger.info(
-        '${styleBold.wrap(lightRed.wrap('error'))}: No target files found.',
+        '${styleBold.wrap(lightRed.wrap('error'))}: No files found.',
       );
       return ExitCode.usage.code;
     }
