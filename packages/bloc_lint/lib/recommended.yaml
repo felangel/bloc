@@ -3,4 +3,5 @@ bloc:
     - avoid_flutter_imports
     - avoid_public_bloc_methods
     - avoid_public_fields
+    - prefer_file_naming_conventions
     - prefer_void_public_cubit_methods

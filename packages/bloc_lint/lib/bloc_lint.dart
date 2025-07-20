@@ -11,8 +11,9 @@ export 'src/rules/rules.dart'
         AvoidFlutterImports,
         AvoidPublicBlocMethods,
         AvoidPublicFields,
-        PreferBlocLint,
-        PreferCubitLint,
+        PreferBloc,
+        PreferCubit,
+        PreferFileNamingConventions,
         PreferVoidPublicCubitMethods;
 export 'src/text_document.dart'
     show

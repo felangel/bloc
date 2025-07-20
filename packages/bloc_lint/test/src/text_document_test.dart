@@ -166,7 +166,7 @@ void main() {
       final document = TextDocument(
         uri: Uri.parse('counter_bloc.dart'),
         content: '''
-// ignore_for_file: ${PreferBlocLint.rule}, ${PreferCubitLint.rule}
+// ignore_for_file: ${PreferBloc.rule}, ${PreferCubit.rule}
 void main() {
   print("hello world");
 }
@@ -174,7 +174,7 @@ void main() {
       );
       expect(
         document.ignoreForFile,
-        equals({PreferBlocLint.rule, PreferCubitLint.rule}),
+        equals({PreferBloc.rule, PreferCubit.rule}),
       );
     });
 
@@ -182,8 +182,8 @@ void main() {
       final document = TextDocument(
         uri: Uri.parse('counter_bloc.dart'),
         content: '''
-// ignore_for_file: ${PreferBlocLint.rule}
-// ignore_for_file: ${PreferCubitLint.rule}
+// ignore_for_file: ${PreferBloc.rule}
+// ignore_for_file: ${PreferCubit.rule}
 void main() {
   print("hello world");
 }
@@ -191,7 +191,7 @@ void main() {
       );
       expect(
         document.ignoreForFile,
-        equals({PreferBlocLint.rule, PreferCubitLint.rule}),
+        equals({PreferBloc.rule, PreferCubit.rule}),
       );
     });
 
@@ -200,15 +200,15 @@ void main() {
         uri: Uri.parse('counter_bloc.dart'),
         content: '''
 void main() {
-// ignore_for_file: ${PreferBlocLint.rule}
+// ignore_for_file: ${PreferBloc.rule}
   print("hello world");
 }
-// ignore_for_file: ${PreferCubitLint.rule}
+// ignore_for_file: ${PreferCubit.rule}
 ''',
       );
       expect(
         document.ignoreForFile,
-        equals({PreferBlocLint.rule, PreferCubitLint.rule}),
+        equals({PreferBloc.rule, PreferCubit.rule}),
       );
     });
   });
@@ -232,7 +232,7 @@ import 'package:flutter/material.dart';
       final document = TextDocument(
         uri: Uri.parse('counter_cubit.dart'),
         content: '''
-// ignore: ${PreferBlocLint.rule}, ${PreferCubitLint.rule}
+// ignore: ${PreferBloc.rule}, ${PreferCubit.rule}
 import 'package:flutter/material.dart';''',
       );
       const range = Range(
@@ -241,7 +241,7 @@ import 'package:flutter/material.dart';''',
       );
       expect(
         document.ignoreForLine(range: range),
-        equals({PreferBlocLint.rule, PreferCubitLint.rule}),
+        equals({PreferBloc.rule, PreferCubit.rule}),
       );
     });
 
@@ -249,7 +249,7 @@ import 'package:flutter/material.dart';''',
       final document = TextDocument(
         uri: Uri.parse('counter_cubit.dart'),
         content: '''
-import 'package:flutter/material.dart'; // ignore: ${PreferBlocLint.rule}, ${PreferCubitLint.rule}''',
+import 'package:flutter/material.dart'; // ignore: ${PreferBloc.rule}, ${PreferCubit.rule}''',
       );
       const range = Range(
         start: Position(character: 0, line: 0),
@@ -257,7 +257,7 @@ import 'package:flutter/material.dart'; // ignore: ${PreferBlocLint.rule}, ${Pre
       );
       expect(
         document.ignoreForLine(range: range),
-        equals({PreferBlocLint.rule, PreferCubitLint.rule}),
+        equals({PreferBloc.rule, PreferCubit.rule}),
       );
     });
   });

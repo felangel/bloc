@@ -67,7 +67,7 @@ Our top sponsors are shown below! [[Become a Sponsor](https://github.com/sponsor
 2. Install the [bloc_lint](https://pub.dev/packages/bloc_lint) package
 
    ```sh
-   dart pub add --dev bloc_lint:^0.2.0
+   dart pub add --dev bloc_lint
    ```
 
 3. Add an `analysis_options.yaml` to the root of your project with the
@@ -90,6 +90,7 @@ For more information, check out the [official documentation](https://bloclibrary
 - [avoid_flutter_imports](https://bloclibrary.dev/lint-rules/avoid_flutter_imports)
 - [avoid_public_bloc_methods](https://bloclibrary.dev/lint-rules/avoid_public_bloc_methods)
 - [avoid_public_fields](https://bloclibrary.dev/lint-rules/avoid_public_fields)
+- [prefer_file_naming_conventions](https://bloclibrary.dev/lint-rules/prefer_file_naming_conventions)
 - [prefer_void_public_cubit_methods](https://bloclibrary.dev/lint-rules/prefer_void_public_cubit_methods)
 
 ## All Lint Rules
@@ -99,6 +100,7 @@ For more information, check out the [official documentation](https://bloclibrary
 - [avoid_public_fields](https://bloclibrary.dev/lint-rules/avoid_public_fields)
 - [prefer_bloc](https://bloclibrary.dev/lint-rules/prefer_bloc)
 - [prefer_cubit](https://bloclibrary.dev/lint-rules/prefer_cubit)
+- [prefer_file_naming_conventions](https://bloclibrary.dev/lint-rules/prefer_file_naming_conventions)
 - [prefer_void_public_cubit_methods](https://bloclibrary.dev/lint-rules/prefer_void_public_cubit_methods)
 
 ## Dart Versions
