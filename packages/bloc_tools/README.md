@@ -56,10 +56,10 @@ Analyze Dart source code using the official bloc linter to improve code quality 
 **Usage**
 
 ```sh
-# Lint the current directory.
+# Lint the current directory
 bloc lint .
 
-# Lint multiple files.
+# Lint multiple files
 bloc lint ./path/to/bloc.dart ./path/to/cubit.dart
 ```
 
