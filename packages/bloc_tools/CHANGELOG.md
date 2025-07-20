@@ -1,3 +1,8 @@
+# 0.1.0-dev.17
+
+- deps: bump `pkg:bloc_lint` to `^0.2.1`
+- docs: various `README.md` improvements
+
 # 0.1.0-dev.16
 
 - deps: bump `pkg:bloc_lint` to `^0.2.0`
