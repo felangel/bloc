@@ -32,7 +32,7 @@ Bloc can be installed from the [VSCode Marketplace](https://marketplace.visualst
 
 ## Language Server
 
-By default, the bloc language server started which enables custom bloc diagnotic reporting. See [https://pub.dev/packages/bloc_lint] for more information about supported lint rules.
+By default, the bloc language server started which enables custom bloc diagnotic reporting. See [the official documentation](https://bloclibrary.dev/lint) for more information about configuring the linter and the various supported lint rules.
 
 ## Commands
 
