@@ -21,9 +21,38 @@ class CounterBloc extends Bloc<CounterEvent, int> {
     );
 
     lintTest(
+      'lints when CounterBloc is declared in counter_cubit.dart',
+      rule: PreferFileNamingConventions.new,
+      path: 'counter_cubit.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+
+enum CounterEvent { increment, decrement }
+class CounterBloc extends Bloc<CounterEvent, int> {
+      ^^^^^^^^^^^
+  CounterBloc() : super(0);
+}
+''',
+    );
+
+    lintTest(
       'lints when CounterCubit is declared in main.dart',
       rule: PreferFileNamingConventions.new,
       path: 'main.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+
+class CounterCubit extends Cubit<int> {
+      ^^^^^^^^^^^^
+  CounterCubit() : super(0);       
+}
+''',
+    );
+
+    lintTest(
+      'lints when CounterCubit is declared in counter_bloc.dart',
+      rule: PreferFileNamingConventions.new,
+      path: 'counter_bloc.dart',
       content: '''
 import 'package:bloc/bloc.dart';
 

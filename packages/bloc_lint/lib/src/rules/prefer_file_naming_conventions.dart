@@ -1,5 +1,6 @@
 import 'package:bloc_lint/bloc_lint.dart';
 import 'package:bloc_lint/src/string_case.dart';
+import 'package:path/path.dart' as path;
 
 /// {@template prefer_file_naming_conventions}
 /// The prefer_file_naming_conventions lint rule.
@@ -13,11 +14,7 @@ class PreferFileNamingConventions extends LintRule {
   static const rule = 'prefer_file_naming_conventions';
 
   @override
-  Listener? create(LintContext context) {
-    if (context.document.type.isBloc) return null;
-    if (context.document.type.isCubit) return null;
-    return _Listener(context);
-  }
+  Listener create(LintContext context) => _Listener(context);
 }
 
 class _Listener extends Listener {
@@ -50,11 +47,13 @@ class _Listener extends Listener {
 
     if (superclazz.lexeme.endsWith('Bloc') ||
         superclazz.lexeme.endsWith('Cubit')) {
+      final expectedFileName = '${name.lexeme.toSnakeCase()}.dart';
+      final actualFileName = path.basename(context.document.uri.toString());
+      if (actualFileName == expectedFileName) return;
       context.reportToken(
         token: name,
         message: 'Prefer following file naming conventions.',
-        hint:
-            '''Prefer moving ${name.lexeme} into ${name.lexeme.toSnakeCase()}.dart''',
+        hint: 'Prefer moving ${name.lexeme} into $expectedFileName.dart',
       );
     }
   }
