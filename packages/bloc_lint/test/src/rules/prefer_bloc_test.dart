@@ -4,10 +4,10 @@ import 'package:test/test.dart';
 import '../lint_test_helper.dart';
 
 void main() {
-  group(PreferBlocLint, () {
+  group(PreferBloc, () {
     lintTest(
       'lints when class extends Cubit',
-      rule: PreferBlocLint.new,
+      rule: PreferBloc.new,
       path: 'counter_cubit.dart',
       content: '''
 import 'package:bloc/bloc.dart';
@@ -21,7 +21,7 @@ class CounterCubit extends Cubit<int> {
 
     lintTest(
       'lints when class extends HydratedCubit',
-      rule: PreferBlocLint.new,
+      rule: PreferBloc.new,
       path: 'counter_cubit.dart',
       content: '''
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -35,7 +35,7 @@ class CounterCubit extends HydratedCubit<int> {
 
     lintTest(
       'lints when class extends MockCubit',
-      rule: PreferBlocLint.new,
+      rule: PreferBloc.new,
       path: 'app_test.dart',
       content: '''
 import 'package:bloc/bloc.dart';
@@ -49,7 +49,7 @@ class _MockCounterCubit extends MockCubit<int> implements CounterCubit {}
 
     lintTest(
       'does not lint when class extends Bloc',
-      rule: PreferBlocLint.new,
+      rule: PreferBloc.new,
       path: 'counter_bloc.dart',
       content: '''
 import 'package:bloc/bloc.dart';
@@ -63,7 +63,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 
     lintTest(
       'does not lint when class extends MockBloc',
-      rule: PreferBlocLint.new,
+      rule: PreferBloc.new,
       path: 'app_test.dart',
       content: '''
 import 'package:bloc/bloc.dart';

@@ -3,9 +3,9 @@ import 'package:bloc_lint/bloc_lint.dart';
 /// {@template prefer_bloc}
 /// The prefer_bloc lint rule.
 /// {@endtemplate}
-class PreferBlocLint extends LintRule {
+class PreferBloc extends LintRule {
   /// {@macro prefer_bloc}
-  PreferBlocLint([Severity? severity])
+  PreferBloc([Severity? severity])
     : super(name: rule, severity: severity ?? Severity.info);
 
   /// The name of the lint rule.
