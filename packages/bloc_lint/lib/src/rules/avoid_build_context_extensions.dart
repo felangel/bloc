@@ -1,15 +1,15 @@
 import 'package:bloc_lint/bloc_lint.dart';
 
-/// {@template avoid_context_extensions}
-/// The avoid_context_extensions lint rule.
+/// {@template avoid_build_context_extensions}
+/// The avoid_build_context_extensions lint rule.
 /// {@endtemplate}
-class AvoidContextExtensions extends LintRule {
-  /// {@macro avoid_context_extensions}
-  AvoidContextExtensions([Severity? severity])
+class AvoidBuildContextExtensions extends LintRule {
+  /// {@macro avoid_build_context_extensions}
+  AvoidBuildContextExtensions([Severity? severity])
     : super(name: rule, severity: severity ?? Severity.warning);
 
   /// The name of the lint rule.
-  static const rule = 'avoid_context_extensions';
+  static const rule = 'avoid_build_context_extensions';
 
   @override
   Listener? create(LintContext context) {
@@ -22,13 +22,7 @@ class _Listener extends Listener {
 
   final LintContext context;
 
-  static const _contextExtensions = {
-    'read',
-    'watch',
-    'select',
-    'listen',
-  };
-
+  static const _contextExtensions = {'read', 'watch', 'select', 'listen'};
   static const _declarationKeywords = {'final', 'const', 'var', 'late'};
 
   /// Stores the type name of the variable currently being initialized.
@@ -62,8 +56,9 @@ class _Listener extends Listener {
 
     final prev = token.previous;
     if (prev == null || prev.lexeme != '.') return;
+
     final target = prev.previous;
-    if (target == null || target.lexeme != 'context') return;
+    if (target?.lexeme != 'context') return;
 
     // Case 1: Explicit type -> context.read<MyBloc>()
     final openBracketToken = token.next;

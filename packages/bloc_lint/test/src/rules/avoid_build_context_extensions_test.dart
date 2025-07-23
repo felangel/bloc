@@ -4,11 +4,11 @@ import 'package:test/test.dart';
 import '../lint_test_helper.dart';
 
 void main() {
-  group('AvoidContextExtensions', () {
+  group(AvoidBuildContextExtensions, () {
     group('context.read', () {
       lintTest(
         'lints when using context.read in a field assignment',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -35,7 +35,7 @@ class _SampleState extends State<Sample> {
 
       lintTest(
         'lints when using context.read in a variable assignment',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -56,7 +56,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'lints when using context.read in a method call',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -77,7 +77,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'lints when declared with another variable on the same line',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -98,7 +98,7 @@ class Sample extends StatelessWidget {
     group('context.watch', () {
       lintTest(
         'lints when using context.watch in a getter',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -125,7 +125,7 @@ class _SampleState extends State<Sample> {
 
       lintTest(
         'lints when using context.watch in a variable assignment',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -146,7 +146,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'lints when using context.watch in a widget tree',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: r'''
 import 'package:flutter/material.dart';
@@ -166,7 +166,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'lints when used inside a ternary operator',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -187,7 +187,7 @@ class Sample extends StatelessWidget {
     group('context.select', () {
       lintTest(
         'lints when using context.select in a variable assignment',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -209,7 +209,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'lints when using context.select in a widget tree',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: r'''
 import 'package:flutter/material.dart';
@@ -229,7 +229,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'lints when using context.select in a method call',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -252,7 +252,7 @@ class Sample extends StatelessWidget {
     group('context.listen', () {
       lintTest(
         'lints when using context.listen in a method call',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: r'''
 import 'package:flutter/material.dart';
@@ -276,7 +276,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'lints when using context.listen in a variable assignment',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: r'''
 import 'package:flutter/material.dart';
@@ -300,7 +300,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'lints when using context.listen in a try-catch block',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: r'''
 import 'package:flutter/material.dart';
@@ -330,7 +330,7 @@ class Sample extends StatelessWidget {
     group('negative tests - should not lint', () {
       lintTest(
         'does not lint when using BlocProvider.of',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -350,7 +350,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'does not lint when using other method calls on context',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -371,7 +371,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'does not lint when using context extensions on other variables',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -392,7 +392,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'does not lint when using BlocProvider without .of',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -414,7 +414,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'does not lint when using context in a string',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -434,7 +434,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'does not lint when using context.read with non-bloc types',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -454,7 +454,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'does not lint when using context.watch with non-bloc types',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -474,7 +474,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'does not lint when using context.select with non-bloc types',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -494,7 +494,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'does not lint when using context.listen with non-bloc types',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -517,7 +517,7 @@ class Sample extends StatelessWidget {
       lintTest(
         'does not lint when using context extensions with types that do not end'
         ' with Bloc or Cubit',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -540,7 +540,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'does not lint when using context extensions without type parameters',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -562,7 +562,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'lints when using context.read with type inference for Bloc',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -583,7 +583,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'lints when using context.watch with type inference for Cubit',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -605,7 +605,7 @@ class Sample extends StatelessWidget {
       lintTest(
         'does not lint when using context.read with type inference for non-bloc'
         ' types',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -625,7 +625,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'lints when using context.read with Bloc type',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -646,7 +646,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'lints when using context.watch with Cubit type',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -667,7 +667,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'does not lint when using a type alias for a Bloc',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';
@@ -688,7 +688,7 @@ class Sample extends StatelessWidget {
 
       lintTest(
         'does not lint when the call target is not context (e.g. cascade)',
-        rule: AvoidContextExtensions.new,
+        rule: AvoidBuildContextExtensions.new,
         path: 'sample.dart',
         content: '''
 import 'package:flutter/material.dart';

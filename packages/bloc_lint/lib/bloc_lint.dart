@@ -8,7 +8,7 @@ export 'src/lint_rule.dart' show LintRule, LintRuleBuilder;
 export 'src/linter.dart' show LintContext, Linter;
 export 'src/rules/rules.dart'
     show
-        AvoidContextExtensions,
+        AvoidBuildContextExtensions,
         AvoidFlutterImports,
         AvoidPublicBlocMethods,
         AvoidPublicFields,
