@@ -1,0 +1,20 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class MyWidget extends StatelessWidget {
+    const MyWidget({super.key});
+
+    @override
+    Widget build(BuildContext context) {
+        final count = context.watch<CounterCubit>().state;
+        return Text('$count');
+    }
+}
+`;
+---
+
+<Code code={code} lang="dart" title="my_widget.dart" />

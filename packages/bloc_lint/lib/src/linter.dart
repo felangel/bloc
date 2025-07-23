@@ -23,7 +23,7 @@ final allRules = <String, LintRuleBuilder>{
   PreferCubit.rule: PreferCubit.new,
   PreferFileNamingConventions.rule: PreferFileNamingConventions.new,
   PreferVoidPublicCubitMethods.rule: PreferVoidPublicCubitMethods.new,
-  PreferContextExtensions.rule: PreferContextExtensions.new,
+  PreferBuildContextExtensions.rule: PreferBuildContextExtensions.new,
 };
 
 /// {@template linter}
