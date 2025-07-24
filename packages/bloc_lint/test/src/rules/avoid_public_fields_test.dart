@@ -17,7 +17,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc() : super(0);
 
   var count = 0;
-  ^^^^^^^^^^^^^
+  ^^^^^^^^^^^^^^
 }
 ''',
     );
@@ -34,7 +34,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc() : super(0);
 
   var count = 0;
-  ^^^^^^^^^^^^^
+  ^^^^^^^^^^^^^^
 }
 ''',
     );
@@ -50,7 +50,7 @@ class CounterCubit extends Cubit<int> {
   CounterCubit() : super(0);
 
   var count = 0;
-  ^^^^^^^^^^^^^
+  ^^^^^^^^^^^^^^
 }
 ''',
     );
@@ -67,7 +67,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc() : super(0);
 
   int count = 0;
-  ^^^^^^^^^^^^^
+  ^^^^^^^^^^^^^^
 }
 ''',
     );
@@ -83,7 +83,7 @@ class CounterCubit extends Cubit<int> {
   CounterCubit() : super(0);
 
   int count = 0;
-  ^^^^^^^^^^^^^
+  ^^^^^^^^^^^^^^
 }
 ''',
     );
@@ -100,7 +100,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc(this.count) : super(0);
 
   final int count;
-  ^^^^^^^^^^^^^^^
+  ^^^^^^^^^^^^^^^^
 }
 ''',
     );
@@ -116,7 +116,7 @@ class CounterCubit extends Cubit<int> {
   CounterCubit(this.count) : super(0);
 
   final int count;
-  ^^^^^^^^^^^^^^^
+  ^^^^^^^^^^^^^^^^
 }
 ''',
     );
@@ -134,7 +134,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc(this.count) : super(0);
 
   final _Count count;
-  ^^^^^^^^^^^^^^^^^^
+  ^^^^^^^^^^^^^^^^^^^
 }
 ''',
     );
@@ -151,7 +151,7 @@ class CounterCubit extends Cubit<int> {
   CounterCubit(this.count) : super(0);
 
   final _Count count;
-  ^^^^^^^^^^^^^^^^^^
+  ^^^^^^^^^^^^^^^^^^^
 }
 ''',
     );
@@ -169,7 +169,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc(this.count) : super(0);
 
   late _Count count;
-  ^^^^^^^^^^^^^^^^^
+  ^^^^^^^^^^^^^^^^^^
 }
 ''',
     );
@@ -187,7 +187,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc(this.count) : super(0);
 
   late final _Count count;
-  ^^^^^^^^^^^^^^^^^^^^^^^
+  ^^^^^^^^^^^^^^^^^^^^^^^^
 }
 ''',
     );
@@ -204,7 +204,7 @@ class CounterCubit extends Cubit<int> {
   CounterCubit(this.count) : super(0);
 
   late final _Count count;
-  ^^^^^^^^^^^^^^^^^^^^^^^
+  ^^^^^^^^^^^^^^^^^^^^^^^^
 }
 ''',
     );
@@ -221,7 +221,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc(this.count) : super(0);
 
   late int count;
-  ^^^^^^^^^^^^^^
+  ^^^^^^^^^^^^^^^
 }
 ''',
     );
@@ -237,7 +237,7 @@ class CounterCubit extends Cubit<int> {
   CounterCubit(this.count) : super(0);
 
   late int count;
-  ^^^^^^^^^^^^^^
+  ^^^^^^^^^^^^^^^
 }
 ''',
     );
@@ -254,7 +254,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc(this.count) : super(0);
 
   late final int count;
-  ^^^^^^^^^^^^^^^^^^^^
+  ^^^^^^^^^^^^^^^^^^^^^
 }
 ''',
     );
@@ -270,7 +270,7 @@ class CounterCubit extends Cubit<int> {
   CounterCubit(this.count) : super(0);
 
   late final int count;
-  ^^^^^^^^^^^^^^^^^^^^
+  ^^^^^^^^^^^^^^^^^^^^^
 }
 ''',
     );
