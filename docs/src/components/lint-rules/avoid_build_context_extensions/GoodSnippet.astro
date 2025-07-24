@@ -13,9 +13,7 @@ class CounterPage extends StatelessWidget {
     return Column(
       children: [
         BlocBuilder<CounterBloc, int>(
-          builder: (context, state) {
-            return Text('Count: \$state');
-          },
+          builder: (context, state) => Text('Count: \$state'),
         ),
         ElevatedButton(
           onPressed: () {

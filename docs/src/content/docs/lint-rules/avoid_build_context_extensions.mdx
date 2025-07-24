@@ -17,14 +17,19 @@ Avoid using `BuildContext` extensions to access `Bloc` or `Cubit` instances.
 
 ## Rationale
 
-Prefer using `BlocProvider.of<T>(context)`, `BlocBuilder`, and `BlocSelector`
-over `BuildContext` extensions like `context.read<T>()`, `context.watch<T>()`,
-and `context.select<T, R>(...)` for more explicit code and to enforce
-consistency.
+For consistency and for the sake of being more explicit, prefer avoiding
+`BuildContext` extensions and instead directly use the underlying methods.
+
+| extension        | explicit method                                                     |
+| ---------------- | ------------------------------------------------------------------- |
+| `context.read`   | `BlocProvider.of<Bloc>(context, listen: false)`                     |
+| `context.watch`  | `BlocBuilder<Bloc, State>(...)` or `BlocProvider.of<Bloc>(context)` |
+| `context.select` | `BlocSelector<Bloc, State>(...)`                                    |
 
 ## Examples
 
-**Avoid** using `BuildContext` extensions to access `Bloc` or `Cubit` instances.
+**Avoid** using `BuildContext` extensions to interact with `Bloc` or `Cubit`
+instances.
 
 **BAD**:
 

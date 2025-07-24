@@ -97,7 +97,7 @@ extension on _ContextMethod {
       case _ContextMethod.read:
         return 'BlocProvider.of<Bloc>(context, listen: false)';
       case _ContextMethod.watch:
-        return 'BlocBuilder<Bloc, State>(...)';
+        return '''BlocBuilder<Bloc, State>(...) or BlocProvider.of<Bloc>(context)''';
       case _ContextMethod.select:
         return 'BlocSelector<Bloc, State>(...)';
     }
