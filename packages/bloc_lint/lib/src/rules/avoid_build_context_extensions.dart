@@ -13,9 +13,7 @@ class AvoidBuildContextExtensions extends LintRule {
   static const rule = 'avoid_build_context_extensions';
 
   @override
-  Listener? create(LintContext context) {
-    return _Listener(context);
-  }
+  Listener create(LintContext context) => _Listener(context);
 }
 
 // Supported `BuildContext` extensions methods.
