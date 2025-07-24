@@ -24,8 +24,9 @@ This lint rule was introduced in version `0.3.0` of
 
 ## Rationale
 
-For consistency and for the sake of being more explicit, prefer avoiding
-`BuildContext` extensions and instead directly use the underlying methods.
+For consistency and for the sake of being explicit, prefer directly using the
+underlying methods instead of `BuildContext` extensions. This is also beneficial
+for testing because it is not possible to mock an extension method.
 
 | extension        | explicit method                                                     |
 | ---------------- | ------------------------------------------------------------------- |
