@@ -1,4 +1,5 @@
 import 'package:bloc_lint/bloc_lint.dart';
+import 'package:collection/collection.dart';
 
 /// {@template avoid_build_context_extensions}
 /// The avoid_build_context_extensions lint rule.
@@ -17,77 +18,94 @@ class AvoidBuildContextExtensions extends LintRule {
   }
 }
 
+// Supported `BuildContext` extensions methods.
+enum _ContextMethod { read, watch, select }
+
 class _Listener extends Listener {
   _Listener(this.context);
 
   final LintContext context;
 
-  static const _contextExtensions = {'read', 'watch', 'select', 'listen'};
   static const _declarationKeywords = {'final', 'const', 'var', 'late'};
 
-  /// Stores the type name of the variable currently being initialized.
-  /// This is the single source of state for the type inference case.
-  /// It's set in `beginInitializedIdentifier` and cleared in
-  /// `endInitializedIdentifier`.
-  String? _inferredTypeName;
+  /// Stores the type token of the variable currently being initialized.
+  Token? _implicitType;
 
   @override
   void beginInitializedIdentifier(Token nameToken) {
     final prev = nameToken.previous;
-
     if (prev != null &&
         prev.type == TokenType.IDENTIFIER &&
         !_declarationKeywords.contains(prev.lexeme)) {
-      _inferredTypeName = prev.lexeme;
+      _implicitType = prev;
     }
     super.beginInitializedIdentifier(nameToken);
   }
 
   @override
   void endInitializedIdentifier(Token nameToken) {
-    _inferredTypeName = null;
+    _implicitType = null;
     super.endInitializedIdentifier(nameToken);
   }
 
   @override
   void handleIdentifier(Token token, IdentifierContext _) {
-    final methodName = token.lexeme;
-    if (!_contextExtensions.contains(methodName)) return;
+    final method = _ContextMethod.values.firstWhereOrNull(
+      (value) => value.name == token.lexeme,
+    );
+    if (method == null) return;
 
     final prev = token.previous;
-    if (prev == null || prev.lexeme != '.') return;
+    if (prev == null || prev.type != TokenType.PERIOD) return;
 
     final target = prev.previous;
-    if (target?.lexeme != 'context') return;
+    if (target == null) return;
+    if (target.lexeme != 'context') return;
 
-    // Case 1: Explicit type -> context.read<MyBloc>()
+    // Case 1: implicit type
+    // e.g. final MyBloc bloc = context.read();
+    final isImplicitBlocType = _implicitType?.isBlocType ?? false;
+    if (isImplicitBlocType) return _report(method, target, token);
+
+    // Case 2: explicit type
+    // e.g. final bloc = context.read<MyBloc>();
     final openBracketToken = token.next;
-    if (openBracketToken != null && openBracketToken.lexeme == '<') {
-      final typeToken = openBracketToken.next;
-      if (typeToken != null &&
-          typeToken.type == TokenType.IDENTIFIER &&
-          _isBlocTypeName(typeToken.lexeme)) {
-        _report(token);
-        return;
-      }
-    }
+    if (openBracketToken == null) return;
+    if (openBracketToken.type != TokenType.LT) return;
 
-    // Case 2: Inferred type -> final MyBloc bloc = context.read();
-    if (_isBlocTypeName(_inferredTypeName)) {
-      _report(token);
-    }
+    final typeToken = openBracketToken.next;
+    if (typeToken == null) return;
+    if (typeToken.type != TokenType.IDENTIFIER) return;
+    if (!typeToken.isBlocType) return;
+
+    return _report(method, target, token);
   }
 
-  bool _isBlocTypeName(String? typeName) {
-    if (typeName == null) return false;
-    return typeName.endsWith('Bloc') || typeName.endsWith('Cubit');
-  }
-
-  void _report(Token token) {
-    context.reportToken(
-      token: token,
-      message: 'Avoid using BuildContext extensions for Blocs/Cubits.',
-      hint: 'Prefer using BlocProvider.of<T>(context) instead.',
+  void _report(_ContextMethod method, Token beginToken, Token endToken) {
+    context.reportTokenRange(
+      beginToken: beginToken,
+      endToken: endToken,
+      message: 'Avoid using BuildContext extensions.',
+      hint: 'Prefer using ${method.alternative} instead.',
     );
+  }
+}
+
+extension on _ContextMethod {
+  String get alternative {
+    switch (this) {
+      case _ContextMethod.read:
+        return 'BlocProvider.of<Bloc>(context, listen: false)';
+      case _ContextMethod.watch:
+        return 'BlocBuilder<Bloc, State>(...)';
+      case _ContextMethod.select:
+        return 'BlocSelector<Bloc, State>(...)';
+    }
+  }
+}
+
+extension on Token {
+  bool get isBlocType {
+    return lexeme.endsWith('Bloc') || lexeme.endsWith('Cubit');
   }
 }

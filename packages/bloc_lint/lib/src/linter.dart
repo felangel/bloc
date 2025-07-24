@@ -205,7 +205,7 @@ class LintContext {
     report(
       range: Range(
         start: document.positionAt(beginToken.offset),
-        end: document.positionAt(endToken.offset),
+        end: document.positionAt(endToken.offset + endToken.length),
       ),
       message: message,
       hint: hint,

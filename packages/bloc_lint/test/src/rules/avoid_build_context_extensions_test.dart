@@ -5,407 +5,313 @@ import '../lint_test_helper.dart';
 
 void main() {
   group(AvoidBuildContextExtensions, () {
-    group('context.read', () {
-      lintTest(
-        'lints when using context.read in a field assignment',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: '''
-import 'package:flutter/material.dart';
+    group('lints when', () {
+      group('context.read', () {
+        lintTest(
+          'is used in a field assignment',
+          rule: AvoidBuildContextExtensions.new,
+          path: 'my_widget.dart',
+          content: '''
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Sample extends StatefulWidget {
-  const Sample({super.key});
+class MyWidget extends StatefulWidget {
+  const MyWidget({super.key});
 
   @override
-  State<Sample> createState() => _SampleState();
+  State<MyWidget> createState() => _MyWidgetState();
 }
 
-class _SampleState extends State<Sample> {
+class _MyWidgetState extends State<MyWidget> {
   late final a = context.read<CounterCubit>();
-                         ^^^^
+                 ^^^^^^^^^^^^
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return const SizedBox();
   }
 }
 ''',
-      );
+        );
 
-      lintTest(
-        'lints when using context.read in a variable assignment',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: '''
-import 'package:flutter/material.dart';
+        lintTest(
+          'is used in a variable assignment',
+          rule: AvoidBuildContextExtensions.new,
+          path: 'my_widget.dart',
+          content: '''
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Sample extends StatelessWidget {
-  const Sample({super.key});
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<CounterCubit>();
-                          ^^^^
-    return Container();
+                  ^^^^^^^^^^^^
+    return const SizedBox();
   }
 }
 ''',
-      );
+        );
 
-      lintTest(
-        'lints when using context.read in a method call',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: '''
-import 'package:flutter/material.dart';
+        lintTest(
+          'is used in a method call',
+          rule: AvoidBuildContextExtensions.new,
+          path: 'my_widget.dart',
+          content: '''
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Sample extends StatelessWidget {
-  const Sample({super.key});
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     context.read<CounterCubit>().increment();
-            ^^^^
-    return Container();
+    ^^^^^^^^^^^^
+    return const SizedBox();
   }
 }
 ''',
-      );
+        );
 
-      lintTest(
-        'lints when declared with another variable on the same line',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: '''
-import 'package:flutter/material.dart';
+        lintTest(
+          'is declared with another variable on the same line',
+          rule: AvoidBuildContextExtensions.new,
+          path: 'my_widget.dart',
+          content: '''
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Sample extends StatelessWidget {
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     final String someVar, counterBloc = context.read<CounterBloc>();
-                                                ^^^^
-    return Container();
+                                        ^^^^^^^^^^^^
+    return const SizedBox();
   }
 }
 ''',
-      );
-    });
+        );
 
-    group('context.watch', () {
-      lintTest(
-        'lints when using context.watch in a getter',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: '''
-import 'package:flutter/material.dart';
+        lintTest(
+          'is used with an inferred bloc type',
+          rule: AvoidBuildContextExtensions.new,
+          path: 'my_widget.dart',
+          content: '''
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Sample extends StatefulWidget {
-  const Sample({super.key});
-
-  @override
-  State<Sample> createState() => _SampleState();
-}
-
-class _SampleState extends State<Sample> {
-  get cubit => context.watch<CounterCubit>();
-                       ^^^^^
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    final CounterBloc counterBloc = context.read();
+                                    ^^^^^^^^^^^^
+    return const SizedBox();
   }
 }
 ''',
-      );
-
-      lintTest(
-        'lints when using context.watch in a variable assignment',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: '''
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-class Sample extends StatelessWidget {
-  const Sample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final state = context.watch<CounterCubit>();
-                          ^^^^^
-    return Container();
-  }
-}
-''',
-      );
-
-      lintTest(
-        'lints when using context.watch in a widget tree',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: r'''
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-class Sample extends StatelessWidget {
-  const Sample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text('Count: ${context.watch<CounterCubit>().state}');
-                                  ^^^^^
-  }
-}
-''',
-      );
-
-      lintTest(
-        'lints when used inside a ternary operator',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: '''
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-class Sample extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final cubit = true ? context.watch<CounterCubit>() : null;
-                                 ^^^^^
-    return Container();
-  }
-}
-''',
-      );
-    });
-
-    group('context.select', () {
-      lintTest(
-        'lints when using context.select in a variable assignment',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: '''
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-class Sample extends StatelessWidget {
-  const Sample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final b = context.select<CounterCubit, int>((cubit) => cubit.state);
-                      ^^^^^^
-
-    return Container();
-  }
-}
-''',
-      );
-
-      lintTest(
-        'lints when using context.select in a widget tree',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: r'''
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-class Sample extends StatelessWidget {
-  const Sample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text('Count: ${context.select<CounterCubit, int>((cubit) => cubit.state)}');
-                                  ^^^^^^
-  }
-}
-''',
-      );
-
-      lintTest(
-        'lints when using context.select in a method call',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: '''
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-class Sample extends StatelessWidget {
-  const Sample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final isPositive = context.select<CounterCubit, bool>((cubit) => cubit.state > 0);
-                               ^^^^^^
-    return Container();
-  }
-}
-''',
-      );
-    });
-
-    group('context.listen', () {
-      lintTest(
-        'lints when using context.listen in a method call',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: r'''
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-class Sample extends StatelessWidget {
-  const Sample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    context.listen<CounterCubit, int>((previous, current) {
-            ^^^^^^
-      print('State changed from $previous to $current');
-    });
-
-    return Container();
-  }
-}
-''',
-      );
-
-      lintTest(
-        'lints when using context.listen in a variable assignment',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: r'''
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-class Sample extends StatelessWidget {
-  const Sample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final listener = context.listen<CounterCubit, int>((previous, current) {
-                             ^^^^^^
-      print('State changed from $previous to $current');
-    });
-
-    return Container();
-  }
-}
-''',
-      );
-
-      lintTest(
-        'lints when using context.listen in a try-catch block',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: r'''
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-class Sample extends StatelessWidget {
-  const Sample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    try {
-      context.listen<CounterCubit, int>((previous, current) {
-              ^^^^^^
-        print('State changed from $previous to $current');
+        );
       });
-    } catch (e) {
-      // Handle error
-    }
 
-    return Container();
+      group('context.watch', () {
+        lintTest(
+          'is used in a getter',
+          rule: AvoidBuildContextExtensions.new,
+          path: 'my_widget.dart',
+          content: '''
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class MyWidget extends StatefulWidget {
+  const MyWidget({super.key});
+
+  @override
+  State<MyWidget> createState() => _MyWidgetState();
+}
+
+class _MyWidgetState extends State<MyWidget> {
+  CounterCubit get cubit => context.watch<CounterCubit>();
+                            ^^^^^^^^^^^^^
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox();
   }
 }
 ''',
-      );
-    });
+        );
 
-    group('negative tests - should not lint', () {
-      lintTest(
-        'does not lint when using BlocProvider.of',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: '''
-import 'package:flutter/material.dart';
+        lintTest(
+          'is used in a variable assignment',
+          rule: AvoidBuildContextExtensions.new,
+          path: 'my_widget.dart',
+          content: '''
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Sample extends StatelessWidget {
-  const Sample({super.key});
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final count = context.watch<CounterCubit>().state;
+                  ^^^^^^^^^^^^^
+    return Text(count.toString());
+  }
+}
+''',
+        );
+
+        lintTest(
+          'is used in a widget',
+          rule: AvoidBuildContextExtensions.new,
+          path: 'my_widget.dart',
+          content: r'''
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('${context.watch<CounterCubit>().state}');
+                   ^^^^^^^^^^^^^
+  }
+}
+''',
+        );
+
+        lintTest(
+          'is used in a ternary operator',
+          rule: AvoidBuildContextExtensions.new,
+          path: 'my_widget.dart',
+          content: '''
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final state = true ? context.watch<CounterCubit>().state : null;
+                         ^^^^^^^^^^^^^
+    return Text(state.toString());
+  }
+}
+''',
+        );
+
+        lintTest(
+          'is used with Cubit type',
+          rule: AvoidBuildContextExtensions.new,
+          path: 'my_widget.dart',
+          content: '''
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final userCubit = context.watch<UserCubit>();
+                      ^^^^^^^^^^^^^
+    return const SizedBox();
+  }
+}
+''',
+        );
+      });
+
+      group('context.select', () {
+        lintTest(
+          'is used in a variable assignment',
+          rule: AvoidBuildContextExtensions.new,
+          path: 'my_widget.dart',
+          content: '''
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final isEven = context.select<CounterCubit, int>((cubit) => cubit.state.isEven);
+                   ^^^^^^^^^^^^^^
+    return Text(isEven ? 'true' : 'false');
+  }
+}
+''',
+        );
+
+        lintTest(
+          'is used in a widget',
+          rule: AvoidBuildContextExtensions.new,
+          path: 'my_widget.dart',
+          content: r'''
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('${context.select<CounterCubit, int>((cubit) => cubit.state)}');
+                   ^^^^^^^^^^^^^^
+  }
+}
+''',
+        );
+      });
+    });
+
+    group('does not lint when', () {
+      lintTest(
+        'using BlocProvider.of',
+        rule: AvoidBuildContextExtensions.new,
+        path: 'my_widget.dart',
+        content: '''
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<CounterCubit>(context);
-    return Container();
+    return const SizedBox();
   }
 }
 ''',
       );
 
       lintTest(
-        'does not lint when using other method calls on context',
+        'using BlocProvider(create: ...)',
         rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
+        path: 'my_widget.dart',
         content: '''
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Sample extends StatelessWidget {
-  const Sample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final size = context.size;
-    final theme = context.theme;
-    return Container();
-  }
-}
-''',
-      );
-
-      lintTest(
-        'does not lint when using context extensions on other variables',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: '''
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-class Sample extends StatelessWidget {
-  const Sample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final otherContext = context;
-    final cubit = otherContext.read<CounterCubit>();
-    return Container();
-  }
-}
-''',
-      );
-
-      lintTest(
-        'does not lint when using BlocProvider without .of',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: '''
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-class Sample extends StatelessWidget {
-  const Sample({super.key});
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => CounterCubit(),
-      child: Container(),
+      child: const SizedBox(),
     );
   }
 }
@@ -413,296 +319,165 @@ class Sample extends StatelessWidget {
       );
 
       lintTest(
-        'does not lint when using context in a string',
+        'using other method calls on context',
         rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
+        path: 'my_widget.dart',
         content: '''
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Sample extends StatelessWidget {
-  const Sample({super.key});
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final message = 'context.read is not allowed';
-    return Container();
+    final size = context.size;
+    final theme = context.theme;
+    return const SizedBox();
   }
 }
 ''',
       );
 
       lintTest(
-        'does not lint when using context.read with non-bloc types',
+        'using context in a string',
         rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
+        path: 'my_widget.dart',
         content: '''
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final message = 'context.read is allowed';
+    return const SizedBox();
+  }
+}
+''',
+      );
+
+      lintTest(
+        'using context.read with non-bloc types',
+        rule: AvoidBuildContextExtensions.new,
+        path: 'my_widget.dart',
+        content: '''
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-class Sample extends StatelessWidget {
-  const Sample({super.key});
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     final provider = context.read<MyProvider>();
-    return Container();
+    return const SizedBox();
   }
 }
 ''',
       );
 
       lintTest(
-        'does not lint when using context.watch with non-bloc types',
+        'using context.watch with non-bloc types',
         rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
+        path: 'my_widget.dart',
         content: '''
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-class Sample extends StatelessWidget {
-  const Sample({super.key});
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<MyProvider>();
-    return Container();
+    final provider = context.watch<MyProvider>();
+    return const SizedBox();
   }
 }
 ''',
       );
 
       lintTest(
-        'does not lint when using context.select with non-bloc types',
+        'using context.select with non-bloc types',
         rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
+        path: 'my_widget.dart',
         content: '''
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-class Sample extends StatelessWidget {
-  const Sample({super.key});
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     final value = context.select<MyProvider, String>((provider) => provider.value);
-    return Container();
+    return const SizedBox();
   }
 }
 ''',
       );
 
       lintTest(
-        'does not lint when using context.listen with non-bloc types',
+        'using context extensions with implicit dynamic types',
         rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
+        path: 'my_widget.dart',
         content: '''
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-class Sample extends StatelessWidget {
-  const Sample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    context.listen<MyProvider>((previous, current) {
-      print('Provider changed');
-    });
-    return Container();
-  }
-}
-''',
-      );
-
-      lintTest(
-        'does not lint when using context extensions with types that do not end'
-        ' with Bloc or Cubit',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: '''
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Sample extends StatelessWidget {
-  const Sample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final service = context.read<MyService>();
-    final repository = context.watch<MyRepository>();
-    final controller = context.select<MyController, bool>((c) => c.isActive);
-    context.listen<MyNotifier>((previous, current) {});
-    return Container();
-  }
-}
-''',
-      );
-
-      lintTest(
-        'does not lint when using context extensions without type parameters',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: '''
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-class Sample extends StatelessWidget {
-  const Sample({super.key});
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     // These would be invalid Dart but should not trigger our rule
     context.read();
     context.watch();
-    return Container();
+    return const SizedBox();
   }
 }
 ''',
       );
 
       lintTest(
-        'lints when using context.read with type inference for Bloc',
+        'using context.read with type inference for non-bloc types',
         rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
+        path: 'my_widget.dart',
         content: '''
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-class Sample extends StatelessWidget {
-  const Sample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final CounterBloc counterBloc = context.read();
-                                            ^^^^
-    return Container();
-  }
-}
-''',
-      );
-
-      lintTest(
-        'lints when using context.watch with type inference for Cubit',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: '''
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-class Sample extends StatelessWidget {
-  const Sample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final UserCubit userCubit = context.watch();
-                                        ^^^^^
-    return Container();
-  }
-}
-''',
-      );
-
-      lintTest(
-        'does not lint when using context.read with type inference for non-bloc'
-        ' types',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: '''
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-class Sample extends StatelessWidget {
-  const Sample({super.key});
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     final MyProvider provider = context.read();
-    return Container();
+    return const SizedBox();
   }
 }
 ''',
       );
 
       lintTest(
-        'lints when using context.read with Bloc type',
+        'the call target is not context (e.g. cascade)',
         rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
+        path: 'my_widget.dart',
         content: '''
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-class Sample extends StatelessWidget {
-  const Sample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final counterBloc = context.read<CounterBloc>();
-                                ^^^^
-    return Container();
-  }
-}
-''',
-      );
-
-      lintTest(
-        'lints when using context.watch with Cubit type',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: '''
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-class Sample extends StatelessWidget {
-  const Sample({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final userCubit = context.watch<UserCubit>();
-                              ^^^^^
-    return Container();
-  }
-}
-''',
-      );
-
-      lintTest(
-        'does not lint when using a type alias for a Bloc',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: '''
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-typedef Counter = CounterBloc;
-
-class Sample extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // Current implementation does not resolve typedefs, so this should not lint.
-    final Counter counter = context.read();
-    return Container();
-  }
-}
-''',
-      );
-
-      lintTest(
-        'does not lint when the call target is not context (e.g. cascade)',
-        rule: AvoidBuildContextExtensions.new,
-        path: 'sample.dart',
-        content: '''
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyThing {
   MyThing read<T>() => this;
 }
 
-class Sample extends StatelessWidget {
+class MyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final thing = MyThing()..read<CounterCubit>();
-    return Container();
+    return const SizedBox();
   }
 }
 ''',
