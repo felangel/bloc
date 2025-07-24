@@ -1,0 +1,19 @@
+import { Code } from '@astrojs/starlight/components';
+import { transformerMetaHighlight } from '@shikijs/transformers';
+
+<Code
+	code={`
+  import 'package:bloc/bloc.dart';
+
+  class CounterCubit extends Cubit<int> { 
+    CounterCubit() : super(0);
+
+    int increment() {
+      emit(state + 1);
+      return state;
+    }
+  }
+`}
+lang="dart" title="main.dart"
+transformers={[transformerMetaHighlight()]} class='warning' meta="{3}"
+/>

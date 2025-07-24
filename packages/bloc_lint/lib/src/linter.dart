@@ -16,6 +16,7 @@ import 'package:path/path.dart' as p;
 
 /// All supported lint rules.
 final allRules = <String, LintRuleBuilder>{
+  AvoidBuildContextExtensions.rule: AvoidBuildContextExtensions.new,
   AvoidFlutterImports.rule: AvoidFlutterImports.new,
   AvoidPublicBlocMethods.rule: AvoidPublicBlocMethods.new,
   AvoidPublicFields.rule: AvoidPublicFields.new,
@@ -205,7 +206,7 @@ class LintContext {
     report(
       range: Range(
         start: document.positionAt(beginToken.offset),
-        end: document.positionAt(endToken.offset),
+        end: document.positionAt(endToken.offset + endToken.length),
       ),
       message: message,
       hint: hint,

@@ -1,0 +1,32 @@
+import { Code } from '@astrojs/starlight/components';
+import { transformerMetaHighlight } from '@shikijs/transformers';
+
+<Code
+	code={`
+  import 'package:flutter/material.dart';
+  import 'package:flutter_bloc/flutter_bloc.dart';
+
+  class CounterPage extends StatelessWidget {
+    const CounterPage({super.key});
+
+    @override
+    Widget build(BuildContext context) {
+      final count = context.watch<CounterBloc>().state; // LINT
+
+      return Column(
+        children: [
+          Text('Count: $count'),
+          ElevatedButton(
+            onPressed: () {
+              context.read<CounterBloc>().add(CounterIncrement()); // LINT
+            },
+            child: const Text('Increment'),
+          ),
+        ],
+      );
+    }
+  }
+`}
+lang="dart" title="counter_page.dart"
+transformers={[transformerMetaHighlight()]} class='warning' meta="{9,16}"
+/> 
