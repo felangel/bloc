@@ -26,8 +26,8 @@ class _Listener extends Listener {
 
   static const _declarationKeywords = {'final', 'const', 'var', 'late'};
 
-  /// Stores the type token of the variable currently being initialized.
-  Token? _implicitType;
+  /// Whether the type is implicitly a bloc type.
+  bool _isImplicitBlocType = false;
 
   @override
   void beginInitializedIdentifier(Token nameToken) {
@@ -35,14 +35,14 @@ class _Listener extends Listener {
     if (prev != null &&
         prev.type == TokenType.IDENTIFIER &&
         !_declarationKeywords.contains(prev.lexeme)) {
-      _implicitType = prev;
+      _isImplicitBlocType = prev.isBlocType;
     }
     super.beginInitializedIdentifier(nameToken);
   }
 
   @override
   void endInitializedIdentifier(Token nameToken) {
-    _implicitType = null;
+    _isImplicitBlocType = false;
     super.endInitializedIdentifier(nameToken);
   }
 
@@ -62,8 +62,7 @@ class _Listener extends Listener {
 
     // Case 1: implicit type
     // e.g. final MyBloc bloc = context.read();
-    final isImplicitBlocType = _implicitType?.isBlocType ?? false;
-    if (isImplicitBlocType) return _report(method, target, token);
+    if (_isImplicitBlocType) return _report(method, target, token);
 
     // Case 2: explicit type
     // e.g. final bloc = context.read<MyBloc>();
