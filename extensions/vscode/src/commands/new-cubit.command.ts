@@ -87,8 +87,18 @@ async function generateCubitCode(
   const useSealedClasses = workspace
     .getConfiguration("bloc")
     .get<boolean>("newCubitTemplate.useSealedClasses", true);
+
+  const useUnionTypes = workspace
+    .getConfiguration("bloc")
+    .get<boolean>("newCubitTemplate.useUnionTypes", true);
   await Promise.all([
-    createCubitStateTemplate(cubitName, cubitDirectoryPath, type, useSealedClasses),
+    createCubitStateTemplate(
+      cubitName,
+      cubitDirectoryPath,
+      type,
+      useSealedClasses,
+      useUnionTypes,
+    ),
     createCubitTemplate(cubitName, cubitDirectoryPath, type),
   ]);
 }
@@ -108,7 +118,8 @@ function createCubitStateTemplate(
   cubitName: string,
   targetDirectory: string,
   type: BlocType,
-  useSealedClasses: boolean
+  useSealedClasses: boolean,
+  useUnionTypes: boolean,
 ) {
   const snakeCaseCubitName = changeCase.snakeCase(cubitName);
   const targetPath = `${targetDirectory}/${snakeCaseCubitName}_state.dart`;
@@ -118,7 +129,7 @@ function createCubitStateTemplate(
   return new Promise<void>(async (resolve, reject) => {
     writeFile(
       targetPath,
-      getCubitStateTemplate(cubitName, type, useSealedClasses),
+      getCubitStateTemplate(cubitName, type, useSealedClasses, useUnionTypes),
       "utf8",
       (error) => {
         if (error) {
