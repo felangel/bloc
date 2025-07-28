@@ -1,6 +1,6 @@
 include:
   - package:bloc_lint/recommended.yaml
-  - ../../../analysis_options.yaml
+  - ../../analysis_options.yaml
 
 linter:
   rules:

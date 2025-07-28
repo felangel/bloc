@@ -138,12 +138,12 @@ The goal of this library is to make it easy to separate _presentation_ from _bus
 - [Shopping Cart](https://github.com/felangel/bloc/tree/master/examples/flutter_shopping_cart) - an example of how to create a Shopping Cart Application using the `bloc` and `flutter_bloc` packages based on [flutter samples](https://github.com/flutter/samples/tree/master/provider_shopper).
 - [Dynamic Form](https://github.com/felangel/bloc/tree/master/examples/flutter_dynamic_form) - an example of how to use the `bloc` and `flutter_bloc` packages to implement a dynamic form which pulls data from a repository.
 - [Wizard](https://github.com/felangel/bloc/tree/master/examples/flutter_wizard) - an example of how to build a multi-step wizard using the `bloc` and `flutter_bloc` packages.
+- [Bloc Concurrency Visualizer](https://github.com/felangel/bloc/tree/master/examples/bloc_concurrency_visualizer) - an example of visualizing the various `bloc_concurrency` transformers.
 - [Fluttersaurus](https://github.com/felangel/fluttersaurus) - an example of how to use the `bloc` and `flutter_bloc` packages to create a thesaurus app -- made for Bytconf Flutter 2020.
 - [I/O Photo Booth](https://github.com/flutter/photobooth) - an example of how to use the `bloc` and `flutter_bloc` packages to create a virtual photo booth web app -- made for Google I/O 2021.
 - [I/O Pinball](https://github.com/flutter/pinball) - an example of how to use the `bloc` and `flutter_bloc` packages to create a pinball web app -- made for Google I/O 2022.
 - [I/O Holobooth](https://github.com/flutter/holobooth) - an example of how to use the `bloc` and `flutter_bloc` packages to create a virtual photobooth experience -- made for Flutter Forward.
 - [I/O Flip](https://github.com/flutter/io_flip) - an example of how to use the `bloc`, `flutter_bloc`, and `flame_bloc` packages to create a card game -- made for Google I/O 2023.
-- [Task Scheduler](https://github.com/felangel/bloc/tree/master/examples/bloc_concurrency) - an example for illustrating all the bloc concurrency transformers using the `bloc_concurrency` and `flutter_bloc` packages.
 
 ### Web
 
