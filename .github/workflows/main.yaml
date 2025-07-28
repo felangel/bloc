@@ -136,6 +136,11 @@ jobs:
         id: needs_flutter_example_checks
         with:
           filters: |
+            bloc_concurrency_visualizer:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/flutter_package/action.yaml
+              - examples/bloc_concurrency_visualizer/**
             flutter_bloc_with_stream:
               - ./.github/codecov.yml
               - ./.github/workflows/main.yaml
