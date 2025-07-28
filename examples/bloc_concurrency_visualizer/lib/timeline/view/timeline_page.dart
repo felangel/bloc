@@ -179,7 +179,7 @@ class Timeline extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Text('tap "add task" to enqueue tasks'),
+          const Text('tap "add task" to enqueue tasks'),
         ],
       ),
     );
