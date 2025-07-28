@@ -1,0 +1,7 @@
+include:
+  - package:bloc_lint/recommended.yaml
+  - ../../analysis_options.yaml
+
+linter:
+  rules:
+    public_member_api_docs: false
