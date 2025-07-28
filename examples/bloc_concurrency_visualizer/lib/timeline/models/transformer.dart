@@ -1,6 +1,1 @@
-enum Transformer {
-  concurrent,
-  sequential,
-  droppable,
-  restartable,
-}
+enum Transformer { concurrent, sequential, droppable, restartable }
