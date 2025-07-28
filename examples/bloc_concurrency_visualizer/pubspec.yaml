@@ -1,0 +1,22 @@
+name: bloc_concurrency_visualizer
+description: A Flutter app to help visualize bloc_concurrency transformers
+version: 1.0.0+1
+publish_to: "none"
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  bloc: ^9.0.0
+  bloc_concurrency: ^0.3.0
+  equatable: ^2.0.0
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^9.0.0
+  uuid: ^4.0.0
+
+dev_dependencies:
+  bloc_lint: ^0.2.0
+
+flutter:
+  uses-material-design: true
