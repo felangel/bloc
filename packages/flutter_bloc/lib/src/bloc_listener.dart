@@ -80,10 +80,10 @@ class BlocListener<B extends StateStreamable<S>, S>
   /// {@macro bloc_listener_listen_when}
   const BlocListener({
     required BlocWidgetListener<S> listener,
+    required Widget child,
     Key? key,
     B? bloc,
     BlocListenerCondition<S>? listenWhen,
-    Widget? child,
   }) : super(
           key: key,
           child: child,
@@ -105,15 +105,15 @@ abstract class BlocListenerBase<B extends StateStreamable<S>, S>
   /// {@macro bloc_listener_base}
   const BlocListenerBase({
     required this.listener,
-    Key? key,
+    required this.child,
     this.bloc,
-    this.child,
     this.listenWhen,
+    Key? key,
   }) : super(key: key, child: child);
 
   /// The widget which will be rendered as a descendant of the
   /// [BlocListenerBase].
-  final Widget? child;
+  final Widget child;
 
   /// The [bloc] whose `state` will be listened to.
   /// Whenever the [bloc]'s `state` changes, [listener] will be invoked.
