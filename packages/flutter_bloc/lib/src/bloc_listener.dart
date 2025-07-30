@@ -86,7 +86,7 @@ class BlocListener<B extends StateStreamable<S>, S>
     Widget? child,
   }) : super(
           key: key,
-          child: child,
+          child: child ?? const SizedBox.shrink(),
           listener: listener,
           bloc: bloc,
           listenWhen: listenWhen,
@@ -105,15 +105,15 @@ abstract class BlocListenerBase<B extends StateStreamable<S>, S>
   /// {@macro bloc_listener_base}
   const BlocListenerBase({
     required this.listener,
+    required this.child,
     Key? key,
     this.bloc,
-    this.child,
     this.listenWhen,
   }) : super(key: key, child: child);
 
   /// The widget which will be rendered as a descendant of the
   /// [BlocListenerBase].
-  final Widget? child;
+  final Widget child;
 
   /// The [bloc] whose `state` will be listened to.
   /// Whenever the [bloc]'s `state` changes, [listener] will be invoked.
@@ -191,16 +191,12 @@ class _BlocListenerBaseState<B extends StateStreamable<S>, S>
 
   @override
   Widget buildWithChild(BuildContext context, Widget? child) {
-    assert(
-      child != null,
-      '''${widget.runtimeType} used outside of MultiBlocListener must specify a child''',
-    );
     if (widget.bloc == null) {
       // Trigger a rebuild if the bloc reference has changed.
       // See https://github.com/felangel/bloc/issues/2127.
       context.select<B, bool>((bloc) => identical(_bloc, bloc));
     }
-    return child!;
+    return child ?? const SizedBox.shrink();
   }
 
   @override
