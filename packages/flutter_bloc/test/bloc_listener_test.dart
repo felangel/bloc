@@ -83,6 +83,7 @@ void main() {
         BlocListener<CounterCubit, int>(
           bloc: CounterCubit(),
           listener: (context, state) {},
+          child: const SizedBox.shrink(),
         ),
       );
       expect(

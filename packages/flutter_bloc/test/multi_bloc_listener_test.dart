@@ -25,10 +25,12 @@ void main() {
             BlocListener<CounterCubit, int>(
               bloc: counterCubitA,
               listener: (context, state) => statesA.add(state),
+              child: const SizedBox.shrink(),
             ),
             BlocListener<CounterCubit, int>(
               bloc: counterCubitB,
               listener: (context, state) => statesB.add(state),
+              child: const SizedBox.shrink(),
             ),
           ],
           child: const SizedBox(key: Key('multiCubitListener_child')),
@@ -65,10 +67,12 @@ void main() {
             BlocListener(
               bloc: counterCubitA,
               listener: (BuildContext context, int state) => statesA.add(state),
+              child: const SizedBox.shrink(),
             ),
             BlocListener(
               bloc: counterCubitB,
               listener: (BuildContext context, int state) => statesB.add(state),
+              child: const SizedBox.shrink(),
             ),
           ],
           child: const SizedBox(key: Key('multiCubitListener_child')),
