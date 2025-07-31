@@ -24,6 +24,7 @@ final allRules = <String, LintRuleBuilder>{
   PreferCubit.rule: PreferCubit.new,
   PreferFileNamingConventions.rule: PreferFileNamingConventions.new,
   PreferVoidPublicCubitMethods.rule: PreferVoidPublicCubitMethods.new,
+  AvoidAsyncEmit.rule: AvoidAsyncEmit.new,
 };
 
 /// {@template linter}
@@ -71,9 +72,10 @@ class Linter {
     final results = {canonicalizedPath: diagnostics};
     final path = canonicalizedPath.toLongPath();
     final cwd = File(path).parent;
-    final pubspecLock = findPubspecLock(cwd);
-    if (pubspecLock == null) return results;
-    if (!pubspecLock.packages.keys.contains('bloc')) return results;
+    // TODO(katekko): TEMP FOR TESTING
+    // final pubspecLock = findPubspecLock(cwd);
+    // if (pubspecLock == null) return results;
+    // if (!pubspecLock.packages.keys.contains('bloc')) return results;
     final analysisOptions = findAnalysisOptions(cwd);
     if (analysisOptions == null) return results;
     final relativePath = p
