@@ -295,5 +295,61 @@ class MyCubit extends Cubit<int> {
 }
 ''',
     );
+
+    lintTest(
+      'does not report when emit is guarded by if (!isClosed) in Bloc',
+      rule: AvoidAsyncEmit.new,
+      path: 'my_bloc.dart',
+      content: '''
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class MyBloc extends Bloc<int, int> {
+  MyBloc() : super(0);
+
+  @override
+  Stream<int> mapEventToState(int event) async* {
+    if (!isClosed) emit(1);
+  }
+}
+''',
+    );
+
+    lintTest(
+      'reports when emit is not guarded in async method in Bloc',
+      rule: AvoidAsyncEmit.new,
+      path: 'my_bloc.dart',
+      content: '''
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class MyBloc extends Bloc<int, int> {
+  MyBloc() : super(0);
+
+  @override
+  Stream<int> mapEventToState(int event) async* {
+    await Future.value(42);
+    emit(1);
+    ^^^^
+  }
+}
+''',
+    );
+
+    lintTest(
+      'does not report when emit is called in sync method in Bloc',
+      rule: AvoidAsyncEmit.new,
+      path: 'my_bloc.dart',
+      content: '''
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class MyBloc extends Bloc<int, int> {
+  MyBloc() : super(0);
+
+  @override
+  Stream<int> mapEventToState(int event) sync* {
+    emit(1);
+  }
+}
+''',
+    );
   });
 }

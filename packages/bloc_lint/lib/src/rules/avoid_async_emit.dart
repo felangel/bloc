@@ -21,14 +21,14 @@ class _Listener extends Listener {
   final LintContext context;
 
   bool _inAsyncMethod = false;
-  bool _isACubit = false;
+  bool _isBlocOrCubit = false;
 
   int _isClosedGuardLevel = 0;
   int _awaitInGuardLevel = 0;
 
   @override
   Future<void> handleAsyncModifier(Token? beginToken, Token? endToken) async {
-    if (!_isACubit) return;
+    if (!_isBlocOrCubit) return;
 
     if (beginToken?.lexeme != 'async') return;
 
@@ -37,7 +37,7 @@ class _Listener extends Listener {
 
   @override
   void beginAwaitExpression(Token token) {
-    if (!_isACubit) return;
+    if (!_isBlocOrCubit) return;
     if (!_inAsyncMethod) return;
 
     if (_isClosedGuardLevel > 0) {
@@ -47,7 +47,7 @@ class _Listener extends Listener {
 
   @override
   void beginIfStatement(Token token) {
-    if (!_isACubit) return;
+    if (!_isBlocOrCubit) return;
     if (!_inAsyncMethod) return;
 
     final next = token.next;
@@ -103,7 +103,7 @@ class _Listener extends Listener {
 
   @override
   void endIfStatement(Token ifToken, Token? elseToken, Token endToken) {
-    if (!_isACubit) return;
+    if (!_isBlocOrCubit) return;
     if (!_inAsyncMethod) return;
 
     final next = ifToken.next;
@@ -128,14 +128,15 @@ class _Listener extends Listener {
 
   @override
   void handleIdentifier(Token token, IdentifierContext _) {
-    final extendsACubit =
-        token.lexeme == 'Cubit' && token.previous?.lexeme == 'extends';
+    final extendsBlocOrCubit =
+        (token.lexeme == 'Cubit' || token.lexeme == 'Bloc') &&
+        token.previous?.lexeme == 'extends';
 
-    if (extendsACubit) {
-      _isACubit = true;
+    if (extendsBlocOrCubit) {
+      _isBlocOrCubit = true;
     }
 
-    if (!_isACubit) return;
+    if (!_isBlocOrCubit) return;
     if (!_inAsyncMethod) return;
 
     if (token.lexeme == 'emit') {
