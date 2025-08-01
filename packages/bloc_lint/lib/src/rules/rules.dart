@@ -1,3 +1,4 @@
+export 'avoid_async_emit.dart';
 export 'avoid_build_context_extensions.dart';
 export 'avoid_flutter_imports.dart';
 export 'avoid_public_bloc_methods.dart';
