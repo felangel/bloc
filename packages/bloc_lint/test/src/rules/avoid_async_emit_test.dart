@@ -121,7 +121,7 @@ class MyCubit extends Cubit<int> {
     );
 
     lintTest(
-      'does not report when emit is guarded by if (isClosed) return;',
+      'does not report when emit is guarded by if (isClosed){ return; }',
       rule: AvoidAsyncEmit.new,
       path: 'my_cubit.dart',
       content: '''
@@ -352,4 +352,42 @@ class MyBloc extends Bloc<int, int> {
 ''',
     );
   });
+
+  lintTest(
+    'does not report when emit is guarded by if (isClosed) return;',
+    rule: AvoidAsyncEmit.new,
+    path: 'my_cubit.dart',
+    content: '''
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class MyCubit extends Cubit<int> {
+  MyCubit() : super(0);
+
+  Future<void> foo() async {
+    await Future.value(1);
+    if (isClosed) return;
+    emit(1);
+  }
+}
+''',
+  );
+
+  lintTest(
+    'does not report when emit is guarded by if (isClosed == false) return;',
+    rule: AvoidAsyncEmit.new,
+    path: 'my_cubit.dart',
+    content: '''
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class MyCubit extends Cubit<int> {
+  MyCubit() : super(0);
+
+  Future<void> foo() async {
+    await Future.value(1);
+    if (isClosed == false) return;
+    emit(1);
+  }
+}
+''',
+  );
 }
