@@ -72,10 +72,9 @@ class Linter {
     final results = {canonicalizedPath: diagnostics};
     final path = canonicalizedPath.toLongPath();
     final cwd = File(path).parent;
-    // TODO(katekko): TEMP FOR TESTING
-    // final pubspecLock = findPubspecLock(cwd);
-    // if (pubspecLock == null) return results;
-    // if (!pubspecLock.packages.keys.contains('bloc')) return results;
+    final pubspecLock = findPubspecLock(cwd);
+    if (pubspecLock == null) return results;
+    if (!pubspecLock.packages.keys.contains('bloc')) return results;
     final analysisOptions = findAnalysisOptions(cwd);
     if (analysisOptions == null) return results;
     final relativePath = p
