@@ -46,7 +46,7 @@ packages:
       path: "../../packages/bloc_lint"
       relative: true
     source: path
-    version: "0.2.0-dev.3"
+    version: "0.2.1"
   bloc_test:
     dependency: "direct dev"
     description:
