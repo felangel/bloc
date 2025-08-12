@@ -74,24 +74,17 @@ class _MyAppState extends State<MyApp> {
 
 void main() {
   group('BlocListener', () {
-    testWidgets(
-        'throws AssertionError '
-        'when child is not specified', (tester) async {
-      const expected =
-          '''BlocListener<CounterCubit, int> used outside of MultiBlocListener must specify a child''';
+    testWidgets('does nothing when child is not specified', (tester) async {
       await tester.pumpWidget(
         BlocListener<CounterCubit, int>(
           bloc: CounterCubit(),
           listener: (context, state) {},
         ),
       );
-      expect(
-        tester.takeException(),
-        isA<AssertionError>().having((e) => e.message, 'message', expected),
-      );
+      expect(tester.takeException(), isNull);
     });
 
-    testWidgets('renders child properly', (tester) async {
+    testWidgets('renders child when specified', (tester) async {
       const targetKey = Key('cubit_listener_container');
       await tester.pumpWidget(
         BlocListener<CounterCubit, int>(
@@ -110,10 +103,7 @@ void main() {
       await tester.pumpWidget(
         BlocListener<CounterCubit, int>(
           bloc: counterCubit,
-          listener: (_, state) {
-            states.add(state);
-          },
-          child: const SizedBox(),
+          listener: (_, state) => states.add(state),
         ),
       );
       counterCubit.increment();
@@ -128,10 +118,7 @@ void main() {
       await tester.pumpWidget(
         BlocListener<CounterCubit, int>(
           bloc: counterCubit,
-          listener: (_, state) {
-            states.add(state);
-          },
-          child: const SizedBox(),
+          listener: (_, state) => states.add(state),
         ),
       );
       counterCubit.increment();
@@ -235,7 +222,6 @@ void main() {
             return true;
           },
           listener: (_, __) {},
-          child: const SizedBox(),
         ),
       );
       counterCubit.increment();
@@ -267,7 +253,6 @@ void main() {
             return false;
           },
           listener: (_, __) {},
-          child: const SizedBox(),
         ),
       );
       counterCubit
@@ -299,7 +284,6 @@ void main() {
             return false;
           },
           listener: (_, state) => states.add(state),
-          child: const SizedBox(),
         ),
       );
       counterCubit
@@ -332,7 +316,6 @@ void main() {
               return true;
             },
             listener: (context, state) {},
-            child: const SizedBox(),
           ),
         ),
       );
@@ -362,7 +345,6 @@ void main() {
             return true;
           },
           listener: (_, __) {},
-          child: const SizedBox(),
         ),
       );
       await tester.pump();
@@ -387,7 +369,6 @@ void main() {
           bloc: counterCubit,
           listenWhen: (_, __) => false,
           listener: (_, state) => states.add(state),
-          child: const SizedBox(),
         ),
       );
       counterCubit.increment();
@@ -407,7 +388,6 @@ void main() {
           bloc: counterCubit,
           listenWhen: (_, __) => true,
           listener: (_, state) => states.add(state),
-          child: const SizedBox(),
         ),
       );
       counterCubit.increment();
@@ -427,7 +407,6 @@ void main() {
           bloc: counterCubit,
           listenWhen: (_, __) => false,
           listener: (_, state) => states.add(state),
-          child: const SizedBox(),
         ),
       );
       counterCubit.increment();
@@ -453,7 +432,6 @@ void main() {
           bloc: counterCubit,
           listenWhen: (_, __) => true,
           listener: (_, state) => states.add(state),
-          child: const SizedBox(),
         ),
       );
       counterCubit.increment();
@@ -482,7 +460,6 @@ void main() {
           value: firstCounterCubit,
           child: BlocListener<CounterCubit, int>(
             listener: (_, state) => states.add(state),
-            child: const SizedBox(),
           ),
         ),
       );
@@ -494,7 +471,6 @@ void main() {
           value: secondCounterCubit,
           child: BlocListener<CounterCubit, int>(
             listener: (_, state) => states.add(state),
-            child: const SizedBox(),
           ),
         ),
       );
@@ -514,7 +490,6 @@ void main() {
         bloc: CounterCubit(),
         listener: (context, state) {},
         listenWhen: (previous, current) => previous != current,
-        child: const SizedBox(),
       ).debugFillProperties(builder);
 
       final description = builder.properties
