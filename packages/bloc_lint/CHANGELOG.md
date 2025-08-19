@@ -1,4 +1,4 @@
-# 0.2.2
+# 0.3.0
 
 - fix: widen supported version ranges for `_fe_analyzer_shared`
 - feat: add [avoid_build_context_extensions](https://bloclibrary.dev/lint-rules/avoid_build_context_extensions)
