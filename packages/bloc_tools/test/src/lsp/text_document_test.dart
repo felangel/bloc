@@ -1,7 +1,7 @@
 // ignore_for_file: cascade_invocations, require_trailing_commas
 
 import 'package:bloc_tools/src/lsp/text_document.dart';
-import 'package:lsp_server/lsp_server.dart' as lsp;
+import 'package:lsp_server_ce/lsp_server_ce.dart' as lsp;
 import 'package:test/test.dart';
 
 lsp.Position at({required int line, required int char}) {
