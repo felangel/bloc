@@ -1,3 +1,7 @@
+# 0.2.2
+
+- chore(deps): widen support version ranges for `_fe_analyzer_shared`
+
 # 0.2.1
 
 - feat: ignore dot directories
