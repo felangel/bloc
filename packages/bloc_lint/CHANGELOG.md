@@ -1,3 +1,7 @@
+# 0.3.1
+
+- fix: adjust lower bound for `_fe_analyzer_shared`
+
 # 0.3.0
 
 - fix: widen supported version ranges for `_fe_analyzer_shared`
