@@ -1,6 +1,8 @@
 # 0.2.2
 
-- chore(deps): widen support version ranges for `_fe_analyzer_shared`
+- fix: widen supported version ranges for `_fe_analyzer_shared`
+- feat: add [avoid_build_context_extensions](https://bloclibrary.dev/lint-rules/avoid_build_context_extensions)
+- feat: add [prefer_file_naming_conventions](https://bloclibrary.dev/lint-rules/prefer_file_naming_conventions)
 
 # 0.2.1
 
