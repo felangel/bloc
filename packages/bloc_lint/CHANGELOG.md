@@ -1,3 +1,13 @@
+# 0.3.1
+
+- fix: adjust lower bound for `_fe_analyzer_shared`
+
+# 0.3.0
+
+- fix: widen supported version ranges for `_fe_analyzer_shared`
+- feat: add [avoid_build_context_extensions](https://bloclibrary.dev/lint-rules/avoid_build_context_extensions)
+- feat: add [prefer_file_naming_conventions](https://bloclibrary.dev/lint-rules/prefer_file_naming_conventions)
+
 # 0.2.1
 
 - feat: ignore dot directories

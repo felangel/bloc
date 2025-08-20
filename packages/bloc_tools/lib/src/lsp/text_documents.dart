@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:bloc_tools/src/lsp/text_document.dart';
-import 'package:lsp_server/lsp_server.dart';
+import 'package:lsp_server_ce/lsp_server_ce.dart';
 
 class TextDocumentChangeEvent {
   const TextDocumentChangeEvent(this.document);

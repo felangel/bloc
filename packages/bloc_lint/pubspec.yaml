@@ -1,6 +1,6 @@
 name: bloc_lint
 description: Official lint rules for development when using the bloc state management library.
-version: 0.2.1
+version: 0.3.1
 repository: https://github.com/felangel/bloc/tree/master/packages/bloc_lint
 issue_tracker: https://github.com/felangel/bloc/issues
 homepage: https://github.com/felangel/bloc
@@ -12,7 +12,7 @@ environment:
   sdk: ">=3.7.0 <4.0.0"
 
 dependencies:
-  _fe_analyzer_shared: ">=75.0.0 <=86.0.0"
+  _fe_analyzer_shared: ">=75.0.0 <=88.0.0"
   checked_yaml: ^2.0.0
   collection: ^1.0.0
   glob: ^2.0.0

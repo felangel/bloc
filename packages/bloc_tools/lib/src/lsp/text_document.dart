@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:lsp_server/lsp_server.dart';
+import 'package:lsp_server_ce/lsp_server_ce.dart';
 
 /// The newline symbol (\n).
 const lineFeed = 10;
