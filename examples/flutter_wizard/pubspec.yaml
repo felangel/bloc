@@ -17,4 +17,4 @@ dependencies:
 flutter:
   uses-material-design: true
 dev_dependencies:
-  bloc_lint: ^0.2.0-dev.0
+  bloc_lint: ^0.3.0
