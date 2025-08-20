@@ -1,6 +1,8 @@
 # 6.8.10
 
 - deps: upgrade to `bloc_tools: 0.1.0-dev.18`
+- deps: various dependency upgrades
+- docs: fix broken link in `README`
 
 # 6.8.9
 
