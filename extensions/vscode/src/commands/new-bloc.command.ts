@@ -90,6 +90,11 @@ async function generateBlocCode(
   const useSealedClasses = workspace
     .getConfiguration("bloc")
     .get<boolean>("newBlocTemplate.useSealedClasses", true);
+
+  const useUnionTypes = workspace
+    .getConfiguration("bloc")
+    .get<boolean>("newBlocTemplate.useUnionTypes", true);
+
   await Promise.all([
     createBlocEventTemplate(
       blocName,
@@ -101,7 +106,8 @@ async function generateBlocCode(
       blocName,
       blocDirectoryPath,
       type,
-      useSealedClasses
+      useSealedClasses,
+      useUnionTypes,
     ),
     createBlocTemplate(blocName, blocDirectoryPath, type),
   ]);
@@ -149,7 +155,8 @@ function createBlocStateTemplate(
   blocName: string,
   targetDirectory: string,
   type: BlocType,
-  useSealedClasses: boolean
+  useSealedClasses: boolean,
+  useUnionTypes: boolean,
 ) {
   const snakeCaseBlocName = changeCase.snakeCase(blocName);
   const targetPath = `${targetDirectory}/${snakeCaseBlocName}_state.dart`;
@@ -159,7 +166,7 @@ function createBlocStateTemplate(
   return new Promise<void>(async (resolve, reject) => {
     writeFile(
       targetPath,
-      getBlocStateTemplate(blocName, type, useSealedClasses),
+      getBlocStateTemplate(blocName, type, useSealedClasses, useUnionTypes),
       "utf8",
       (error) => {
         if (error) {
