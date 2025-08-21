@@ -1,0 +1,42 @@
+---
+title: Prefer BuildContext Extensions
+description: The prefer_build_context_extensions rule.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/prefer_context_extensions/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/prefer_context_extensions/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+</div>
+
+Prefer using `BuildContext` extensions to access a `Bloc` or `Repository`
+instance.
+
+## Rationale
+
+For consistency, prefer using `BuildContext` extensions like
+`context.read<T>()`, `context.watch<T>()`, and `context.select<T, R>(...)`
+instead of `BlocProvider.of<T>(context)` or `RepositoryProvider.of<T>(context)`.
+
+## Examples
+
+**Avoid** using `BlocProvider.of<T>(context)` to access a `Bloc` instance.
+
+**BAD**:
+
+<BadSnippet />
+
+**GOOD**:
+
+<GoodSnippet />
+
+## Enable
+
+To enable the `prefer_build_context_extensions` rule, add it to your
+`analysis_options.yaml` under `bloc` > `rules`:
+
+<EnableRuleSnippet name="prefer_build_context_extensions" />
