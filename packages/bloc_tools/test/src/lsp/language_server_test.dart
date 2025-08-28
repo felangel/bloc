@@ -4,8 +4,9 @@ import 'dart:async';
 
 import 'package:bloc_lint/bloc_lint.dart';
 import 'package:bloc_tools/src/lsp/language_server.dart';
-import 'package:lsp_server/lsp_server.dart' hide Diagnostic, Position, Range;
-import 'package:lsp_server/lsp_server.dart' as lsp;
+import 'package:lsp_server_ce/lsp_server_ce.dart'
+    hide Diagnostic, Position, Range;
+import 'package:lsp_server_ce/lsp_server_ce.dart' as lsp;
 import 'package:mocktail/mocktail.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
