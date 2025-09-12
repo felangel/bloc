@@ -13,6 +13,7 @@ export 'src/rules/rules.dart'
         AvoidPublicBlocMethods,
         AvoidPublicFields,
         PreferBloc,
+        PreferBuildContextExtensions,
         PreferCubit,
         PreferFileNamingConventions,
         PreferVoidPublicCubitMethods;
