@@ -5,16 +5,20 @@ const code = `
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MyWidget extends StatelessWidget {
-    const MyWidget({super.key});
+class IncrementButton extends StatelessWidget {
+  const IncrementButton({super.key});
 
-    @override
-    Widget build(BuildContext context) {
-        final count = context.watch<CounterCubit>().state;
-        return Text('$count');
-    }
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      child: Icon(Icons.add),
+      onPressed: () {
+        context.read<CounterCubit>().increment();
+      },
+    );    
+  }
 }
 `;
 ---
 
-<Code code={code} lang="dart" title="my_widget.dart" />
+<Code code={code} lang="dart" title="increment_button.dart" />
