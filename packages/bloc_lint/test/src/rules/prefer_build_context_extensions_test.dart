@@ -15,7 +15,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyWidget extends StatelessWidget {
-  const Sample({super.key});
+  const MyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +37,38 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyWidget extends StatelessWidget {
-  const Sample({super.key});
+  const MyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CounterCubit, int>(
            ^^^^^^^^^^^
       buildWhen: (previous, current) => previous != current,
+      builder: (context, state) => Text('$state'),
+    );
+  }
+}
+''',
+      );
+
+      lintTest(
+        'lints when using BlocBuilder (explicit bloc)',
+        rule: PreferBuildContextExtensions.new,
+        path: 'my_widget.dart',
+        content: r'''
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class MyWidget extends StatelessWidget {
+  const MyWidget({required this.bloc, super.key});
+
+  final CounterBloc bloc;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder(
+           ^^^^^^^^^^^
+      bloc: bloc,
       builder: (context, state) => Text('$state'),
     );
   }
@@ -62,7 +87,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyWidget extends StatelessWidget {
-  const Sample({super.key});
+  const MyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +112,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyWidget extends StatelessWidget {
-  const Sample({super.key});
+  const MyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
