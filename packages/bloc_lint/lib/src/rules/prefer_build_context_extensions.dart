@@ -36,6 +36,30 @@ Avoid using ${provider.lexeme}.of<T>.
 Prefer using context.read or context.watch instead.''',
       );
     }
+
+    final blocBuilder = tryParseBlocBuilder(token);
+    if (blocBuilder != null) {
+      return context.reportTokenRange(
+        beginToken: blocBuilder,
+        endToken: token,
+        message: 'Prefer using BuildContext extensions.',
+        hint: '''
+Avoid using ${blocBuilder.lexeme}.
+Prefer using context.watch instead.''',
+      );
+    }
+
+    final blocSelector = tryParseBlocSelector(token);
+    if (blocSelector != null) {
+      return context.reportTokenRange(
+        beginToken: blocSelector,
+        endToken: token,
+        message: 'Prefer using BuildContext extensions.',
+        hint: '''
+Avoid using ${blocSelector.lexeme}.
+Prefer using context.select instead.''',
+      );
+    }
   }
 
   Token? tryParseProvider(Token token) {
@@ -52,5 +76,15 @@ Prefer using context.read or context.watch instead.''',
     if (target == null) return null;
 
     return _providers.contains(target.lexeme) ? target : null;
+  }
+
+  Token? tryParseBlocBuilder(Token token) {
+    if (token.lexeme != 'BlocBuilder') return null;
+    return (token.next is BeginToken) ? token : null;
+  }
+
+  Token? tryParseBlocSelector(Token token) {
+    if (token.lexeme != 'BlocSelector') return null;
+    return (token.next is BeginToken) ? token : null;
   }
 }

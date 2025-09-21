@@ -5,6 +5,55 @@ import '../lint_test_helper.dart';
 
 void main() {
   group(PreferBuildContextExtensions, () {
+    group('BlocBuilder', () {
+      lintTest(
+        'lints when using BlocBuilder in a return',
+        rule: PreferBuildContextExtensions.new,
+        path: 'my_widget.dart',
+        content: r'''
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class MyWidget extends StatelessWidget {
+  const Sample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CounterCubit, int>(
+           ^^^^^^^^^^^
+      builder: (context, state) => Text('$state'),
+    );
+  }
+}
+''',
+      );
+    });
+
+    group('BlocSelector', () {
+      lintTest(
+        'lints when using BlocSelector in a return',
+        rule: PreferBuildContextExtensions.new,
+        path: 'my_widget.dart',
+        content: r'''
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class MyWidget extends StatelessWidget {
+  const Sample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocSelector<CounterCubit, int, bool>(
+           ^^^^^^^^^^^^
+      selector: (state) => state.isEven,
+      builder: (context, isEven) => Text('$isEven'),
+    );
+  }
+}
+''',
+      );
+    });
+
     group('BlocProvider', () {
       lintTest(
         'lints when using BlocProvider.of in an assignment',
