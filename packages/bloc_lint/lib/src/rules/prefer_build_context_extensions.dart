@@ -1,4 +1,3 @@
-// ignore: implementation_imports
 import 'package:bloc_lint/bloc_lint.dart';
 
 /// {@template prefer_build_context_extensions}
