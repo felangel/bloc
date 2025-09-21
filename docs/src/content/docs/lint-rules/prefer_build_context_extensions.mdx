@@ -29,6 +29,12 @@ For consistency, prefer using `BuildContext` extensions like `context.read`,
 `context.watch`, and `context.select` instead of `BlocProvider.of`,
 `RepositoryProvider.of`, `BlocBuilder` or `BlocSelector`.
 
+| explicit method                                                     | extension             |
+| ------------------------------------------------------------------- | --------------------- |
+| `BlocProvider.of<Bloc>(context, listen: false)`                     | `context.read<Bloc>`  |
+| `BlocBuilder<Bloc, State>(...)` or `BlocProvider.of<Bloc>(context)` | `context.watch<Bloc>` |
+| `BlocSelector<Bloc, State>(...)`                                    | `context.select`      |
+
 ## Examples
 
 **Avoid** using `BlocProvider.of<T>(context)` to access a `Bloc` instance.
