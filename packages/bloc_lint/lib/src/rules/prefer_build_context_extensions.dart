@@ -20,6 +20,8 @@ class _Listener extends Listener {
 
   final LintContext context;
 
+  static const _message = 'Prefer using BuildContext extensions.';
+
   @override
   void handleIdentifier(Token token, IdentifierContext _) {
     final provider = tryParseProvider(token);
@@ -27,7 +29,7 @@ class _Listener extends Listener {
       return context.reportTokenRange(
         beginToken: provider,
         endToken: token,
-        message: 'Prefer using BuildContext extensions.',
+        message: _message,
         hint: '''
 Avoid using ${provider.lexeme}.of<T>.
 Prefer using context.read or context.watch instead.''',
@@ -39,7 +41,7 @@ Prefer using context.read or context.watch instead.''',
       return context.reportTokenRange(
         beginToken: blocBuilder,
         endToken: token,
-        message: 'Prefer using BuildContext extensions.',
+        message: _message,
         hint: '''
 Avoid using ${blocBuilder.lexeme}.
 Prefer using context.watch instead.''',
@@ -51,7 +53,7 @@ Prefer using context.watch instead.''',
       return context.reportTokenRange(
         beginToken: blocSelector,
         endToken: token,
-        message: 'Prefer using BuildContext extensions.',
+        message: _message,
         hint: '''
 Avoid using ${blocSelector.lexeme}.
 Prefer using context.select instead.''',
