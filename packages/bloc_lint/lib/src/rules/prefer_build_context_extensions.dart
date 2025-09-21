@@ -1,5 +1,4 @@
 // ignore: implementation_imports
-import 'package:_fe_analyzer_shared/src/parser/parser.dart';
 import 'package:bloc_lint/bloc_lint.dart';
 
 /// {@template prefer_build_context_extensions}
@@ -26,26 +25,32 @@ class _Listener extends Listener {
 
   @override
   void handleIdentifier(Token token, IdentifierContext _) {
-    if (token.lexeme == 'of') {
-      final prev = token.previous;
-      if (prev == null) return;
-      if (prev.lexeme != '.') return;
-
-      final next = token.next;
-      if (next == null) return;
-
-      final target = prev.previous;
-      if (target == null) return;
-      if (!_providers.contains(target.lexeme)) return;
-
-      context.reportTokenRange(
-        beginToken: target,
-        endToken: next,
+    final provider = tryParseProvider(token);
+    if (provider != null) {
+      return context.reportTokenRange(
+        beginToken: provider,
+        endToken: token,
         message: 'Prefer using BuildContext extensions.',
         hint: '''
-Avoid using ${target.lexeme}.of<T>.
-Use context.read, context.watch, and context.select instead.''',
+Avoid using ${provider.lexeme}.of<T>.
+Prefer using context.read or context.watch instead.''',
       );
     }
+  }
+
+  Token? tryParseProvider(Token token) {
+    if (token.lexeme != 'of') return null;
+
+    final prev = token.previous;
+    if (prev == null) return null;
+    if (prev.type != TokenType.PERIOD) return null;
+
+    final next = token.next;
+    if (next == null) return null;
+
+    final target = prev.previous;
+    if (target == null) return null;
+
+    return _providers.contains(target.lexeme) ? target : null;
   }
 }
