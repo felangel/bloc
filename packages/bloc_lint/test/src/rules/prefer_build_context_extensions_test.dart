@@ -7,7 +7,7 @@ void main() {
   group(PreferBuildContextExtensions, () {
     group('BlocBuilder', () {
       lintTest(
-        'lints when using BlocBuilder in a return',
+        'lints when using BlocBuilder',
         rule: PreferBuildContextExtensions.new,
         path: 'my_widget.dart',
         content: r'''
@@ -27,11 +27,34 @@ class MyWidget extends StatelessWidget {
 }
 ''',
       );
+
+      lintTest(
+        'lints when using BlocBuilder (buildWhen)',
+        rule: PreferBuildContextExtensions.new,
+        path: 'my_widget.dart',
+        content: r'''
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class MyWidget extends StatelessWidget {
+  const Sample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CounterCubit, int>(
+           ^^^^^^^^^^^
+      buildWhen: (previous, current) => previous != current,
+      builder: (context, state) => Text('$state'),
+    );
+  }
+}
+''',
+      );
     });
 
     group('BlocSelector', () {
       lintTest(
-        'lints when using BlocSelector in a return',
+        'lints when using BlocSelector',
         rule: PreferBuildContextExtensions.new,
         path: 'my_widget.dart',
         content: r'''
@@ -56,10 +79,10 @@ class MyWidget extends StatelessWidget {
 
     group('BlocProvider', () {
       lintTest(
-        'lints when using BlocProvider.of in an assignment',
+        'lints when using BlocProvider.of (assignment)',
         rule: PreferBuildContextExtensions.new,
         path: 'my_widget.dart',
-        content: '''
+        content: r'''
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -68,16 +91,16 @@ class MyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<CounterCubit>(context);
-                 ^^^^^^^^^^^^^^^
-    return const SizedBox();
+    final count = BlocProvider.of<CounterCubit>(context).state;
+                  ^^^^^^^^^^^^^^^
+    return const Text('\$count');
   }
 }
 ''',
       );
 
       lintTest(
-        'lints when using BlocProvider.of in a callback',
+        'lints when using BlocProvider.of (invocation)',
         rule: PreferBuildContextExtensions.new,
         path: 'my_widget.dart',
         content: '''
@@ -91,10 +114,8 @@ class MyWidget extends StatelessWidget {
   Widget build(BuildContext context) {        
     return FloatingActionButton(
       child: const Icon(Icons.add),
-      onPressed: () {
-        BlocProvider.of<CounterCubit>().add(CounterEvent.increment);
-        ^^^^^^^^^^^^^^^
-      },                       
+      onPressed: () => BlocProvider.of<CounterBloc>().add(CounterEvent.increment);
+                       ^^^^^^^^^^^^^^^        
     );
   }
 }
@@ -159,7 +180,7 @@ class _MyWidgetState extends State<MyWidget> {
 
     group('RepositoryProvider', () {
       lintTest(
-        'lints when using RepositoryProvider.of in an assignment',
+        'lints when using RepositoryProvider.of (assignment)',
         rule: PreferBuildContextExtensions.new,
         path: 'my_widget.dart',
         content: '''
@@ -167,34 +188,38 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyWidget extends StatelessWidget {
-  const Sample({super.key});
+  const MyWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final repo = RepositoryProvider.of<MyRepo>(context);
-                 ^^^^^^^^^^^^^^^^^^^^^
-    return const SizedBox();
+  Widget build(BuildContext context) {    
+    return BlocProvider(
+      create: (context) => WeatherBloc(
+        weatherRepository: RepositoryProvider.of<WeatherRepository>(context),
+                           ^^^^^^^^^^^^^^^^^^^^^
+      ),
+      child: WeatherView(),
+    );
   }
 }
 ''',
       );
 
       lintTest(
-        'lints when using RepositoryProvider.of in a callback',
+        'lints when using RepositoryProvider.of (invocation)',
         rule: PreferBuildContextExtensions.new,
-        path: 'my_widget.dart',
+        path: 'my_button.dart',
         content: '''
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MyWidget extends StatelessWidget {
-  const MyWidget({super.key});
+class MyButton extends StatelessWidget {
+  const MyButton({super.key});
 
   @override
   Widget build(BuildContext context) {        
     return FloatingActionButton(
       child: const Icon(Icons.add),
-      onPressed: () => RepositoryProvider.of<MyRepo>().foo(),
+      onPressed: () => RepositoryProvider.of<MyRepository>().add(),
                        ^^^^^^^^^^^^^^^^^^^^^                       
     );
   }
@@ -216,7 +241,7 @@ class MyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider(
-      create: (_) => MyRepo(),
+      create: (_) => MyRepository(),
       child: const SizedBox(),
     );
   }
@@ -239,20 +264,15 @@ class MyWidget extends StatefulWidget {
   State<MyWidget> createState() => _MyWidgetState();
 }
 class _MyWidgetState extends State<MyWidget> {
-  final repo = MyRepo();
+  final repository = MyRepository();
 
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
-      value: repo,
+      value: repository,
       child: const SizedBox(),
     );
-  }
-
-  @override
-  void dispose() {
-    repo.dispose();
-  }
+  }  
 }
 ''',
       );

@@ -21,8 +21,6 @@ class _Listener extends Listener {
 
   final LintContext context;
 
-  static const _providers = <String>{'BlocProvider', 'RepositoryProvider'};
-
   @override
   void handleIdentifier(Token token, IdentifierContext _) {
     final provider = tryParseProvider(token);
@@ -75,7 +73,8 @@ Prefer using context.select instead.''',
     final target = prev.previous;
     if (target == null) return null;
 
-    return _providers.contains(target.lexeme) ? target : null;
+    const providers = <String>{'BlocProvider', 'RepositoryProvider'};
+    return providers.contains(target.lexeme) ? target : null;
   }
 
   Token? tryParseBlocBuilder(Token token) {
