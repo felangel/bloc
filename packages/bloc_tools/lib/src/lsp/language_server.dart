@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:bloc_lint/bloc_lint.dart';
 import 'package:bloc_tools/src/lsp/text_documents.dart';
-import 'package:lsp_server/lsp_server.dart' as lsp;
+import 'package:lsp_server_ce/lsp_server_ce.dart' as lsp;
 import 'package:path/path.dart' as p;
 
 /// {@template language_server}

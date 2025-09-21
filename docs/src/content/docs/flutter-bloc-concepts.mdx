@@ -142,6 +142,13 @@ to:
 
 <MultiBlocProviderSnippet />
 
+:::caution
+
+When a `BlocProvider` is defined within the context of a `MultiBlocProvider`,
+any `child` will be ignored.
+
+:::
+
 ### BlocListener
 
 **BlocListener** is a Flutter widget which takes a `BlocWidgetListener` and an
@@ -182,6 +189,13 @@ go from:
 to:
 
 <MultiBlocListenerSnippet />
+
+:::caution
+
+When a `BlocListener` is defined within the context of a `MultiBlocListener`,
+any `child` will be ignored.
+
+:::
 
 ### BlocConsumer
 
@@ -240,6 +254,13 @@ using `MultiRepositoryProvider` we can go from:
 to:
 
 <MultiRepositoryProviderSnippet />
+
+:::caution
+
+When a `RepositoryProvider` is defined within the context of a
+`MultiRepositoryProvider`, any `child` will be ignored.
+
+:::
 
 ## BlocProvider Usage
 
