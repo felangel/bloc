@@ -11,6 +11,7 @@
 
     <change-notes><![CDATA[
         <ul>
+          <li>v4.1.9 - Bump bloc_tools version to 0.1.0-dev.19</li>  
           <li>v4.1.8 - Bump bloc_tools version to 0.1.0-dev.18</li>
           <li>v4.1.7 - Various linter improvements and performance optimizations</li>
           <li>v4.1.6 - Fix increased CPU usage when using fvm</li>
