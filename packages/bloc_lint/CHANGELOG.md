@@ -1,3 +1,7 @@
+# 0.3.2
+
+- feat: add [prefer_build_context_extensions](https://bloclibrary.dev/lint-rules/prefer_build_context_extensions)
+
 # 0.3.1
 
 - fix: adjust lower bound for `_fe_analyzer_shared`
