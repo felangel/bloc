@@ -1,3 +1,8 @@
+# 6.8.11
+
+- deps: upgrade to `bloc_tools: 0.1.0-dev.19`
+- deps: various dependency upgrades
+
 # 6.8.10
 
 - deps: upgrade to `bloc_tools: 0.1.0-dev.18`
