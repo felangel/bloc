@@ -2,23 +2,30 @@
 import { Code } from '@astrojs/starlight/components';
 
 const code = `
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class IncrementButton extends StatelessWidget {
-  const IncrementButton({super.key});
+class CounterPage extends StatelessWidget {
+  const CounterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      child: Icon(Icons.add),
-      onPressed: () {
-        context.read<CounterCubit>().increment();
-      },
-    );    
+    final count = context.watch<CounterBloc>().state;
+
+    return Column(
+      children: [
+        Text('Count: $count'),
+        ElevatedButton(
+          onPressed: () {
+            context.read<CounterBloc>().add(CounterIncrement());
+          },
+          child: const Text('Increment'),
+        ),
+      ],
+    );
   }
 }
 `;
 ---
 
-<Code code={code} lang="dart" title="increment_button.dart" />
+<Code code={code} lang="dart" title="counter_page.dart" />
