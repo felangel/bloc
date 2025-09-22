@@ -11,14 +11,14 @@ import { transformerMetaHighlight } from '@shikijs/transformers';
 
     @override
     Widget build(BuildContext context) {
-      final count = context.watch<CounterBloc>().state; // LINT
+      final count = context.watch<CounterBloc>().state;
 
       return Column(
         children: [
           Text('Count: $count'),
           ElevatedButton(
             onPressed: () {
-              context.read<CounterBloc>().add(CounterIncrement()); // LINT
+              context.read<CounterBloc>().add(CounterIncrement());
             },
             child: const Text('Increment'),
           ),
