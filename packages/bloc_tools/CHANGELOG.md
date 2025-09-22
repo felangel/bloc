@@ -1,3 +1,7 @@
+# 0.1.0-dev.19
+
+- deps: bump `pkg:bloc_lint` to `^0.3.2`
+
 # 0.1.0-dev.18
 
 - fix: migrate to `pkg:lsp_server_ce`
