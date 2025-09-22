@@ -11,20 +11,18 @@ import { transformerMetaHighlight } from '@shikijs/transformers';
 
     @override
     Widget build(BuildContext context) {
-      return BlocBuilder<CounterBloc, int>(
-        builder: (context, state) {
-          return Column(
-            children: [
-              Text('Count: $state'),
-              ElevatedButton(
-                onPressed: () {
-                  BlocProvider.of<CounterBloc>(context).add(CounterIncrement());
-                },
-                child: const Text('Increment'),
-              ),
-            ],
-          );
-        }
+      return Column(
+        children: [
+          BlocBuilder<CounterBloc, int>(
+            builder: (context, state) => Text('Count: \$state'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              BlocProvider.of<CounterBloc>(context).add(CounterIncrement());
+            },
+            child: const Text('Increment'),
+          ),
+        ],
       );
     }
   }
