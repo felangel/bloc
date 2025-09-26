@@ -219,7 +219,6 @@ Future<void> testBloc<B extends EmittableStateStreamableSource<State>, State>({
           if (shallowEquality || expected is! List<State>) rethrow;
           final diff = _diff(expected: expected, actual: states);
           final message = '${e.message}\n$diff';
-          // ignore: only_throw_errors
           throw test.TestFailure(message);
         }
       }
@@ -229,7 +228,6 @@ Future<void> testBloc<B extends EmittableStateStreamableSource<State>, State>({
     });
   } catch (error) {
     if (shallowEquality && error is test.TestFailure) {
-      // ignore: only_throw_errors
       throw test.TestFailure(
         '''
 ${error.message}
