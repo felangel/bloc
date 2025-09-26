@@ -19,6 +19,7 @@ dependencies:
   test: ^1.16.0
 
 dev_dependencies:
+  bloc_lint: ^0.3.2
   rxdart: ^0.28.0
 
 screenshots:

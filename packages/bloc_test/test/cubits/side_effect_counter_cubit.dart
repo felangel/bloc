@@ -5,12 +5,12 @@ class Repository {
 }
 
 class SideEffectCounterCubit extends Cubit<int> {
-  SideEffectCounterCubit(this.repository) : super(0);
+  SideEffectCounterCubit(this._repository) : super(0);
 
-  final Repository repository;
+  final Repository _repository;
 
   void increment() {
-    repository.sideEffect();
+    _repository.sideEffect();
     emit(state + 1);
   }
 }
