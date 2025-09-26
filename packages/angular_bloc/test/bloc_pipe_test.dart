@@ -16,6 +16,7 @@ class Increment extends CounterEvent {}
 
 class Decrement extends CounterEvent {}
 
+// ignore: prefer_file_naming_conventions
 class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc() : super(0) {
     on<Increment>((event, emit) => emit(state + 1));
