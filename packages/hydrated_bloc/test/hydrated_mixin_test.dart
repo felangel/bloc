@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_file_naming_conventions
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';

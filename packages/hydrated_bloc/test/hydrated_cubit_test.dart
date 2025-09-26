@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_file_naming_conventions
 import 'dart:async';
 
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -18,9 +19,11 @@ class MyUuidHydratedCubit extends HydratedCubit<String> {
 }
 
 class MyCallbackHydratedCubit extends HydratedCubit<int> {
-  MyCallbackHydratedCubit({this.onFromJsonCalled}) : super(0);
+  MyCallbackHydratedCubit({void Function(dynamic)? onFromJsonCalled})
+      : _onFromJsonCalled = onFromJsonCalled,
+        super(0);
 
-  final void Function(dynamic)? onFromJsonCalled;
+  final void Function(dynamic)? _onFromJsonCalled;
 
   void increment() => emit(state + 1);
 
@@ -29,7 +32,7 @@ class MyCallbackHydratedCubit extends HydratedCubit<int> {
 
   @override
   int? fromJson(dynamic json) {
-    onFromJsonCalled?.call(json);
+    _onFromJsonCalled?.call(json);
     // ignore: avoid_dynamic_calls
     return json['value'] as int?;
   }

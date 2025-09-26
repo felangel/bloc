@@ -385,19 +385,21 @@ void main() {
 
     group('FromJsonStateCubit', () {
       test('does not throw StackOverflow ', () async {
-        var cubit = FromJsonStateCubit();
+        final fromJsonCalls = <int>[];
+        var cubit = FromJsonStateCubit(onFromJson: fromJsonCalls.add);
 
-        expect(cubit.fromJsonCalls, isEmpty);
+        expect(fromJsonCalls, isEmpty);
         expect(cubit.state, equals(0));
 
         cubit.increment();
         await sleep();
 
         expect(cubit.state, equals(1));
-        expect(cubit.fromJsonCalls, isEmpty);
+        expect(fromJsonCalls, isEmpty);
 
-        cubit = FromJsonStateCubit();
-        expect(cubit.fromJsonCalls, equals([0]));
+        fromJsonCalls.clear();
+        cubit = FromJsonStateCubit(onFromJson: fromJsonCalls.add);
+        expect(fromJsonCalls, equals([0]));
         expect(cubit.state, equals(1));
       });
     });
