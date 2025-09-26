@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_equals_and_hash_code_on_mutable_classes
+// ignore_for_file: avoid_equals_and_hash_code_on_mutable_classes, lines_longer_than_80_chars, prefer_file_naming_conventions, avoid_public_fields
 import 'package:bloc/bloc.dart';
 
 abstract class CounterEvent {}
