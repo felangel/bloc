@@ -1,3 +1,10 @@
+# 9.0.1
+
+- refactor: analysis options updates ([#4616](https://github.com/felangel/bloc/pull/4616))
+- docs: update build status badge ([#4502](https://github.com/felangel/bloc/pull/4502))
+- docs: update sponsors ([#4418](https://github.com/felangel/bloc/pull/4418))
+- docs: update minimum Dart SDK version in `README.md`
+
 # 9.0.0
 
 - **BREAKING** refactor!: introduce `EmittableStateStreamableSource` ([#4311](https://github.com/felangel/bloc/pull/4311))
