@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 import 'package:todos_api/todos_api.dart';

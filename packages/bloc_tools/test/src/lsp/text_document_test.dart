@@ -1,4 +1,4 @@
-// ignore_for_file: cascade_invocations, require_trailing_commas
+// ignore_for_file: cascade_invocations
 
 import 'package:bloc_tools/src/lsp/text_document.dart';
 import 'package:lsp_server_ce/lsp_server_ce.dart' as lsp;

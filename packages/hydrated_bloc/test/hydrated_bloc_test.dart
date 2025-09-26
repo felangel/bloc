@@ -21,7 +21,6 @@ class MyUuidHydratedBloc extends HydratedBloc<String, String?> {
       // ignore: avoid_dynamic_calls
       return json['value'] as String;
     } catch (_) {
-      // ignore: avoid_returning_null
       return null;
     }
   }
