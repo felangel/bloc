@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_file_naming_conventions
 import 'dart:async';
 
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -43,18 +44,20 @@ abstract class CounterEvent {}
 class Increment extends CounterEvent {}
 
 class MyCallbackHydratedBloc extends HydratedBloc<CounterEvent, int> {
-  MyCallbackHydratedBloc({this.onFromJsonCalled}) : super(0) {
+  MyCallbackHydratedBloc({void Function(dynamic)? onFromJsonCalled})
+      : _onFromJsonCalled = onFromJsonCalled,
+        super(0) {
     on<Increment>((event, emit) => emit(state + 1));
   }
 
-  final void Function(dynamic)? onFromJsonCalled;
+  final void Function(dynamic)? _onFromJsonCalled;
 
   @override
   Map<String, int> toJson(int state) => {'value': state};
 
   @override
   int? fromJson(Map<String, dynamic> json) {
-    onFromJsonCalled?.call(json);
+    _onFromJsonCalled?.call(json);
     return json['value'] as int?;
   }
 }
@@ -101,20 +104,22 @@ class MyMultiHydratedBloc extends HydratedBloc<int, int> {
 }
 
 class MyErrorThrowingBloc extends HydratedBloc<Object, int> {
-  MyErrorThrowingBloc({this.onErrorCallback, this.superOnError = true})
-      : super(0) {
+  MyErrorThrowingBloc({
+    void Function(Object error, StackTrace stackTrace)? onErrorCallback,
+    bool superOnError = true,
+  })  : _onErrorCallback = onErrorCallback,
+        _superOnError = superOnError,
+        super(0) {
     on<Object>((event, emit) => emit(state + 1));
   }
 
-  final void Function(Object error, StackTrace stackTrace)? onErrorCallback;
-  final bool superOnError;
+  final void Function(Object error, StackTrace stackTrace)? _onErrorCallback;
+  final bool _superOnError;
 
   @override
   void onError(Object error, StackTrace stackTrace) {
-    onErrorCallback?.call(error, stackTrace);
-    if (superOnError) {
-      super.onError(error, stackTrace);
-    }
+    _onErrorCallback?.call(error, stackTrace);
+    if (_superOnError) super.onError(error, stackTrace);
   }
 
   @override

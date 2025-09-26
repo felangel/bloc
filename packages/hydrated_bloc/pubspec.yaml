@@ -26,6 +26,7 @@ dependencies:
   synchronized: ^3.0.0
 
 dev_dependencies:
+  bloc_lint: ^0.3.2
   build_runner: ^2.3.3
   collection: ^1.17.1
   crypto: ^3.0.2
