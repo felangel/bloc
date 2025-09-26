@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_file_naming_conventions
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -159,16 +160,18 @@ class RoutePage extends StatelessWidget {
 }
 
 class CounterCubit extends Cubit<int> {
-  CounterCubit({this.onClose}) : super(0);
+  CounterCubit({VoidCallback? onClose})
+      : _onClose = onClose,
+        super(0);
 
-  final void Function()? onClose;
+  final VoidCallback? _onClose;
 
   void increment() => emit(state + 1);
   void decrement() => emit(state - 1);
 
   @override
   Future<void> close() {
-    onClose?.call();
+    _onClose?.call();
     return super.close();
   }
 }

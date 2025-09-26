@@ -18,6 +18,7 @@ dependencies:
   provider: ^6.0.0
 
 dev_dependencies:
+  bloc_lint: ^0.3.2
   flutter_test:
     sdk: flutter
 
