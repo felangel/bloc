@@ -48,6 +48,18 @@ abstract class BlocObserver {
   @mustCallSuper
   void onError(BlocBase<dynamic> bloc, Object error, StackTrace stackTrace) {}
 
+  /// Called whenever an [event] handler for a specific [bloc] has completed.
+  /// This may include an [error] and [stackTrace] if an uncaught exception
+  /// occurred within the event handler.
+  @protected
+  @mustCallSuper
+  void onDone(
+    Bloc<dynamic, dynamic> bloc,
+    Object? event, [
+    Object? error,
+    StackTrace? stackTrace,
+  ]) {}
+
   /// Called whenever a [Bloc] is closed.
   /// [onClose] is called just before the [Bloc] is closed
   /// and indicates that the particular instance will no longer
