@@ -1,0 +1,114 @@
+---
+title: Modélisation de l'État
+description:
+  Un aperçu de plusieurs façons de modéliser les états lors de l'utilisation de
+  package:bloc.
+---
+
+import ConcreteClassAndStatusEnumSnippet from '~/components/modeling-state/ConcreteClassAndStatusEnumSnippet.astro';
+import SealedClassAndSubclassesSnippet from '~/components/modeling-state/SealedClassAndSubclassesSnippet.astro';
+
+Il existe de nombreuses approches différentes lorsqu'il s'agit de structurer
+l'état de l'application. Chacune a ses propres avantages et inconvénients. Dans
+cette section, nous examinerons plusieurs approches, leurs avantages et
+inconvénients, et quand utiliser chacune d'elles.
+
+Les approches suivantes sont simplement des recommandations et sont complètement
+optionnelles. N'hésitez pas à utiliser l'approche que vous préférez. Vous
+pouvez constater que certains exemples/documentation ne suivent pas les
+approches principalement par souci de simplicité/concision.
+
+:::tip
+
+Les extraits de code suivants sont axés sur la structure de l'état. En pratique,
+vous pourriez également vouloir :
+
+- Étendre `Equatable` de
+  [`package:equatable`](https://pub.dev/packages/equatable)
+- Annoter la classe avec `@Data()` de
+  [`package:data_class`](https://pub.dev/packages/data_class)
+- Annoter la classe avec **@immutable** de
+  [`package:meta`](https://pub.dev/packages/meta)
+- Implémenter une méthode `copyWith`
+- Utiliser le mot-clé `const` pour les constructeurs
+
+:::
+
+## Classe Concrète et Enum de Statut
+
+Cette approche consiste en une **classe concrète unique** pour tous les états
+avec un `enum` représentant différents statuts. Les propriétés sont rendues
+nullables et sont gérées en fonction du statut actuel. Cette approche fonctionne
+mieux pour les états qui ne sont pas strictement exclusifs et/ou contiennent
+beaucoup de propriétés partagées.
+
+<ConcreteClassAndStatusEnumSnippet />
+
+#### Avantages
+
+- **Simple** : Facile à gérer une seule classe et un enum de statut et toutes
+  les propriétés sont facilement accessibles.
+- **Concis** : Nécessite généralement moins de lignes de code par rapport aux
+  autres approches.
+
+#### Inconvénients
+
+- **Non Type-Safe** : Nécessite de vérifier le `status` avant d'accéder aux
+  propriétés. Il est possible d'émettre un état mal formé qui peut entraîner des
+  erreurs. Les propriétés pour des statuts spécifiques sont nullables, ce qui
+  peut être fastidieux à gérer et nécessite soit un déballage forcé, soit des
+  vérifications de nullité. Certains de ces inconvénients peuvent être atténués
+  en écrivant des tests unitaires et des constructeurs spécialisés et nommés.
+- **Gonflé** : Résulte en un seul état qui peut devenir gonflé avec de
+  nombreuses propriétés au fil du temps.
+
+#### Verdict
+
+Cette approche fonctionne mieux pour les états simples ou lorsque les exigences
+appellent à des états qui ne sont pas exclusifs (par exemple, afficher une
+snackbar lorsqu'une erreur se produit tout en continuant à afficher les
+anciennes données du dernier état réussi). Cette approche offre flexibilité et
+concision au détriment de la sécurité des types.
+
+## Classe Scellée et Sous-classes
+
+Cette approche consiste en une **classe scellée** contenant toutes les
+propriétés partagées et plusieurs sous-classes pour les états séparés. Cette
+approche est idéale pour les états séparés et exclusifs.
+
+<SealedClassAndSubclassesSnippet />
+
+#### Avantages
+
+- **Type-Safe** : Le code est sûr au moment de la compilation et il n'est pas
+  possible d'accéder accidentellement à une propriété invalide. Chaque
+  sous-classe contient ses propres propriétés, ce qui rend clair quelles
+  propriétés appartiennent à quel état.
+- **Explicite** : Sépare les propriétés partagées des propriétés spécifiques à
+  l'état.
+- **Exhaustif** : L'utilisation d'une instruction `switch` pour des
+  vérifications exhaustives garantit que chaque état est géré explicitement.
+  - Si vous ne souhaitez pas de
+    [vérifications exhaustives](https://dart.dev/language/branches#exhaustiveness-checking)
+    ou si vous souhaitez pouvoir ajouter des sous-types plus tard sans casser
+    l'API, utilisez le modificateur [final](https://dart.dev/language/class-modifiers#final).
+  - Consultez la
+    [documentation des classes scellées](https://dart.dev/language/class-modifiers#sealed)
+    pour plus de détails.
+
+#### Inconvénients
+
+- **Verbeux** : Nécessite plus de code (une classe de base et une sous-classe
+  par état). Peut également nécessiter du code dupliqué pour les propriétés
+  partagées entre les sous-classes.
+- **Complexité** : L'ajout de nouvelles propriétés nécessite de mettre à jour
+  chaque sous-classe et la classe de base, ce qui peut être fastidieux et
+  entraîner une augmentation de la complexité de l'état. De plus, peut nécessiter
+  des vérifications de type inutiles/excessives pour accéder aux propriétés.
+
+#### Verdict
+
+Cette approche fonctionne mieux pour les états bien définis et exclusifs avec
+des propriétés uniques. Cette approche offre la sécurité des types et des
+vérifications exhaustives et met l'accent sur la sécurité plutôt que sur la
+concision et la simplicité.
