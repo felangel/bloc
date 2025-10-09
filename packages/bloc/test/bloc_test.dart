@@ -1521,7 +1521,7 @@ void main() {
         );
       });
 
-      test('triggers onError from eventHandler', () {
+      test('triggers onError from event handler', () {
         runZonedGuarded(
           () {
             final error = Error();
