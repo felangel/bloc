@@ -1,0 +1,254 @@
+---
+title: FAQ
+description: Réponses aux questions fréquemment posées sur la bibliothèque bloc.
+---
+
+import StateNotUpdatingGood1Snippet from '~/components/faqs/StateNotUpdatingGood1Snippet.astro';
+import StateNotUpdatingGood2Snippet from '~/components/faqs/StateNotUpdatingGood2Snippet.astro';
+import StateNotUpdatingGood3Snippet from '~/components/faqs/StateNotUpdatingGood3Snippet.astro';
+import StateNotUpdatingBad1Snippet from '~/components/faqs/StateNotUpdatingBad1Snippet.astro';
+import StateNotUpdatingBad2Snippet from '~/components/faqs/StateNotUpdatingBad2Snippet.astro';
+import StateNotUpdatingBad3Snippet from '~/components/faqs/StateNotUpdatingBad3Snippet.astro';
+import EquatableEmitSnippet from '~/components/faqs/EquatableEmitSnippet.astro';
+import EquatableBlocTestSnippet from '~/components/faqs/EquatableBlocTestSnippet.astro';
+import NoEquatableBlocTestSnippet from '~/components/faqs/NoEquatableBlocTestSnippet.astro';
+import SingleStateSnippet from '~/components/faqs/SingleStateSnippet.astro';
+import SingleStateUsageSnippet from '~/components/faqs/SingleStateUsageSnippet.astro';
+import BlocProviderGood1Snippet from '~/components/faqs/BlocProviderGood1Snippet.astro';
+import BlocProviderGood2Snippet from '~/components/faqs/BlocProviderGood2Snippet.astro';
+import BlocProviderBad1Snippet from '~/components/faqs/BlocProviderBad1Snippet.astro';
+import BlocInternalAddEventSnippet from '~/components/faqs/BlocInternalAddEventSnippet.astro';
+import BlocInternalEventSnippet from '~/components/faqs/BlocInternalEventSnippet.astro';
+import BlocExternalForEachSnippet from '~/components/faqs/BlocExternalForEachSnippet.astro';
+
+## L'État ne se Met pas à Jour
+
+❔ **Question** : J'émets un état dans mon bloc mais l'interface utilisateur ne
+se met pas à jour. Qu'est-ce que je fais de mal ?
+
+💡 **Réponse** : Si vous utilisez Equatable, assurez-vous de passer toutes les
+propriétés au getter props.
+
+✅ **BON**
+
+<StateNotUpdatingGood1Snippet />
+
+❌ **MAUVAIS**
+
+<StateNotUpdatingBad1Snippet />
+
+<StateNotUpdatingBad2Snippet />
+
+De plus, assurez-vous d'émettre une nouvelle instance de l'état dans votre bloc.
+
+✅ **BON**
+
+<StateNotUpdatingGood2Snippet />
+
+<StateNotUpdatingGood3Snippet />
+
+❌ **MAUVAIS**
+
+<StateNotUpdatingBad3Snippet />
+
+:::caution
+
+Les propriétés d'`Equatable` doivent toujours être copiées plutôt que modifiées.
+Si une classe `Equatable` contient une `List` ou `Map` comme propriétés,
+assurez-vous d'utiliser `List.of` ou `Map.of` respectivement pour garantir que
+l'égalité soit évaluée en fonction des valeurs des propriétés plutôt que de la
+référence.
+
+:::
+
+## Quand Utiliser Equatable
+
+❔**Question** : Quand dois-je utiliser Equatable ?
+
+💡**Réponse** :
+
+<EquatableEmitSnippet />
+
+Dans le scénario ci-dessus, si `StateA` étend `Equatable`, un seul changement
+d'état se produira (le second emit sera ignoré). En général, vous devriez
+utiliser `Equatable` si vous souhaitez optimiser votre code pour réduire le
+nombre de reconstructions. Vous ne devriez pas utiliser `Equatable` si vous
+souhaitez que le même état consécutif déclenche plusieurs transitions.
+
+De plus, l'utilisation d'`Equatable` facilite beaucoup les tests de blocs, car
+nous pouvons attendre des instances spécifiques d'états de bloc au lieu
+d'utiliser `Matchers` ou `Predicates`.
+
+<EquatableBlocTestSnippet />
+
+Sans `Equatable`, le test ci-dessus échouerait et devrait être réécrit ainsi :
+
+<NoEquatableBlocTestSnippet />
+
+## Gestion des Erreurs
+
+❔ **Question** : Comment puis-je gérer une erreur tout en continuant à afficher
+les données précédentes ?
+
+💡 **Réponse** :
+
+Cela dépend fortement de la façon dont l'état du bloc a été modélisé. Dans les
+cas où les données doivent être conservées même en présence d'une erreur,
+envisagez d'utiliser une seule classe d'état.
+
+<SingleStateSnippet />
+
+Cela permettra aux widgets d'avoir accès aux propriétés `data` et `error`
+simultanément et le bloc peut utiliser `state.copyWith` pour conserver les
+anciennes données même lorsqu'une erreur se produit.
+
+<SingleStateUsageSnippet />
+
+## Bloc vs. Redux
+
+❔ **Question** : Quelle est la différence entre Bloc et Redux ?
+
+💡 **Réponse** :
+
+BLoC est un modèle de conception qui se définit par les règles suivantes :
+
+1. L'entrée et la sortie du BLoC sont des Streams et Sinks simples.
+2. Les dépendances doivent être injectables et agnostiques de la plateforme.
+3. Aucune bifurcation de plateforme n'est autorisée.
+4. L'implémentation peut être ce que vous voulez tant que vous suivez les règles
+   ci-dessus.
+
+Les directives de l'interface utilisateur sont :
+
+1. Chaque composant "suffisamment complexe" a un BLoC correspondant.
+2. Les composants doivent envoyer les entrées "telles quelles".
+3. Les composants doivent afficher les sorties aussi près de "telles quelles"
+   que possible.
+4. Toute bifurcation doit être basée sur des sorties booléennes simples du BLoC.
+
+La bibliothèque Bloc implémente le modèle de conception BLoC et vise à abstraire
+RxDart pour simplifier l'expérience du développeur.
+
+Les trois principes de Redux sont :
+
+1. Source unique de vérité
+2. L'état est en lecture seule
+3. Les changements sont effectués avec des fonctions pures
+
+La bibliothèque bloc viole le premier principe ; avec bloc, l'état est distribué
+à travers plusieurs blocs. De plus, il n'y a pas de concept de middleware dans
+bloc et bloc est conçu pour faciliter les changements d'état asynchrones, vous
+permettant d'émettre plusieurs états pour un seul événement.
+
+## Bloc vs. Provider
+
+❔ **Question** : Quelle est la différence entre Bloc et Provider ?
+
+💡 **Réponse** : `provider` est conçu pour l'injection de dépendances (il
+encapsule `InheritedWidget`). Vous devez toujours déterminer comment gérer votre
+état (via `ChangeNotifier`, `Bloc`, `Mobx`, etc...). La bibliothèque Bloc
+utilise `provider` en interne pour faciliter la fourniture et l'accès aux blocs
+dans l'arbre de widgets.
+
+## BlocProvider.of() ne Trouve pas le Bloc
+
+❔ **Question** : Lorsque j'utilise `BlocProvider.of(context)`, il ne peut pas
+trouver le bloc. Comment puis-je résoudre ce problème ?
+
+💡 **Réponse** : Vous ne pouvez pas accéder à un bloc à partir du même contexte
+dans lequel il a été fourni, vous devez donc vous assurer que `BlocProvider.of()`
+est appelé dans un `BuildContext` enfant.
+
+✅ **BON**
+
+<BlocProviderGood1Snippet />
+
+<BlocProviderGood2Snippet />
+
+❌ **MAUVAIS**
+
+<BlocProviderBad1Snippet />
+
+## Structure du Projet
+
+❔ **Question** : Comment dois-je structurer mon projet ?
+
+💡 **Réponse** : Bien qu'il n'y ait vraiment pas de bonne/mauvaise réponse à
+cette question, voici quelques références recommandées :
+
+- [I/O Photobooth](https://github.com/flutter/photobooth)
+- [I/O Pinball](https://github.com/flutter/pinball)
+- [Flutter News Toolkit](https://github.com/flutter/news_toolkit)
+
+Le plus important est d'avoir une structure de projet **cohérente** et
+**intentionnelle**.
+
+## Ajouter des Événements dans un Bloc
+
+❔ **Question** : Est-il acceptable d'ajouter des événements à l'intérieur d'un
+bloc ?
+
+💡 **Réponse** : Dans la plupart des cas, les événements doivent être ajoutés
+en externe, mais dans certains cas sélectionnés, il peut être judicieux que les
+événements soient ajoutés en interne.
+
+La situation la plus courante où les événements internes sont utilisés est
+lorsque les changements d'état doivent se produire en réponse à des mises à jour
+en temps réel depuis un dépôt. Dans ces situations, le dépôt est le stimulus
+pour le changement d'état plutôt qu'un événement externe comme un appui sur un
+bouton.
+
+Dans l'exemple suivant, l'état de `MyBloc` dépend de l'utilisateur actuel qui
+est exposé via le `Stream<User>` du `UserRepository`. `MyBloc` écoute les
+changements de l'utilisateur actuel et ajoute un événement interne `_UserChanged`
+chaque fois qu'un utilisateur est émis depuis le flux d'utilisateurs.
+
+<BlocInternalAddEventSnippet />
+
+Lors de l'ajout d'un événement interne, nous pouvons également spécifier un
+`transformer` personnalisé pour l'événement afin de déterminer comment plusieurs
+événements `_UserChanged` seront traités -- par défaut, ils seront traités
+simultanément.
+
+Il est fortement recommandé que les événements internes soient privés. C'est une
+façon explicite de signaler qu'un événement spécifique est utilisé uniquement à
+l'intérieur du bloc et empêche les composants externes de connaître l'événement.
+
+<BlocInternalEventSnippet />
+
+Alternativement, nous pouvons définir un événement externe `Started` et utiliser
+l'API `emit.forEach` pour gérer la réaction aux mises à jour des utilisateurs en
+temps réel :
+
+<BlocExternalForEachSnippet />
+
+Les avantages de l'approche ci-dessus sont :
+
+- Nous n'avons pas besoin d'un événement interne `_UserChanged`
+- Nous n'avons pas besoin de gérer manuellement la `StreamSubscription`
+- Nous avons un contrôle total sur quand le bloc s'abonne au flux de mises à
+  jour des utilisateurs
+
+Les inconvénients de l'approche ci-dessus sont :
+
+- Nous ne pouvons pas facilement `pausar` ou `reprendre` l'abonnement
+- Nous devons exposer un événement public `Started` qui doit être ajouté en
+  externe
+- Nous ne pouvons pas utiliser un `transformer` personnalisé pour ajuster la
+  façon dont nous réagissons aux mises à jour des utilisateurs
+
+## Exposer des Méthodes Publiques
+
+❔ **Question** : Est-il acceptable d'exposer des méthodes publiques sur mes
+instances de bloc et cubit ?
+
+💡 **Réponse**
+
+Lors de la création d'un cubit, il est recommandé d'exposer uniquement des
+méthodes publiques dans le but de déclencher des changements d'état. Par
+conséquent, généralement toutes les méthodes publiques sur une instance de cubit
+doivent retourner `void` ou `Future<void>`.
+
+Lors de la création d'un bloc, il est recommandé d'éviter d'exposer des méthodes
+publiques personnalisées et de plutôt notifier le bloc d'événements en appelant
+`add`.
