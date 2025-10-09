@@ -50,17 +50,17 @@ export default defineConfig({
 			sidebar: [
 				{
 					label: 'Introduction',
-					translations: { 'zh-CN': '介绍', fa: 'مقدمه', es: 'Introducción' },
+					translations: { 'zh-CN': '介绍', fa: 'مقدمه', es: 'Introducción', fr: 'Introduction' },
 					items: [
 						{
 							label: 'Getting Started',
 							link: '/getting-started/',
-							translations: { 'zh-CN': '快速入门', fa: 'شروع شدن', es: 'Empezando' },
+							translations: { 'zh-CN': '快速入门', fa: 'شروع شدن', es: 'Empezando', fr: 'Démarrer' },
 						},
 						{
 							label: 'Why Bloc?',
 							link: '/why-bloc/',
-							translations: { 'zh-CN': '为什么用 Bloc?', fa: 'چرا Bloc؟', es: '¿Por qué Bloc?' },
+							translations: { 'zh-CN': '为什么用 Bloc?', fa: 'چرا Bloc؟', es: '¿Por qué Bloc?', fr: 'Pourquoi Bloc ?' },
 						},
 						{
 							label: 'Bloc Concepts',
@@ -69,6 +69,7 @@ export default defineConfig({
 								'zh-CN': 'Bloc 核心概念',
 								fa: 'مفاهیم Bloc',
 								es: 'Conceptos de Bloc',
+								fr: 'Concepts de Bloc',
 							},
 						},
 						{
@@ -78,75 +79,77 @@ export default defineConfig({
 								'zh-CN': 'Flutter Bloc 核心概念',
 								fa: 'مفاهیم بلوک فلاتر',
 								es: 'Conceptos de Flutter Bloc',
+								fr: 'Concepts de Flutter Bloc',
 							},
 						},
 						{
 							label: 'Architecture',
 							link: '/architecture/',
-							translations: { fa: 'معماری', es: 'Arquitectura' },
+							translations: { fa: 'معماری', es: 'Arquitectura', fr: 'Architecture' },
 						},
 						{
 							label: 'Modeling State',
 							link: '/modeling-state/',
-							translations: { fa: 'وضعیت (State) مدل سازی', es: 'Modelando el Estado' },
+							translations: { fa: 'وضعیت (State) مدل سازی', es: 'Modelando el Estado', fr: 'Modélisation de l\'État' },
 						},
 						{
 							label: 'Testing',
 							link: '/testing/',
-							translations: { fa: 'آزمایش کردن', es: 'Pruebas' },
+							translations: { fa: 'آزمایش کردن', es: 'Pruebas', fr: 'Tests' },
 						},
 						{
 							label: 'Naming Conventions',
 							link: '/naming-conventions/',
-							translations: { fa: 'قراردادهای نامگذاری', es: 'Convenciones de Nomenclatura' },
+							translations: { fa: 'قراردادهای نامگذاری', es: 'Convenciones de Nomenclatura', fr: 'Conventions de Nommage' },
 						},
 						{
 							label: 'Migration Guide',
 							link: '/migration/',
-							translations: { fa: 'راهنمای مهاجرت', es: 'Guía de Migración' },
+							translations: { fa: 'راهنمای مهاجرت', es: 'Guía de Migración', fr: 'Guide de Migration' },
 						},
 						{
 							label: 'FAQs',
 							link: '/faqs/',
-							translations: { fa: 'سوالات متداول', es: 'Preguntas Frecuentes' },
+							translations: { fa: 'سوالات متداول', es: 'Preguntas Frecuentes', fr: 'FAQ' },
 						},
 					],
 				},
 				{
 					label: 'Linter',
 					badge: { text: 'new' },
+					translations: { fr: 'Linter' },
 					items: [
-						{ label: 'Overview ', link: '/lint/' },
-						{ label: 'Installation ', link: '/lint/installation/' },
-						{ label: 'Configuration ', link: '/lint/configuration/' },
-						{ label: 'Customizing Rules ', link: '/lint/customizing-rules/' },
-						{ label: 'Rules', autogenerate: { directory: '/lint-rules' } },
+						{ label: 'Overview ', link: '/lint/', translations: { fr: 'Vue d\'ensemble' } },
+						{ label: 'Installation ', link: '/lint/installation/', translations: { fr: 'Installation' } },
+						{ label: 'Configuration ', link: '/lint/configuration/', translations: { fr: 'Configuration' } },
+						{ label: 'Customizing Rules ', link: '/lint/customizing-rules/', translations: { fr: 'Personnalisation des Règles' } },
+						{ label: 'Rules', autogenerate: { directory: '/lint-rules' }, translations: { fr: 'Règles' } },
 					],
 				},
 				{
 					label: 'Tutorials',
-					translations: { fa: 'آموزش ها', es: 'Tutoriales' },
+					translations: { fa: 'آموزش ها', es: 'Tutoriales', fr: 'Tutoriels' },
 					autogenerate: { directory: 'tutorials' },
 				},
 				{
 					label: 'Tools',
-					translations: { fa: 'ابزار', es: 'Herramientas' },
+					translations: { fa: 'ابزار', es: 'Herramientas', fr: 'Outils' },
 					items: [
 						{
 							label: 'IntelliJ Plugin',
 							link: 'https://plugins.jetbrains.com/plugin/12129-bloc',
-							translations: { fa: 'پلاگین IntelliJ', es: 'Plugin de IntelliJ' },
+							translations: { fa: 'پلاگین IntelliJ', es: 'Plugin de IntelliJ', fr: 'Plugin IntelliJ' },
 						},
 						{
 							label: 'VSCode Extension',
 							link: 'https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc',
-							translations: { fa: 'پلاگین VSCode', es: 'Extensión de VSCode' },
+							translations: { fa: 'پلاگین VSCode', es: 'Extensión de VSCode', fr: 'Extension VSCode' },
 						},
 					],
 				},
 				{
 					label: 'Reference',
-					translations: { fa: 'مرجع', es: 'Referencia' },
+					translations: { fa: 'مرجع', es: 'Referencia', fr: 'Référence' },
 					items: [
 						{
 							label: 'angular_bloc',
