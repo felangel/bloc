@@ -17,3 +17,4 @@ export './src/multi_bloc_listener.dart';
 export './src/multi_bloc_provider.dart';
 export './src/multi_repository_provider.dart';
 export './src/repository_provider.dart';
+export './src/side_effect_bloc_builder.dart';
