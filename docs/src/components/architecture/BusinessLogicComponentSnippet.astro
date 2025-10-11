@@ -4,7 +4,7 @@ import { Code } from '@astrojs/starlight/components';
 const code = `
 class BusinessLogicComponent extends Bloc<MyEvent, MyState> {
     BusinessLogicComponent(this.repository) {
-        on<AppStarted>((event, emit) {
+        on<AppStarted>((event, emit) async {
             try {
                 final data = await repository.getAllDataThatMeetsRequirements();
                 emit(Success(data));
