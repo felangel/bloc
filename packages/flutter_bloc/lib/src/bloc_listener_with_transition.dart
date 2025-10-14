@@ -6,17 +6,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/single_child_widget.dart';
 
 /// Signature for the `listener` function which takes the `BuildContext` along
-/// with the previous and current `state` and is responsible for executing in response to
+/// with the `state` and is responsible for executing in response to
 /// `state` changes.
-typedef BlocWidgetListenerWithTransition<S> =
-    void Function(BuildContext context, S previous, S current);
+typedef BlocWidgetListenerWithTransition<S> = void Function(
+    BuildContext context, S previous, S state);
 
 /// Signature for the `listenWhen` function which takes the previous `state`
 /// and the current `state` and is responsible for returning a [bool] which
 /// determines whether or not to call [BlocWidgetListenerWithTransition] of [BlocListener]
 /// with the current `state`.
-typedef BlocListenerWithTransitionCondition<S> =
-    bool Function(S previous, S current);
+typedef BlocListenerWithTransitionCondition<S> = bool Function(
+    S previous, S current);
 
 /// {@template bloc_listener}
 /// Takes a [BlocWidgetListenerWithTransition] and an optional [bloc] and invokes
@@ -31,8 +31,8 @@ typedef BlocListenerWithTransitionCondition<S> =
 /// perform a lookup using [BlocProvider] and the current `BuildContext`.
 ///
 /// ```dart
-/// BlocListenerWithTransition<BlocA, BlocAState>(
-///   listener: (context, previous, current) {
+/// BlocListener<BlocA, BlocAState>(
+///   listener: (context, state) {
 ///     // do stuff here based on BlocA's state
 ///   },
 ///   child: Container(),
@@ -42,9 +42,9 @@ typedef BlocListenerWithTransitionCondition<S> =
 /// not accessible via [BlocProvider] and the current `BuildContext`.
 ///
 /// ```dart
-/// WithTransitionr<BlocA, BlocAState>(
+/// BlocListener<BlocA, BlocAState>(
 ///   value: blocA,
-///   listener: (context, previous, current) {
+///   listener: (context, state) {
 ///     // do stuff here based on BlocA's state
 ///   },
 ///   child: Container(),
@@ -64,12 +64,12 @@ typedef BlocListenerWithTransitionCondition<S> =
 /// [listenWhen] is optional and if omitted, it will default to `true`.
 ///
 /// ```dart
-/// BlocListenerWithTransition<BlocA, BlocAState>(
+/// BlocListener<BlocA, BlocAState>(
 ///   listenWhen: (previous, current) {
 ///     // return true/false to determine whether or not
 ///     // to invoke listener with state
 ///   },
-///   listener: (context, previous, current) {
+///   listener: (context, state) {
 ///     // do stuff here based on BlocA's state
 ///   },
 ///   child: Container(),
@@ -81,12 +81,18 @@ class BlocListenerWithTransition<B extends StateStreamable<S>, S>
   /// {@macro bloc_listener}
   /// {@macro bloc_listener_listen_when}
   const BlocListenerWithTransition({
-    required super.listener,
-    super.key,
-    super.bloc,
-    super.listenWhen,
-    super.child,
-  });
+    required BlocWidgetListenerWithTransition<S> listener,
+    Key? key,
+    B? bloc,
+    BlocListenerWithTransitionCondition<S>? listenWhen,
+    Widget? child,
+  }) : super(
+          key: key,
+          child: child,
+          listener: listener,
+          bloc: bloc,
+          listenWhen: listenWhen,
+        );
 }
 
 /// {@template bloc_listener_base}
@@ -101,11 +107,11 @@ abstract class BlocListenerWithTransitionBase<B extends StateStreamable<S>, S>
   /// {@macro bloc_listener_base}
   const BlocListenerWithTransitionBase({
     required this.listener,
-    super.key,
+    Key? key,
     this.bloc,
     this.child,
     this.listenWhen,
-  }) : super(child: child);
+  }) : super(key: key, child: child);
 
   /// The widget which will be rendered as a descendant of the
   /// [BlocListenerBase].
@@ -132,12 +138,8 @@ abstract class BlocListenerWithTransitionBase<B extends StateStreamable<S>, S>
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty<B?>('bloc', bloc))
-      ..add(
-        ObjectFlagProperty<BlocWidgetListenerWithTransition<S>>.has(
-          'listener',
-          listener,
-        ),
-      )
+      ..add(ObjectFlagProperty<BlocWidgetListenerWithTransition<S>>.has(
+          'listener', listener))
       ..add(
         ObjectFlagProperty<BlocListenerWithTransitionCondition<S>?>.has(
           'listenWhen',
@@ -192,16 +194,12 @@ class _BlocListenerWithTransitionBaseState<B extends StateStreamable<S>, S>
 
   @override
   Widget buildWithChild(BuildContext context, Widget? child) {
-    assert(
-      child != null,
-      '''${widget.runtimeType} used outside of MultiBlocListener must specify a child''',
-    );
     if (widget.bloc == null) {
       // Trigger a rebuild if the bloc reference has changed.
       // See https://github.com/felangel/bloc/issues/2127.
       context.select<B, bool>((bloc) => identical(_bloc, bloc));
     }
-    return child!;
+    return child ?? const SizedBox.shrink();
   }
 
   @override
