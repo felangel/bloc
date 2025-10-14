@@ -234,11 +234,13 @@ Future<void> main() async {
 
 Since all `Blocs` extend `BlocBase` just like `Cubit`, `onChange` and `onError` can be overridden in a `Bloc` as well.
 
-In addition, `Blocs` can also override `onEvent` and `onTransition`.
+In addition, `Blocs` can also override `onEvent`, `onTransition`, and `onDone`.
 
 `onEvent` is called any time a new `event` is added to the `Bloc`.
 
 `onTransition` is similar to `onChange`, however, it contains the `event` which triggered the state change in addition to the `currentState` and `nextState`.
+
+`onDone` is called whenever the event handler for a given `event` has completed.
 
 ```dart
 sealed class CounterEvent {}
@@ -266,6 +268,12 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   void onTransition(Transition<CounterEvent, int> transition) {
     super.onTransition(transition);
     print(transition);
+  }
+
+  @override
+  void onDone(CounterEvent event, [Object? error, StackTrace? stackTrace]) {
+    super.onDone(event, error, stackTrace);
+    print('$event, $error');
   }
 
   @override
@@ -302,6 +310,12 @@ class MyBlocObserver extends BlocObserver {
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
     print('onTransition -- ${bloc.runtimeType}, $transition');
+  }
+
+  @override
+  void onDone(Bloc bloc, Object? event, [Object? error, StackTrace? stackTrace]) {
+    super.onDone(bloc, event, error, stackTrace);
+    print('onDone -- ${bloc.runtimeType}, $event, $error');
   }
 
   @override
