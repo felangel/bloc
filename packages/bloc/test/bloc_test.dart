@@ -1,3 +1,4 @@
+// ignore_for_file: invalid_use_of_protected_member
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
@@ -26,14 +27,12 @@ void main() {
 
       test('triggers onCreate on observer when instantiated', () {
         final bloc = SimpleBloc();
-        // ignore: invalid_use_of_protected_member
         verify(() => observer.onCreate(bloc)).called(1);
       });
 
       test('triggers onClose on observer when closed', () async {
         final bloc = SimpleBloc();
         await bloc.close();
-        // ignore: invalid_use_of_protected_member
         verify(() => observer.onClose(bloc)).called(1);
       });
 
@@ -57,24 +56,25 @@ void main() {
           simpleBloc.stream,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
-          verify(
-            // ignore: invalid_use_of_protected_member
+          verifyInOrder([
+            () => observer.onCreate(simpleBloc),
+            () => observer.onEvent(simpleBloc, 'event'),
             () => observer.onTransition(
-              simpleBloc,
-              const Transition<dynamic, String>(
-                currentState: '',
-                event: 'event',
-                nextState: 'data',
-              ),
-            ),
-          ).called(1);
-          verify(
-            // ignore: invalid_use_of_protected_member
+                  simpleBloc,
+                  const Transition<dynamic, String>(
+                    currentState: '',
+                    event: 'event',
+                    nextState: 'data',
+                  ),
+                ),
             () => observer.onChange(
-              simpleBloc,
-              const Change<String>(currentState: '', nextState: 'data'),
-            ),
-          ).called(1);
+                  simpleBloc,
+                  const Change<String>(currentState: '', nextState: 'data'),
+                ),
+            () => observer.onDone(simpleBloc, 'event'),
+            () => observer.onClose(simpleBloc),
+          ]);
+
           expect(simpleBloc.state, 'data');
         });
 
@@ -91,24 +91,27 @@ void main() {
           simpleBloc.stream,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
-          verify(
-            // ignore: invalid_use_of_protected_member
+          verifyInOrder([
+            () => observer.onCreate(simpleBloc),
+            () => observer.onEvent(simpleBloc, 'event1'),
+            () => observer.onEvent(simpleBloc, 'event2'),
+            () => observer.onEvent(simpleBloc, 'event3'),
             () => observer.onTransition(
-              simpleBloc,
-              const Transition<dynamic, String>(
-                currentState: '',
-                event: 'event1',
-                nextState: 'data',
-              ),
-            ),
-          ).called(1);
-          verify(
-            // ignore: invalid_use_of_protected_member
+                  simpleBloc,
+                  const Transition<dynamic, String>(
+                    currentState: '',
+                    event: 'event1',
+                    nextState: 'data',
+                  ),
+                ),
             () => observer.onChange(
-              simpleBloc,
-              const Change<String>(currentState: '', nextState: 'data'),
-            ),
-          ).called(1);
+                  simpleBloc,
+                  const Change<String>(currentState: '', nextState: 'data'),
+                ),
+            () => observer.onDone(simpleBloc, 'event1'),
+            () => observer.onClose(simpleBloc),
+          ]);
+
           expect(simpleBloc.state, 'data');
         });
 
@@ -174,31 +177,34 @@ void main() {
           complexBloc.stream,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
-          verify(
-            // ignore: invalid_use_of_protected_member
+          verifyInOrder([
+            () => observer.onCreate(complexBloc),
+            () => observer.onEvent(complexBloc, ComplexEventB()),
             () => observer.onTransition(
-              complexBloc,
-              Transition<ComplexEvent, ComplexState>(
-                currentState: ComplexStateA(),
-                event: ComplexEventB(),
-                nextState: ComplexStateB(),
-              ),
-            ),
-          ).called(1);
-          verify(
-            // ignore: invalid_use_of_protected_member
+                  complexBloc,
+                  Transition<ComplexEvent, ComplexState>(
+                    currentState: ComplexStateA(),
+                    event: ComplexEventB(),
+                    nextState: ComplexStateB(),
+                  ),
+                ),
             () => observer.onChange(
-              complexBloc,
-              Change<ComplexState>(
-                currentState: ComplexStateA(),
-                nextState: ComplexStateB(),
-              ),
-            ),
-          ).called(1);
+                  complexBloc,
+                  Change<ComplexState>(
+                    currentState: ComplexStateA(),
+                    nextState: ComplexStateB(),
+                  ),
+                ),
+            () => observer.onDone(complexBloc, ComplexEventB()),
+            () => observer.onClose(complexBloc),
+          ]);
+
           expect(complexBloc.state, ComplexStateB());
         });
 
-        complexBloc.add(ComplexEventB());
+        complexBloc
+          ..add(ComplexEventB())
+          ..close();
       });
 
       test('should map multiple events to correct states', () async {
@@ -291,24 +297,26 @@ void main() {
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
           expectLater(transitions, expectedTransitions);
-          verify(
-            // ignore: invalid_use_of_protected_member
+
+          verifyInOrder([
+            () => observer.onCreate(counterBloc),
+            () => observer.onEvent(counterBloc, CounterEvent.increment),
             () => observer.onTransition(
-              counterBloc,
-              const Transition<CounterEvent, int>(
-                currentState: 0,
-                event: CounterEvent.increment,
-                nextState: 1,
-              ),
-            ),
-          ).called(1);
-          verify(
-            // ignore: invalid_use_of_protected_member
+                  counterBloc,
+                  const Transition<CounterEvent, int>(
+                    currentState: 0,
+                    event: CounterEvent.increment,
+                    nextState: 1,
+                  ),
+                ),
             () => observer.onChange(
-              counterBloc,
-              const Change<int>(currentState: 0, nextState: 1),
-            ),
-          ).called(1);
+                  counterBloc,
+                  const Change<int>(currentState: 0, nextState: 1),
+                ),
+            () => observer.onDone(counterBloc, CounterEvent.increment),
+            () => observer.onClose(counterBloc),
+          ]);
+
           expect(counterBloc.state, 1);
         });
 
@@ -336,60 +344,54 @@ void main() {
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
           expect(transitions, expectedTransitions);
-          verify(
-            // ignore: invalid_use_of_protected_member
+
+          verifyInOrder([
+            () => observer.onCreate(counterBloc),
+            () => observer.onEvent(counterBloc, CounterEvent.increment),
+            () => observer.onEvent(counterBloc, CounterEvent.increment),
+            () => observer.onEvent(counterBloc, CounterEvent.increment),
             () => observer.onTransition(
-              counterBloc,
-              const Transition<CounterEvent, int>(
-                currentState: 0,
-                event: CounterEvent.increment,
-                nextState: 1,
-              ),
-            ),
-          ).called(1);
-          verify(
-            // ignore: invalid_use_of_protected_member
+                  counterBloc,
+                  const Transition<CounterEvent, int>(
+                    currentState: 0,
+                    event: CounterEvent.increment,
+                    nextState: 1,
+                  ),
+                ),
             () => observer.onChange(
-              counterBloc,
-              const Change<int>(currentState: 0, nextState: 1),
-            ),
-          ).called(1);
-          verify(
-            // ignore: invalid_use_of_protected_member
+                  counterBloc,
+                  const Change<int>(currentState: 0, nextState: 1),
+                ),
+            () => observer.onDone(counterBloc, CounterEvent.increment),
             () => observer.onTransition(
-              counterBloc,
-              const Transition<CounterEvent, int>(
-                currentState: 1,
-                event: CounterEvent.increment,
-                nextState: 2,
-              ),
-            ),
-          ).called(1);
-          verify(
-            // ignore: invalid_use_of_protected_member
+                  counterBloc,
+                  const Transition<CounterEvent, int>(
+                    currentState: 1,
+                    event: CounterEvent.increment,
+                    nextState: 2,
+                  ),
+                ),
             () => observer.onChange(
-              counterBloc,
-              const Change<int>(currentState: 1, nextState: 2),
-            ),
-          ).called(1);
-          verify(
-            // ignore: invalid_use_of_protected_member
+                  counterBloc,
+                  const Change<int>(currentState: 1, nextState: 2),
+                ),
             () => observer.onTransition(
-              counterBloc,
-              const Transition<CounterEvent, int>(
-                currentState: 2,
-                event: CounterEvent.increment,
-                nextState: 3,
-              ),
-            ),
-          ).called(1);
-          verify(
-            // ignore: invalid_use_of_protected_member
+                  counterBloc,
+                  const Transition<CounterEvent, int>(
+                    currentState: 2,
+                    event: CounterEvent.increment,
+                    nextState: 3,
+                  ),
+                ),
             () => observer.onChange(
-              counterBloc,
-              const Change<int>(currentState: 2, nextState: 3),
-            ),
-          ).called(1);
+                  counterBloc,
+                  const Change<int>(currentState: 2, nextState: 3),
+                ),
+            () => observer.onDone(counterBloc, CounterEvent.increment),
+            () => observer.onClose(counterBloc),
+          ]);
+
+          expect(counterBloc.state, equals(3));
         });
 
         counterBloc
@@ -513,7 +515,8 @@ void main() {
         await asyncBloc.close();
 
         expect(states, expectedStates);
-        // ignore: invalid_use_of_protected_member
+
+        verify(() => observer.onDone(asyncBloc, AsyncEvent())).called(1);
         verifyNever(() => observer.onError(any(), any(), any()));
       });
 
@@ -533,80 +536,75 @@ void main() {
           asyncBloc.stream,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
-          verify(
-            // ignore: invalid_use_of_protected_member
+          verifyInOrder([
+            () => observer.onCreate(asyncBloc),
+            () => observer.onEvent(asyncBloc, AsyncEvent()),
             () => observer.onTransition(
-              asyncBloc,
-              Transition<AsyncEvent, AsyncState>(
-                currentState: const AsyncState(
-                  isLoading: false,
-                  hasError: false,
-                  isSuccess: false,
+                  asyncBloc,
+                  Transition<AsyncEvent, AsyncState>(
+                    currentState: const AsyncState(
+                      isLoading: false,
+                      hasError: false,
+                      isSuccess: false,
+                    ),
+                    event: AsyncEvent(),
+                    nextState: const AsyncState(
+                      isLoading: true,
+                      hasError: false,
+                      isSuccess: false,
+                    ),
+                  ),
                 ),
-                event: AsyncEvent(),
-                nextState: const AsyncState(
-                  isLoading: true,
-                  hasError: false,
-                  isSuccess: false,
-                ),
-              ),
-            ),
-          ).called(1);
-          verify(
-            // ignore: invalid_use_of_protected_member
             () => observer.onChange(
-              asyncBloc,
-              const Change<AsyncState>(
-                currentState: AsyncState(
-                  isLoading: false,
-                  hasError: false,
-                  isSuccess: false,
+                  asyncBloc,
+                  const Change<AsyncState>(
+                    currentState: AsyncState(
+                      isLoading: false,
+                      hasError: false,
+                      isSuccess: false,
+                    ),
+                    nextState: AsyncState(
+                      isLoading: true,
+                      hasError: false,
+                      isSuccess: false,
+                    ),
+                  ),
                 ),
-                nextState: AsyncState(
-                  isLoading: true,
-                  hasError: false,
-                  isSuccess: false,
-                ),
-              ),
-            ),
-          ).called(1);
-          verify(
-            // ignore: invalid_use_of_protected_member
             () => observer.onTransition(
-              asyncBloc,
-              Transition<AsyncEvent, AsyncState>(
-                currentState: const AsyncState(
-                  isLoading: true,
-                  hasError: false,
-                  isSuccess: false,
+                  asyncBloc,
+                  Transition<AsyncEvent, AsyncState>(
+                    currentState: const AsyncState(
+                      isLoading: true,
+                      hasError: false,
+                      isSuccess: false,
+                    ),
+                    event: AsyncEvent(),
+                    nextState: const AsyncState(
+                      isLoading: false,
+                      hasError: false,
+                      isSuccess: true,
+                    ),
+                  ),
                 ),
-                event: AsyncEvent(),
-                nextState: const AsyncState(
-                  isLoading: false,
-                  hasError: false,
-                  isSuccess: true,
-                ),
-              ),
-            ),
-          ).called(1);
-          verify(
-            // ignore: invalid_use_of_protected_member
             () => observer.onChange(
-              asyncBloc,
-              const Change<AsyncState>(
-                currentState: AsyncState(
-                  isLoading: true,
-                  hasError: false,
-                  isSuccess: false,
+                  asyncBloc,
+                  const Change<AsyncState>(
+                    currentState: AsyncState(
+                      isLoading: true,
+                      hasError: false,
+                      isSuccess: false,
+                    ),
+                    nextState: AsyncState(
+                      isLoading: false,
+                      hasError: false,
+                      isSuccess: true,
+                    ),
+                  ),
                 ),
-                nextState: AsyncState(
-                  isLoading: false,
-                  hasError: false,
-                  isSuccess: true,
-                ),
-              ),
-            ),
-          ).called(1);
+            () => observer.onDone(asyncBloc, AsyncEvent()),
+            () => observer.onClose(asyncBloc),
+          ]);
+
           expect(
             asyncBloc.state,
             const AsyncState(
@@ -636,80 +634,139 @@ void main() {
           asyncBloc.stream,
           emitsInOrder(expectedStates),
         ).then((dynamic _) {
-          verify(
-            // ignore: invalid_use_of_protected_member
+          verifyInOrder([
+            () => observer.onCreate(asyncBloc),
+            () => observer.onEvent(asyncBloc, AsyncEvent()),
+            () => observer.onEvent(asyncBloc, AsyncEvent()),
             () => observer.onTransition(
-              asyncBloc,
-              Transition<AsyncEvent, AsyncState>(
-                currentState: const AsyncState(
-                  isLoading: false,
-                  hasError: false,
-                  isSuccess: false,
+                  asyncBloc,
+                  Transition<AsyncEvent, AsyncState>(
+                    currentState: const AsyncState(
+                      isLoading: false,
+                      hasError: false,
+                      isSuccess: false,
+                    ),
+                    event: AsyncEvent(),
+                    nextState: const AsyncState(
+                      isLoading: true,
+                      hasError: false,
+                      isSuccess: false,
+                    ),
+                  ),
                 ),
-                event: AsyncEvent(),
-                nextState: const AsyncState(
-                  isLoading: true,
-                  hasError: false,
-                  isSuccess: false,
-                ),
-              ),
-            ),
-          ).called(1);
-          verify(
-            // ignore: invalid_use_of_protected_member
             () => observer.onChange(
-              asyncBloc,
-              const Change<AsyncState>(
-                currentState: AsyncState(
-                  isLoading: false,
-                  hasError: false,
-                  isSuccess: false,
+                  asyncBloc,
+                  const Change<AsyncState>(
+                    currentState: AsyncState(
+                      isLoading: false,
+                      hasError: false,
+                      isSuccess: false,
+                    ),
+                    nextState: AsyncState(
+                      isLoading: true,
+                      hasError: false,
+                      isSuccess: false,
+                    ),
+                  ),
                 ),
-                nextState: AsyncState(
-                  isLoading: true,
-                  hasError: false,
-                  isSuccess: false,
-                ),
-              ),
-            ),
-          ).called(1);
-          verify(
-            // ignore: invalid_use_of_protected_member
             () => observer.onTransition(
-              asyncBloc,
-              Transition<AsyncEvent, AsyncState>(
-                currentState: const AsyncState(
-                  isLoading: true,
-                  hasError: false,
-                  isSuccess: false,
+                  asyncBloc,
+                  Transition<AsyncEvent, AsyncState>(
+                    currentState: const AsyncState(
+                      isLoading: true,
+                      hasError: false,
+                      isSuccess: false,
+                    ),
+                    event: AsyncEvent(),
+                    nextState: const AsyncState(
+                      isLoading: false,
+                      hasError: false,
+                      isSuccess: true,
+                    ),
+                  ),
                 ),
-                event: AsyncEvent(),
-                nextState: const AsyncState(
-                  isLoading: false,
-                  hasError: false,
-                  isSuccess: true,
-                ),
-              ),
-            ),
-          ).called(2);
-          verify(
-            // ignore: invalid_use_of_protected_member
             () => observer.onChange(
-              asyncBloc,
-              const Change<AsyncState>(
-                currentState: AsyncState(
-                  isLoading: true,
-                  hasError: false,
-                  isSuccess: false,
+                  asyncBloc,
+                  const Change<AsyncState>(
+                    currentState: AsyncState(
+                      isLoading: true,
+                      hasError: false,
+                      isSuccess: false,
+                    ),
+                    nextState: AsyncState(
+                      isLoading: false,
+                      hasError: false,
+                      isSuccess: true,
+                    ),
+                  ),
                 ),
-                nextState: AsyncState(
-                  isLoading: false,
-                  hasError: false,
-                  isSuccess: true,
+            () => observer.onDone(asyncBloc, AsyncEvent()),
+            () => observer.onTransition(
+                  asyncBloc,
+                  Transition<AsyncEvent, AsyncState>(
+                    currentState: const AsyncState(
+                      isLoading: false,
+                      hasError: false,
+                      isSuccess: true,
+                    ),
+                    event: AsyncEvent(),
+                    nextState: const AsyncState(
+                      isLoading: true,
+                      hasError: false,
+                      isSuccess: false,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ).called(2);
+            () => observer.onChange(
+                  asyncBloc,
+                  const Change<AsyncState>(
+                    currentState: AsyncState(
+                      isLoading: false,
+                      hasError: false,
+                      isSuccess: true,
+                    ),
+                    nextState: AsyncState(
+                      isLoading: true,
+                      hasError: false,
+                      isSuccess: false,
+                    ),
+                  ),
+                ),
+            () => observer.onTransition(
+                  asyncBloc,
+                  Transition<AsyncEvent, AsyncState>(
+                    currentState: const AsyncState(
+                      isLoading: true,
+                      hasError: false,
+                      isSuccess: false,
+                    ),
+                    event: AsyncEvent(),
+                    nextState: const AsyncState(
+                      isLoading: false,
+                      hasError: false,
+                      isSuccess: true,
+                    ),
+                  ),
+                ),
+            () => observer.onChange(
+                  asyncBloc,
+                  const Change<AsyncState>(
+                    currentState: AsyncState(
+                      isLoading: true,
+                      hasError: false,
+                      isSuccess: false,
+                    ),
+                    nextState: AsyncState(
+                      isLoading: false,
+                      hasError: false,
+                      isSuccess: true,
+                    ),
+                  ),
+                ),
+            () => observer.onDone(asyncBloc, AsyncEvent()),
+            () => observer.onClose(asyncBloc),
+          ]);
+
           expect(
             asyncBloc.state,
             const AsyncState(
@@ -1351,7 +1408,6 @@ void main() {
           OnExceptionBloc(
             exception: expectedError,
             onErrorCallback: (Object _, StackTrace __) {},
-            // ignore: invalid_use_of_protected_member
           ).addError(expectedError, StackTrace.current);
         }, (Object error, StackTrace stackTrace) {
           expect(error, equals(expectedError));
@@ -1465,7 +1521,7 @@ void main() {
         );
       });
 
-      test('triggers onError from mapEventToState', () {
+      test('triggers onError from event handler', () {
         runZonedGuarded(
           () {
             final error = Error();
