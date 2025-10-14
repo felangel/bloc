@@ -1,3 +1,9 @@
+# 9.1.0
+
+- docs: add `onDone` to `README` and `example` ([#4641](https://github.com/felangel/bloc/pull/4641))
+- feat: add `onDone` callback ([#4633](https://github.com/felangel/bloc/pull/4633))
+- refactor: add `pkg:bloc_lint` ([#4620](https://github.com/felangel/bloc/pull/4620))
+
 # 9.0.1
 
 - refactor: analysis options updates ([#4616](https://github.com/felangel/bloc/pull/4616))
