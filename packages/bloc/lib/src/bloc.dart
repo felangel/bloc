@@ -215,7 +215,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
         );
 
         Future<void> handleEvent() async {
-          void onDone() {
+          void tearDown() {
             emitter.complete();
             _emitters.remove(emitter);
             if (!controller.isClosed) controller.close();
@@ -224,11 +224,13 @@ abstract class Bloc<Event, State> extends BlocBase<State>
           try {
             _emitters.add(emitter);
             await handler(event as E, emitter);
+            onDone(event);
           } catch (error, stackTrace) {
             onError(error, stackTrace);
+            onDone(event as E, error, stackTrace);
             rethrow;
           } finally {
-            onDone();
+            tearDown();
           }
         }
 
@@ -266,6 +268,35 @@ abstract class Bloc<Event, State> extends BlocBase<State>
   void onTransition(Transition<Event, State> transition) {
     // ignore: invalid_use_of_protected_member
     _blocObserver.onTransition(this, transition);
+  }
+
+  /// Called whenever an [event] handler for a specific [Bloc] has completed.
+  /// This may include an [error] and [stackTrace] if an uncaught exception
+  /// occurred within the event handler.
+  ///
+  /// [onDone] is called right after the event handler has completed.
+  /// A great spot to add logging/analytics at the individual [Bloc] level.
+  ///
+  /// **Note: `super.onDone` should always be called first.**
+  /// ```dart
+  /// @override
+  /// void onDone(Event event, [Object? error, StackTrace? stackTrace]) {
+  ///   // Always call super.onDone with the respective event.
+  ///   super.onDone(event, error, stackTrace);
+  ///
+  ///   // Custom onDone logic goes here
+  /// }
+  /// ```
+  ///
+  /// See also:
+  ///
+  /// * [BlocObserver.onDone] for observing event handler completions globally.
+  ///
+  @protected
+  @mustCallSuper
+  void onDone(Event event, [Object? error, StackTrace? stackTrace]) {
+    // ignore: invalid_use_of_protected_member
+    _blocObserver.onDone(this, event, error, stackTrace);
   }
 
   /// Closes the `event` and `state` `Streams`.
