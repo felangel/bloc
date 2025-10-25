@@ -1,3 +1,9 @@
+# 0.1.0-dev.20
+
+- deps: bump `pkg:bloc_lint` to `^0.3.3`
+- docs: add `bloc_lint` badge to `README`
+- refactor: analysis options updates
+
 # 0.1.0-dev.19
 
 - deps: bump `pkg:bloc_lint` to `^0.3.2`
