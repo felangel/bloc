@@ -19,14 +19,14 @@ class TextDocument {
       _content = content;
 
   static final _ignoreForFileRegExp = RegExp(
-    r'^\s*?//\s*?ignore_for_file:(.*?)$',
+    r'^\s*//\s*ignore_for_file:(.*?)$',
     dotAll: true,
     multiLine: true,
   );
 
-  static final _ignoreForLineRegExp = RegExp(r'^\s*?//\s*?ignore:(.*)$');
+  static final _ignoreForLineRegExp = RegExp(r'^\s*//\s*ignore:(.*)$');
 
-  static final _ignoreAfterLineRegExp = RegExp(r'\s*?//\s*?ignore:(.*)$');
+  static final _ignoreAfterLineRegExp = RegExp(r'\s*//\s*ignore:(.*)$');
 
   final Uri _uri;
   final String _content;
