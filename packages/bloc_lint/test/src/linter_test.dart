@@ -135,7 +135,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
       );
 
       lintTest(
-        'does not report when rule is ignored for file (with leading space)',
+        'does not report when rule is ignored for file (w/leading space)',
         rule: AvoidFlutterImports.new,
         path: 'counter_bloc.dart',
         content: '''
@@ -151,7 +151,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
       );
 
       lintTest(
-        'does not report when rule is ignored for file (with in-between space)',
+        'does not report when rule is ignored for file (w/in-between space)',
         rule: AvoidFlutterImports.new,
         path: 'counter_bloc.dart',
         content: '''
@@ -167,7 +167,7 @@ class CounterBloc extends Bloc<CounterEvent, int> {
       );
 
       lintTest(
-        'does not report when rule is ignored for file (with trailing space)',
+        'does not report when rule is ignored for file (w/trailing space)',
         rule: AvoidFlutterImports.new,
         path: 'counter_bloc.dart',
         content: '''
