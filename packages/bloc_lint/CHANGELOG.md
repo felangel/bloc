@@ -1,3 +1,8 @@
+# 0.3.3
+
+- fix: ignore whitespace in ignore comments
+- docs: add `bloc_lint` badge to `README`
+
 # 0.3.2
 
 - feat: add [prefer_build_context_extensions](https://bloclibrary.dev/lint-rules/prefer_build_context_extensions)
