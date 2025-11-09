@@ -145,6 +145,7 @@ mixin HydratedMixin<State> on BlocBase<State> {
   late final Storage __storage;
   HydrationErrorBehavior? _errorBehavior;
   var _onErrorCallbackInProgress = false;
+  var _hydrationInProgress = false;
 
   /// Populates the internal state storage with the latest state.
   /// This should be called when using the [HydratedMixin]
@@ -181,9 +182,20 @@ mixin HydratedMixin<State> on BlocBase<State> {
     OnHydrationError onError = defaultOnHydrationError,
   }) {
     __storage = storage ??= HydratedBloc.storage;
+    _hydrationInProgress = true;
     try {
       final stateJson = __storage.read(storageToken) as Map<dynamic, dynamic>?;
-      _state = stateJson != null ? _fromJson(stateJson) : super.state;
+      final hydratedState = stateJson != null ? _fromJson(stateJson) : null;
+
+      // If we have a hydrated state, set it and emit it to properly
+      // set the _emitted flag. This ensures subsequent emit calls with
+      // the same state are ignored
+      if (hydratedState != null) {
+        _state = hydratedState;
+        emit(hydratedState);
+      } else {
+        _state = super.state;
+      }
       _errorBehavior = null;
     } catch (error, stackTrace) {
       this.onError(error, stackTrace);
@@ -192,6 +204,7 @@ mixin HydratedMixin<State> on BlocBase<State> {
       _errorBehavior = onError(error, stackTrace);
     } finally {
       _onErrorCallbackInProgress = false;
+      _hydrationInProgress = false;
     }
 
     if (_errorBehavior == HydrationErrorBehavior.retain) return;
@@ -220,6 +233,7 @@ mixin HydratedMixin<State> on BlocBase<State> {
     final state = change.nextState;
     _state = state;
 
+    if (_hydrationInProgress) return;
     if (_onErrorCallbackInProgress) return;
     if (_errorBehavior == HydrationErrorBehavior.retain) return;
 
