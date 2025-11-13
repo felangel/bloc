@@ -114,6 +114,7 @@ linter:
     - null_check_on_nullable_type_parameter
     - null_closures
     - omit_local_variable_types
+    - omit_obvious_local_variable_types
     - one_member_abstracts
     - only_throw_errors
     - overridden_fields
