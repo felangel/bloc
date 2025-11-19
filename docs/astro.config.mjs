@@ -50,17 +50,27 @@ export default defineConfig({
 			sidebar: [
 				{
 					label: 'Introduction',
-					translations: { 'zh-CN': '介绍', fa: 'مقدمه', es: 'Introducción' },
+					translations: { 'zh-CN': '介绍', fa: 'مقدمه', es: 'Introducción', ja: '紹介' },
 					items: [
 						{
 							label: 'Getting Started',
 							link: '/getting-started/',
-							translations: { 'zh-CN': '快速入门', fa: 'شروع شدن', es: 'Empezando' },
+							translations: {
+								'zh-CN': '快速入门',
+								fa: 'شروع شدن',
+								es: 'Empezando',
+								ja: 'まずはじめに',
+							},
 						},
 						{
 							label: 'Why Bloc?',
 							link: '/why-bloc/',
-							translations: { 'zh-CN': '为什么用 Bloc?', fa: 'چرا Bloc؟', es: '¿Por qué Bloc?' },
+							translations: {
+								'zh-CN': '为什么用 Bloc?',
+								fa: 'چرا Bloc؟',
+								es: '¿Por qué Bloc?',
+								ja: 'なぜBlocを使う?',
+							},
 						},
 						{
 							label: 'Bloc Concepts',
@@ -69,6 +79,7 @@ export default defineConfig({
 								'zh-CN': 'Bloc 核心概念',
 								fa: 'مفاهیم Bloc',
 								es: 'Conceptos de Bloc',
+								ja: 'Blocコンセプト',
 							},
 						},
 						{
@@ -78,37 +89,46 @@ export default defineConfig({
 								'zh-CN': 'Flutter Bloc 核心概念',
 								fa: 'مفاهیم بلوک فلاتر',
 								es: 'Conceptos de Flutter Bloc',
+								ja: 'Flutter Blocコンセプト',
 							},
 						},
 						{
 							label: 'Architecture',
 							link: '/architecture/',
-							translations: { fa: 'معماری', es: 'Arquitectura' },
+							translations: { fa: 'معماری', es: 'Arquitectura', ja: 'アーキテクチャー' },
 						},
 						{
 							label: 'Modeling State',
 							link: '/modeling-state/',
-							translations: { fa: 'وضعیت (State) مدل سازی', es: 'Modelando el Estado' },
+							translations: {
+								fa: 'وضعیت (State) مدل سازی',
+								es: 'Modelando el Estado',
+								ja: 'モデリング状態',
+							},
 						},
 						{
 							label: 'Testing',
 							link: '/testing/',
-							translations: { fa: 'آزمایش کردن', es: 'Pruebas' },
+							translations: { fa: 'آزمایش کردن', es: 'Pruebas', ja: 'テスト' },
 						},
 						{
 							label: 'Naming Conventions',
 							link: '/naming-conventions/',
-							translations: { fa: 'قراردادهای نامگذاری', es: 'Convenciones de Nomenclatura' },
+							translations: {
+								fa: 'قراردادهای نامگذاری',
+								es: 'Convenciones de Nomenclatura',
+								ja: '命名規則',
+							},
 						},
 						{
 							label: 'Migration Guide',
 							link: '/migration/',
-							translations: { fa: 'راهنمای مهاجرت', es: 'Guía de Migración' },
+							translations: { fa: 'راهنمای مهاجرت', es: 'Guía de Migración', ja: '移行ガイド' },
 						},
 						{
 							label: 'FAQs',
 							link: '/faqs/',
-							translations: { fa: 'سوالات متداول', es: 'Preguntas Frecuentes' },
+							translations: { fa: 'سوالات متداول', es: 'Preguntas Frecuentes', ja: 'よくある質問' },
 						},
 					],
 				},
@@ -125,12 +145,12 @@ export default defineConfig({
 				},
 				{
 					label: 'Tutorials',
-					translations: { fa: 'آموزش ها', es: 'Tutoriales' },
+					translations: { fa: 'آموزش ها', es: 'Tutoriales', ja: 'チュートリアル' },
 					autogenerate: { directory: 'tutorials' },
 				},
 				{
 					label: 'Tools',
-					translations: { fa: 'ابزار', es: 'Herramientas' },
+					translations: { fa: 'ابزار', es: 'Herramientas', ja: 'ツール' },
 					items: [
 						{
 							label: 'IntelliJ Plugin',
@@ -146,7 +166,7 @@ export default defineConfig({
 				},
 				{
 					label: 'Reference',
-					translations: { fa: 'مرجع', es: 'Referencia' },
+					translations: { fa: 'مرجع', es: 'Referencia', ja: 'APIリファレンス' },
 					items: [
 						{
 							label: 'angular_bloc',
