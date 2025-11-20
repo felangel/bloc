@@ -2,7 +2,7 @@
   "name": "bloc",
   "displayName": "bloc",
   "description": "Support for the bloc library and provides tools for effectively creating blocs for both Flutter and AngularDart apps.",
-  "version": "6.8.11",
+  "version": "6.8.12",
   "publisher": "FelixAngelov",
   "bugs": {
     "url": "https://github.com/felangel/bloc/issues",
@@ -251,7 +251,7 @@
   "dependencies": {
     "axios": "^1.12.0",
     "change-case": "^4.1.2",
-    "js-yaml": "^3.13.1",
+    "js-yaml": "^4.1.1",
     "lodash": "^4.17.19",
     "mkdirp": "^0.5.1",
     "node-fetch": "^2.0.0",
