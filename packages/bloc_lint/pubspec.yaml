@@ -12,7 +12,7 @@ environment:
   sdk: ">=3.7.0 <4.0.0"
 
 dependencies:
-  _fe_analyzer_shared: ">=75.0.0 <=90.0.0"
+  _fe_analyzer_shared: ">=75.0.0 <=92.0.0"
   checked_yaml: ^2.0.0
   collection: ^1.0.0
   glob: ^2.0.0
