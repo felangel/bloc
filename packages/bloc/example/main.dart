@@ -35,6 +35,17 @@ class SimpleBlocObserver extends BlocObserver {
   }
 
   @override
+  void onDone(
+    Bloc<dynamic, dynamic> bloc,
+    Object? event, [
+    Object? error,
+    StackTrace? stackTrace,
+  ]) {
+    super.onDone(bloc, event, error, stackTrace);
+    print('onDone -- bloc: ${bloc.runtimeType}, event: $event, error: $error');
+  }
+
+  @override
   void onError(BlocBase<dynamic> bloc, Object error, StackTrace stackTrace) {
     print('onError -- bloc: ${bloc.runtimeType}, error: $error');
     super.onError(bloc, error, stackTrace);

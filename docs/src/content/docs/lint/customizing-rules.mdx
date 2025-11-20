@@ -13,6 +13,8 @@ import BlocLintChangingSeveritySnippet from '~/components/lint/BlocLintChangingS
 import ImportFlutterInfoSnippet from '~/components/lint/ImportFlutterInfoSnippet.mdx';
 import ImportFlutterInfoOutputSnippet from '~/components/lint/ImportFlutterInfoOutputSnippet.astro';
 import BlocLintExcludingFilesSnippet from '~/components/lint/BlocLintExcludingFilesSnippet.astro';
+import BlocLintIgnoreForLineSnippet from '~/components/lint/BlocLintIgnoreForLineSnippet.astro';
+import BlocLintIgnoreForFileSnippet from '~/components/lint/BlocLintIgnoreForFileSnippet.astro';
 
 You can customize the behavior of the bloc linter by changing the severity of
 individual rules, individually enabling or disabling rules, and excluding files
@@ -122,3 +124,37 @@ For example, we can exclude all generated Dart code via the following analysis
 options:
 
 <BlocLintExcludingFilesSnippet />
+
+## Ignoring Rules
+
+Just like with official Dart lint rules, you can ignore bloc lint rules for a
+given file or line of code using `// ignore_for_file` and `// ignore`
+respectively.
+
+:::note
+
+To ignore multiple rules for a given line or file, supply a comma-separated
+list.
+
+:::
+
+### Ignoring Lines
+
+We can ignore specific occurrences of rule violations by adding an `ignore`
+comment either right above the offending line or by appending it to the
+offending line.
+
+For example, we can ignore specific occurrences of
+`prefer_file_naming_conventions` in a given file:
+
+<BlocLintIgnoreForLineSnippet />
+
+### Ignoring Files
+
+We can ignore all occurrences of rule violations within a file by adding an
+`ignore_for_file` comment anywhere in the file.
+
+For example, we can ignore all occurrences of `prefer_file_naming_conventions`
+in a given file:
+
+<BlocLintIgnoreForFileSnippet />

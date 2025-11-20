@@ -1,7 +1,7 @@
 name: bloc_hooks
 
 environment:
-  sdk: ^3.5.4
+  sdk: ^3.10.0
 
 dependencies:
   mason: ^0.1.0

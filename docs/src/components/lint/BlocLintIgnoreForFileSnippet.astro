@@ -1,0 +1,16 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+// ignore_for_file: prefer_file_naming_conventions
+import 'package:bloc/bloc.dart';
+
+class CounterCubit extends Cubit<int> {}
+
+enum CounterEvent { increment, decrement }
+
+class CounterBloc extends Bloc<CounterEvent, int> {}
+`;
+---
+
+<Code code={code} lang="dart" title="main.dart" />
