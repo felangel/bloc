@@ -1,3 +1,7 @@
+# 0.3.4
+
+- chore: various dependency upgrades
+
 # 0.3.3
 
 - fix: ignore whitespace in ignore comments
