@@ -1,0 +1,521 @@
+---
+title: Flutter Bloc কনসেপ্টস
+description: package:flutter_bloc এর প্রধান ধারণাগুলোর একটি ওভারভিউ
+sidebar:
+  order: 2
+---
+
+import BlocBuilderSnippet from '~/components/concepts/flutter-bloc/BlocBuilderSnippet.astro';
+import BlocBuilderExplicitBlocSnippet from '~/components/concepts/flutter-bloc/BlocBuilderExplicitBlocSnippet.astro';
+import BlocBuilderConditionSnippet from '~/components/concepts/flutter-bloc/BlocBuilderConditionSnippet.astro';
+import BlocSelectorSnippet from '~/components/concepts/flutter-bloc/BlocSelectorSnippet.astro';
+import BlocProviderSnippet from '~/components/concepts/flutter-bloc/BlocProviderSnippet.astro';
+import BlocProviderEagerSnippet from '~/components/concepts/flutter-bloc/BlocProviderEagerSnippet.astro';
+import BlocProviderValueSnippet from '~/components/concepts/flutter-bloc/BlocProviderValueSnippet.astro';
+import BlocProviderLookupSnippet from '~/components/concepts/flutter-bloc/BlocProviderLookupSnippet.astro';
+import NestedBlocProviderSnippet from '~/components/concepts/flutter-bloc/NestedBlocProviderSnippet.astro';
+import MultiBlocProviderSnippet from '~/components/concepts/flutter-bloc/MultiBlocProviderSnippet.astro';
+import BlocListenerSnippet from '~/components/concepts/flutter-bloc/BlocListenerSnippet.astro';
+import BlocListenerExplicitBlocSnippet from '~/components/concepts/flutter-bloc/BlocListenerExplicitBlocSnippet.astro';
+import BlocListenerConditionSnippet from '~/components/concepts/flutter-bloc/BlocListenerConditionSnippet.astro';
+import NestedBlocListenerSnippet from '~/components/concepts/flutter-bloc/NestedBlocListenerSnippet.astro';
+import MultiBlocListenerSnippet from '~/components/concepts/flutter-bloc/MultiBlocListenerSnippet.astro';
+import BlocConsumerSnippet from '~/components/concepts/flutter-bloc/BlocConsumerSnippet.astro';
+import BlocConsumerConditionSnippet from '~/components/concepts/flutter-bloc/BlocConsumerConditionSnippet.astro';
+import RepositoryProviderSnippet from '~/components/concepts/flutter-bloc/RepositoryProviderSnippet.astro';
+import RepositoryProviderLookupSnippet from '~/components/concepts/flutter-bloc/RepositoryProviderLookupSnippet.astro';
+import RepositoryProviderDisposeSnippet from '~/components/concepts/flutter-bloc/RepositoryProviderDisposeSnippet.astro';
+import NestedRepositoryProviderSnippet from '~/components/concepts/flutter-bloc/NestedRepositoryProviderSnippet.astro';
+import MultiRepositoryProviderSnippet from '~/components/concepts/flutter-bloc/MultiRepositoryProviderSnippet.astro';
+import CounterBlocSnippet from '~/components/concepts/flutter-bloc/CounterBlocSnippet.astro';
+import CounterMainSnippet from '~/components/concepts/flutter-bloc/CounterMainSnippet.astro';
+import CounterPageSnippet from '~/components/concepts/flutter-bloc/CounterPageSnippet.astro';
+import WeatherRepositorySnippet from '~/components/concepts/flutter-bloc/WeatherRepositorySnippet.astro';
+import WeatherMainSnippet from '~/components/concepts/flutter-bloc/WeatherMainSnippet.astro';
+import WeatherAppSnippet from '~/components/concepts/flutter-bloc/WeatherAppSnippet.astro';
+import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSnippet.astro';
+
+:::note
+
+অনুগ্রহ করে package:flutter_bloc সম্পর্কিত নীচের অংশগুলো মনোযোগ দিয়ে পড়ুন।
+
+:::
+
+:::note
+
+`flutter_bloc` প্যাকেজ থেকে এক্সপোর্ট করা সব widgets `Cubit` এবং `Bloc` উভয় ইনস্ট্যান্সের সাথেই কাজ করে।
+
+:::
+
+## Bloc Widgets
+
+### BlocBuilder
+
+**BlocBuilder** হল একটি Flutter widget যার জন্য একটি `Bloc` এবং একটি `builder`
+ফাংশন প্রয়োজন। `BlocBuilder` নতুন states-এর প্রতিক্রিয়ায় widget তৈরি করে।
+`BlocBuilder` `StreamBuilder`-এর সাথে খুবই মিল কিন্তু boilerplate কোড কমাতে আরও সহজ API আছে। `builder` ফাংশনটি
+অনেকবার কল হতে পারে এবং এটি একটি
+[pure function](https://en.wikipedia.org/wiki/Pure_function) হওয়া উচিত যা state-এর প্রতিক্রিয়ায় একটি
+widget রিটার্ন করে।
+
+State পরিবর্তনের প্রতিক্রিয়ায় কোনো কাজ করতে চাইলে (যেমন navigation, dialog দেখানো ইত্যাদি) `BlocListener` দেখুন।
+
+`bloc` প্যারামিটার বাদ দিলে, `BlocBuilder` স্বয়ংক্রিয়ভাবে `BlocProvider` এবং current `BuildContext` ব্যবহার করে lookup করবে।
+
+<BlocBuilderSnippet />
+
+শুধুমাত্র তখনই bloc নির্দিষ্ট করুন যখন আপনি একটি bloc প্রদান করতে চান যা একটি single widget-এ scoped হবে এবং parent `BlocProvider` এবং current `BuildContext` দিয়ে অ্যাক্সেসযোগ্য নয়।
+
+<BlocBuilderExplicitBlocSnippet />
+
+`builder` ফাংশন কখন কল হবে তার উপর fine-grained control-এর জন্য একটি optional
+`buildWhen` প্রদান করা যেতে পারে। `buildWhen` previous bloc state এবং
+current bloc state নেয় এবং একটি boolean রিটার্ন করে। যদি `buildWhen` true রিটার্ন করে, `builder`
+`state` সহ কল হবে এবং widget rebuild হবে। যদি `buildWhen` false রিটার্ন করে, `builder`
+`state` সহ কল হবে না এবং rebuild হবে না।
+
+<BlocBuilderConditionSnippet />
+
+### BlocSelector
+
+**BlocSelector** হল একটি Flutter widget যা `BlocBuilder`-এর অনুরূপ কিন্তু
+ডেভেলপারদের current bloc state-এর উপর ভিত্তি করে একটি নতুন মান নির্বাচন করে আপডেট ফিল্টার করতে দেয়। নির্বাচিত মান পরিবর্তন না হলে অপ্রয়োজনীয় builds প্রতিরোধ করা হয়। `BlocSelector`-এর জন্য
+সঠিকভাবে নির্ধারণ করতে যে `builder` আবার কল করা উচিত কিনা, নির্বাচিত মান অবশ্যই immutable হতে হবে।
+
+`bloc` প্যারামিটার বাদ দিলে, `BlocSelector` স্বয়ংক্রিয়ভাবে `BlocProvider` এবং current `BuildContext` ব্যবহার করে lookup করবে।
+
+<BlocSelectorSnippet />
+
+### BlocProvider
+
+**BlocProvider** হল একটি Flutter widget যা `BlocProvider.of<T>(context)` এর মাধ্যমে তার children-দের একটি bloc প্রদান করে। এটি dependency injection (DI) widget হিসেবে ব্যবহৃত হয়
+যাতে একটি subtree-এর মধ্যে একাধিক widgets-এ একটি bloc-এর single instance প্রদান করা যায়।
+
+বেশিরভাগ ক্ষেত্রে, `BlocProvider` নতুন blocs তৈরি করতে ব্যবহার করা উচিত যা subtree-এর বাকি অংশে উপলব্ধ করা হবে। এই ক্ষেত্রে, যেহেতু `BlocProvider`
+bloc তৈরি করার জন্য দায়ী, এটি স্বয়ংক্রিয়ভাবে bloc বন্ধ করার কাজটি handle করবে।
+
+<BlocProviderSnippet />
+
+ডিফল্টভাবে, `BlocProvider` bloc-টি lazily তৈরি করবে, অর্থাৎ `create` তখনই
+এক্সিকিউট হবে যখন bloc-টি `BlocProvider.of<BlocA>(context)` এর মাধ্যমে lookup করা হবে।
+
+এই আচরণ override করতে এবং `create`-কে অবিলম্বে চালানোর জন্য, `lazy` কে
+`false` সেট করা যেতে পারে।
+
+<BlocProviderEagerSnippet />
+
+কিছু ক্ষেত্রে, `BlocProvider` widget tree-এর একটি নতুন অংশে একটি existing bloc প্রদান করতে ব্যবহার করা যেতে পারে। এটি সাধারণত ব্যবহৃত হয় যখন একটি existing
+bloc-কে একটি নতুন route-এ উপলব্ধ করতে হবে। এই ক্ষেত্রে, `BlocProvider`
+স্বয়ংক্রিয়ভাবে bloc বন্ধ করবে না যেহেতু এটি এটি তৈরি করেনি।
+
+<BlocProviderValueSnippet />
+
+তারপর `ChildA`, অথবা `ScreenA` থেকে আমরা `BlocA` পেতে পারি:
+
+<BlocProviderLookupSnippet />
+
+### MultiBlocProvider
+
+**MultiBlocProvider** হল একটি Flutter widget যা একাধিক `BlocProvider`
+widgets-কে একটিতে merge করে। `MultiBlocProvider` readability উন্নত করে এবং
+একাধিক `BlocProviders` nest করার প্রয়োজন দূর করে। `MultiBlocProvider` ব্যবহার করে আমরা
+যেতে পারি:
+
+<NestedBlocProviderSnippet />
+
+থেকে:
+
+<MultiBlocProviderSnippet />
+
+:::caution
+
+যখন একটি `BlocProvider` একটি `MultiBlocProvider`-এর context-এর মধ্যে সংজ্ঞায়িত করা হয়,
+যেকোনো `child` উপেক্ষা করা হবে।
+
+:::
+
+### BlocListener
+
+**BlocListener** হল একটি Flutter widget যা একটি `BlocWidgetListener` এবং একটি
+optional `Bloc` নেয় এবং bloc-এ state পরিবর্তনের প্রতিক্রিয়ায় `listener` invoke করে। এটি এমন functionality-এর জন্য ব্যবহার করা উচিত যার জন্য প্রতি state
+পরিবর্তনে একবার ঘটতে হবে যেমন navigation, `SnackBar` দেখানো, `Dialog` দেখানো ইত্যাদি...
+
+`listener` প্রতিটি state change-এর জন্য শুধুমাত্র একবার কল হয় (**NOT** initial state সহ)
+`BlocBuilder`-এ `builder`-এর মতো নয় এবং এটি একটি `void` ফাংশন।
+
+`bloc` প্যারামিটার বাদ দিলে, `BlocListener` স্বয়ংক্রিয়ভাবে `BlocProvider` এবং current `BuildContext` ব্যবহার করে lookup করবে।
+
+<BlocListenerSnippet />
+
+শুধুমাত্র তখনই bloc নির্দিষ্ট করুন যখন আপনি একটি bloc প্রদান করতে চান যা অন্যথায়
+`BlocProvider` এবং current `BuildContext` দিয়ে অ্যাক্সেসযোগ্য নয়।
+
+<BlocListenerExplicitBlocSnippet />
+
+`listener` ফাংশন কখন কল হবে তার উপর fine-grained control-এর জন্য একটি optional
+`listenWhen` প্রদান করা যেতে পারে। `listenWhen` previous bloc state এবং
+current bloc state নেয় এবং একটি boolean রিটার্ন করে। যদি `listenWhen` true রিটার্ন করে,
+`listener` `state` সহ কল হবে। যদি `listenWhen` false রিটার্ন করে,
+`listener` `state` সহ কল হবে না।
+
+<BlocListenerConditionSnippet />
+
+### MultiBlocListener
+
+**MultiBlocListener** হল একটি Flutter widget যা একাধিক `BlocListener`
+widgets-কে একটিতে merge করে। `MultiBlocListener` readability উন্নত করে এবং
+একাধিক `BlocListeners` nest করার প্রয়োজন দূর করে। `MultiBlocListener` ব্যবহার করে আমরা
+যেতে পারি:
+
+<NestedBlocListenerSnippet />
+
+থেকে:
+
+<MultiBlocListenerSnippet />
+
+:::caution
+
+যখন একটি `BlocListener` একটি `MultiBlocListener`-এর context-এর মধ্যে সংজ্ঞায়িত করা হয়,
+যেকোনো `child` উপেক্ষা করা হবে।
+
+:::
+
+### BlocConsumer
+
+**BlocConsumer** নতুন states-এর প্রতিক্রিয়ায় একটি `builder` এবং `listener` এক্সপোজ করে। `BlocConsumer` একটি nested `BlocListener` এবং `BlocBuilder`-এর অনুরূপ
+কিন্তু প্রয়োজনীয় boilerplate-এর পরিমাণ কমায়। `BlocConsumer` শুধুমাত্র তখনই ব্যবহার করা উচিত
+যখন `bloc`-এ state changes-এর জন্য UI rebuild এবং অন্যান্য reactions উভয়ই এক্সিকিউট করা প্রয়োজন। `BlocConsumer` একটি required `BlocWidgetBuilder` এবং
+`BlocWidgetListener` এবং একটি optional `bloc`, `BlocBuilderCondition`, এবং
+`BlocListenerCondition` নেয়।
+
+`bloc` প্যারামিটার বাদ দিলে, `BlocConsumer` স্বয়ংক্রিয়ভাবে `BlocProvider` এবং current `BuildContext` ব্যবহার করে lookup করবে।
+
+<BlocConsumerSnippet />
+
+`listener` এবং `builder` কখন কল হবে তার উপর আরও granular control-এর জন্য একটি optional `listenWhen` এবং `buildWhen` ইমপ্লিমেন্ট করা যেতে পারে। `listenWhen` এবং
+`buildWhen` প্রতিটি `bloc` `state` change-এ invoke হবে। তারা প্রতিটি previous `state` এবং current `state` নেয় এবং অবশ্যই একটি `bool` রিটার্ন করতে হবে যা নির্ধারণ করে
+`builder` এবং/অথবা `listener` ফাংশন invoke হবে কিনা। Previous `state` `bloc`-এর `state`-এ initialize হবে যখন
+`BlocConsumer` initialize হয়। `listenWhen` এবং `buildWhen` optional এবং যদি
+তারা ইমপ্লিমেন্ট না করা হয়, তারা `true`-তে default হবে।
+
+<BlocConsumerConditionSnippet />
+
+### RepositoryProvider
+
+**RepositoryProvider** হল একটি Flutter widget যা `RepositoryProvider.of<T>(context)` এর মাধ্যমে তার children-দের একটি repository প্রদান করে। এটি dependency
+injection (DI) widget হিসেবে ব্যবহৃত হয় যাতে একটি subtree-এর মধ্যে একাধিক widgets-এ একটি repository-এর single instance প্রদান করা যায়। `BlocProvider` blocs প্রদান করতে ব্যবহার করা উচিত
+যেখানে `RepositoryProvider` শুধুমাত্র repositories-এর জন্য ব্যবহার করা উচিত।
+
+<RepositoryProviderSnippet />
+
+তারপর `ChildA` থেকে আমরা `Repository` instance পেতে পারি:
+
+<RepositoryProviderLookupSnippet />
+
+যে repositories resources manage করে যা dispose করতে হবে তারা `dispose` callback-এর মাধ্যমে তা করতে পারে:
+
+<RepositoryProviderDisposeSnippet />
+
+### MultiRepositoryProvider
+
+**MultiRepositoryProvider** হল একটি Flutter widget যা একাধিক
+`RepositoryProvider` widgets-কে একটিতে merge করে। `MultiRepositoryProvider` readability উন্নত করে এবং
+একাধিক `RepositoryProvider` nest করার প্রয়োজন দূর করে। `MultiRepositoryProvider` ব্যবহার করে আমরা
+যেতে পারি:
+
+<NestedRepositoryProviderSnippet />
+
+থেকে:
+
+<MultiRepositoryProviderSnippet />
+
+:::caution
+
+যখন একটি `RepositoryProvider` একটি
+`MultiRepositoryProvider`-এর context-এর মধ্যে সংজ্ঞায়িত করা হয়, যেকোনো `child` উপেক্ষা করা হবে।
+
+:::
+
+## BlocProvider ব্যবহার
+
+আসুন দেখি কিভাবে `BlocProvider` ব্যবহার করে একটি `CounterBloc` একটি
+`CounterPage`-এ প্রদান করা যায় এবং `BlocBuilder` দিয়ে state changes-এর প্রতিক্রিয়া জানানো যায়।
+
+<CounterBlocSnippet />
+
+<CounterMainSnippet />
+
+<CounterPageSnippet />
+
+এই মুহূর্তে আমরা আমাদের presentational layer-কে আমাদের
+business logic layer থেকে সফলভাবে আলাদা করেছি। লক্ষ্য করুন যে `CounterPage` widget-টি buttons-এ tap করলে কী ঘটে সে সম্পর্কে কিছুই জানে না। Widget-টি কেবল
+`CounterBloc`-কে বলে যে ব্যবহারকারী increment অথবা decrement
+button চাপেছে।
+
+## RepositoryProvider ব্যবহার
+
+আমরা [`flutter_weather`][flutter_weather_link] উদাহরণের context-এ
+`RepositoryProvider` কিভাবে ব্যবহার করা যায় তা দেখব।
+
+<WeatherRepositorySnippet />
+
+আমাদের `main.dart`-এ, আমরা আমাদের `WeatherApp` widget-এর সাথে `runApp` কল করি।
+
+<WeatherMainSnippet />
+
+আমরা `RepositoryProvider`-এর মাধ্যমে আমাদের `WeatherRepository` instance-কে আমাদের widget tree-তে inject করব।
+
+একটি bloc instantiate করার সময়, আমরা `context.read`-এর মাধ্যমে একটি repository-এর instance অ্যাক্সেস করতে পারি
+এবং constructor-এর মাধ্যমে repository-কে bloc-এ inject করতে পারি।
+
+<WeatherAppSnippet />
+
+:::tip
+
+আপনার যদি একাধিক repository থাকে, আপনি `MultiRepositoryProvider` ব্যবহার করে
+subtree-তে একাধিক repository instances প্রদান করতে পারেন।
+
+:::
+
+:::note
+
+`RepositoryProvider` unmount হলে resources মুক্ত করার জন্য `dispose` callback ব্যবহার করুন।
+
+:::
+
+[flutter_weather_link]:
+	https://github.com/felangel/bloc/blob/master/examples/flutter_weather
+
+## Extension Methods
+
+[Extension methods](https://dart.dev/guides/language/extension-methods),
+Dart 2.7-এ চালু, existing libraries-এ functionality যোগ করার একটি উপায়। এই
+সেকশনে, আমরা `package:flutter_bloc`-এ অন্তর্ভুক্ত extension methods এবং
+সেগুলো কিভাবে ব্যবহার করা যায় তা দেখব।
+
+`flutter_bloc`-এর উপর একটি dependency আছে
+[package:provider](https://pub.dev/packages/provider) যা
+[`InheritedWidget`](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html)-এর ব্যবহার সহজ করে।
+
+অভ্যন্তরীণভাবে, `package:flutter_bloc` `package:provider` ব্যবহার করে implement করে:
+`BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` এবং
+`MultiRepositoryProvider` widgets। `package:flutter_bloc` `ReadContext`, `WatchContext` এবং `SelectContext` extensions এক্সপোর্ট করে
+`package:provider` থেকে।
+
+:::note
+
+[`package:provider`](https://pub.dev/packages/provider) সম্পর্কে আরও জানুন।
+
+:::
+
+### context.read
+
+`context.read<T>()` type `T`-এর closest ancestor instance lookup করে এবং
+functionally `BlocProvider.of<T>(context)`-এর সমতুল্য। `context.read` সবচেয়ে বেশি
+সাধারণভাবে একটি bloc instance পেতে ব্যবহৃত হয় যাতে
+`onPressed` callbacks-এর মধ্যে একটি event add করা যায়।
+
+:::note
+
+`context.read<T>()` `T`-কে listen করে না -- যদি type `T`-এর প্রদত্ত `Object`
+পরিবর্তন হয়, `context.read` একটি widget rebuild trigger করবে না।
+
+:::
+
+#### ব্যবহার
+
+✅ **করুন** callbacks-এ events add করতে `context.read` ব্যবহার করুন।
+
+```dart
+onPressed() {
+  context.read<CounterBloc>().add(CounterIncrementPressed()),
+}
+```
+
+❌ **এড়িয়ে চলুন** একটি `build` method-এর মধ্যে state পেতে `context.read` ব্যবহার করা।
+
+```dart
+@override
+Widget build(BuildContext context) {
+  final state = context.read<MyBloc>().state;
+  return Text('$state');
+}
+```
+
+উপরের ব্যবহার error-prone কারণ `Text` widget rebuild হবে না যদি
+bloc-এর state পরিবর্তন হয়।
+
+:::caution
+
+State changes-এর প্রতিক্রিয়ায় rebuild করতে পরিবর্তে `BlocBuilder` অথবা `context.watch` ব্যবহার করুন।
+
+:::
+
+### context.watch
+
+`context.read<T>()`-এর মতো, `context.watch<T>()` type `T`-এর closest ancestor
+instance প্রদান করে, তবে এটি instance-এ changes-ও listen করে। এটি
+functionally `BlocProvider.of<T>(context, listen: true)`-এর সমতুল্য।
+
+যদি type `T`-এর প্রদত্ত `Object` পরিবর্তন হয়, `context.watch` একটি
+rebuild trigger করবে।
+
+:::caution
+
+`context.watch` শুধুমাত্র একটি `StatelessWidget` অথবা `State` class-এর `build` method-এর মধ্যে অ্যাক্সেসযোগ্য।
+
+:::
+
+#### ব্যবহার
+
+✅ **করুন** rebuilds-কে explicitly scope করতে `context.watch`-এর পরিবর্তে `BlocBuilder` ব্যবহার করুন।
+
+```dart
+Widget build(BuildContext context) {
+  return MaterialApp(
+    home: Scaffold(
+      body: BlocBuilder<MyBloc, MyState>(
+        builder: (context, state) {
+          // Whenever the state changes, only the Text is rebuilt.
+          return Text(state.value);
+        },
+      ),
+    ),
+  );
+}
+```
+
+বিকল্পভাবে, rebuilds scope করতে একটি `Builder` ব্যবহার করুন।
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return MaterialApp(
+    home: Scaffold(
+      body: Builder(
+        builder: (context) {
+          // Whenever the state changes, only the Text is rebuilt.
+          final state = context.watch<MyBloc>().state;
+          return Text(state.value);
+        },
+      ),
+    ),
+  );
+}
+```
+
+✅ **করুন** `MultiBlocBuilder` হিসেবে `Builder` এবং `context.watch` ব্যবহার করুন।
+
+```dart
+Builder(
+  builder: (context) {
+    final stateA = context.watch<BlocA>().state;
+    final stateB = context.watch<BlocB>().state;
+    final stateC = context.watch<BlocC>().state;
+
+    // return a Widget which depends on the state of BlocA, BlocB, and BlocC
+  }
+);
+```
+
+❌ **এড়িয়ে চলুন** `build` method-এ parent widget state-এর উপর নির্ভর না করলে `context.watch` ব্যবহার করা।
+
+```dart
+@override
+Widget build(BuildContext context) {
+  // Whenever the state changes, the MaterialApp is rebuilt
+  // even though it is only used in the Text widget.
+  final state = context.watch<MyBloc>().state;
+  return MaterialApp(
+    home: Scaffold(
+      body: Text(state.value),
+    ),
+  );
+}
+```
+
+:::caution
+
+`build` method-এর root-এ `context.watch` ব্যবহার করলে
+bloc state পরিবর্তন হলে entire widget rebuild হবে।
+
+:::
+
+### context.select
+
+`context.watch<T>()`-এর মতোই, `context.select<T, R>(R function(T value))`
+type `T`-এর closest ancestor instance প্রদান করে এবং `T`-এ changes listen করে।
+`context.watch`-এর মতো নয়, `context.select` আপনাকে state-এর একটি
+ছোট অংশে changes listen করতে দেয়।
+
+```dart
+Widget build(BuildContext context) {
+  final name = context.select((ProfileBloc bloc) => bloc.state.name);
+  return Text(name);
+}
+```
+
+উপরেরটি শুধুমাত্র তখনই widget rebuild করবে যখন
+`ProfileBloc`-এর state-এর `name` property পরিবর্তন হয়।
+
+#### ব্যবহার
+
+✅ **করুন** rebuilds-কে explicitly scope করতে `context.select`-এর পরিবর্তে `BlocSelector` ব্যবহার করুন।
+
+```dart
+Widget build(BuildContext context) {
+  return MaterialApp(
+    home: Scaffold(
+      body: BlocSelector<ProfileBloc, ProfileState, String>(
+        selector: (state) => state.name,
+        builder: (context, name) {
+          // Whenever the state.name changes, only the Text is rebuilt.
+          return Text(name);
+        },
+      ),
+    ),
+  );
+}
+```
+
+বিকল্পভাবে, rebuilds scope করতে একটি `Builder` ব্যবহার করুন।
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return MaterialApp(
+    home: Scaffold(
+      body: Builder(
+        builder: (context) {
+          // Whenever state.name changes, only the Text is rebuilt.
+          final name = context.select((ProfileBloc bloc) => bloc.state.name);
+          return Text(name);
+        },
+      ),
+    ),
+  );
+}
+```
+
+❌ **এড়িয়ে চলুন** একটি build method-এ parent widget state-এর উপর নির্ভর না করলে `context.select` ব্যবহার করা।
+
+```dart
+@override
+Widget build(BuildContext context) {
+  // Whenever the state.value changes, the MaterialApp is rebuilt
+  // even though it is only used in the Text widget.
+  final name = context.select((ProfileBloc bloc) => bloc.state.name);
+  return MaterialApp(
+    home: Scaffold(
+      body: Text(name),
+    ),
+  );
+}
+```
+
+:::caution
+
+`build` method-এর root-এ `context.select` ব্যবহার করলে
+selection পরিবর্তন হলে entire widget rebuild হবে।
+
+:::

@@ -1,0 +1,77 @@
+---
+title: টেস্টিং
+description: আপনার blocs-এর জন্য টেস্ট কীভাবে লিখবেন তার মৌলিক বিষয়গুলো।
+---
+
+import CounterBlocSnippet from '~/components/testing/CounterBlocSnippet.astro';
+import AddDevDependenciesSnippet from '~/components/testing/AddDevDependenciesSnippet.astro';
+import CounterBlocTestImportsSnippet from '~/components/testing/CounterBlocTestImportsSnippet.astro';
+import CounterBlocTestMainSnippet from '~/components/testing/CounterBlocTestMainSnippet.astro';
+import CounterBlocTestSetupSnippet from '~/components/testing/CounterBlocTestSetupSnippet.astro';
+import CounterBlocTestInitialStateSnippet from '~/components/testing/CounterBlocTestInitialStateSnippet.astro';
+import CounterBlocTestBlocTestSnippet from '~/components/testing/CounterBlocTestBlocTestSnippet.astro';
+
+Bloc এমনভাবে ডিজাইন করা হয়েছে যাতে এটি টেস্ট করা অত্যন্ত সহজ হয়। এই সেকশনে আমরা
+একটি bloc কীভাবে ইউনিট টেস্ট করতে হয় তা দেখে নেব।
+
+সহজতার জন্য, চলুন আমরা [Core Concepts](/bloc-concepts)-এ তৈরি করা `CounterBloc`-এর জন্য
+টেস্ট লিখি।
+
+সংক্ষেপে বলতে গেলে, `CounterBloc`-এর ইমপ্লিমেন্টেশনটি এমন দেখায়:
+
+<CounterBlocSnippet />
+
+## Setup
+
+টেস্ট লেখার আগে আমাদের ডিপেনডেন্সিতে একটি টেস্টিং ফ্রেমওয়ার্ক যোগ করতে হবে।
+
+আমাদের প্রজেক্টে [test](https://pub.dev/packages/test) এবং
+[bloc_test](https://pub.dev/packages/bloc_test) যোগ করতে হবে।
+
+<AddDevDependenciesSnippet />
+
+## Testing
+
+এখন শুরু করি আমাদের `CounterBloc` টেস্টগুলোর জন্য ফাইল তৈরি করে।
+ফাইলের নাম হবে `counter_bloc_test.dart` এবং আমরা সেখানে test প্যাকেজ ইমপোর্ট করব।
+
+<CounterBlocTestImportsSnippet />
+
+এরপর আমাদের `main` তৈরি করতে হবে এবং টেস্ট গ্রুপ তৈরি করতে হবে।
+
+<CounterBlocTestMainSnippet />
+
+:::note
+
+গ্রুপগুলো ব্যবহৃত হয় পৃথক টেস্টগুলো সংগঠিত করতে এবং এমন একটি কনটেক্সট তৈরি করতে
+যেখানে আপনি সব টেস্টের জন্য সাধারণ `setUp` এবং `tearDown` শেয়ার করতে পারবেন।
+
+:::
+
+চলুন শুরু করি আমাদের `CounterBloc`-এর একটি ইনস্ট্যান্স তৈরি করে, যা সব টেস্টেই ব্যবহৃত হবে।
+
+<CounterBlocTestSetupSnippet />
+
+এখন আমরা আমাদের পৃথক টেস্টগুলো লেখা শুরু করতে পারি।
+
+<CounterBlocTestInitialStateSnippet />
+
+:::note
+
+আমরা `dart test` কমান্ড দিয়ে সব টেস্ট রান করতে পারি।
+
+:::
+
+এ পর্যায়ে আমাদের প্রথম টেস্টটি পাশ করা উচিত! এখন চলুন
+[bloc_test](https://pub.dev/packages/bloc_test) প্যাকেজ ব্যবহার করে আরও জটিল একটি
+টেস্ট লিখি।
+
+<CounterBlocTestBlocTestSnippet />
+
+আমাদের এখন টেস্টগুলো রান করতে সক্ষম হওয়া উচিত এবং সবগুলো পাস করবে।
+
+এতেই সব শেষ — টেস্টিং হওয়া উচিত খুবই সহজ, এবং কোড পরিবর্তন বা রিফ্যাক্টর করার সময়
+আমাদের আত্মবিশ্বাসী লাগবে।
+
+আপনি সম্পূর্ণ টেস্ট করা একটি অ্যাপ্লিকেশনের উদাহরণ হিসেবে দেখতে পারেন
+[Weather App](https://github.com/felangel/bloc/tree/master/examples/flutter_weather)।

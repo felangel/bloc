@@ -1,0 +1,97 @@
+---
+title: নামকরণ কনভেনশন
+description: bloc ব্যবহার করার সময় সুপারিশকৃত নামকরণ কনভেনশনগুলোর একটি ওভারভিউ।
+---
+
+import EventExamplesGood1 from '~/components/naming-conventions/EventExamplesGood1Snippet.astro';
+import EventExamplesBad1 from '~/components/naming-conventions/EventExamplesBad1Snippet.astro';
+import StateExamplesGood1Snippet from '~/components/naming-conventions/StateExamplesGood1Snippet.astro';
+import SingleStateExamplesGood1Snippet from '~/components/naming-conventions/SingleStateExamplesGood1Snippet.astro';
+import StateExamplesBad1Snippet from '~/components/naming-conventions/StateExamplesBad1Snippet.astro';
+
+নীচের নামকরণ কনভেনশনগুলো শুধুই সুপারিশ এবং সম্পূর্ণই ঐচ্ছিক। আপনি চাইলে আপনার
+পছন্দমতো যেকোনো নামকরণ কনভেনশন ব্যবহার করতে পারেন। কিছু উদাহরণ/ডকুমেন্টেশন
+সংক্ষিপ্ত রাখার সুবিধার্থে এই কনভেনশন অনুসরণ নাও করতে পারে। অনেক ডেভেলপারসহ
+বড় প্রজেক্টে এই কনভেনশনগুলো অনুসরণ করা বিশেষভাবে সুপারিশ করা হয়।
+
+## Event Conventions
+
+ইভেন্টগুলোর নাম **অতীত কাল**-এ হওয়া উচিত কারণ bloc-এর দৃষ্টিকোণ থেকে ইভেন্টগুলো
+হলো এমন ঘটনা যেগুলো ইতোমধ্যে ঘটেছে।
+
+### Anatomy
+
+`BlocSubject` + `Noun (optional)` + `Verb (event)`
+
+প্রাথমিক লোড ইভেন্টগুলো এই কনভেনশন অনুসরণ করবে:  
+`BlocSubject` + `Started`
+
+:::note
+
+বেস ইভেন্ট ক্লাসের নাম হওয়া উচিত: `BlocSubject` + `Event`.
+
+:::
+
+### Examples
+
+✅ **Good**
+
+<EventExamplesGood1 />
+
+❌ **Bad**
+
+<EventExamplesBad1 />
+
+## State Conventions
+
+স্টেটের নাম হওয়া উচিত **noun**, কারণ একটি স্টেট হলো নির্দিষ্ট সময়ে অ্যাপের
+একটি স্ন্যাপশট। স্টেট উপস্থাপন করার দুটি সাধারণ উপায় আছে: সাবক্লাস ব্যবহার করে
+বা একটি সিঙ্গেল ক্লাস ব্যবহার করে।
+
+### Anatomy
+
+#### Subclasses
+
+`BlocSubject` + `Verb (action)` + `State`
+
+যখন স্টেটকে একাধিক সাবক্লাস হিসাবে উপস্থাপন করা হয়, তখন `State` নিম্নোক্তগুলোর
+একটি হওয়া উচিত:
+
+`Initial` | `Success` | `Failure` | `InProgress`
+
+:::note
+
+Initial স্টেটের কনভেনশন হওয়া উচিত: `BlocSubject` + `Initial`.
+
+:::
+
+#### Single Class
+
+`BlocSubject` + `State`
+
+যখন স্টেটকে একটি সিঙ্গেল বেস ক্লাস হিসেবে উপস্থাপন করা হয়, তখন স্টেটের স্ট্যাটাস
+উপস্থাপন করার জন্য `BlocSubject` + `Status` নামে একটি enum ব্যবহার করা উচিত:
+
+`initial` | `success` | `failure` | `loading`.
+
+:::note
+
+বেস স্টেট ক্লাসের নাম সর্বদা হওয়া উচিত: `BlocSubject` + `State`.
+
+:::
+
+### Examples
+
+✅ **Good**
+
+##### Subclasses
+
+<StateExamplesGood1Snippet />
+
+##### Single Class
+
+<SingleStateExamplesGood1Snippet />
+
+❌ **Bad**
+
+<StateExamplesBad1Snippet />

@@ -19,6 +19,7 @@ const locales = {
 	'zh-cn': { label: '简体中文', lang: 'zh-CN' },
 	ar: { label: 'العربية', lang: 'ar', dir: 'rtl' },
 	fa: { label: 'فارسی', lang: 'fa', dir: 'rtl' },
+	bn: { label: 'বাংলা', lang: 'bn' },
 };
 
 // https://astro.build/config
