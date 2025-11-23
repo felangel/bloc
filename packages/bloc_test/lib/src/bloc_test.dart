@@ -262,27 +262,27 @@ class _TestBlocObserver extends BlocObserver {
 
   @override
   void onCreate(BlocBase<dynamic> bloc) {
-    super.onCreate(bloc);
     _localObserver.onCreate(bloc);
+    super.onCreate(bloc);
   }
 
   @override
   void onEvent(Bloc<dynamic, dynamic> bloc, Object? event) {
-    super.onEvent(bloc, event);
     _localObserver.onEvent(bloc, event);
+    super.onEvent(bloc, event);
   }
 
   @override
   void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
-    super.onChange(bloc, change);
     _localObserver.onChange(bloc, change);
+    super.onChange(bloc, change);
   }
 
   @override
   void onTransition(
       Bloc<dynamic, dynamic> bloc, Transition<dynamic, dynamic> transition) {
-    super.onTransition(bloc, transition);
     _localObserver.onTransition(bloc, transition);
+    super.onTransition(bloc, transition);
   }
 
   @override
@@ -299,14 +299,14 @@ class _TestBlocObserver extends BlocObserver {
     Object? error,
     StackTrace? stackTrace,
   ]) {
-    super.onDone(bloc, event, error, stackTrace);
     _localObserver.onDone(bloc, event, error, stackTrace);
+    super.onDone(bloc, event, error, stackTrace);
   }
 
   @override
   void onClose(BlocBase<dynamic> bloc) {
-    super.onClose(bloc);
     _localObserver.onClose(bloc);
+    super.onClose(bloc);
   }
 }
 
