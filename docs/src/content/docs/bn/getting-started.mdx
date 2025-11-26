@@ -1,0 +1,41 @@
+---
+title: শুরু করা
+description: Bloc দিয়ে শুরু করতে যা যা দরকার তা সবকিছু।
+---
+
+import InstallationTabs from '~/components/getting-started/InstallationTabs.astro';
+import ImportTabs from '~/components/getting-started/ImportTabs.astro';
+
+## প্যাকেজসমূহ
+
+Bloc ইকোসিস্টেমের মধ্যে বিভিন্ন প্যাকেজ রয়েছে, যেগুলো নিচে তালিকাভুক্ত করা হলো:
+
+| প্যাকেজ                                                                                    | বর্ণনা                       | লিংক                                                                                                           |
+| ------------------------------------------------------------------------------------------ | ---------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| [angular_bloc](https://github.com/felangel/bloc/tree/master/packages/angular_bloc)         | AngularDart কম্পোনেন্টস      | [![pub package](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dev/packages/angular_bloc)         |
+| [bloc](https://github.com/felangel/bloc/tree/master/packages/bloc)                         | মূল Dart API                 | [![pub package](https://img.shields.io/pub/v/bloc.svg)](https://pub.dev/packages/bloc)                         |
+| [bloc_concurrency](https://github.com/felangel/bloc/tree/master/packages/bloc_concurrency) | ইভেন্ট ট্রান্সফর্মার         | [![pub package](https://img.shields.io/pub/v/bloc_concurrency.svg)](https://pub.dev/packages/bloc_concurrency) |
+| [bloc_lint](https://github.com/felangel/bloc/tree/master/packages/bloc_lint)               | কাস্টম লিন্টার               | [![pub package](https://img.shields.io/pub/v/bloc_lint.svg)](https://pub.dev/packages/bloc_lint)               |
+| [bloc_test](https://github.com/felangel/bloc/tree/master/packages/bloc_test)               | টেস্টিং API                  | [![pub package](https://img.shields.io/pub/v/bloc_test.svg)](https://pub.dev/packages/bloc_test)               |
+| [bloc_tools](https://github.com/felangel/bloc/tree/master/packages/bloc_tools)             | কমান্ড-লাইন টুলস             | [![pub package](https://img.shields.io/pub/v/bloc_tools.svg)](https://pub.dev/packages/bloc_tools)             |
+| [flutter_bloc](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc)         | Flutter উইজেটস               | [![pub package](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dev/packages/flutter_bloc)         |
+| [hydrated_bloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc)       | ক্যাশিং/পারসিস্টেন্স সাপোর্ট | [![pub package](https://img.shields.io/pub/v/hydrated_bloc.svg)](https://pub.dev/packages/hydrated_bloc)       |
+| [replay_bloc](https://github.com/felangel/bloc/tree/master/packages/replay_bloc)           | Undo/Redo সাপোর্ট            | [![pub package](https://img.shields.io/pub/v/replay_bloc.svg)](https://pub.dev/packages/replay_bloc)           |
+
+## ইনস্টলেশন
+
+<InstallationTabs />
+
+:::note
+
+Bloc ব্যবহার শুরু করার জন্য আপনার মেশিনে [Dart SDK](https://dart.dev/get-dart)
+ইনস্টল করা থাকতে হবে।
+
+:::
+
+## ইমপোর্টস
+
+এখন যেহেতু আমরা Bloc সফলভাবে ইনস্টল করেছি, আমরা আমাদের `main.dart` তৈরি করতে
+পারি এবং প্রয়োজনীয় `bloc` প্যাকেজ ইমপোর্ট করতে পারি।
+
+<ImportTabs />

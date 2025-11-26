@@ -1,0 +1,84 @@
+---
+template: splash
+title: Bloc 状態管理ライブラリ
+description: 状態管理ライブラリBlocの公式ドキュメントです。Dart、Flutter、AngularDartをサポートしています。サンプルとチュートリアルが含まれています。
+banner:
+  content: |
+    ✨ <a href="https://shop.bloclibrary.dev">Blocショップ</a>にアクセス ✨
+editUrl: false
+lastUpdated: false
+hero:
+  title: Bloc <sup><span style="font-size:0.4em">v9.1.0</span></sup>
+  tagline: 思い通りに動くDartの状態管理用ライブラリ
+  image:
+    alt: Bloc logo
+    file: ~/assets/bloc.svg
+  actions:
+    - text: はじめる
+      link: /ja/getting-started/
+      variant: primary
+      icon: rocket
+    - text: GitHubで詳細を見る
+      link: https://github.com/felangel/bloc
+      icon: github
+      variant: secondary
+---
+
+import { CardGrid } from '@astrojs/starlight/components';
+import SponsorsGrid from '~/components/landing/SponsorsGrid.astro';
+import Card from '~/components/landing/Card.astro';
+import ListCard from '~/components/landing/ListCard.astro';
+import SplitCard from '~/components/landing/SplitCard.astro';
+import Discord from '~/components/landing/Discord.astro';
+
+<SponsorsGrid
+	sponsoredBy="💖のあるスポンサーの方々"
+	becomeASponsor="スポンサーになる"
+/>
+
+<hr />
+
+<CardGrid>
+
+<SplitCard title="はじめる" icon="rocket">
+	```sh
+	# プロジェクトにblocを追加します。
+	dart pub add bloc
+	```
+[はじめに](/ja/getting-started)では、数分でBlocを使い始められるようになるための方法が順番に解説されています。
+
+</SplitCard>
+
+<Card title="ガイド付きツアーに参加" icon="star">
+	[公式チュートリアル](/ja/tutorials/flutter-counter)でベストプラクティスを学び、
+	Blocを利用したさまざまなアプリを作成してみましょう。
+</Card>
+
+<Card title="Blocで構築" icon="laptop">
+	カウンター、タイマー、無限にスクロール可能なリスト、天気、ToDoなど、完全にテストされた高品質な
+	[サンプルアプリ](https://github.com/felangel/bloc/tree/master/examples)
+	をご覧ください！
+</Card>
+
+<ListCard title="学ぶ" icon="open-book">
+
+    - [なぜBloc？](/ja/why-bloc)
+    - [基本的なコンセプト](/ja/bloc-concepts)
+    - [アーキテクチャー](/ja/architecture)
+    - [テスト](/ja/testing)
+    - [命名規則](/ja/naming-conventions)
+    - [よくある質問](/ja/faqs)
+
+</ListCard>
+
+  <ListCard title="拡張機能" icon="puzzle">
+    - [VSCode拡張機能](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+    - [IntelliJ拡張機能](https://plugins.jetbrains.com/plugin/12129-bloc)
+    - [Neovim拡張機能](https://github.com/wa11breaker/flutter-bloc.nvim)
+    - [Mason拡張機能](https://github.com/felangel/bloc/blob/master/bricks/README.md)
+    - [カスタムテンプレート](https://brickhub.dev/search?q=bloc)
+    - [開発者ツール](https://github.com/felangel/bloc/blob/master/packages/bloc_tools/README.md)
+  </ListCard>
+</CardGrid>
+
+<Discord joinDiscord="Discordに参加する" />
