@@ -1,0 +1,560 @@
+---
+title: ব্লক কনসেপ্টস
+description: package:bloc এর প্রধান ধারণাগুলোর একটি ওভারভিউ
+sidebar:
+  order: 1
+---
+
+import CountStreamSnippet from '~/components/concepts/bloc/CountStreamSnippet.astro';
+import SumStreamSnippet from '~/components/concepts/bloc/SumStreamSnippet.astro';
+import StreamsMainSnippet from '~/components/concepts/bloc/StreamsMainSnippet.astro';
+import CounterCubitSnippet from '~/components/concepts/bloc/CounterCubitSnippet.astro';
+import CounterCubitInitialStateSnippet from '~/components/concepts/bloc/CounterCubitInitialStateSnippet.astro';
+import CounterCubitInstantiationSnippet from '~/components/concepts/bloc/CounterCubitInstantiationSnippet.astro';
+import CounterCubitIncrementSnippet from '~/components/concepts/bloc/CounterCubitIncrementSnippet.astro';
+import CounterCubitBasicUsageSnippet from '~/components/concepts/bloc/CounterCubitBasicUsageSnippet.astro';
+import CounterCubitStreamUsageSnippet from '~/components/concepts/bloc/CounterCubitStreamUsageSnippet.astro';
+import CounterCubitOnChangeSnippet from '~/components/concepts/bloc/CounterCubitOnChangeSnippet.astro';
+import CounterCubitOnChangeUsageSnippet from '~/components/concepts/bloc/CounterCubitOnChangeUsageSnippet.astro';
+import CounterCubitOnChangeOutputSnippet from '~/components/concepts/bloc/CounterCubitOnChangeOutputSnippet.astro';
+import SimpleBlocObserverOnChangeSnippet from '~/components/concepts/bloc/SimpleBlocObserverOnChangeSnippet.astro';
+import SimpleBlocObserverOnChangeUsageSnippet from '~/components/concepts/bloc/SimpleBlocObserverOnChangeUsageSnippet.astro';
+import SimpleBlocObserverOnChangeOutputSnippet from '~/components/concepts/bloc/SimpleBlocObserverOnChangeOutputSnippet.astro';
+import CounterCubitOnErrorSnippet from '~/components/concepts/bloc/CounterCubitOnErrorSnippet.astro';
+import SimpleBlocObserverOnErrorSnippet from '~/components/concepts/bloc/SimpleBlocObserverOnErrorSnippet.astro';
+import CounterCubitOnErrorOutputSnippet from '~/components/concepts/bloc/CounterCubitOnErrorOutputSnippet.astro';
+import CounterBlocSnippet from '~/components/concepts/bloc/CounterBlocSnippet.astro';
+import CounterBlocEventHandlerSnippet from '~/components/concepts/bloc/CounterBlocEventHandlerSnippet.astro';
+import CounterBlocIncrementSnippet from '~/components/concepts/bloc/CounterBlocIncrementSnippet.astro';
+import CounterBlocUsageSnippet from '~/components/concepts/bloc/CounterBlocUsageSnippet.astro';
+import CounterBlocStreamUsageSnippet from '~/components/concepts/bloc/CounterBlocStreamUsageSnippet.astro';
+import CounterBlocOnChangeSnippet from '~/components/concepts/bloc/CounterBlocOnChangeSnippet.astro';
+import CounterBlocOnChangeUsageSnippet from '~/components/concepts/bloc/CounterBlocOnChangeUsageSnippet.astro';
+import CounterBlocOnChangeOutputSnippet from '~/components/concepts/bloc/CounterBlocOnChangeOutputSnippet.astro';
+import CounterBlocOnTransitionSnippet from '~/components/concepts/bloc/CounterBlocOnTransitionSnippet.astro';
+import CounterBlocOnTransitionOutputSnippet from '~/components/concepts/bloc/CounterBlocOnTransitionOutputSnippet.astro';
+import SimpleBlocObserverOnTransitionSnippet from '~/components/concepts/bloc/SimpleBlocObserverOnTransitionSnippet.astro';
+import SimpleBlocObserverOnTransitionUsageSnippet from '~/components/concepts/bloc/SimpleBlocObserverOnTransitionUsageSnippet.astro';
+import SimpleBlocObserverOnTransitionOutputSnippet from '~/components/concepts/bloc/SimpleBlocObserverOnTransitionOutputSnippet.astro';
+import CounterBlocOnEventSnippet from '~/components/concepts/bloc/CounterBlocOnEventSnippet.astro';
+import SimpleBlocObserverOnEventSnippet from '~/components/concepts/bloc/SimpleBlocObserverOnEventSnippet.astro';
+import SimpleBlocObserverOnEventOutputSnippet from '~/components/concepts/bloc/SimpleBlocObserverOnEventOutputSnippet.astro';
+import CounterBlocOnErrorSnippet from '~/components/concepts/bloc/CounterBlocOnErrorSnippet.astro';
+import CounterBlocOnErrorOutputSnippet from '~/components/concepts/bloc/CounterBlocOnErrorOutputSnippet.astro';
+import CounterCubitFullSnippet from '~/components/concepts/bloc/CounterCubitFullSnippet.astro';
+import CounterBlocFullSnippet from '~/components/concepts/bloc/CounterBlocFullSnippet.astro';
+import AuthenticationStateSnippet from '~/components/concepts/bloc/AuthenticationStateSnippet.astro';
+import AuthenticationTransitionSnippet from '~/components/concepts/bloc/AuthenticationTransitionSnippet.astro';
+import AuthenticationChangeSnippet from '~/components/concepts/bloc/AuthenticationChangeSnippet.astro';
+import DebounceEventTransformerSnippet from '~/components/concepts/bloc/DebounceEventTransformerSnippet.astro';
+
+:::note
+
+অনুগ্রহ করে package:bloc সম্পর্কিত নীচের অংশগুলো মনোযোগ দিয়ে পড়ুন।
+
+:::
+
+কয়েকটি মূল ধারণা আছে যেগুলো bloc প্যাকেজ ব্যবহার করার সময় বোঝা খুবই জরুরি।
+
+নিচের সেকশনে আমরা এগুলো বিস্তারিতভাবে আলোচনা করব এবং একটি কাউন্টার অ্যাপ দিয়ে
+উদাহরণ দেখাব।
+
+## স্ট্রিমস (Streams)
+
+:::note
+
+আরও তথ্যের জন্য অফিসিয়াল Dart ডকুমেন্টেশন দেখুন:
+https://dart.dev/tutorials/language/streams
+
+:::
+
+স্ট্রিম হল অ্যাসিঙ্ক্রোনাস ডেটার একটি ক্রম।
+
+bloc লাইব্রেরি ব্যবহার করার জন্য স্ট্রিমগুলোর একটি বেসিক ধারণা থাকা জরুরি।
+
+যদি আপনি স্ট্রিম সম্পর্কে অপরিচিত হন, তাহলে একটি পাইপে পানি প্রবাহের কল্পনা করুন
+— পাইপ হচ্ছে স্ট্রিম এবং পানি হচ্ছে অ্যাসিঙ্ক্রোনাস ডেটা।
+
+আমরা Dart-এ একটি স্ট্রিম তৈরি করতে পারি একটি `async*` (async generator) ফাংশন
+লিখে।
+
+<CountStreamSnippet />
+
+`async*` ফাংশনে `yield` ব্যবহার করে আমরা স্ট্রিমে ডেটা পুশ করতে পারি। উপরের
+উদাহরণে আমরা `max` পর্যন্ত পূর্ণসংখ্যার একটি স্ট্রিম রিটার্ন করছি।
+
+স্ট্রিমের প্রতিটি `yield` কল একটি নতুন ডেটা আইটেম পাঠায়।
+
+উপরের স্ট্রিমটি আমরা বিভিন্নভাবে কনজিউম করতে পারি। যদি আমরা স্ট্রিমের সব সংখ্যার
+যোগফল ফেরত দিতে চাই, তাহলে একটি ফাংশন হতে পারে:
+
+<SumStreamSnippet />
+
+উপরের ফাংশনটি `async` হওয়ায় আমরা `await` ব্যবহার করে স্ট্রিম থেকে প্রতিটি মান
+সংগ্রহ করে একটি `Future<int>` রিটার্ন করছি।
+
+সবকিছু একসাথে করা যেতে পারে এইভাবে:
+
+<StreamsMainSnippet />
+
+স্ট্রিম সম্পর্কে এই মৌলিক ধারণা হলে আমরা bloc প্যাকেজের মূল উপাদান — Cubit —
+শেখার জন্য প্রস্তুত।
+
+## কিউবিট (Cubit)
+
+Cubit হল একটি ক্লাস যা `BlocBase` থেকে এক্সটেন্ড করে এবং যেকোনো ধরনের state
+হ্যান্ডেল করতে ব্যবহৃত হয়।
+
+![Cubit Architecture](~/assets/concepts/cubit_architecture_full.png)
+
+Cubit এমন ফাংশন এক্সপোজ করতে পারে যা কল করলে state পরিবর্তন ট্রিগার হয়।
+
+State হল Cubit-র আউটপুট এবং আপনার অ্যাপ্লিকেশনের অংশবিশেষকে প্রতিনিধিত্ব করে। UI
+কম্পোনেন্টগুলো current state অনুযায়ী রিল-রেন্ডার করতে পারে।
+
+:::note
+
+Cubit-এর উত্স সম্পর্কে আরও জানতে এই ইস্যুটি পড়তে পারেন:
+https://github.com/felangel/cubit/issues/69
+
+:::
+
+### Cubit তৈরি করা
+
+আমরা একটি CounterCubit তৈরি করতে পারি এভাবে:
+
+<CounterCubitSnippet />
+
+Cubit তৈরি করার সময় আমাদের state-এর টাইপ নির্ধারণ করতে হবে। CounterCubit-এর
+ক্ষেত্রে state একটি `int`, কিন্তু জটিল পরিস্থিতিতে একটি `class` ব্যবহার করা যেতে
+পারে।
+
+আরেকটি গুরুত্বপূর্ণ বিষয় হল initial state নির্ধারণ করা। এটা আমরা `super`-এ
+ভ্যালু দিয়ে করতে পারি। উপরের উদাহরণে initial state ভিতর থেকেই `0` সেট করা
+হয়েছে, অথবা Cubit কে বাহ্যিকভাবে আরও ফ্লেক্সিবল করা যায়:
+
+<CounterCubitInitialStateSnippet />
+
+এভাবে আমরা ভিন্ন initial state দিয়ে CounterCubit ইনস্ট্যানশিয়েট করতে পারি:
+
+<CounterCubitInstantiationSnippet />
+
+### Cubit state পরিবর্তন
+
+প্রতিটি Cubit নতুন state আউটপুট করার জন্য `emit` ব্যবহার করে।
+
+<CounterCubitIncrementSnippet />
+
+উপরের উদাহরণে CounterCubit একটি public method `increment` এক্সপোজ করেছে।
+`increment` কল করলে আমরা current state (`state` getter) পড়ে `emit(state + 1)`
+করি।
+
+:::caution
+
+`emit` মেথডটি প্রোটেক্টেড — অর্থাৎ এটি শুধুমাত্র Cubit-এর ভিতরে ব্যবহার করবেন।
+
+:::
+
+### Cubit ব্যবহার করা
+
+এখন আমরা CounterCubit তৈরি করে ব্যবহার করব।
+
+#### বেসিক ব্যবহার
+
+<CounterCubitBasicUsageSnippet />
+
+উপরের উদাহরণে আমরা প্রথমে CounterCubit ইনস্ট্যানশিয়েট করি। তারপর বর্তমান state
+প্রিন্ট করি (এটি initial state)। এরপর `increment` কল করে state পরিবর্তন করি এবং
+আবার state প্রিন্ট করি। শেষে `Cubit.close()` করে স্ট্রিম বন্ধ করি।
+
+#### স্ট্রিম ব্যবহার
+
+Cubit একটি স্ট্রিম এক্সপোজ করে যাতে রিয়েল-টাইম আপডেট নেওয়া যায়:
+
+<CounterCubitStreamUsageSnippet />
+
+উপরের উদাহরণে আমরা Cubit-এ subscribe করে প্রতিটি state পরিবর্তনে print করছি,
+তারপর `increment` কল করছি এবং শেষে `subscription.cancel()` করে সাবস্ক্রিপশন বন্ধ
+করছি। `Cubit.close()` করে Cubit বন্ধ করা হয়।
+
+:::note
+
+উদাহরণে `await Future.delayed(Duration.zero)` দেওয়া আছে যাতে সাবস্ক্রিপশন
+একেবারেই তাড়াতাড়ি ক্যানসেল না হয়ে পরের ইভেন্ট-লুপ মিলানো যায়।
+
+:::
+
+:::caution
+
+Cubit-এ listen করলে শুধুমাত্র পরবর্তী state পরিবর্তনগুলোই পাবেন (past states
+নয়)।
+
+:::
+
+### Cubit পর্যবেক্ষণ (Observing a Cubit)
+
+Cubit একটি নতুন state emit করলে সেটা একটি `Change` হিসেবে ধরা হয়। Cubit-এর
+`onChange` override করে আমরা সব চেঞ্জ পর্যবেক্ষণ করতে পারি:
+
+<CounterCubitOnChangeSnippet />
+
+পরে Cubit চালিয়ে আমরা কনসোলে সব চেঞ্জ দেখতে পারি:
+
+<CounterCubitOnChangeUsageSnippet />
+
+উপরের উদাহরণ আউটপুট হবে:
+
+<CounterCubitOnChangeOutputSnippet />
+
+:::note
+
+`Change` ঘটে ঠিক আগে যখন Cubit-এর state আপডেট হয়। একটি `Change`-এ
+`currentState` এবং `nextState` থাকে।
+
+:::
+
+#### BlocObserver
+
+bloc লাইব্রেরির একটি সুবিধা হচ্ছে আমরা সব `Changes` এক জায়গায় দেখতে পারি। বড়
+অ্যাপে বহু Cubit থাকতে পারে, তাই সব Changes কেন্দ্রিয়ভাবে হ্যান্ডল করতে
+BlocObserver বানানো যেতে পারে।
+
+<SimpleBlocObserverOnChangeSnippet />
+
+:::note
+
+শুধু `BlocObserver` এক্সটেন্ড করে `onChange` override করলেই হয়।
+
+:::
+
+SimpleBlocObserver ব্যবহার করতে main-এ একটু পরিবর্তন করতে হবে:
+
+<SimpleBlocObserverOnChangeUsageSnippet />
+
+তারপর আউটপুট হবে:
+
+<SimpleBlocObserverOnChangeOutputSnippet />
+
+:::note
+
+লোকাল (internal) `onChange` আগে কল হয় এবং `super.onChange` ডাকে যাতে global
+BlocObserver-ও নোটিফাই হয়।
+
+:::
+
+:::tip
+
+BlocObserver-এ আপনার কাছে Cubit ইনস্ট্যান্সও অ্যাক্সেস থাকে, change ছাড়াও।
+
+:::
+
+### Cubit ত্রুটি হ্যান্ডলিং
+
+প্রতি Cubit-এর `addError` মেথড আছে যা কোনো ত্রুটি ইঙ্গিত করতে ব্যবহার করা যায়।
+
+<CounterCubitOnErrorSnippet />
+
+:::note
+
+Cubit-এর ভিতরে `onError` ওভাররাইড করে নির্দিষ্ট Cubit-এর সব এরর হ্যান্ডল করা
+যায়।
+
+:::
+
+গ্লোবালি সব রিপোর্টেড এরর হ্যান্ডল করতে BlocObserver-এ `onError` ওভাররাইড করা
+যায়।
+
+<SimpleBlocObserverOnErrorSnippet />
+
+উপরের প্রোগ্রাম চালালে আমরা দেখতে পাব:
+
+<CounterCubitOnErrorOutputSnippet />
+
+## Bloc
+
+Bloc একটি উন্নত ক্লাস যা ইভেন্ট-ভিত্তিকভাবে state পরিবর্তন করে; এটি `BlocBase`-ও
+এক্সটেন্ড করে। Cubit-এর তুলনায় Bloc-এ সরাসরি ফাংশন কল করে state পরিবর্তন না
+করে, পরিবর্তে ইভেন্ট যোগ করে Bloc সেই ইভেন্টগুলোকে state-এ রূপান্তর করে।
+
+![Bloc Architecture](~/assets/concepts/bloc_architecture_full.png)
+
+### Bloc তৈরি করা
+
+Bloc তৈরি করা Cubit-এর মতোই, বরং অতিরিক্তভাবে আপনাকে কোন ইভেন্টগুলি Bloc
+প্রক্রিয়াকরণ করবে তা নির্ধারণ করতে হবে।
+
+ইভেন্ট হল Bloc-এর ইনপুট। সাধারণত ইউজার অ্যাকশন (বাটন ট্যাপ) বা লাইফসাইকেল
+ইভেন্টের ফলে ইভেন্ট যোগ করা হয়।
+
+<CounterBlocSnippet />
+
+Cubit-এর মতোই Bloc-এও initial state `super`-এ দিয়ে নির্ধারণ করতে হবে।
+
+### Bloc state পরিবর্তন
+
+Bloc-এ ইভেন্ট-হ্যান্ডলার অনুজায়ীভাবে `on<Event>` API দিয়ে রেজিস্টার করা হয়।
+ইভেন্ট-হ্যান্ডলার ইনকামিং ইভেন্ট থেকে শূন্য বা একাধিক স্টেট ইমিট করে।
+
+<CounterBlocEventHandlerSnippet />
+
+:::tip
+
+EventHandler-এ আপনার কাছে event এবং একটি `Emitter` থাকবে, যেটি ব্যবহার করে শূন্য
+বা একাধিক state ইমিট করা যায়।
+
+:::
+
+আমরা এখন CounterIncrementPressed ইভেন্ট হ্যান্ডল করতে পারি:
+
+<CounterBlocIncrementSnippet />
+
+উপরের উদাহরণে `on<CounterIncrementPressed>` রেজিস্টার করা হয়েছে। প্রতিটি
+ইভেন্টে current state পড়ে `emit(state + 1)` করা হচ্ছে।
+
+:::note
+
+Bloc ক্লাস `BlocBase` এক্সটেন্ড করে, তাই current state যেকোনো সময় `state`
+গেটারের মাধ্যমে অ্যাক্সেস করা যাবে — ঠিক Cubit-এর মতোই।
+
+:::
+
+:::caution
+
+Blocs সরাসরি `emit` করা উচিত নয়; প্রতিটি state change অবশ্যই
+ইভেন্ট-হ্যান্ডলারের মধ্যে ইমিট করা উচিত।
+
+:::
+
+:::caution
+
+Blocs এবং Cubits উভয়ই duplicate states উপেক্ষা করে। যদি emit করা nextState
+পূর্ববর্তী state এর সমান হয়, তাহলে কোন স্টেট পরিবর্তন হবে না।
+
+:::
+
+### Bloc ব্যবহার করা
+
+এখন আমরা CounterBloc ইনস্ট্যানশিয়েট করে ব্যবহার করব।
+
+#### বেসিক ব্যবহার
+
+<CounterBlocUsageSnippet />
+
+উপরের উদাহরণে আমরা Bloc তৈরি করে current state প্রিন্ট করেছি, তারপর
+`CounterIncrementPressed` ইভেন্ট add করে state পরিবর্তন করেছি এবং শেষেও
+`close()` করে Bloc বন্ধ করেছি।
+
+:::note
+
+ইভেন্ট-হ্যান্ডলারকে প্রক্রিয়া করার জন্য `await Future.delayed(Duration.zero)`
+যোগ করা হয়েছে যাতে পরের ইভেন্ট-লুপের ইটারেশন পর্যন্ত অপেক্ষা করা যায়।
+
+:::
+
+#### স্ট্রিম ব্যবহার
+
+Cubit-এর মতোই Bloc-ও স্ট্রিম; আপনি Bloc সাবস্ক্রাইব করে রিয়েল-টাইম state আপডেট
+পেতে পারেন:
+
+<CounterBlocStreamUsageSnippet />
+
+উপরের উদাহরণে আমরা Bloc সাবস্ক্রাইব করে প্রতিটি state পরিবর্তন print করছি, তারপর
+ইভেন্ট add করছি এবং শেষে `subscription.cancel()` ও `Bloc.close()` করেছি।
+
+:::note
+
+উদাহরণে `await Future.delayed(Duration.zero)` দেওয়া হয়েছে যাতে সাবস্ক্রিপশন
+সরাসরি ক্যানসেল না হয়।
+
+:::
+
+### Bloc পর্যবেক্ষণ
+
+Cubit-এর মতো Bloc-এও `onChange` override করে state পরিবর্তন পর্যবেক্ষণ করা যায়।
+
+<CounterBlocOnChangeSnippet />
+
+main.dart আপডেট করলে:
+
+<CounterBlocOnChangeUsageSnippet />
+
+এরপর আউটপুট হবে:
+
+<CounterBlocOnChangeOutputSnippet />
+
+Bloc-এর একটি গুরুত্বপূর্ণ পার্থক্য হল এটি ইভেন্ট-চৌকশ হওয়ায় আমরা ঠিক কী ইভেন্ট
+ট্রিগার করেছে তা ট্র্যাক করতে পারি। এজন্য `onTransition` override করে আমরা
+transition সম্পর্কিত তথ্য পেতে পারি।
+
+Transition হচ্ছে current state, event এবং next state — এই তিনটির মিশ্রণ।
+
+<CounterBlocOnTransitionSnippet />
+
+উপরের main-টি আবার চালালে আমরা পাব:
+
+<CounterBlocOnTransitionOutputSnippet />
+
+:::note
+
+`onTransition` `onChange`-এর আগে invoked হয় এবং এতে কোন ইভেন্টে `currentState`
+থেকে `nextState`-এ পরিবর্তন ঘটল তা থাকে।
+
+:::
+
+#### BlocObserver
+
+ওইভাবে BlocObserver-এ `onTransition` override করলে সব Bloc-এ ঘটা transition এক
+জায়গায় দেখা যাবে।
+
+<SimpleBlocObserverOnTransitionSnippet />
+
+SimpleBlocObserver initialization ঠিক আগের মতোই করা যাবে:
+
+<SimpleBlocObserverOnTransitionUsageSnippet />
+
+এরপর আউটপুট হবে:
+
+<SimpleBlocObserverOnTransitionOutputSnippet />
+
+:::note
+
+`onTransition` প্রথমে (লোকাল আগে, গ্লোবাল পরে) কল হয়ে থাকে, এরপর `onChange`
+চলে।
+
+:::
+
+আরেকটি ইউনিক ফিচার হল Bloc-এ `onEvent` override করা যায় — যেটা তখন কল হয় যখন
+নতুন ইভেন্ট যোগ করা হয়। লোকাল `onEvent` প্রথমে, তারপর global
+`BlocObserver.onEvent` কল হয়।
+
+<CounterBlocOnEventSnippet />
+
+<SimpleBlocObserverOnEventSnippet />
+
+তারপর আউটপুট হবে:
+
+<SimpleBlocObserverOnEventOutputSnippet />
+
+:::note
+
+`onEvent` ইভেন্ট যোগ করার সঙ্গে সঙ্গেই কল হয়। লোকাল `onEvent` আগে, গ্লোবাল পরে
+কল হয়।
+
+:::
+
+### Bloc ত্রুটি হ্যান্ডলিং
+
+Cubit-ও Bloc-ও `addError` এবং `onError` মেথড প্রদান করে। Bloc-এর ভেতর কোথাও
+`addError` কল করলে that error রিপোর্ট হবে এবং local অথবা global `onError`-এ
+হ্যান্ডল করা যাবে।
+
+<CounterBlocOnErrorSnippet />
+
+উপরের main-টি আবার চালালে error রিপোর্ট কেমন লাগে তা দেখা যাবে:
+
+<CounterBlocOnErrorOutputSnippet />
+
+:::note
+
+লোকাল `onError` আগে, তারপর গ্লোবাল `BlocObserver.onError` কল হয়।
+
+:::
+
+:::note
+
+`onError` এবং `onChange` উভয়ই Bloc ও Cubit-এ একইভাবে কাজ করে।
+
+:::
+
+:::caution
+
+EventHandler-এ কোনো unhandled exception হলে সেটাও `onError`-এ রিপোর্ট করা হয়।
+
+:::
+
+## Cubit vs Bloc
+
+Cubit এবং Bloc-এর মৌলিক পার্থক্য এখন covered হয়েছে; আপনি হয়তো চাইবেন কখন Cubit
+ব্যবহার করবেন এবং কখন Bloc।
+
+### Cubit সুবিধা
+
+#### সরলতা
+
+Cubit-এর প্রধান সুবিধা হল সরলতা। Cubit তৈরি করতে কেবল state এবং সেই state
+পরিবর্তনের জন্য যে ফাংশনগুলো দরকার সেগুলোই লিখতে হয়। Bloc-এ events, states এবং
+EventHandler লিখতে হয় — ফলে Cubit কোড কম এবং বোঝা সহজ।
+
+নিচে দুইটি কাউন্টার ইমপ্লিমেন্টেশন:
+
+##### CounterCubit
+
+<CounterCubitFullSnippet />
+
+##### CounterBloc
+
+<CounterBlocFullSnippet />
+
+Cubit ইমপ্লিমেন্টেশন সংক্ষিপ্ত; এখানে আলাদা ইভেন্ট ডিফাইন করার দরকার পড়ে না —
+ফাংশনগুলো ইভেন্টের কাজ করে। Cubit-এ `emit` যেখানেই প্রয়োজন সেখানেই করা যায়।
+
+### Bloc সুবিধা
+
+#### ট্রেসযোগ্যতা (Traceability)
+
+Bloc-এর বড় সুবিধা হল state পরিবর্তনের ক্রম এবং ঠিক কী কারণে পরিবর্তন ঘটল সেটা
+ট্র্যাক করা যায়। `AuthenticationState` এর মত গুরুত্বপূর্ণ state-এ Bloc-এর
+মাধ্যমে ইভেন্ট-ভিত্তিক লগ রাখা বেশ কার্যকর।
+
+সরলতার জন্য `AuthenticationState` কে enum ধরে নেওয়া যাক:
+
+<AuthenticationStateSnippet />
+
+state পরিবর্তনের অনেক কারণ থাকতে পারে — উদাহরণ: ইউজার লগআউট ট্যাপ করেছে অথবা
+টোকেন বাতিল হয়েছে। Bloc-এ Transition আপনাকে জানায় কোন ইভেন্টের ফলে state
+বদলেছে:
+
+<AuthenticationTransitionSnippet />
+
+এই Transition আমাদের প্রয়োজনীয় তথ্য দেয়। Cubit ব্যবহার করলে আমরা শুধুমাত্র
+Change দেখতে পারি:
+
+<AuthenticationChangeSnippet />
+
+এই লোগে বলা থাকে যে ব্যবহারকারী লগআউট হয়েছে, কিন্তু কেন তা স্পষ্ট থাকে না — যা
+ডিবাগিং-এ অসুবিধা করতে পারে।
+
+#### অ্যাডভান্সড ইভেন্ট ট্রান্সফর্মেশন
+
+আরেকটি জায়গা যেখানে Bloc এগিয়ে তা হলো reactive অপারেটর (`buffer`,
+`debounceTime`, `throttle` ইত্যাদি) ব্যবহার করে ইনকামিং ইভেন্টগুলো কিভাবে
+ট্রান্সফর্ম করা হবে তা নিয়ন্ত্রণ করা যায়।
+
+:::tip
+
+stream_transform এবং rxdart প্যাকেজগুলো দেখুন:
+https://pub.dev/packages/stream_transform , https://pub.dev/packages/rxdart
+
+:::
+
+Bloc-এ ইভেন্ট সিংক থাকে যা ইনকামিং ইভেন্টের ফ্লো কন্ট্রোল ও ট্রান্সফর্ম করতে
+দেয়।
+
+উদাহরণস্বরূপ, রিয়েল-টাইম সার্চে অনুরোধগুলো debounce করলে ব্যাকেন্ড-এ রেট
+লিমিটিং বা অতিরিক্ত লোড কমানো যায়।
+
+Bloc-এ কাস্টম `EventTransformer` ব্যবহার করে ইনকামিং ইভেন্ট ডিবাউন্স করা যায়:
+
+<DebounceEventTransformerSnippet />
+
+উপরের কোড দিয়ে ইনকামিং ইভেন্ট সহজে ডিবাউন্স করা যায়।
+
+:::tip
+
+bloc_concurrency প্যাকেজ দেখুন; এটি কিছু প্রচলিত EventTransformer প্রদান করে:
+https://pub.dev/packages/bloc_concurrency
+
+:::
+
+নিশ্চয় না হলে Cubit দিয়ে শুরু করুন; পরে প্রয়োজনে Bloc-এ রিফ্যাক্টর করতে
+পারবেন।
