@@ -1,0 +1,44 @@
+---
+title: Avoid Bloc-to-Bloc Members
+description: The avoid_bloc_to_bloc_members rule
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/avoid_bloc_to_bloc_members/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/avoid_bloc_to_bloc_members/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+</div>
+
+Avoid including `Bloc`s or `Cubit`s as members of other `Bloc`s or `Cubit`s.
+
+## Rationale
+
+While passing blocs to other blocs may be error free, it creates dependencies
+between blocs.
+
+See also
+[Bloc-to-Bloc Communication](https://bloclibrary.dev/architecture/#bloc-to-bloc-communication)
+
+## Examples
+
+**Avoid** passing a `Bloc` or `Cubit` to the constructor of another `Bloc` or
+`Cubit`.
+
+**BAD**:
+
+<BadSnippet />
+
+**GOOD**:
+
+<GoodSnippet />
+
+## Enable
+
+To enable the `avoid_bloc_to_bloc_members` rule, add it to your
+`analysis_options.yaml` under `bloc` > `rules`:
+
+<EnableRuleSnippet name="avoid_bloc_to_bloc_members" />
