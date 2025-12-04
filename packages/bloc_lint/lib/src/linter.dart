@@ -1,6 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+// Use the experimental features from the shared frontend.
+// ignore: implementation_imports
+import 'package:_fe_analyzer_shared/src/parser/experimental_features.dart'
+    show DefaultExperimentalFeatures;
 // Use the parser from the shared frontend.
 // ignore: implementation_imports
 import 'package:_fe_analyzer_shared/src/parser/parser.dart' show Parser;
@@ -94,7 +98,10 @@ class Linter {
       final context = LintContext._(rule: rule, document: document);
       final listener = rule.create(context);
       if (listener == null) continue;
-      Parser(listener).parseUnit(tokens);
+      Parser(
+        listener,
+        experimentalFeatures: const DefaultExperimentalFeatures(),
+      ).parseUnit(tokens);
       diagnostics.addAll(context.diagnostics);
     }
     return results;
