@@ -4,7 +4,7 @@ typedef _Predicate<T> = bool Function(T);
 
 class _ChangeStack<T> {
   _ChangeStack({required _Predicate<T> shouldReplay, this.limit})
-      : _shouldReplay = shouldReplay;
+    : _shouldReplay = shouldReplay;
 
   final Queue<_Change<T>> _history = ListQueue();
   final Queue<_Change<T>> _redos = ListQueue();

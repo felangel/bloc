@@ -165,7 +165,8 @@ void main() {
     test('detects ignore_for_file at start of file', () {
       final document = TextDocument(
         uri: Uri.parse('counter_bloc.dart'),
-        content: '''
+        content:
+            '''
 // ignore_for_file: ${PreferBloc.rule}, ${PreferCubit.rule}
 void main() {
   print("hello world");
@@ -181,7 +182,8 @@ void main() {
     test('detects multiple ignore_for_file', () {
       final document = TextDocument(
         uri: Uri.parse('counter_bloc.dart'),
-        content: '''
+        content:
+            '''
 // ignore_for_file: ${PreferBloc.rule}
 // ignore_for_file: ${PreferCubit.rule}
 void main() {
@@ -198,7 +200,8 @@ void main() {
     test('ignore_for_file throughout file', () {
       final document = TextDocument(
         uri: Uri.parse('counter_bloc.dart'),
-        content: '''
+        content:
+            '''
 void main() {
 // ignore_for_file: ${PreferBloc.rule}
   print("hello world");
@@ -231,7 +234,8 @@ import 'package:flutter/material.dart';
     test('returns ignores above line', () {
       final document = TextDocument(
         uri: Uri.parse('counter_cubit.dart'),
-        content: '''
+        content:
+            '''
 // ignore: ${PreferBloc.rule}, ${PreferCubit.rule}
 import 'package:flutter/material.dart';''',
       );

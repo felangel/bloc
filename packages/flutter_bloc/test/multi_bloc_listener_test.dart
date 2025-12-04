@@ -50,8 +50,9 @@ void main() {
       expect(statesB, expectedStatesB);
     });
 
-    testWidgets('calls listeners on state changes without explicit types',
-        (tester) async {
+    testWidgets('calls listeners on state changes without explicit types', (
+      tester,
+    ) async {
       final statesA = <int>[];
       const expectedStatesA = [1, 2];
       final counterCubitA = CounterCubit();

@@ -12,10 +12,10 @@ class CounterBloc extends ReplayBloc<CounterEvent, int> {
     void Function(ReplayEvent)? onEventCallback,
     void Function(Transition<ReplayEvent, int>)? onTransitionCallback,
     bool Function(int)? shouldReplayCallback,
-  })  : _onEventCallback = onEventCallback,
-        _onTransitionCallback = onTransitionCallback,
-        _shouldReplayCallback = shouldReplayCallback,
-        super(0, limit: limit) {
+  }) : _onEventCallback = onEventCallback,
+       _onTransitionCallback = onTransitionCallback,
+       _shouldReplayCallback = shouldReplayCallback,
+       super(0, limit: limit) {
     on<Increment>((event, emit) => emit(state + 1));
     on<Decrement>((event, emit) => emit(state - 1));
   }

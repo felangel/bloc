@@ -64,11 +64,11 @@ class BlocConsumer<B extends StateStreamable<S>, S> extends StatefulWidget {
   const BlocConsumer({
     required this.builder,
     required this.listener,
-    Key? key,
+    super.key,
     this.bloc,
     this.buildWhen,
     this.listenWhen,
-  }) : super(key: key);
+  });
 
   /// The [bloc] that the [BlocConsumer] will interact with.
   /// If omitted, [BlocConsumer] will automatically perform a lookup using

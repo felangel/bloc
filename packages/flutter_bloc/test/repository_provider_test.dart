@@ -6,9 +6,9 @@ class MyApp extends StatelessWidget {
   const MyApp({
     required this.repository,
     required this.child,
-    Key? key,
+    super.key,
     this.useValueProvider = false,
-  }) : super(key: key);
+  });
 
   final Repository repository;
   final Widget child;
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyStatefulApp extends StatefulWidget {
-  const MyStatefulApp({required this.child, Key? key}) : super(key: key);
+  const MyStatefulApp({required this.child, super.key});
 
   final Widget child;
 
@@ -76,12 +76,12 @@ class _MyStatefulAppState extends State<MyStatefulApp> {
 }
 
 class MyAppNoProvider extends MaterialApp {
-  const MyAppNoProvider({required Widget child, Key? key})
-      : super(key: key, home: child);
+  const MyAppNoProvider({required Widget child, super.key})
+    : super(home: child);
 }
 
 class CounterPage extends StatelessWidget {
-  const CounterPage({Key? key, this.onBuild}) : super(key: key);
+  const CounterPage({super.key, this.onBuild});
 
   final VoidCallback? onBuild;
 
@@ -166,12 +166,13 @@ void main() {
     });
 
     testWidgets(
-        'should throw FlutterError if RepositoryProvider is not found in '
-        'current context', (tester) async {
-      const child = CounterPage();
-      await tester.pumpWidget(const MyAppNoProvider(child: child));
-      final dynamic exception = tester.takeException();
-      const expectedMessage = '''
+      'should throw FlutterError if RepositoryProvider is not found in '
+      'current context',
+      (tester) async {
+        const child = CounterPage();
+        await tester.pumpWidget(const MyAppNoProvider(child: child));
+        final dynamic exception = tester.takeException();
+        const expectedMessage = '''
         RepositoryProvider.of() called with a context that does not contain a repository of type Repository.
         No ancestor could be found starting from the context that was passed to RepositoryProvider.of<Repository>().
 
@@ -179,13 +180,14 @@ void main() {
 
         The context used was: CounterPage(dirty)
 ''';
-      expect((exception as FlutterError).message, expectedMessage);
-    });
+        expect((exception as FlutterError).message, expectedMessage);
+      },
+    );
 
-    testWidgets(
-        'should throw StateError if internal '
+    testWidgets('should throw StateError if internal '
         'exception is thrown', (tester) async {
-      const expected = 'Tried to read a provider that threw '
+      const expected =
+          'Tried to read a provider that threw '
           'during the creation of its value.\n'
           'The exception occurred during the creation of type Repository.';
       final onError = FlutterError.onError;
@@ -215,10 +217,10 @@ void main() {
       );
     });
 
-    testWidgets(
-        'should throw StateError '
+    testWidgets('should throw StateError '
         'if exception is for different provider', (tester) async {
-      const expected = 'Tried to read a provider that threw '
+      const expected =
+          'Tried to read a provider that threw '
           'during the creation of its value.\n'
           'The exception occurred during the creation of type Repository.';
       final onError = FlutterError.onError;
@@ -252,86 +254,92 @@ void main() {
     });
 
     testWidgets(
-        'should not rebuild widgets that inherited the value if the value is '
-        'changed', (tester) async {
-      var numBuilds = 0;
-      final child = CounterPage(onBuild: () => numBuilds++);
-      await tester.pumpWidget(MyStatefulApp(child: child));
-      await tester.tap(find.byKey(const Key('iconButtonKey')));
-      await tester.pump();
-      expect(numBuilds, 1);
-    });
+      'should not rebuild widgets that inherited the value if the value is '
+      'changed',
+      (tester) async {
+        var numBuilds = 0;
+        final child = CounterPage(onBuild: () => numBuilds++);
+        await tester.pumpWidget(MyStatefulApp(child: child));
+        await tester.tap(find.byKey(const Key('iconButtonKey')));
+        await tester.pump();
+        expect(numBuilds, 1);
+      },
+    );
 
     testWidgets(
-        'should rebuild widgets that inherited the value if the value is '
-        'changed with context.watch', (tester) async {
-      var numBuilds = 0;
-      await tester.pumpWidget(
-        MaterialApp(
-          home: StatefulBuilder(
-            builder: (context, setState) {
-              var repository = const Repository(0);
-              return RepositoryProvider.value(
-                value: repository,
-                child: StatefulBuilder(
-                  builder: (context, _) {
-                    numBuilds++;
-                    final data = context.watch<Repository>().data;
-                    return TextButton(
-                      child: Text('Data: $data'),
-                      onPressed: () {
-                        setState(() => repository = const Repository(1));
-                      },
-                    );
-                  },
-                ),
-              );
-            },
+      'should rebuild widgets that inherited the value if the value is '
+      'changed with context.watch',
+      (tester) async {
+        var numBuilds = 0;
+        await tester.pumpWidget(
+          MaterialApp(
+            home: StatefulBuilder(
+              builder: (context, setState) {
+                var repository = const Repository(0);
+                return RepositoryProvider.value(
+                  value: repository,
+                  child: StatefulBuilder(
+                    builder: (context, _) {
+                      numBuilds++;
+                      final data = context.watch<Repository>().data;
+                      return TextButton(
+                        child: Text('Data: $data'),
+                        onPressed: () {
+                          setState(() => repository = const Repository(1));
+                        },
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
           ),
-        ),
-      );
-      await tester.tap(find.byType(TextButton));
-      await tester.pump();
-      expect(numBuilds, 2);
-    });
+        );
+        await tester.tap(find.byType(TextButton));
+        await tester.pump();
+        expect(numBuilds, 2);
+      },
+    );
 
     testWidgets(
-        'should rebuild widgets that inherited the value if the value is '
-        'changed with listen: true', (tester) async {
-      var numBuilds = 0;
-      await tester.pumpWidget(
-        MaterialApp(
-          home: StatefulBuilder(
-            builder: (context, setState) {
-              var repository = const Repository(0);
-              return RepositoryProvider.value(
-                value: repository,
-                child: StatefulBuilder(
-                  builder: (context, _) {
-                    numBuilds++;
-                    final data =
-                        RepositoryProvider.of<Repository>(context, listen: true)
-                            .data;
-                    return TextButton(
-                      child: Text('Data: $data'),
-                      onPressed: () {
-                        setState(() => repository = const Repository(1));
-                      },
-                    );
-                  },
-                ),
-              );
-            },
+      'should rebuild widgets that inherited the value if the value is '
+      'changed with listen: true',
+      (tester) async {
+        var numBuilds = 0;
+        await tester.pumpWidget(
+          MaterialApp(
+            home: StatefulBuilder(
+              builder: (context, setState) {
+                var repository = const Repository(0);
+                return RepositoryProvider.value(
+                  value: repository,
+                  child: StatefulBuilder(
+                    builder: (context, _) {
+                      numBuilds++;
+                      final data = RepositoryProvider.of<Repository>(
+                        context,
+                        listen: true,
+                      ).data;
+                      return TextButton(
+                        child: Text('Data: $data'),
+                        onPressed: () {
+                          setState(() => repository = const Repository(1));
+                        },
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
           ),
-        ),
-      );
-      await tester.tap(find.byType(TextButton));
-      await tester.pump();
-      expect(numBuilds, 2);
-    });
+        );
+        await tester.tap(find.byType(TextButton));
+        await tester.pump();
+        expect(numBuilds, 2);
+      },
+    );
 
-    testWidgets(
-        'should access repository instance '
+    testWidgets('should access repository instance '
         'via context.read', (tester) async {
       await tester.pumpWidget(
         RepositoryProvider(

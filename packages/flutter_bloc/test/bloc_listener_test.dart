@@ -11,7 +11,7 @@ class CounterCubit extends Cubit<int> {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key, this.onListenerCalled}) : super(key: key);
+  const MyApp({super.key, this.onListenerCalled});
 
   final BlocWidgetListener<int>? onListenerCalled;
 
@@ -130,83 +130,86 @@ void main() {
     });
 
     testWidgets(
-        'updates when the cubit is changed at runtime to a different cubit '
-        'and unsubscribes from old cubit', (tester) async {
-      var listenerCallCount = 0;
-      int? latestState;
-      final incrementFinder = find.byKey(
-        const Key('cubit_listener_increment_button'),
-      );
-      final resetCubitFinder = find.byKey(
-        const Key('cubit_listener_reset_button'),
-      );
-      await tester.pumpWidget(
-        MyApp(
-          onListenerCalled: (_, state) {
-            listenerCallCount++;
-            latestState = state;
-          },
-        ),
-      );
+      'updates when the cubit is changed at runtime to a different cubit '
+      'and unsubscribes from old cubit',
+      (tester) async {
+        var listenerCallCount = 0;
+        int? latestState;
+        final incrementFinder = find.byKey(
+          const Key('cubit_listener_increment_button'),
+        );
+        final resetCubitFinder = find.byKey(
+          const Key('cubit_listener_reset_button'),
+        );
+        await tester.pumpWidget(
+          MyApp(
+            onListenerCalled: (_, state) {
+              listenerCallCount++;
+              latestState = state;
+            },
+          ),
+        );
 
-      await tester.tap(incrementFinder);
-      await tester.pump();
-      expect(listenerCallCount, 1);
-      expect(latestState, 1);
+        await tester.tap(incrementFinder);
+        await tester.pump();
+        expect(listenerCallCount, 1);
+        expect(latestState, 1);
 
-      await tester.tap(incrementFinder);
-      await tester.pump();
-      expect(listenerCallCount, 2);
-      expect(latestState, 2);
+        await tester.tap(incrementFinder);
+        await tester.pump();
+        expect(listenerCallCount, 2);
+        expect(latestState, 2);
 
-      await tester.tap(resetCubitFinder);
-      await tester.pump();
-      await tester.tap(incrementFinder);
-      await tester.pump();
-      expect(listenerCallCount, 3);
-      expect(latestState, 1);
-    });
-
-    testWidgets(
-        'does not update when the cubit is changed at runtime to same cubit '
-        'and stays subscribed to current cubit', (tester) async {
-      var listenerCallCount = 0;
-      int? latestState;
-      final incrementFinder = find.byKey(
-        const Key('cubit_listener_increment_button'),
-      );
-      final noopCubitFinder = find.byKey(
-        const Key('cubit_listener_noop_button'),
-      );
-      await tester.pumpWidget(
-        MyApp(
-          onListenerCalled: (context, state) {
-            listenerCallCount++;
-            latestState = state;
-          },
-        ),
-      );
-
-      await tester.tap(incrementFinder);
-      await tester.pump();
-      expect(listenerCallCount, 1);
-      expect(latestState, 1);
-
-      await tester.tap(incrementFinder);
-      await tester.pump();
-      expect(listenerCallCount, 2);
-      expect(latestState, 2);
-
-      await tester.tap(noopCubitFinder);
-      await tester.pump();
-      await tester.tap(incrementFinder);
-      await tester.pump();
-      expect(listenerCallCount, 3);
-      expect(latestState, 3);
-    });
+        await tester.tap(resetCubitFinder);
+        await tester.pump();
+        await tester.tap(incrementFinder);
+        await tester.pump();
+        expect(listenerCallCount, 3);
+        expect(latestState, 1);
+      },
+    );
 
     testWidgets(
-        'calls listenWhen on single state change with correct previous '
+      'does not update when the cubit is changed at runtime to same cubit '
+      'and stays subscribed to current cubit',
+      (tester) async {
+        var listenerCallCount = 0;
+        int? latestState;
+        final incrementFinder = find.byKey(
+          const Key('cubit_listener_increment_button'),
+        );
+        final noopCubitFinder = find.byKey(
+          const Key('cubit_listener_noop_button'),
+        );
+        await tester.pumpWidget(
+          MyApp(
+            onListenerCalled: (context, state) {
+              listenerCallCount++;
+              latestState = state;
+            },
+          ),
+        );
+
+        await tester.tap(incrementFinder);
+        await tester.pump();
+        expect(listenerCallCount, 1);
+        expect(latestState, 1);
+
+        await tester.tap(incrementFinder);
+        await tester.pump();
+        expect(listenerCallCount, 2);
+        expect(latestState, 2);
+
+        await tester.tap(noopCubitFinder);
+        await tester.pump();
+        await tester.tap(incrementFinder);
+        await tester.pump();
+        expect(listenerCallCount, 3);
+        expect(latestState, 3);
+      },
+    );
+
+    testWidgets('calls listenWhen on single state change with correct previous '
         'and current states', (tester) async {
       int? latestPreviousState;
       var listenWhenCallCount = 0;
@@ -234,41 +237,43 @@ void main() {
     });
 
     testWidgets(
-        'calls listenWhen with previous listener state and current cubit state',
-        (tester) async {
-      int? latestPreviousState;
-      var listenWhenCallCount = 0;
-      final states = <int>[];
-      final counterCubit = CounterCubit();
-      const expectedStates = [2];
-      await tester.pumpWidget(
-        BlocListener<CounterCubit, int>(
-          bloc: counterCubit,
-          listenWhen: (previous, state) {
-            listenWhenCallCount++;
-            if ((previous + state) % 3 == 0) {
-              latestPreviousState = previous;
-              states.add(state);
-              return true;
-            }
-            return false;
-          },
-          listener: (_, __) {},
-        ),
-      );
-      counterCubit
-        ..increment()
-        ..increment()
-        ..increment();
-      await tester.pump();
+      'calls listenWhen with previous listener state and current cubit state',
+      (tester) async {
+        int? latestPreviousState;
+        var listenWhenCallCount = 0;
+        final states = <int>[];
+        final counterCubit = CounterCubit();
+        const expectedStates = [2];
+        await tester.pumpWidget(
+          BlocListener<CounterCubit, int>(
+            bloc: counterCubit,
+            listenWhen: (previous, state) {
+              listenWhenCallCount++;
+              if ((previous + state) % 3 == 0) {
+                latestPreviousState = previous;
+                states.add(state);
+                return true;
+              }
+              return false;
+            },
+            listener: (_, __) {},
+          ),
+        );
+        counterCubit
+          ..increment()
+          ..increment()
+          ..increment();
+        await tester.pump();
 
-      expect(states, expectedStates);
-      expect(listenWhenCallCount, 3);
-      expect(latestPreviousState, 1);
-    });
+        expect(states, expectedStates);
+        expect(listenWhenCallCount, 3);
+        expect(latestPreviousState, 1);
+      },
+    );
 
-    testWidgets('calls listenWhen and listener with correct state',
-        (tester) async {
+    testWidgets('calls listenWhen and listener with correct state', (
+      tester,
+    ) async {
       final listenWhenPreviousState = <int>[];
       final listenWhenCurrentState = <int>[];
       final states = <int>[];
@@ -299,106 +304,111 @@ void main() {
     });
 
     testWidgets(
-        'infers the cubit from the context if the cubit is not provided',
-        (tester) async {
-      int? latestPreviousState;
-      var listenWhenCallCount = 0;
-      final states = <int>[];
-      final counterCubit = CounterCubit();
-      const expectedStates = [1];
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: counterCubit,
-          child: BlocListener<CounterCubit, int>(
+      'infers the cubit from the context if the cubit is not provided',
+      (tester) async {
+        int? latestPreviousState;
+        var listenWhenCallCount = 0;
+        final states = <int>[];
+        final counterCubit = CounterCubit();
+        const expectedStates = [1];
+        await tester.pumpWidget(
+          BlocProvider.value(
+            value: counterCubit,
+            child: BlocListener<CounterCubit, int>(
+              listenWhen: (previous, state) {
+                listenWhenCallCount++;
+                latestPreviousState = previous;
+                states.add(state);
+                return true;
+              },
+              listener: (context, state) {},
+            ),
+          ),
+        );
+        counterCubit.increment();
+        await tester.pump();
+
+        expect(states, expectedStates);
+        expect(listenWhenCallCount, 1);
+        expect(latestPreviousState, 0);
+      },
+    );
+
+    testWidgets(
+      'calls listenWhen on multiple state change with correct previous '
+      'and current states',
+      (tester) async {
+        int? latestPreviousState;
+        var listenWhenCallCount = 0;
+        final states = <int>[];
+        final counterCubit = CounterCubit();
+        const expectedStates = [1, 2];
+        await tester.pumpWidget(
+          BlocListener<CounterCubit, int>(
+            bloc: counterCubit,
             listenWhen: (previous, state) {
               listenWhenCallCount++;
               latestPreviousState = previous;
               states.add(state);
               return true;
             },
-            listener: (context, state) {},
+            listener: (_, __) {},
           ),
-        ),
-      );
-      counterCubit.increment();
-      await tester.pump();
+        );
+        await tester.pump();
+        counterCubit.increment();
+        await tester.pump();
+        counterCubit.increment();
+        await tester.pump();
 
-      expect(states, expectedStates);
-      expect(listenWhenCallCount, 1);
-      expect(latestPreviousState, 0);
-    });
-
-    testWidgets(
-        'calls listenWhen on multiple state change with correct previous '
-        'and current states', (tester) async {
-      int? latestPreviousState;
-      var listenWhenCallCount = 0;
-      final states = <int>[];
-      final counterCubit = CounterCubit();
-      const expectedStates = [1, 2];
-      await tester.pumpWidget(
-        BlocListener<CounterCubit, int>(
-          bloc: counterCubit,
-          listenWhen: (previous, state) {
-            listenWhenCallCount++;
-            latestPreviousState = previous;
-            states.add(state);
-            return true;
-          },
-          listener: (_, __) {},
-        ),
-      );
-      await tester.pump();
-      counterCubit.increment();
-      await tester.pump();
-      counterCubit.increment();
-      await tester.pump();
-
-      expect(states, expectedStates);
-      expect(listenWhenCallCount, 2);
-      expect(latestPreviousState, 1);
-    });
+        expect(states, expectedStates);
+        expect(listenWhenCallCount, 2);
+        expect(latestPreviousState, 1);
+      },
+    );
 
     testWidgets(
-        'does not call listener when listenWhen returns false on single state '
-        'change', (tester) async {
-      final states = <int>[];
-      final counterCubit = CounterCubit();
-      const expectedStates = <int>[];
-      await tester.pumpWidget(
-        BlocListener<CounterCubit, int>(
-          bloc: counterCubit,
-          listenWhen: (_, __) => false,
-          listener: (_, state) => states.add(state),
-        ),
-      );
-      counterCubit.increment();
-      await tester.pump();
+      'does not call listener when listenWhen returns false on single state '
+      'change',
+      (tester) async {
+        final states = <int>[];
+        final counterCubit = CounterCubit();
+        const expectedStates = <int>[];
+        await tester.pumpWidget(
+          BlocListener<CounterCubit, int>(
+            bloc: counterCubit,
+            listenWhen: (_, __) => false,
+            listener: (_, state) => states.add(state),
+          ),
+        );
+        counterCubit.increment();
+        await tester.pump();
 
-      expect(states, expectedStates);
-    });
-
-    testWidgets(
-        'calls listener when listenWhen returns true on single state change',
-        (tester) async {
-      final states = <int>[];
-      final counterCubit = CounterCubit();
-      const expectedStates = [1];
-      await tester.pumpWidget(
-        BlocListener<CounterCubit, int>(
-          bloc: counterCubit,
-          listenWhen: (_, __) => true,
-          listener: (_, state) => states.add(state),
-        ),
-      );
-      counterCubit.increment();
-      await tester.pump();
-
-      expect(states, expectedStates);
-    });
+        expect(states, expectedStates);
+      },
+    );
 
     testWidgets(
-        'does not call listener when listenWhen returns false '
+      'calls listener when listenWhen returns true on single state change',
+      (tester) async {
+        final states = <int>[];
+        final counterCubit = CounterCubit();
+        const expectedStates = [1];
+        await tester.pumpWidget(
+          BlocListener<CounterCubit, int>(
+            bloc: counterCubit,
+            listenWhen: (_, __) => true,
+            listener: (_, state) => states.add(state),
+          ),
+        );
+        counterCubit.increment();
+        await tester.pump();
+
+        expect(states, expectedStates);
+      },
+    );
+
+    testWidgets('does not call listener when listenWhen returns false '
         'on multiple state changes', (tester) async {
       final states = <int>[];
       final counterCubit = CounterCubit();
@@ -423,32 +433,32 @@ void main() {
     });
 
     testWidgets(
-        'calls listener when listenWhen returns true on multiple state change',
-        (tester) async {
-      final states = <int>[];
-      final counterCubit = CounterCubit();
-      const expectedStates = [1, 2, 3, 4];
-      await tester.pumpWidget(
-        BlocListener<CounterCubit, int>(
-          bloc: counterCubit,
-          listenWhen: (_, __) => true,
-          listener: (_, state) => states.add(state),
-        ),
-      );
-      counterCubit.increment();
-      await tester.pump();
-      counterCubit.increment();
-      await tester.pump();
-      counterCubit.increment();
-      await tester.pump();
-      counterCubit.increment();
-      await tester.pump();
+      'calls listener when listenWhen returns true on multiple state change',
+      (tester) async {
+        final states = <int>[];
+        final counterCubit = CounterCubit();
+        const expectedStates = [1, 2, 3, 4];
+        await tester.pumpWidget(
+          BlocListener<CounterCubit, int>(
+            bloc: counterCubit,
+            listenWhen: (_, __) => true,
+            listener: (_, state) => states.add(state),
+          ),
+        );
+        counterCubit.increment();
+        await tester.pump();
+        counterCubit.increment();
+        await tester.pump();
+        counterCubit.increment();
+        await tester.pump();
+        counterCubit.increment();
+        await tester.pump();
 
-      expect(states, expectedStates);
-    });
+        expect(states, expectedStates);
+      },
+    );
 
-    testWidgets(
-        'updates subscription '
+    testWidgets('updates subscription '
         'when provided bloc is changed', (tester) async {
       final firstCounterCubit = CounterCubit();
       final secondCounterCubit = CounterCubit(seed: 100);

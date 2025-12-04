@@ -2,8 +2,8 @@ import 'package:replay_bloc/replay_bloc.dart';
 
 class CounterCubit extends ReplayCubit<int> {
   CounterCubit({int? limit, bool Function(int)? shouldReplayCallback})
-      : _shouldReplayCallback = shouldReplayCallback,
-        super(0, limit: limit);
+    : _shouldReplayCallback = shouldReplayCallback,
+      super(0, limit: limit);
 
   final bool Function(int)? _shouldReplayCallback;
 

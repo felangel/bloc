@@ -2,8 +2,8 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 class FromJsonStateCubit extends HydratedCubit<int> {
   FromJsonStateCubit({required void Function(int) onFromJson})
-      : _onFromJson = onFromJson,
-        super(0);
+    : _onFromJson = onFromJson,
+      super(0);
 
   final void Function(int) _onFromJson;
 

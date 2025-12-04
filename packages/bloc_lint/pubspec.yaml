@@ -9,10 +9,10 @@ topics: [bloc, state-management, lint]
 funding: [https://github.com/sponsors/felangel]
 
 environment:
-  sdk: ">=3.7.0 <4.0.0"
+  sdk: ^3.10.1
 
 dependencies:
-  _fe_analyzer_shared: ">=92.0.0 <93.0.0"
+  _fe_analyzer_shared: ">=91.0.0 <93.0.0"
   checked_yaml: ^2.0.0
   collection: ^1.0.0
   glob: ^2.0.0
@@ -21,11 +21,11 @@ dependencies:
   pubspec_lock_parse: ^2.0.0
 
 dev_dependencies:
-  build_runner: ^2.0.0
+  build_runner: ^2.10.4
   json_serializable: ^6.0.0
   meta: ^1.0.0
   mocktail: ^1.0.0
-  test: ^1.0.0
+  test: ^1.28.0
 
 screenshots:
   - description: The bloc_lint package logo.

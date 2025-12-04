@@ -55,11 +55,10 @@ class Linter {
   }
 
   Map<String, List<Diagnostic>> _analyzeDirectory(Directory directory) {
-    final files =
-        directory
-            .listSync(recursive: true)
-            .where((e) => e.isLintableDartFile)
-            .cast<File>();
+    final files = directory
+        .listSync(recursive: true)
+        .where((e) => e.isLintableDartFile)
+        .cast<File>();
 
     return files
         .map(_analyzeFile)

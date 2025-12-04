@@ -107,61 +107,66 @@ void main() {
         ).called(1);
       });
 
-      test('is called with correct changes for multiple state changes',
-          () async {
-        final changes = <Change<int>>[];
-        final cubit = CounterCubit(onChangeCallback: changes.add)
-          ..increment()
-          ..increment();
-        await cubit.close();
-        expect(
-          changes,
-          const [
-            Change<int>(currentState: 0, nextState: 1),
-            Change<int>(currentState: 1, nextState: 2),
-          ],
-        );
-        verify(
-          // ignore: invalid_use_of_protected_member
-          () => observer.onChange(
-            cubit,
-            const Change<int>(currentState: 0, nextState: 1),
-          ),
-        ).called(1);
-        verify(
-          // ignore: invalid_use_of_protected_member
-          () => observer.onChange(
-            cubit,
-            const Change<int>(currentState: 1, nextState: 2),
-          ),
-        ).called(1);
-      });
+      test(
+        'is called with correct changes for multiple state changes',
+        () async {
+          final changes = <Change<int>>[];
+          final cubit = CounterCubit(onChangeCallback: changes.add)
+            ..increment()
+            ..increment();
+          await cubit.close();
+          expect(
+            changes,
+            const [
+              Change<int>(currentState: 0, nextState: 1),
+              Change<int>(currentState: 1, nextState: 2),
+            ],
+          );
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onChange(
+              cubit,
+              const Change<int>(currentState: 0, nextState: 1),
+            ),
+          ).called(1);
+          verify(
+            // ignore: invalid_use_of_protected_member
+            () => observer.onChange(
+              cubit,
+              const Change<int>(currentState: 1, nextState: 2),
+            ),
+          ).called(1);
+        },
+      );
     });
 
     group('emit', () {
       test('throws StateError if cubit is closed', () {
         var didThrow = false;
-        runZonedGuarded(() {
-          final cubit = CounterCubit();
-          expectLater(
-            cubit.stream,
-            emitsInOrder(<Matcher>[equals(1), emitsDone]),
-          );
-          cubit
-            ..increment()
-            ..close()
-            ..increment();
-        }, (error, _) {
-          didThrow = true;
-          expect(
-            error,
-            isA<StateError>().having(
-              (e) => e.message,
-              'message',
-              'Cannot emit new states after calling close',
-            ),
-          );
-        });
+        runZonedGuarded(
+          () {
+            final cubit = CounterCubit();
+            expectLater(
+              cubit.stream,
+              emitsInOrder(<Matcher>[equals(1), emitsDone]),
+            );
+            cubit
+              ..increment()
+              ..close()
+              ..increment();
+          },
+          (error, _) {
+            didThrow = true;
+            expect(
+              error,
+              isA<StateError>().having(
+                (e) => e.message,
+                'message',
+                'Cannot emit new states after calling close',
+              ),
+            );
+          },
+        );
         expect(didThrow, isTrue);
       });
 
@@ -187,8 +192,7 @@ void main() {
         expect(states, [0]);
       });
 
-      test(
-          'can emit initial state and '
+      test('can emit initial state and '
           'continue emitting distinct states', () async {
         final states = <int>[];
         final cubit = SeededCubit(initialState: 0);

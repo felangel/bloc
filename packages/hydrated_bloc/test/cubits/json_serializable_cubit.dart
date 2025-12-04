@@ -24,12 +24,12 @@ class User {
   const User(this.name, this.age, this.favoriteColor, this.todos);
 
   const User.initial()
-      : this(
-          'John Doe',
-          42,
-          Color.green,
-          const <Todo>[Todo('0', 'wash car'), Todo('1', 'dishes')],
-        );
+    : this(
+        'John Doe',
+        42,
+        Color.green,
+        const <Todo>[Todo('0', 'wash car'), Todo('1', 'dishes')],
+      );
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);

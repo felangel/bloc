@@ -52,8 +52,7 @@ void main() {
         );
       });
 
-      test(
-          'should return same value when nothing has changed '
+      test('should return same value when nothing has changed '
           'since the last call', () async {
         pipe.transform(bloc);
         bloc.add(Increment());
@@ -65,8 +64,7 @@ void main() {
         );
       });
 
-      test(
-          'should dispose of the existing subscription when '
+      test('should dispose of the existing subscription when '
           'subscribing to a new bloc', () async {
         pipe.transform(bloc);
         final newBloc = CounterBloc();
@@ -80,37 +78,43 @@ void main() {
         );
       });
 
-      test('should not dispose of existing subscription when Streams are equal',
-          () async {
-        // See https://github.com/dart-lang/angular2/issues/260
-        final bloc = CounterBloc();
-        expect(pipe.transform(bloc), 0);
-        bloc.add(Increment());
-        Timer.run(
-          expectAsync0(() {
-            expect(pipe.transform(bloc), 1);
-          }),
-        );
-      });
+      test(
+        'should not dispose of existing subscription when Streams are equal',
+        () async {
+          // See https://github.com/dart-lang/angular2/issues/260
+          final bloc = CounterBloc();
+          expect(pipe.transform(bloc), 0);
+          bloc.add(Increment());
+          Timer.run(
+            expectAsync0(() {
+              expect(pipe.transform(bloc), 1);
+            }),
+          );
+        },
+      );
 
-      test('should request a change detection check upon receiving a new value',
-          () async {
-        pipe.transform(bloc);
-        bloc.add(Increment());
-        Timer(
-          const Duration(milliseconds: 10),
-          expectAsync0(() {
-            verify(() => ref.markForCheck()).called(1);
-          }),
-        );
-      });
+      test(
+        'should request a change detection check upon receiving a new value',
+        () async {
+          pipe.transform(bloc);
+          bloc.add(Increment());
+          Timer(
+            const Duration(milliseconds: 10),
+            expectAsync0(() {
+              verify(() => ref.markForCheck()).called(1);
+            }),
+          );
+        },
+      );
     });
 
     group('ngOnDestroy', () {
-      test('should do nothing when no subscription and not throw exception',
-          () {
-        pipe.ngOnDestroy();
-      });
+      test(
+        'should do nothing when no subscription and not throw exception',
+        () {
+          pipe.ngOnDestroy();
+        },
+      );
 
       test('should dispose of the existing subscription', () async {
         pipe

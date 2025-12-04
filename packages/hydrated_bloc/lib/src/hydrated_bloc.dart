@@ -19,10 +19,11 @@ enum HydrationErrorBehavior {
 }
 
 /// Signature of the `onError` callback during `hydrate`.
-typedef OnHydrationError = HydrationErrorBehavior Function(
-  Object error,
-  StackTrace stackTrace,
-);
+typedef OnHydrationError =
+    HydrationErrorBehavior Function(
+      Object error,
+      StackTrace stackTrace,
+    );
 
 /// The default hydration `onError` implementation.
 /// Returns [HydrationErrorBehavior.overwrite].
@@ -62,10 +63,10 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State>
     with HydratedMixin {
   /// {@macro hydrated_bloc}
   HydratedBloc(
-    State state, {
+    super.state, {
     Storage? storage,
     OnHydrationError onHydrationError = defaultOnHydrationError,
-  }) : super(state) {
+  }) {
     hydrate(storage: storage, onError: onHydrationError);
   }
 
@@ -108,10 +109,10 @@ abstract class HydratedCubit<State> extends Cubit<State>
     with HydratedMixin<State> {
   /// {@macro hydrated_cubit}
   HydratedCubit(
-    State state, {
+    super.state, {
     Storage? storage,
     OnHydrationError onHydrationError = defaultOnHydrationError,
-  }) : super(state) {
+  }) {
     hydrate(storage: storage, onError: onHydrationError);
   }
 }
@@ -403,7 +404,7 @@ mixin HydratedMixin<State> on BlocBase<State> {
 /// When the cycle is detected, a [HydratedCyclicError] is thrown.
 class HydratedCyclicError extends HydratedUnsupportedError {
   /// The first object that was detected as part of a cycle.
-  HydratedCyclicError(Object? object) : super(object);
+  HydratedCyclicError(super.object);
 
   @override
   String toString() => 'Cyclic error while state traversing';
@@ -482,9 +483,9 @@ enum _Outcome { atomic, complex }
 class _Traversed {
   _Traversed._({required this.outcome, required this.value});
   _Traversed.atomic(dynamic value)
-      : this._(outcome: _Outcome.atomic, value: value);
+    : this._(outcome: _Outcome.atomic, value: value);
   _Traversed.complex(dynamic value)
-      : this._(outcome: _Outcome.complex, value: value);
+    : this._(outcome: _Outcome.complex, value: value);
   final _Outcome outcome;
   final dynamic value;
 }

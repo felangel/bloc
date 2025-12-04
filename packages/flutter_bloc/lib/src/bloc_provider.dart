@@ -36,12 +36,12 @@ class BlocProvider<T extends StateStreamableSource<Object?>>
   /// {@macro bloc_provider}
   const BlocProvider({
     required T Function(BuildContext context) create,
-    Key? key,
+    super.key,
     this.child,
     this.lazy = true,
-  })  : _create = create,
-        _value = null,
-        super(key: key, child: child);
+  }) : _create = create,
+       _value = null,
+       super(child: child);
 
   /// Takes a [value] and a [child] which will have access to the [value] via
   /// `BlocProvider.of(context)`.
@@ -62,12 +62,12 @@ class BlocProvider<T extends StateStreamableSource<Object?>>
   /// ```
   const BlocProvider.value({
     required T value,
-    Key? key,
+    super.key,
     this.child,
-  })  : _value = value,
-        _create = null,
-        lazy = true,
-        super(key: key, child: child);
+  }) : _value = value,
+       _create = null,
+       lazy = true,
+       super(child: child);
 
   /// Widget which will have access to the [Bloc] or [Cubit].
   final Widget? child;

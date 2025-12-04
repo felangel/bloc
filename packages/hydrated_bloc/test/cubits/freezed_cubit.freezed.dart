@@ -12,7 +12,8 @@ part of 'freezed_cubit.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods',
+);
 
 Question _$QuestionFromJson(Map<String, dynamic> json) {
   return _Question.fromJson(json);
@@ -53,24 +54,28 @@ class _$QuestionCopyWithImpl<$Res, $Val extends Question>
     Object? id = freezed,
     Object? question = freezed,
   }) {
-    return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      question: freezed == question
-          ? _value.question
-          : question // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: freezed == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            question: freezed == question
+                ? _value.question
+                : question // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$_QuestionCopyWith<$Res> implements $QuestionCopyWith<$Res> {
   factory _$$_QuestionCopyWith(
-          _$_Question value, $Res Function(_$_Question) then) =
-      __$$_QuestionCopyWithImpl<$Res>;
+    _$_Question value,
+    $Res Function(_$_Question) then,
+  ) = __$$_QuestionCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int? id, String? question});
@@ -81,8 +86,9 @@ class __$$_QuestionCopyWithImpl<$Res>
     extends _$QuestionCopyWithImpl<$Res, _$_Question>
     implements _$$_QuestionCopyWith<$Res> {
   __$$_QuestionCopyWithImpl(
-      _$_Question _value, $Res Function(_$_Question) _then)
-      : super(_value, _then);
+    _$_Question _value,
+    $Res Function(_$_Question) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -90,16 +96,18 @@ class __$$_QuestionCopyWithImpl<$Res>
     Object? id = freezed,
     Object? question = freezed,
   }) {
-    return _then(_$_Question(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      question: freezed == question
-          ? _value.question
-          : question // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$_Question(
+        id: freezed == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        question: freezed == question
+            ? _value.question
+            : question // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -209,20 +217,23 @@ class _$TreeCopyWithImpl<$Res, $Val extends Tree>
     Object? left = freezed,
     Object? right = freezed,
   }) {
-    return _then(_value.copyWith(
-      question: freezed == question
-          ? _value.question
-          : question // ignore: cast_nullable_to_non_nullable
-              as Question?,
-      left: freezed == left
-          ? _value.left
-          : left // ignore: cast_nullable_to_non_nullable
-              as Tree?,
-      right: freezed == right
-          ? _value.right
-          : right // ignore: cast_nullable_to_non_nullable
-              as Tree?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            question: freezed == question
+                ? _value.question
+                : question // ignore: cast_nullable_to_non_nullable
+                      as Question?,
+            left: freezed == left
+                ? _value.left
+                : left // ignore: cast_nullable_to_non_nullable
+                      as Tree?,
+            right: freezed == right
+                ? _value.right
+                : right // ignore: cast_nullable_to_non_nullable
+                      as Tree?,
+          )
+          as $Val,
+    );
   }
 
   @override
@@ -282,7 +293,7 @@ abstract class _$$_QTreeCopyWith<$Res> implements $TreeCopyWith<$Res> {
 class __$$_QTreeCopyWithImpl<$Res> extends _$TreeCopyWithImpl<$Res, _$_QTree>
     implements _$$_QTreeCopyWith<$Res> {
   __$$_QTreeCopyWithImpl(_$_QTree _value, $Res Function(_$_QTree) _then)
-      : super(_value, _then);
+    : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -291,20 +302,22 @@ class __$$_QTreeCopyWithImpl<$Res> extends _$TreeCopyWithImpl<$Res, _$_QTree>
     Object? left = freezed,
     Object? right = freezed,
   }) {
-    return _then(_$_QTree(
-      question: freezed == question
-          ? _value.question
-          : question // ignore: cast_nullable_to_non_nullable
-              as Question?,
-      left: freezed == left
-          ? _value.left
-          : left // ignore: cast_nullable_to_non_nullable
-              as Tree?,
-      right: freezed == right
-          ? _value.right
-          : right // ignore: cast_nullable_to_non_nullable
-              as Tree?,
-    ));
+    return _then(
+      _$_QTree(
+        question: freezed == question
+            ? _value.question
+            : question // ignore: cast_nullable_to_non_nullable
+                  as Question?,
+        left: freezed == left
+            ? _value.left
+            : left // ignore: cast_nullable_to_non_nullable
+                  as Tree?,
+        right: freezed == right
+            ? _value.right
+            : right // ignore: cast_nullable_to_non_nullable
+                  as Tree?,
+      ),
+    );
   }
 }
 
@@ -358,10 +371,11 @@ class _$_QTree implements _QTree {
 }
 
 abstract class _QTree implements Tree {
-  const factory _QTree(
-      {final Question? question,
-      final Tree? left,
-      final Tree? right}) = _$_QTree;
+  const factory _QTree({
+    final Question? question,
+    final Tree? left,
+    final Tree? right,
+  }) = _$_QTree;
 
   factory _QTree.fromJson(Map<String, dynamic> json) = _$_QTree.fromJson;
 

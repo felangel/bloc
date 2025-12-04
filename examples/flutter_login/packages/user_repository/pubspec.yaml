@@ -3,7 +3,7 @@ description: Dart package which manages the user domain.
 publish_to: none
 
 environment:
-  sdk: ">=3.10.0 <4.0.0"
+  sdk: ^3.10.1
 
 dependencies:
   equatable: ^2.0.0

@@ -39,32 +39,24 @@ import 'package:provider/provider.dart';
 class RepositoryProvider<T> extends Provider<T> {
   /// {@macro repository_provider}
   RepositoryProvider({
-    required T Function(BuildContext context) create,
+    required super.create,
     void Function(T value)? dispose,
-    Key? key,
-    Widget? child,
-    bool? lazy,
+    super.key,
+    super.child,
+    super.lazy,
   }) : super(
-          key: key,
-          create: create,
-          dispose: (_, value) => dispose?.call(value),
-          child: child,
-          lazy: lazy,
-        );
+         dispose: (_, value) => dispose?.call(value),
+       );
 
   /// Takes a repository and a [child] which will have access to the repository.
   /// A new repository should not be created in `RepositoryProvider.value`.
   /// Repositories should always be created using the default constructor
   /// within the [Create] function.
   RepositoryProvider.value({
-    required T value,
-    Key? key,
-    Widget? child,
-  }) : super.value(
-          key: key,
-          value: value,
-          child: child,
-        );
+    required super.value,
+    super.key,
+    super.child,
+  }) : super.value();
 
   /// Method that allows widgets to access a repository instance as long as
   /// their `BuildContext` contains a [RepositoryProvider] instance.

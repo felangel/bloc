@@ -76,10 +76,10 @@ class BlocBuilder<B extends StateStreamable<S>, S>
   /// {@macro bloc_builder_build_when}
   const BlocBuilder({
     required this.builder,
-    Key? key,
-    B? bloc,
-    BlocBuilderCondition<S>? buildWhen,
-  }) : super(key: key, bloc: bloc, buildWhen: buildWhen);
+    super.key,
+    super.bloc,
+    super.buildWhen,
+  });
 
   /// The [builder] function which will be invoked on each widget build.
   /// The [builder] takes the `BuildContext` and current `state` and
@@ -110,8 +110,7 @@ class BlocBuilder<B extends StateStreamable<S>, S>
 abstract class BlocBuilderBase<B extends StateStreamable<S>, S>
     extends StatefulWidget {
   /// {@macro bloc_builder_base}
-  const BlocBuilderBase({Key? key, this.bloc, this.buildWhen})
-      : super(key: key);
+  const BlocBuilderBase({super.key, this.bloc, this.buildWhen});
 
   /// The [bloc] that the [BlocBuilderBase] will interact with.
   /// If omitted, [BlocBuilderBase] will automatically perform a lookup using

@@ -47,8 +47,7 @@ class CounterState extends TransitionState {
 void main() {
   group('Change Tests', () {
     group('constructor', () {
-      test(
-          'should return normally when initialized with '
+      test('should return normally when initialized with '
           'all required parameters', () {
         expect(
           () => const Change<int>(currentState: 0, nextState: 1),
@@ -98,8 +97,7 @@ void main() {
 
   group('Transition Tests', () {
     group('constructor', () {
-      test(
-          'should not throw assertion error when initialized '
+      test('should not throw assertion error when initialized '
           'with a null currentState', () {
         expect(
           () => Transition<TransitionEvent, TransitionState?>(
@@ -112,20 +110,20 @@ void main() {
       });
 
       test(
-          'should not throw assertion error when initialized with a null event',
-          () {
-        expect(
-          () => Transition<TransitionEvent?, TransitionState>(
-            currentState: SimpleTransitionState(),
-            event: null,
-            nextState: SimpleTransitionState(),
-          ),
-          isNot(throwsA(isA<AssertionError>())),
-        );
-      });
+        'should not throw assertion error when initialized with a null event',
+        () {
+          expect(
+            () => Transition<TransitionEvent?, TransitionState>(
+              currentState: SimpleTransitionState(),
+              event: null,
+              nextState: SimpleTransitionState(),
+            ),
+            isNot(throwsA(isA<AssertionError>())),
+          );
+        },
+      );
 
-      test(
-          'should not throw assertion error '
+      test('should not throw assertion error '
           'when initialized with a null nextState', () {
         expect(
           () => Transition<TransitionEvent, TransitionState?>(
@@ -137,8 +135,7 @@ void main() {
         );
       });
 
-      test(
-          'should not throw assertion error when initialized with '
+      test('should not throw assertion error when initialized with '
           'all required parameters', () {
         try {
           Transition<TransitionEvent, TransitionState>(
@@ -214,10 +211,11 @@ void main() {
         );
 
         expect(
-            transition.toString(),
-            'Transition { currentState: ${transition.currentState}, '
-            'event: ${transition.event}, '
-            'nextState: ${transition.nextState} }');
+          transition.toString(),
+          'Transition { currentState: ${transition.currentState}, '
+          'event: ${transition.event}, '
+          'nextState: ${transition.nextState} }',
+        );
       });
     });
   });

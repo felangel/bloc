@@ -90,8 +90,7 @@ void main() {
     expect(states, equals([1, 2, 3]));
   });
 
-  test(
-      'when processing events concurrently '
+  test('when processing events concurrently '
       'all subscriptions are canceled on close', () async {
     final states = <int>[];
     final bloc = CounterBloc()
@@ -119,8 +118,7 @@ void main() {
     expect(states, isEmpty);
   });
 
-  test(
-      'processes events sequentially when '
+  test('processes events sequentially when '
       'transformer is overridden.', () async {
     EventTransformer<Increment> incrementTransformer() {
       return (events, mapper) => events.asyncExpand(mapper);
@@ -195,8 +193,7 @@ void main() {
     expect(states, equals([1, 2, 3]));
   });
 
-  test(
-      'processes events sequentially when '
+  test('processes events sequentially when '
       'Bloc.transformer is overridden.', () async {
     Bloc.transformer = (events, mapper) => events.asyncExpand<dynamic>(mapper);
     final states = <int>[];

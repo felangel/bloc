@@ -38,7 +38,8 @@ const expectedUsage = [
       'Run "bloc help <command>" for more information about a command.',
 ];
 
-final updatePrompt = '''
+final updatePrompt =
+    '''
 +------------------------------------------------------------------------------------+
 |                                                                                    |
 |                    ${lightYellow.wrap('Update available!')} ${lightCyan.wrap(packageVersion)} \u2192 ${lightCyan.wrap(latestVersion)}                     |

@@ -36,5 +36,5 @@ abstract class HydratedCipher implements HiveCipher {
 /// Default encryption algorithm. Uses AES256 CBC with PKCS7 padding.
 class HydratedAesCipher extends HiveAesCipher implements HydratedCipher {
   /// Create a cipher with the given [key].
-  HydratedAesCipher(List<int> key) : super(key);
+  HydratedAesCipher(super.key);
 }

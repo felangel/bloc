@@ -9,7 +9,6 @@ class MultiCounterBloc extends Bloc<CounterEvent, int> {
         case CounterEvent.increment:
           emit(state + 1);
           emit(state + 1);
-          break;
       }
     });
   }

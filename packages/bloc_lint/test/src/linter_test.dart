@@ -122,7 +122,8 @@ bloc:
         'does not report when rule is ignored for file',
         rule: AvoidFlutterImports.new,
         path: 'counter_bloc.dart',
-        content: '''
+        content:
+            '''
 // ignore_for_file: ${AvoidFlutterImports.rule}
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
@@ -138,7 +139,8 @@ class CounterBloc extends Bloc<CounterEvent, int> {
         'does not report when rule is ignored for file (w/leading space)',
         rule: AvoidFlutterImports.new,
         path: 'counter_bloc.dart',
-        content: '''
+        content:
+            '''
  // ignore_for_file: ${AvoidFlutterImports.rule}
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
@@ -154,7 +156,8 @@ class CounterBloc extends Bloc<CounterEvent, int> {
         'does not report when rule is ignored for file (w/in-between space)',
         rule: AvoidFlutterImports.new,
         path: 'counter_bloc.dart',
-        content: '''
+        content:
+            '''
 //   ignore_for_file: ${AvoidFlutterImports.rule}
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
@@ -170,7 +173,8 @@ class CounterBloc extends Bloc<CounterEvent, int> {
         'does not report when rule is ignored for file (w/trailing space)',
         rule: AvoidFlutterImports.new,
         path: 'counter_bloc.dart',
-        content: '''
+        content:
+            '''
 //   ignore_for_file: ${AvoidFlutterImports.rule}  
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
@@ -220,7 +224,8 @@ class CounterBloc extends Bloc<CounterEvent, int> {
       'does not report when rule is ignored for line (above)',
       rule: AvoidFlutterImports.new,
       path: 'counter_bloc.dart',
-      content: '''
+      content:
+          '''
 import 'package:bloc/bloc.dart';
 
 // ignore: ${AvoidFlutterImports.rule}
@@ -252,7 +257,8 @@ class CounterBloc extends Bloc<CounterEvent, int> {
       'does not report when rule is ignored for line (after)',
       rule: AvoidFlutterImports.new,
       path: 'counter_bloc.dart',
-      content: '''
+      content:
+          '''
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart'; // ignore: ${AvoidFlutterImports.rule}
 
@@ -267,7 +273,8 @@ class CounterBloc extends Bloc<CounterEvent, int> {
       'does not report when rule is ignored for line (after w/leading space)',
       rule: AvoidFlutterImports.new,
       path: 'counter_bloc.dart',
-      content: '''
+      content:
+          '''
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart'; //   ignore: ${AvoidFlutterImports.rule}
 
@@ -282,7 +289,8 @@ class CounterBloc extends Bloc<CounterEvent, int> {
       'does not report when rule is ignored for line (after w/in-between space)',
       rule: AvoidFlutterImports.new,
       path: 'counter_bloc.dart',
-      content: '''
+      content:
+          '''
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart'; // ignore:   ${AvoidFlutterImports.rule}
 
@@ -297,7 +305,8 @@ class CounterBloc extends Bloc<CounterEvent, int> {
       'does not report when rule is ignored for line (after w/trailing space)',
       rule: AvoidFlutterImports.new,
       path: 'counter_bloc.dart',
-      content: '''
+      content:
+          '''
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart'; // ignore: ${AvoidFlutterImports.rule}  
 

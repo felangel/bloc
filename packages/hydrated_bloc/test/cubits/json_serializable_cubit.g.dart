@@ -9,20 +9,20 @@ part of 'json_serializable_cubit.dart';
 // **************************************************************************
 
 User _$UserFromJson(Map<String, dynamic> json) => User(
-      json['name'] as String,
-      json['age'] as int,
-      $enumDecode(_$ColorEnumMap, json['favoriteColor']),
-      (json['todos'] as List<dynamic>)
-          .map((e) => Todo.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+  json['name'] as String,
+  json['age'] as int,
+  $enumDecode(_$ColorEnumMap, json['favoriteColor']),
+  (json['todos'] as List<dynamic>)
+      .map((e) => Todo.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
-      'name': instance.name,
-      'age': instance.age,
-      'favoriteColor': _$ColorEnumMap[instance.favoriteColor]!,
-      'todos': instance.todos.map((e) => e.toJson()).toList(),
-    };
+  'name': instance.name,
+  'age': instance.age,
+  'favoriteColor': _$ColorEnumMap[instance.favoriteColor]!,
+  'todos': instance.todos.map((e) => e.toJson()).toList(),
+};
 
 const _$ColorEnumMap = {
   Color.red: 'red',
@@ -31,11 +31,11 @@ const _$ColorEnumMap = {
 };
 
 Todo _$TodoFromJson(Map<String, dynamic> json) => Todo(
-      json['id'] as String,
-      json['task'] as String,
-    );
+  json['id'] as String,
+  json['task'] as String,
+);
 
 Map<String, dynamic> _$TodoToJson(Todo instance) => <String, dynamic>{
-      'id': instance.id,
-      'task': instance.task,
-    };
+  'id': instance.id,
+  'task': instance.task,
+};

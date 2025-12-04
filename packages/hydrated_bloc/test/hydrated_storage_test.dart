@@ -70,8 +70,7 @@ void main() {
         expect(instanceA, isNot(instanceB));
       });
 
-      test(
-          'does not call Hive.init '
+      test('does not call Hive.init '
           'when storageDirectory is webStorageDirectory', () async {
         final completer = Completer<void>();
         await runZonedGuarded(

@@ -8,10 +8,9 @@ class MyThemeApp extends StatefulWidget {
   const MyThemeApp({
     required Cubit<ThemeData> themeCubit,
     required void Function() onBuild,
-    Key? key,
-  })  : _themeCubit = themeCubit,
-        _onBuild = onBuild,
-        super(key: key);
+    super.key,
+  }) : _themeCubit = themeCubit,
+       _onBuild = onBuild;
 
   final Cubit<ThemeData> _themeCubit;
   final void Function() _onBuild;
@@ -81,7 +80,7 @@ class DarkThemeCubit extends Cubit<ThemeData> {
 }
 
 class MyCounterApp extends StatefulWidget {
-  const MyCounterApp({Key? key}) : super(key: key);
+  const MyCounterApp({super.key});
 
   @override
   State<StatefulWidget> createState() => MyCounterAppState();
@@ -153,8 +152,9 @@ void main() {
       expect(numBuilds, 1);
     });
 
-    testWidgets('receives events and sends state updates to widget',
-        (tester) async {
+    testWidgets('receives events and sends state updates to widget', (
+      tester,
+    ) async {
       final themeCubit = ThemeCubit();
       var numBuilds = 0;
       await tester.pumpWidget(
@@ -174,56 +174,12 @@ void main() {
     });
 
     testWidgets(
-        'infers the cubit from the context if the cubit is not provided',
-        (tester) async {
-      final themeCubit = ThemeCubit();
-      var numBuilds = 0;
-      await tester.pumpWidget(
-        BlocProvider.value(
-          value: themeCubit,
-          child: BlocBuilder<ThemeCubit, ThemeData>(
-            builder: (context, theme) {
-              numBuilds++;
-              return MaterialApp(
-                key: const Key('material_app'),
-                theme: theme,
-                home: const SizedBox(),
-              );
-            },
-          ),
-        ),
-      );
-
-      themeCubit.setDarkTheme();
-
-      await tester.pumpAndSettle();
-
-      var materialApp = tester.widget<MaterialApp>(
-        find.byKey(const Key('material_app')),
-      );
-
-      expect(materialApp.theme, ThemeData.dark());
-      expect(numBuilds, 2);
-
-      themeCubit.setLightTheme();
-
-      await tester.pumpAndSettle();
-
-      materialApp = tester.widget<MaterialApp>(
-        find.byKey(const Key('material_app')),
-      );
-
-      expect(materialApp.theme, ThemeData.light());
-      expect(numBuilds, 3);
-    });
-
-    testWidgets('updates cubit and performs new lookup when widget is updated',
-        (tester) async {
-      final themeCubit = ThemeCubit();
-      var numBuilds = 0;
-      await tester.pumpWidget(
-        StatefulBuilder(
-          builder: (context, setState) => BlocProvider.value(
+      'infers the cubit from the context if the cubit is not provided',
+      (tester) async {
+        final themeCubit = ThemeCubit();
+        var numBuilds = 0;
+        await tester.pumpWidget(
+          BlocProvider.value(
             value: themeCubit,
             child: BlocBuilder<ThemeCubit, ThemeData>(
               builder: (context, theme) {
@@ -231,105 +187,156 @@ void main() {
                 return MaterialApp(
                   key: const Key('material_app'),
                   theme: theme,
-                  home: ElevatedButton(
-                    child: const SizedBox(),
-                    onPressed: () => setState(() {}),
-                  ),
+                  home: const SizedBox(),
                 );
               },
             ),
           ),
-        ),
-      );
+        );
 
-      await tester.tap(find.byType(ElevatedButton));
-      await tester.pumpAndSettle();
+        themeCubit.setDarkTheme();
 
-      final materialApp = tester.widget<MaterialApp>(
-        find.byKey(const Key('material_app')),
-      );
+        await tester.pumpAndSettle();
 
-      expect(materialApp.theme, ThemeData.light());
-      expect(numBuilds, 2);
-    });
+        var materialApp = tester.widget<MaterialApp>(
+          find.byKey(const Key('material_app')),
+        );
 
-    testWidgets(
-        'updates when the cubit is changed at runtime to a different cubit and '
-        'unsubscribes from old cubit', (tester) async {
-      final themeCubit = ThemeCubit();
-      var numBuilds = 0;
-      await tester.pumpWidget(
-        MyThemeApp(themeCubit: themeCubit, onBuild: () => numBuilds++),
-      );
+        expect(materialApp.theme, ThemeData.dark());
+        expect(numBuilds, 2);
 
-      await tester.pumpAndSettle();
+        themeCubit.setLightTheme();
 
-      var materialApp = tester.widget<MaterialApp>(
-        find.byKey(const Key('material_app')),
-      );
+        await tester.pumpAndSettle();
 
-      expect(materialApp.theme, ThemeData.light());
-      expect(numBuilds, 1);
+        materialApp = tester.widget<MaterialApp>(
+          find.byKey(const Key('material_app')),
+        );
 
-      await tester.tap(find.byKey(const Key('raised_button_1')));
-      await tester.pumpAndSettle();
-
-      materialApp = tester.widget<MaterialApp>(
-        find.byKey(const Key('material_app')),
-      );
-
-      expect(materialApp.theme, ThemeData.dark());
-      expect(numBuilds, 2);
-
-      themeCubit.setLightTheme();
-      await tester.pumpAndSettle();
-
-      materialApp = tester.widget<MaterialApp>(
-        find.byKey(const Key('material_app')),
-      );
-
-      expect(materialApp.theme, ThemeData.dark());
-      expect(numBuilds, 2);
-    });
+        expect(materialApp.theme, ThemeData.light());
+        expect(numBuilds, 3);
+      },
+    );
 
     testWidgets(
-        'does not update when the cubit is changed at runtime to same cubit '
-        'and stays subscribed to current cubit', (tester) async {
-      final themeCubit = DarkThemeCubit();
-      var numBuilds = 0;
-      await tester.pumpWidget(
-        MyThemeApp(themeCubit: themeCubit, onBuild: () => numBuilds++),
-      );
+      'updates cubit and performs new lookup when widget is updated',
+      (tester) async {
+        final themeCubit = ThemeCubit();
+        var numBuilds = 0;
+        await tester.pumpWidget(
+          StatefulBuilder(
+            builder: (context, setState) => BlocProvider.value(
+              value: themeCubit,
+              child: BlocBuilder<ThemeCubit, ThemeData>(
+                builder: (context, theme) {
+                  numBuilds++;
+                  return MaterialApp(
+                    key: const Key('material_app'),
+                    theme: theme,
+                    home: ElevatedButton(
+                      child: const SizedBox(),
+                      onPressed: () => setState(() {}),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
 
-      await tester.pumpAndSettle();
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
 
-      var materialApp = tester.widget<MaterialApp>(
-        find.byKey(const Key('material_app')),
-      );
+        final materialApp = tester.widget<MaterialApp>(
+          find.byKey(const Key('material_app')),
+        );
 
-      expect(materialApp.theme, ThemeData.dark());
-      expect(numBuilds, 1);
+        expect(materialApp.theme, ThemeData.light());
+        expect(numBuilds, 2);
+      },
+    );
 
-      await tester.tap(find.byKey(const Key('raised_button_2')));
-      await tester.pumpAndSettle();
+    testWidgets(
+      'updates when the cubit is changed at runtime to a different cubit and '
+      'unsubscribes from old cubit',
+      (tester) async {
+        final themeCubit = ThemeCubit();
+        var numBuilds = 0;
+        await tester.pumpWidget(
+          MyThemeApp(themeCubit: themeCubit, onBuild: () => numBuilds++),
+        );
 
-      materialApp = tester.widget<MaterialApp>(
-        find.byKey(const Key('material_app')),
-      );
+        await tester.pumpAndSettle();
 
-      expect(materialApp.theme, ThemeData.dark());
-      expect(numBuilds, 2);
+        var materialApp = tester.widget<MaterialApp>(
+          find.byKey(const Key('material_app')),
+        );
 
-      themeCubit.setLightTheme();
-      await tester.pumpAndSettle();
+        expect(materialApp.theme, ThemeData.light());
+        expect(numBuilds, 1);
 
-      materialApp = tester.widget<MaterialApp>(
-        find.byKey(const Key('material_app')),
-      );
+        await tester.tap(find.byKey(const Key('raised_button_1')));
+        await tester.pumpAndSettle();
 
-      expect(materialApp.theme, ThemeData.light());
-      expect(numBuilds, 3);
-    });
+        materialApp = tester.widget<MaterialApp>(
+          find.byKey(const Key('material_app')),
+        );
+
+        expect(materialApp.theme, ThemeData.dark());
+        expect(numBuilds, 2);
+
+        themeCubit.setLightTheme();
+        await tester.pumpAndSettle();
+
+        materialApp = tester.widget<MaterialApp>(
+          find.byKey(const Key('material_app')),
+        );
+
+        expect(materialApp.theme, ThemeData.dark());
+        expect(numBuilds, 2);
+      },
+    );
+
+    testWidgets(
+      'does not update when the cubit is changed at runtime to same cubit '
+      'and stays subscribed to current cubit',
+      (tester) async {
+        final themeCubit = DarkThemeCubit();
+        var numBuilds = 0;
+        await tester.pumpWidget(
+          MyThemeApp(themeCubit: themeCubit, onBuild: () => numBuilds++),
+        );
+
+        await tester.pumpAndSettle();
+
+        var materialApp = tester.widget<MaterialApp>(
+          find.byKey(const Key('material_app')),
+        );
+
+        expect(materialApp.theme, ThemeData.dark());
+        expect(numBuilds, 1);
+
+        await tester.tap(find.byKey(const Key('raised_button_2')));
+        await tester.pumpAndSettle();
+
+        materialApp = tester.widget<MaterialApp>(
+          find.byKey(const Key('material_app')),
+        );
+
+        expect(materialApp.theme, ThemeData.dark());
+        expect(numBuilds, 2);
+
+        themeCubit.setLightTheme();
+        await tester.pumpAndSettle();
+
+        materialApp = tester.widget<MaterialApp>(
+          find.byKey(const Key('material_app')),
+        );
+
+        expect(materialApp.theme, ThemeData.light());
+        expect(numBuilds, 3);
+      },
+    );
 
     testWidgets('shows latest state instead of initial state', (tester) async {
       final themeCubit = ThemeCubit()..setDarkTheme();
@@ -350,61 +357,73 @@ void main() {
       expect(numBuilds, 1);
     });
 
-    testWidgets('with buildWhen only rebuilds when buildWhen evaluates to true',
-        (tester) async {
-      await tester.pumpWidget(const MyCounterApp());
-      await tester.pumpAndSettle();
+    testWidgets(
+      'with buildWhen only rebuilds when buildWhen evaluates to true',
+      (tester) async {
+        await tester.pumpWidget(const MyCounterApp());
+        await tester.pumpAndSettle();
 
-      expect(find.byKey(const Key('myCounterApp')), findsOneWidget);
+        expect(find.byKey(const Key('myCounterApp')), findsOneWidget);
 
-      final incrementButtonFinder =
-          find.byKey(const Key('myCounterAppIncrementButton'));
-      expect(incrementButtonFinder, findsOneWidget);
+        final incrementButtonFinder = find.byKey(
+          const Key('myCounterAppIncrementButton'),
+        );
+        expect(incrementButtonFinder, findsOneWidget);
 
-      final counterText1 =
-          tester.widget<Text>(find.byKey(const Key('myCounterAppText')));
-      expect(counterText1.data, '0');
+        final counterText1 = tester.widget<Text>(
+          find.byKey(const Key('myCounterAppText')),
+        );
+        expect(counterText1.data, '0');
 
-      final conditionalCounterText1 = tester
-          .widget<Text>(find.byKey(const Key('myCounterAppTextCondition')));
-      expect(conditionalCounterText1.data, '0');
+        final conditionalCounterText1 = tester.widget<Text>(
+          find.byKey(const Key('myCounterAppTextCondition')),
+        );
+        expect(conditionalCounterText1.data, '0');
 
-      await tester.tap(incrementButtonFinder);
-      await tester.pumpAndSettle();
+        await tester.tap(incrementButtonFinder);
+        await tester.pumpAndSettle();
 
-      final counterText2 =
-          tester.widget<Text>(find.byKey(const Key('myCounterAppText')));
-      expect(counterText2.data, '1');
+        final counterText2 = tester.widget<Text>(
+          find.byKey(const Key('myCounterAppText')),
+        );
+        expect(counterText2.data, '1');
 
-      final conditionalCounterText2 = tester
-          .widget<Text>(find.byKey(const Key('myCounterAppTextCondition')));
-      expect(conditionalCounterText2.data, '0');
+        final conditionalCounterText2 = tester.widget<Text>(
+          find.byKey(const Key('myCounterAppTextCondition')),
+        );
+        expect(conditionalCounterText2.data, '0');
 
-      await tester.tap(incrementButtonFinder);
-      await tester.pumpAndSettle();
+        await tester.tap(incrementButtonFinder);
+        await tester.pumpAndSettle();
 
-      final counterText3 =
-          tester.widget<Text>(find.byKey(const Key('myCounterAppText')));
-      expect(counterText3.data, '2');
+        final counterText3 = tester.widget<Text>(
+          find.byKey(const Key('myCounterAppText')),
+        );
+        expect(counterText3.data, '2');
 
-      final conditionalCounterText3 = tester
-          .widget<Text>(find.byKey(const Key('myCounterAppTextCondition')));
-      expect(conditionalCounterText3.data, '2');
+        final conditionalCounterText3 = tester.widget<Text>(
+          find.byKey(const Key('myCounterAppTextCondition')),
+        );
+        expect(conditionalCounterText3.data, '2');
 
-      await tester.tap(incrementButtonFinder);
-      await tester.pumpAndSettle();
+        await tester.tap(incrementButtonFinder);
+        await tester.pumpAndSettle();
 
-      final counterText4 =
-          tester.widget<Text>(find.byKey(const Key('myCounterAppText')));
-      expect(counterText4.data, '3');
+        final counterText4 = tester.widget<Text>(
+          find.byKey(const Key('myCounterAppText')),
+        );
+        expect(counterText4.data, '3');
 
-      final conditionalCounterText4 = tester
-          .widget<Text>(find.byKey(const Key('myCounterAppTextCondition')));
-      expect(conditionalCounterText4.data, '2');
-    });
+        final conditionalCounterText4 = tester.widget<Text>(
+          find.byKey(const Key('myCounterAppTextCondition')),
+        );
+        expect(conditionalCounterText4.data, '2');
+      },
+    );
 
-    testWidgets('calls buildWhen and builder with correct state',
-        (tester) async {
+    testWidgets('calls buildWhen and builder with correct state', (
+      tester,
+    ) async {
       final buildWhenPreviousState = <int>[];
       final buildWhenCurrentState = <int>[];
       final states = <int>[];
@@ -438,8 +457,7 @@ void main() {
       expect(buildWhenCurrentState, [2]);
     });
 
-    testWidgets(
-        'does not rebuild with latest state when '
+    testWidgets('does not rebuild with latest state when '
         'buildWhen is false and widget is updated', (tester) async {
       const key = Key('__target__');
       final states = <int>[];

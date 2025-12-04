@@ -61,10 +61,9 @@ class TextDocument {
       return lineOffset;
     }
 
-    final nextLineOffset =
-        (position.line + 1 < lineOffsets.length)
-            ? lineOffsets[position.line + 1]
-            : _content.length;
+    final nextLineOffset = (position.line + 1 < lineOffsets.length)
+        ? lineOffsets[position.line + 1]
+        : _content.length;
     final offset = min(lineOffset + position.character, nextLineOffset);
 
     return _ensureBeforeEndOfLine(offset: offset, lineOffset: lineOffset);

@@ -55,12 +55,13 @@ class MissingHandlerBloc extends Bloc<TestEvent, TestState> {
 void main() {
   group('on<Event>', () {
     test('throws StateError when handler is registered more than once', () {
-      const expectedMessage = 'on<TestEvent> was called multiple times. '
+      const expectedMessage =
+          'on<TestEvent> was called multiple times. '
           'There should only be a single event handler per event type.';
       final expected = throwsA(
         isA<StateError>().having((e) => e.message, 'message', expectedMessage),
       );
-      expect(() => DuplicateHandlerBloc(), expected);
+      expect(DuplicateHandlerBloc.new, expected);
     });
 
     test('throws StateError when handler is missing', () {

@@ -30,7 +30,8 @@ class _Listener extends Listener {
         beginToken: provider,
         endToken: token,
         message: _message,
-        hint: '''
+        hint:
+            '''
 Avoid using ${provider.lexeme}.of<T>.
 Prefer using context.read or context.watch instead.''',
       );
@@ -42,7 +43,8 @@ Prefer using context.read or context.watch instead.''',
         beginToken: blocBuilder,
         endToken: token,
         message: _message,
-        hint: '''
+        hint:
+            '''
 Avoid using ${blocBuilder.lexeme}.
 Prefer using context.watch instead.''',
       );
@@ -54,7 +56,8 @@ Prefer using context.watch instead.''',
         beginToken: blocSelector,
         endToken: token,
         message: _message,
-        hint: '''
+        hint:
+            '''
 Avoid using ${blocSelector.lexeme}.
 Prefer using context.select instead.''',
       );

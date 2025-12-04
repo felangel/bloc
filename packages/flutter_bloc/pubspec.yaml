@@ -9,10 +9,10 @@ topics: [bloc, state-management]
 funding: [https://github.com/sponsors/felangel]
 
 environment:
-  sdk: ">=2.14.0 <4.0.0"
+  sdk: ^3.10.1
 
 dependencies:
-  bloc: ^9.0.0
+  bloc: ^9.1.0
   flutter:
     sdk: flutter
   provider: ^6.0.0

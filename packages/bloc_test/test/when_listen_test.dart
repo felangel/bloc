@@ -129,8 +129,7 @@ void main() {
       );
     });
 
-    test(
-        'can mock the stream of a cubit dependency '
+    test('can mock the stream of a cubit dependency '
         '(with initial state)', () async {
       final controller = StreamController<int>();
       final counterCubit = MockCounterCubit();

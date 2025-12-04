@@ -18,10 +18,11 @@ abstract class BlocEventSink<Event extends Object?> implements ErrorSink {
 
 /// An event handler is responsible for reacting to an incoming [Event]
 /// and can emit zero or more states via the [Emitter].
-typedef EventHandler<Event, State> = FutureOr<void> Function(
-  Event event,
-  Emitter<State> emit,
-);
+typedef EventHandler<Event, State> =
+    FutureOr<void> Function(
+      Event event,
+      Emitter<State> emit,
+    );
 
 /// Signature for a function which converts an incoming event
 /// into an outbound stream of events.
@@ -30,10 +31,11 @@ typedef EventMapper<Event> = Stream<Event> Function(Event event);
 
 /// Used to change how events are processed.
 /// By default events are processed concurrently.
-typedef EventTransformer<Event> = Stream<Event> Function(
-  Stream<Event> events,
-  EventMapper<Event> mapper,
-);
+typedef EventTransformer<Event> =
+    Stream<Event> Function(
+      Stream<Event> events,
+      EventMapper<Event> mapper,
+    );
 
 /// {@template bloc}
 /// Takes a `Stream` of `Events` as input
@@ -42,7 +44,7 @@ typedef EventTransformer<Event> = Stream<Event> Function(
 abstract class Bloc<Event, State> extends BlocBase<State>
     implements BlocEventSink<Event> {
   /// {@macro bloc}
-  Bloc(State initialState) : super(initialState);
+  Bloc(super.initialState);
 
   /// The current [BlocObserver] instance.
   static BlocObserver observer = const _DefaultBlocObserver();

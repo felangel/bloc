@@ -60,17 +60,17 @@ void main() {
             () => observer.onCreate(simpleBloc),
             () => observer.onEvent(simpleBloc, 'event'),
             () => observer.onTransition(
-                  simpleBloc,
-                  const Transition<dynamic, String>(
-                    currentState: '',
-                    event: 'event',
-                    nextState: 'data',
-                  ),
-                ),
+              simpleBloc,
+              const Transition<dynamic, String>(
+                currentState: '',
+                event: 'event',
+                nextState: 'data',
+              ),
+            ),
             () => observer.onChange(
-                  simpleBloc,
-                  const Change<String>(currentState: '', nextState: 'data'),
-                ),
+              simpleBloc,
+              const Change<String>(currentState: '', nextState: 'data'),
+            ),
             () => observer.onDone(simpleBloc, 'event'),
             () => observer.onClose(simpleBloc),
           ]);
@@ -97,17 +97,17 @@ void main() {
             () => observer.onEvent(simpleBloc, 'event2'),
             () => observer.onEvent(simpleBloc, 'event3'),
             () => observer.onTransition(
-                  simpleBloc,
-                  const Transition<dynamic, String>(
-                    currentState: '',
-                    event: 'event1',
-                    nextState: 'data',
-                  ),
-                ),
+              simpleBloc,
+              const Transition<dynamic, String>(
+                currentState: '',
+                event: 'event1',
+                nextState: 'data',
+              ),
+            ),
             () => observer.onChange(
-                  simpleBloc,
-                  const Change<String>(currentState: '', nextState: 'data'),
-                ),
+              simpleBloc,
+              const Change<String>(currentState: '', nextState: 'data'),
+            ),
             () => observer.onDone(simpleBloc, 'event1'),
             () => observer.onClose(simpleBloc),
           ]);
@@ -181,20 +181,20 @@ void main() {
             () => observer.onCreate(complexBloc),
             () => observer.onEvent(complexBloc, ComplexEventB()),
             () => observer.onTransition(
-                  complexBloc,
-                  Transition<ComplexEvent, ComplexState>(
-                    currentState: ComplexStateA(),
-                    event: ComplexEventB(),
-                    nextState: ComplexStateB(),
-                  ),
-                ),
+              complexBloc,
+              Transition<ComplexEvent, ComplexState>(
+                currentState: ComplexStateA(),
+                event: ComplexEventB(),
+                nextState: ComplexStateB(),
+              ),
+            ),
             () => observer.onChange(
-                  complexBloc,
-                  Change<ComplexState>(
-                    currentState: ComplexStateA(),
-                    nextState: ComplexStateB(),
-                  ),
-                ),
+              complexBloc,
+              Change<ComplexState>(
+                currentState: ComplexStateA(),
+                nextState: ComplexStateB(),
+              ),
+            ),
             () => observer.onDone(complexBloc, ComplexEventB()),
             () => observer.onClose(complexBloc),
           ]);
@@ -302,17 +302,17 @@ void main() {
             () => observer.onCreate(counterBloc),
             () => observer.onEvent(counterBloc, CounterEvent.increment),
             () => observer.onTransition(
-                  counterBloc,
-                  const Transition<CounterEvent, int>(
-                    currentState: 0,
-                    event: CounterEvent.increment,
-                    nextState: 1,
-                  ),
-                ),
+              counterBloc,
+              const Transition<CounterEvent, int>(
+                currentState: 0,
+                event: CounterEvent.increment,
+                nextState: 1,
+              ),
+            ),
             () => observer.onChange(
-                  counterBloc,
-                  const Change<int>(currentState: 0, nextState: 1),
-                ),
+              counterBloc,
+              const Change<int>(currentState: 0, nextState: 1),
+            ),
             () => observer.onDone(counterBloc, CounterEvent.increment),
             () => observer.onClose(counterBloc),
           ]);
@@ -351,42 +351,42 @@ void main() {
             () => observer.onEvent(counterBloc, CounterEvent.increment),
             () => observer.onEvent(counterBloc, CounterEvent.increment),
             () => observer.onTransition(
-                  counterBloc,
-                  const Transition<CounterEvent, int>(
-                    currentState: 0,
-                    event: CounterEvent.increment,
-                    nextState: 1,
-                  ),
-                ),
+              counterBloc,
+              const Transition<CounterEvent, int>(
+                currentState: 0,
+                event: CounterEvent.increment,
+                nextState: 1,
+              ),
+            ),
             () => observer.onChange(
-                  counterBloc,
-                  const Change<int>(currentState: 0, nextState: 1),
-                ),
+              counterBloc,
+              const Change<int>(currentState: 0, nextState: 1),
+            ),
             () => observer.onDone(counterBloc, CounterEvent.increment),
             () => observer.onTransition(
-                  counterBloc,
-                  const Transition<CounterEvent, int>(
-                    currentState: 1,
-                    event: CounterEvent.increment,
-                    nextState: 2,
-                  ),
-                ),
+              counterBloc,
+              const Transition<CounterEvent, int>(
+                currentState: 1,
+                event: CounterEvent.increment,
+                nextState: 2,
+              ),
+            ),
             () => observer.onChange(
-                  counterBloc,
-                  const Change<int>(currentState: 1, nextState: 2),
-                ),
+              counterBloc,
+              const Change<int>(currentState: 1, nextState: 2),
+            ),
             () => observer.onTransition(
-                  counterBloc,
-                  const Transition<CounterEvent, int>(
-                    currentState: 2,
-                    event: CounterEvent.increment,
-                    nextState: 3,
-                  ),
-                ),
+              counterBloc,
+              const Transition<CounterEvent, int>(
+                currentState: 2,
+                event: CounterEvent.increment,
+                nextState: 3,
+              ),
+            ),
             () => observer.onChange(
-                  counterBloc,
-                  const Change<int>(currentState: 2, nextState: 3),
-                ),
+              counterBloc,
+              const Change<int>(currentState: 2, nextState: 3),
+            ),
             () => observer.onDone(counterBloc, CounterEvent.increment),
             () => observer.onClose(counterBloc),
           ]);
@@ -500,8 +500,7 @@ void main() {
         await asyncBloc.close();
       });
 
-      test(
-          'close while events are pending finishes processing pending events '
+      test('close while events are pending finishes processing pending events '
           'and does not trigger onError', () async {
         final expectedStates = <AsyncState>[
           AsyncState.initial().copyWith(isLoading: true),
@@ -540,67 +539,67 @@ void main() {
             () => observer.onCreate(asyncBloc),
             () => observer.onEvent(asyncBloc, AsyncEvent()),
             () => observer.onTransition(
-                  asyncBloc,
-                  Transition<AsyncEvent, AsyncState>(
-                    currentState: const AsyncState(
-                      isLoading: false,
-                      hasError: false,
-                      isSuccess: false,
-                    ),
-                    event: AsyncEvent(),
-                    nextState: const AsyncState(
-                      isLoading: true,
-                      hasError: false,
-                      isSuccess: false,
-                    ),
-                  ),
+              asyncBloc,
+              Transition<AsyncEvent, AsyncState>(
+                currentState: const AsyncState(
+                  isLoading: false,
+                  hasError: false,
+                  isSuccess: false,
                 ),
+                event: AsyncEvent(),
+                nextState: const AsyncState(
+                  isLoading: true,
+                  hasError: false,
+                  isSuccess: false,
+                ),
+              ),
+            ),
             () => observer.onChange(
-                  asyncBloc,
-                  const Change<AsyncState>(
-                    currentState: AsyncState(
-                      isLoading: false,
-                      hasError: false,
-                      isSuccess: false,
-                    ),
-                    nextState: AsyncState(
-                      isLoading: true,
-                      hasError: false,
-                      isSuccess: false,
-                    ),
-                  ),
+              asyncBloc,
+              const Change<AsyncState>(
+                currentState: AsyncState(
+                  isLoading: false,
+                  hasError: false,
+                  isSuccess: false,
                 ),
+                nextState: AsyncState(
+                  isLoading: true,
+                  hasError: false,
+                  isSuccess: false,
+                ),
+              ),
+            ),
             () => observer.onTransition(
-                  asyncBloc,
-                  Transition<AsyncEvent, AsyncState>(
-                    currentState: const AsyncState(
-                      isLoading: true,
-                      hasError: false,
-                      isSuccess: false,
-                    ),
-                    event: AsyncEvent(),
-                    nextState: const AsyncState(
-                      isLoading: false,
-                      hasError: false,
-                      isSuccess: true,
-                    ),
-                  ),
+              asyncBloc,
+              Transition<AsyncEvent, AsyncState>(
+                currentState: const AsyncState(
+                  isLoading: true,
+                  hasError: false,
+                  isSuccess: false,
                 ),
+                event: AsyncEvent(),
+                nextState: const AsyncState(
+                  isLoading: false,
+                  hasError: false,
+                  isSuccess: true,
+                ),
+              ),
+            ),
             () => observer.onChange(
-                  asyncBloc,
-                  const Change<AsyncState>(
-                    currentState: AsyncState(
-                      isLoading: true,
-                      hasError: false,
-                      isSuccess: false,
-                    ),
-                    nextState: AsyncState(
-                      isLoading: false,
-                      hasError: false,
-                      isSuccess: true,
-                    ),
-                  ),
+              asyncBloc,
+              const Change<AsyncState>(
+                currentState: AsyncState(
+                  isLoading: true,
+                  hasError: false,
+                  isSuccess: false,
                 ),
+                nextState: AsyncState(
+                  isLoading: false,
+                  hasError: false,
+                  isSuccess: true,
+                ),
+              ),
+            ),
             () => observer.onDone(asyncBloc, AsyncEvent()),
             () => observer.onClose(asyncBloc),
           ]);
@@ -639,130 +638,130 @@ void main() {
             () => observer.onEvent(asyncBloc, AsyncEvent()),
             () => observer.onEvent(asyncBloc, AsyncEvent()),
             () => observer.onTransition(
-                  asyncBloc,
-                  Transition<AsyncEvent, AsyncState>(
-                    currentState: const AsyncState(
-                      isLoading: false,
-                      hasError: false,
-                      isSuccess: false,
-                    ),
-                    event: AsyncEvent(),
-                    nextState: const AsyncState(
-                      isLoading: true,
-                      hasError: false,
-                      isSuccess: false,
-                    ),
-                  ),
+              asyncBloc,
+              Transition<AsyncEvent, AsyncState>(
+                currentState: const AsyncState(
+                  isLoading: false,
+                  hasError: false,
+                  isSuccess: false,
                 ),
+                event: AsyncEvent(),
+                nextState: const AsyncState(
+                  isLoading: true,
+                  hasError: false,
+                  isSuccess: false,
+                ),
+              ),
+            ),
             () => observer.onChange(
-                  asyncBloc,
-                  const Change<AsyncState>(
-                    currentState: AsyncState(
-                      isLoading: false,
-                      hasError: false,
-                      isSuccess: false,
-                    ),
-                    nextState: AsyncState(
-                      isLoading: true,
-                      hasError: false,
-                      isSuccess: false,
-                    ),
-                  ),
+              asyncBloc,
+              const Change<AsyncState>(
+                currentState: AsyncState(
+                  isLoading: false,
+                  hasError: false,
+                  isSuccess: false,
                 ),
+                nextState: AsyncState(
+                  isLoading: true,
+                  hasError: false,
+                  isSuccess: false,
+                ),
+              ),
+            ),
             () => observer.onTransition(
-                  asyncBloc,
-                  Transition<AsyncEvent, AsyncState>(
-                    currentState: const AsyncState(
-                      isLoading: true,
-                      hasError: false,
-                      isSuccess: false,
-                    ),
-                    event: AsyncEvent(),
-                    nextState: const AsyncState(
-                      isLoading: false,
-                      hasError: false,
-                      isSuccess: true,
-                    ),
-                  ),
+              asyncBloc,
+              Transition<AsyncEvent, AsyncState>(
+                currentState: const AsyncState(
+                  isLoading: true,
+                  hasError: false,
+                  isSuccess: false,
                 ),
+                event: AsyncEvent(),
+                nextState: const AsyncState(
+                  isLoading: false,
+                  hasError: false,
+                  isSuccess: true,
+                ),
+              ),
+            ),
             () => observer.onChange(
-                  asyncBloc,
-                  const Change<AsyncState>(
-                    currentState: AsyncState(
-                      isLoading: true,
-                      hasError: false,
-                      isSuccess: false,
-                    ),
-                    nextState: AsyncState(
-                      isLoading: false,
-                      hasError: false,
-                      isSuccess: true,
-                    ),
-                  ),
+              asyncBloc,
+              const Change<AsyncState>(
+                currentState: AsyncState(
+                  isLoading: true,
+                  hasError: false,
+                  isSuccess: false,
                 ),
+                nextState: AsyncState(
+                  isLoading: false,
+                  hasError: false,
+                  isSuccess: true,
+                ),
+              ),
+            ),
             () => observer.onDone(asyncBloc, AsyncEvent()),
             () => observer.onTransition(
-                  asyncBloc,
-                  Transition<AsyncEvent, AsyncState>(
-                    currentState: const AsyncState(
-                      isLoading: false,
-                      hasError: false,
-                      isSuccess: true,
-                    ),
-                    event: AsyncEvent(),
-                    nextState: const AsyncState(
-                      isLoading: true,
-                      hasError: false,
-                      isSuccess: false,
-                    ),
-                  ),
+              asyncBloc,
+              Transition<AsyncEvent, AsyncState>(
+                currentState: const AsyncState(
+                  isLoading: false,
+                  hasError: false,
+                  isSuccess: true,
                 ),
+                event: AsyncEvent(),
+                nextState: const AsyncState(
+                  isLoading: true,
+                  hasError: false,
+                  isSuccess: false,
+                ),
+              ),
+            ),
             () => observer.onChange(
-                  asyncBloc,
-                  const Change<AsyncState>(
-                    currentState: AsyncState(
-                      isLoading: false,
-                      hasError: false,
-                      isSuccess: true,
-                    ),
-                    nextState: AsyncState(
-                      isLoading: true,
-                      hasError: false,
-                      isSuccess: false,
-                    ),
-                  ),
+              asyncBloc,
+              const Change<AsyncState>(
+                currentState: AsyncState(
+                  isLoading: false,
+                  hasError: false,
+                  isSuccess: true,
                 ),
+                nextState: AsyncState(
+                  isLoading: true,
+                  hasError: false,
+                  isSuccess: false,
+                ),
+              ),
+            ),
             () => observer.onTransition(
-                  asyncBloc,
-                  Transition<AsyncEvent, AsyncState>(
-                    currentState: const AsyncState(
-                      isLoading: true,
-                      hasError: false,
-                      isSuccess: false,
-                    ),
-                    event: AsyncEvent(),
-                    nextState: const AsyncState(
-                      isLoading: false,
-                      hasError: false,
-                      isSuccess: true,
-                    ),
-                  ),
+              asyncBloc,
+              Transition<AsyncEvent, AsyncState>(
+                currentState: const AsyncState(
+                  isLoading: true,
+                  hasError: false,
+                  isSuccess: false,
                 ),
+                event: AsyncEvent(),
+                nextState: const AsyncState(
+                  isLoading: false,
+                  hasError: false,
+                  isSuccess: true,
+                ),
+              ),
+            ),
             () => observer.onChange(
-                  asyncBloc,
-                  const Change<AsyncState>(
-                    currentState: AsyncState(
-                      isLoading: true,
-                      hasError: false,
-                      isSuccess: false,
-                    ),
-                    nextState: AsyncState(
-                      isLoading: false,
-                      hasError: false,
-                      isSuccess: true,
-                    ),
-                  ),
+              asyncBloc,
+              const Change<AsyncState>(
+                currentState: AsyncState(
+                  isLoading: true,
+                  hasError: false,
+                  isSuccess: false,
                 ),
+                nextState: AsyncState(
+                  isLoading: false,
+                  hasError: false,
+                  isSuccess: true,
+                ),
+              ),
+            ),
             () => observer.onDone(asyncBloc, AsyncEvent()),
             () => observer.onClose(asyncBloc),
           ]);
@@ -877,8 +876,7 @@ void main() {
           ..close();
       });
 
-      test(
-          'can emit initial state and '
+      test('can emit initial state and '
           'continue emitting distinct states', () {
         final seededBloc = SeededBloc(seed: 0, states: [0, 0, 1]);
         final expectedStates = [0, 1, emitsDone];
@@ -953,23 +951,26 @@ void main() {
     group('RestartableStreamBloc', () {
       test('unawaited forEach throws AssertionError', () async {
         late final Object blocError;
-        await runZonedGuarded(() async {
-          final controller = StreamController<int>.broadcast();
-          final bloc = RestartableStreamBloc(controller.stream)
-            ..add(UnawaitedForEach());
+        await runZonedGuarded(
+          () async {
+            final controller = StreamController<int>.broadcast();
+            final bloc = RestartableStreamBloc(controller.stream)
+              ..add(UnawaitedForEach());
 
-          await tick();
+            await tick();
 
-          controller.add(0);
+            controller.add(0);
 
-          await tick();
+            await tick();
 
-          await Future<void>.delayed(const Duration(milliseconds: 300));
+            await Future<void>.delayed(const Duration(milliseconds: 300));
 
-          await bloc.close();
-        }, (error, stackTrace) {
-          blocError = error;
-        });
+            await bloc.close();
+          },
+          (error, stackTrace) {
+            blocError = error;
+          },
+        );
 
         expect(
           blocError,
@@ -1012,8 +1013,7 @@ void main() {
         expect(states, equals(expectedStates));
       });
 
-      test(
-          'forEach with onError handles errors emitted by stream '
+      test('forEach with onError handles errors emitted by stream '
           'and does not cancel the subscription', () async {
         const expectedStates = [1, 2, 3, -1, 4, 5, 6];
         final error = Exception('oops');
@@ -1072,8 +1072,7 @@ void main() {
         await bloc.close();
       });
 
-      test(
-          'forEach with catchError '
+      test('forEach with catchError '
           'handles errors emitted by stream', () async {
         const expectedStates = [1, 2, 3, -1];
         final error = Exception('oops');
@@ -1139,15 +1138,18 @@ void main() {
 
       test('unawaited onEach throws AssertionError', () async {
         late final Object blocError;
-        await runZonedGuarded(() async {
-          final controller = StreamController<int>.broadcast();
-          final bloc = RestartableStreamBloc(controller.stream)
-            ..add(UnawaitedOnEach());
+        await runZonedGuarded(
+          () async {
+            final controller = StreamController<int>.broadcast();
+            final bloc = RestartableStreamBloc(controller.stream)
+              ..add(UnawaitedOnEach());
 
-          await bloc.close();
-        }, (error, stackTrace) {
-          blocError = error;
-        });
+            await bloc.close();
+          },
+          (error, stackTrace) {
+            blocError = error;
+          },
+        );
 
         expect(
           blocError,
@@ -1161,8 +1163,7 @@ void main() {
         );
       });
 
-      test(
-          'onEach with onError handles errors emitted by stream '
+      test('onEach with onError handles errors emitted by stream '
           'and does not cancel subscription', () async {
         const expectedStates = [1, 2, 3, -1, 4, 5, 6];
         final error = Exception('oops');
@@ -1222,8 +1223,7 @@ void main() {
         await bloc.close();
       });
 
-      test(
-          'onEach with try/catch handles errors '
+      test('onEach with try/catch handles errors '
           'emitted by stream and cancels delayed emits', () async {
         const expectedStates = [-1];
         final error = Exception('oops');
@@ -1249,8 +1249,7 @@ void main() {
         await bloc.close();
       });
 
-      test(
-          'onEach with catchError '
+      test('onEach with catchError '
           'handles errors emitted by stream', () async {
         const expectedStates = [1, 2, 3, -1];
         final error = Exception('oops');
@@ -1349,8 +1348,7 @@ void main() {
     });
 
     group('UnawaitedBloc', () {
-      test(
-          'throws AssertionError when emit is called '
+      test('throws AssertionError when emit is called '
           'after the event handler completed normally', () async {
         late final Object blocError;
         await runZonedGuarded(
@@ -1384,111 +1382,125 @@ void main() {
 
     group('Exception', () {
       test('does not break stream', () {
-        runZonedGuarded(() {
-          final expectedStates = [-1, emitsDone];
-          final counterBloc = CounterExceptionBloc();
+        runZonedGuarded(
+          () {
+            final expectedStates = [-1, emitsDone];
+            final counterBloc = CounterExceptionBloc();
 
-          expectLater(counterBloc.stream, emitsInOrder(expectedStates));
+            expectLater(counterBloc.stream, emitsInOrder(expectedStates));
 
-          counterBloc
-            ..add(CounterEvent.increment)
-            ..add(CounterEvent.decrement)
-            ..close();
-        }, (Object error, StackTrace stackTrace) {
-          expect(error.toString(), equals('Exception: fatal exception'));
-          expect(stackTrace, isNotNull);
-          expect(stackTrace, isNot(StackTrace.empty));
-        });
+            counterBloc
+              ..add(CounterEvent.increment)
+              ..add(CounterEvent.decrement)
+              ..close();
+          },
+          (Object error, StackTrace stackTrace) {
+            expect(error.toString(), equals('Exception: fatal exception'));
+            expect(stackTrace, isNotNull);
+            expect(stackTrace, isNot(StackTrace.empty));
+          },
+        );
       });
 
       test('addError triggers onError', () async {
         final expectedError = Exception('fatal exception');
 
-        runZonedGuarded(() {
-          OnExceptionBloc(
-            exception: expectedError,
-            onErrorCallback: (Object _, StackTrace __) {},
-          ).addError(expectedError, StackTrace.current);
-        }, (Object error, StackTrace stackTrace) {
-          expect(error, equals(expectedError));
-          expect(stackTrace, isNotNull);
-          expect(stackTrace, isNot(StackTrace.empty));
-        });
+        runZonedGuarded(
+          () {
+            OnExceptionBloc(
+              exception: expectedError,
+              onErrorCallback: (Object _, StackTrace __) {},
+            ).addError(expectedError, StackTrace.current);
+          },
+          (Object error, StackTrace stackTrace) {
+            expect(error, equals(expectedError));
+            expect(stackTrace, isNotNull);
+            expect(stackTrace, isNot(StackTrace.empty));
+          },
+        );
       });
 
       test('triggers onError from on<E>', () {
         final exception = Exception('fatal exception');
-        runZonedGuarded(() {
-          Object? expectedError;
-          StackTrace? expectedStacktrace;
+        runZonedGuarded(
+          () {
+            Object? expectedError;
+            StackTrace? expectedStacktrace;
 
-          final onExceptionBloc = OnExceptionBloc(
-            exception: exception,
-            onErrorCallback: (Object error, StackTrace stackTrace) {
-              expectedError = error;
-              expectedStacktrace = stackTrace;
-            },
-          );
+            final onExceptionBloc = OnExceptionBloc(
+              exception: exception,
+              onErrorCallback: (Object error, StackTrace stackTrace) {
+                expectedError = error;
+                expectedStacktrace = stackTrace;
+              },
+            );
 
-          expectLater(
-            onExceptionBloc.stream,
-            emitsInOrder(<Matcher>[emitsDone]),
-          ).then((dynamic _) {
-            expect(expectedError, exception);
-            expect(expectedStacktrace, isNotNull);
-            expect(expectedStacktrace, isNot(StackTrace.empty));
-          });
+            expectLater(
+              onExceptionBloc.stream,
+              emitsInOrder(<Matcher>[emitsDone]),
+            ).then((dynamic _) {
+              expect(expectedError, exception);
+              expect(expectedStacktrace, isNotNull);
+              expect(expectedStacktrace, isNot(StackTrace.empty));
+            });
 
-          onExceptionBloc
-            ..add(CounterEvent.increment)
-            ..close();
-        }, (Object error, StackTrace stackTrace) {
-          expect(error, equals(exception));
-          expect(stackTrace, isNotNull);
-          expect(stackTrace, isNot(StackTrace.empty));
-        });
+            onExceptionBloc
+              ..add(CounterEvent.increment)
+              ..close();
+          },
+          (Object error, StackTrace stackTrace) {
+            expect(error, equals(exception));
+            expect(stackTrace, isNotNull);
+            expect(stackTrace, isNot(StackTrace.empty));
+          },
+        );
       });
 
       test('triggers onError from onEvent', () {
         final exception = Exception('fatal exception');
-        runZonedGuarded(() {
-          OnEventErrorBloc(exception: exception)
-            ..add(CounterEvent.increment)
-            ..close();
-        }, (Object error, StackTrace stackTrace) {
-          expect(error, equals(exception));
-          expect(stackTrace, isNotNull);
-          expect(stackTrace, isNot(StackTrace.empty));
-        });
+        runZonedGuarded(
+          () {
+            OnEventErrorBloc(exception: exception)
+              ..add(CounterEvent.increment)
+              ..close();
+          },
+          (Object error, StackTrace stackTrace) {
+            expect(error, equals(exception));
+            expect(stackTrace, isNotNull);
+            expect(stackTrace, isNot(StackTrace.empty));
+          },
+        );
       });
 
-      test(
-          'add throws StateError and triggers onError '
+      test('add throws StateError and triggers onError '
           'when bloc is closed', () {
         Object? capturedError;
         StackTrace? capturedStacktrace;
         var didThrow = false;
-        runZonedGuarded(() {
-          final counterBloc = CounterBloc(
-            onErrorCallback: (error, stackTrace) {
-              capturedError = error;
-              capturedStacktrace = stackTrace;
-            },
-          );
+        runZonedGuarded(
+          () {
+            final counterBloc = CounterBloc(
+              onErrorCallback: (error, stackTrace) {
+                capturedError = error;
+                capturedStacktrace = stackTrace;
+              },
+            );
 
-          expectLater(
-            counterBloc.stream,
-            emitsInOrder(<Matcher>[emitsDone]),
-          );
+            expectLater(
+              counterBloc.stream,
+              emitsInOrder(<Matcher>[emitsDone]),
+            );
 
-          counterBloc
-            ..close()
-            ..add(CounterEvent.increment);
-        }, (Object error, StackTrace stackTrace) {
-          didThrow = true;
-          expect(error, equals(capturedError));
-          expect(stackTrace, equals(capturedStacktrace));
-        });
+            counterBloc
+              ..close()
+              ..add(CounterEvent.increment);
+          },
+          (Object error, StackTrace stackTrace) {
+            didThrow = true;
+            expect(error, equals(capturedError));
+            expect(stackTrace, equals(capturedStacktrace));
+          },
+        );
 
         expect(didThrow, isTrue);
         expect(
@@ -1596,8 +1608,7 @@ void main() {
         await counterBloc.close();
       });
 
-      test(
-          'throws StateError and triggers onError '
+      test('throws StateError and triggers onError '
           'when bloc is closed', () async {
         Object? capturedError;
         StackTrace? capturedStacktrace;

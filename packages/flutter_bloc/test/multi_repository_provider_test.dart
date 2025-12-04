@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class MyApp extends MaterialApp {
-  const MyApp({Key? key}) : super(key: key, home: const CounterPage());
+  const MyApp({super.key}) : super(home: const CounterPage());
 }
 
 class CounterPage extends StatelessWidget {
-  const CounterPage({Key? key}) : super(key: key);
+  const CounterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -73,8 +73,9 @@ void main() {
       expect(repositoryBText.data, '1');
     });
 
-    testWidgets('passes values to children without explict types',
-        (tester) async {
+    testWidgets('passes values to children without explict types', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MultiRepositoryProvider(
           providers: [

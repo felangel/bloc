@@ -110,8 +110,7 @@ void main() {
         expect(states, const <int>[1, 2, 3, 1]);
       });
 
-      test(
-          "doesn't skip states that would be filtered out by shouldReplay "
+      test("doesn't skip states that would be filtered out by shouldReplay "
           'at transition time but not at undo time', () async {
         var replayEvens = false;
         final states = <int>[];
@@ -227,8 +226,7 @@ void main() {
         expect(states, const <int>[1, 2, 1, 2]);
       });
 
-      test(
-          'does nothing when undos has occurred '
+      test('does nothing when undos has occurred '
           'followed by a new state change', () async {
         final states = <int>[];
         final cubit = CounterCubit();
@@ -244,8 +242,7 @@ void main() {
         expect(states, const <int>[1, 2, 1, 0]);
       });
 
-      test(
-          'redo does not redo states which were'
+      test('redo does not redo states which were'
           ' filtered out by shouldReplay at undo time', () async {
         final states = <int>[];
         final cubit = CounterCubit(shouldReplayCallback: (i) => !i.isEven);
@@ -265,8 +262,7 @@ void main() {
         expect(states, const <int>[1, 2, 3, 1, 3]);
       });
 
-      test(
-          'redo does not redo states which were'
+      test('redo does not redo states which were'
           ' filtered out by shouldReplay at transition time', () async {
         var replayEvens = false;
         final states = <int>[];
@@ -472,8 +468,7 @@ void main() {
         expect(states, const <int>[1, 2, 1, 2]);
       });
 
-      test(
-          'does nothing when undos has occurred '
+      test('does nothing when undos has occurred '
           'followed by a new state change', () async {
         final states = <int>[];
         final cubit = CounterCubitMixin();

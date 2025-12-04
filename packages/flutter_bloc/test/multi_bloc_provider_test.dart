@@ -4,18 +4,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class MyAppWithNavigation extends MaterialApp {
-  MyAppWithNavigation({required Widget child, Key? key})
-      : super(key: key, home: Scaffold(body: child));
+  MyAppWithNavigation({required Widget child, super.key})
+    : super(home: Scaffold(body: child));
 }
 
 class HomePage extends StatelessWidget {
   const HomePage({
-    Key? key,
+    super.key,
     this.onCounterCubitClosed,
     this.onThemeCubitClosed,
     this.counterCubitValue,
     this.themeCubitValue,
-  }) : super(key: key);
+  });
 
   final VoidCallback? onCounterCubitClosed;
   final VoidCallback? onThemeCubitClosed;
@@ -91,7 +91,7 @@ class HomePage extends StatelessWidget {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +105,7 @@ class MyApp extends StatelessWidget {
 }
 
 class CounterPage extends StatelessWidget {
-  const CounterPage({Key? key}) : super(key: key);
+  const CounterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -129,9 +129,7 @@ class CounterPage extends StatelessWidget {
 }
 
 class CounterCubit extends Cubit<int> {
-  CounterCubit({VoidCallback? onClose})
-      : _onClose = onClose,
-        super(0);
+  CounterCubit({VoidCallback? onClose}) : _onClose = onClose, super(0);
 
   final VoidCallback? _onClose;
 
@@ -147,8 +145,8 @@ class CounterCubit extends Cubit<int> {
 
 class ThemeCubit extends Cubit<ThemeData> {
   ThemeCubit({VoidCallback? onClose})
-      : _onClose = onClose,
-        super(ThemeData.light());
+    : _onClose = onClose,
+      super(ThemeData.light());
 
   final VoidCallback? _onClose;
 
@@ -186,8 +184,9 @@ void main() {
       expect(counterText.data, '0');
     });
 
-    testWidgets('passes cubits to children without explicit states',
-        (tester) async {
+    testWidgets('passes cubits to children without explicit states', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
@@ -235,8 +234,9 @@ void main() {
       expect(counterText.data, '-1');
     });
 
-    testWidgets('close on counter cubit which was loaded (lazily)',
-        (tester) async {
+    testWidgets('close on counter cubit which was loaded (lazily)', (
+      tester,
+    ) async {
       var counterCubitClosed = false;
       var themeCubitClosed = false;
 
@@ -261,8 +261,9 @@ void main() {
       expect(themeCubitClosed, false);
     });
 
-    testWidgets('close on theme cubit which was loaded (lazily)',
-        (tester) async {
+    testWidgets('close on theme cubit which was loaded (lazily)', (
+      tester,
+    ) async {
       var counterCubitClosed = false;
       var themeCubitClosed = false;
 
@@ -287,8 +288,9 @@ void main() {
       expect(themeCubitClosed, true);
     });
 
-    testWidgets('close on all cubits which were loaded (lazily)',
-        (tester) async {
+    testWidgets('close on all cubits which were loaded (lazily)', (
+      tester,
+    ) async {
       var counterCubitClosed = false;
       var themeCubitClosed = false;
 
@@ -315,29 +317,30 @@ void main() {
     });
 
     testWidgets(
-        'does not call close on cubits if they were not loaded (lazily)',
-        (tester) async {
-      var counterCubitClosed = false;
-      var themeCubitClosed = false;
+      'does not call close on cubits if they were not loaded (lazily)',
+      (tester) async {
+        var counterCubitClosed = false;
+        var themeCubitClosed = false;
 
-      await tester.pumpWidget(
-        MyAppWithNavigation(
-          child: HomePage(
-            onCounterCubitClosed: () => counterCubitClosed = true,
-            onThemeCubitClosed: () => themeCubitClosed = true,
+        await tester.pumpWidget(
+          MyAppWithNavigation(
+            child: HomePage(
+              onCounterCubitClosed: () => counterCubitClosed = true,
+              onThemeCubitClosed: () => themeCubitClosed = true,
+            ),
           ),
-        ),
-      );
+        );
 
-      expect(counterCubitClosed, false);
-      expect(themeCubitClosed, false);
+        expect(counterCubitClosed, false);
+        expect(themeCubitClosed, false);
 
-      await tester.tap(find.byKey(const Key('pop_button')));
-      await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key('pop_button')));
+        await tester.pumpAndSettle();
 
-      expect(counterCubitClosed, false);
-      expect(themeCubitClosed, false);
-    });
+        expect(counterCubitClosed, false);
+        expect(themeCubitClosed, false);
+      },
+    );
 
     testWidgets('does not close when created using value', (tester) async {
       var counterCubitClosed = false;

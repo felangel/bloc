@@ -52,7 +52,7 @@ class MultiBlocListener extends MultiProvider {
   /// {@macro multi_bloc_listener}
   MultiBlocListener({
     required List<SingleChildWidget> listeners,
-    required Widget child,
-    Key? key,
-  }) : super(key: key, providers: listeners, child: child);
+    required Widget super.child,
+    super.key,
+  }) : super(providers: listeners);
 }

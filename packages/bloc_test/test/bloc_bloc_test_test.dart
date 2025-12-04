@@ -15,14 +15,14 @@ void main() {
     group('CounterBloc', () {
       blocTest<CounterBloc, int>(
         'supports matchers (contains)',
-        build: () => CounterBloc(),
+        build: CounterBloc.new,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => contains(1),
       );
 
       blocTest<CounterBloc, int>(
         'supports matchers (containsAll)',
-        build: () => CounterBloc(),
+        build: CounterBloc.new,
         act: (bloc) => bloc
           ..add(CounterEvent.increment)
           ..add(CounterEvent.increment),
@@ -31,7 +31,7 @@ void main() {
 
       blocTest<CounterBloc, int>(
         'supports matchers (containsAllInOrder)',
-        build: () => CounterBloc(),
+        build: CounterBloc.new,
         act: (bloc) => bloc
           ..add(CounterEvent.increment)
           ..add(CounterEvent.increment),
@@ -40,20 +40,20 @@ void main() {
 
       blocTest<CounterBloc, int>(
         'emits [] when nothing is added',
-        build: () => CounterBloc(),
+        build: CounterBloc.new,
         expect: () => const <int>[],
       );
 
       blocTest<CounterBloc, int>(
         'emits [1] when CounterEvent.increment is added',
-        build: () => CounterBloc(),
+        build: CounterBloc.new,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[1],
       );
 
       blocTest<CounterBloc, int>(
         'emits [1] when CounterEvent.increment is added with async act',
-        build: () => CounterBloc(),
+        build: CounterBloc.new,
         act: (bloc) async {
           await Future<void>.delayed(const Duration(seconds: 1));
           bloc.add(CounterEvent.increment);
@@ -64,7 +64,7 @@ void main() {
       blocTest<CounterBloc, int>(
         'emits [1, 2] when CounterEvent.increment is called multiple times '
         'with async act',
-        build: () => CounterBloc(),
+        build: CounterBloc.new,
         act: (bloc) async {
           bloc.add(CounterEvent.increment);
           await Future<void>.delayed(const Duration(milliseconds: 10));
@@ -75,7 +75,7 @@ void main() {
 
       blocTest<CounterBloc, int>(
         'emits [2] when CounterEvent.increment is added twice and skip: 1',
-        build: () => CounterBloc(),
+        build: CounterBloc.new,
         act: (bloc) {
           bloc
             ..add(CounterEvent.increment)
@@ -87,7 +87,7 @@ void main() {
 
       blocTest<CounterBloc, int>(
         'emits [11] when CounterEvent.increment is added and emitted 10',
-        build: () => CounterBloc(),
+        build: CounterBloc.new,
         seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[11],
@@ -95,7 +95,7 @@ void main() {
 
       blocTest<CounterBloc, int>(
         'emits [11] when CounterEvent.increment is added and seed 10',
-        build: () => CounterBloc(),
+        build: CounterBloc.new,
         seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[11],
@@ -103,13 +103,14 @@ void main() {
 
       blocTest<CounterBloc, int>(
         'emits [1] when CounterEvent.increment is added and expect is async',
-        build: () => CounterBloc(),
+        build: CounterBloc.new,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () async => <int>[1],
       );
 
       test('fails immediately when expectation is incorrect', () async {
-        const expectedError = 'Expected: [2]\n'
+        const expectedError =
+            'Expected: [2]\n'
             '  Actual: [1]\n'
             '   Which: at location [0] is <1> instead of <2>\n'
             '\n'
@@ -120,40 +121,45 @@ void main() {
             '==== end diff ====================================\n';
         late Object actualError;
         final completer = Completer<void>();
-        await runZonedGuarded(() async {
-          unawaited(
-            testBloc<CounterBloc, int>(
-              build: () => CounterBloc(),
-              act: (bloc) => bloc.add(CounterEvent.increment),
-              expect: () => const <int>[2],
-            ).then((_) => completer.complete()),
-          );
-          await completer.future;
-        }, (Object error, _) {
-          actualError = error;
-          if (!completer.isCompleted) completer.complete();
-        });
+        await runZonedGuarded(
+          () async {
+            unawaited(
+              testBloc<CounterBloc, int>(
+                build: CounterBloc.new,
+                act: (bloc) => bloc.add(CounterEvent.increment),
+                expect: () => const <int>[2],
+              ).then((_) => completer.complete()),
+            );
+            await completer.future;
+          },
+          (Object error, _) {
+            actualError = error;
+            if (!completer.isCompleted) completer.complete();
+          },
+        );
         expect((actualError as TestFailure).message, expectedError);
       });
 
-      test(
-          'fails immediately when '
+      test('fails immediately when '
           'uncaught exception occurs within bloc', () async {
         late Object actualError;
         final completer = Completer<void>();
-        await runZonedGuarded(() async {
-          unawaited(
-            testBloc<ErrorCounterBloc, int>(
-              build: () => ErrorCounterBloc(),
-              act: (bloc) => bloc.add(CounterEvent.increment),
-              expect: () => const <int>[1],
-            ).then((_) => completer.complete()),
-          );
-          await completer.future;
-        }, (Object error, _) {
-          actualError = error;
-          if (!completer.isCompleted) completer.complete();
-        });
+        await runZonedGuarded(
+          () async {
+            unawaited(
+              testBloc<ErrorCounterBloc, int>(
+                build: ErrorCounterBloc.new,
+                act: (bloc) => bloc.add(CounterEvent.increment),
+                expect: () => const <int>[1],
+              ).then((_) => completer.complete()),
+            );
+            await completer.future;
+          },
+          (Object error, _) {
+            actualError = error;
+            if (!completer.isCompleted) completer.complete();
+          },
+        );
         expect(actualError, isA<ErrorCounterBlocError>());
       });
 
@@ -161,26 +167,29 @@ void main() {
         final exception = Exception('oops');
         late Object actualError;
         final completer = Completer<void>();
-        await runZonedGuarded(() async {
-          unawaited(
-            testBloc<ErrorCounterBloc, int>(
-              build: () => ErrorCounterBloc(),
-              act: (_) => throw exception,
-              expect: () => const <int>[1],
-            ).then((_) => completer.complete()),
-          );
-          await completer.future;
-        }, (Object error, _) {
-          actualError = error;
-          if (!completer.isCompleted) completer.complete();
-        });
+        await runZonedGuarded(
+          () async {
+            unawaited(
+              testBloc<ErrorCounterBloc, int>(
+                build: ErrorCounterBloc.new,
+                act: (_) => throw exception,
+                expect: () => const <int>[1],
+              ).then((_) => completer.complete()),
+            );
+            await completer.future;
+          },
+          (Object error, _) {
+            actualError = error;
+            if (!completer.isCompleted) completer.complete();
+          },
+        );
         expect(actualError, exception);
       });
 
       test('future still completes when uncaught exception occurs', () async {
         await expectLater(
           () => testBloc<ErrorCounterBloc, int>(
-            build: () => ErrorCounterBloc(),
+            build: ErrorCounterBloc.new,
             act: (bloc) => bloc.add(CounterEvent.increment),
             expect: () => const <int>[1],
           ),
@@ -192,13 +201,13 @@ void main() {
     group('AsyncCounterBloc', () {
       blocTest<AsyncCounterBloc, int>(
         'emits [] when nothing is added',
-        build: () => AsyncCounterBloc(),
+        build: AsyncCounterBloc.new,
         expect: () => const <int>[],
       );
 
       blocTest<AsyncCounterBloc, int>(
         'emits [1] when CounterEvent.increment is added',
-        build: () => AsyncCounterBloc(),
+        build: AsyncCounterBloc.new,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[1],
       );
@@ -206,7 +215,7 @@ void main() {
       blocTest<AsyncCounterBloc, int>(
         'emits [1, 2] when CounterEvent.increment is called multiple '
         'times with async act',
-        build: () => AsyncCounterBloc(),
+        build: AsyncCounterBloc.new,
         act: (bloc) async {
           bloc.add(CounterEvent.increment);
           await Future<void>.delayed(const Duration(milliseconds: 10));
@@ -217,7 +226,7 @@ void main() {
 
       blocTest<AsyncCounterBloc, int>(
         'emits [2] when CounterEvent.increment is added twice and skip: 1',
-        build: () => AsyncCounterBloc(),
+        build: AsyncCounterBloc.new,
         act: (bloc) => bloc
           ..add(CounterEvent.increment)
           ..add(CounterEvent.increment),
@@ -227,7 +236,7 @@ void main() {
 
       blocTest<AsyncCounterBloc, int>(
         'emits [11] when CounterEvent.increment is added and emitted 10',
-        build: () => AsyncCounterBloc(),
+        build: AsyncCounterBloc.new,
         seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[11],
@@ -237,13 +246,13 @@ void main() {
     group('DebounceCounterBloc', () {
       blocTest<DebounceCounterBloc, int>(
         'emits [] when nothing is added',
-        build: () => DebounceCounterBloc(),
+        build: DebounceCounterBloc.new,
         expect: () => const <int>[],
       );
 
       blocTest<DebounceCounterBloc, int>(
         'emits [1] when CounterEvent.increment is added',
-        build: () => DebounceCounterBloc(),
+        build: DebounceCounterBloc.new,
         act: (bloc) => bloc.add(CounterEvent.increment),
         wait: const Duration(milliseconds: 300),
         expect: () => const <int>[1],
@@ -252,7 +261,7 @@ void main() {
       blocTest<DebounceCounterBloc, int>(
         'emits [2] when CounterEvent.increment '
         'is added twice and skip: 1',
-        build: () => DebounceCounterBloc(),
+        build: DebounceCounterBloc.new,
         act: (bloc) async {
           bloc.add(CounterEvent.increment);
           await Future<void>.delayed(const Duration(milliseconds: 305));
@@ -265,7 +274,7 @@ void main() {
 
       blocTest<DebounceCounterBloc, int>(
         'emits [11] when CounterEvent.increment is added and emitted 10',
-        build: () => DebounceCounterBloc(),
+        build: DebounceCounterBloc.new,
         seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         wait: const Duration(milliseconds: 300),
@@ -276,13 +285,13 @@ void main() {
     group('InstantEmitBloc', () {
       blocTest<InstantEmitBloc, int>(
         'emits [1] when nothing is added',
-        build: () => InstantEmitBloc(),
+        build: InstantEmitBloc.new,
         expect: () => const <int>[1],
       );
 
       blocTest<InstantEmitBloc, int>(
         'emits [1, 2] when CounterEvent.increment is added',
-        build: () => InstantEmitBloc(),
+        build: InstantEmitBloc.new,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[1, 2],
       );
@@ -290,7 +299,7 @@ void main() {
       blocTest<InstantEmitBloc, int>(
         'emits [1, 2, 3] when CounterEvent.increment is called '
         'multiple times with async act',
-        build: () => InstantEmitBloc(),
+        build: InstantEmitBloc.new,
         act: (bloc) async {
           bloc.add(CounterEvent.increment);
           await Future<void>.delayed(const Duration(milliseconds: 10));
@@ -301,7 +310,7 @@ void main() {
 
       blocTest<InstantEmitBloc, int>(
         'emits [3] when CounterEvent.increment is added twice and skip: 2',
-        build: () => InstantEmitBloc(),
+        build: InstantEmitBloc.new,
         act: (bloc) => bloc
           ..add(CounterEvent.increment)
           ..add(CounterEvent.increment),
@@ -311,7 +320,7 @@ void main() {
 
       blocTest<InstantEmitBloc, int>(
         'emits [11, 12] when CounterEvent.increment is added and seeded 10',
-        build: () => InstantEmitBloc(),
+        build: InstantEmitBloc.new,
         seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[11, 12],
@@ -321,13 +330,13 @@ void main() {
     group('MultiCounterBloc', () {
       blocTest<MultiCounterBloc, int>(
         'emits [] when nothing is added',
-        build: () => MultiCounterBloc(),
+        build: MultiCounterBloc.new,
         expect: () => const <int>[],
       );
 
       blocTest<MultiCounterBloc, int>(
         'emits [1, 2] when CounterEvent.increment is added',
-        build: () => MultiCounterBloc(),
+        build: MultiCounterBloc.new,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[1, 2],
       );
@@ -335,7 +344,7 @@ void main() {
       blocTest<MultiCounterBloc, int>(
         'emits [1, 2, 3, 4] when CounterEvent.increment is called '
         'multiple times with async act',
-        build: () => MultiCounterBloc(),
+        build: MultiCounterBloc.new,
         act: (bloc) async {
           bloc.add(CounterEvent.increment);
           await Future<void>.delayed(const Duration(milliseconds: 10));
@@ -346,7 +355,7 @@ void main() {
 
       blocTest<MultiCounterBloc, int>(
         'emits [4] when CounterEvent.increment is added twice and skip: 3',
-        build: () => MultiCounterBloc(),
+        build: MultiCounterBloc.new,
         act: (bloc) => bloc
           ..add(CounterEvent.increment)
           ..add(CounterEvent.increment),
@@ -356,7 +365,7 @@ void main() {
 
       blocTest<MultiCounterBloc, int>(
         'emits [11, 12] when CounterEvent.increment is added and emitted 10',
-        build: () => MultiCounterBloc(),
+        build: MultiCounterBloc.new,
         seed: () => 10,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[11, 12],
@@ -366,13 +375,13 @@ void main() {
     group('ComplexBloc', () {
       blocTest<ComplexBloc, ComplexState>(
         'emits [] when nothing is added',
-        build: () => ComplexBloc(),
+        build: ComplexBloc.new,
         expect: () => const <ComplexState>[],
       );
 
       blocTest<ComplexBloc, ComplexState>(
         'emits [ComplexStateB] when ComplexEventB is added',
-        build: () => ComplexBloc(),
+        build: ComplexBloc.new,
         act: (bloc) => bloc.add(ComplexEventB()),
         expect: () => [isA<ComplexStateB>()],
       );
@@ -380,7 +389,7 @@ void main() {
       blocTest<ComplexBloc, ComplexState>(
         'emits [ComplexStateA] when [ComplexEventB, ComplexEventA] '
         'is added and skip: 1',
-        build: () => ComplexBloc(),
+        build: ComplexBloc.new,
         act: (bloc) => bloc
           ..add(ComplexEventB())
           ..add(ComplexEventA()),
@@ -391,13 +400,13 @@ void main() {
     group('ErrorCounterBloc', () {
       blocTest<ErrorCounterBloc, int>(
         'emits [] when nothing is added',
-        build: () => ErrorCounterBloc(),
+        build: ErrorCounterBloc.new,
         expect: () => const <int>[],
       );
 
       blocTest<ErrorCounterBloc, int>(
         'emits [2] when increment is added twice and skip: 1',
-        build: () => ErrorCounterBloc(),
+        build: ErrorCounterBloc.new,
         act: (bloc) => bloc
           ..add(CounterEvent.increment)
           ..add(CounterEvent.increment),
@@ -408,7 +417,7 @@ void main() {
 
       blocTest<ErrorCounterBloc, int>(
         'emits [1] when increment is added',
-        build: () => ErrorCounterBloc(),
+        build: ErrorCounterBloc.new,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[1],
         errors: () => isNotEmpty,
@@ -416,7 +425,7 @@ void main() {
 
       blocTest<ErrorCounterBloc, int>(
         'throws ErrorCounterBlocException when increment is added',
-        build: () => ErrorCounterBloc(),
+        build: ErrorCounterBloc.new,
         act: (bloc) => bloc.add(CounterEvent.increment),
         errors: () => [isA<ErrorCounterBlocError>()],
       );
@@ -424,7 +433,7 @@ void main() {
       blocTest<ErrorCounterBloc, int>(
         'emits [1] and throws ErrorCounterBlocError '
         'when increment is added',
-        build: () => ErrorCounterBloc(),
+        build: ErrorCounterBloc.new,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[1],
         errors: () => [isA<ErrorCounterBlocError>()],
@@ -432,7 +441,7 @@ void main() {
 
       blocTest<ErrorCounterBloc, int>(
         'emits [1, 2] when increment is added twice',
-        build: () => ErrorCounterBloc(),
+        build: ErrorCounterBloc.new,
         act: (bloc) => bloc
           ..add(CounterEvent.increment)
           ..add(CounterEvent.increment),
@@ -443,7 +452,7 @@ void main() {
       blocTest<ErrorCounterBloc, int>(
         'throws two ErrorCounterBlocErrors '
         'when increment is added twice',
-        build: () => ErrorCounterBloc(),
+        build: ErrorCounterBloc.new,
         act: (bloc) => bloc
           ..add(CounterEvent.increment)
           ..add(CounterEvent.increment),
@@ -456,7 +465,7 @@ void main() {
       blocTest<ErrorCounterBloc, int>(
         'emits [1, 2] and throws two ErrorCounterBlocErrors '
         'when increment is added twice',
-        build: () => ErrorCounterBloc(),
+        build: ErrorCounterBloc.new,
         act: (bloc) => bloc
           ..add(CounterEvent.increment)
           ..add(CounterEvent.increment),
@@ -471,13 +480,13 @@ void main() {
     group('ExceptionCounterBloc', () {
       blocTest<ExceptionCounterBloc, int>(
         'emits [] when nothing is added',
-        build: () => ExceptionCounterBloc(),
+        build: ExceptionCounterBloc.new,
         expect: () => const <int>[],
       );
 
       blocTest<ExceptionCounterBloc, int>(
         'emits [2] when increment is added twice and skip: 1',
-        build: () => ExceptionCounterBloc(),
+        build: ExceptionCounterBloc.new,
         act: (bloc) => bloc
           ..add(CounterEvent.increment)
           ..add(CounterEvent.increment),
@@ -488,7 +497,7 @@ void main() {
 
       blocTest<ExceptionCounterBloc, int>(
         'emits [1] when increment is added',
-        build: () => ExceptionCounterBloc(),
+        build: ExceptionCounterBloc.new,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[1],
         errors: () => isNotEmpty,
@@ -496,7 +505,7 @@ void main() {
 
       blocTest<ExceptionCounterBloc, int>(
         'throws ExceptionCounterBlocException when increment is added',
-        build: () => ExceptionCounterBloc(),
+        build: ExceptionCounterBloc.new,
         act: (bloc) => bloc.add(CounterEvent.increment),
         errors: () => [isA<ExceptionCounterBlocException>()],
       );
@@ -504,7 +513,7 @@ void main() {
       blocTest<ExceptionCounterBloc, int>(
         'emits [1] and throws ExceptionCounterBlocException '
         'when increment is added',
-        build: () => ExceptionCounterBloc(),
+        build: ExceptionCounterBloc.new,
         act: (bloc) => bloc.add(CounterEvent.increment),
         expect: () => const <int>[1],
         errors: () => [isA<ExceptionCounterBlocException>()],
@@ -512,7 +521,7 @@ void main() {
 
       blocTest<ExceptionCounterBloc, int>(
         'emits [1, 2] when increment is added twice',
-        build: () => ExceptionCounterBloc(),
+        build: ExceptionCounterBloc.new,
         act: (bloc) => bloc
           ..add(CounterEvent.increment)
           ..add(CounterEvent.increment),
@@ -523,7 +532,7 @@ void main() {
       blocTest<ExceptionCounterBloc, int>(
         'throws two ExceptionCounterBlocExceptions '
         'when increment is added twice',
-        build: () => ExceptionCounterBloc(),
+        build: ExceptionCounterBloc.new,
         act: (bloc) => bloc
           ..add(CounterEvent.increment)
           ..add(CounterEvent.increment),
@@ -536,7 +545,7 @@ void main() {
       blocTest<ExceptionCounterBloc, int>(
         'emits [1, 2] and throws two ExceptionCounterBlocException '
         'when increment is added twice',
-        build: () => ExceptionCounterBloc(),
+        build: ExceptionCounterBloc.new,
         act: (bloc) => bloc
           ..add(CounterEvent.increment)
           ..add(CounterEvent.increment),
@@ -618,21 +627,24 @@ void main() {
             '''Expected: <2>\n  Actual: <1>\nUnexpected number of calls\n''';
         late Object actualError;
         final completer = Completer<void>();
-        await runZonedGuarded(() async {
-          unawaited(
-            testBloc<SideEffectCounterBloc, int>(
-              build: () => SideEffectCounterBloc(repository),
-              act: (bloc) => bloc.add(CounterEvent.increment),
-              verify: (_) {
-                verify(() => repository.sideEffect()).called(2);
-              },
-            ).then((_) => completer.complete()),
-          );
-          await completer.future;
-        }, (Object error, _) {
-          actualError = error;
-          if (!completer.isCompleted) completer.complete();
-        });
+        await runZonedGuarded(
+          () async {
+            unawaited(
+              testBloc<SideEffectCounterBloc, int>(
+                build: () => SideEffectCounterBloc(repository),
+                act: (bloc) => bloc.add(CounterEvent.increment),
+                verify: (_) {
+                  verify(() => repository.sideEffect()).called(2);
+                },
+              ).then((_) => completer.complete()),
+            );
+            await completer.future;
+          },
+          (Object error, _) {
+            actualError = error;
+            if (!completer.isCompleted) completer.complete();
+          },
+        );
         expect((actualError as TestFailure).message, expectedError);
       });
 
@@ -645,19 +657,22 @@ WARNING: Please ensure state instances extend Equatable, override == and hashCod
 Alternatively, consider using Matchers in the expect of the blocTest rather than concrete state instances.\n''';
         late Object actualError;
         final completer = Completer<void>();
-        await runZonedGuarded(() async {
-          unawaited(
-            testBloc<ComplexBloc, ComplexState>(
-              build: () => ComplexBloc(),
-              act: (bloc) => bloc.add(ComplexEventA()),
-              expect: () => <ComplexState>[ComplexStateA()],
-            ).then((_) => completer.complete()),
-          );
-          await completer.future;
-        }, (Object error, _) {
-          actualError = error;
-          if (!completer.isCompleted) completer.complete();
-        });
+        await runZonedGuarded(
+          () async {
+            unawaited(
+              testBloc<ComplexBloc, ComplexState>(
+                build: ComplexBloc.new,
+                act: (bloc) => bloc.add(ComplexEventA()),
+                expect: () => <ComplexState>[ComplexStateA()],
+              ).then((_) => completer.complete()),
+            );
+            await completer.future;
+          },
+          (Object error, _) {
+            actualError = error;
+            if (!completer.isCompleted) completer.complete();
+          },
+        );
         expect((actualError as TestFailure).message, expectedError);
       });
     });
@@ -677,7 +692,7 @@ Alternatively, consider using Matchers in the expect of the blocTest rather than
 
     blocTest<CounterBloc, int>(
       'is called after the test is run',
-      build: () => CounterBloc(),
+      build: CounterBloc.new,
       act: (bloc) => bloc.add(CounterEvent.increment),
       verify: (bloc) {
         state = bloc.state;

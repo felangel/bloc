@@ -30,9 +30,9 @@ class BlocSelector<B extends StateStreamable<S>, S, T> extends StatefulWidget {
   const BlocSelector({
     required this.selector,
     required this.builder,
-    Key? key,
+    super.key,
     this.bloc,
-  }) : super(key: key);
+  });
 
   /// The [bloc] that the [BlocSelector] will interact with.
   /// If omitted, [BlocSelector] will automatically perform a lookup using

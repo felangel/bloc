@@ -245,12 +245,15 @@ Alternatively, consider using Matchers in the expect of the blocTest rather than
 
 Future<void> _runZonedGuarded(Future<void> Function() body) {
   final completer = Completer<void>();
-  runZonedGuarded(() async {
-    await body();
-    if (!completer.isCompleted) completer.complete();
-  }, (error, stackTrace) {
-    if (!completer.isCompleted) completer.completeError(error, stackTrace);
-  });
+  runZonedGuarded(
+    () async {
+      await body();
+      if (!completer.isCompleted) completer.complete();
+    },
+    (error, stackTrace) {
+      if (!completer.isCompleted) completer.completeError(error, stackTrace);
+    },
+  );
   return completer.future;
 }
 
@@ -291,13 +294,10 @@ extension on List<Diff> {
       switch (difference.operation) {
         case DIFF_EQUAL:
           buffer.write(identical(difference.text));
-          break;
         case DIFF_DELETE:
           buffer.write(deletion(difference.text));
-          break;
         case DIFF_INSERT:
           buffer.write(insertion(difference.text));
-          break;
       }
     }
     return buffer.toString();

@@ -20,8 +20,8 @@ class MyUuidHydratedCubit extends HydratedCubit<String> {
 
 class MyCallbackHydratedCubit extends HydratedCubit<int> {
   MyCallbackHydratedCubit({void Function(dynamic)? onFromJsonCalled})
-      : _onFromJsonCalled = onFromJsonCalled,
-        super(0);
+    : _onFromJsonCalled = onFromJsonCalled,
+      super(0);
 
   final void Function(dynamic)? _onFromJsonCalled;
 
@@ -74,9 +74,7 @@ class MyHydratedCubit extends HydratedCubit<int> {
 }
 
 class MyMultiHydratedCubit extends HydratedCubit<int> {
-  MyMultiHydratedCubit(String id)
-      : _id = id,
-        super(0);
+  MyMultiHydratedCubit(String id) : _id = id, super(0);
 
   final String _id;
 
@@ -93,7 +91,7 @@ class MyMultiHydratedCubit extends HydratedCubit<int> {
 
 class MyHydratedCubitWithCustomStorage extends HydratedCubit<int> {
   MyHydratedCubitWithCustomStorage(Storage storage)
-      : super(0, storage: storage);
+    : super(0, storage: storage);
 
   @override
   Map<String, int>? toJson(int state) {
@@ -123,29 +121,31 @@ void main() {
     });
 
     test(
-        'reads from storage once upon initialization w/custom storagePrefix/id',
-        () {
-      const storagePrefix = '__storagePrefix__';
-      const id = '__id__';
-      MyHydratedCubit(id, true, storagePrefix);
-      verify<dynamic>(() => storage.read('$storagePrefix$id')).called(1);
-    });
-
-    test('writes to storage when onChange is called w/custom storagePrefix/id',
-        () {
-      const change = Change(
-        currentState: 0,
-        nextState: 0,
-      );
-      const expected = <String, int>{'value': 0};
-      const storagePrefix = '__storagePrefix__';
-      const id = '__id__';
-      MyHydratedCubit(id, true, storagePrefix).onChange(change);
-      verify(() => storage.write('$storagePrefix$id', expected)).called(2);
-    });
+      'reads from storage once upon initialization w/custom storagePrefix/id',
+      () {
+        const storagePrefix = '__storagePrefix__';
+        const id = '__id__';
+        MyHydratedCubit(id, true, storagePrefix);
+        verify<dynamic>(() => storage.read('$storagePrefix$id')).called(1);
+      },
+    );
 
     test(
-        'does not read from storage on subsequent state changes '
+      'writes to storage when onChange is called w/custom storagePrefix/id',
+      () {
+        const change = Change(
+          currentState: 0,
+          nextState: 0,
+        );
+        const expected = <String, int>{'value': 0};
+        const storagePrefix = '__storagePrefix__';
+        const id = '__id__';
+        MyHydratedCubit(id, true, storagePrefix).onChange(change);
+        verify(() => storage.write('$storagePrefix$id', expected)).called(2);
+      },
+    );
+
+    test('does not read from storage on subsequent state changes '
         'when cache value exists', () {
       when<dynamic>(() => storage.read(any())).thenReturn({'value': 42});
       final cubit = MyCallbackHydratedCubit();
@@ -155,8 +155,7 @@ void main() {
       verify<dynamic>(() => storage.read('MyCallbackHydratedCubit')).called(1);
     });
 
-    test(
-        'does not deserialize state on subsequent state changes '
+    test('does not deserialize state on subsequent state changes '
         'when cache value exists', () {
       final fromJsonCalls = <dynamic>[];
       when<dynamic>(() => storage.read(any())).thenReturn({'value': 42});
@@ -171,8 +170,7 @@ void main() {
       ]);
     });
 
-    test(
-        'does not read from storage on subsequent state changes '
+    test('does not read from storage on subsequent state changes '
         'when cache is empty', () {
       when<dynamic>(() => storage.read(any())).thenReturn(null);
       final cubit = MyCallbackHydratedCubit();
@@ -194,8 +192,7 @@ void main() {
       expect(fromJsonCalls, isEmpty);
     });
 
-    test(
-        'does not read from storage on subsequent state changes '
+    test('does not read from storage on subsequent state changes '
         'when cache is malformed', () {
       when<dynamic>(() => storage.read(any())).thenReturn('{');
       final cubit = MyCallbackHydratedCubit();
@@ -222,7 +219,7 @@ void main() {
       test('should throw StorageNotFound when storage is null', () {
         HydratedBloc.storage = null;
         expect(
-          () => MyHydratedCubit(),
+          MyHydratedCubit.new,
           throwsA(isA<StorageNotFound>()),
         );
       });
@@ -255,39 +252,43 @@ void main() {
         verify(() => storage.write('MyHydratedCubit', expected)).called(2);
       });
 
-      test('should call storage.write when onChange is called with cubit id',
-          () {
-        final cubit = MyHydratedCubit('A');
-        const transition = Change<int>(
-          currentState: 0,
-          nextState: 0,
-        );
-        final expected = <String, int>{'value': 0};
-        cubit.onChange(transition);
-        verify(() => storage.write('MyHydratedCubitA', expected)).called(2);
-      });
+      test(
+        'should call storage.write when onChange is called with cubit id',
+        () {
+          final cubit = MyHydratedCubit('A');
+          const transition = Change<int>(
+            currentState: 0,
+            nextState: 0,
+          );
+          final expected = <String, int>{'value': 0};
+          cubit.onChange(transition);
+          verify(() => storage.write('MyHydratedCubitA', expected)).called(2);
+        },
+      );
 
-      test('should throw BlocUnhandledErrorException when storage.write throws',
-          () {
-        runZonedGuarded(
-          () async {
-            final expectedError = Exception('oops');
-            const transition = Change<int>(
-              currentState: 0,
-              nextState: 0,
-            );
-            when(
-              () => storage.write(any(), any<dynamic>()),
-            ).thenThrow(expectedError);
-            MyHydratedCubit().onChange(transition);
-            await Future<void>.delayed(const Duration(seconds: 300));
-            fail('should throw');
-          },
-          (error, _) {
-            expect(error.toString(), 'Exception: oops');
-          },
-        );
-      });
+      test(
+        'should throw BlocUnhandledErrorException when storage.write throws',
+        () {
+          runZonedGuarded(
+            () async {
+              final expectedError = Exception('oops');
+              const transition = Change<int>(
+                currentState: 0,
+                nextState: 0,
+              );
+              when(
+                () => storage.write(any(), any<dynamic>()),
+              ).thenThrow(expectedError);
+              MyHydratedCubit().onChange(transition);
+              await Future<void>.delayed(const Duration(seconds: 300));
+              fail('should throw');
+            },
+            (error, _) {
+              expect(error.toString(), 'Exception: oops');
+            },
+          );
+        },
+      );
 
       test('stores initial state when instantiated', () {
         MyHydratedCubit();
@@ -335,24 +336,26 @@ void main() {
         ).called(1);
       });
 
-      test('initial state should return 101/102 when fromJson returns 101/102',
-          () {
-        when<dynamic>(
-          () => storage.read('MyMultiHydratedCubitA'),
-        ).thenReturn({'value': 101});
-        expect(MyMultiHydratedCubit('A').state, 101);
-        verify<dynamic>(
-          () => storage.read('MyMultiHydratedCubitA'),
-        ).called(1);
+      test(
+        'initial state should return 101/102 when fromJson returns 101/102',
+        () {
+          when<dynamic>(
+            () => storage.read('MyMultiHydratedCubitA'),
+          ).thenReturn({'value': 101});
+          expect(MyMultiHydratedCubit('A').state, 101);
+          verify<dynamic>(
+            () => storage.read('MyMultiHydratedCubitA'),
+          ).called(1);
 
-        when<dynamic>(
-          () => storage.read('MyMultiHydratedCubitB'),
-        ).thenReturn({'value': 102});
-        expect(MyMultiHydratedCubit('B').state, 102);
-        verify<dynamic>(
-          () => storage.read('MyMultiHydratedCubitB'),
-        ).called(1);
-      });
+          when<dynamic>(
+            () => storage.read('MyMultiHydratedCubitB'),
+          ).thenReturn({'value': 102});
+          expect(MyMultiHydratedCubit('B').state, 102);
+          verify<dynamic>(
+            () => storage.read('MyMultiHydratedCubitB'),
+          ).called(1);
+        },
+      );
 
       group('clear', () {
         test('calls delete on storage', () async {
@@ -411,21 +414,24 @@ void main() {
       });
 
       test('should call onError when storage.write throws', () {
-        runZonedGuarded(() async {
-          final expectedError = Exception('oops');
-          const change = Change(currentState: 0, nextState: 0);
-          final cubit = MyHydratedCubitWithCustomStorage(storage);
-          when(
-            () => storage.write(any(), any<dynamic>()),
-          ).thenThrow(expectedError);
-          cubit.onChange(change);
-          await Future<void>.delayed(const Duration(milliseconds: 300));
-          // ignore: invalid_use_of_protected_member
-          verify(() => cubit.onError(expectedError, any())).called(2);
-        }, (error, stackTrace) {
-          expect(error.toString(), 'Exception: oops');
-          expect(stackTrace, isNotNull);
-        });
+        runZonedGuarded(
+          () async {
+            final expectedError = Exception('oops');
+            const change = Change(currentState: 0, nextState: 0);
+            final cubit = MyHydratedCubitWithCustomStorage(storage);
+            when(
+              () => storage.write(any(), any<dynamic>()),
+            ).thenThrow(expectedError);
+            cubit.onChange(change);
+            await Future<void>.delayed(const Duration(milliseconds: 300));
+            // ignore: invalid_use_of_protected_member
+            verify(() => cubit.onError(expectedError, any())).called(2);
+          },
+          (error, stackTrace) {
+            expect(error.toString(), 'Exception: oops');
+            expect(stackTrace, isNotNull);
+          },
+        );
       });
 
       test('stores initial state when instantiated', () {

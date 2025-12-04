@@ -20,5 +20,5 @@ import 'package:bloc/bloc.dart';
 /// {@endtemplate}
 abstract class Cubit<State> extends BlocBase<State> {
   /// {@macro cubit}
-  Cubit(State initialState) : super(initialState);
+  Cubit(super.initialState);
 }

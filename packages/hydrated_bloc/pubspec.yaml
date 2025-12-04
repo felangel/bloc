@@ -17,27 +17,27 @@ platforms:
   windows:
 
 environment:
-  sdk: ">=2.14.0 <4.0.0"
+  sdk: ^3.10.1
 
 dependencies:
-  bloc: ^9.0.0
+  bloc: ^9.1.0
   hive_ce: ^2.0.0
   meta: ^1.3.0
   synchronized: ^3.0.0
 
 dev_dependencies:
   bloc_lint: ^0.3.2
-  build_runner: ^2.3.3
+  build_runner: ^2.10.4
   collection: ^1.17.1
   crypto: ^3.0.2
-  freezed: ^2.3.2
-  freezed_annotation: ^2.2.0
-  json_annotation: ^4.8.0
-  json_serializable: ^6.6.1
+  freezed: ^3.2.3
+  freezed_annotation: ^3.1.0
+  json_annotation: ^4.9.0
+  json_serializable: ^6.11.2
   mocktail: ^1.0.0
   path: ^1.8.3
-  test: ^1.22.2
-  uuid: ^3.0.7
+  test: ^1.28.0
+  uuid: ^4.5.2
 
 screenshots:
   - description: The hydrated bloc package logo.

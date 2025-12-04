@@ -5,8 +5,9 @@ import '../blocs.dart';
 
 EventTransformer<CounterEvent> customTransformer() {
   return (events, mapper) {
-    final nonDebounceStream =
-        events.where((event) => event != CounterEvent.increment);
+    final nonDebounceStream = events.where(
+      (event) => event != CounterEvent.increment,
+    );
 
     final debounceStream = events
         .where((event) => event == CounterEvent.increment)

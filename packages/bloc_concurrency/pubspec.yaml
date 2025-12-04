@@ -9,16 +9,16 @@ topics: [bloc, concurrency, state-management]
 funding: [https://github.com/sponsors/felangel]
 
 environment:
-  sdk: ">=2.14.0 <4.0.0"
+  sdk: ^3.10.1
 
 dependencies:
-  bloc: ^9.0.0
+  bloc: ^9.1.0
   stream_transform: ^2.0.0
 
 dev_dependencies:
   bloc_lint: ^0.3.2
   mocktail: ^1.0.0
-  test: ^1.17.0
+  test: ^1.28.0
 
 screenshots:
   - description: The bloc concurrency package logo.

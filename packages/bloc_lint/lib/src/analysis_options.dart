@@ -37,12 +37,11 @@ class AnalysisOptions {
       final options = AnalysisOptions.parse(file);
       for (final include in options.yaml.include ?? <String>[]) {
         final isPackageInclude = include.startsWith('package:');
-        final parsedOptions =
-            isPackageInclude
-                ? AnalysisOptions.tryInclude(include, cwd: root)
-                : AnalysisOptions.tryParse(
-                  File(p.normalize(p.join(options.file.parent.path, include))),
-                );
+        final parsedOptions = isPackageInclude
+            ? AnalysisOptions.tryInclude(include, cwd: root)
+            : AnalysisOptions.tryParse(
+                File(p.normalize(p.join(options.file.parent.path, include))),
+              );
         if (parsedOptions == null) continue;
         final resolved = recursiveResolver(
           parsedOptions.file,
@@ -201,7 +200,8 @@ enum LinterRuleState {
   warning('warning'),
 
   /// The rule is enabled with a severity of hint.
-  hint('hint');
+  hint('hint')
+  ;
 
   const LinterRuleState(this.value);
 
