@@ -110,7 +110,7 @@ mehr über die Kernkomponente des Bloc-Packages zu lernen: einen `Cubit`.
 
 ## Cubit
 
-Ein `Cubit` ist eine Klasse, die `BlocBase` extended und erweitert werden kann, um jeden
+Ein `Cubit` ist eine Klasse, die `BlocBase` erweitert und erweitert werden kann, um jeden
 Typ von State zu verwalten.
 
 ![Cubit Architecture](~/assets/concepts/cubit_architecture_full.png)
@@ -300,7 +300,7 @@ Wenn wir das gleiche Programm erneut ausführen, sollten wir folgende Ausgabe se
 ## Bloc
 
 Ein `Bloc` ist eine fortgeschrittenere Klasse, die sich auf `Events` verlässt, um `State`-
-Änderungen auszulösen, anstatt auf Funktionen. `Bloc` extended auch `BlocBase`, was bedeutet, dass es eine
+Änderungen auszulösen, anstatt auf Funktionen. `Bloc` erweitert auch `BlocBase`, was bedeutet, dass es eine
 ähnliche öffentliche API wie `Cubit` hat. Anstatt jedoch eine `function` auf einem
 `Bloc` aufzurufen und direkt einen neuen `state` zu emittieren, empfangen `Blocs` `events` und konvertieren
 die eingehenden `events` in ausgehende `states`.
@@ -348,7 +348,7 @@ Event können wir auf den aktuellen State des Bloc über den `state` Getter zugr
 
 :::note
 
-Da die `Bloc` Klasse `BlocBase` extended, haben wir Zugriff auf den aktuellen State
+Da die `Bloc` Klasse `BlocBase` erweitert, haben wir Zugriff auf den aktuellen State
 des Bloc zu jedem Zeitpunkt über den `state` Getter, genau wie in `Cubit`.
 
 :::
@@ -411,7 +411,7 @@ das Abonnement nicht sofort zu kündigen.
 
 ### Beobachten eines Bloc
 
-Da `Bloc` `BlocBase` extended, können wir alle State-Änderungen für einen `Bloc`
+Da `Bloc` `BlocBase` erweitert, können wir alle State-Änderungen für einen `Bloc`
 mit `onChange` beobachten.
 
 <CounterBlocOnChangeSnippet />
