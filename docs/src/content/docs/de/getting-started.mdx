@@ -1,0 +1,41 @@
+---
+title: Erste Schritte
+description: Alles, was du brauchst, um mit Bloc zu starten.
+---
+
+import InstallationTabs from '~/components/getting-started/InstallationTabs.astro';
+import ImportTabs from '~/components/getting-started/ImportTabs.astro';
+
+## Packages
+
+Das Bloc-Ökosystem besteht aus mehreren Packages, die unten aufgeführt sind:
+
+| Package                                                                                    | Beschreibung                | Link                                                                                                           |
+| ------------------------------------------------------------------------------------------ | --------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| [angular_bloc](https://github.com/felangel/bloc/tree/master/packages/angular_bloc)         | AngularDart Komponenten     | [![pub package](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dev/packages/angular_bloc)         |
+| [bloc](https://github.com/felangel/bloc/tree/master/packages/bloc)                         | Core Dart APIs              | [![pub package](https://img.shields.io/pub/v/bloc.svg)](https://pub.dev/packages/bloc)                         |
+| [bloc_concurrency](https://github.com/felangel/bloc/tree/master/packages/bloc_concurrency) | Event Transformers          | [![pub package](https://img.shields.io/pub/v/bloc_concurrency.svg)](https://pub.dev/packages/bloc_concurrency) |
+| [bloc_lint](https://github.com/felangel/bloc/tree/master/packages/bloc_lint)               | Custom Linter               | [![pub package](https://img.shields.io/pub/v/bloc_lint.svg)](https://pub.dev/packages/bloc_lint)               |
+| [bloc_test](https://github.com/felangel/bloc/tree/master/packages/bloc_test)               | Testing APIs                | [![pub package](https://img.shields.io/pub/v/bloc_test.svg)](https://pub.dev/packages/bloc_test)               |
+| [bloc_tools](https://github.com/felangel/bloc/tree/master/packages/bloc_tools)             | Command-line Tools          | [![pub package](https://img.shields.io/pub/v/bloc_tools.svg)](https://pub.dev/packages/bloc_tools)             |
+| [flutter_bloc](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc)         | Flutter Widgets             | [![pub package](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dev/packages/flutter_bloc)         |
+| [hydrated_bloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc)       | Caching/Persistence Support | [![pub package](https://img.shields.io/pub/v/hydrated_bloc.svg)](https://pub.dev/packages/hydrated_bloc)       |
+| [replay_bloc](https://github.com/felangel/bloc/tree/master/packages/replay_bloc)           | Undo/Redo Support           | [![pub package](https://img.shields.io/pub/v/replay_bloc.svg)](https://pub.dev/packages/replay_bloc)           |
+
+## Installation
+
+<InstallationTabs />
+
+:::note
+
+Um Bloc verwenden zu können, musst du das
+[Dart SDK](https://dart.dev/get-dart) auf deinem Computer installiert haben.
+
+:::
+
+## Imports
+
+Nachdem wir Bloc erfolgreich installiert haben, können wir unsere `main.dart` erstellen und
+das entsprechende `bloc` Package importieren.
+
+<ImportTabs />
