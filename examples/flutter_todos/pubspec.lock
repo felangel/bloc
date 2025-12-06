@@ -46,7 +46,7 @@ packages:
       path: "../../packages/bloc_lint"
       relative: true
     source: path
-    version: "0.3.3"
+    version: "0.3.5"
   bloc_test:
     dependency: "direct dev"
     description:
@@ -748,5 +748,5 @@ packages:
     source: hosted
     version: "3.1.3"
 sdks:
-  dart: ">=3.10.0-290.4.beta <4.0.0"
+  dart: ">=3.10.0 <4.0.0"
   flutter: ">=3.35.0"
