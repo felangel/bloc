@@ -1,0 +1,87 @@
+---
+template: splash
+title: Bloc স্টেট ম্যানেজমেন্ট লাইব্রেরি
+description:
+  Bloc স্টেট ম্যানেজমেন্ট লাইব্রেরির অফিসিয়াল ডকুমেন্টেশন। Dart, Flutter, এবং
+  AngularDart-এর জন্য সাপোর্ট। উদাহরণ এবং টিউটোরিয়াল অন্তর্ভুক্ত।
+banner:
+  content: |
+    ✨ ভিজিট করুন
+    <a href="https://shop.bloclibrary.dev">Bloc Shop</a> ✨
+editUrl: false
+lastUpdated: false
+hero:
+  title: Bloc <sup><span style="font-size:0.4em">v9.1.0</span></sup>
+  tagline: Dart-এর জন্য একটি পূর্বানুমানযোগ্য স্টেট ম্যানেজমেন্ট লাইব্রেরি।
+  image:
+    alt: Bloc লোগো
+    file: ~/assets/bloc.svg
+  actions:
+    - text: শুরু করুন
+      link: /bn/getting-started/
+      variant: primary
+      icon: rocket
+    - text: GitHub-এ দেখুন
+      link: https://github.com/felangel/bloc
+      icon: github
+      variant: secondary
+---
+
+import { CardGrid } from '@astrojs/starlight/components';
+import SponsorsGrid from '~/components/landing/SponsorsGrid.astro';
+import Card from '~/components/landing/Card.astro';
+import ListCard from '~/components/landing/ListCard.astro';
+import SplitCard from '~/components/landing/SplitCard.astro';
+import Discord from '~/components/landing/Discord.astro';
+
+<SponsorsGrid />
+
+<hr />
+
+<CardGrid>
+
+<SplitCard title="শুরু করুন" icon="rocket">
+	```sh
+	# আপনার প্রজেক্টে bloc যুক্ত করুন।
+	dart pub add bloc
+	```
+
+আমাদের [গেটিং স্টার্টেড গাইড](/bn/getting-started)-এ ধাপে-ধাপে নির্দেশনা রয়েছে
+যা অনুসরণ করে আপনি কয়েক মিনিটেই Bloc ব্যবহার শুরু করতে পারবেন।
+
+</SplitCard>
+
+<Card title="একটি গাইডেড ট্যুর নিন" icon="star">
+	[অফিসিয়াল টিউটোরিয়ালগুলো](/bn/tutorials/flutter-counter) সম্পূর্ণ করুন যাতে
+	সেরা প্র্যাকটিস শিখতে পারেন এবং Bloc-চালিত বিভিন্ন ধরনের অ্যাপ তৈরি করতে
+	পারেন।
+</Card>
+
+<Card title="Bloc দিয়ে তৈরি করুন" icon="laptop">
+	উচ্চমানের, সম্পূর্ণ পরীক্ষিত [স্যাম্পল
+	অ্যাপ](https://github.com/felangel/bloc/tree/master/examples) অনুসন্ধান করুন —
+	যেমন counter, timer, infinite list, weather, todo এবং আরও অনেক কিছু!
+</Card>
+
+<ListCard title="শিখুন" icon="open-book">
+
+    - [কেন Bloc?](/bn/why-bloc)
+    - [মূল ধারণা](/bn/bloc-concepts)
+    - [আর্কিটেকচার](/bn/architecture)
+    - [টেস্টিং](/bn/testing)
+    - [নেমিং কনভেনশন](/bn/naming-conventions)
+    - [সাধারণ প্রশ্নোত্তর](/bn/faqs)
+
+</ListCard>
+
+  <ListCard title="ইন্টিগ্রেশনসমূহ" icon="puzzle">
+    - [VSCode ইন্টিগ্রেশন](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+    - [IntelliJ ইন্টিগ্রেশন](https://plugins.jetbrains.com/plugin/12129-bloc)
+    - [Neovim ইন্টিগ্রেশন](https://github.com/wa11breaker/flutter-bloc.nvim)
+    - [Mason CLI ইন্টিগ্রেশন](https://github.com/felangel/bloc/blob/master/bricks/README.md)
+    - [কাস্টম টেমপ্লেট](https://brickhub.dev/search?q=bloc)
+    - [ডেভেলপার টুলস](https://github.com/felangel/bloc/blob/master/packages/bloc_tools/README.md)
+  </ListCard>
+</CardGrid>
+
+<Discord />
