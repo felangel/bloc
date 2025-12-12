@@ -1,3 +1,11 @@
+# 0.3.6
+
+- feat: upgrade to latest analyzer frontend
+
+# 0.3.5
+
+- fix: adjust upper bound for `_fe_analyzer_shared`
+
 # 0.3.4
 
 - chore: various dependency upgrades

@@ -19,6 +19,7 @@ const locales = {
 	'zh-cn': { label: '简体中文', lang: 'zh-CN' },
 	ar: { label: 'العربية', lang: 'ar', dir: 'rtl' },
 	fa: { label: 'فارسی', lang: 'fa', dir: 'rtl' },
+	bn: { label: 'বাংলা', lang: 'bn' },
 };
 
 // https://astro.build/config
@@ -59,7 +60,7 @@ export default defineConfig({
 								'zh-CN': '快速入门',
 								fa: 'شروع شدن',
 								es: 'Empezando',
-								ja: 'まずはじめに',
+								ja: 'はじめに',
 							},
 						},
 						{
@@ -69,7 +70,7 @@ export default defineConfig({
 								'zh-CN': '为什么用 Bloc?',
 								fa: 'چرا Bloc؟',
 								es: '¿Por qué Bloc?',
-								ja: 'なぜBlocを使う?',
+								ja: 'なぜBloc？',
 							},
 						},
 						{
@@ -79,7 +80,7 @@ export default defineConfig({
 								'zh-CN': 'Bloc 核心概念',
 								fa: 'مفاهیم Bloc',
 								es: 'Conceptos de Bloc',
-								ja: 'Blocコンセプト',
+								ja: 'Blocのコンセプト',
 							},
 						},
 						{
@@ -89,7 +90,7 @@ export default defineConfig({
 								'zh-CN': 'Flutter Bloc 核心概念',
 								fa: 'مفاهیم بلوک فلاتر',
 								es: 'Conceptos de Flutter Bloc',
-								ja: 'Flutter Blocコンセプト',
+								ja: 'Flutter Blocのコンセプト',
 							},
 						},
 						{
@@ -103,7 +104,7 @@ export default defineConfig({
 							translations: {
 								fa: 'وضعیت (State) مدل سازی',
 								es: 'Modelando el Estado',
-								ja: 'モデリング状態',
+								ja: '状態のモデリング',
 							},
 						},
 						{
