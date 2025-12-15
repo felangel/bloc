@@ -267,7 +267,7 @@ Repository‌هایی که منابع را مدیریت می‌کنند که ب�
 
 #### کاربرد
 
-✅ **انجام دهید:** از `context.read` برای افزودن event‌ها در callback‌ها استفاده کنید.
+✅ **انجام دهید:** از `context.read` برای افزودن رویدادها در callback‌ها استفاده کنید.
 
 ```dart
 onPressed() {
@@ -303,8 +303,7 @@ Widget build(BuildContext context) {
 
 #### کاربرد
 
-✅ **DO** use `BlocBuilder` instead of `context.watch` to explicitly scope
-rebuilds.
+✅ **انجام دهید:** از `BlocBuilder` به جای `context.watch` برای تعیین محدوده دوباره‌سازی‌ها استفاده کنید.
 
 ```dart
 Widget build(BuildContext context) {
@@ -321,7 +320,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-Alternatively, use a `Builder` to scope rebuilds.
+به طور جایگزین، از `Builder` برای تعیین محدوده دوباره‌سازی‌ها استفاده کنید.
 
 ```dart
 @override
@@ -340,7 +339,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-✅ **DO** use `Builder` and `context.watch` as `MultiBlocBuilder`.
+✅ **انجام دهید:** از `Builder` و `context.watch` به عنوان `MultiBlocBuilder` استفاده کنید.
 
 ```dart
 Builder(
@@ -354,8 +353,7 @@ Builder(
 );
 ```
 
-❌ **AVOID** using `context.watch` when the parent widget in the `build` method
-doesn't depend on the state.
+❌ **پرهیز کنید:** استفاده از `context.watch` وقتی ویجت والد در متد `build` به حالت وابسته نیست.
 
 ```dart
 @override
@@ -373,17 +371,13 @@ Widget build(BuildContext context) {
 
 :::caution
 
-Using `context.watch` at the root of the `build` method will result in the
-entire widget being rebuilt when the bloc state changes.
+استفاده از `context.watch` در ریشه متد `build` باعث می‌شود کل ویجت دوباره ساخته شود وقتی حالت bloc تغییر کند.
 
 :::
 
 ### context.select
 
-Just like `context.watch<T>()`, `context.select<T, R>(R function(T value))`
-provides the closest ancestor instance of type `T` and listens to changes on
-`T`. Unlike `context.watch`, `context.select` allows you listen for changes in a
-smaller part of a state.
+مانند `context.watch<T>()`، `context.select<T, R>(R function(T value))` نزدیک‌ترین نمونه اجداد از نوع `T` را ارائه می‌دهد و به تغییرات در `T` گوش می‌دهد. بر خلاف `context.watch`، `context.select` به شما اجازه می‌دهد تا به تغییرات در بخشی کوچک‌تر از حالت گوش دهید.
 
 ```dart
 Widget build(BuildContext context) {
@@ -392,13 +386,11 @@ Widget build(BuildContext context) {
 }
 ```
 
-The above will only rebuild the widget when the property `name` of the
-`ProfileBloc`'s state changes.
+بالا فقط ویجت را دوباره می‌سازد وقتی ویژگی `name` از حالت `ProfileBloc` تغییر کند.
 
-#### Usage
+#### کاربرد
 
-✅ **DO** use `BlocSelector` instead of `context.select` to explicitly scope
-rebuilds.
+✅ **انجام دهید:** از `BlocSelector` به جای `context.select` برای تعیین محدوده دوباره‌سازی‌ها استفاده کنید.
 
 ```dart
 Widget build(BuildContext context) {
@@ -416,7 +408,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-Alternatively, use a `Builder` to scope rebuilds.
+به طور جایگزین، از `Builder` برای تعیین محدوده دوباره‌سازی‌ها استفاده کنید.
 
 ```dart
 @override
@@ -435,8 +427,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-❌ **AVOID** using `context.select` when the parent widget in a build method
-doesn't depend on the state.
+❌ **پرهیز کنید:** استفاده از `context.select` وقتی ویجت والد در متد build به حالت وابسته نیست.
 
 ```dart
 @override
@@ -454,7 +445,6 @@ Widget build(BuildContext context) {
 
 :::caution
 
-Using `context.select` at the root of the `build` method will result in the
-entire widget being rebuilt when the selection changes.
+استفاده از `context.select` در ریشه متد `build` باعث می‌شود کل ویجت دوباره ساخته شود وقتی انتخاب تغییر کند.
 
 :::
