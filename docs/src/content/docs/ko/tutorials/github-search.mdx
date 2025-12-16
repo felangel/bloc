@@ -1,0 +1,538 @@
+---
+title: GitHub 검색
+description: Flutter와 AngularDart에서 bloc을 사용하여 GitHub 검색 앱을 구현하는 심층 가이드.
+sidebar:
+  order: 9
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import SetupSnippet from '~/components/tutorials/github-search/SetupSnippet.astro';
+import DartPubGetSnippet from '~/components/tutorials/github-search/DartPubGetSnippet.astro';
+import FlutterCreateSnippet from '~/components/tutorials/github-search/FlutterCreateSnippet.astro';
+import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.astro';
+import StagehandSnippet from '~/components/tutorials/github-search/StagehandSnippet.astro';
+import ActivateStagehandSnippet from '~/components/tutorials/github-search/ActivateStagehandSnippet.astro';
+
+![advanced](https://img.shields.io/badge/level-advanced-red.svg)
+
+이번 튜토리얼에서는 Flutter와 AngularDart에서 GitHub 검색 앱을 만들어 두 프로젝트 간에 데이터 레이어와 비즈니스 로직 레이어를 어떻게 공유할 수 있는지 보여줍니다.
+
+![demo](~/assets/tutorials/flutter-github-search.gif)
+
+![demo](~/assets/tutorials/ngdart-github-search.gif)
+
+## 주요 주제
+
+- [BlocProvider](/ko/flutter-bloc-concepts#blocprovider), 자식 위젯에 bloc을 제공하는 Flutter 위젯.
+- [BlocBuilder](/ko/flutter-bloc-concepts#blocbuilder), 새로운 상태에 따라 위젯을 빌드하는 Flutter 위젯.
+- Bloc 대신 Cubit 사용하기. [차이점은 무엇인가요?](/ko/bloc-concepts#cubit-vs-bloc)
+- [Equatable](/ko/faqs#when-to-use-equatable)을 사용하여 불필요한 리빌드 방지.
+- [`bloc_concurrency`](https://pub.dev/packages/bloc_concurrency)와 함께 커스텀 `EventTransformer` 사용.
+- `http` 패키지를 사용한 네트워크 요청.
+
+## Common GitHub Search 라이브러리
+
+Common GitHub Search 라이브러리는 AngularDart와 Flutter 간에 공유될 모델, 데이터 프로바이더, 리포지토리, 그리고 bloc을 포함합니다.
+
+### 설정
+
+먼저 애플리케이션을 위한 새 디렉토리를 만듭니다.
+
+<SetupSnippet />
+
+:::note
+
+`common_github_search` 디렉토리가 공유 라이브러리를 포함할 것입니다.
+
+:::
+
+필요한 의존성이 담긴 `pubspec.yaml`을 생성해야 합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/pubspec.yaml"
+	title="common_github_search/pubspec.yaml"
+/>
+
+마지막으로 의존성을 설치합니다.
+
+<DartPubGetSnippet />
+
+프로젝트 설정이 완료되었습니다! 이제 `common_github_search` 패키지를 만들어 봅시다.
+
+### Github 클라이언트
+
+`GithubClient`는 [GitHub API](https://developer.github.com/v3/)에서 원시 데이터를 제공합니다.
+
+:::note
+
+반환되는 데이터의 샘플은 [여기](https://api.github.com/search/repositories?q=dartlang)에서 확인할 수 있습니다.
+
+:::
+
+`github_client.dart`를 생성합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/github_client.dart"
+	title="common_github_search/lib/src/github_client.dart"
+/>
+
+:::note
+
+`GithubClient`는 단순히 Github의 Repository Search API에 네트워크 요청을 하고 결과를 `SearchResult` 또는 `SearchResultError`로 변환하여 `Future`로 반환합니다.
+
+:::
+
+:::note
+
+`GithubClient` 구현은 아직 구현하지 않은 `SearchResult.fromJson`에 의존합니다.
+
+:::
+
+다음으로 `SearchResult`와 `SearchResultError` 모델을 정의해야 합니다.
+
+#### Search Result 모델
+
+사용자의 쿼리를 기반으로 한 `SearchResultItems` 리스트를 나타내는 `search_result.dart`를 생성합니다:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/models/search_result.dart"
+	title="lib/src/models/search_result.dart"
+/>
+
+:::note
+
+`SearchResult` 구현은 아직 구현하지 않은 `SearchResultItem.fromJson`에 의존합니다.
+
+:::
+
+:::note
+
+모델에서 사용하지 않을 프로퍼티는 포함하지 않습니다.
+
+:::
+
+#### Search Result Item 모델
+
+다음으로 `search_result_item.dart`를 생성합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/models/search_result_item.dart"
+	title="lib/src/models/search_result_item.dart"
+/>
+
+:::note
+
+마찬가지로 `SearchResultItem` 구현은 아직 구현하지 않은 `GithubUser.fromJson`에 의존합니다.
+
+:::
+
+#### GitHub User 모델
+
+다음으로 `github_user.dart`를 생성합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/models/github_user.dart"
+	title="lib/src/models/github_user.dart"
+/>
+
+여기까지 `SearchResult`와 그 의존성 구현을 완료했습니다. 이제 `SearchResultError`로 넘어갑니다.
+
+#### Search Result Error 모델
+
+`search_result_error.dart`를 생성합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/models/search_result_error.dart"
+	title="lib/src/models/search_result_error.dart"
+/>
+
+`GithubClient`가 완성되었으니 다음으로 성능 최적화를 위해 [메모이제이션](https://en.wikipedia.org/wiki/Memoization)을 담당할 `GithubCache`로 넘어갑니다.
+
+### GitHub Cache
+
+`GithubCache`는 모든 이전 쿼리를 기억하여 GitHub API에 불필요한 네트워크 요청을 피하는 역할을 합니다. 이를 통해 애플리케이션의 성능도 향상됩니다.
+
+`github_cache.dart`를 생성합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/github_cache.dart"
+	title="lib/src/github_cache.dart"
+/>
+
+이제 `GithubRepository`를 만들 준비가 되었습니다!
+
+### GitHub Repository
+
+Github Repository는 데이터 레이어(`GithubClient`)와 비즈니스 로직 레이어(`Bloc`) 사이에 추상화를 만드는 역할을 합니다. 여기서 `GithubCache`도 사용하게 됩니다.
+
+`github_repository.dart`를 생성합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/github_repository.dart"
+	title="lib/src/github_repository.dart"
+/>
+
+:::note
+
+`GithubRepository`는 `GithubCache`와 `GithubClient`에 의존하며 기저 구현을 추상화합니다. 애플리케이션은 데이터가 어디서 어떻게 가져와지는지 알 필요가 없습니다. 인터페이스를 변경하지 않는 한 클라이언트 코드를 변경하지 않고도 리포지토리의 동작 방식을 언제든지 바꿀 수 있습니다.
+
+:::
+
+여기까지 데이터 프로바이더 레이어와 리포지토리 레이어를 완성했으니 이제 비즈니스 로직 레이어로 넘어갑니다.
+
+### GitHub Search 이벤트
+
+Bloc은 사용자가 리포지토리 이름을 입력하면 알림을 받게 되며, 이를 `TextChanged` `GithubSearchEvent`로 나타냅니다.
+
+`github_search_event.dart`를 생성합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/github_search_bloc/github_search_event.dart"
+	title="lib/src/github_search_bloc/github_search_event.dart"
+/>
+
+:::note
+
+`GithubSearchEvent`의 인스턴스를 비교할 수 있도록 [`Equatable`](https://pub.dev/packages/equatable)을 상속합니다. 기본적으로 동등 연산자는 this와 other가 동일한 인스턴스인 경우에만 true를 반환합니다.
+
+:::
+
+### Github Search 상태
+
+프레젠테이션 레이어가 적절하게 표시되려면 여러 정보가 필요합니다:
+
+- `SearchStateEmpty` - 사용자가 아무 입력도 하지 않았음을 프레젠테이션 레이어에 알립니다.
+
+- `SearchStateLoading` - 로딩 인디케이터를 표시해야 함을 프레젠테이션 레이어에 알립니다.
+
+- `SearchStateSuccess` - 표시할 데이터가 있음을 프레젠테이션 레이어에 알립니다.
+
+  - `items` - 표시될 `List<SearchResultItem>`입니다.
+
+- `SearchStateError` - 리포지토리를 가져오는 중 에러가 발생했음을 프레젠테이션 레이어에 알립니다.
+
+  - `error` - 발생한 정확한 에러입니다.
+
+이제 `github_search_state.dart`를 생성하고 다음과 같이 구현합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/github_search_bloc/github_search_state.dart"
+	title="lib/src/github_search_bloc/github_search_state.dart"
+/>
+
+:::note
+
+`GithubSearchState`의 인스턴스를 비교할 수 있도록 [`Equatable`](https://pub.dev/packages/equatable)을 상속합니다. 기본적으로 동등 연산자는 this와 other가 동일한 인스턴스인 경우에만 true를 반환합니다.
+
+:::
+
+이벤트와 상태가 구현되었으니 이제 `GithubSearchBloc`을 만들 수 있습니다.
+
+### GitHub Search Bloc
+
+`github_search_bloc.dart`를 생성합니다:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/github_search_bloc/github_search_bloc.dart"
+	title="lib/src/github_search_bloc/github_search_bloc.dart"
+/>
+
+:::note
+
+`GithubSearchBloc`은 `GithubSearchEvent`를 `GithubSearchState`로 변환하며 `GithubRepository`에 의존합니다.
+
+:::
+
+:::note
+
+`GithubSearchEvents`를 [디바운스](https://pub.dev/documentation/stream_transform/latest/stream_transform/RateLimit/debounce.html)하기 위해 커스텀 `EventTransformer`를 생성합니다. `Cubit` 대신 `Bloc`을 만든 이유 중 하나가 바로 스트림 트랜스포머를 활용하기 위해서입니다.
+
+:::
+
+`common_github_search` 패키지가 완성되었습니다. 최종 결과물은 [여기](https://github.com/felangel/bloc/tree/master/examples/github_search/common_github_search)에서 확인할 수 있습니다.
+
+다음으로 Flutter 구현을 진행합니다.
+
+## Flutter GitHub Search
+
+Flutter Github Search는 `common_github_search`의 모델, 데이터 프로바이더, 리포지토리, bloc을 재사용하여 Github Search를 구현하는 Flutter 애플리케이션입니다.
+
+### 설정
+
+`github_search` 디렉토리 내에서 `common_github_search`와 같은 레벨에 새 Flutter 프로젝트를 생성합니다.
+
+<FlutterCreateSnippet />
+
+다음으로 필요한 모든 의존성을 포함하도록 `pubspec.yaml`을 업데이트합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/flutter_github_search/pubspec.yaml"
+	title="flutter_github_search/pubspec.yaml"
+/>
+
+:::note
+
+새로 만든 `common_github_search` 라이브러리를 의존성으로 포함하고 있습니다.
+
+:::
+
+이제 의존성을 설치합니다.
+
+<FlutterPubGetSnippet />
+
+프로젝트 설정이 완료되었습니다. `common_github_search` 패키지가 데이터 레이어와 비즈니스 로직 레이어를 포함하고 있으므로 프레젠테이션 레이어만 구현하면 됩니다.
+
+### Search Form
+
+`_SearchBar`와 `_SearchBody` 위젯이 있는 폼을 만들어야 합니다.
+
+- `_SearchBar`는 사용자 입력을 받는 역할을 합니다.
+- `_SearchBody`는 검색 결과, 로딩 인디케이터, 에러를 표시하는 역할을 합니다.
+
+`search_form.dart`를 생성합니다.
+
+`SearchForm`은 `_SearchBar`와 `_SearchBody` 위젯을 렌더링하는 `StatelessWidget`입니다.
+
+`_SearchBar`도 `StatefulWidget`인데, 사용자가 입력한 내용을 추적하기 위해 자체 `TextEditingController`를 유지해야 하기 때문입니다.
+
+`_SearchBody`는 검색 결과, 에러, 로딩 인디케이터를 표시하는 `StatelessWidget`입니다. `GithubSearchBloc`의 소비자가 됩니다.
+
+상태가 `SearchStateSuccess`이면 다음에 구현할 `_SearchResults`를 렌더링합니다.
+
+`_SearchResults`는 `List<SearchResultItem>`을 받아 `_SearchResultItems` 리스트로 표시하는 `StatelessWidget`입니다.
+
+`_SearchResultItem`은 단일 검색 결과의 정보를 렌더링하는 `StatelessWidget`입니다. 사용자 상호작용을 처리하고 탭 시 리포지토리 URL로 이동하는 역할도 합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/flutter_github_search/lib/search_form.dart"
+	title="flutter_github_search/lib/search_form.dart"
+/>
+
+:::note
+
+`_SearchBar`는 `context.read<GithubSearchBloc>()`을 통해 `GitHubSearchBloc`에 접근하고 bloc에 `TextChanged` 이벤트를 알립니다.
+
+:::
+
+:::note
+
+`_SearchBody`는 상태 변화에 따라 리빌드하기 위해 `BlocBuilder`를 사용합니다. `BlocBuilder` 객체의 bloc 파라미터가 생략되었으므로 `BlocBuilder`는 `BlocProvider`와 현재 `BuildContext`를 사용하여 자동으로 조회합니다. 더 자세한 내용은 [여기](/ko/flutter-bloc-concepts#blocbuilder)를 참고하세요.
+
+:::
+
+:::note
+
+스크롤 가능한 `_SearchResultItem` 리스트를 구성하기 위해 `ListView.builder`를 사용합니다.
+
+:::
+
+:::note
+
+외부 URL을 열기 위해 [url_launcher](https://pub.dev/packages/url_launcher) 패키지를 사용합니다.
+
+:::
+
+### 통합하기
+
+이제 `main.dart`에서 메인 앱을 구현하기만 하면 됩니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/flutter_github_search/lib/main.dart"
+	title="flutter_github_search/lib/main.dart"
+/>
+
+:::note
+
+`GithubRepository`는 `main`에서 생성되어 `App`에 주입됩니다. `SearchForm`은 `GithubSearchBloc`의 인스턴스를 초기화, 종료하고 `SearchForm` 위젯과 그 자식들이 사용할 수 있도록 하는 `BlocProvider`로 감싸져 있습니다.
+
+:::
+
+이것이 전부입니다! [bloc](https://pub.dev/packages/bloc)과 [flutter_bloc](https://pub.dev/packages/flutter_bloc) 패키지를 사용하여 Flutter에서 GitHub 검색 앱을 성공적으로 구현했고, 프레젠테이션 레이어와 비즈니스 로직을 성공적으로 분리했습니다.
+
+전체 소스 코드는 [여기](https://github.com/felangel/bloc/tree/master/examples/github_search/flutter_github_search)에서 확인할 수 있습니다.
+
+마지막으로 AngularDart GitHub Search 앱을 만들어 봅시다.
+
+## AngularDart GitHub Search
+
+AngularDart GitHub Search는 `common_github_search`의 모델, 데이터 프로바이더, 리포지토리, bloc을 재사용하여 Github Search를 구현하는 AngularDart 애플리케이션입니다.
+
+### 설정
+
+`common_github_search`와 같은 레벨의 github_search 디렉토리에 새 AngularDart 프로젝트를 생성합니다.
+
+<StagehandSnippet />
+
+:::note
+
+`stagehand`는 다음 명령으로 설치할 수 있습니다:
+
+<ActivateStagehandSnippet />
+:::
+
+그런 다음 `pubspec.yaml`의 내용을 다음으로 교체합니다:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/pubspec.yaml"
+	title="angular_github_search/pubspec.yaml"
+/>
+
+### Search Form
+
+Flutter 앱과 마찬가지로 `SearchBar`와 `SearchBody` 컴포넌트가 있는 `SearchForm`을 만들어야 합니다.
+
+`SearchForm` 컴포넌트는 `GithubSearchBloc`을 생성하고 닫아야 하므로 `OnInit`과 `OnDestroy`를 구현합니다.
+
+- `SearchBar`는 사용자 입력을 받는 역할을 합니다.
+- `SearchBody`는 검색 결과, 로딩 인디케이터, 에러를 표시하는 역할을 합니다.
+
+`search_form_component.dart`를 생성합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_form_component.dart"
+	title="angular_github_search/lib/src/search_form/search_form_component.dart"
+/>
+
+:::note
+
+`GithubRepository`가 `SearchFormComponent`에 주입됩니다.
+
+:::
+
+:::note
+
+`GithubSearchBloc`은 `SearchFormComponent`에서 생성되고 닫힙니다.
+
+:::
+
+템플릿(`search_form_component.html`)은 다음과 같습니다:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_form_component.html"
+	title="angular_github_search/lib/src/search_form/search_form_component.html"
+/>
+
+다음으로 `SearchBar` 컴포넌트를 구현합니다.
+
+### Search Bar
+
+`SearchBar`는 사용자 입력을 받고 `GithubSearchBloc`에 텍스트 변경을 알리는 컴포넌트입니다.
+
+`search_bar_component.dart`를 생성합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_bar/search_bar_component.dart"
+	title="angular_github_search/lib/src/search_form/search_bar/search_bar_component.dart"
+/>
+
+:::note
+
+`SearchBarComponent`는 bloc에 `TextChanged` 이벤트를 알리는 역할을 하므로 `GitHubSearchBloc`에 의존합니다.
+
+:::
+
+다음으로 `search_bar_component.html`을 생성합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_bar/search_bar_component.html"
+	title="angular_github_search/lib/src/search_form/search_bar/search_bar_component.html"
+/>
+
+`SearchBar`가 완성되었습니다. 이제 `SearchBody`로 넘어갑니다.
+
+### Search Body
+
+`SearchBody`는 검색 결과, 에러, 로딩 인디케이터를 표시하는 컴포넌트입니다. `GithubSearchBloc`의 소비자가 됩니다.
+
+`search_body_component.dart`를 생성합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_body/search_body_component.dart"
+	title="angular_github_search/lib/src/search_form/search_body/search_body_component.dart"
+/>
+
+:::note
+
+`SearchBodyComponent`는 `angular_bloc` bloc 파이프를 통해 `GithubSearchBloc`이 제공하는 `GithubSearchState`에 의존합니다.
+
+:::
+
+`search_body_component.html`을 생성합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_body/search_body_component.html"
+	title="angular_github_search/lib/src/search_form/search_body/search_body_component.html"
+/>
+
+상태가 `isSuccess`이면 `SearchResults`를 렌더링합니다. 다음에 구현해 봅시다.
+
+### Search Results
+
+`SearchResults`는 `List<SearchResultItem>`을 받아 `SearchResultItems` 리스트로 표시하는 컴포넌트입니다.
+
+`search_results_component.dart`를 생성합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_body/search_results/search_results_component.dart"
+	title="angular_github_search/lib/src/search_form/search_body/search_results/search_results_component.dart"
+/>
+
+다음으로 `search_results_component.html`을 생성합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_body/search_results/search_results_component.html"
+	title="angular_github_search/lib/src/search_form/search_body/search_results/search_results_component.html"
+/>
+
+:::note
+
+`SearchResultItem` 컴포넌트 리스트를 구성하기 위해 `ngFor`를 사용합니다.
+
+:::
+
+이제 `SearchResultItem`을 구현할 차례입니다.
+
+### Search Result Item
+
+`SearchResultItem`은 단일 검색 결과의 정보를 렌더링하는 컴포넌트입니다. 사용자 상호작용을 처리하고 탭 시 리포지토리 URL로 이동하는 역할도 합니다.
+
+`search_result_item_component.dart`를 생성합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_body/search_results/search_result_item/search_result_item_component.dart"
+	title="angular_github_search/lib/src/search_form/search_body/search_results/search_result_item/search_result_item_component.dart"
+/>
+
+그리고 `search_result_item_component.html`에 해당 템플릿을 작성합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_body/search_results/search_result_item/search_result_item_component.html"
+	title="angular_github_search/lib/src/search_form/search_body/search_results/search_result_item/search_result_item_component.html"
+/>
+
+### 통합하기
+
+모든 컴포넌트가 준비되었으니 이제 `app_component.dart`에서 통합합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/app_component.dart"
+	title="angular_github_search/lib/app_component.dart"
+/>
+
+:::note
+
+`AppComponent`에서 `GithubRepository`를 생성하고 `SearchForm` 컴포넌트에 주입합니다.
+
+:::
+
+이것이 전부입니다! `bloc`과 `angular_bloc` 패키지를 사용하여 AngularDart에서 GitHub 검색 앱을 성공적으로 구현했고, 프레젠테이션 레이어와 비즈니스 로직을 성공적으로 분리했습니다.
+
+전체 소스 코드는 [여기](https://github.com/felangel/bloc/tree/master/examples/github_search/angular_github_search)에서 확인할 수 있습니다.
+
+## 요약
+
+이번 튜토리얼에서는 Flutter와 AngularDart 앱을 만들면서 두 앱 간에 모든 모델, 데이터 프로바이더, bloc을 공유했습니다.
+
+실제로 두 번 작성해야 했던 것은 프레젠테이션 레이어(UI)뿐이며, 이는 효율성과 개발 속도 면에서 큰 장점입니다. 또한 웹 앱과 모바일 앱이 서로 다른 사용자 경험과 스타일을 갖는 것은 꽤 흔한 일인데, 이 접근 방식은 완전히 다르게 보이는 두 앱이 동일한 데이터와 비즈니스 로직 레이어를 공유하는 것이 얼마나 쉬운지 보여줍니다.
+
+전체 소스 코드는 [여기](https://github.com/felangel/bloc/tree/master/examples/github_search)에서 확인할 수 있습니다.
