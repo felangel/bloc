@@ -1,0 +1,479 @@
+---
+title: Flutter Login
+description: Bloc을 사용한 Flutter 로그인 플로우 튜토리얼입니다.
+sidebar:
+  order: 4
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import FlutterCreateSnippet from '~/components/tutorials/flutter-login/FlutterCreateSnippet.astro';
+import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.astro';
+
+![intermediate](https://img.shields.io/badge/level-intermediate-orange.svg)
+
+이 튜토리얼에서는 Bloc 라이브러리를 사용해서 Flutter에서 로그인 플로우를 만들어 봅니다.
+
+![demo](~/assets/tutorials/flutter-login.gif)
+
+## 핵심 주제
+
+- [BlocProvider](/ko/flutter-bloc-concepts#blocprovider)로 하위 위젯에 bloc 제공하기.
+- [context.read](/ko/flutter-bloc-concepts#contextread)로 이벤트 추가하기.
+- [Equatable](/ko/faqs#when-to-use-equatable)로 불필요한 rebuild 방지하기.
+- [RepositoryProvider](/ko/flutter-bloc-concepts#repositoryprovider)로 하위 위젯에 repository 제공하기.
+- [BlocListener](/ko/flutter-bloc-concepts#bloclistener)로 상태 변화에 반응하기.
+- [context.select](/ko/flutter-bloc-concepts#contextselect)로 bloc 상태의 일부에 따라 UI 업데이트하기.
+
+## 프로젝트 설정
+
+새로운 Flutter 프로젝트를 생성합니다.
+
+<FlutterCreateSnippet />
+
+의존성을 설치합니다.
+
+<FlutterPubGetSnippet />
+
+## Authentication Repository
+
+먼저 인증 도메인을 관리하는 `authentication_repository` 패키지를 만듭니다.
+
+프로젝트 루트에 모든 내부 패키지가 들어갈 `packages/authentication_repository` 디렉토리를 생성합니다.
+
+대략적으로 디렉토리 구조는 다음과 같습니다:
+
+```
+├── android
+├── ios
+├── lib
+├── packages
+│   └── authentication_repository
+└── test
+```
+
+다음으로 `authentication_repository` 패키지의 `pubspec.yaml`을 생성합니다:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/authentication_repository/pubspec.yaml"
+	title="packages/authentication_repository/pubspec.yaml"
+/>
+
+:::note
+
+`package:authentication_repository`는 외부 의존성이 없는 순수 Dart 패키지입니다.
+
+:::
+
+다음으로 `AuthenticationRepository` 클래스 자체를 `packages/authentication_repository/lib/src/authentication_repository.dart`에 구현합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/authentication_repository/lib/src/authentication_repository.dart"
+	title="packages/authentication_repository/lib/src/authentication_repository.dart"
+/>
+
+`AuthenticationRepository`는 사용자가 로그인하거나 로그아웃할 때 앱에 알리는 데 사용할 `AuthenticationStatus` 업데이트 `Stream`을 노출합니다.
+
+또한 단순화를 위해 stub으로 처리된 `logIn`과 `logOut` 메서드가 있지만, `FirebaseAuth`나 다른 인증 프로바이더로 쉽게 확장할 수 있습니다.
+
+:::note
+
+내부적으로 `StreamController`를 유지하고 있으므로 컨트롤러가 더 이상 필요하지 않을 때 닫을 수 있도록 `dispose` 메서드를 노출합니다.
+
+:::
+
+마지막으로 public exports를 포함할 `packages/authentication_repository/lib/authentication_repository.dart`를 생성합니다:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/authentication_repository/lib/authentication_repository.dart"
+	title="packages/authentication_repository/lib/authentication_repository.dart"
+/>
+
+`AuthenticationRepository`는 여기까지입니다. 다음으로 `UserRepository`를 만듭니다.
+
+## User Repository
+
+`AuthenticationRepository`처럼 `packages` 디렉토리 안에 `user_repository` 패키지를 만듭니다.
+
+```
+├── android
+├── ios
+├── lib
+├── packages
+│   ├── authentication_repository
+│   └── user_repository
+└── test
+```
+
+다음으로 `user_repository`의 `pubspec.yaml`을 생성합니다:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/user_repository/pubspec.yaml"
+	title="packages/user_repository/pubspec.yaml"
+/>
+
+`user_repository`는 사용자 도메인을 담당하고 현재 사용자와 상호작용하기 위한 API를 노출합니다.
+
+먼저 `packages/user_repository/lib/src/models/user.dart`에 user 모델을 정의합니다:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/user_repository/lib/src/models/user.dart"
+	title="packages/user_repository/lib/src/models/user.dart"
+/>
+
+단순화를 위해 user는 `id` 속성만 가지지만, 실제로는 `firstName`, `lastName`, `avatarUrl` 등의 추가 속성이 있을 수 있습니다.
+
+:::note
+
+[`package:equatable`](https://pub.dev/packages/equatable)을 사용해서 `User` 객체의 값 비교를 활성화합니다.
+
+:::
+
+다음으로 `packages/user_repository/lib/src/models`에 `models.dart`를 생성해서 단일 import로 여러 모델을 가져올 수 있도록 합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/user_repository/lib/src/models/models.dart"
+	title="packages/user_repository/lib/src/models/models.dart"
+/>
+
+이제 모델이 정의됐으니 `packages/user_repository/lib/src/user_repository.dart`에 `UserRepository` 클래스를 구현합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/user_repository/lib/src/user_repository.dart"
+	title="packages/user_repository/lib/src/user_repository.dart"
+/>
+
+이 간단한 예제에서 `UserRepository`는 현재 사용자를 가져오는 `getUser` 메서드 하나만 노출합니다. stub으로 처리됐지만 실제로는 백엔드에서 현재 사용자를 쿼리하는 곳입니다.
+
+`user_repository` 패키지가 거의 완료됐습니다. 남은 건 public exports를 정의하는 `packages/user_repository/lib`의 `user_repository.dart` 파일을 만드는 것뿐입니다:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/packages/user_repository/lib/user_repository.dart"
+	title="packages/user_repository/lib/user_repository.dart"
+/>
+
+이제 `authentication_repository`와 `user_repository` 패키지가 완료됐으니 Flutter 앱에 집중할 수 있습니다.
+
+## 의존성 설치
+
+프로젝트 루트에 생성된 `pubspec.yaml`을 업데이트합니다:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+다음을 실행해서 의존성을 설치합니다:
+
+<FlutterPubGetSnippet />
+
+## Authentication Bloc
+
+`AuthenticationBloc`은 (`AuthenticationRepository`가 노출하는) 인증 상태 변화에 반응하고 프레젠테이션 레이어에서 반응할 수 있는 상태를 emit합니다.
+
+`AuthenticationBloc` 구현은 `lib/authentication` 안에 있습니다. 인증을 앱 레이어의 기능으로 취급하기 때문입니다.
+
+```
+├── lib
+│   ├── app.dart
+│   ├── authentication
+│   │   ├── authentication.dart
+│   │   └── bloc
+│   │       ├── authentication_bloc.dart
+│   │       ├── authentication_event.dart
+│   │       └── authentication_state.dart
+│   ├── main.dart
+```
+
+:::tip
+
+[VSCode Extension](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)이나 [IntelliJ Plugin](https://plugins.jetbrains.com/plugin/12129-bloc)을 사용하면 bloc을 자동으로 생성할 수 있습니다.
+
+:::
+
+### authentication_event.dart
+
+`AuthenticationEvent` 인스턴스는 `AuthenticationBloc`의 입력이 되고, 처리되어 새로운 `AuthenticationState` 인스턴스를 emit하는 데 사용됩니다.
+
+이 앱에서 `AuthenticationBloc`은 두 가지 이벤트에 반응합니다:
+
+- `AuthenticationSubscriptionRequested`: bloc에게 `AuthenticationStatus` 스트림을 구독하라고 알리는 초기 이벤트
+- `AuthenticationLogoutPressed`: 사용자 로그아웃 액션을 bloc에 알림
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/authentication/bloc/authentication_event.dart"
+	title="lib/authentication/bloc/authentication_event.dart"
+/>
+
+다음으로 `AuthenticationState`를 살펴봅니다.
+
+### authentication_state.dart
+
+`AuthenticationState` 인스턴스는 `AuthenticationBloc`의 출력이 되고 프레젠테이션 레이어에서 사용됩니다.
+
+`AuthenticationState` 클래스는 세 개의 named constructor가 있습니다:
+
+- `AuthenticationState.unknown()`: bloc이 현재 사용자가 인증됐는지 아닌지 아직 모르는 기본 상태.
+
+- `AuthenticationState.authenticated()`: 사용자가 현재 인증된 상태.
+
+- `AuthenticationState.unauthenticated()`: 사용자가 현재 인증되지 않은 상태.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/authentication/bloc/authentication_state.dart"
+	title="lib/authentication/bloc/authentication_state.dart"
+/>
+
+`AuthenticationEvent`와 `AuthenticationState` 구현을 봤으니 이제 `AuthenticationBloc`을 살펴봅니다.
+
+### authentication_bloc.dart
+
+`AuthenticationBloc`은 사용자를 로그인 페이지에서 시작할지 홈 페이지에서 시작할지 같은 것들을 결정하는 데 사용되는 앱의 인증 상태를 관리합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/authentication/bloc/authentication_bloc.dart"
+	title="lib/authentication/bloc/authentication_bloc.dart"
+/>
+
+`AuthenticationBloc`은 `AuthenticationRepository`와 `UserRepository` 모두에 의존하고 초기 상태를 `AuthenticationState.unknown()`으로 정의합니다.
+
+생성자 본문에서 `AuthenticationEvent` 하위 클래스가 해당 이벤트 핸들러에 매핑됩니다.
+
+`_onSubscriptionRequested` 이벤트 핸들러에서 `AuthenticationBloc`은 `emit.onEach`를 사용해서 `AuthenticationRepository`의 `status` 스트림을 구독하고 각 `AuthenticationStatus`에 대한 응답으로 상태를 emit합니다.
+
+`emit.onEach`는 내부적으로 스트림 구독을 생성하고 `AuthenticationBloc`이나 `status` 스트림이 닫히면 취소를 처리합니다.
+
+`status` 스트림이 에러를 emit하면 `addError`가 에러와 stackTrace를 listen하고 있는 `BlocObserver`에 전달합니다.
+
+:::caution
+
+`onError`가 생략되면 `status` 스트림의 모든 에러는 처리되지 않은 것으로 간주되어 `onEach`에서 throw됩니다. 결과적으로 `status` 스트림에 대한 구독이 취소됩니다.
+
+:::
+
+:::tip
+
+[`BlocObserver`](/ko/bloc-concepts/#blocobserver-1)는 특히 분석과 크래시 리포팅에서 Bloc 이벤트, 에러, 상태 변화를 로깅하는 데 좋습니다.
+
+:::
+
+`status` 스트림이 `AuthenticationStatus.unknown`이나 `unauthenticated`를 emit하면 해당 `AuthenticationState`가 emit됩니다.
+
+`AuthenticationStatus.authenticated`가 emit되면 `AuthenticationBloc`이 `UserRepository`를 통해 사용자를 쿼리합니다.
+
+## main.dart
+
+기본 `main.dart`를 다음으로 교체합니다:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/main.dart"
+	title="lib/main.dart"
+/>
+
+## App
+
+`app.dart`는 전체 앱의 루트 `App` 위젯을 포함합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/app.dart"
+	title="lib/app.dart"
+/>
+
+:::note
+
+`app.dart`는 `App`과 `AppView` 두 부분으로 나뉩니다. `App`은 `AppView`가 사용할 `AuthenticationBloc`을 생성/제공하는 역할을 합니다. 이런 분리를 통해 나중에 `App`과 `AppView` 위젯 모두 쉽게 테스트할 수 있습니다.
+
+:::
+
+:::note
+
+`RepositoryProvider`는 `AuthenticationRepository`의 단일 인스턴스를 전체 앱에 제공하는 데 사용되고, 나중에 유용하게 쓰입니다.
+
+:::
+
+기본적으로 `BlocProvider`는 lazy라서 Bloc이 처음 접근될 때까지 `create`를 호출하지 않습니다. `AuthenticationBloc`은 항상 (`AuthenticationSubscriptionRequested` 이벤트를 통해) `AuthenticationStatus` 스트림을 즉시 구독해야 하므로 `lazy: false`를 설정해서 이 동작을 명시적으로 opt out합니다.
+
+`AppView`는 `NavigatorState`에 접근하는 데 사용되는 `GlobalKey`를 유지하기 때문에 `StatefulWidget`입니다. 기본적으로 `AppView`는 `SplashPage`(나중에 살펴봄)를 렌더링하고 `BlocListener`를 사용해서 `AuthenticationState` 변화에 따라 다른 페이지로 이동합니다.
+
+## Splash
+
+splash 기능은 앱이 시작될 때 사용자가 인증됐는지 판단하는 동안 렌더링될 간단한 뷰만 포함합니다.
+
+```
+lib
+└── splash
+    ├── splash.dart
+    └── view
+        └── splash_page.dart
+```
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/splash/view/splash_page.dart"
+	title="lib/splash/view/splash_page.dart"
+/>
+
+:::tip
+
+`SplashPage`는 static `Route`를 노출해서 `Navigator.of(context).push(SplashPage.route())`를 통해 쉽게 이동할 수 있습니다.
+
+:::
+
+## Login
+
+login 기능은 `LoginPage`, `LoginForm`, `LoginBloc`을 포함하고 사용자가 앱에 로그인하기 위해 username과 password를 입력할 수 있게 합니다.
+
+```
+├── lib
+│   ├── login
+│   │   ├── bloc
+│   │   │   ├── login_bloc.dart
+│   │   │   ├── login_event.dart
+│   │   │   └── login_state.dart
+│   │   ├── login.dart
+│   │   ├── models
+│   │   │   ├── models.dart
+│   │   │   ├── password.dart
+│   │   │   └── username.dart
+│   │   └── view
+│   │       ├── login_form.dart
+│   │       ├── login_page.dart
+│   │       └── view.dart
+```
+
+### Login Models
+
+[`package:formz`](https://pub.dev/packages/formz)를 사용해서 `username`과 `password`에 대한 재사용 가능하고 표준적인 모델을 만듭니다.
+
+#### Username
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/models/username.dart"
+	title="lib/login/models/username.dart"
+/>
+
+단순화를 위해 username이 비어있지 않은지만 검증하지만, 실제로는 특수 문자 사용, 길이 등을 적용할 수 있습니다.
+
+#### Password
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/models/password.dart"
+	title="lib/login/models/password.dart"
+/>
+
+마찬가지로 password가 비어있지 않은지 간단히 확인합니다.
+
+#### Models Barrel
+
+이전처럼 단일 import로 `Username`과 `Password` 모델을 쉽게 가져올 수 있도록 `models.dart` barrel이 있습니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/models/models.dart"
+	title="lib/login/models/models.dart"
+/>
+
+### Login Bloc
+
+`LoginBloc`은 `LoginForm`의 상태를 관리하고 username과 password 입력 유효성 검사와 폼 상태를 처리합니다.
+
+#### login_event.dart
+
+이 앱에는 세 가지 `LoginEvent` 타입이 있습니다:
+
+- `LoginUsernameChanged`: username이 수정됐음을 bloc에 알림.
+- `LoginPasswordChanged`: password가 수정됐음을 bloc에 알림.
+- `LoginSubmitted`: 폼이 submit됐음을 bloc에 알림.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/bloc/login_event.dart"
+	title="lib/login/bloc/login_event.dart"
+/>
+
+#### login_state.dart
+
+`LoginState`는 폼의 상태와 username, password 입력 상태를 포함합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/bloc/login_state.dart"
+	title="lib/login/bloc/login_state.dart"
+/>
+
+:::note
+
+`Username`과 `Password` 모델은 `LoginState`의 일부로 사용되고 status도 [package:formz](https://pub.dev/packages/formz)의 일부입니다.
+
+:::
+
+#### login_bloc.dart
+
+`LoginBloc`은 `LoginForm`의 사용자 상호작용에 반응하고 폼의 유효성 검사와 submit을 처리합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/bloc/login_bloc.dart"
+	title="lib/login/bloc/login_bloc.dart"
+/>
+
+`LoginBloc`은 폼이 submit될 때 `logIn`을 호출하므로 `AuthenticationRepository`에 의존합니다. bloc의 초기 상태는 `pure`로, 입력이나 폼이 아직 터치되거나 상호작용되지 않은 상태입니다.
+
+`username`이나 `password`가 바뀔 때마다 bloc은 `Username`/`Password` 모델의 dirty variant를 생성하고 `Formz.validate` API를 통해 폼 상태를 업데이트합니다.
+
+`LoginSubmitted` 이벤트가 추가되면 폼의 현재 상태가 valid인 경우 bloc이 `logIn`을 호출하고 요청 결과에 따라 상태를 업데이트합니다.
+
+다음으로 `LoginPage`와 `LoginForm`을 살펴봅니다.
+
+### Login Page
+
+`LoginPage`는 `Route`를 노출하고 `LoginBloc`을 생성해서 `LoginForm`에 제공하는 역할을 합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/view/login_page.dart"
+	title="lib/login/view/login_page.dart"
+/>
+
+:::note
+
+`context.read<AuthenticationRepository>()`를 사용해서 `BuildContext`를 통해 `AuthenticationRepository` 인스턴스를 찾습니다.
+
+:::
+
+### Login Form
+
+`LoginForm`은 사용자 이벤트를 `LoginBloc`에 알리고 `BlocBuilder`와 `BlocListener`를 사용해서 상태 변화에 반응합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/view/login_form.dart"
+	title="lib/login/view/login_form.dart"
+/>
+
+`BlocListener`는 로그인 submit이 실패하면 `SnackBar`를 표시하는 데 사용됩니다. 또한 `context.select`를 사용해서 각 위젯이 `LoginState`의 특정 부분에 효율적으로 접근하여 불필요한 rebuild를 방지합니다. `onChanged` 콜백은 username/password 변경을 `LoginBloc`에 알리는 데 사용됩니다.
+
+`_LoginButton` 위젯은 폼의 상태가 valid인 경우에만 활성화되고, 폼이 submit되는 동안에는 `CircularProgressIndicator`가 대신 표시됩니다.
+
+## Home
+
+성공적인 `logIn` 요청 시 `AuthenticationBloc`의 상태가 `authenticated`로 바뀌고 사용자는 user의 `id`와 로그아웃 버튼이 표시되는 `HomePage`로 이동합니다.
+
+```
+├── lib
+│   ├── home
+│   │   ├── home.dart
+│   │   └── view
+│   │       └── home_page.dart
+```
+
+### Home Page
+
+`HomePage`는 `context.select((AuthenticationBloc bloc) => bloc.state.user.id)`를 통해 현재 user id에 접근하고 `Text` 위젯을 통해 표시합니다. 또한 logout 버튼이 탭되면 `AuthenticationBloc`에 `AuthenticationLogoutPressed` 이벤트가 추가됩니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/home/view/home_page.dart"
+	title="lib/home/view/home_page.dart"
+/>
+
+:::note
+
+`context.select((AuthenticationBloc bloc) => bloc.state.user.id)`는 user id가 바뀌면 업데이트를 트리거합니다.
+
+:::
+
+이 시점에서 꽤 괜찮은 로그인 구현이 있고, Bloc을 사용해서 프레젠테이션 레이어와 비즈니스 로직 레이어를 분리했습니다.
+
+이 예제의 전체 소스 코드(단위 테스트와 위젯 테스트 포함)는 [여기](https://github.com/felangel/Bloc/tree/master/examples/flutter_login)에서 확인할 수 있습니다.
