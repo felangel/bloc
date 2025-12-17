@@ -11,17 +11,21 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
-이 튜토리얼에서는 Bloc 라이브러리를 사용해서 Flutter에서 Firebase 로그인 플로우를 만들어 봅니다.
+이 튜토리얼에서는 Bloc 라이브러리를 사용해서 Flutter에서 Firebase 로그인
+플로우를 만들어 봅니다.
 
 ![demo](~/assets/tutorials/flutter-firebase-login.gif)
 
 ## 핵심 주제
 
-- [BlocProvider](/ko/flutter-bloc-concepts#blocprovider)로 하위 위젯에 bloc 제공하기.
+- [BlocProvider](/ko/flutter-bloc-concepts#blocprovider)로 하위 위젯에 bloc
+  제공하기.
 - Bloc 대신 Cubit 사용하기. [차이점이 뭔가요?](/ko/bloc-concepts#cubit-vs-bloc)
 - [context.read](/ko/flutter-bloc-concepts#contextread)로 이벤트 추가하기.
-- [Equatable](/ko/faqs#when-to-use-equatable)로 불필요한 rebuild 방지하기.
-- [RepositoryProvider](/ko/flutter-bloc-concepts#repositoryprovider)로 하위 위젯에 repository 제공하기.
+- [Equatable](/ko/faqs#언제-equatable를-사용해야-하나요)로 불필요한 rebuild
+  방지하기.
+- [RepositoryProvider](/ko/flutter-bloc-concepts#repositoryprovider)로 하위
+  위젯에 repository 제공하기.
 - [BlocListener](/ko/flutter-bloc-concepts#bloclistener)로 상태 변화에 반응하기.
 - [context.read](/ko/flutter-bloc-concepts#contextselect)로 이벤트 추가하기.
 
@@ -31,17 +35,25 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 <FlutterCreateSnippet />
 
-[로그인 튜토리얼](/ko/tutorials/flutter-login)처럼 내부 패키지를 만들어서 앱 아키텍처를 더 잘 계층화하고, 명확한 경계를 유지하며, 재사용성과 테스트 용이성을 높입니다.
+[로그인 튜토리얼](/ko/tutorials/flutter-login)처럼 내부 패키지를 만들어서 앱
+아키텍처를 더 잘 계층화하고, 명확한 경계를 유지하며, 재사용성과 테스트 용이성을
+높입니다.
 
-이 경우 [firebase_auth](https://pub.dev/packages/firebase_auth)와 [google_sign_in](https://pub.dev/packages/google_sign_in) 패키지가 데이터 레이어가 되므로, 두 API 클라이언트의 데이터를 조합하는 `AuthenticationRepository`만 만들면 됩니다.
+이 경우 [firebase_auth](https://pub.dev/packages/firebase_auth)와
+[google_sign_in](https://pub.dev/packages/google_sign_in) 패키지가 데이터
+레이어가 되므로, 두 API 클라이언트의 데이터를 조합하는
+`AuthenticationRepository`만 만들면 됩니다.
 
 ## Authentication Repository
 
-`AuthenticationRepository`는 사용자 인증과 사용자 정보 가져오기의 내부 구현 세부사항을 추상화합니다. 지금은 Firebase와 통합하지만, 나중에 내부 구현을 바꿔도 앱에는 영향이 없습니다.
+`AuthenticationRepository`는 사용자 인증과 사용자 정보 가져오기의 내부 구현
+세부사항을 추상화합니다. 지금은 Firebase와 통합하지만, 나중에 내부 구현을 바꿔도
+앱에는 영향이 없습니다.
 
 ### 설정
 
-프로젝트 루트에 `packages/authentication_repository`와 `pubspec.yaml`을 생성합니다.
+프로젝트 루트에 `packages/authentication_repository`와 `pubspec.yaml`을
+생성합니다.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/authentication_repository/pubspec.yaml"
@@ -52,7 +64,9 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 <FlutterPubGetSnippet />
 
-대부분의 패키지처럼 `authentication_repository`는 `packages/authentication_repository/lib/authentication_repository.dart`를 통해 API를 노출합니다.
+대부분의 패키지처럼 `authentication_repository`는
+`packages/authentication_repository/lib/authentication_repository.dart`를 통해
+API를 노출합니다.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/authentication_repository/lib/authentication_repository.dart"
@@ -61,7 +75,8 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 :::note
 
-`authentication_repository` 패키지는 `AuthenticationRepository`와 모델들을 노출합니다.
+`authentication_repository` 패키지는 `AuthenticationRepository`와 모델들을
+노출합니다.
 
 :::
 
@@ -69,7 +84,8 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 ### User
 
-`User` 모델은 인증 도메인에서 사용자를 설명합니다. 이 예제에서 사용자는 `email`, `id`, `name`, `photo`로 구성됩니다.
+`User` 모델은 인증 도메인에서 사용자를 설명합니다. 이 예제에서 사용자는 `email`,
+`id`, `name`, `photo`로 구성됩니다.
 
 :::note
 
@@ -81,42 +97,53 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 :::note
 
-`User` 클래스는 [equatable](https://pub.dev/packages/equatable)을 상속해서 다른 `User` 인스턴스를 값으로 비교할 수 있습니다.
+`User` 클래스는 [equatable](https://pub.dev/packages/equatable)을 상속해서 다른
+`User` 인스턴스를 값으로 비교할 수 있습니다.
 
 :::
 
 :::tip
 
-`null` User를 처리하지 않고 항상 구체적인 `User` 객체로 작업할 수 있도록 `static` empty `User`를 정의하는 게 유용합니다.
+`null` User를 처리하지 않고 항상 구체적인 `User` 객체로 작업할 수 있도록
+`static` empty `User`를 정의하는 게 유용합니다.
 
 :::
 
 ### Repository
 
-`AuthenticationRepository`는 사용자 인증과 사용자 정보 가져오기의 구현을 추상화합니다.
+`AuthenticationRepository`는 사용자 인증과 사용자 정보 가져오기의 구현을
+추상화합니다.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/authentication_repository/lib/src/authentication_repository.dart"
 	title="packages/authentication_repository/lib/src/authentication_repository.dart"
 />
 
-`AuthenticationRepository`는 `User`가 바뀔 때 알림을 받을 수 있도록 구독할 수 있는 `Stream<User>`를 노출합니다. 또한 `signUp`, `logInWithGoogle`, `logInWithEmailAndPassword`, `logOut` 메서드를 노출합니다.
+`AuthenticationRepository`는 `User`가 바뀔 때 알림을 받을 수 있도록 구독할 수
+있는 `Stream<User>`를 노출합니다. 또한 `signUp`, `logInWithGoogle`,
+`logInWithEmailAndPassword`, `logOut` 메서드를 노출합니다.
 
 :::note
 
-`AuthenticationRepository`는 데이터 레이어에서 발생할 수 있는 저수준 에러도 처리하고, 도메인에 맞는 깔끔하고 간단한 에러 집합을 노출합니다.
+`AuthenticationRepository`는 데이터 레이어에서 발생할 수 있는 저수준 에러도
+처리하고, 도메인에 맞는 깔끔하고 간단한 에러 집합을 노출합니다.
 
 :::
 
-`AuthenticationRepository`는 여기까지입니다. 다음으로 만든 Flutter 프로젝트에 어떻게 통합하는지 살펴봅니다.
+`AuthenticationRepository`는 여기까지입니다. 다음으로 만든 Flutter 프로젝트에
+어떻게 통합하는지 살펴봅니다.
 
 ## Firebase 설정
 
-앱을 Firebase에 연결하고 [google_sign_in](https://pub.dev/packages/google_sign_in)을 활성화하려면 [firebase_auth 사용 설명서](https://pub.dev/packages/firebase_auth#usage)를 따라야 합니다.
+앱을 Firebase에 연결하고
+[google_sign_in](https://pub.dev/packages/google_sign_in)을 활성화하려면
+[firebase_auth 사용 설명서](https://pub.dev/packages/firebase_auth#usage)를
+따라야 합니다.
 
 :::caution
 
-Android에서 `google-services.json`을, iOS에서 `GoogleService-Info.plist`와 `Info.plist`를 업데이트하는 걸 잊지 마세요. 그렇지 않으면 앱이 크래시합니다.
+Android에서 `google-services.json`을, iOS에서 `GoogleService-Info.plist`와
+`Info.plist`를 업데이트하는 걸 잊지 마세요. 그렇지 않으면 앱이 크래시합니다.
 
 :::
 
@@ -129,7 +156,10 @@ Android에서 `google-services.json`을, iOS에서 `GoogleService-Info.plist`와
 	title="pubspec.yaml"
 />
 
-모든 로컬 에셋을 위한 assets 디렉토리를 지정하고 있습니다. 프로젝트 루트에 `assets` 디렉토리를 만들고 [bloc 로고](https://github.com/felangel/bloc/blob/master/examples/flutter_firebase_login/assets/bloc_logo_small.png) 에셋을 추가합니다(나중에 사용).
+모든 로컬 에셋을 위한 assets 디렉토리를 지정하고 있습니다. 프로젝트 루트에
+`assets` 디렉토리를 만들고
+[bloc 로고](https://github.com/felangel/bloc/blob/master/examples/flutter_firebase_login/assets/bloc_logo_small.png)
+에셋을 추가합니다(나중에 사용).
 
 그 다음 모든 의존성을 설치합니다:
 
@@ -137,7 +167,8 @@ Android에서 `google-services.json`을, iOS에서 `GoogleService-Info.plist`와
 
 :::note
 
-명확한 분리를 유지하면서 빠르게 반복할 수 있도록 path를 통해 `authentication_repository` 패키지에 의존하고 있습니다.
+명확한 분리를 유지하면서 빠르게 반복할 수 있도록 path를 통해
+`authentication_repository` 패키지에 의존하고 있습니다.
 
 :::
 
@@ -154,13 +185,18 @@ Android에서 `google-services.json`을, iOS에서 `GoogleService-Info.plist`와
 
 :::note
 
-`App`에 `AuthenticationRepository`의 단일 인스턴스를 주입하고 있고, 이건 명시적인 생성자 의존성입니다.
+`App`에 `AuthenticationRepository`의 단일 인스턴스를 주입하고 있고, 이건
+명시적인 생성자 의존성입니다.
 
 :::
 
 ## App
 
-[로그인 튜토리얼](/ko/tutorials/flutter-login)처럼 `app.dart`는 `RepositoryProvider`를 통해 앱에 `AuthenticationRepository` 인스턴스를 제공하고, `AuthenticationBloc` 인스턴스도 생성해서 제공합니다. 그런 다음 `AppView`가 `AuthenticationBloc`을 사용하고 `AuthenticationState`에 따라 현재 라우트를 업데이트합니다.
+[로그인 튜토리얼](/ko/tutorials/flutter-login)처럼 `app.dart`는
+`RepositoryProvider`를 통해 앱에 `AuthenticationRepository` 인스턴스를 제공하고,
+`AuthenticationBloc` 인스턴스도 생성해서 제공합니다. 그런 다음 `AppView`가
+`AuthenticationBloc`을 사용하고 `AuthenticationState`에 따라 현재 라우트를
+업데이트합니다.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/app/view/app.dart"
@@ -169,11 +205,14 @@ Android에서 `google-services.json`을, iOS에서 `GoogleService-Info.plist`와
 
 ## App Bloc
 
-`AppBloc`은 앱의 전역 상태를 관리합니다. `AuthenticationRepository`에 의존하고 현재 사용자의 변경에 대한 응답으로 새 상태를 emit하기 위해 `user` Stream을 구독합니다.
+`AppBloc`은 앱의 전역 상태를 관리합니다. `AuthenticationRepository`에 의존하고
+현재 사용자의 변경에 대한 응답으로 새 상태를 emit하기 위해 `user` Stream을
+구독합니다.
 
 ### State
 
-`AppState`는 `AppStatus`와 `User`로 구성됩니다. 기본 생성자는 선택적 `User`를 받아서 적절한 인증 상태와 함께 private 생성자로 리다이렉트합니다.
+`AppState`는 `AppStatus`와 `User`로 구성됩니다. 기본 생성자는 선택적 `User`를
+받아서 적절한 인증 상태와 함께 private 생성자로 리다이렉트합니다.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/app/bloc/app_state.dart"
@@ -196,21 +235,27 @@ Android에서 `google-services.json`을, iOS에서 `GoogleService-Info.plist`와
 
 생성자 본문에서 `AppEvent` 하위 클래스가 해당 이벤트 핸들러에 매핑됩니다.
 
-`_onUserSubscriptionRequested` 이벤트 핸들러에서 `AppBloc`은 `emit.onEach`를 사용해서 `AuthenticationRepository`의 user 스트림을 구독하고 각 `User`에 대한 응답으로 상태를 emit합니다.
+`_onUserSubscriptionRequested` 이벤트 핸들러에서 `AppBloc`은 `emit.onEach`를
+사용해서 `AuthenticationRepository`의 user 스트림을 구독하고 각 `User`에 대한
+응답으로 상태를 emit합니다.
 
-`emit.onEach`는 내부적으로 스트림 구독을 생성하고 `AppBloc`이나 user 스트림이 닫히면 취소를 처리합니다.
+`emit.onEach`는 내부적으로 스트림 구독을 생성하고 `AppBloc`이나 user 스트림이
+닫히면 취소를 처리합니다.
 
-user 스트림이 에러를 emit하면 `addError`가 에러와 스택 트레이스를 listen하고 있는 `BlocObserver`에 전달합니다.
+user 스트림이 에러를 emit하면 `addError`가 에러와 스택 트레이스를 listen하고
+있는 `BlocObserver`에 전달합니다.
 
 :::caution
 
-`onError`가 생략되면 user 스트림의 모든 에러는 처리되지 않은 것으로 간주되어 `onEach`에서 throw됩니다. 결과적으로 user 스트림에 대한 구독이 취소됩니다.
+`onError`가 생략되면 user 스트림의 모든 에러는 처리되지 않은 것으로 간주되어
+`onEach`에서 throw됩니다. 결과적으로 user 스트림에 대한 구독이 취소됩니다.
 
 :::
 
 :::tip
 
-[`BlocObserver`](/ko/bloc-concepts/#blocobserver-1)는 특히 분석과 크래시 리포팅에서 Bloc 이벤트, 에러, 상태 변화를 로깅하는 데 좋습니다.
+[`BlocObserver`](/ko/bloc-concepts/#blocobserver-1)는 특히 분석과 크래시
+리포팅에서 Bloc 이벤트, 에러, 상태 변화를 로깅하는 데 좋습니다.
 
 :::
 
@@ -221,9 +266,12 @@ user 스트림이 에러를 emit하면 `addError`가 에러와 스택 트레이�
 
 ## Models
 
-`Email`과 `Password` 입력 모델은 유효성 검사 로직을 캡슐화하는 데 유용하고 `LoginForm`과 `SignUpForm`(튜토리얼 후반부) 모두에서 사용됩니다.
+`Email`과 `Password` 입력 모델은 유효성 검사 로직을 캡슐화하는 데 유용하고
+`LoginForm`과 `SignUpForm`(튜토리얼 후반부) 모두에서 사용됩니다.
 
-두 입력 모델은 [formz](https://pub.dev/packages/formz) 패키지를 사용해서 만들어지고, `String` 같은 원시 타입 대신 유효성 검사된 객체로 작업할 수 있게 해줍니다.
+두 입력 모델은 [formz](https://pub.dev/packages/formz) 패키지를 사용해서
+만들어지고, `String` 같은 원시 타입 대신 유효성 검사된 객체로 작업할 수 있게
+해줍니다.
 
 ### Email
 
@@ -250,17 +298,21 @@ user 스트림이 에러를 emit하면 `addError`가 에러와 스택 트레이�
 
 :::tip
 
-bloc/cubit의 생성과 사용을 분리하는 게 매우 중요합니다. 이렇게 하면 mock 인스턴스를 쉽게 주입하고 뷰를 독립적으로 테스트할 수 있습니다.
+bloc/cubit의 생성과 사용을 분리하는 게 매우 중요합니다. 이렇게 하면 mock
+인스턴스를 쉽게 주입하고 뷰를 독립적으로 테스트할 수 있습니다.
 
 :::
 
 ## Login Cubit
 
-`LoginCubit`은 폼의 `LoginState`를 관리합니다. `logInWithCredentials`, `logInWithGoogle` API를 노출하고 email/password가 업데이트될 때 알림을 받습니다.
+`LoginCubit`은 폼의 `LoginState`를 관리합니다. `logInWithCredentials`,
+`logInWithGoogle` API를 노출하고 email/password가 업데이트될 때 알림을 받습니다.
 
 ### State
 
-`LoginState`는 `Email`, `Password`, `FormzStatus`로 구성됩니다. `Email`과 `Password` 모델은 [formz](https://pub.dev/packages/formz) 패키지의 `FormzInput`을 상속합니다.
+`LoginState`는 `Email`, `Password`, `FormzStatus`로 구성됩니다. `Email`과
+`Password` 모델은 [formz](https://pub.dev/packages/formz) 패키지의
+`FormzInput`을 상속합니다.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/login/cubit/login_state.dart"
@@ -269,7 +321,8 @@ bloc/cubit의 생성과 사용을 분리하는 게 매우 중요합니다. 이�
 
 ### Cubit
 
-`LoginCubit`은 credentials나 google 로그인을 통해 사용자를 로그인시키기 위해 `AuthenticationRepository`에 의존합니다.
+`LoginCubit`은 credentials나 google 로그인을 통해 사용자를 로그인시키기 위해
+`AuthenticationRepository`에 의존합니다.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/login/cubit/login_cubit.dart"
@@ -278,26 +331,32 @@ bloc/cubit의 생성과 사용을 분리하는 게 매우 중요합니다. 이�
 
 :::note
 
-`LoginState`가 상당히 단순하고 지역적이기 때문에 여기서는 `Bloc` 대신 `Cubit`을 사용했습니다. 이벤트 없이도 한 상태에서 다른 상태로의 변화를 보는 것만으로 무슨 일이 일어났는지 꽤 잘 알 수 있고, 코드가 훨씬 단순하고 간결합니다.
+`LoginState`가 상당히 단순하고 지역적이기 때문에 여기서는 `Bloc` 대신 `Cubit`을
+사용했습니다. 이벤트 없이도 한 상태에서 다른 상태로의 변화를 보는 것만으로 무슨
+일이 일어났는지 꽤 잘 알 수 있고, 코드가 훨씬 단순하고 간결합니다.
 
 :::
 
 ## Login Form
 
-`LoginForm`은 `LoginState`에 대한 응답으로 폼을 렌더링하고 사용자 상호작용에 대한 응답으로 `LoginCubit`의 메서드를 호출합니다.
+`LoginForm`은 `LoginState`에 대한 응답으로 폼을 렌더링하고 사용자 상호작용에
+대한 응답으로 `LoginCubit`의 메서드를 호출합니다.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/login/view/login_form.dart"
 	title="lib/login/view/login_form.dart"
 />
 
-`LoginForm`은 사용자가 새 계정을 만들 수 있는 `SignUpPage`로 이동하는 "Create Account" 버튼도 렌더링합니다.
+`LoginForm`은 사용자가 새 계정을 만들 수 있는 `SignUpPage`로 이동하는 "Create
+Account" 버튼도 렌더링합니다.
 
 ## Sign Up Page
 
-`SignUp` 구조는 `Login` 구조를 미러링하고 `SignUpPage`, `SignUpView`, `SignUpCubit`으로 구성됩니다.
+`SignUp` 구조는 `Login` 구조를 미러링하고 `SignUpPage`, `SignUpView`,
+`SignUpCubit`으로 구성됩니다.
 
-`SignUpPage`는 `SignUpCubit` 인스턴스를 생성하고 `SignUpForm`에 제공합니다(`LoginPage`와 정확히 같습니다).
+`SignUpPage`는 `SignUpCubit` 인스턴스를 생성하고 `SignUpForm`에
+제공합니다(`LoginPage`와 정확히 같습니다).
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/view/sign_up_page.dart"
@@ -306,17 +365,20 @@ bloc/cubit의 생성과 사용을 분리하는 게 매우 중요합니다. 이�
 
 :::note
 
-`LoginCubit`처럼 `SignUpCubit`도 새 사용자 계정을 만들기 위해 `AuthenticationRepository`에 의존합니다.
+`LoginCubit`처럼 `SignUpCubit`도 새 사용자 계정을 만들기 위해
+`AuthenticationRepository`에 의존합니다.
 
 :::
 
 ## Sign Up Cubit
 
-`SignUpCubit`은 `SignUpForm`의 상태를 관리하고 새 사용자 계정을 만들기 위해 `AuthenticationRepository`와 통신합니다.
+`SignUpCubit`은 `SignUpForm`의 상태를 관리하고 새 사용자 계정을 만들기 위해
+`AuthenticationRepository`와 통신합니다.
 
 ### State
 
-`SignUpState`는 유효성 검사 로직이 같기 때문에 같은 `Email`과 `Password` 폼 입력 모델을 재사용합니다.
+`SignUpState`는 유효성 검사 로직이 같기 때문에 같은 `Email`과 `Password` 폼 입력
+모델을 재사용합니다.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/cubit/sign_up_state.dart"
@@ -325,7 +387,8 @@ bloc/cubit의 생성과 사용을 분리하는 게 매우 중요합니다. 이�
 
 ### Cubit
 
-`SignUpCubit`은 `LoginCubit`과 매우 비슷하지만 login 대신 폼을 submit하는 API를 노출한다는 주요 차이점이 있습니다.
+`SignUpCubit`은 `LoginCubit`과 매우 비슷하지만 login 대신 폼을 submit하는 API를
+노출한다는 주요 차이점이 있습니다.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/cubit/sign_up_cubit.dart"
@@ -334,7 +397,8 @@ bloc/cubit의 생성과 사용을 분리하는 게 매우 중요합니다. 이�
 
 ## Sign Up Form
 
-`SignUpForm`은 `SignUpState`에 대한 응답으로 폼을 렌더링하고 사용자 상호작용에 대한 응답으로 `SignUpCubit`의 메서드를 호출합니다.
+`SignUpForm`은 `SignUpState`에 대한 응답으로 폼을 렌더링하고 사용자 상호작용에
+대한 응답으로 `SignUpCubit`의 메서드를 호출합니다.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/view/sign_up_form.dart"
@@ -343,9 +407,12 @@ bloc/cubit의 생성과 사용을 분리하는 게 매우 중요합니다. 이�
 
 ## Home Page
 
-사용자가 로그인하거나 가입에 성공하면 `user` 스트림이 업데이트되고, 이는 `AuthenticationBloc`에서 상태 변화를 트리거하여 `AppView`가 네비게이션 스택에 `HomePage` 라우트를 push하게 됩니다.
+사용자가 로그인하거나 가입에 성공하면 `user` 스트림이 업데이트되고, 이는
+`AuthenticationBloc`에서 상태 변화를 트리거하여 `AppView`가 네비게이션 스택에
+`HomePage` 라우트를 push하게 됩니다.
 
-`HomePage`에서 사용자는 프로필 정보를 보고 `AppBar`의 exit 아이콘을 탭해서 로그아웃할 수 있습니다.
+`HomePage`에서 사용자는 프로필 정보를 보고 `AppBar`의 exit 아이콘을 탭해서
+로그아웃할 수 있습니다.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/home/view/home_page.dart"
@@ -354,16 +421,23 @@ bloc/cubit의 생성과 사용을 분리하는 게 매우 중요합니다. 이�
 
 :::note
 
-`home` 기능 내에서 `view` 디렉토리와 함께 해당 기능에 특화된 재사용 가능한 컴포넌트를 위한 `widgets` 디렉토리가 만들어졌습니다. 이 경우 간단한 `Avatar` 위젯이 export되어 `HomePage` 내에서 사용됩니다.
+`home` 기능 내에서 `view` 디렉토리와 함께 해당 기능에 특화된 재사용 가능한
+컴포넌트를 위한 `widgets` 디렉토리가 만들어졌습니다. 이 경우 간단한 `Avatar`
+위젯이 export되어 `HomePage` 내에서 사용됩니다.
 
 :::
 
 :::note
 
-logout `IconButton`이 탭되면 `AuthenticationBloc`에 `AuthenticationLogoutRequested` 이벤트가 추가되어 사용자를 로그아웃시키고 `LoginPage`로 다시 이동합니다.
+logout `IconButton`이 탭되면 `AuthenticationBloc`에
+`AuthenticationLogoutRequested` 이벤트가 추가되어 사용자를 로그아웃시키고
+`LoginPage`로 다시 이동합니다.
 
 :::
 
-이 시점에서 Firebase를 사용한 꽤 괜찮은 로그인 구현이 있고, Bloc 라이브러리를 사용해서 프레젠테이션 레이어와 비즈니스 로직 레이어를 분리했습니다.
+이 시점에서 Firebase를 사용한 꽤 괜찮은 로그인 구현이 있고, Bloc 라이브러리를
+사용해서 프레젠테이션 레이어와 비즈니스 로직 레이어를 분리했습니다.
 
-이 예제의 전체 소스 코드는 [여기](https://github.com/felangel/bloc/tree/master/examples/flutter_firebase_login)에서 확인할 수 있습니다.
+이 예제의 전체 소스 코드는
+[여기](https://github.com/felangel/bloc/tree/master/examples/flutter_firebase_login)에서
+확인할 수 있습니다.
