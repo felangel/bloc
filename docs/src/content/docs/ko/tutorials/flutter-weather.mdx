@@ -29,7 +29,10 @@ import WeatherBarrelDartSnippet from '~/components/tutorials/flutter-weather/Wea
 
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
-이번 튜토리얼에서는 Flutter로 날씨 앱을 만들어 여러 cubit을 관리하여 동적 테마, 당겨서 새로고침 등을 구현하는 방법을 보여줍니다. 날씨 앱은 공개 OpenMeteo API에서 실시간 날씨 데이터를 가져오고 애플리케이션을 레이어(데이터, 리포지토리, 비즈니스 로직, 프레젠테이션)로 분리하는 방법을 보여줍니다.
+이번 튜토리얼에서는 Flutter로 날씨 앱을 만들어 여러 cubit을 관리하여 동적 테마,
+당겨서 새로고침 등을 구현하는 방법을 보여줍니다. 날씨 앱은 공개 OpenMeteo
+API에서 실시간 날씨 데이터를 가져오고 애플리케이션을 레이어(데이터, 리포지토리,
+비즈니스 로직, 프레젠테이션)로 분리하는 방법을 보여줍니다.
 
 ![demo](~/assets/tutorials/flutter-weather.gif)
 
@@ -38,25 +41,37 @@ import WeatherBarrelDartSnippet from '~/components/tutorials/flutter-weather/Wea
 앱에서 사용자가 할 수 있어야 하는 것:
 
 - 전용 검색 페이지에서 도시 검색
-- [Open Meteo API](https://open-meteo.com)에서 반환된 날씨 데이터를 보기 좋게 표시
+- [Open Meteo API](https://open-meteo.com)에서 반환된 날씨 데이터를 보기 좋게
+  표시
 - 표시되는 단위 변경 (미터법 vs 야드파운드법)
 
 추가로:
 
 - 애플리케이션의 테마는 선택한 도시의 날씨를 반영해야 함
-- 애플리케이션 상태는 세션 간에 유지되어야 함: 즉, 앱을 닫았다가 다시 열어도 상태를 기억해야 함 ([HydratedBloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc) 사용)
+- 애플리케이션 상태는 세션 간에 유지되어야 함: 즉, 앱을 닫았다가 다시 열어도
+  상태를 기억해야 함
+  ([HydratedBloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc)
+  사용)
 
 ## 주요 개념
 
 - [BlocObserver](/ko/bloc-concepts#blocobserver)로 상태 변화 관찰.
-- [BlocProvider](/ko/flutter-bloc-concepts#blocprovider), 자식에게 bloc을 제공하는 Flutter 위젯.
-- [BlocBuilder](/ko/flutter-bloc-concepts#blocbuilder), 새로운 상태에 따라 위젯을 빌드하는 Flutter 위젯.
-- [Equatable](/ko/faqs#when-to-use-equatable)을 사용한 불필요한 리빌드 방지.
-- [RepositoryProvider](/ko/flutter-bloc-concepts#repositoryprovider), 자식에게 리포지토리를 제공하는 Flutter 위젯.
-- [BlocListener](/ko/flutter-bloc-concepts#bloclistener), bloc의 상태 변화에 따라 리스너 코드를 호출하는 Flutter 위젯.
-- [MultiBlocProvider](/ko/flutter-bloc-concepts#multiblocprovider), 여러 BlocProvider 위젯을 하나로 합치는 Flutter 위젯.
-- [BlocConsumer](/ko/flutter-bloc-concepts#blocconsumer), 새로운 상태에 반응하기 위해 builder와 listener를 노출하는 Flutter 위젯.
-- 상태를 관리하고 유지하기 위한 [HydratedBloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc).
+- [BlocProvider](/ko/flutter-bloc-concepts#blocprovider), 자식에게 bloc을
+  제공하는 Flutter 위젯.
+- [BlocBuilder](/ko/flutter-bloc-concepts#blocbuilder), 새로운 상태에 따라
+  위젯을 빌드하는 Flutter 위젯.
+- [Equatable](/ko/faqs#언제-equatable를-사용해야-하나요)을 사용한 불필요한
+  리빌드 방지.
+- [RepositoryProvider](/ko/flutter-bloc-concepts#repositoryprovider), 자식에게
+  리포지토리를 제공하는 Flutter 위젯.
+- [BlocListener](/ko/flutter-bloc-concepts#bloclistener), bloc의 상태 변화에
+  따라 리스너 코드를 호출하는 Flutter 위젯.
+- [MultiBlocProvider](/ko/flutter-bloc-concepts#multiblocprovider), 여러
+  BlocProvider 위젯을 하나로 합치는 Flutter 위젯.
+- [BlocConsumer](/ko/flutter-bloc-concepts#blocconsumer), 새로운 상태에 반응하기
+  위해 builder와 listener를 노출하는 Flutter 위젯.
+- 상태를 관리하고 유지하기 위한
+  [HydratedBloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc).
 
 ## 설정
 
@@ -66,22 +81,27 @@ import WeatherBarrelDartSnippet from '~/components/tutorials/flutter-weather/Wea
 
 ### 프로젝트 구조
 
-앱은 해당 디렉토리에 분리된 기능으로 구성됩니다. 이를 통해 기능 수가 증가함에 따라 확장할 수 있으며 개발자가 서로 다른 기능을 병렬로 작업할 수 있습니다.
+앱은 해당 디렉토리에 분리된 기능으로 구성됩니다. 이를 통해 기능 수가 증가함에
+따라 확장할 수 있으며 개발자가 서로 다른 기능을 병렬로 작업할 수 있습니다.
 
-앱은 네 가지 주요 기능으로 나눌 수 있습니다: **search, settings, theme, weather**. 해당 디렉토리를 만들어 봅시다.
+앱은 네 가지 주요 기능으로 나눌 수 있습니다: **search, settings, theme,
+weather**. 해당 디렉토리를 만들어 봅시다.
 
 <FeatureTreeSnippet />
 
 ### 아키텍처
 
-[bloc 아키텍처](/ko/architecture) 가이드라인에 따라 애플리케이션은 여러 레이어로 구성됩니다.
+[bloc 아키텍처](/ko/architecture) 가이드라인에 따라 애플리케이션은 여러 레이어로
+구성됩니다.
 
 이 튜토리얼에서 각 레이어가 하는 일:
 
 - **데이터**: API에서 원시 날씨 데이터 검색
-- **리포지토리**: 데이터 레이어를 추상화하고 애플리케이션이 사용할 도메인 모델 노출
+- **리포지토리**: 데이터 레이어를 추상화하고 애플리케이션이 사용할 도메인 모델
+  노출
 - **비즈니스 로직**: 각 기능의 상태 관리 (단위 정보, 도시 정보, 테마 등)
-- **프레젠테이션**: 날씨 정보 표시 및 사용자 입력 수집 (설정 페이지, 검색 페이지 등)
+- **프레젠테이션**: 날씨 정보 표시 및 사용자 입력 수집 (설정 페이지, 검색 페이지
+  등)
 
 ## 데이터 레이어
 
@@ -89,32 +109,46 @@ import WeatherBarrelDartSnippet from '~/components/tutorials/flutter-weather/Wea
 
 두 가지 엔드포인트에 집중합니다:
 
-- `https://geocoding-api.open-meteo.com/v1/search?name=$city&count=1` - 주어진 도시 이름의 위치 가져오기
-- `https://api.open-meteo.com/v1/forecast?latitude=$latitude&longitude=$longitude&current_weather=true` - 주어진 위치의 날씨 가져오기
+- `https://geocoding-api.open-meteo.com/v1/search?name=$city&count=1` - 주어진
+  도시 이름의 위치 가져오기
+- `https://api.open-meteo.com/v1/forecast?latitude=$latitude&longitude=$longitude&current_weather=true` -
+  주어진 위치의 날씨 가져오기
 
-브라우저에서 [https://geocoding-api.open-meteo.com/v1/search?name=chicago&count=1](https://geocoding-api.open-meteo.com/v1/search?name=chicago&count=1)을 열어 시카고 도시의 응답을 확인하세요. 응답의 `latitude`와 `longitude`를 사용하여 날씨 엔드포인트를 호출합니다.
+브라우저에서
+[https://geocoding-api.open-meteo.com/v1/search?name=chicago&count=1](https://geocoding-api.open-meteo.com/v1/search?name=chicago&count=1)을
+열어 시카고 도시의 응답을 확인하세요. 응답의 `latitude`와 `longitude`를 사용하여
+날씨 엔드포인트를 호출합니다.
 
-시카고의 `latitude`/`longitude`는 `41.85003`/`-87.65005`입니다. 브라우저에서 [https://api.open-meteo.com/v1/forecast?latitude=43.0389&longitude=-87.90647&current_weather=true](https://api.open-meteo.com/v1/forecast?latitude=43.0389&longitude=-87.90647&current_weather=true)로 이동하면 시카고의 날씨 응답을 볼 수 있으며, 앱에 필요한 모든 데이터가 포함되어 있습니다.
+시카고의 `latitude`/`longitude`는 `41.85003`/`-87.65005`입니다. 브라우저에서
+[https://api.open-meteo.com/v1/forecast?latitude=43.0389&longitude=-87.90647&current_weather=true](https://api.open-meteo.com/v1/forecast?latitude=43.0389&longitude=-87.90647&current_weather=true)로
+이동하면 시카고의 날씨 응답을 볼 수 있으며, 앱에 필요한 모든 데이터가 포함되어
+있습니다.
 
 ### OpenMeteo API 클라이언트
 
-OpenMeteo API 클라이언트는 애플리케이션과 독립적입니다. 따라서 내부 패키지로 생성하고 ([pub.dev](https://pub.dev)에 게시할 수도 있음) 리포지토리 레이어의 `pubspec.yaml`에 추가하여 메인 날씨 애플리케이션의 데이터 요청을 처리합니다.
+OpenMeteo API 클라이언트는 애플리케이션과 독립적입니다. 따라서 내부 패키지로
+생성하고 ([pub.dev](https://pub.dev)에 게시할 수도 있음) 리포지토리 레이어의
+`pubspec.yaml`에 추가하여 메인 날씨 애플리케이션의 데이터 요청을 처리합니다.
 
-프로젝트 레벨에 `packages`라는 새 디렉토리를 만듭니다. 이 디렉토리에 모든 내부 패키지를 저장합니다.
+프로젝트 레벨에 `packages`라는 새 디렉토리를 만듭니다. 이 디렉토리에 모든 내부
+패키지를 저장합니다.
 
-이 디렉토리 내에서 내장된 `flutter create` 명령을 실행하여 API 클라이언트용 `open_meteo_api`라는 새 패키지를 만듭니다.
+이 디렉토리 내에서 내장된 `flutter create` 명령을 실행하여 API 클라이언트용
+`open_meteo_api`라는 새 패키지를 만듭니다.
 
 <FlutterCreateApiClientSnippet />
 
 ### 날씨 데이터 모델
 
-다음으로 `location` 및 `weather` API 엔드포인트 응답에 대한 모델을 포함할 `location.dart`와 `weather.dart`를 만듭니다.
+다음으로 `location` 및 `weather` API 엔드포인트 응답에 대한 모델을 포함할
+`location.dart`와 `weather.dart`를 만듭니다.
 
 <OpenMeteoModelsTreeSnippet />
 
 #### Location 모델
 
-`location.dart` 모델은 다음과 같은 location API가 반환하는 데이터를 저장해야 합니다:
+`location.dart` 모델은 다음과 같은 location API가 반환하는 데이터를 저장해야
+합니다:
 
 <LocationJsonSnippet />
 
@@ -124,7 +158,8 @@ OpenMeteo API 클라이언트는 애플리케이션과 독립적입니다. 따�
 
 #### Weather 모델
 
-다음으로 `weather.dart`를 작업합니다. weather 모델은 다음과 같은 weather API가 반환하는 데이터를 저장해야 합니다:
+다음으로 `weather.dart`를 작업합니다. weather 모델은 다음과 같은 weather API가
+반환하는 데이터를 저장해야 합니다:
 
 <WeatherJsonSnippet />
 
@@ -134,7 +169,8 @@ OpenMeteo API 클라이언트는 애플리케이션과 독립적입니다. 따�
 
 ### 배럴 파일
 
-여기서 임포트를 정리하기 위해 [배럴 파일](https://adrianfaciu.dev/posts/barrel-files/)을 빠르게 만들어 봅시다.
+여기서 임포트를 정리하기 위해
+[배럴 파일](https://adrianfaciu.dev/posts/barrel-files/)을 빠르게 만들어 봅시다.
 
 `models.dart` 배럴 파일을 만들고 두 모델을 내보냅니다:
 
@@ -153,13 +189,22 @@ OpenMeteo API 클라이언트는 애플리케이션과 독립적입니다. 따�
 
 ### 설정
 
-API 데이터로 작업하려면 모델을 [직렬화 및 역직렬화](https://en.wikipedia.org/wiki/Serialization)할 수 있어야 합니다. 이를 위해 모델에 `toJson` 및 `fromJson` 메서드를 추가합니다.
+API 데이터로 작업하려면 모델을
+[직렬화 및 역직렬화](https://en.wikipedia.org/wiki/Serialization)할 수 있어야
+합니다. 이를 위해 모델에 `toJson` 및 `fromJson` 메서드를 추가합니다.
 
-또한 API에서 데이터를 가져오기 위해 [HTTP 네트워크 요청을 만드는](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods) 방법이 필요합니다. 다행히 이를 위한 인기 있는 패키지가 여러 개 있습니다.
+또한 API에서 데이터를 가져오기 위해
+[HTTP 네트워크 요청을 만드는](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
+방법이 필요합니다. 다행히 이를 위한 인기 있는 패키지가 여러 개 있습니다.
 
-`toJson` 및 `fromJson` 구현을 생성하기 위해 [json_annotation](https://pub.dev/packages/json_annotation), [json_serializable](https://pub.dev/packages/json_serializable), [build_runner](https://pub.dev/packages/build_runner) 패키지를 사용합니다.
+`toJson` 및 `fromJson` 구현을 생성하기 위해
+[json_annotation](https://pub.dev/packages/json_annotation),
+[json_serializable](https://pub.dev/packages/json_serializable),
+[build_runner](https://pub.dev/packages/build_runner) 패키지를 사용합니다.
 
-이후 단계에서는 [http](https://pub.dev/packages/http) 패키지를 사용하여 weather API에 네트워크 요청을 보내 애플리케이션이 현재 날씨 데이터를 표시할 수 있도록 합니다.
+이후 단계에서는 [http](https://pub.dev/packages/http) 패키지를 사용하여 weather
+API에 네트워크 요청을 보내 애플리케이션이 현재 날씨 데이터를 표시할 수 있도록
+합니다.
 
 이러한 의존성을 `pubspec.yaml`에 추가합니다.
 
@@ -186,7 +231,8 @@ API 데이터로 작업하려면 모델을 [직렬화 및 역직렬화](https://
 각 파일에 대해 다음도 필요합니다:
 
 - `json_annotation` 임포트
-- [part](https://dart.dev/tools/pub/create-packages#organizing-a-package) 키워드를 사용하여 생성된 코드 포함
+- [part](https://dart.dev/tools/pub/create-packages#organizing-a-package)
+  키워드를 사용하여 생성된 코드 포함
 - 역직렬화를 위한 `fromJson` 메서드 포함
 
 #### Location 모델
@@ -209,7 +255,8 @@ API 데이터로 작업하려면 모델을 [직렬화 및 역직렬화](https://
 
 #### Build 파일 생성
 
-`open_meteo_api` 폴더에 `build.yaml` 파일을 만듭니다. 이 파일의 목적은 `json_serializable` 필드 이름의 명명 규칙 간 불일치를 처리하는 것입니다.
+`open_meteo_api` 폴더에 `build.yaml` 파일을 만듭니다. 이 파일의 목적은
+`json_serializable` 필드 이름의 명명 규칙 간 불일치를 처리하는 것입니다.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/build.yaml"
@@ -226,11 +273,14 @@ API 데이터로 작업하려면 모델을 [직렬화 및 역직렬화](https://
 
 ### OpenMeteo API 클라이언트
 
-`src` 디렉토리 내에 `open_meteo_api_client.dart`에 API 클라이언트를 만듭니다. 이제 프로젝트 구조는 다음과 같아야 합니다:
+`src` 디렉토리 내에 `open_meteo_api_client.dart`에 API 클라이언트를 만듭니다.
+이제 프로젝트 구조는 다음과 같아야 합니다:
 
 <OpenMeteoApiClientTreeSnippet />
 
-이전에 `pubspec.yaml` 파일에 추가한 [http](https://pub.dev/packages/http) 패키지를 사용하여 weather API에 HTTP 요청을 하고 이 정보를 애플리케이션에서 사용할 수 있습니다.
+이전에 `pubspec.yaml` 파일에 추가한 [http](https://pub.dev/packages/http)
+패키지를 사용하여 weather API에 HTTP 요청을 하고 이 정보를 애플리케이션에서
+사용할 수 있습니다.
 
 API 클라이언트는 두 가지 메서드를 노출합니다:
 
@@ -239,13 +289,15 @@ API 클라이언트는 두 가지 메서드를 노출합니다:
 
 #### Location 검색
 
-`locationSearch` 메서드는 location API를 호출하고 해당되는 경우 `LocationRequestFailure` 에러를 throw합니다. 완성된 메서드는 다음과 같습니다:
+`locationSearch` 메서드는 location API를 호출하고 해당되는 경우
+`LocationRequestFailure` 에러를 throw합니다. 완성된 메서드는 다음과 같습니다:
 
 <LocationSearchMethodSnippet />
 
 #### 날씨 가져오기
 
-마찬가지로 `getWeather` 메서드는 weather API를 호출하고 해당되는 경우 `WeatherRequestFailure` 에러를 throw합니다. 완성된 메서드는 다음과 같습니다:
+마찬가지로 `getWeather` 메서드는 weather API를 호출하고 해당되는 경우
+`WeatherRequestFailure` 에러를 throw합니다. 완성된 메서드는 다음과 같습니다:
 
 <GetWeatherMethodSnippet />
 
@@ -267,11 +319,13 @@ API 클라이언트는 두 가지 메서드를 노출합니다:
 
 ### 유닛 테스트
 
-데이터 레이어는 애플리케이션의 기반이므로 유닛 테스트를 작성하는 것이 특히 중요합니다. 유닛 테스트는 패키지가 예상대로 동작한다는 확신을 줍니다.
+데이터 레이어는 애플리케이션의 기반이므로 유닛 테스트를 작성하는 것이 특히
+중요합니다. 유닛 테스트는 패키지가 예상대로 동작한다는 확신을 줍니다.
 
 #### 설정
 
-이전에 pubspec.yaml에 [test](https://pub.dev/packages/test) 패키지를 추가하여 유닛 테스트를 쉽게 작성할 수 있습니다.
+이전에 pubspec.yaml에 [test](https://pub.dev/packages/test) 패키지를 추가하여
+유닛 테스트를 쉽게 작성할 수 있습니다.
 
 API 클라이언트와 두 모델에 대한 테스트 파일을 만들 것입니다.
 
@@ -291,11 +345,16 @@ API 클라이언트와 두 모델에 대한 테스트 파일을 만들 것입니
 
 #### API 클라이언트 테스트
 
-다음으로 API 클라이언트를 테스트합니다. API 클라이언트가 엣지 케이스를 포함하여 두 API 호출을 올바르게 처리하는지 테스트해야 합니다.
+다음으로 API 클라이언트를 테스트합니다. API 클라이언트가 엣지 케이스를 포함하여
+두 API 호출을 올바르게 처리하는지 테스트해야 합니다.
 
 :::note
 
-우리의 목표는 API 자체가 아닌 API 클라이언트 로직(모든 엣지 케이스 포함)을 테스트하는 것이므로 테스트에서 실제 API 호출을 하지 않습니다. 일관되고 제어된 테스트 환경을 갖기 위해 이전에 pubspec.yaml 파일에 추가한 [mocktail](https://github.com/felangel/mocktail)을 사용하여 `http` 클라이언트를 모킹합니다.
+우리의 목표는 API 자체가 아닌 API 클라이언트 로직(모든 엣지 케이스 포함)을
+테스트하는 것이므로 테스트에서 실제 API 호출을 하지 않습니다. 일관되고 제어된
+테스트 환경을 갖기 위해 이전에 pubspec.yaml 파일에 추가한
+[mocktail](https://github.com/felangel/mocktail)을 사용하여 `http` 클라이언트를
+모킹합니다.
 
 :::
 
@@ -306,13 +365,20 @@ API 클라이언트와 두 모델에 대한 테스트 파일을 만들 것입니
 
 #### 테스트 커버리지
 
-마지막으로 각 코드 라인이 최소한 하나의 테스트 케이스로 커버되었는지 확인하기 위해 테스트 커버리지를 수집합니다.
+마지막으로 각 코드 라인이 최소한 하나의 테스트 케이스로 커버되었는지 확인하기
+위해 테스트 커버리지를 수집합니다.
 
 <FlutterTestCoverageSnippet />
 
 ## 리포지토리 레이어
 
-리포지토리 레이어의 목표는 데이터 레이어를 추상화하고 bloc 레이어와의 통신을 용이하게 하는 것입니다. 이렇게 하면 코드베이스의 나머지 부분은 특정 데이터 프로바이더 구현이 아닌 리포지토리 레이어에서 노출하는 함수에만 의존합니다. 이를 통해 애플리케이션 레벨 코드를 방해하지 않고 데이터 프로바이더를 변경할 수 있습니다. 예를 들어, 이 특정 weather API에서 마이그레이션하기로 결정하면 리포지토리 또는 애플리케이션 레이어의 공개 API를 변경하지 않고도 새 API 클라이언트를 만들어 교체할 수 있어야 합니다.
+리포지토리 레이어의 목표는 데이터 레이어를 추상화하고 bloc 레이어와의 통신을
+용이하게 하는 것입니다. 이렇게 하면 코드베이스의 나머지 부분은 특정 데이터
+프로바이더 구현이 아닌 리포지토리 레이어에서 노출하는 함수에만 의존합니다. 이를
+통해 애플리케이션 레벨 코드를 방해하지 않고 데이터 프로바이더를 변경할 수
+있습니다. 예를 들어, 이 특정 weather API에서 마이그레이션하기로 결정하면
+리포지토리 또는 애플리케이션 레이어의 공개 API를 변경하지 않고도 새 API
+클라이언트를 만들어 교체할 수 있어야 합니다.
 
 ### 설정
 
@@ -320,11 +386,14 @@ packages 디렉토리 내에서 다음 명령을 실행합니다:
 
 <FlutterCreateRepositorySnippet />
 
-마지막 단계의 `open_meteo_api` 패키지를 포함하여 `open_meteo_api` 패키지와 동일한 패키지를 사용합니다. `pubspec.yaml`을 업데이트하고 `flutter pub get`을 실행합니다.
+마지막 단계의 `open_meteo_api` 패키지를 포함하여 `open_meteo_api` 패키지와
+동일한 패키지를 사용합니다. `pubspec.yaml`을 업데이트하고 `flutter pub get`을
+실행합니다.
 
 :::note
 
-`open_meteo_api`의 위치를 지정하기 위해 `path`를 사용하며, 이를 통해 `pub.dev`의 외부 패키지처럼 취급할 수 있습니다.
+`open_meteo_api`의 위치를 지정하기 위해 `path`를 사용하며, 이를 통해 `pub.dev`의
+외부 패키지처럼 취급할 수 있습니다.
 
 :::
 
@@ -335,11 +404,15 @@ packages 디렉토리 내에서 다음 명령을 실행합니다:
 
 ### Weather Repository 모델
 
-도메인별 날씨 모델을 노출하기 위해 새 `weather.dart` 파일을 만듭니다. 이 모델은 비즈니스 케이스와 관련된 데이터만 포함합니다 -- 즉, API 클라이언트 및 원시 데이터 형식과 완전히 분리되어야 합니다. 평소처럼 `models.dart` 배럴 파일도 만듭니다.
+도메인별 날씨 모델을 노출하기 위해 새 `weather.dart` 파일을 만듭니다. 이 모델은
+비즈니스 케이스와 관련된 데이터만 포함합니다 -- 즉, API 클라이언트 및 원시
+데이터 형식과 완전히 분리되어야 합니다. 평소처럼 `models.dart` 배럴 파일도
+만듭니다.
 
 <RepositoryModelsBarrelTreeSnippet />
 
-이번에는 weather 모델이 `location, temperature, condition` 프로퍼티만 저장합니다. 직렬화 및 역직렬화를 위해 코드에 어노테이션을 계속 달 것입니다.
+이번에는 weather 모델이 `location, temperature, condition` 프로퍼티만
+저장합니다. 직렬화 및 역직렬화를 위해 코드에 어노테이션을 계속 달 것입니다.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/lib/src/models/weather.dart"
@@ -370,25 +443,34 @@ packages 디렉토리 내에서 다음 명령을 실행합니다:
 
 #### 배럴 파일
 
-모델을 내보내기 위해 `packages/weather_repository/lib/weather_repository.dart`라는 패키지 레벨 배럴 파일도 만듭니다:
+모델을 내보내기 위해
+`packages/weather_repository/lib/weather_repository.dart`라는 패키지 레벨 배럴
+파일도 만듭니다:
 
 <WeatherRepositoryLibrarySnippet />
 
 ### Weather Repository
 
-`WeatherRepository`의 주요 목표는 데이터 프로바이더를 추상화하는 인터페이스를 제공하는 것입니다. 이 경우 `WeatherRepository`는 `WeatherApiClient`에 의존하고 단일 공개 메서드 `getWeather(String city)`를 노출합니다.
+`WeatherRepository`의 주요 목표는 데이터 프로바이더를 추상화하는 인터페이스를
+제공하는 것입니다. 이 경우 `WeatherRepository`는 `WeatherApiClient`에 의존하고
+단일 공개 메서드 `getWeather(String city)`를 노출합니다.
 
 :::note
 
-`WeatherRepository`의 소비자는 날씨 API에 두 번의 네트워크 요청이 이루어진다는 사실과 같은 기저 구현 세부 사항을 알 수 없습니다. `WeatherRepository`의 목표는 "무엇"과 "어떻게"를 분리하는 것입니다 -- 즉, 주어진 도시의 날씨를 가져오는 방법을 갖고 싶지만, 데이터가 어디서 어떻게 오는지는 신경 쓰지 않습니다.
+`WeatherRepository`의 소비자는 날씨 API에 두 번의 네트워크 요청이 이루어진다는
+사실과 같은 기저 구현 세부 사항을 알 수 없습니다. `WeatherRepository`의 목표는
+"무엇"과 "어떻게"를 분리하는 것입니다 -- 즉, 주어진 도시의 날씨를 가져오는
+방법을 갖고 싶지만, 데이터가 어디서 어떻게 오는지는 신경 쓰지 않습니다.
 
 :::
 
 #### 설정
 
-패키지의 `src` 디렉토리 내에 `weather_repository.dart` 파일을 만들고 리포지토리 구현을 작업합니다.
+패키지의 `src` 디렉토리 내에 `weather_repository.dart` 파일을 만들고 리포지토리
+구현을 작업합니다.
 
-집중할 주요 메서드는 `getWeather(String city)`입니다. 다음과 같이 API 클라이언트에 대한 두 번의 호출을 사용하여 구현할 수 있습니다:
+집중할 주요 메서드는 `getWeather(String city)`입니다. 다음과 같이 API
+클라이언트에 대한 두 번의 호출을 사용하여 구현할 수 있습니다:
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/lib/src/weather_repository.dart"
@@ -406,7 +488,11 @@ packages 디렉토리 내에서 다음 명령을 실행합니다:
 
 ### 유닛 테스트
 
-데이터 레이어와 마찬가지로 도메인 레벨 로직이 올바른지 확인하기 위해 리포지토리 레이어를 테스트하는 것이 중요합니다. `WeatherRepository`를 테스트하기 위해 [mocktail](https://github.com/felangel/mocktail) 라이브러리를 사용합니다. 격리된, 제어된 환경에서 `WeatherRepository` 로직을 유닛 테스트하기 위해 기저 api 클라이언트를 모킹합니다.
+데이터 레이어와 마찬가지로 도메인 레벨 로직이 올바른지 확인하기 위해 리포지토리
+레이어를 테스트하는 것이 중요합니다. `WeatherRepository`를 테스트하기 위해
+[mocktail](https://github.com/felangel/mocktail) 라이브러리를 사용합니다.
+격리된, 제어된 환경에서 `WeatherRepository` 로직을 유닛 테스트하기 위해 기저 api
+클라이언트를 모킹합니다.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/test/weather_repository_test.dart"
@@ -415,24 +501,37 @@ packages 디렉토리 내에서 다음 명령을 실행합니다:
 
 ## 비즈니스 로직 레이어
 
-비즈니스 로직 레이어에서는 `WeatherRepository`의 날씨 도메인 모델을 사용하고 UI를 통해 사용자에게 표시될 기능 레벨 모델을 노출합니다.
+비즈니스 로직 레이어에서는 `WeatherRepository`의 날씨 도메인 모델을 사용하고
+UI를 통해 사용자에게 표시될 기능 레벨 모델을 노출합니다.
 
 :::note
 
-이것이 우리가 구현하는 세 번째 다른 유형의 날씨 모델입니다. API 클라이언트에서 weather 모델은 API가 반환한 모든 정보를 포함했습니다. 리포지토리 레이어에서 weather 모델은 비즈니스 케이스를 기반으로 추상화된 모델만 포함했습니다. 이 레이어에서 weather 모델은 현재 기능 세트에 특별히 필요한 관련 정보를 포함합니다.
+이것이 우리가 구현하는 세 번째 다른 유형의 날씨 모델입니다. API 클라이언트에서
+weather 모델은 API가 반환한 모든 정보를 포함했습니다. 리포지토리 레이어에서
+weather 모델은 비즈니스 케이스를 기반으로 추상화된 모델만 포함했습니다. 이
+레이어에서 weather 모델은 현재 기능 세트에 특별히 필요한 관련 정보를 포함합니다.
 
 :::
 
 ### 설정
 
-비즈니스 로직 레이어가 메인 앱에 있으므로 전체 `flutter_weather` 프로젝트의 `pubspec.yaml`을 편집하고 사용할 모든 패키지를 포함해야 합니다.
+비즈니스 로직 레이어가 메인 앱에 있으므로 전체 `flutter_weather` 프로젝트의
+`pubspec.yaml`을 편집하고 사용할 모든 패키지를 포함해야 합니다.
 
-- [equatable](https://pub.dev/packages/equatable)을 사용하면 앱의 상태 클래스 인스턴스를 equals `==` 연산자를 사용하여 비교할 수 있습니다. 내부적으로 bloc은 상태가 같은지 비교하고, 같지 않으면 리빌드를 트리거합니다. 이는 위젯 트리가 필요할 때만 리빌드되도록 하여 성능을 빠르고 반응적으로 유지합니다.
-- [google_fonts](https://pub.dev/packages/google_fonts)로 사용자 인터페이스를 꾸밀 수 있습니다.
-- [HydratedBloc](https://pub.dev/packages/hydrated_bloc)을 사용하면 앱을 닫았다가 다시 열 때 애플리케이션 상태를 유지할 수 있습니다.
-- 방금 만든 `weather_repository` 패키지를 포함하여 현재 날씨 데이터를 가져올 수 있습니다!
+- [equatable](https://pub.dev/packages/equatable)을 사용하면 앱의 상태 클래스
+  인스턴스를 equals `==` 연산자를 사용하여 비교할 수 있습니다. 내부적으로 bloc은
+  상태가 같은지 비교하고, 같지 않으면 리빌드를 트리거합니다. 이는 위젯 트리가
+  필요할 때만 리빌드되도록 하여 성능을 빠르고 반응적으로 유지합니다.
+- [google_fonts](https://pub.dev/packages/google_fonts)로 사용자 인터페이스를
+  꾸밀 수 있습니다.
+- [HydratedBloc](https://pub.dev/packages/hydrated_bloc)을 사용하면 앱을
+  닫았다가 다시 열 때 애플리케이션 상태를 유지할 수 있습니다.
+- 방금 만든 `weather_repository` 패키지를 포함하여 현재 날씨 데이터를 가져올 수
+  있습니다!
 
-테스트를 위해 일반적인 `test` 패키지와 의존성 모킹을 위한 `mocktail`, 비즈니스 로직 단위 또는 bloc의 쉬운 테스트를 가능하게 하는 [bloc_test](https://pub.dev/packages/bloc_test)를 포함합니다!
+테스트를 위해 일반적인 `test` 패키지와 의존성 모킹을 위한 `mocktail`, 비즈니스
+로직 단위 또는 bloc의 쉬운 테스트를 가능하게 하는
+[bloc_test](https://pub.dev/packages/bloc_test)를 포함합니다!
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/pubspec.yaml"
@@ -443,7 +542,8 @@ packages 디렉토리 내에서 다음 명령을 실행합니다:
 
 ### Weather 모델
 
-weather 모델의 목표는 앱에 표시되는 날씨 데이터와 온도 설정(섭씨 또는 화씨)을 추적하는 것입니다.
+weather 모델의 목표는 앱에 표시되는 날씨 데이터와 온도 설정(섭씨 또는 화씨)을
+추적하는 것입니다.
 
 `flutter_weather/lib/weather/models/weather.dart`를 만듭니다:
 
@@ -469,20 +569,23 @@ weather 모델의 목표는 앱에 표시되는 날씨 데이터와 온도 설�
 
 ### 배럴 파일
 
-배럴 파일(`flutter_weather/lib/weather/models/models.dart`)에서 모델을 내보냅니다:
+배럴 파일(`flutter_weather/lib/weather/models/models.dart`)에서 모델을
+내보냅니다:
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/models/models.dart"
 	title="lib/weather/models/models.dart"
 />
 
-그런 다음 최상위 weather 배럴 파일(`flutter_weather/lib/weather/weather.dart`)을 만듭니다;
+그런 다음 최상위 weather 배럴 파일(`flutter_weather/lib/weather/weather.dart`)을
+만듭니다;
 
 <WeatherBarrelDartSnippet />
 
 ### Weather
 
-`HydratedCubit`을 사용하여 앱이 닫았다가 다시 열어도 애플리케이션 상태를 기억할 수 있게 합니다.
+`HydratedCubit`을 사용하여 앱이 닫았다가 다시 열어도 애플리케이션 상태를 기억할
+수 있게 합니다.
 
 :::note
 
@@ -492,7 +595,10 @@ weather 모델의 목표는 앱에 표시되는 날씨 데이터와 온도 설�
 
 #### Weather 상태
 
-[Bloc VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) 또는 [Bloc IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc) 확장을 사용하여 `weather` 디렉토리를 우클릭하고 `Weather`라는 새 cubit을 만듭니다. 프로젝트 구조는 다음과 같아야 합니다:
+[Bloc VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+또는 [Bloc IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc) 확장을
+사용하여 `weather` 디렉토리를 우클릭하고 `Weather`라는 새 cubit을 만듭니다.
+프로젝트 구조는 다음과 같아야 합니다:
 
 <WeatherCubitTreeSnippet />
 
@@ -514,12 +620,16 @@ weather 모델의 목표는 앱에 표시되는 날씨 데이터와 온도 설�
 
 #### Weather Cubit
 
-`WeatherState`를 정의했으니 이제 다음 메서드를 노출하는 `WeatherCubit`을 작성합니다:
+`WeatherState`를 정의했으니 이제 다음 메서드를 노출하는 `WeatherCubit`을
+작성합니다:
 
-- `fetchWeather(String? city)` - weather repository를 사용하여 주어진 도시의 weather 객체를 가져오려고 시도
-- `refreshWeather()` - 현재 weather 상태를 기반으로 weather repository를 사용하여 새 weather 객체를 가져옴
+- `fetchWeather(String? city)` - weather repository를 사용하여 주어진 도시의
+  weather 객체를 가져오려고 시도
+- `refreshWeather()` - 현재 weather 상태를 기반으로 weather repository를
+  사용하여 새 weather 객체를 가져옴
 - `toggleUnits()` - 섭씨와 화씨 사이에서 상태를 토글
-- `fromJson(Map<String, dynamic> json)`, `toJson(WeatherState state)` - 지속성에 사용
+- `fromJson(Map<String, dynamic> json)`, `toJson(WeatherState state)` - 지속성에
+  사용
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/cubit/weather_cubit.dart"
@@ -535,7 +645,9 @@ weather 모델의 목표는 앱에 표시되는 날씨 데이터와 온도 설�
 
 ### 유닛 테스트
 
-데이터 및 리포지토리 레이어와 마찬가지로 기능 레벨 로직이 예상대로 동작하는지 확인하기 위해 비즈니스 로직 레이어를 유닛 테스트하는 것이 중요합니다. `mocktail` 외에도 [bloc_test](https://pub.dev/packages/bloc_test)를 사용합니다.
+데이터 및 리포지토리 레이어와 마찬가지로 기능 레벨 로직이 예상대로 동작하는지
+확인하기 위해 비즈니스 로직 레이어를 유닛 테스트하는 것이 중요합니다. `mocktail`
+외에도 [bloc_test](https://pub.dev/packages/bloc_test)를 사용합니다.
 
 `test`, `bloc_test`, `mocktail` 패키지를 `dev_dependencies`에 추가합니다.
 
@@ -546,7 +658,9 @@ weather 모델의 목표는 앱에 표시되는 날씨 데이터와 온도 설�
 
 :::note
 
-[bloc_test](https://pub.dev/packages/bloc_test) 패키지를 사용하면 bloc을 테스트용으로 쉽게 준비하고, 상태 변경을 처리하고, 일관된 방식으로 결과를 확인할 수 있습니다.
+[bloc_test](https://pub.dev/packages/bloc_test) 패키지를 사용하면 bloc을
+테스트용으로 쉽게 준비하고, 상태 변경을 처리하고, 일관된 방식으로 결과를 확인할
+수 있습니다.
 
 :::
 
@@ -561,14 +675,16 @@ weather 모델의 목표는 앱에 표시되는 날씨 데이터와 온도 설�
 
 ### Weather 페이지
 
-`WeatherPage`는 `BlocProvider`를 사용하여 `WeatherCubit` 인스턴스를 위젯 트리에 제공합니다.
+`WeatherPage`는 `BlocProvider`를 사용하여 `WeatherCubit` 인스턴스를 위젯 트리에
+제공합니다.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/view/weather_page.dart"
 	title="lib/weather/view/weather_page.dart"
 />
 
-페이지가 `SettingsPage`와 `SearchPage` 위젯에 의존하는 것을 알 수 있으며, 다음에 만들 것입니다.
+페이지가 `SettingsPage`와 `SearchPage` 위젯에 의존하는 것을 알 수 있으며, 다음에
+만들 것입니다.
 
 ### SettingsPage
 
@@ -581,7 +697,8 @@ weather 모델의 목표는 앱에 표시되는 날씨 데이터와 온도 설�
 
 ### SearchPage
 
-검색 페이지에서 사용자는 원하는 도시 이름을 입력할 수 있으며 `Navigator.of(context).pop`을 통해 이전 라우트에 검색 결과를 제공합니다.
+검색 페이지에서 사용자는 원하는 도시 이름을 입력할 수 있으며
+`Navigator.of(context).pop`을 통해 이전 라우트에 검색 결과를 제공합니다.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/search/view/search_page.dart"
@@ -639,14 +756,16 @@ weather 모델의 목표는 앱에 표시되는 날씨 데이터와 온도 설�
 
 ### 진입점
 
-`main.dart` 파일은 `WeatherApp`과 `BlocObserver`(디버깅 목적)를 초기화하고 세션 간 상태를 유지하기 위해 `HydratedStorage`를 설정해야 합니다.
+`main.dart` 파일은 `WeatherApp`과 `BlocObserver`(디버깅 목적)를 초기화하고 세션
+간 상태를 유지하기 위해 `HydratedStorage`를 설정해야 합니다.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/main.dart"
 	title="lib/main.dart"
 />
 
-`app.dart` 위젯은 이전에 만든 `WeatherPage` 뷰를 빌드하고 `BlocProvider`를 사용하여 `WeatherCubit`을 주입합니다.
+`app.dart` 위젯은 이전에 만든 `WeatherPage` 뷰를 빌드하고 `BlocProvider`를
+사용하여 `WeatherCubit`을 주입합니다.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/app.dart"
@@ -655,7 +774,9 @@ weather 모델의 목표는 앱에 표시되는 날씨 데이터와 온도 설�
 
 ### 위젯 테스트
 
-[`bloc_test`](https://pub.dev/packages/bloc_test) 라이브러리는 UI를 쉽게 테스트할 수 있는 `MockBlocs`와 `MockCubits`도 노출합니다. 다양한 cubit의 상태를 모킹하고 UI가 올바르게 반응하는지 확인할 수 있습니다.
+[`bloc_test`](https://pub.dev/packages/bloc_test) 라이브러리는 UI를 쉽게
+테스트할 수 있는 `MockBlocs`와 `MockCubits`도 노출합니다. 다양한 cubit의 상태를
+모킹하고 UI가 올바르게 반응하는지 확인할 수 있습니다.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/test/weather/view/weather_page_test.dart"
@@ -664,7 +785,9 @@ weather 모델의 목표는 앱에 표시되는 날씨 데이터와 온도 설�
 
 :::note
 
-각 테스트 케이스에서 cubit의 상태를 스텁하기 위해 `mocktail`의 `when` API와 함께 `MockWeatherCubit`을 사용합니다. 이를 통해 모든 상태를 시뮬레이션하고 모든 상황에서 UI가 올바르게 동작하는지 확인할 수 있습니다.
+각 테스트 케이스에서 cubit의 상태를 스텁하기 위해 `mocktail`의 `when` API와 함께
+`MockWeatherCubit`을 사용합니다. 이를 통해 모든 상태를 시뮬레이션하고 모든
+상황에서 UI가 올바르게 동작하는지 확인할 수 있습니다.
 
 :::
 
@@ -674,4 +797,6 @@ weather 모델의 목표는 앱에 표시되는 날씨 데이터와 온도 설�
 
 `flutter run` 명령을 사용하여 최종 앱을 실행할 수 있습니다.
 
-유닛 테스트와 위젯 테스트를 포함한 전체 소스 코드는 [여기](https://github.com/felangel/bloc/tree/master/examples/flutter_weather)에서 확인할 수 있습니다.
+유닛 테스트와 위젯 테스트를 포함한 전체 소스 코드는
+[여기](https://github.com/felangel/bloc/tree/master/examples/flutter_weather)에서
+확인할 수 있습니다.
