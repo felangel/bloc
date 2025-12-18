@@ -1,0 +1,161 @@
+---
+title: سفارشی‌سازی قواعد لینت
+description: سفارشی‌سازی قواعد لینتر bloc
+sidebar:
+  order: 4
+---
+
+import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.astro';
+import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
+import BlocLintEnablingRulesSnippet from '~/components/lint/BlocLintEnablingRulesSnippet.astro';
+import BlocLintDisablingRulesSnippet from '~/components/lint/BlocLintDisablingRulesSnippet.astro';
+import BlocLintChangingSeveritySnippet from '~/components/lint/BlocLintChangingSeveritySnippet.astro';
+import ImportFlutterInfoSnippet from '~/components/lint/ImportFlutterInfoSnippet.mdx';
+import ImportFlutterInfoOutputSnippet from '~/components/lint/ImportFlutterInfoOutputSnippet.astro';
+import BlocLintExcludingFilesSnippet from '~/components/lint/BlocLintExcludingFilesSnippet.astro';
+import BlocLintIgnoreForLineSnippet from '~/components/lint/BlocLintIgnoreForLineSnippet.astro';
+import BlocLintIgnoreForFileSnippet from '~/components/lint/BlocLintIgnoreForFileSnippet.astro';
+
+می‌توانید رفتار لینتر bloc را با تغییر سطح شدت (severity) قواعد، فعال یا
+غیرفعال‌سازی قواعد به‌صورت تکی، و یا استثنا کردن فایل‌ها از تحلیل ایستا،
+شخصی‌سازی کنید.
+
+## فعال و غیرفعال کردن قواعد
+
+لینتر bloc مجموعه‌ای در حال رشد از قواعد لینت را پشتیبانی می‌کند. توجه کنید
+که قواعد لینت لزوماً با هم سازگار نیستند. برای مثال بعضی از توسعه‌دهندگان
+ممکن است ترجیح دهند از بلوک‌ها (blocs) استفاده کنند (`prefer_bloc`) در حالی
+که دیگران ممکن است cubit را ترجیح دهند (`prefer_cubit`).
+
+:::note
+
+برخلاف تحلیل ایستا، قواعد لینت ممکن است مثبت کاذب (false positive) تولید
+کنند. در صورت مشاهدهٔ چنین مواردی یا هر مشکل دیگر، لطفاً با باز کردن یک
+[issue](https://github.com/felangel/bloc/issues/new/choose) ما را مطلع کنید.
+
+:::
+
+### فعال‌سازی قواعد پیشنهادی
+
+کتابخانهٔ bloc مجموعه‌ای از قواعد پیشنهادی لینت را در بستهٔ
+[`bloc_lint`](https://pub.dev/packages/bloc_lint) ارائه می‌دهد.
+
+برای فعال‌سازی مجموعهٔ پیشنهادی، پکیج `bloc_lint` را به‌عنوان یک وابستگی
+dev اضافه کنید:
+
+<InstallBlocLintSnippet />
+
+سپس `analysis_options.yaml` خود را ویرایش کنید تا مجموعهٔ قواعد را وارد کنید:
+
+<BlocLintRecommendedAnalysisOptionsSnippet />
+
+:::note
+
+وقتی نسخهٔ جدیدی از `bloc_lint` منتشر شود، ممکن است کدی که قبلاً از تحلیل
+ایستا عبور می‌کرد اکنون با قواعد جدید مشکل پیدا کند. توصیه می‌کنیم کد خود را
+برای سازگاری با قواعد جدید به‌روزرسانی کنید؛ یا در صورت نیاز می‌توانید به
+صورت اختیاری برخی قواعد را فعال یا غیرفعال کنید.
+
+:::
+
+### فعال‌سازی قواعد به‌صورت تکی
+
+برای فعال‌سازی قواعد به‌صورت تکی، کلید `bloc:` را به‌عنوان کلید سطح بالا در
+فایل `analysis_options.yaml` اضافه کنید و `rules:` را به‌عنوان کلید سطح دوم
+قرار دهید. در خطوط بعدی، قواعد موردنظر را به‌صورت یک لیست YAML (با پیشوند
+خط تیره) مشخص کنید.
+
+برای مثال:
+
+<BlocLintEnablingRulesSnippet />
+
+### غیرفعال کردن قواعد به‌صورت تکی
+
+اگر مجموعهٔ قواعد موجودی مانند مجموعهٔ `recommended` را وارد کرده‌اید، ممکن
+است بخواهید یک یا چند قاعدهٔ واردشده را غیرفعال کنید. غیرفعال‌سازی قواعد
+مشابه فعال‌سازی است، اما به‌جای لیست از یک نقشهٔ YAML استفاده می‌شود.
+
+برای مثال، نمونهٔ زیر مجموعهٔ قواعد پیشنهادی را (recommended) وارد می‌کند
+اما قاعدهٔ `avoid_public_bloc_methods` را حذف می‌کند و در عوض قاعدهٔ
+`prefer_bloc` را فعال می‌نماید:
+
+<BlocLintDisablingRulesSnippet />
+
+## سفارشی‌سازی شدت قواعد
+
+می‌توانید شدت هر قاعده را به این صورت تغییر دهید:
+
+<BlocLintChangingSeveritySnippet />
+
+در این حالت همان قاعدهٔ لینت با شدت `info` به‌جای `warning` گزارش خواهد
+شد:
+
+<ImportFlutterInfoSnippet />
+
+خروجی دستور `bloc lint` باید چیزی شبیه زیر باشد:
+
+<ImportFlutterInfoOutputSnippet />
+
+گزینه‌های سطح شدتِ پشتیبانی‌شده عبارت‌اند از:
+
+| شدت   | توضیحات                            |
+| --------- | -------------------------------------------------- |
+| `error`   | نشان می‌دهد که این الگو اجازه‌پذیر نیست.           |
+| `warning` | نشان می‌دهد که الگو مشکوک است اما قابل‌قبول است. |
+| `info`    | اطلاعاتی به کاربر می‌دهد اما مشکل محسوب نمی‌شود.  |
+| `hint`    | راهی بهتر یا بهینه‌تر برای رسیدن به نتیجه پیشنهاد می‌کند. |
+
+## استثنا کردن فایل‌ها
+
+گاهی اوقات پذیرفتنی است که تحلیل ایستا شکست بخورد. برای مثال ممکن است
+بخواهید هشدارها یا خطاهایی که در کد تولیدشده (generated code) گزارش شده و
+توسط شما نوشته نشده را نادیده بگیرید. همانند قواعد رسمی Dart lint، می‌توانید
+از گزینهٔ `exclude:` در analyzer برای استثنا کردن فایل‌ها از تحلیل ایستا استفاده
+کنید.
+
+می‌توانید نام فایل‌های جداگانه را لیست کنید یا از الگوهای
+[`glob`](https://pub.dev/packages/glob) استفاده نمایید.
+
+:::note
+
+تمام استفاده‌ها از الگوهای glob باید نسبت به پوشه‌ای باشد که فایل
+`analysis_options.yaml` مربوطه در آن قرار دارد.
+
+:::
+
+برای مثال، می‌توانیم تمام کد Dart تولیدشده را با استفاده از گزینه‌های زیر
+از تحلیل مستثنی کنیم:
+
+<BlocLintExcludingFilesSnippet />
+
+## نادیده گرفتن قواعد
+
+مشابه قواعد رسمی Dart lint، می‌توانید قواعد bloc lint را برای یک فایل یا یک
+خط خاص با استفاده از `// ignore_for_file` و `// ignore` نادیده بگیرید.
+
+:::note
+
+برای نادیده گرفتن چند قاعده برای یک خط یا فایل، فهرستی از قواعد را با
+کاما جدا کنید.
+
+:::
+
+### نادیده گرفتن خطوط
+
+می‌توانیم وقوع‌های خاص نقض قواعد را با افزودن یک کامنت `ignore` درست بالای
+خط مشکل‌ساز یا الحاق آن به انتهای همان خط نادیده بگیریم.
+
+برای مثال، می‌توانیم موارد خاص `prefer_file_naming_conventions` را در یک
+فایل مشخص نادیده بگیریم:
+
+<BlocLintIgnoreForLineSnippet />
+
+### نادیده گرفتن فایل‌ها
+
+می‌توانیم تمام وقوع‌های نقض قواعد داخل یک فایل را با افزودن کامنت
+`ignore_for_file` در هر نقطه از فایل نادیده بگیریم.
+
+برای مثال، می‌توانیم تمام وقوع‌های `prefer_file_naming_conventions` را در یک
+فایل مشخص نادیده بگیریم:
+
+<BlocLintIgnoreForFileSnippet />
