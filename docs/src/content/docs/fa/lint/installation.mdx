@@ -1,6 +1,6 @@
 ---
-title: Linter Installation
-description: Installing the bloc linter.
+title: نصب لینتر
+description: نصب لینتر bloc.
 sidebar:
   order: 2
 ---
@@ -13,50 +13,51 @@ import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.ast
 import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
 import BlocLintMultipleRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintMultipleRecommendedAnalysisOptionsSnippet.astro';
 
-## Command-Line Tools
+## ابزارهای خط فرمان
 
-To use the linter from the command line, install
-[`package:bloc_tools`](https://pub.dev/packages/bloc_tools) via the following
-command:
+برای استفاده از لینتر از خط فرمان، پکیج
+[`package:bloc_tools`](https://pub.dev/packages/bloc_tools) را با دستور زیر نصب
+کنید:
 
 <InstallBlocToolsSnippet />
 
-Once the bloc command-line tools have been installed, you can run the bloc
-linter via the `bloc lint` command:
+پس از نصب ابزارهای خط فرمان bloc، می‌توانید لینتر bloc را با دستور
+`bloc lint` اجرا کنید:
 
 <BlocToolsLintHelpOutputSnippet />
 
-## Recommended Rule Set
+## مجموعه قوانین پیشنهادی
 
-To install the recommended lint rule set, install
-[`package:bloc_lint`](https://pub.dev/packages/bloc_lint) as a dev dependency
-via the following command:
+برای نصب مجموعه قوانین لینت پیشنهادی، پکیج
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint) را به‌عنوان یک وابستگی
+dev با دستور زیر نصب کنید:
 
 <InstallBlocLintSnippet />
 
-Then, add an `analysis_options.yaml` to the root of your project with the
-recommended rule set:
+سپس یک فایل `analysis_options.yaml` در ریشهٔ پروژه اضافه کنید و مجموعه قوانین
+پیشنهادی را در آن قرار دهید:
 
 <BlocLintRecommendedAnalysisOptionsSnippet />
 
-If needed, you can include multiple rule sets by defining them as a list:
+در صورت نیاز می‌توانید چند مجموعه قانون را با تعریف آن‌ها به‌صورت یک لیست
+اضافه کنید:
 
 <BlocLintMultipleRecommendedAnalysisOptionsSnippet />
 
-## IDE Integrations
+## ادغام با IDE
 
-The following IDEs officially support the bloc linter and language server to
-provide instant diagnostics directly within your IDE.
+IDEهای زیر به‌صورت رسمی از لینتر bloc و language server آن پشتیبانی می‌کنند تا
+تشخیص‌های آنی (diagnostics) را مستقیماً درون محیط توسعه‌تان نمایش دهند.
 
 <CardGrid>
 	<Card title="VSCode" icon="vscode">
-		Support for the [Bloc VSCode
-		Extension](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
-		is available in v6.8.0.
+		پشتیبانی از
+		[Bloc VSCode Extension](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+		از نسخهٔ v6.8.0 در دسترس است.
 	</Card>
 	<Card title="IntelliJ" icon="jetbrains">
-		Support for the [Bloc IntelliJ
-		Plugin](https://plugins.jetbrains.com/plugin/12129-bloc) is available in
-		v4.1.0.
+		پشتیبانی از
+		[Bloc IntelliJ Plugin](https://plugins.jetbrains.com/plugin/12129-bloc)
+		از نسخهٔ v4.1.0 در دسترس است.
 	</Card>
 </CardGrid>
