@@ -138,28 +138,29 @@ export default defineConfig({
 					badge: { text: 'new' },
 					items: [
 						{
-                            label: 'Overview ',
-                            link: '/lint/',
-                            translations: {fa: 'بررسی اجمالی',}
-                        },
+							label: 'Overview ',
+							link: '/lint/',
+							translations: { fa: 'بررسی اجمالی' },
+						},
 						{
-                            label: 'Installation ', link: '/lint/installation/' ,
-                            translations: {fa: 'نصب',}
-                        },
+							label: 'Installation ',
+							link: '/lint/installation/',
+							translations: { fa: 'نصب' },
+						},
 						{
-                            label: 'Configuration ',
-                            link: '/lint/configuration/',
-                            translations: {fa: 'پیکربندی',}
-                        },
+							label: 'Configuration ',
+							link: '/lint/configuration/',
+							translations: { fa: 'پیکربندی' },
+						},
 						{
-                            label: 'Customizing Rules ',
-                            link: '/lint/customizing-rules/',
-                            translations: {fa: 'سفارشی سازی قوانین',}
-                        },
+							label: 'Customizing Rules ',
+							link: '/lint/customizing-rules/',
+							translations: { fa: 'سفارشی سازی قوانین' },
+						},
 						{
-                            label: 'Rules',
-                            autogenerate: { directory: '/lint-rules' },
-						    translations: {fa: 'قوانین',}
+							label: 'Rules',
+							autogenerate: { directory: '/lint-rules' },
+							translations: { fa: 'قوانین' },
 						},
 					],
 				},
