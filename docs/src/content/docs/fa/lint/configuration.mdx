@@ -13,8 +13,8 @@ import AvoidFlutterImportsWarningSnippet from '~/components/lint/ImportFlutterWa
 import RunBlocLintCounterCubitSnippet from '~/components/lint/RunBlocLintCounterCubitSnippet.astro';
 import AvoidFlutterImportsWarningOutputSnippet from '~/components/lint/ImportFlutterWarningOutputSnippet.astro';
 
-به‌طور پیش‌فرض، لینتر bloc هیچ تشخیصی گزارش نمی‌دهد مگر اینکه گزینه‌های
-تحلیل (analysis options) پروژه را به‌طور صریح پیکربندی کرده باشید.
+به‌طور پیش‌فرض، لینتر bloc هیچ تشخیصی گزارش نمی‌دهد مگر اینکه گزینه‌های تحلیل
+(analysis options) پروژه را به‌طور صریح پیکربندی کرده باشید.
 
 برای شروع، یک فایل `analysis_options.yaml` در ریشهٔ پروژه ایجاد کنید یا فایل
 موجود را ویرایش نمایید و فهرستی از قوانین را زیر کلید سطح‌بالای `bloc` قرار
@@ -26,16 +26,16 @@ import AvoidFlutterImportsWarningOutputSnippet from '~/components/lint/ImportFlu
 
 <RunBlocLintInCurrentDirectorySnippet />
 
-دستور بالا تمام فایل‌ها در پوشهٔ جاری و زیرپوشه‌های آن را تحلیل خواهد کرد،
-اما می‌توانید با ارسال آرگومان‌های خط فرمان، تنها فایل‌ها یا پوشه‌های خاصی را
-هم نیز لینت کنید:
+دستور بالا تمام فایل‌ها در پوشهٔ جاری و زیرپوشه‌های آن را تحلیل خواهد کرد، اما
+می‌توانید با ارسال آرگومان‌های خط فرمان، تنها فایل‌ها یا پوشه‌های خاصی را هم نیز
+لینت کنید:
 
 <RunBlocLintInSrcTestSnippet />
 
 دستور بالا تمام کدهای موجود در پوشه‌های `src` و `test` را تحلیل خواهد کرد.
 
-اگر قانون `avoid_flutter_imports` فعال باشد، هر فایل bloc یا cubit که شامل
-یک import مربوط به فلاتر باشد به‌صورت هشدار گزارش خواهد شد:
+اگر قانون `avoid_flutter_imports` فعال باشد، هر فایل bloc یا cubit که شامل یک
+import مربوط به فلاتر باشد به‌صورت هشدار گزارش خواهد شد:
 
 <AvoidFlutterImportsWarningSnippet />
 
