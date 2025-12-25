@@ -1,0 +1,44 @@
+---
+title: از متدهای عمومی Bloc خودداری کنید
+description: قانون avoid_public_bloc_methods.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/avoid_public_bloc_methods/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/avoid_public_bloc_methods/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+	<Badge text="recommended" variant="success" />
+</div>
+
+از در معرض قرار دادن متدهای عمومی در نمونه‌های `Bloc` خودداری کنید.
+
+## دلیل
+
+Blocها به رویدادهای ورودی واکنش نشان می‌دهند و وضعیت‌های خروجی را منتشر می‌کنند. بنابراین
+روش پیشنهادی برای ارتباط با یک نمونهٔ bloc استفاده از متد `add` است. در اکثر موارد نیازی
+به ایجاد انتزاع‌های اضافی روی API `add` نیست.
+
+![Bloc Architecture](~/assets/concepts/bloc_architecture_full.png)
+
+## مثال‌ها
+**اجتناب کنید**
+از در معرض قرار دادن متدهای عمومی روی نمونه‌های bloc
+
+**بد**:
+
+<BadSnippet />
+
+**خوب**:
+
+<GoodSnippet />
+
+## فعال‌سازی
+
+برای فعال کردن قانون `avoid_public_bloc_methods`، آن را به فایل
+`analysis_options.yaml` خود تحت `bloc` > `rules` اضافه کنید:
+
+<EnableRuleSnippet name="avoid_public_bloc_methods" />
