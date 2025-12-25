@@ -1,0 +1,47 @@
+---
+title:  Cubit را ترجیح دهید
+description: قانون prefer_cubit.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/prefer_cubit/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/prefer_cubit/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+</div>
+
+استفاده از نمونه‌های `Cubit` را به‌جای نمونه‌های `Bloc` ترجیح دهید.
+
+## دلیل
+
+این قانون صرفاً یک قاعدهٔ سبک است. در برخی موارد، تیم‌ها ممکن است ترجیح دهند
+برای حفظ یکپارچگی و سازگاری، در سراسر برنامه فقط از نمونه‌های `Cubit` استفاده کنند.
+
+:::tip
+
+برای آشنایی بیشتر با مزایای `Cubit` به
+[Core Concepts](/bloc-concepts/#cubit-advantages) مراجعه کنید.
+
+:::
+
+## مثال‌ها
+**اجتناب کنید**
+از به‌کارگیری نمونه‌های `Bloc`
+
+**بد**:
+
+<BadSnippet />
+
+**خوب**:
+
+<GoodSnippet />
+
+## فعال‌سازی
+
+برای فعال کردن قانون `prefer_cubit`، آن را به فایل
+`analysis_options.yaml` خود تحت `bloc` > `rules` اضافه کنید:
+
+<EnableRuleSnippet name="prefer_cubit" />
