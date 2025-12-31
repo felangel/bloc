@@ -1,3 +1,7 @@
+# 10.0.1
+
+- chore: update to `test ^1.28.0`
+
 # 10.0.0
 
 - refactor: `blocTest` depends on core interfaces instead of `BlocBase` ([#4311](https://github.com/felangel/bloc/pull/4311))

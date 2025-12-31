@@ -1,3 +1,7 @@
+# 0.3.7
+
+- chore: upgrade dependencies
+
 # 0.3.6
 
 - feat: upgrade to latest analyzer frontend
