@@ -13,7 +13,8 @@ import GoodSnippet from '~/components/lint-rules/prefer_build_context_extensions
 	<Badge text="dart" variant="note" />
 </div>
 
-ترجیح دهید از اکستنشن‌های `BuildContext` برای دسترسی به یک نمونهٔ `Bloc` یا `Repository` استفاده کنید.
+ترجیح دهید از اکستنشن‌های `BuildContext` برای دسترسی به یک نمونهٔ `Bloc` یا
+`Repository` استفاده کنید.
 
 :::note
 
@@ -24,19 +25,20 @@ import GoodSnippet from '~/components/lint-rules/prefer_build_context_extensions
 
 ## دلیل
 
-برای حفظ یکپارچگی، ترجیح دهید از اکستنشن‌های `BuildContext` مانند `context.read`،
-`context.watch` و `context.select` به‌جای `BlocProvider.of`، `RepositoryProvider.of`،
-`BlocBuilder` یا `BlocSelector` استفاده کنید.
+برای حفظ یکپارچگی، ترجیح دهید از اکستنشن‌های `BuildContext` مانند
+`context.read`، `context.watch` و `context.select` به‌جای `BlocProvider.of`،
+`RepositoryProvider.of`، `BlocBuilder` یا `BlocSelector` استفاده کنید.
 
-| روش صریح                                                             | اکستنشن                 |
-| ------------------------------------------------------------------- | ----------------------- |
-| `BlocProvider.of<Bloc>(context, listen: false)`                     | `context.read<Bloc>`    |
-| `BlocBuilder<Bloc, State>(...)` یا `BlocProvider.of<Bloc>(context)` | `context.watch<Bloc>`   |
-| `BlocSelector<Bloc, State>(...)`                                    | `context.select`        |
+| روش صریح                                                            | اکستنشن               |
+| ------------------------------------------------------------------- | --------------------- |
+| `BlocProvider.of<Bloc>(context, listen: false)`                     | `context.read<Bloc>`  |
+| `BlocBuilder<Bloc, State>(...)` یا `BlocProvider.of<Bloc>(context)` | `context.watch<Bloc>` |
+| `BlocSelector<Bloc, State>(...)`                                    | `context.select`      |
 
 ## مثال‌ها
-**اجتناب کنید**
-از استفاده از `BlocProvider.of<T>(context)` برای دسترسی به یک نمونهٔ `Bloc`
+
+**اجتناب کنید** از استفاده از `BlocProvider.of<T>(context)` برای دسترسی به یک
+نمونهٔ `Bloc`
 
 **بد**:
 

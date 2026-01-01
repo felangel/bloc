@@ -13,7 +13,8 @@ import GoodSnippet from '~/components/lint-rules/avoid_build_context_extensions/
 	<Badge text="dart" variant="note" />
 </div>
 
-از استفاده از اکستنشن‌های `BuildContext` برای دسترسی به نمونه‌های `Bloc` یا `Cubit` خودداری کنید.
+از استفاده از اکستنشن‌های `BuildContext` برای دسترسی به نمونه‌های `Bloc` یا
+`Cubit` خودداری کنید.
 
 :::note
 
@@ -24,19 +25,20 @@ import GoodSnippet from '~/components/lint-rules/avoid_build_context_extensions/
 
 ## دلیل
 
-برای یکپارچگی و برای صراحت بیشتر، به‌جای استفاده از اکستنشن‌های `BuildContext` مستقیم از
-روش‌های زیرین استفاده کنید. این رویکرد برای تست نیز مفید است، زیرا امکان موک کردن یک متد اکستنشن وجود ندارد.
+برای یکپارچگی و برای صراحت بیشتر، به‌جای استفاده از اکستنشن‌های `BuildContext`
+مستقیم از روش‌های زیرین استفاده کنید. این رویکرد برای تست نیز مفید است، زیرا
+امکان موک کردن یک متد اکستنشن وجود ندارد.
 
-| اکستنشن         | روش صریح                                                             |
-| ---------------- | --------------------------------------------------------------------- |
-| `context.read`   | `BlocProvider.of<Bloc>(context, listen: false)`                       |
-| `context.watch`  | `BlocBuilder<Bloc, State>(...)` یا `BlocProvider.of<Bloc>(context)`   |
-| `context.select` | `BlocSelector<Bloc, State>(...)`                                      |
+| اکستنشن          | روش صریح                                                            |
+| ---------------- | ------------------------------------------------------------------- |
+| `context.read`   | `BlocProvider.of<Bloc>(context, listen: false)`                     |
+| `context.watch`  | `BlocBuilder<Bloc, State>(...)` یا `BlocProvider.of<Bloc>(context)` |
+| `context.select` | `BlocSelector<Bloc, State>(...)`                                    |
 
 ## مثال‌ها
 
-از استفاده از اکستنشن‌های `BuildContext` برای تعامل با نمونه‌های `Bloc` یا `Cubit`
-خودداری کنید.
+از استفاده از اکستنشن‌های `BuildContext` برای تعامل با نمونه‌های `Bloc` یا
+`Cubit` خودداری کنید.
 
 **بد**:
 

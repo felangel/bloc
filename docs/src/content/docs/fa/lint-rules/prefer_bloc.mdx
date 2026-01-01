@@ -17,20 +17,20 @@ import GoodSnippet from '~/components/lint-rules/prefer_bloc/GoodSnippet.astro';
 
 ## دلیل
 
-این قانون صرفاً یک قاعدهٔ سبک است. در برخی موارد تیم‌ها ممکن است ترجیح دهند
-تا برای حفظ یکپارچگی و سازگاری، در سراسر برنامه فقط از نمونه‌های `Bloc` استفاده کنند.
+این قانون صرفاً یک قاعدهٔ سبک است. در برخی موارد تیم‌ها ممکن است ترجیح دهند تا
+برای حفظ یکپارچگی و سازگاری، در سراسر برنامه فقط از نمونه‌های `Bloc` استفاده
+کنند.
 
 :::tip
 
 برای آشنایی بیشتر با مزایای `Bloc` به
-[Core Concepts](/bloc-concepts/#bloc-advantages) مراجعه کنید.
+[Core Concepts](/fa/bloc-concepts/#مزایای-bloc) مراجعه کنید.
 
 :::
 
 ## مثال‌ها
 
-**اجتناب کنید**
-از به‌کارگیری نمونه‌های `Cubit`
+**اجتناب کنید** از به‌کارگیری نمونه‌های `Cubit`
 
 **بد**:
 
@@ -42,7 +42,7 @@ import GoodSnippet from '~/components/lint-rules/prefer_bloc/GoodSnippet.astro';
 
 ## فعال‌سازی
 
-برای فعال کردن قانون `prefer_bloc`، آن را به فایل
-`analysis_options.yaml` خود تحت `bloc` > `rules` اضافه کنید:
+برای فعال کردن قانون `prefer_bloc`، آن را به فایل `analysis_options.yaml` خود
+تحت `bloc` > `rules` اضافه کنید:
 
 <EnableRuleSnippet name="prefer_bloc" />

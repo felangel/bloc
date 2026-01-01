@@ -26,22 +26,22 @@ import GoodSnippet from '~/components/lint-rules/prefer_void_public_cubit_method
 ## دلیل
 
 متدهای عمومی روی نمونه‌های `Cubit` باید برای اطلاع‌رسانی به `Cubit` و آغاز
-تغییرات وضعیت از طریق متد `emit` استفاده شوند. اگر فراخواننده نیاز به دسترسی
-به اطلاعات وضعیت داشته باشد، باید آن را از طریق شیء `state` دریافت کند.
+تغییرات وضعیت از طریق متد `emit` استفاده شوند. اگر فراخواننده نیاز به دسترسی به
+اطلاعات وضعیت داشته باشد، باید آن را از طریق شیء `state` دریافت کند.
 
 :::note
 
-قوانین زیر مرتبط هستند و معمولاً همراه با
-`prefer_void_public_cubit_methods` فعال می‌شوند:
+قوانین زیر مرتبط هستند و معمولاً همراه با `prefer_void_public_cubit_methods`
+فعال می‌شوند:
 
-- [`avoid_public_bloc_methods`](/lint-rules/avoid_public_bloc_methods)
-- [`avoid_public_fields`](/lint-rules/avoid_public_fields)
+- [`avoid_public_bloc_methods`](/fa/lint-rules/avoid_public_bloc_methods)
+- [`avoid_public_fields`](/fa/lint-rules/avoid_public_fields)
 
 :::
 
 ## مثال‌ها
-**اجتناب کنید**
-از تعریف متدهای عمومی غیر-void روی نمونه‌های `Cubit`
+
+**اجتناب کنید** از تعریف متدهای عمومی غیر-void روی نمونه‌های `Cubit`
 
 **بد**:
 

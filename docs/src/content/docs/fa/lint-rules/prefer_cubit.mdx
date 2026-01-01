@@ -1,5 +1,5 @@
 ---
-title:  Cubit را ترجیح دهید
+title: Cubit را ترجیح دهید
 description: قانون prefer_cubit.
 ---
 
@@ -18,18 +18,19 @@ import GoodSnippet from '~/components/lint-rules/prefer_cubit/GoodSnippet.astro'
 ## دلیل
 
 این قانون صرفاً یک قاعدهٔ سبک است. در برخی موارد، تیم‌ها ممکن است ترجیح دهند
-برای حفظ یکپارچگی و سازگاری، در سراسر برنامه فقط از نمونه‌های `Cubit` استفاده کنند.
+برای حفظ یکپارچگی و سازگاری، در سراسر برنامه فقط از نمونه‌های `Cubit` استفاده
+کنند.
 
 :::tip
 
 برای آشنایی بیشتر با مزایای `Cubit` به
-[Core Concepts](/bloc-concepts/#cubit-advantages) مراجعه کنید.
+[Core Concepts](/fa/bloc-concepts/#cubit-مزایای) مراجعه کنید.
 
 :::
 
 ## مثال‌ها
-**اجتناب کنید**
-از به‌کارگیری نمونه‌های `Bloc`
+
+**اجتناب کنید** از به‌کارگیری نمونه‌های `Bloc`
 
 **بد**:
 
@@ -41,7 +42,7 @@ import GoodSnippet from '~/components/lint-rules/prefer_cubit/GoodSnippet.astro'
 
 ## فعال‌سازی
 
-برای فعال کردن قانون `prefer_cubit`، آن را به فایل
-`analysis_options.yaml` خود تحت `bloc` > `rules` اضافه کنید:
+برای فعال کردن قانون `prefer_cubit`، آن را به فایل `analysis_options.yaml` خود
+تحت `bloc` > `rules` اضافه کنید:
 
 <EnableRuleSnippet name="prefer_cubit" />
