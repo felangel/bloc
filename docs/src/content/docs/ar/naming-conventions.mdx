@@ -1,0 +1,88 @@
+---
+title: اصطلاحات التسمية
+description: نظرة عامة على اصطلاحات التسمية الموصى بها عند استخدام حزمة bloc.
+---
+
+import EventExamplesGood1 from '~/components/naming-conventions/EventExamplesGood1Snippet.astro';
+import EventExamplesBad1 from '~/components/naming-conventions/EventExamplesBad1Snippet.astro';
+import StateExamplesGood1Snippet from '~/components/naming-conventions/StateExamplesGood1Snippet.astro';
+import SingleStateExamplesGood1Snippet from '~/components/naming-conventions/SingleStateExamplesGood1Snippet.astro';
+import StateExamplesBad1Snippet from '~/components/naming-conventions/StateExamplesBad1Snippet.astro';
+
+اصطلاحات التسمية التالية هي مجرد توصيات وهي **اختيارية بالكامل**. لا تتردد في استخدام أي اصطلاحات تسمية تفضلها. قد تجد أن بعض الأمثلة/التوثيقات لا تتبع اصطلاحات التسمية هذه، ويرجع ذلك بشكل أساسي إلى البساطة/الإيجاز. يوصى بشدة بهذه الاصطلاحات للمشاريع الكبيرة التي تضم عدة مطورين.
+
+## اصطلاحات الأحداث (Event Conventions)
+
+يجب تسمية الأحداث بصيغة **الماضي** لأن الأحداث هي أشياء حدثت بالفعل من منظور الـ bloc.
+
+### الهيكلية (Anatomy)
+
+`BlocSubject` + `Noun (اختياري)` + `Verb (الحدث)`
+
+يجب أن تتبع أحداث التحميل الأولية الاصطلاح التالي: `BlocSubject` + `Started`
+
+:::note
+
+يجب أن يكون اسم فئة الحدث الأساسية (base event class) هو: `BlocSubject` + `Event`.
+
+:::
+
+### أمثلة
+
+✅ **جيد**
+
+<EventExamplesGood1 />
+
+❌ **سيئ**
+
+<EventExamplesBad1 />
+
+## اصطلاحات الحالات (State Conventions)
+
+يجب أن تكون الحالات أسماء (Nouns) لأن الحالة هي مجرد لقطة (snapshot) في نقطة زمنية معينة. هناك طريقتان شائعتان لتمثيل الحالة: استخدام الفئات الفرعية (subclasses) أو استخدام فئة واحدة (single class).
+
+### الهيكلية (Anatomy)
+
+#### الفئات الفرعية (Subclasses)
+
+`BlocSubject` + `Verb (الإجراء)` + `State`
+
+عند تمثيل الحالة كفئات فرعية متعددة، يجب أن تكون `State` واحدة مما يلي:
+
+`Initial` | `Success` | `Failure` | `InProgress`
+
+:::note
+
+يجب أن تتبع الحالات الأولية (Initial states) الاصطلاح التالي: `BlocSubject` + `Initial`.
+
+:::
+
+#### الفئة الواحدة (Single Class)
+
+`BlocSubject` + `State`
+
+عند تمثيل الحالة كفئة أساسية واحدة، يجب استخدام تعداد (enum) باسم `BlocSubject` + `Status` لتمثيل حالة الـ State:
+
+`initial` | `success` | `failure` | `loading`.
+
+:::note
+
+يجب أن يكون اسم فئة الحالة الأساسية (base state class) دائمًا: `BlocSubject` + `State`.
+
+:::
+
+### أمثلة
+
+✅ **جيد**
+
+##### الفئات الفرعية (Subclasses)
+
+<StateExamplesGood1Snippet />
+
+##### الفئة الواحدة (Single Class)
+
+<SingleStateExamplesGood1Snippet />
+
+❌ **سيئ**
+
+<StateExamplesBad1Snippet />
