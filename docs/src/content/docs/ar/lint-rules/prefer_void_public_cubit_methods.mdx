@@ -1,0 +1,55 @@
+---
+title: تفضيل الدوال العامة ذات القيمة المرتجعة Void في Cubit
+description: قاعدة prefer_void_public_cubit_methods.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/prefer_void_public_cubit_methods/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/prefer_void_public_cubit_methods/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+	<Badge text="recommended" variant="success" />
+</div>
+
+**تفضيل** استخدام الدوال العامة ذات القيمة المرتجعة `void` في كائنات `Cubit`.
+
+:::note
+
+تم تقديم قاعدة التحليل (lint rule) هذه في الإصدار `0.2.0-dev.2` من حزمة
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint)
+
+:::
+
+## الأساس المنطقي (Rationale)
+
+يجب استخدام الدوال العامة في كائنات `Cubit` لإخطار `Cubit` وبدء تغييرات الحالة عبر دالة `emit`. إذا احتاج المُستدعي (caller) إلى الوصول إلى أي معلومات عن الحالة، فيجب عليه الوصول إليها من خلال خاصية `state` بدلاً من ذلك.
+
+:::note
+
+القواعد التالية ذات صلة ويتم تفعيلها عادةً بالتزامن مع قاعدة `prefer_void_public_cubit_methods`:
+
+- [`avoid_public_bloc_methods`](/lint-rules/avoid_public_bloc_methods)
+- [`avoid_public_fields`](/lint-rules/avoid_public_fields)
+
+:::
+
+## الأمثلة (Examples)
+
+**تجنب** الدوال العامة ذات القيمة المرتجعة غير `void` في كائنات `Cubit`.
+
+**مثال سيئ (BAD)**:
+
+<BadSnippet />
+
+**مثال جيد (GOOD)**:
+
+<GoodSnippet />
+
+## التفعيل (Enable)
+
+لتفعيل قاعدة `prefer_void_public_cubit_methods`، أضفها إلى ملف `analysis_options.yaml` الخاص بك ضمن قسم `bloc` > `rules`:
+
+<EnableRuleSnippet name="prefer_void_public_cubit_methods" />
