@@ -1,0 +1,51 @@
+---
+title: تثبيت المدقق (Linter Installation)
+description: تثبيت مدقق bloc.
+sidebar:
+  order: 2
+---
+
+import { CardGrid } from '@astrojs/starlight/components';
+import Card from '~/components/landing/Card.astro';
+import InstallBlocToolsSnippet from '~/components/lint/InstallBlocToolsSnippet.astro';
+import BlocToolsLintHelpOutputSnippet from '~/components/lint/BlocToolsLintHelpOutputSnippet.astro';
+import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.astro';
+import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
+import BlocLintMultipleRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintMultipleRecommendedAnalysisOptionsSnippet.astro';
+
+## أدوات سطر الأوامر
+
+لاستخدام المدقق من سطر الأوامر، قم بتثبيت حزمة [`package:bloc_tools`](https://pub.dev/packages/bloc_tools) عبر الأمر التالي:
+
+<InstallBlocToolsSnippet />
+
+بمجرد تثبيت أدوات سطر أوامر bloc، يمكنك تشغيل مدقق bloc عبر الأمر `bloc lint`:
+
+<BlocToolsLintHelpOutputSnippet />
+
+## مجموعة القواعد الموصى بها
+
+لتثبيت مجموعة قواعد التدقيق الموصى بها، قم بتثبيت حزمة [`package:bloc_lint`](https://pub.dev/packages/bloc_lint) كاعتماد تطوير (dev dependency) عبر الأمر التالي:
+
+<InstallBlocLintSnippet />
+
+بعد ذلك، أضف ملف `analysis_options.yaml` إلى الجذر الرئيسي لمشروعك مع مجموعة القواعد الموصى بها:
+
+<BlocLintRecommendedAnalysisOptionsSnippet />
+
+إذا لزم الأمر، يمكنك تضمين مجموعات قواعد متعددة عن طريق تعريفها كقائمة:
+
+<BlocLintMultipleRecommendedAnalysisOptionsSnippet />
+
+## تكاملات بيئات التطوير المتكاملة (IDE Integrations)
+
+تدعم بيئات التطوير المتكاملة (IDEs) التالية رسميًا مدقق bloc وخادم اللغة (language server) لتوفير تشخيصات فورية مباشرة داخل بيئة التطوير الخاصة بك.
+
+<CardGrid>
+	<Card title="VSCode" icon="vscode">
+		يتوفر دعم [إضافة Bloc VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) في الإصدار v6.8.0.
+	</Card>
+	<Card title="IntelliJ" icon="jetbrains">
+		يتوفر دعم [إضافة Bloc IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc) في الإصدار v4.1.0.
+	</Card>
+</CardGrid>

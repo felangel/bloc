@@ -1,0 +1,59 @@
+---
+title: نظرة عامة على المدقق (Linter Overview)
+description: مقدمة لمدقق bloc.
+sidebar:
+  order: 1
+---
+
+import AvoidFlutterImportsWarningSnippet from '~/components/lint/ImportFlutterWarningSnippet.mdx';
+import AvoidFlutterImportsWarningOutputSnippet from '~/components/lint/ImportFlutterWarningOutputSnippet.astro';
+import InstallBlocToolsSnippet from '~/components/lint/InstallBlocToolsSnippet.astro';
+import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.astro';
+import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
+import RunBlocLintInCurrentDirectorySnippet from '~/components/lint/RunBlocLintInCurrentDirectorySnippet.astro';
+
+التدقيق (Linting) هو عملية **التحليل الساكن (statically analyzing)** للكود للبحث عن الأخطاء المحتملة بالإضافة إلى الأخطاء البرمجية والأسلوبية.
+
+يحتوي Bloc على مدقق مدمج (built-in linter)، يمكن استخدامه من خلال بيئة التطوير المتكاملة (IDE) الخاصة بك أو عبر [`أدوات سطر أوامر bloc`](https://pub.dev/packages/bloc_tools) باستخدام الأمر `bloc lint`.
+
+بمساعدة مدقق bloc، يمكنك تحسين جودة قاعدة الكود الخاصة بك وفرض الاتساق دون الحاجة إلى تنفيذ سطر واحد من الكود.
+
+على سبيل المثال، ربما قمت عن طريق الخطأ باستيراد اعتمادية (dependency) خاصة بـ Flutter إلى الـ cubit الخاص بك:
+
+<AvoidFlutterImportsWarningSnippet />
+
+إذا تم إعداده بشكل صحيح، سيشير مدقق bloc إلى الاستيراد وينتج التحذير التالي:
+
+<AvoidFlutterImportsWarningOutputSnippet />
+
+في الأقسام التالية، سنتناول كيفية تثبيت وإعداد وتخصيص مدقق bloc حتى تتمكن من الاستفادة من التحليل الساكن في قاعدة الكود الخاصة بك.
+
+## البدء السريع (Quick Start)
+
+ابدأ باستخدام مدقق bloc في بضع خطوات سريعة وسهلة.
+
+:::note
+
+لكي تبدأ باستخدام bloc، يجب أن يكون لديك [Dart SDK](https://dart.dev/get-dart) مثبتًا على جهازك.
+
+:::
+
+1.  قم بتثبيت [أدوات سطر أوامر bloc](https://pub.dev/packages/bloc_tools)
+
+    <InstallBlocToolsSnippet />
+
+2.  قم بتثبيت حزمة [bloc_lint](https://pub.dev/packages/bloc_lint)
+
+    <InstallBlocLintSnippet />
+
+3.  أضف ملف `analysis_options.yaml` إلى الجذر الرئيسي لمشروعك مع القواعد الموصى بها
+
+    <BlocLintRecommendedAnalysisOptionsSnippet />
+
+4.  قم بتشغيل المدقق
+
+    <RunBlocLintInCurrentDirectorySnippet />
+
+هذا كل ما في الأمر 🎉
+
+استمر في القراءة للحصول على نظرة أكثر تعمقًا حول إعداد وتخصيص مدقق bloc.
