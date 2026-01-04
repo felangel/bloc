@@ -1,0 +1,53 @@
+---
+title: إعدادات المدقق (Linter Configuration)
+description: إعداد مدقق bloc (bloc linter).
+sidebar:
+  order: 3
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import BlocLintBasicAnalysisOptionsSnippet from '~/components/lint/BlocLintBasicAnalysisOptionsSnippet.astro';
+import RunBlocLintInCurrentDirectorySnippet from '~/components/lint/RunBlocLintInCurrentDirectorySnippet.astro';
+import RunBlocLintInSrcTestSnippet from '~/components/lint/RunBlocLintInSrcTestSnippet.astro';
+import AvoidFlutterImportsWarningSnippet from '~/components/lint/ImportFlutterWarningSnippet.mdx';
+import RunBlocLintCounterCubitSnippet from '~/components/lint/RunBlocLintCounterCubitSnippet.astro';
+import AvoidFlutterImportsWarningOutputSnippet from '~/components/lint/ImportFlutterWarningOutputSnippet.astro';
+
+بشكل افتراضي، لن يقوم مدقق bloc بالإبلاغ عن أي تشخيصات (diagnostics) ما لم تقم **بإعداد خيارات التحليل (analysis options) للمشروع بشكل صريح**.
+
+للبدء، قم بإنشاء أو تعديل ملف `analysis_options.yaml` الموجود في **الجذر الرئيسي لمشروعك**، بحيث يتضمن قائمة بالقواعد تحت المفتاح الرئيسي `bloc`:
+
+<BlocLintBasicAnalysisOptionsSnippet />
+
+قم بتشغيل المدقق باستخدام الأمر التالي في الطرفية (terminal):
+
+<RunBlocLintInCurrentDirectorySnippet />
+
+سيقوم الأمر أعلاه بتحليل جميع الملفات في المجلد الحالي والمجلدات الفرعية التابعة له، ولكن يمكنك أيضًا فحص ملفات ومجلدات محددة عن طريق تمريرها كمعاملات للأمر (command-line arguments):
+
+<RunBlocLintInSrcTestSnippet />
+
+سيقوم الأمر أعلاه بتحليل جميع الأكواد البرمجية في مجلدات `src` و `test`.
+
+إذا كانت قاعدة `avoid_flutter_imports` مُفعلة، فسيتم الإبلاغ عن أي ملف `bloc` أو `cubit` يحتوي على استيراد (import) لـ Flutter كتحذير:
+
+<AvoidFlutterImportsWarningSnippet />
+
+يمكنك رؤية التحذير عن طريق تشغيل الأمر `bloc lint`:
+
+<RunBlocLintCounterCubitSnippet />
+
+يجب أن يبدو الإخراج (output) كما يلي:
+
+<AvoidFlutterImportsWarningOutputSnippet />
+
+:::note
+
+فيما يلي جميع قواعد المدقق (lint rules) المدعومة:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/packages/bloc_lint/lib/all.yaml"
+	title="package:bloc_lint/all.yaml"
+/>
+
+:::
