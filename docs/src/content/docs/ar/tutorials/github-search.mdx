@@ -1,0 +1,558 @@
+```markdown
+title: بحث GitHub
+description:
+  دليل شامل حول كيفية بناء تطبيق بحث GitHub باستخدام Flutter و AngularDart مع bloc.
+sidebar:
+  order: 9
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import SetupSnippet from '~/components/tutorials/github-search/SetupSnippet.astro';
+import DartPubGetSnippet from '~/components/tutorials/github-search/DartPubGetSnippet.astro';
+import FlutterCreateSnippet from '~/components/tutorials/github-search/FlutterCreateSnippet.astro';
+import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.astro';
+import StagehandSnippet from '~/components/tutorials/github-search/StagehandSnippet.astro';
+import ActivateStagehandSnippet from '~/components/tutorials/github-search/ActivateStagehandSnippet.astro';
+
+![advanced](https://img.shields.io/badge/level-advanced-red.svg)
+
+في هذا الدرس التعليمي، سنقوم ببناء تطبيق بحث GitHub باستخدام Flutter و AngularDart لشرح كيفية مشاركة طبقات البيانات ومنطق العمل بين المشروعين.
+
+![demo](~/assets/tutorials/flutter-github-search.gif)
+
+![demo](~/assets/tutorials/ngdart-github-search.gif)
+```
+
+## المواضيع الرئيسية
+
+- [BlocProvider](/flutter-bloc-concepts#blocprovider)، ويدجت Flutter التي توفر Bloc لأطفالها.
+- [BlocBuilder](/flutter-bloc-concepts#blocbuilder)، ويدجت Flutter التي تدير بناء الويدجت استجابة للحالات الجديدة.
+- استخدام Cubit بدلاً من Bloc.  
+  [ما الفرق؟](/bloc-concepts#cubit-vs-bloc)
+- منع إعادة البناء غير الضرورية باستخدام [Equatable](/faqs#when-to-use-equatable).
+- استخدام محول أحداث مخصص `EventTransformer` مع  
+  [`bloc_concurrency`](https://pub.dev/packages/bloc_concurrency).
+- إجراء طلبات الشبكة باستخدام حزمة `http`.
+
+## مكتبة البحث المشتركة في GitHub
+
+تتضمن مكتبة البحث المشتركة في GitHub النماذج، مزود البيانات، المستودع، بالإضافة إلى الـ bloc الذي سيتم مشاركته بين AngularDart و Flutter.
+
+### الإعداد
+
+سنبدأ بإنشاء مجلد جديد لتطبيقنا.
+
+<SetupSnippet />
+
+:::note
+
+سيحتوي المجلد `common_github_search` على المكتبة المشتركة.
+
+:::
+
+نحتاج إلى إنشاء ملف `pubspec.yaml` مع التبعيات المطلوبة.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/pubspec.yaml"
+	title="common_github_search/pubspec.yaml"
+/>
+
+وأخيرًا، نحتاج إلى تثبيت التبعيات.
+
+<DartPubGetSnippet />
+
+هذا كل ما يتعلق بإعداد المشروع! الآن يمكننا البدء في بناء حزمة
+`common_github_search`.
+
+### عميل GitHub
+
+الـ `GithubClient` هو المسؤول عن توفير البيانات الخام من
+[واجهة برمجة تطبيقات GitHub](https://developer.github.com/v3/).
+
+:::note
+
+يمكنك الاطلاع على نموذج للبيانات التي نحصل عليها
+من [هنا](https://api.github.com/search/repositories?q=dartlang).
+
+:::
+
+لننشئ الملف `github_client.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/github_client.dart"
+	title="common_github_search/lib/src/github_client.dart"
+/>
+
+:::note
+
+يقوم `GithubClient` ببساطة بإجراء طلب شبكة إلى API بحث المستودعات في GitHub وتحويل النتيجة إلى إما `SearchResult` أو
+`SearchResultError` بشكل Future.
+
+:::
+
+:::note
+
+تعتمد طريقة تنفيذ `GithubClient` على الدالة `SearchResult.fromJson`،
+والتي لم ننفذها بعد.
+
+:::
+
+التالي، نحتاج إلى تعريف نماذج `SearchResult` و `SearchResultError`.
+
+#### نموذج نتائج البحث
+
+أنشئ `search_result.dart`، والذي يُمثّل قائمة من `SearchResultItems`
+تعتمد على استعلام المستخدم:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/models/search_result.dart"
+	title="lib/src/models/search_result.dart"
+/>
+
+:::note
+
+تعتمد طريقة تنفيذ `SearchResult` على `SearchResultItem.fromJson`،
+التي لم ننفذها بعد.
+
+:::
+
+:::note
+
+نحن لا ندرج الخصائص التي لن تُستخدم في نموذجنا.
+
+:::
+
+#### نموذج عنصر نتيجة البحث
+
+بعدها، سننشئ `search_result_item.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/models/search_result_item.dart"
+	title="lib/src/models/search_result_item.dart"
+/>
+
+:::note
+
+مرة أخرى، يعتمد تنفيذ `SearchResultItem` على `GithubUser.fromJson`،
+التي لم ننفذها بعد.
+
+:::
+
+#### نموذج مستخدم GitHub
+
+التالي، سننشئ `github_user.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/models/github_user.dart"
+	title="lib/src/models/github_user.dart"
+/>
+
+الآن بعد أن أكملنا تنفيذ `SearchResult` واعتمادياته، سننتقل إلى `SearchResultError`.
+
+#### نموذج خطأ نتيجة البحث
+
+أنشئ `search_result_error.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/models/search_result_error.dart"
+	title="lib/src/models/search_result_error.dart"
+/>
+
+لقد انتهينا من `GithubClient`، لذلك سننتقل إلى `GithubCache`، الذي سيكون مسؤولًا عن
+[التخزين المؤقت للنتائج (Memoization)](https://en.wikipedia.org/wiki/Memoization)
+كوسيلة لتحسين الأداء.
+
+### التخزين المؤقت لـ GitHub
+
+سيتولى `GithubCache` مهمة تذكر جميع الاستعلامات السابقة لتجنب إجراء طلبات شبكة غير ضرورية إلى API GitHub. هذا سيُساعد أيضًا على تحسين أداء التطبيق.
+
+أنشئ `github_cache.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/github_cache.dart"
+	title="lib/src/github_cache.dart"
+/>
+
+الآن نحن مستعدون لإنشاء `GithubRepository`!
+
+### مستودع GitHub
+
+مستودع GitHub مسؤول عن خلق طبقة تجريدية بين طبقة البيانات (`GithubClient`) وطبقة منطق الأعمال (`Bloc`). هذه الطبقة أيضًا المكان الذي سنستخدم فيه `GithubCache`.
+
+أنشئ `github_repository.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/github_repository.dart"
+	title="lib/src/github_repository.dart"
+/>
+
+:::note
+
+يعتمد `GithubRepository` على `GithubCache` و `GithubClient` ويقوم بتجريد التنفيذ الداخلي. تطبيقنا لا يحتاج لمعرفة كيفية استرجاع البيانات أو مصدرها لأنه لا يهمه ذلك. يمكننا تغيير طريقة عمل المستودع في أي وقت طالما أننا لم نغير الواجهة (interface) فليس هناك حاجة لتعديل أي كود يستخدمه.
+
+:::
+
+الآن بعد أن أكملنا طبقة مزود البيانات وطبقة المستودع، نحن جاهزون للانتقال إلى طبقة منطق الأعمال.
+
+### حدث بحث GitHub
+
+سيتم إعلام الـ Bloc عندما يقوم المستخدم بكتابة اسم مستودع، والذي سنمثله عبر حدث `TextChanged` من نوع `GithubSearchEvent`.
+
+أنشئ `github_search_event.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/github_search_bloc/github_search_event.dart"
+	title="lib/src/github_search_bloc/github_search_event.dart"
+/>
+
+:::note
+
+نحن نستخدم الوراثة من [`Equatable`](https://pub.dev/packages/equatable) لتمكين مقارنة مثيلات `GithubSearchEvent`. بشكل افتراضي، عامل المساواة يعيد true فقط إذا كانت هذه والمثيل الآخر نفس الكائن.
+
+:::
+
+### حالة بحث GitHub
+
+طبقة العرض لدينا ستحتاج إلى مجموعة من المعلومات لكي تعرض الواجهة بشكل صحيح:
+
+- `SearchStateEmpty`- تخبر طبقة العرض أنه لم يتم إدخال أي مدخلات من المستخدم.
+
+- `SearchStateLoading`- تخبر طبقة العرض بضرورة عرض مؤشر تحميل.
+
+- `SearchStateSuccess`- تخبر طبقة العرض بأنها تمتلك بيانات للعرض.
+
+  - `items`- ستكون قائمة من `List<SearchResultItem>` التي سيتم عرضها.
+
+- `SearchStateError`- تخبر طبقة العرض بحدوث خطأ أثناء جلب البيانات.
+
+  - `error`- هو الخطأ المحدد الذي حدث.
+
+يمكننا الآن إنشاء `github_search_state.dart` وتنفيذه كما يلي.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/github_search_bloc/github_search_state.dart"
+	title="lib/src/github_search_bloc/github_search_state.dart"
+/>
+
+:::note
+
+نحن نستخدم الوراثة من [`Equatable`](https://pub.dev/packages/equatable) لتمكين مقارنة مثيلات `GithubSearchState`. بشكل افتراضي، عامل المساواة يعيد true فقط إذا كانت هذه والمثيل الآخر نفس الكائن.
+
+:::
+
+الآن بعد أن أنشأنا الأحداث (Events) والحالات (States)، يمكننا إنشاء الـ
+`GithubSearchBloc`.
+
+### Bloc بحث GitHub
+
+أنشئ `github_search_bloc.dart`:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/github_search_bloc/github_search_bloc.dart"
+	title="lib/src/github_search_bloc/github_search_bloc.dart"
+/>
+
+:::note
+
+يقوم `GithubSearchBloc` بتحويل `GithubSearchEvent` إلى `GithubSearchState` ويعتمد على `GithubRepository`.
+
+:::
+
+:::note
+
+أنشأنا مُحوّل أحداث مخصص `EventTransformer` لـ
+[تأخير التنفيذ (Debounce)](https://pub.dev/documentation/stream_transform/latest/stream_transform/RateLimit/debounce.html)
+لـ `GithubSearchEvents`. واحد من الأسباب التي دفعتنا لاستخدام Bloc بدل Cubit هو للاستفادة من محولات الدفق (stream transformers).
+
+:::
+
+رائع! لقد انتهينا من حزمة `common_github_search`. المنتج النهائي يجب أن يبدو
+مثل
+[هذا](https://github.com/felangel/bloc/tree/master/examples/github_search/common_github_search).
+
+بعد ذلك، سنعمل على تنفيذ Flutter.
+
+## بحث GitHub باستخدام Flutter
+
+تطبيق Flutter GitHub Search سيكون تطبيق Flutter يعيد استخدام النماذج، مزودي البيانات، المستودعات (repositories)، وblocs من مكتبة `common_github_search` لتنفيذ وظيفة البحث في GitHub.
+
+### الإعداد
+
+نبدأ بإنشاء مشروع Flutter جديد داخل مجلد `github_search` على نفس المستوى الذي توجد به مكتبة `common_github_search`.
+
+<FlutterCreateSnippet />
+
+بعدها، نحتاج لتحديث ملف `pubspec.yaml` ليشمل جميع الاعتمادات اللازمة.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/flutter_github_search/pubspec.yaml"
+	title="flutter_github_search/pubspec.yaml"
+/>
+
+:::note
+
+نحن نضيف مكتبة `common_github_search` التي أنشأناها حديثًا كاعتماد.
+
+:::
+
+الآن، نحتاج لتثبيت الاعتمادات.
+
+<FlutterPubGetSnippet />
+
+هذا كل شيء بخصوص إعداد المشروع. بما أن مكتبة `common_github_search` تحتوي على طبقة البيانات وطبقة منطق العمل، ما علينا بناؤه هو فقط طبقة العرض.
+
+### نموذج البحث
+
+سنحتاج لإنشاء نموذج يحتوي على عناصر واجهة `_SearchBar` و `_SearchBody`.
+
+- `_SearchBar` مسؤول عن استقبال إدخال المستخدم.
+- `_SearchBody` مسؤول عن عرض نتائج البحث، مؤشرات التحميل، والأخطاء.
+
+لننشئ ملف `search_form.dart`.
+
+سيكون عنصر `SearchForm` من نوع `StatelessWidget` يعرض عناصر `_SearchBar` و `_SearchBody`.
+
+أما `_SearchBar` فسيكون من نوع `StatefulWidget` لأنه بحاجة للحفاظ على `TextEditingController` خاص به ليتتبع ما أدخله المستخدم.
+
+`_SearchBody` هو `StatelessWidget` مسؤول عن عرض نتائج البحث، الأخطاء، مؤشرات التحميل، وسيكون مستهلكًا لـ `GithubSearchBloc`.
+
+إذا كانت الحالة الحالية هي `SearchStateSuccess`، نعرض `_SearchResults` والتي سنقوم بتنفيذها لاحقًا.
+
+`_SearchResults` هو `StatelessWidget` يأخذ قائمة من النوع `List<SearchResultItem>` ويعرضها كمجموعة من عناصر `_SearchResultItem`.
+
+أما `_SearchResultItem` فهو `StatelessWidget` مسؤول عن عرض معلومات نتيجة بحث واحدة، وكذلك معالجة تفاعل المستخدم والتنقل إلى رابط المستودع عند النقر.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/flutter_github_search/lib/search_form.dart"
+	title="flutter_github_search/lib/search_form.dart"
+/>
+
+:::note
+
+يقوم `_SearchBar` بالوصول إلى `GitHubSearchBloc` عبر `context.read<GithubSearchBloc>()` ويُخطِر الـ bloc بأحداث `TextChanged`.
+
+:::
+
+:::note
+
+يستخدم `_SearchBody` `BlocBuilder` لإعادة البناء استجابة لتغييرات الحالة. ونظرًا لأن معامل الـ bloc في كائن `BlocBuilder` تم حذفه، فسيقوم `BlocBuilder` تلقائيًا بالبحث عبر `BlocProvider` وفي السياق الحالي `BuildContext`. يمكنك القراءة أكثر [هنا.](/flutter-bloc-concepts#blocbuilder)
+
+:::
+
+:::note
+
+نستخدم `ListView.builder` لبناء قائمة قابلة للتمرير من عناصر `_SearchResultItem`.
+
+:::
+
+:::note
+
+نستخدم مكتبة [url_launcher](https://pub.dev/packages/url_launcher) لفتح الروابط الخارجية.
+
+:::
+
+### جمع كل شيء معًا
+
+الآن ما تبقى هو تنفيذ التطبيق الرئيسي في ملف `main.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/flutter_github_search/lib/main.dart"
+	title="flutter_github_search/lib/main.dart"
+/>
+
+:::note
+
+يتم إنشاء `GithubRepository` في ملف `main` ويتم حقنه داخل `App`. يتم لفّ `SearchForm` داخل `BlocProvider` المسؤول عن تهيئة وإغلاق وجعل نسخة `GithubSearchBloc` متاحة لعناصر واجهة `SearchForm` والأطفال الخاصة به.
+
+:::
+
+هذا كل شيء! لقد طبقنا بنجاح تطبيق بحث GitHub باستخدام Flutter مع مكتبات [bloc](https://pub.dev/packages/bloc) و[flutter_bloc](https://pub.dev/packages/flutter_bloc)، وفصلنا بنجاح طبقة العرض عن طبقة منطق العمل.
+
+يمكنك الاطلاع على الشيفرة المصدرية كاملة
+[هنا](https://github.com/felangel/bloc/tree/master/examples/github_search/flutter_github_search).
+
+أخيرًا، سنقوم ببناء تطبيق بحث GitHub باستخدام AngularDart.
+
+## بحث GitHub باستخدام AngularDart
+
+تطبيق بحث GitHub باستخدام AngularDart سيكون تطبيق AngularDart يعيد استخدام النماذج، موفري البيانات، المستودعات (repositories)، وbloc من `common_github_search` لتنفيذ ميزة البحث في GitHub.
+
+### الإعداد
+
+نحتاج أولاً إلى إنشاء مشروع AngularDart جديد داخل مجلد `github_search` على نفس المستوى مع مجلد `common_github_search`.
+
+<StagehandSnippet />
+
+:::note
+
+يمكنك تثبيت `stagehand` عبر الأمر التالي:
+
+<ActivateStagehandSnippet />
+:::
+
+بعدها يمكننا استبدال محتويات ملف `pubspec.yaml` بما يلي:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/pubspec.yaml"
+	title="angular_github_search/pubspec.yaml"
+/>
+
+### نموذج البحث (Search Form)
+
+تمامًا كما في تطبيق Flutter الخاص بنا، سنحتاج لإنشاء `SearchForm` يحتوي على مكون `SearchBar` و `SearchBody`.
+
+مكون `SearchForm` سيتبع واجهتي `OnInit` و `OnDestroy` لأنه سيحتاج لإنشاء وإغلاق `GithubSearchBloc`.
+
+- `SearchBar` سيكون مسؤولًا عن استقبال إدخال المستخدم.
+- `SearchBody` سيكون مسؤولًا عن عرض نتائج البحث، مؤشرات التحميل، والأخطاء.
+
+دعونا ننشئ `search_form_component.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_form_component.dart"
+	title="angular_github_search/lib/src/search_form/search_form_component.dart"
+/>
+
+:::note
+
+يتم حقن `GithubRepository` داخل `SearchFormComponent`.
+
+:::
+
+:::note
+
+يتم إنشاء وإغلاق `GithubSearchBloc` بواسطة `SearchFormComponent`.
+
+:::
+
+القالب الخاص بنا (`search_form_component.html`) سيكون كالتالي:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_form_component.html"
+	title="angular_github_search/lib/src/search_form/search_form_component.html"
+/>
+
+الآن، سنقوم بتنفيذ مكون `SearchBar`.
+
+### شريط البحث (Search Bar)
+
+`SearchBar` هو مكون مسؤول عن استقبال إدخال المستخدم وإعلام `GithubSearchBloc` بتغييرات النص.
+
+أنشئ `search_bar_component.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_bar/search_bar_component.dart"
+	title="angular_github_search/lib/src/search_form/search_bar/search_bar_component.dart"
+/>
+
+:::note
+
+`SearchBarComponent` يعتمد على `GitHubSearchBloc` لأنه مسؤول عن إخطار الـ bloc بحدث `TextChanged`.
+
+:::
+
+بعدها، يمكننا إنشاء القالب `search_bar_component.html`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_bar/search_bar_component.html"
+	title="angular_github_search/lib/src/search_form/search_bar/search_bar_component.html"
+/>
+
+لقد انتهينا من `SearchBar`، الآن ننتقل إلى `SearchBody`.
+
+### جسم البحث (Search Body)
+
+`SearchBody` هو مكون مسؤول عن عرض نتائج البحث، الأخطاء، ومؤشرات التحميل. سيكون المستهلك لـ `GithubSearchBloc`.
+
+أنشئ `search_body_component.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_body/search_body_component.dart"
+	title="angular_github_search/lib/src/search_form/search_body/search_body_component.dart"
+/>
+
+:::note
+
+`SearchBodyComponent` يعتمد على `GithubSearchState` والذي يتم توفيره من خلال `GithubSearchBloc` باستخدام أنبوب الـ bloc في `angular_bloc`.
+
+:::
+
+أنشئ القالب `search_body_component.html`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_body/search_body_component.html"
+	title="angular_github_search/lib/src/search_form/search_body/search_body_component.html"
+/>
+
+إذا كانت الحالة `isSuccess`، نقوم بعرض `SearchResults`. سنقوم بتنفيذه لاحقًا.
+
+### نتائج البحث (Search Results)
+
+`SearchResults` هو مكون يستقبل قائمة من `List<SearchResultItem>` ويعرضها على هيئة قائمة من عناصر `SearchResultItem`.
+
+أنشئ `search_results_component.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_body/search_results/search_results_component.dart"
+	title="angular_github_search/lib/src/search_form/search_body/search_results/search_results_component.dart"
+/>
+
+بعدها، سننشئ القالب `search_results_component.html`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_body/search_results/search_results_component.html"
+	title="angular_github_search/lib/src/search_form/search_body/search_results/search_results_component.html"
+/>
+
+:::note
+
+نستخدم `ngFor` لبناء قائمة من مكونات `SearchResultItem`.
+:::
+
+الآن حان الوقت لتنفيذ `SearchResultItem`.
+
+### عنصر نتيجة البحث (Search Result Item)
+
+`SearchResultItem` هو مكون مسؤول عن عرض المعلومات الخاصة بنتيجة بحث واحدة. وهو مسؤول أيضًا عن التعامل مع تفاعل المستخدم والتنقل إلى رابط المستودع عند نقر المستخدم.
+
+أنشئ `search_result_item_component.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_body/search_results/search_result_item/search_result_item_component.dart"
+	title="angular_github_search/lib/src/search_form/search_body/search_results/search_result_item/search_result_item_component.dart"
+/>
+
+والقالب المرتبط به في `search_result_item_component.html`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_body/search_results/search_result_item/search_result_item_component.html"
+	title="angular_github_search/lib/src/search_form/search_body/search_results/search_result_item/search_result_item_component.html"
+/>
+
+### تجميع كل شيء معًا
+
+لدينا الآن جميع مكوناتنا وحان الوقت لتجميعها كلها معًا في `app_component.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/app_component.dart"
+	title="angular_github_search/lib/app_component.dart"
+/>
+
+:::note
+
+نحن نقوم بإنشاء `GithubRepository` في `AppComponent` وحقنه في مكون `SearchForm`.
+
+:::
+
+هذا كل شيء! لقد قمنا الآن بنجاح بتنفيذ تطبيق بحث GitHub باستخدام AngularDart مع حزمتي `bloc` و `angular_bloc`، وفصلنا بنجاح طبقة العرض عن منطق العمل/الأعمال.
+
+يمكنك إيجاد الشيفرة المصدرية كاملة [هنا](https://github.com/felangel/bloc/tree/master/examples/github_search/angular_github_search).
+
+## الملخص
+
+في هذا الدرس، قمنا بإنشاء تطبيق Flutter و AngularDart مع مشاركة جميع النماذج (models)، مزودي البيانات (data providers)، وbloc بين الاثنين.
+
+الشيء الوحيد الذي اضطررنا لكتابته مرتين فعليًا هو طبقة العرض (واجهة المستخدم)، وهو أمر رائع من حيث الكفاءة وسرعة التطوير. بالإضافة إلى ذلك، من الشائع جدًا أن تمتلك تطبيقات الويب وتطبيقات الجوال تجارب مستخدم وأنماط تصميم مختلفة، وتُظهر هذه الطريقة مدى سهولة بناء تطبيقين يبدوان مختلفين تمامًا بينما يشتركان في نفس بيانات ومنطق العمل.
+
+يمكن العثور على المصدر الكامل  
+[هنا](https://github.com/felangel/bloc/tree/master/examples/github_search).

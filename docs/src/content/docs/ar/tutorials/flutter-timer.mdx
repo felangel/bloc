@@ -1,0 +1,267 @@
+---
+title: مؤقت Flutter (Flutter Timer)
+description: دليل متعمق حول كيفية بناء تطبيق مؤقت (Timer) في Flutter باستخدام Bloc.
+sidebar:
+  order: 2
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import FlutterCreateSnippet from '~/components/tutorials/flutter-timer/FlutterCreateSnippet.astro';
+import TimerBlocEmptySnippet from '~/components/tutorials/flutter-timer/TimerBlocEmptySnippet.astro';
+import TimerBlocInitialStateSnippet from '~/components/tutorials/flutter-timer/TimerBlocInitialStateSnippet.astro';
+import TimerBlocTickerSnippet from '~/components/tutorials/flutter-timer/TimerBlocTickerSnippet.astro';
+import TimerBlocOnStartedSnippet from '~/components/tutorials/flutter-timer/TimerBlocOnStartedSnippet.astro';
+import TimerBlocOnTickedSnippet from '~/components/tutorials/flutter-timer/TimerBlocOnTickedSnippet.astro';
+import TimerBlocOnPausedSnippet from '~/components/tutorials/flutter-timer/TimerBlocOnPausedSnippet.astro';
+import TimerBlocOnResumedSnippet from '~/components/tutorials/flutter-timer/TimerBlocOnResumedSnippet.astro';
+import TimerPageSnippet from '~/components/tutorials/flutter-timer/TimerPageSnippet.astro';
+import ActionsSnippet from '~/components/tutorials/flutter-timer/ActionsSnippet.astro';
+import BackgroundSnippet from '~/components/tutorials/flutter-timer/BackgroundSnippet.astro';
+
+![beginner](https://img.shields.io/badge/level-beginner-green.svg)
+
+في الدليل التالي، سنتناول كيفية بناء تطبيق مؤقت باستخدام مكتبة Bloc. يجب أن يبدو التطبيق النهائي كما يلي:
+
+![demo](~/assets/tutorials/flutter-timer.gif)
+
+## المواضيع الرئيسية
+
+- مراقبة تغييرات الحالة باستخدام [BlocObserver](/bloc-concepts#blocobserver).
+- [BlocProvider](/flutter-bloc-concepts#blocprovider)، وهي ويدجت (Widget) من Flutter توفر كتلة (Bloc) لأبنائها.
+- [BlocBuilder](/flutter-bloc-concepts#blocbuilder)، وهي ويدجت من Flutter تتولى بناء الويدجت استجابةً للحالات الجديدة.
+- منع إعادة البناء غير الضرورية باستخدام [Equatable](/faqs#when-to-use-equatable).
+- تعلم كيفية استخدام `StreamSubscription` في Bloc.
+- منع إعادة البناء غير الضرورية باستخدام `buildWhen`.
+
+## الإعداد
+
+سنبدأ بإنشاء مشروع Flutter جديد تمامًا:
+
+<FlutterCreateSnippet />
+
+يمكننا بعد ذلك استبدال محتويات `pubspec.yaml` بما يلي:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+:::note
+
+سنستخدم حزمتي [flutter_bloc](https://pub.dev/packages/flutter_bloc) و [equatable](https://pub.dev/packages/equatable) في هذا التطبيق.
+
+:::
+
+بعد ذلك، قم بتشغيل `flutter pub get` لتثبيت جميع التبعيات.
+
+## هيكل المشروع
+
+```
+├── lib
+|   ├── timer
+│   │   ├── bloc
+│   │   │   └── timer_bloc.dart
+|   |   |   └── timer_event.dart
+|   |   |   └── timer_state.dart
+│   │   └── view
+│   │   |   ├── timer_page.dart
+│   │   ├── timer.dart
+│   ├── app.dart
+│   ├── ticker.dart
+│   └── main.dart
+├── pubspec.lock
+├── pubspec.yaml
+```
+
+## المؤقت (Ticker)
+
+سيكون المؤقت (`Ticker`) هو مصدر البيانات لتطبيق المؤقت. سيكشف عن دفق من النبضات (`stream of ticks`) يمكننا الاشتراك فيه والتفاعل معه.
+
+ابدأ بإنشاء `ticker.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/ticker.dart"
+	title="lib/ticker.dart"
+/>
+
+كل ما يفعله صنف `Ticker` الخاص بنا هو كشف دالة `tick` تأخذ عدد النبضات (الثواني) التي نريدها وتُرجع دفقًا (`stream`) يُصدر الثواني المتبقية كل ثانية.
+
+بعد ذلك، نحتاج إلى إنشاء `TimerBloc` الخاص بنا والذي سيستهلك `Ticker`.
+
+## كتلة المؤقت (Timer Bloc)
+
+### حالة المؤقت (TimerState)
+
+سنبدأ بتعريف `TimerStates` التي يمكن أن يكون عليها `TimerBloc` الخاص بنا.
+
+يمكن أن تكون حالة `TimerBloc` الخاصة بنا واحدة مما يلي:
+
+- `TimerInitial`: جاهز لبدء العد التنازلي من المدة المحددة.
+- `TimerRunInProgress`: يعد تنازليًا بنشاط من المدة المحددة.
+- `TimerRunPause`: متوقف مؤقتًا عند مدة متبقية معينة.
+- `TimerRunComplete`: اكتمل بمدة متبقية 0.
+
+كل من هذه الحالات سيكون له تأثير على واجهة المستخدم والإجراءات التي يمكن للمستخدم القيام بها. على سبيل المثال:
+
+- إذا كانت الحالة هي `TimerInitial`، فسيتمكن المستخدم من بدء المؤقت.
+- إذا كانت الحالة هي `TimerRunInProgress`، فسيتمكن المستخدم من إيقاف المؤقت مؤقتًا وإعادة تعيينه، بالإضافة إلى رؤية المدة المتبقية.
+- إذا كانت الحالة هي `TimerRunPause`، فسيتمكن المستخدم من استئناف المؤقت وإعادة تعيينه.
+- إذا كانت الحالة هي `TimerRunComplete`، فسيتمكن المستخدم من إعادة تعيين المؤقت.
+
+للحفاظ على جميع ملفات الـ bloc الخاصة بنا معًا، دعنا ننشئ دليل `bloc` مع `bloc/timer_state.dart`.
+
+:::tip
+
+يمكنك استخدام إضافات [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) أو [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc) لإنشاء ملفات الـ bloc التالية تلقائيًا لك.
+
+:::
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/timer/bloc/timer_state.dart"
+	title="lib/timer/bloc/timer_state.dart"
+/>
+
+لاحظ أن جميع `TimerStates` توسع الصنف الأساسي المجرد `TimerState` الذي يحتوي على خاصية المدة (`duration`). هذا لأنه بغض النظر عن الحالة التي يوجد بها `TimerBloc` الخاص بنا، نريد أن نعرف مقدار الوقت المتبقي. بالإضافة إلى ذلك، يوسع `TimerState` من `Equatable` لتحسين الكود الخاص بنا من خلال ضمان أن تطبيقنا لا يؤدي إلى إعادة بناء إذا حدثت نفس الحالة.
+
+بعد ذلك، دعنا نحدد وننفذ `TimerEvents` التي سيعالجها `TimerBloc` الخاص بنا.
+
+### حدث المؤقت (TimerEvent)
+
+سيحتاج `TimerBloc` الخاص بنا إلى معرفة كيفية معالجة الأحداث التالية:
+
+- `TimerStarted`: يُعلم `TimerBloc` بضرورة بدء المؤقت.
+- `TimerPaused`: يُعلم `TimerBloc` بضرورة إيقاف المؤقت مؤقتًا.
+- `TimerResumed`: يُعلم `TimerBloc` بضرورة استئناف المؤقت.
+- `TimerReset`: يُعلم `TimerBloc` بضرورة إعادة تعيين المؤقت إلى حالته الأصلية.
+- `_TimerTicked`: يُعلم `TimerBloc` بحدوث نبضة (`tick`) وبضرورة تحديث حالته وفقًا لذلك.
+
+إذا لم تستخدم إضافات [IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) أو [VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)، فقم بإنشاء `bloc/timer_event.dart` ودعنا ننفذ تلك الأحداث.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/timer/bloc/timer_event.dart"
+	title="lib/timer/bloc/timer_event.dart"
+/>
+
+بعد ذلك، دعنا ننفذ `TimerBloc`!
+
+### TimerBloc
+
+إذا لم تكن قد قمت بذلك بالفعل، فقم بإنشاء `bloc/timer_bloc.dart` وأنشئ `TimerBloc` فارغًا.
+
+<TimerBlocEmptySnippet />
+
+أول شيء نحتاج إلى القيام به هو تحديد الحالة الأولية لـ `TimerBloc` الخاص بنا. في هذه الحالة، نريد أن يبدأ `TimerBloc` في حالة `TimerInitial` بمدة محددة مسبقًا تبلغ دقيقة واحدة (60 ثانية).
+
+<TimerBlocInitialStateSnippet />
+
+بعد ذلك، نحتاج إلى تحديد التبعية على `Ticker` الخاص بنا.
+
+<TimerBlocTickerSnippet />
+
+نقوم أيضًا بتعريف `StreamSubscription` لـ `Ticker` الخاص بنا والذي سنتطرق إليه بعد قليل.
+
+في هذه المرحلة، كل ما تبقى هو تنفيذ معالجات الأحداث. لتحسين قابلية القراءة، أحب تقسيم كل معالج حدث إلى دالة مساعدة خاصة به. سنبدأ بحدث `TimerStarted`.
+
+<TimerBlocOnStartedSnippet />
+
+إذا تلقى `TimerBloc` حدث `TimerStarted`، فإنه يدفع حالة `TimerRunInProgress` بمدة البدء. بالإضافة إلى ذلك، إذا كان هناك بالفعل `_tickerSubscription` مفتوح، فنحن بحاجة إلى إلغائه لتحرير الذاكرة. نحتاج أيضًا إلى تجاوز طريقة `close` في `TimerBloc` الخاص بنا حتى نتمكن من إلغاء `_tickerSubscription` عند إغلاق `TimerBloc`. أخيرًا، نستمع إلى دفق `_ticker.tick` وفي كل نبضة، نضيف حدث `_TimerTicked` بالمدة المتبقية.
+
+بعد ذلك، دعنا ننفذ معالج حدث `_TimerTicked`.
+
+<TimerBlocOnTickedSnippet />
+
+في كل مرة يتم فيها تلقي حدث `_TimerTicked`، إذا كانت مدة النبضة أكبر من 0، فنحن بحاجة إلى دفع حالة `TimerRunInProgress` محدثة بالمدة الجديدة. بخلاف ذلك، إذا كانت مدة النبضة هي 0، فقد انتهى المؤقت الخاص بنا ونحتاج إلى دفع حالة `TimerRunComplete`.
+
+الآن دعنا ننفذ معالج حدث `TimerPaused`.
+
+<TimerBlocOnPausedSnippet />
+
+في `_onPaused` إذا كانت `state` الخاصة بـ `TimerBloc` هي `TimerRunInProgress`، فيمكننا إيقاف `_tickerSubscription` مؤقتًا ودفع حالة `TimerRunPause` بالمدة الحالية للمؤقت.
+
+بعد ذلك، دعنا ننفذ معالج حدث `TimerResumed` حتى نتمكن من استئناف المؤقت.
+
+<TimerBlocOnResumedSnippet />
+
+معالج حدث `TimerResumed` مشابه جدًا لمعالج حدث `TimerPaused`. إذا كان `TimerBloc` في `state` من نوع `TimerRunPause` وتلقى حدث `TimerResumed`، فإنه يستأنف `_tickerSubscription` ويدفع حالة `TimerRunInProgress` بالمدة الحالية.
+
+أخيرًا، نحتاج إلى تنفيذ معالج حدث `TimerReset`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/timer/bloc/timer_bloc.dart"
+	title="lib/timer/bloc/timer_bloc.dart"
+/>
+
+إذا تلقى `TimerBloc` حدث `TimerReset`، فإنه يحتاج إلى إلغاء `_tickerSubscription` الحالي حتى لا يتم إخطاره بأي نبضات إضافية ويدفع حالة `TimerInitial` بالمدة الأصلية.
+
+هذا كل ما يتعلق بـ `TimerBloc`. الآن كل ما تبقى هو تنفيذ واجهة المستخدم لتطبيق المؤقت الخاص بنا.
+
+## واجهة مستخدم التطبيق (Application UI)
+
+### MyApp
+
+يمكننا أن نبدأ بحذف محتويات `main.dart` واستبدالها بما يلي.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/main.dart"
+	title="lib/main.dart"
+/>
+
+بعد ذلك، دعنا ننشئ ويدجت 'App' الخاص بنا في `app.dart`، والذي سيكون جذر تطبيقنا.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/app.dart"
+	title="lib/app.dart"
+/>
+
+بعد ذلك، نحتاج إلى تنفيذ ويدجت `Timer` الخاص بنا.
+
+### المؤقت (Timer)
+
+سيكون ويدجت `Timer` الخاص بنا (`lib/timer/view/timer_page.dart`) مسؤولاً عن عرض الوقت المتبقي جنبًا إلى جنب مع الأزرار المناسبة التي ستمكن المستخدمين من بدء المؤقت وإيقافه مؤقتًا وإعادة تعيينه.
+
+<TimerPageSnippet />
+
+حتى الآن، نحن نستخدم `BlocProvider` فقط للوصول إلى مثيل `TimerBloc` الخاص بنا.
+
+بعد ذلك، سنقوم بتنفيذ ويدجت `Actions` الخاص بنا والذي سيحتوي على الإجراءات المناسبة (بدء، إيقاف مؤقت، وإعادة تعيين).
+
+### ملف التجميع (Barrel)
+
+لتنظيف عمليات الاستيراد الخاصة بنا من قسم `Timer`، نحتاج إلى إنشاء ملف تجميع (`barrel file`) باسم `timer/timer.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/timer/timer.dart"
+	title="lib/timer/timer.dart"
+/>
+
+### الإجراءات (Actions)
+
+<ActionsSnippet />
+
+ويدجت `Actions` هو مجرد `StatelessWidget` آخر يستخدم `BlocBuilder` لإعادة بناء واجهة المستخدم في كل مرة نحصل فيها على `TimerState` جديدة. يستخدم `Actions` الدالة `context.read<TimerBloc>()` للوصول إلى مثيل `TimerBloc` ويُرجع أزرار `FloatingActionButton` مختلفة بناءً على الحالة الحالية لـ `TimerBloc`. يضيف كل زر من أزرار `FloatingActionButton` حدثًا في دالة رد الاتصال `onPressed` لإخطار `TimerBloc`.
+
+إذا كنت تريد تحكمًا دقيقًا في وقت استدعاء دالة `builder`، يمكنك توفير `buildWhen` اختياريًا لـ `BlocBuilder`. يأخذ `buildWhen` حالة الـ bloc السابقة وحالة الـ bloc الحالية ويُرجع قيمة منطقية (`boolean`). إذا أرجع `buildWhen` القيمة `true`، فسيتم استدعاء `builder` بالحالة وسيتم إعادة بناء الويدجت. إذا أرجع `buildWhen` القيمة `false`، فلن يتم استدعاء `builder` بالحالة ولن تحدث إعادة بناء.
+
+في هذه الحالة، لا نريد إعادة بناء ويدجت `Actions` في كل نبضة لأن ذلك سيكون غير فعال. بدلاً من ذلك، نريد فقط إعادة بناء `Actions` إذا تغير `runtimeType` لـ `TimerState` (على سبيل المثال: TimerInitial => TimerRunInProgress، TimerRunInProgress => TimerRunPause، إلخ...).
+
+نتيجة لذلك، إذا قمنا بتلوين الويدجت عشوائيًا في كل عملية إعادة بناء، فسيبدو الأمر كما يلي:
+
+![BlocBuilder buildWhen demo](https://cdn-images-1.medium.com/max/1600/1*YyjpH1rcZlYWxCX308l_Ew.gif)
+
+:::note
+
+على الرغم من أن ويدجت `Text` يتم إعادة بناؤه في كل نبضة، فإننا نعيد بناء `Actions` فقط إذا كانت بحاجة إلى إعادة بناء.
+
+:::
+
+### الخلفية (Background)
+
+أخيرًا، أضف ويدجت الخلفية كما يلي:
+
+<BackgroundSnippet />
+
+### تجميع كل شيء معًا
+
+هذا كل ما في الأمر! في هذه المرحلة، لدينا تطبيق مؤقت قوي إلى حد ما يعيد بناء الويدجت التي تحتاج إلى إعادة بناء فقط بكفاءة.
+
+يمكن العثور على المصدر الكامل لهذا المثال [هنا](https://github.com/felangel/Bloc/tree/master/examples/flutter_timer).
