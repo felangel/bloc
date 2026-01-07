@@ -36,12 +36,12 @@ export const newCubit = async (uri: Uri) => {
   try {
     await generateCubitCode(cubitName, targetDirectory, blocType);
     window.showInformationMessage(
-      `Successfully Generated ${pascalCaseCubitName} Cubit`
+      `Successfully Generated ${pascalCaseCubitName} Cubit`,
     );
   } catch (error) {
     window.showErrorMessage(
       `Error:
-        ${error instanceof Error ? error.message : JSON.stringify(error)}`
+        ${error instanceof Error ? error.message : JSON.stringify(error)}`,
     );
   }
 };
@@ -72,7 +72,7 @@ async function promptForTargetDirectory(): Promise<string | undefined> {
 async function generateCubitCode(
   cubitName: string,
   targetDirectory: string,
-  type: BlocType
+  type: BlocType,
 ) {
   const shouldCreateDirectory = workspace
     .getConfiguration("bloc")
@@ -88,7 +88,12 @@ async function generateCubitCode(
     .getConfiguration("bloc")
     .get<boolean>("newCubitTemplate.useSealedClasses", true);
   await Promise.all([
-    createCubitStateTemplate(cubitName, cubitDirectoryPath, type, useSealedClasses),
+    createCubitStateTemplate(
+      cubitName,
+      cubitDirectoryPath,
+      type,
+      useSealedClasses,
+    ),
     createCubitTemplate(cubitName, cubitDirectoryPath, type),
   ]);
 }
@@ -108,7 +113,7 @@ function createCubitStateTemplate(
   cubitName: string,
   targetDirectory: string,
   type: BlocType,
-  useSealedClasses: boolean
+  useSealedClasses: boolean,
 ) {
   const snakeCaseCubitName = changeCase.snakeCase(cubitName);
   const targetPath = `${targetDirectory}/${snakeCaseCubitName}_state.dart`;
@@ -126,7 +131,7 @@ function createCubitStateTemplate(
           return;
         }
         resolve();
-      }
+      },
     );
   });
 }
@@ -134,7 +139,7 @@ function createCubitStateTemplate(
 function createCubitTemplate(
   cubitName: string,
   targetDirectory: string,
-  type: BlocType
+  type: BlocType,
 ) {
   const snakeCaseCubitName = changeCase.snakeCase(cubitName);
   const targetPath = `${targetDirectory}/${snakeCaseCubitName}_cubit.dart`;
@@ -152,7 +157,7 @@ function createCubitTemplate(
           return;
         }
         resolve();
-      }
+      },
     );
   });
 }

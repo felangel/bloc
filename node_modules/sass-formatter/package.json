@@ -1,0 +1,65 @@
+{
+  "name": "sass-formatter",
+  "version": "0.7.9",
+  "description": "typescript sass formatter",
+  "main": "dist/index.js",
+  "scripts": {
+    "prepack": "yarn test:ci && yarn build",
+    "build": "del-cli ./dist && tsc -b && suf",
+    "watch": "tsc -w",
+    "postpublish": "curl -X POST -d {} https://api.netlify.com/build_hooks/60100b58cf7f871b9e91cca8",
+    "test": "jest --watch --coverage",
+    "test:clear": "jest --clearCache",
+    "test:ci": "jest --ci --coverage --forceExit"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "sass",
+    "formatter"
+  ],
+  "author": "Syler",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^26.0.20",
+    "del-cli": "^3.0.1",
+    "jest": "^26.6.3",
+    "jest-store-log": "^1.3.0",
+    "known-css-properties": "^0.20.0",
+    "nodemon": "^2.0.7",
+    "suf-cli": "^0.3.1",
+    "ts-jest": "^26.4.4",
+    "ts-node": "^9.1.1",
+    "tslib": "^2.1.0",
+    "typescript": "^4.1.3"
+  },
+  "dependencies": {
+    "suf-log": "^2.5.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheRealSyler/sass-formatter"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json",
+      "jsx",
+      "node"
+    ],
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/src/logger.ts",
+      "/node_modules/"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    }
+  }
+}

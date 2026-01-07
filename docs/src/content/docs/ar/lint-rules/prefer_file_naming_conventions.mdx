@@ -25,12 +25,15 @@ import GoodSnippet from '~/components/lint-rules/prefer_file_naming_conventions/
 
 ## الأساس المنطقي (Rationale)
 
-من أجل الاتساق، وسهولة الصيانة، وفصل الاهتمامات (separation of concerns)، **يُفضل** تعريف كائنات `bloc` و `cubit` في ملفات Dart الخاصة بها بدلاً من تضمينها مباشرة (inlining).
+من أجل الاتساق، وسهولة الصيانة، وفصل الاهتمامات (separation of concerns)،
+**يُفضل** تعريف كائنات `bloc` و `cubit` في ملفات Dart الخاصة بها بدلاً من
+تضمينها مباشرة (inlining).
 
 :::tip
 
 فكر في استخدام الأمر `bloc new <component>` من حزمة
-[package:bloc_tools](https://pub.dev/packages/bloc_tools) لإنشاء كائنات bloc/cubit جديدة بسرعة وبشكل متسق.
+[package:bloc_tools](https://pub.dev/packages/bloc_tools) لإنشاء كائنات
+bloc/cubit جديدة بسرعة وبشكل متسق.
 
 :::
 
@@ -48,6 +51,7 @@ import GoodSnippet from '~/components/lint-rules/prefer_file_naming_conventions/
 
 ## التفعيل (Enable)
 
-لتفعيل قاعدة `prefer_file_naming_conventions`، أضفها إلى ملف `analysis_options.yaml` الخاص بك ضمن قسم `bloc` > `rules`:
+لتفعيل قاعدة `prefer_file_naming_conventions`، أضفها إلى ملف
+`analysis_options.yaml` الخاص بك ضمن قسم `bloc` > `rules`:
 
 <EnableRuleSnippet name="prefer_file_naming_conventions" />

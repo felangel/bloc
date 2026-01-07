@@ -4,7 +4,7 @@ import { BlocType } from "../utils";
 export function getBlocEventTemplate(
   blocName: string,
   type: BlocType,
-  useSealedClasses: boolean
+  useSealedClasses: boolean,
 ): string {
   switch (type) {
     case BlocType.Freezed:
@@ -18,7 +18,7 @@ export function getBlocEventTemplate(
 
 function getEquatableBlocEventTemplate(
   blocName: string,
-  useSealedClasses: boolean
+  useSealedClasses: boolean,
 ): string {
   const classPrefix = useSealedClasses ? "sealed" : "abstract";
   const pascalCaseBlocName = changeCase.pascalCase(blocName);
@@ -36,7 +36,7 @@ ${classPrefix} class ${pascalCaseBlocName}Event extends Equatable {
 
 function getDefaultBlocEventTemplate(
   blocName: string,
-  useSealedClasses: boolean
+  useSealedClasses: boolean,
 ): string {
   const classPrefix = useSealedClasses ? "sealed" : "abstract";
   const pascalCaseBlocName = changeCase.pascalCase(blocName);

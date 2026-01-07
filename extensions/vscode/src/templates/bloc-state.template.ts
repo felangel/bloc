@@ -4,7 +4,7 @@ import { BlocType } from "../utils";
 export function getBlocStateTemplate(
   blocName: string,
   type: BlocType,
-  useSealedClasses: boolean
+  useSealedClasses: boolean,
 ): string {
   switch (type) {
     case BlocType.Freezed:
@@ -18,7 +18,7 @@ export function getBlocStateTemplate(
 
 function getEquatableBlocStateTemplate(
   blocName: string,
-  useSealedClasses: boolean
+  useSealedClasses: boolean,
 ): string {
   const classPrefix = useSealedClasses ? "sealed" : "abstract";
   const subclassPrefix = useSealedClasses ? "final " : "";
@@ -39,7 +39,7 @@ ${subclassPrefix}class ${pascalCaseBlocName}Initial extends ${pascalCaseBlocName
 
 function getDefaultBlocStateTemplate(
   blocName: string,
-  useSealedClasses: boolean
+  useSealedClasses: boolean,
 ): string {
   const classPrefix = useSealedClasses ? "sealed" : "abstract";
   const subclassPrefix = useSealedClasses ? "final " : "";

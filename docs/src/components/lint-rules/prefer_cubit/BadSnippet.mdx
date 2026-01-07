@@ -5,14 +5,9 @@ import { transformerMetaHighlight } from '@shikijs/transformers';
 	code={`
   import 'package:bloc/bloc.dart';
 
-  enum CounterEvent { increment };
+enum CounterEvent { increment };
 
-  class CounterBloc extends Bloc<CounterEvent, int> { 
-    CounterBloc() : super(0) {
-      on<CounterEvent>((event, emit) => emit(state + 1));
-    }
-  }
-`}
-lang="dart" title="counter_bloc.dart"
-transformers={[transformerMetaHighlight()]} class='warning' meta="{5}"
-/>
+class CounterBloc extends Bloc<CounterEvent, int> { CounterBloc() : super(0) {
+on<CounterEvent>((event, emit) => emit(state + 1)); } } `} lang="dart"
+title="counter_bloc.dart" transformers={[transformerMetaHighlight()]}
+class='warning' meta="{5}" />

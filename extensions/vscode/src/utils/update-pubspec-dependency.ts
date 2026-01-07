@@ -18,8 +18,8 @@ export function updatePubspecDependency(dependency: {
             .readFileSync(pubspecPath, "utf8")
             .replace(
               `${dependency.name}: ${dependency.currentVersion}`,
-              `${dependency.name}: ${dependency.latestVersion}`
-            )
+              `${dependency.name}: ${dependency.latestVersion}`,
+            ),
         );
       } catch (_) {}
     }

@@ -18,11 +18,11 @@ const rmAsync = promisify(rimraf);
 export async function downloadFile(
   url: Uri,
   filename: string,
-  context: ExtensionContext
+  context: ExtensionContext,
 ): Promise<Uri> {
   if (url.scheme !== `http` && url.scheme !== `https`) {
     throw new Error(
-      `Unsupported URI scheme in url. Supported schemes are http and https.`
+      `Unsupported URI scheme in url. Supported schemes are http and https.`,
     );
   }
 
@@ -42,7 +42,7 @@ export async function downloadFile(
       url.toString(),
       DEFAULT_TIMEOUT_MS,
       DEFAULT_RETRY_COUNT,
-      DEFAULT_RETRY_DELAY_MS
+      DEFAULT_RETRY_DELAY_MS,
     );
 
     const writeStream = fs.createWriteStream(tempFileDownloadPath);
@@ -68,13 +68,13 @@ export async function downloadFile(
     renameDownloadedFile,
     renameDownloadedFile.name,
     DEFAULT_RETRY_COUNT,
-    DEFAULT_RETRY_DELAY_MS
+    DEFAULT_RETRY_DELAY_MS,
   );
 }
 
 export async function tryGetDownload(
   filename: string,
-  context: ExtensionContext
+  context: ExtensionContext,
 ): Promise<Uri | undefined> {
   try {
     return await getDownload(filename, context);
@@ -92,7 +92,7 @@ async function listDownloads(context: ExtensionContext): Promise<Uri[]> {
   try {
     const filePaths: string[] = await fs.promises.readdir(downloadsStoragePath);
     return filePaths.map((filePath) =>
-      Uri.file(path.join(downloadsStoragePath, filePath))
+      Uri.file(path.join(downloadsStoragePath, filePath)),
     );
   } catch (error) {
     return [];
@@ -101,22 +101,22 @@ async function listDownloads(context: ExtensionContext): Promise<Uri[]> {
 
 async function getDownload(
   filename: string,
-  context: ExtensionContext
+  context: ExtensionContext,
 ): Promise<Uri> {
   const filePaths = await listDownloads(context);
   const matchingUris = filePaths.filter(
-    (uri) => uri.path.split(`/`).pop() === filename.replace(`/`, ``)
+    (uri) => uri.path.split(`/`).pop() === filename.replace(`/`, ``),
   );
   switch (matchingUris.length) {
     case 1:
       return matchingUris[0];
     case 0:
       throw new Error(
-        `Download not found: ${path.join(downloadsPath(context), filename)}`
+        `Download not found: ${path.join(downloadsPath(context), filename)}`,
       );
     default:
       throw new Error(
-        `Multiple downloads found: ${filePaths.map((uri) => uri.toString())}`
+        `Multiple downloads found: ${filePaths.map((uri) => uri.toString())}`,
       );
   }
 }
@@ -125,7 +125,7 @@ async function get(
   url: string,
   timeoutInMs: number,
   retries: number,
-  retryDelayInMs: number
+  retryDelayInMs: number,
 ): Promise<Readable> {
   const body = () => getAsStream(url, timeoutInMs);
   const onError = (error: Error) => {
@@ -139,7 +139,7 @@ async function get(
 
 async function getAsStream(
   url: string,
-  timeoutInMs: number
+  timeoutInMs: number,
 ): Promise<Readable> {
   const options: AxiosRequestConfig = {
     timeout: timeoutInMs,
@@ -149,7 +149,7 @@ async function getAsStream(
   const response = await axios.get(url, options);
   if (response === undefined) {
     throw new Error(
-      `Undefined response received when downloading from '${url}'`
+      `Undefined response received when downloading from '${url}'`,
     );
   }
   return response.data;

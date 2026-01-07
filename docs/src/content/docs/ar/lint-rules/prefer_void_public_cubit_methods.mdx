@@ -25,11 +25,14 @@ import GoodSnippet from '~/components/lint-rules/prefer_void_public_cubit_method
 
 ## الأساس المنطقي (Rationale)
 
-يجب استخدام الدوال العامة في كائنات `Cubit` لإخطار `Cubit` وبدء تغييرات الحالة عبر دالة `emit`. إذا احتاج المُستدعي (caller) إلى الوصول إلى أي معلومات عن الحالة، فيجب عليه الوصول إليها من خلال خاصية `state` بدلاً من ذلك.
+يجب استخدام الدوال العامة في كائنات `Cubit` لإخطار `Cubit` وبدء تغييرات الحالة
+عبر دالة `emit`. إذا احتاج المُستدعي (caller) إلى الوصول إلى أي معلومات عن
+الحالة، فيجب عليه الوصول إليها من خلال خاصية `state` بدلاً من ذلك.
 
 :::note
 
-القواعد التالية ذات صلة ويتم تفعيلها عادةً بالتزامن مع قاعدة `prefer_void_public_cubit_methods`:
+القواعد التالية ذات صلة ويتم تفعيلها عادةً بالتزامن مع قاعدة
+`prefer_void_public_cubit_methods`:
 
 - [`avoid_public_bloc_methods`](/lint-rules/avoid_public_bloc_methods)
 - [`avoid_public_fields`](/lint-rules/avoid_public_fields)
@@ -50,6 +53,7 @@ import GoodSnippet from '~/components/lint-rules/prefer_void_public_cubit_method
 
 ## التفعيل (Enable)
 
-لتفعيل قاعدة `prefer_void_public_cubit_methods`، أضفها إلى ملف `analysis_options.yaml` الخاص بك ضمن قسم `bloc` > `rules`:
+لتفعيل قاعدة `prefer_void_public_cubit_methods`، أضفها إلى ملف
+`analysis_options.yaml` الخاص بك ضمن قسم `bloc` > `rules`:
 
 <EnableRuleSnippet name="prefer_void_public_cubit_methods" />

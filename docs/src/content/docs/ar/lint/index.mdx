@@ -12,13 +12,19 @@ import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.ast
 import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
 import RunBlocLintInCurrentDirectorySnippet from '~/components/lint/RunBlocLintInCurrentDirectorySnippet.astro';
 
-التدقيق (Linting) هو عملية **التحليل الساكن (statically analyzing)** للكود للبحث عن الأخطاء المحتملة بالإضافة إلى الأخطاء البرمجية والأسلوبية.
+التدقيق (Linting) هو عملية **التحليل الساكن (statically analyzing)** للكود للبحث
+عن الأخطاء المحتملة بالإضافة إلى الأخطاء البرمجية والأسلوبية.
 
-يحتوي Bloc على مدقق مدمج (built-in linter)، يمكن استخدامه من خلال بيئة التطوير المتكاملة (IDE) الخاصة بك أو عبر [`أدوات سطر أوامر bloc`](https://pub.dev/packages/bloc_tools) باستخدام الأمر `bloc lint`.
+يحتوي Bloc على مدقق مدمج (built-in linter)، يمكن استخدامه من خلال بيئة التطوير
+المتكاملة (IDE) الخاصة بك أو عبر
+[`أدوات سطر أوامر bloc`](https://pub.dev/packages/bloc_tools) باستخدام الأمر
+`bloc lint`.
 
-بمساعدة مدقق bloc، يمكنك تحسين جودة قاعدة الكود الخاصة بك وفرض الاتساق دون الحاجة إلى تنفيذ سطر واحد من الكود.
+بمساعدة مدقق bloc، يمكنك تحسين جودة قاعدة الكود الخاصة بك وفرض الاتساق دون
+الحاجة إلى تنفيذ سطر واحد من الكود.
 
-على سبيل المثال، ربما قمت عن طريق الخطأ باستيراد اعتمادية (dependency) خاصة بـ Flutter إلى الـ cubit الخاص بك:
+على سبيل المثال، ربما قمت عن طريق الخطأ باستيراد اعتمادية (dependency) خاصة بـ
+Flutter إلى الـ cubit الخاص بك:
 
 <AvoidFlutterImportsWarningSnippet />
 
@@ -26,7 +32,8 @@ import RunBlocLintInCurrentDirectorySnippet from '~/components/lint/RunBlocLintI
 
 <AvoidFlutterImportsWarningOutputSnippet />
 
-في الأقسام التالية، سنتناول كيفية تثبيت وإعداد وتخصيص مدقق bloc حتى تتمكن من الاستفادة من التحليل الساكن في قاعدة الكود الخاصة بك.
+في الأقسام التالية، سنتناول كيفية تثبيت وإعداد وتخصيص مدقق bloc حتى تتمكن من
+الاستفادة من التحليل الساكن في قاعدة الكود الخاصة بك.
 
 ## البدء السريع (Quick Start)
 
@@ -34,7 +41,8 @@ import RunBlocLintInCurrentDirectorySnippet from '~/components/lint/RunBlocLintI
 
 :::note
 
-لكي تبدأ باستخدام bloc، يجب أن يكون لديك [Dart SDK](https://dart.dev/get-dart) مثبتًا على جهازك.
+لكي تبدأ باستخدام bloc، يجب أن يكون لديك [Dart SDK](https://dart.dev/get-dart)
+مثبتًا على جهازك.
 
 :::
 
@@ -46,7 +54,8 @@ import RunBlocLintInCurrentDirectorySnippet from '~/components/lint/RunBlocLintI
 
     <InstallBlocLintSnippet />
 
-3.  أضف ملف `analysis_options.yaml` إلى الجذر الرئيسي لمشروعك مع القواعد الموصى بها
+3.  أضف ملف `analysis_options.yaml` إلى الجذر الرئيسي لمشروعك مع القواعد الموصى
+    بها
 
     <BlocLintRecommendedAnalysisOptionsSnippet />
 

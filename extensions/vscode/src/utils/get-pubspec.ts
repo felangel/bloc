@@ -7,12 +7,16 @@ export async function getPubspec(): Promise<Record<string, any> | undefined> {
   return getYAMLFileContent(pubspecPath);
 }
 
-export async function getPubspecLock(): Promise<Record<string, any> | undefined> {
+export async function getPubspecLock(): Promise<
+  Record<string, any> | undefined
+> {
   const pubspecLockPath = getPubspecLockPath();
   return getYAMLFileContent(pubspecLockPath);
 }
 
-async function getYAMLFileContent(path: string | undefined): Promise<Record<string, any> | undefined> {
+async function getYAMLFileContent(
+  path: string | undefined,
+): Promise<Record<string, any> | undefined> {
   if (path) {
     try {
       let content = await workspace.fs.readFile(Uri.file(path));

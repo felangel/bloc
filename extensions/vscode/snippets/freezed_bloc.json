@@ -6,5 +6,5 @@
   "New freezed event": {
     "prefix": "fevent",
     "body": "const factory ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/g}.${1:eventName}($2) = _${1/(.*)/${1:/capitalize}/};\n$3"
-  }  
+  }
 }

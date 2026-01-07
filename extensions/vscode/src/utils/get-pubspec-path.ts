@@ -14,9 +14,6 @@ export function getPubspecLockPath(): string | undefined {
 
 function getWorkspacePath(fileName: string): string | undefined {
   if (workspace.workspaceFolders && workspace.workspaceFolders.length > 0) {
-    return path.join(
-      `${workspace.workspaceFolders[0].uri.path}`,
-      fileName
-    );
+    return path.join(`${workspace.workspaceFolders[0].uri.path}`, fileName);
   }
 }

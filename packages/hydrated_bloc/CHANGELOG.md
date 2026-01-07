@@ -13,7 +13,6 @@
 # 10.0.0
 
 - **BREAKING** feat!: support for `wasm` ([#4313](https://github.com/felangel/bloc/pull/4313))
-
   - introduces `HydratedStorageDirectory` and modifies `HydratedStorage.build` signature to use `HydratedStorageDirectory` instead of `Directory` from `dart:io`
 
   ```dart

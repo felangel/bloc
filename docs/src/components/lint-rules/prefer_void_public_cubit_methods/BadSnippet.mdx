@@ -5,15 +5,12 @@ import { transformerMetaHighlight } from '@shikijs/transformers';
 	code={`
   import 'package:bloc/bloc.dart';
 
-  class CounterCubit extends Cubit<int> { 
-    CounterCubit() : super(0);
+class CounterCubit extends Cubit<int> { CounterCubit() : super(0);
 
     int increment() {
       emit(state + 1);
       return state;
     }
-  }
-`}
-lang="dart" title="counter_cubit.dart"
-transformers={[transformerMetaHighlight()]} class='warning' meta="{6}"
-/>
+
+} `} lang="dart" title="counter_cubit.dart"
+transformers={[transformerMetaHighlight()]} class='warning' meta="{6}" />

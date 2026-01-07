@@ -36,7 +36,7 @@ async function startLanguageServer(executable: string) {
     "blocAnalysisLSP",
     "Bloc Analysis Server",
     serverOptions,
-    clientOptions
+    clientOptions,
   );
 
   return client.start();
@@ -55,12 +55,12 @@ async function startLanguageServerWithProgress(executable: string) {
       } catch (err) {
         window.showErrorMessage(`${err}`);
       }
-    }
+    },
   );
 }
 
 async function tryStartLanguageServer(
-  context: ExtensionContext
+  context: ExtensionContext,
 ): Promise<void> {
   const executable = await getBlocToolsExecutable(context);
   if (executable) return startLanguageServerWithProgress(executable);
@@ -77,7 +77,7 @@ async function tryStartLanguageServer(
       } catch (err) {
         window.showErrorMessage(`${err}`);
       }
-    }
+    },
   );
 
   const installedExecutable = await getBlocToolsExecutable(context);

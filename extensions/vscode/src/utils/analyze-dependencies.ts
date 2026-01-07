@@ -28,8 +28,8 @@ const openEquatableMigrationGuide = {
   callback: () => {
     env.openExternal(
       Uri.parse(
-        "https://github.com/felangel/equatable/blob/master/doc/migration_guides/migration-0.6.0.md"
-      )
+        "https://github.com/felangel/equatable/blob/master/doc/migration_guides/migration-0.6.0.md",
+      ),
     );
   },
 };
@@ -60,7 +60,7 @@ export async function analyzeDependencies() {
 
 function checkForUpgrades(
   dependencies: Dependency[],
-  pubspecDependencies: object[]
+  pubspecDependencies: object[],
 ) {
   for (let i = 0; i < dependencies.length; i++) {
     const dependency = dependencies[i];
@@ -70,27 +70,27 @@ function checkForUpgrades(
         pubspecDependencies,
         dependency.name,
       ).version;
-      
+
       const hasLatestVersion = currentDependencyVersion === dependency.version;
       if (hasLatestVersion) continue;
-      
+
       showUpdateMessage(dependency, currentDependencyVersion);
     }
   }
 }
 
-function showUpdateMessage(dependency : Dependency, dependencyVersion : string) {
+function showUpdateMessage(dependency: Dependency, dependencyVersion: string) {
   const minVersion = _.get(
     semver.minVersion(dependencyVersion),
     "version",
-    DEFAULT_VERSION_VALUE
+    DEFAULT_VERSION_VALUE,
   );
-  
+
   if (!semver.satisfies(minVersion, dependency.version)) {
     window
       .showWarningMessage(
         `This workspace contains an outdated version of ${dependency.name}. Please update to ${dependency.version}.`,
-        ...dependency.actions.map((action) => action.name).concat("Update")
+        ...dependency.actions.map((action) => action.name).concat("Update"),
       )
       .then((invokedAction) => {
         if (invokedAction === "Update") {
@@ -101,7 +101,7 @@ function showUpdateMessage(dependency : Dependency, dependencyVersion : string) 
           });
         }
         const action = dependency.actions.find(
-          (action) => action.name === invokedAction
+          (action) => action.name === invokedAction,
         );
         if (!_.isNil(action)) {
           action.callback();
@@ -111,7 +111,7 @@ function showUpdateMessage(dependency : Dependency, dependencyVersion : string) 
 }
 
 async function getDependencies(
-  dependencies: { name: string; actions: Action[] }[]
+  dependencies: { name: string; actions: Action[] }[],
 ): Promise<Dependency[]> {
   const futures: Promise<Dependency>[] = dependencies.map(
     async (dependency) => {
@@ -120,7 +120,7 @@ async function getDependencies(
         actions: dependency.actions,
         version: await getLatestPackageVersion(dependency.name),
       };
-    }
+    },
   );
 
   return Promise.all(futures);

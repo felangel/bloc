@@ -1,0 +1,64 @@
+{
+  "name": "prettier-plugin-astro",
+  "version": "0.14.1",
+  "type": "module",
+  "description": "A Prettier Plugin for formatting Astro files",
+  "main": "dist/index.js",
+  "files": [
+    "dist/**",
+    "workers/*"
+  ],
+  "engines": {
+    "node": "^14.15.0 || >=16.0.0"
+  },
+  "packageManager": "pnpm@8.6.2",
+  "homepage": "https://github.com/withastro/prettier-plugin-astro/",
+  "issues": {
+    "url": "https://github.com/withastro/prettier-plugin-astro/issues"
+  },
+  "license": "MIT",
+  "keywords": [
+    "prettier-plugin",
+    "prettier",
+    "astro",
+    "formatter"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/withastro/prettier-plugin-astro.git"
+  },
+  "dependencies": {
+    "@astrojs/compiler": "^2.9.1",
+    "prettier": "^3.0.0",
+    "sass-formatter": "^0.7.6"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.26.1",
+    "@rollup/plugin-commonjs": "^25.0.0",
+    "@rollup/plugin-typescript": "^11.1.1",
+    "@types/node": "^20.2.5",
+    "@typescript-eslint/eslint-plugin": "^5.61.0",
+    "@typescript-eslint/parser": "^5.61.0",
+    "@vitest/ui": "^0.31.3",
+    "eslint": "^8.44.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "5.0.0-alpha.2",
+    "eslint-plugin-prettier-doc": "^1.1.0",
+    "rollup": "^3.23.0",
+    "tslib": "^2.5.2",
+    "typescript": "^5.0.4",
+    "vitest": "^0.31.3",
+    "vite": "^4.4.3"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test": "vitest run",
+    "test:watch": "vitest -w",
+    "test:ui": "vitest --ui",
+    "lint": "eslint .",
+    "lint:fix": "pnpm lint --fix",
+    "format": "prettier -w . --cache",
+    "release": "pnpm build && changeset publish"
+  }
+}

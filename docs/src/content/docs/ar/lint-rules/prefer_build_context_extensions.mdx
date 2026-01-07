@@ -17,19 +17,22 @@ import GoodSnippet from '~/components/lint-rules/prefer_build_context_extensions
 
 :::note
 
-تم تقديم قاعدة التحقق هذه (lint rule) في الإصدار `0.3.2` من حزمة [`package:bloc_lint`](https://pub.dev/packages/bloc_lint).
+تم تقديم قاعدة التحقق هذه (lint rule) في الإصدار `0.3.2` من حزمة
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint).
 
 :::
 
 ## الأساس المنطقي
 
-من أجل الاتساق (consistency)، فضل استخدام امتدادات `BuildContext` مثل `context.read` و `context.watch` و `context.select` بدلاً من `BlocProvider.of` و `RepositoryProvider.of` و `BlocBuilder` أو `BlocSelector`.
+من أجل الاتساق (consistency)، فضل استخدام امتدادات `BuildContext` مثل
+`context.read` و `context.watch` و `context.select` بدلاً من `BlocProvider.of` و
+`RepositoryProvider.of` و `BlocBuilder` أو `BlocSelector`.
 
-| الطريقة الصريحة (explicit method) | الامتداد (extension) |
-| -------------------------------- | -------------------- |
-| `BlocProvider.of<Bloc>(context, listen: false)` | `context.read<Bloc>` |
+| الطريقة الصريحة (explicit method)                                   | الامتداد (extension)  |
+| ------------------------------------------------------------------- | --------------------- |
+| `BlocProvider.of<Bloc>(context, listen: false)`                     | `context.read<Bloc>`  |
 | `BlocBuilder<Bloc, State>(...)` أو `BlocProvider.of<Bloc>(context)` | `context.watch<Bloc>` |
-| `BlocSelector<Bloc, State>(...)` | `context.select` |
+| `BlocSelector<Bloc, State>(...)`                                    | `context.select`      |
 
 ## أمثلة
 
@@ -45,6 +48,7 @@ import GoodSnippet from '~/components/lint-rules/prefer_build_context_extensions
 
 ## التفعيل
 
-لتفعيل قاعدة `prefer_build_context_extensions`، أضفها إلى ملف `analysis_options.yaml` الخاص بك تحت المسار `bloc` > `rules`:
+لتفعيل قاعدة `prefer_build_context_extensions`، أضفها إلى ملف
+`analysis_options.yaml` الخاص بك تحت المسار `bloc` > `rules`:
 
 <EnableRuleSnippet name="prefer_build_context_extensions" />

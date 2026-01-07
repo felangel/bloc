@@ -245,12 +245,10 @@ to properly lay itself out:
 
 - `SearchStateSuccess`- will tell the presentation layer that it has data to
   present.
-
   - `items`- will be the `List<SearchResultItem>` which will be displayed.
 
 - `SearchStateError`- will tell the presentation layer that an error has
   occurred while fetching repositories.
-
   - `error`- will be the exact error that occurred.
 
 We can now create `github_search_state.dart` and implement it like so.

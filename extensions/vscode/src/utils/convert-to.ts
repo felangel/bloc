@@ -4,7 +4,7 @@ import { getSelectedText } from "../utils";
 const childRegExp = new RegExp("[^S\r\n]*child: .*,s*", "ms");
 
 export const convertTo = async (
-  snippet: (widget: string, child: string) => string
+  snippet: (widget: string, child: string) => string,
 ) => {
   let editor = window.activeTextEditor;
   if (!editor) return;

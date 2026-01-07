@@ -1,0 +1,57 @@
+{
+  "name": "suf-log",
+  "version": "2.5.3",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "prepack": "yarn build && yarn test && suf",
+    "build": "del ./dist && tsc -b",
+    "watch": "tsc -w",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch --coverage"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "logger"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheRealSyler/suf-log"
+  },
+  "author": "Syler",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^25.1.4",
+    "del-cli": "^3.0.0",
+    "jest": "^25.1.0",
+    "jest-store-log": "^1.1.1",
+    "suf-cli": "^0.1.0",
+    "ts-jest": "^25.2.1",
+    "tslib": "^1.11.1",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "s.color": "0.0.15"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json",
+      "jsx",
+      "node"
+    ],
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    }
+  }
+}

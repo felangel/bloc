@@ -3,7 +3,7 @@ export async function retry<T>(
   label: string,
   retryCount: number,
   delay: number,
-  onError?: (error: Error) => void
+  onError?: (error: Error) => void,
 ): Promise<T> {
   try {
     return await callback();
@@ -13,7 +13,7 @@ export async function retry<T>(
         throw new Error(
           `Maximum retry count exceeded.'${label}' failed with error: ${
             error.message
-          }. ${JSON.stringify(error)}`
+          }. ${JSON.stringify(error)}`,
         );
       if (onError != null) onError(error);
     }

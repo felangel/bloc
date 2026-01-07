@@ -1,0 +1,58 @@
+{
+  "name": "@astrojs/compiler",
+  "author": "withastro",
+  "license": "MIT",
+  "type": "module",
+  "bugs": "https://github.com/withastro/compiler/issues",
+  "homepage": "https://astro.build",
+  "version": "2.13.0",
+  "main": "./dist/node/index.js",
+  "types": "./dist/shared/types.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/withastro/compiler.git"
+  },
+  "files": [
+    "dist",
+    "types.d.ts",
+    "utils.d.ts",
+    "sync.d.ts"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/node/index.d.ts",
+      "browser": "./dist/browser/index.js",
+      "import": "./dist/node/index.js",
+      "require": "./dist/node/index.cjs",
+      "default": "./dist/browser/index.js"
+    },
+    "./sync": {
+      "types": "./dist/node/sync.d.ts",
+      "import": "./dist/node/sync.js",
+      "require": "./dist/node/sync.cjs",
+      "default": "./dist/node/sync.js"
+    },
+    "./utils": {
+      "types": "./dist/node/utils.d.ts",
+      "browser": "./dist/browser/utils.js",
+      "import": "./dist/node/utils.js",
+      "require": "./dist/node/utils.cjs",
+      "default": "./dist/browser/utils.js"
+    },
+    "./astro.wasm": "./dist/astro.wasm",
+    "./types": "./dist/shared/types.d.ts",
+    "./package.json": "./package.json"
+  },
+  "devDependencies": {
+    "@jridgewell/trace-mapping": "^0.3.16",
+    "@types/node": "^18.15.11",
+    "@types/sass": "^1.43.1",
+    "acorn": "^8.8.1",
+    "esbuild": "^0.17.17",
+    "tsup": "^6.7.0",
+    "typescript": "~5.0.2"
+  },
+  "scripts": {
+    "build": "tsup"
+  }
+}

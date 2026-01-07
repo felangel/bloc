@@ -18,7 +18,10 @@ import GoodSnippet from '~/components/lint-rules/avoid_public_bloc_methods/GoodS
 
 ## الأساس المنطقي
 
-تستجيب كائنات Bloc للأحداث الواردة (incoming events) وتُصدر حالات صادرة (outgoing states). ونتيجة لذلك، فإن الطريقة الموصى بها للتواصل مع كائن Bloc هي عبر الدالة `add`. في معظم الحالات، لا توجد حاجة لإنشاء تجريدات إضافية (additional abstractions) فوق واجهة برمجة التطبيقات `add`.
+تستجيب كائنات Bloc للأحداث الواردة (incoming events) وتُصدر حالات صادرة
+(outgoing states). ونتيجة لذلك، فإن الطريقة الموصى بها للتواصل مع كائن Bloc هي
+عبر الدالة `add`. في معظم الحالات، لا توجد حاجة لإنشاء تجريدات إضافية
+(additional abstractions) فوق واجهة برمجة التطبيقات `add`.
 
 ![هيكلية Bloc](~/assets/concepts/bloc_architecture_full.png)
 
@@ -36,6 +39,7 @@ import GoodSnippet from '~/components/lint-rules/avoid_public_bloc_methods/GoodS
 
 ## التفعيل
 
-لتفعيل قاعدة `avoid_public_bloc_methods`، أضفها إلى ملف `analysis_options.yaml` الخاص بك تحت المسار `bloc` > `rules`:
+لتفعيل قاعدة `avoid_public_bloc_methods`، أضفها إلى ملف `analysis_options.yaml`
+الخاص بك تحت المسار `bloc` > `rules`:
 
 <EnableRuleSnippet name="avoid_public_bloc_methods" />

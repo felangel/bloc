@@ -6,7 +6,7 @@ const closeBracket = ")";
 export const getSelectedText = (editor: TextEditor): Selection => {
   const emptySelection = new Selection(
     editor.document.positionAt(0),
-    editor.document.positionAt(0)
+    editor.document.positionAt(0),
   );
   const language = editor.document.languageId;
   if (language != "dart") return emptySelection;
@@ -15,7 +15,7 @@ export const getSelectedText = (editor: TextEditor): Selection => {
   const lineText = line.text;
   const openBracketIndex = line.text.indexOf(
     openBracket,
-    editor.selection.anchor.character
+    editor.selection.anchor.character,
   );
 
   let widgetStartIndex =
@@ -40,12 +40,12 @@ export const getSelectedText = (editor: TextEditor): Selection => {
       commaIndex >= 0
         ? commaIndex
         : bracketIndex >= 0
-        ? bracketIndex
-        : lineText.length;
+          ? bracketIndex
+          : lineText.length;
 
     return new Selection(
       new Position(line.lineNumber, widgetStartIndex),
-      new Position(line.lineNumber, endIndex)
+      new Position(line.lineNumber, endIndex),
     );
   }
 
@@ -60,7 +60,7 @@ export const getSelectedText = (editor: TextEditor): Selection => {
       if (bracketCount === 0) {
         return new Selection(
           new Position(line.lineNumber, widgetStartIndex),
-          new Position(l, c + 1)
+          new Position(l, c + 1),
         );
       }
     }

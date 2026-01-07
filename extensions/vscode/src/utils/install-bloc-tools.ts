@@ -4,7 +4,7 @@ import { downloadFile } from ".";
 
 export const BLOC_TOOLS_VERSION = "0.1.0-dev.20";
 export const installBlocTools = async (
-  context: ExtensionContext
+  context: ExtensionContext,
 ): Promise<boolean> => {
   try {
     const os = getOS();
@@ -13,10 +13,10 @@ export const installBlocTools = async (
     if (arch == Architecture.unknown) return false;
     await downloadFile(
       Uri.parse(
-        `https://github.com/felangel/bloc/releases/download/bloc_tools-v${BLOC_TOOLS_VERSION}/bloc_${os}_${arch}`
+        `https://github.com/felangel/bloc/releases/download/bloc_tools-v${BLOC_TOOLS_VERSION}/bloc_${os}_${arch}`,
       ),
       `bloc_${BLOC_TOOLS_VERSION}`,
-      context
+      context,
     );
     return true;
   } catch (_) {

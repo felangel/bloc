@@ -40,12 +40,12 @@ export const newBloc = async (uri: Uri) => {
   try {
     await generateBlocCode(blocName, targetDirectory, blocType);
     window.showInformationMessage(
-      `Successfully Generated ${pascalCaseBlocName} Bloc`
+      `Successfully Generated ${pascalCaseBlocName} Bloc`,
     );
   } catch (error) {
     window.showErrorMessage(
       `Error:
-        ${error instanceof Error ? error.message : JSON.stringify(error)}`
+        ${error instanceof Error ? error.message : JSON.stringify(error)}`,
     );
   }
 };
@@ -76,7 +76,7 @@ async function promptForTargetDirectory(): Promise<string | undefined> {
 async function generateBlocCode(
   blocName: string,
   targetDirectory: string,
-  type: BlocType
+  type: BlocType,
 ) {
   const shouldCreateDirectory = workspace
     .getConfiguration("bloc")
@@ -95,13 +95,13 @@ async function generateBlocCode(
       blocName,
       blocDirectoryPath,
       type,
-      useSealedClasses
+      useSealedClasses,
     ),
     createBlocStateTemplate(
       blocName,
       blocDirectoryPath,
       type,
-      useSealedClasses
+      useSealedClasses,
     ),
     createBlocTemplate(blocName, blocDirectoryPath, type),
   ]);
@@ -122,7 +122,7 @@ function createBlocEventTemplate(
   blocName: string,
   targetDirectory: string,
   type: BlocType,
-  useSealedClasses: boolean
+  useSealedClasses: boolean,
 ) {
   const snakeCaseBlocName = changeCase.snakeCase(blocName);
   const targetPath = `${targetDirectory}/${snakeCaseBlocName}_event.dart`;
@@ -140,7 +140,7 @@ function createBlocEventTemplate(
           return;
         }
         resolve();
-      }
+      },
     );
   });
 }
@@ -149,7 +149,7 @@ function createBlocStateTemplate(
   blocName: string,
   targetDirectory: string,
   type: BlocType,
-  useSealedClasses: boolean
+  useSealedClasses: boolean,
 ) {
   const snakeCaseBlocName = changeCase.snakeCase(blocName);
   const targetPath = `${targetDirectory}/${snakeCaseBlocName}_state.dart`;
@@ -167,7 +167,7 @@ function createBlocStateTemplate(
           return;
         }
         resolve();
-      }
+      },
     );
   });
 }
@@ -175,7 +175,7 @@ function createBlocStateTemplate(
 function createBlocTemplate(
   blocName: string,
   targetDirectory: string,
-  type: BlocType
+  type: BlocType,
 ) {
   const snakeCaseBlocName = changeCase.snakeCase(blocName);
   const targetPath = `${targetDirectory}/${snakeCaseBlocName}_bloc.dart`;

@@ -13,9 +13,11 @@ import AvoidFlutterImportsWarningSnippet from '~/components/lint/ImportFlutterWa
 import RunBlocLintCounterCubitSnippet from '~/components/lint/RunBlocLintCounterCubitSnippet.astro';
 import AvoidFlutterImportsWarningOutputSnippet from '~/components/lint/ImportFlutterWarningOutputSnippet.astro';
 
-بشكل افتراضي، لن يقوم مدقق bloc بالإبلاغ عن أي تشخيصات (diagnostics) ما لم تقم **بإعداد خيارات التحليل (analysis options) للمشروع بشكل صريح**.
+بشكل افتراضي، لن يقوم مدقق bloc بالإبلاغ عن أي تشخيصات (diagnostics) ما لم تقم
+**بإعداد خيارات التحليل (analysis options) للمشروع بشكل صريح**.
 
-للبدء، قم بإنشاء أو تعديل ملف `analysis_options.yaml` الموجود في **الجذر الرئيسي لمشروعك**، بحيث يتضمن قائمة بالقواعد تحت المفتاح الرئيسي `bloc`:
+للبدء، قم بإنشاء أو تعديل ملف `analysis_options.yaml` الموجود في **الجذر الرئيسي
+لمشروعك**، بحيث يتضمن قائمة بالقواعد تحت المفتاح الرئيسي `bloc`:
 
 <BlocLintBasicAnalysisOptionsSnippet />
 
@@ -23,13 +25,16 @@ import AvoidFlutterImportsWarningOutputSnippet from '~/components/lint/ImportFlu
 
 <RunBlocLintInCurrentDirectorySnippet />
 
-سيقوم الأمر أعلاه بتحليل جميع الملفات في المجلد الحالي والمجلدات الفرعية التابعة له، ولكن يمكنك أيضًا فحص ملفات ومجلدات محددة عن طريق تمريرها كمعاملات للأمر (command-line arguments):
+سيقوم الأمر أعلاه بتحليل جميع الملفات في المجلد الحالي والمجلدات الفرعية التابعة
+له، ولكن يمكنك أيضًا فحص ملفات ومجلدات محددة عن طريق تمريرها كمعاملات للأمر
+(command-line arguments):
 
 <RunBlocLintInSrcTestSnippet />
 
 سيقوم الأمر أعلاه بتحليل جميع الأكواد البرمجية في مجلدات `src` و `test`.
 
-إذا كانت قاعدة `avoid_flutter_imports` مُفعلة، فسيتم الإبلاغ عن أي ملف `bloc` أو `cubit` يحتوي على استيراد (import) لـ Flutter كتحذير:
+إذا كانت قاعدة `avoid_flutter_imports` مُفعلة، فسيتم الإبلاغ عن أي ملف `bloc` أو
+`cubit` يحتوي على استيراد (import) لـ Flutter كتحذير:
 
 <AvoidFlutterImportsWarningSnippet />
 

@@ -4,11 +4,11 @@ import { getSelectedText } from "../utils";
 const blocListenerRegExp = new RegExp("^BlocListener(\\<.*\\>)*\\(.*\\)", "ms");
 const blocProviderRegExp = new RegExp(
   "^BlocProvider(\\<.*\\>)*(\\.value)*\\(.*\\)",
-  "ms"
+  "ms",
 );
 const repositoryProviderRegExp = new RegExp(
   "^RepositoryProvider(\\<.*\\>)*(\\.value)*\\(.*\\)",
-  "ms"
+  "ms",
 );
 
 export class BlocCodeActionProvider implements CodeActionProvider {

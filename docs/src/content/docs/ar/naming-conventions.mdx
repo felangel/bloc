@@ -9,11 +9,15 @@ import StateExamplesGood1Snippet from '~/components/naming-conventions/StateExam
 import SingleStateExamplesGood1Snippet from '~/components/naming-conventions/SingleStateExamplesGood1Snippet.astro';
 import StateExamplesBad1Snippet from '~/components/naming-conventions/StateExamplesBad1Snippet.astro';
 
-اصطلاحات التسمية التالية هي مجرد توصيات وهي **اختيارية بالكامل**. لا تتردد في استخدام أي اصطلاحات تسمية تفضلها. قد تجد أن بعض الأمثلة/التوثيقات لا تتبع اصطلاحات التسمية هذه، ويرجع ذلك بشكل أساسي إلى البساطة/الإيجاز. يوصى بشدة بهذه الاصطلاحات للمشاريع الكبيرة التي تضم عدة مطورين.
+اصطلاحات التسمية التالية هي مجرد توصيات وهي **اختيارية بالكامل**. لا تتردد في
+استخدام أي اصطلاحات تسمية تفضلها. قد تجد أن بعض الأمثلة/التوثيقات لا تتبع
+اصطلاحات التسمية هذه، ويرجع ذلك بشكل أساسي إلى البساطة/الإيجاز. يوصى بشدة بهذه
+الاصطلاحات للمشاريع الكبيرة التي تضم عدة مطورين.
 
 ## اصطلاحات الأحداث (Event Conventions)
 
-يجب تسمية الأحداث بصيغة **الماضي** لأن الأحداث هي أشياء حدثت بالفعل من منظور الـ bloc.
+يجب تسمية الأحداث بصيغة **الماضي** لأن الأحداث هي أشياء حدثت بالفعل من منظور الـ
+bloc.
 
 ### الهيكلية (Anatomy)
 
@@ -23,7 +27,8 @@ import StateExamplesBad1Snippet from '~/components/naming-conventions/StateExamp
 
 :::note
 
-يجب أن يكون اسم فئة الحدث الأساسية (base event class) هو: `BlocSubject` + `Event`.
+يجب أن يكون اسم فئة الحدث الأساسية (base event class) هو: `BlocSubject` +
+`Event`.
 
 :::
 
@@ -39,7 +44,9 @@ import StateExamplesBad1Snippet from '~/components/naming-conventions/StateExamp
 
 ## اصطلاحات الحالات (State Conventions)
 
-يجب أن تكون الحالات أسماء (Nouns) لأن الحالة هي مجرد لقطة (snapshot) في نقطة زمنية معينة. هناك طريقتان شائعتان لتمثيل الحالة: استخدام الفئات الفرعية (subclasses) أو استخدام فئة واحدة (single class).
+يجب أن تكون الحالات أسماء (Nouns) لأن الحالة هي مجرد لقطة (snapshot) في نقطة
+زمنية معينة. هناك طريقتان شائعتان لتمثيل الحالة: استخدام الفئات الفرعية
+(subclasses) أو استخدام فئة واحدة (single class).
 
 ### الهيكلية (Anatomy)
 
@@ -53,7 +60,8 @@ import StateExamplesBad1Snippet from '~/components/naming-conventions/StateExamp
 
 :::note
 
-يجب أن تتبع الحالات الأولية (Initial states) الاصطلاح التالي: `BlocSubject` + `Initial`.
+يجب أن تتبع الحالات الأولية (Initial states) الاصطلاح التالي: `BlocSubject` +
+`Initial`.
 
 :::
 
@@ -61,13 +69,15 @@ import StateExamplesBad1Snippet from '~/components/naming-conventions/StateExamp
 
 `BlocSubject` + `State`
 
-عند تمثيل الحالة كفئة أساسية واحدة، يجب استخدام تعداد (enum) باسم `BlocSubject` + `Status` لتمثيل حالة الـ State:
+عند تمثيل الحالة كفئة أساسية واحدة، يجب استخدام تعداد (enum) باسم
+`BlocSubject` + `Status` لتمثيل حالة الـ State:
 
 `initial` | `success` | `failure` | `loading`.
 
 :::note
 
-يجب أن يكون اسم فئة الحالة الأساسية (base state class) دائمًا: `BlocSubject` + `State`.
+يجب أن يكون اسم فئة الحالة الأساسية (base state class) دائمًا: `BlocSubject` +
+`State`.
 
 :::
 

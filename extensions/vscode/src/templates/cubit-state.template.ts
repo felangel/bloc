@@ -4,7 +4,7 @@ import { BlocType } from "../utils";
 export function getCubitStateTemplate(
   cubitName: string,
   type: BlocType,
-  useSealedClasses: boolean
+  useSealedClasses: boolean,
 ): string {
   switch (type) {
     case BlocType.Freezed:
@@ -18,7 +18,7 @@ export function getCubitStateTemplate(
 
 function getEquatableCubitStateTemplate(
   cubitName: string,
-  useSealedClasses: boolean
+  useSealedClasses: boolean,
 ): string {
   const classPrefix = useSealedClasses ? "sealed" : "abstract";
   const subclassPrefix = useSealedClasses ? "final " : "";
@@ -39,7 +39,7 @@ ${subclassPrefix}class ${pascalCaseCubitName}Initial extends ${pascalCaseCubitNa
 
 function getDefaultCubitStateTemplate(
   cubitName: string,
-  useSealedClasses: boolean
+  useSealedClasses: boolean,
 ): string {
   const classPrefix = useSealedClasses ? "sealed" : "abstract";
   const subclassPrefix = useSealedClasses ? "final " : "";
