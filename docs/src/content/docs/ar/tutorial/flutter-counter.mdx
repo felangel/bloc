@@ -1,0 +1,227 @@
+---
+title: Flutter Counter
+description:
+  دليل متعمق حول كيفية بناء تطبيق عداد (Counter) باستخدام فلاتر ومكتبة Bloc.
+sidebar:
+  order: 1
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import FlutterCreateSnippet from '~/components/tutorials/flutter-counter/FlutterCreateSnippet.astro';
+import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.astro';
+
+![beginner](https://img.shields.io/badge/level-beginner-green.svg)
+
+في هذا الدليل التعليمي، سنقوم ببناء تطبيق **عداد (Counter)** في فلاتر باستخدام
+مكتبة **Bloc**.
+
+![demo](~/assets/tutorials/flutter-counter.gif)
+
+## المواضيع الرئيسية (Key Topics)
+
+- مراقبة تغييرات الحالة باستخدام [`BlocObserver`](/bloc-concepts#blocobserver).
+- [`BlocProvider`](/flutter-bloc-concepts#blocprovider)، وهي ويدجت (Widget) من
+  فلاتر توفر Bloc لأبنائها.
+- [`BlocBuilder`](/flutter-bloc-concepts#blocbuilder)، وهي ويدجت من فلاتر تتولى
+  بناء الويدجت استجابةً للحالات الجديدة.
+- استخدام Cubit بدلاً من Bloc. [ما هو الفرق؟](/bloc-concepts#cubit-vs-bloc)
+- إضافة الأحداث باستخدام [`context.read`](/flutter-bloc-concepts#contextread).
+
+## الإعداد (Setup)
+
+سنبدأ بإنشاء مشروع فلاتر جديد تمامًا:
+
+<FlutterCreateSnippet />
+
+بعد ذلك، يمكننا استبدال محتويات ملف `pubspec.yaml` بما يلي:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+ثم نقوم بتثبيت جميع التبعيات (Dependencies) الخاصة بنا:
+
+<FlutterPubGetSnippet />
+
+## هيكل المشروع (Project Structure)
+
+```
+├── lib
+│   ├── app.dart
+│   ├── counter
+│   │   ├── counter.dart
+│   │   ├── cubit
+│   │   │   └── counter_cubit.dart
+│   │   └── view
+│   │       ├── counter_page.dart
+│   │       ├── counter_view.dart
+│   │       └── view.dart
+│   ├── counter_observer.dart
+│   └── main.dart
+├── pubspec.lock
+├── pubspec.yaml
+```
+
+يستخدم التطبيق هيكل دليل (Directory Structure) يعتمد على الميزات
+(Feature-driven). يتيح لنا هيكل المشروع هذا توسيع نطاق المشروع من خلال وجود
+ميزات مكتفية ذاتيًا. في هذا المثال، سيكون لدينا ميزة واحدة فقط (العداد نفسه)،
+ولكن في التطبيقات الأكثر تعقيدًا، يمكن أن يكون لدينا المئات من الميزات المختلفة.
+
+## BlocObserver
+
+أول شيء سننظر إليه هو كيفية إنشاء `BlocObserver`، والذي سيساعدنا في مراقبة جميع
+تغييرات الحالة في التطبيق.
+
+لنقم بإنشاء الملف `lib/counter_observer.dart`:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter_observer.dart"
+	title="lib/counter_observer.dart"
+/>
+
+في هذه الحالة، نحن نقوم فقط بتجاوز الدالة `onChange` لرؤية جميع تغييرات الحالة
+التي تحدث.
+
+:::note
+
+تعمل الدالة `onChange` بنفس الطريقة لكل من نُسخ `Bloc` و `Cubit`.
+
+:::
+
+## main.dart
+
+بعد ذلك، لنقم باستبدال محتويات الملف `lib/main.dart` بما يلي:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/main.dart"
+	title="lib/main.dart"
+/>
+
+نقوم بتهيئة `CounterObserver` الذي أنشأناه للتو واستدعاء `runApp` باستخدام ويدجت
+`CounterApp`، والذي سننظر إليه لاحقًا.
+
+## تطبيق العداد (Counter App)
+
+لنقم بإنشاء الملف `lib/app.dart`:
+
+سيكون `CounterApp` عبارة عن `MaterialApp` ويحدد `home` على أنه `CounterPage`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/app.dart"
+	title="lib/app.dart"
+/>
+
+:::note
+
+نحن نقوم بتوسيع `MaterialApp` لأن `CounterApp` **هو** `MaterialApp`. في معظم
+الحالات، سنقوم بإنشاء نُسخ من `StatelessWidget` أو `StatefulWidget` وتركيب
+الويدجت في الدالة `build`، ولكن في هذه الحالة لا توجد ويدجت لتركيبها، لذا من
+الأبسط تمديد `MaterialApp` مباشرة.
+
+:::
+
+لنلقِ نظرة على `CounterPage` الآن!
+
+## صفحة العداد (Counter Page)
+
+لنقم بإنشاء الملف `lib/counter/view/counter_page.dart`:
+
+تتحمل ويدجت `CounterPage` مسؤولية إنشاء `CounterCubit` (الذي سننظر إليه لاحقًا)
+وتوفيره إلى `CounterView`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_page.dart"
+	title="lib/counter/view/counter_page.dart"
+/>
+
+:::note
+
+من المهم فصل أو فك اقتران إنشاء `Cubit` عن استهلاك `Cubit` للحصول على كود أكثر
+قابلية للاختبار وإعادة الاستخدام.
+
+:::
+
+## Counter Cubit
+
+لنقم بإنشاء الملف `lib/counter/cubit/counter_cubit.dart`:
+
+ستكشف فئة `CounterCubit` عن طريقتين (Methods):
+
+- `increment`: تضيف 1 إلى الحالة الحالية.
+- `decrement`: تطرح 1 من الحالة الحالية.
+
+نوع الحالة الذي يديره `CounterCubit` هو مجرد `int`، والحالة الأولية هي `0`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/cubit/counter_cubit.dart"
+	title="lib/counter/cubit/counter_cubit.dart"
+/>
+
+:::tip
+
+استخدم
+[إضافة VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+أو [ملحق IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc) لإنشاء
+Cubits جديدة تلقائيًا.
+
+:::
+
+بعد ذلك، لنلقِ نظرة على `CounterView`، والذي سيكون مسؤولاً عن استهلاك الحالة
+والتفاعل مع `CounterCubit`.
+
+## عرض العداد (Counter View)
+
+لنقم بإنشاء الملف `lib/counter/view/counter_view.dart`:
+
+`CounterView` مسؤول عن عرض العدد الحالي وعرض زرين عائمين للإجراءات
+(`FloatingActionButtons`) لزيادة/إنقاص العداد.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_view.dart"
+	title="lib/counter/view/counter_view.dart"
+/>
+
+يتم استخدام `BlocBuilder` لتغليف ويدجت `Text` من أجل تحديث النص في أي وقت تتغير
+فيه حالة `CounterCubit`. بالإضافة إلى ذلك، يتم استخدام
+`context.read<CounterCubit>()` للبحث عن أقرب نسخة من `CounterCubit`.
+
+:::note
+
+يتم تغليف ويدجت `Text` فقط في `BlocBuilder` لأنها الويدجت الوحيدة التي تحتاج إلى
+إعادة بنائها استجابةً لتغييرات الحالة في `CounterCubit`. تجنب تغليف الويدجت التي
+لا تحتاج إلى إعادة بناء عند تغيير الحالة دون داعٍ.
+
+:::
+
+## Barrel (تجميع الصادرات)
+
+لنقم بإنشاء الملف `lib/counter/view/view.dart`:
+
+أضف `view.dart` لتصدير جميع الأجزاء العامة (Public) لعرض العداد.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/view.dart"
+	title="lib/counter/view/view.dart"
+/>
+
+لنقم بإنشاء الملف `lib/counter/counter.dart`:
+
+أضف `counter.dart` لتصدير جميع الأجزاء العامة لميزة العداد.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/counter.dart"
+	title="lib/counter/counter.dart"
+/>
+
+هذا كل شيء! لقد قمنا بفصل طبقة العرض (Presentation Layer) عن طبقة منطق الأعمال
+(Business Logic Layer). لا تملك `CounterView` أي فكرة عما يحدث عندما يضغط
+المستخدم على زر؛ إنها فقط تخطر `CounterCubit`. علاوة على ذلك، لا يملك
+`CounterCubit` أي فكرة عما يحدث مع الحالة (قيمة العداد)؛ إنه ببساطة يصدر حالات
+جديدة استجابةً لاستدعاء الطرق (Methods).
+
+يمكننا تشغيل تطبيقنا باستخدام الأمر `flutter run` وعرضه على جهازنا أو
+المحاكي/المحاكي.
+
+يمكن العثور على المصدر الكامل (بما في ذلك اختبارات الوحدة والويدجت) لهذا المثال
+[هنا](https://github.com/felangel/Bloc/tree/master/examples/flutter_counter).

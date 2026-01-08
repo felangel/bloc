@@ -1,0 +1,57 @@
+---
+title: تفضيل اصطلاحات تسمية الملفات
+description: قاعدة prefer_file_naming_conventions.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/prefer_file_naming_conventions/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/prefer_file_naming_conventions/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+	<Badge text="recommended" variant="success" />
+</div>
+
+**تفضيل** اتباع اصطلاحات تسمية الملفات.
+
+:::note
+
+تم تقديم قاعدة التحليل (lint rule) هذه في الإصدار `0.3.0` من حزمة
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint)
+
+:::
+
+## الأساس المنطقي (Rationale)
+
+من أجل الاتساق، وسهولة الصيانة، وفصل الاهتمامات (separation of concerns)،
+**يُفضل** تعريف كائنات `bloc` و `cubit` في ملفات Dart الخاصة بها بدلاً من
+تضمينها مباشرة (inlining).
+
+:::tip
+
+فكر في استخدام الأمر `bloc new <component>` من حزمة
+[package:bloc_tools](https://pub.dev/packages/bloc_tools) لإنشاء كائنات
+bloc/cubit جديدة بسرعة وبشكل متسق.
+
+:::
+
+## الأمثلة (Examples)
+
+**يُفضل** التصريح عن كائنات bloc/cubit في ملفاتها الخاصة.
+
+**مثال جيد (GOOD)**:
+
+<GoodSnippet />
+
+**مثال سيئ (BAD)**:
+
+<BadSnippet />
+
+## التفعيل (Enable)
+
+لتفعيل قاعدة `prefer_file_naming_conventions`، أضفها إلى ملف
+`analysis_options.yaml` الخاص بك ضمن قسم `bloc` > `rules`:
+
+<EnableRuleSnippet name="prefer_file_naming_conventions" />

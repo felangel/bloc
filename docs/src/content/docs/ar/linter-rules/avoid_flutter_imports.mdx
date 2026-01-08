@@ -1,0 +1,53 @@
+---
+title: تجنب استيراد Flutter (Avoid Flutter Imports)
+description: قاعدة avoid_flutter_imports البرمجية الخاصة بـ Bloc.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/avoid_flutter_imports/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/avoid_flutter_imports/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+	<Badge text="recommended" variant="success" />
+</div>
+
+تجنب إدخال تبعيات على Flutter ضمن مكونات منطق الأعمال (Business Logic
+Components) (نُسخ `Bloc` أو `Cubit`).
+
+## الأساس المنطقي (Rationale)
+
+يعد تقسيم التطبيق إلى طبقات (Layering an application) جزءًا أساسيًا من بناء
+قاعدة أكواد قابلة للصيانة (maintainable codebase) ويساعد المطورين على التكرار
+بسرعة وثقة. يجب أن يكون لكل طبقة مسؤولية واحدة (single responsibility) وأن تكون
+قادرة على العمل والاختبار بشكل مستقل (in isolation). يتيح لك هذا احتواء
+التغييرات في طبقات محددة، مما يقلل من تأثيرها على التطبيق بأكمله.
+
+ونتيجة لذلك، يجب أن تدير مكونات منطق الأعمال حالة الميزة (feature state) وأن
+تكون مفصولة عن طبقة واجهة المستخدم (UI layer). يجب أن تتدفق الأحداث (Events) إلى
+مكونات منطق الأعمال من طبقة واجهة المستخدم، ويجب أن تتدفق الحالة (State) من طبقة
+منطق الأعمال إلى طبقة واجهة المستخدم.
+
+إن إبقاء مكونات منطق الأعمال مفصولة عن Flutter يوفر القدرة على إعادة استخدام
+منطق الأعمال عبر منصات/أطر عمل متعددة (مثل Flutter، AngularDart، Jaspr، إلخ).
+
+## أمثلة (Examples)
+
+**لا تقم** باستيراد Flutter ضمن مكونات منطق الأعمال الخاصة بك.
+
+**مثال سيئ (BAD)**:
+
+<BadSnippet />
+
+**مثال جيد (GOOD)**:
+
+<GoodSnippet />
+
+## التفعيل (Enable)
+
+لتفعيل قاعدة `avoid_flutter_imports`، أضفها إلى ملف `analysis_options.yaml`
+الخاص بك ضمن `bloc` > `rules`:
+
+<EnableRuleSnippet name="avoid_flutter_imports" />

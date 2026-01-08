@@ -1,0 +1,154 @@
+---
+title: الهندسة المعمارية
+description: نظرة عامة على أنماط الهندسة المعمارية الموصى بها عند استخدام bloc.
+---
+
+import DataProviderSnippet from '~/components/architecture/DataProviderSnippet.astro';
+import RepositorySnippet from '~/components/architecture/RepositorySnippet.astro';
+import BusinessLogicComponentSnippet from '~/components/architecture/BusinessLogicComponentSnippet.astro';
+import BlocTightCouplingSnippet from '~/components/architecture/BlocTightCouplingSnippet.astro';
+import BlocLooseCouplingPresentationSnippet from '~/components/architecture/BlocLooseCouplingPresentationSnippet.astro';
+import AppIdeasRepositorySnippet from '~/components/architecture/AppIdeasRepositorySnippet.astro';
+import AppIdeaRankingBlocSnippet from '~/components/architecture/AppIdeaRankingBlocSnippet.astro';
+import PresentationComponentSnippet from '~/components/architecture/PresentationComponentSnippet.astro';
+
+![Bloc Architecture](~/assets/concepts/bloc_architecture_full.png)
+
+يتيح لنا استخدام مكتبة bloc فصل تطبيقنا إلى ثلاث طبقات:
+
+- طبقة العرض (Presentation)
+- طبقة منطق الأعمال (Business Logic)
+- طبقة البيانات (Data)
+  - المستودع (Repository)
+  - مزود البيانات (Data Provider)
+
+سنبدأ بالطبقة الأدنى (الأبعد عن واجهة المستخدم) ونتدرج صعودًا إلى طبقة العرض.
+
+## طبقة البيانات (Data Layer)
+
+تتمثل مسؤولية طبقة البيانات في استرداد/معالجة البيانات من مصدر واحد أو أكثر.
+
+يمكن تقسيم طبقة البيانات إلى جزأين:
+
+- المستودع (Repository)
+- مزود البيانات (Data Provider)
+
+هذه الطبقة هي أدنى مستوى في التطبيق وتتفاعل مع قواعد البيانات، طلبات الشبكة،
+ومصادر البيانات غير المتزامنة الأخرى.
+
+### مزود البيانات (Data Provider)
+
+تتمثل مسؤولية مزود البيانات في توفير البيانات الخام. يجب أن يكون مزود البيانات
+عامًا ومتعدد الاستخدامات.
+
+عادةً ما يكشف مزود البيانات عن واجهات برمجية بسيطة (APIs) لأداء
+[عمليات الإنشاء والقراءة والتحديث والحذف (CRUD)](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete).
+قد يكون لدينا دوال مثل `createData` و `readData` و `updateData` و `deleteData`
+كجزء من طبقة البيانات لدينا.
+
+<DataProviderSnippet />
+
+### المستودع (Repository)
+
+طبقة المستودع هي غلاف حول مزود بيانات واحد أو أكثر تتواصل معه طبقة الـ Bloc
+(منطق الأعمال).
+
+<RepositorySnippet />
+
+كما ترى، يمكن لطبقة المستودع لدينا التفاعل مع مزودي بيانات متعددين وإجراء
+تحويلات على البيانات قبل تسليم النتيجة إلى طبقة منطق الأعمال.
+
+## طبقة منطق الأعمال (Business Logic Layer)
+
+تتمثل مسؤولية طبقة منطق الأعمال في الاستجابة للمدخلات من طبقة العرض بحالات
+جديدة. يمكن أن تعتمد هذه الطبقة على مستودع واحد أو أكثر لاسترداد البيانات
+اللازمة لبناء حالة التطبيق.
+
+فكر في طبقة منطق الأعمال كجسر بين واجهة المستخدم (طبقة العرض) وطبقة البيانات.
+يتم إخطار طبقة منطق الأعمال بالأحداث/الإجراءات من طبقة العرض، ثم تتواصل مع
+المستودع من أجل بناء حالة جديدة لتستهلكها طبقة العرض.
+
+<BusinessLogicComponentSnippet />
+
+### التواصل بين الـ Blocs (Bloc-to-Bloc Communication)
+
+نظرًا لأن الـ blocs تكشف عن تدفقات (streams)، فقد يكون من المغري إنشاء bloc
+يستمع إلى bloc آخر. يجب **ألا** تفعل ذلك. هناك بدائل أفضل من اللجوء إلى الكود
+أدناه:
+
+<BlocTightCouplingSnippet />
+
+على الرغم من أن الكود أعلاه خالٍ من الأخطاء (بل ويقوم بالتنظيف الذاتي)، إلا أن
+لديه مشكلة أكبر: إنه ينشئ تبعية بين اثنين من الـ blocs.
+
+بشكل عام، يجب تجنب التبعيات الشقيقة بين كيانين في نفس الطبقة المعمارية بأي ثمن،
+لأنها تخلق اقترانًا محكمًا (tight-coupling) يصعب صيانته. نظرًا لأن الـ blocs تقع
+في طبقة منطق الأعمال المعمارية، فلا ينبغي لأي bloc أن يعرف شيئًا عن أي bloc آخر.
+
+![Application Architecture Layers](~/assets/architecture/architecture.png)
+
+يجب أن يتلقى الـ bloc المعلومات فقط من خلال الأحداث ومن المستودعات المحقونة
+(injected repositories) (أي المستودعات التي يتم تمريرها إلى الـ bloc في المُنشئ
+الخاص به).
+
+إذا كنت في موقف يحتاج فيه bloc إلى الاستجابة لـ bloc آخر، فلديك خياران آخران.
+يمكنك دفع المشكلة إلى طبقة أعلى (في طبقة العرض)، أو إلى طبقة أدنى (في طبقة
+النطاق/المجال).
+
+#### ربط الـ Blocs عبر طبقة العرض (Connecting Blocs through Presentation)
+
+يمكنك استخدام `BlocListener` للاستماع إلى bloc واحد وإضافة حدث إلى bloc آخر كلما
+تغير الـ bloc الأول.
+
+<BlocLooseCouplingPresentationSnippet />
+
+يمنع الكود أعلاه `SecondBloc` من الحاجة إلى معرفة أي شيء عن `FirstBloc`، مما
+يشجع على الاقتران المرن (loose-coupling). يستخدم تطبيق
+[flutter_weather](/tutorials/flutter-weather)
+[هذه التقنية](https://github.com/felangel/bloc/blob/b4c8db938ad71a6b60d4a641ec357905095c3965/examples/flutter_weather/lib/weather/view/weather_page.dart#L38-L42)
+لتغيير سمة التطبيق بناءً على معلومات الطقس التي يتم تلقيها.
+
+في بعض الحالات، قد لا ترغب في ربط اثنين من الـ blocs في طبقة العرض. بدلاً من
+ذلك، قد يكون من المنطقي في كثير من الأحيان أن يتشارك الـ blocs في نفس مصدر
+البيانات ويتم تحديثهما كلما تغيرت البيانات.
+
+#### ربط الـ Blocs عبر طبقة النطاق (Connecting Blocs through Domain)
+
+يمكن لـ blocين الاستماع إلى تدفق (stream) من مستودع وتحديث حالاتهما بشكل مستقل
+عن بعضهما البعض كلما تغيرت بيانات المستودع. يعد استخدام المستودعات التفاعلية
+(reactive repositories) للحفاظ على مزامنة الحالة أمرًا شائعًا في تطبيقات
+المؤسسات واسعة النطاق.
+
+أولاً، قم بإنشاء أو استخدام مستودع يوفر `Stream` للبيانات. على سبيل المثال، يوفر
+المستودع التالي تدفقًا لا نهائيًا لنفس الأفكار القليلة للتطبيق:
+
+<AppIdeasRepositorySnippet />
+
+يمكن حقن نفس المستودع في كل bloc يحتاج إلى التفاعل مع أفكار التطبيق الجديدة.
+أدناه يوجد `AppIdeaRankingBloc` الذي يصدر حالة لكل فكرة تطبيق واردة من المستودع
+أعلاه:
+
+<AppIdeaRankingBlocSnippet />
+
+لمزيد من المعلومات حول استخدام التدفقات (streams) مع Bloc، راجع
+[كيفية استخدام Bloc مع التدفقات والتزامن](https://verygood.ventures/blog/how-to-use-bloc-with-streams-and-concurrency).
+
+## طبقة العرض (Presentation Layer)
+
+تتمثل مسؤولية طبقة العرض في تحديد كيفية عرض نفسها بناءً على حالة bloc واحدة أو
+أكثر. بالإضافة إلى ذلك، يجب أن تتعامل مع مدخلات المستخدم وأحداث دورة حياة
+التطبيق.
+
+تبدأ معظم تدفقات التطبيقات بحدث `AppStart` الذي يشغل التطبيق لجلب بعض البيانات
+لعرضها للمستخدم.
+
+في هذا السيناريو، ستقوم طبقة العرض بإضافة حدث `AppStart`.
+
+بالإضافة إلى ذلك، سيتعين على طبقة العرض تحديد ما يجب عرضه على الشاشة بناءً على
+الحالة من طبقة الـ bloc.
+
+<PresentationComponentSnippet />
+
+حتى الآن، على الرغم من أننا قدمنا بعض مقتطفات الكود، إلا أن كل هذا كان على مستوى
+عالٍ إلى حد ما. في قسم الدروس التعليمية، سنقوم بجمع كل هذا معًا بينما نبني
+العديد من تطبيقات الأمثلة المختلفة.
