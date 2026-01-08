@@ -1,0 +1,57 @@
+---
+title: از قراردادهای نام‌گذاری فایل پیروی کنید
+description: قانون prefer_file_naming_conventions.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/prefer_file_naming_conventions/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/prefer_file_naming_conventions/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+	<Badge text="recommended" variant="success" />
+</div>
+
+ترجیح داده می‌شود از قراردادهای نام‌گذاری فایل پیروی کنید.
+
+:::note
+
+این قانون lint در نسخهٔ `0.3.0` از
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint) معرفی شده است
+
+:::
+
+## دلیل
+
+برای حفظ یکپارچگی، سهولت نگهداری و جداسازی مسئولیت‌ها، ترجیح دهید نمونه‌های
+`bloc` و `cubit` را در فایل‌های Dart مربوط به خودشان تعریف کنید به‌جای آنکه
+آن‌ها را به‌صورت درون‌خطی قرار دهید.
+
+:::tip
+
+در نظر داشته باشید از دستور `bloc new <component>` از
+[package:bloc_tools](https://pub.dev/packages/bloc_tools) برای تولید سریع و
+یکنواخت نمونه‌های جدید bloc/cubit استفاده کنید.
+
+:::
+
+## مثال‌ها
+
+**ترجیح دهید** نمونه‌های bloc/cubit را در فایل‌های مربوطهٔ خودشان اعلام کنید.
+
+**خوب**:
+
+<GoodSnippet />
+
+**بد**:
+
+<BadSnippet />
+
+## فعال‌سازی
+
+برای فعال کردن قانون `prefer_file_naming_conventions`، آن را به فایل
+`analysis_options.yaml` خود تحت `bloc` > `rules` اضافه کنید:
+
+<EnableRuleSnippet name="prefer_file_naming_conventions" />

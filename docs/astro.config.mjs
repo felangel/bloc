@@ -88,7 +88,7 @@ export default defineConfig({
 							link: '/flutter-bloc-concepts/',
 							translations: {
 								'zh-CN': 'Flutter Bloc 核心概念',
-								fa: 'مفاهیم بلوک فلاتر',
+								fa: 'مفاهیم Bloc فلاتر',
 								es: 'Conceptos de Flutter Bloc',
 								ja: 'Flutter Blocのコンセプト',
 							},
@@ -102,7 +102,7 @@ export default defineConfig({
 							label: 'Modeling State',
 							link: '/modeling-state/',
 							translations: {
-								fa: 'وضعیت (State) مدل سازی',
+								fa: 'حالت (State) مدل سازی',
 								es: 'Modelando el Estado',
 								ja: '状態のモデリング',
 							},
@@ -137,11 +137,31 @@ export default defineConfig({
 					label: 'Linter',
 					badge: { text: 'new' },
 					items: [
-						{ label: 'Overview ', link: '/lint/' },
-						{ label: 'Installation ', link: '/lint/installation/' },
-						{ label: 'Configuration ', link: '/lint/configuration/' },
-						{ label: 'Customizing Rules ', link: '/lint/customizing-rules/' },
-						{ label: 'Rules', autogenerate: { directory: '/lint-rules' } },
+						{
+							label: 'Overview ',
+							link: '/lint/',
+							translations: { fa: 'بررسی اجمالی' },
+						},
+						{
+							label: 'Installation ',
+							link: '/lint/installation/',
+							translations: { fa: 'نصب' },
+						},
+						{
+							label: 'Configuration ',
+							link: '/lint/configuration/',
+							translations: { fa: 'پیکربندی' },
+						},
+						{
+							label: 'Customizing Rules ',
+							link: '/lint/customizing-rules/',
+							translations: { fa: 'سفارشی سازی قوانین' },
+						},
+						{
+							label: 'Rules',
+							autogenerate: { directory: '/lint-rules' },
+							translations: { fa: 'قوانین' },
+						},
 					],
 				},
 				{
