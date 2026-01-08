@@ -1,0 +1,47 @@
+---
+title: تفضيل Bloc
+description: قاعدة prefer_bloc.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/prefer_bloc/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/prefer_bloc/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+</div>
+
+فضل استخدام كائنات `Bloc` على كائنات `Cubit`.
+
+## الأساس المنطقي
+
+هذه القاعدة هي قاعدة أسلوبية بحتة. في بعض الحالات، قد تفضل الفرق توحيد استخدام
+كائنات `Bloc` فقط في جميع أنحاء تطبيقها من أجل الاتساق (consistency).
+
+:::tip
+
+تعرف على المزيد حول فوائد `Bloc` في
+[المفاهيم الأساسية](/bloc-concepts/#bloc-advantages).
+
+:::
+
+## أمثلة
+
+**تجنب** استخدام كائنات `Cubit`.
+
+**مثال سيئ**:
+
+<BadSnippet />
+
+**مثال جيد**:
+
+<GoodSnippet />
+
+## التفعيل
+
+لتفعيل قاعدة `prefer_bloc`، أضفها إلى ملف `analysis_options.yaml` الخاص بك تحت
+المسار `bloc` > `rules`:
+
+<EnableRuleSnippet name="prefer_bloc" />
