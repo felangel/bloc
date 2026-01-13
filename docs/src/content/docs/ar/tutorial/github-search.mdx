@@ -1,49 +1,38 @@
-```markdown
-title: بحث GitHub description: دليل شامل حول كيفية بناء تطبيق بحث GitHub
-باستخدام Flutter و AngularDart مع bloc. sidebar: order: 9
-
+---
+title: بحث GitHub
+description: دليل شامل حول كيفية بناء تطبيق بحث GitHub باستخدام Flutter و AngularDart مع bloc.
+sidebar:
+  order: 9
 ---
 
-import RemoteCode from '~/components/code/RemoteCode.astro'; import SetupSnippet
-from '~/components/tutorials/github-search/SetupSnippet.astro'; import
-DartPubGetSnippet from
-'~/components/tutorials/github-search/DartPubGetSnippet.astro'; import
-FlutterCreateSnippet from
-'~/components/tutorials/github-search/FlutterCreateSnippet.astro'; import
-FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.astro';
-import StagehandSnippet from
-'~/components/tutorials/github-search/StagehandSnippet.astro'; import
-ActivateStagehandSnippet from
-'~/components/tutorials/github-search/ActivateStagehandSnippet.astro';
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import SetupSnippet from '~/components/tutorials/github-search/SetupSnippet.astro';
+import DartPubGetSnippet from '~/components/tutorials/github-search/DartPubGetSnippet.astro';
+import FlutterCreateSnippet from '~/components/tutorials/github-search/FlutterCreateSnippet.astro';
+import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.astro';
+import StagehandSnippet from '~/components/tutorials/github-search/StagehandSnippet.astro';
+import ActivateStagehandSnippet from '~/components/tutorials/github-search/ActivateStagehandSnippet.astro';
 
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
-في هذا الدرس التعليمي، سنقوم ببناء تطبيق بحث GitHub باستخدام Flutter و
-AngularDart لشرح كيفية مشاركة طبقات البيانات ومنطق العمل بين المشروعين.
+في هذا الدرس التعليمي، سنقوم ببناء تطبيق بحث GitHub باستخدام Flutter و AngularDart لشرح كيفية مشاركة طبقات البيانات ومنطق العمل بين المشروعين.
 
 ![demo](~/assets/tutorials/flutter-github-search.gif)
 
 ![demo](~/assets/tutorials/ngdart-github-search.gif)
-```
 
 ## المواضيع الرئيسية
 
-- [BlocProvider](/flutter-bloc-concepts#blocprovider)، ويدجت Flutter التي توفر
-  Bloc لأطفالها.
-- [BlocBuilder](/flutter-bloc-concepts#blocbuilder)، ويدجت Flutter التي تدير
-  بناء الويدجت استجابة للحالات الجديدة.
-- استخدام Cubit بدلاً من Bloc.  
-  [ما الفرق؟](/bloc-concepts#cubit-vs-bloc)
-- منع إعادة البناء غير الضرورية باستخدام
-  [Equatable](/faqs#when-to-use-equatable).
-- استخدام محول أحداث مخصص `EventTransformer` مع  
-  [`bloc_concurrency`](https://pub.dev/packages/bloc_concurrency).
+- [BlocProvider](/flutter-bloc-concepts#blocprovider)، ويدجت Flutter التي توفر Bloc لأطفالها.
+- [BlocBuilder](/flutter-bloc-concepts#blocbuilder)، ويدجت Flutter التي تدير بناء الويدجت استجابة للحالات الجديدة.
+- استخدام Cubit بدلاً من Bloc. [ما الفرق؟](/bloc-concepts#cubit-vs-bloc)
+- منع إعادة البناء غير الضرورية باستخدام [Equatable](/faqs#when-to-use-equatable).
+- استخدام محول أحداث مخصص `EventTransformer` مع [`bloc_concurrency`](https://pub.dev/packages/bloc_concurrency).
 - إجراء طلبات الشبكة باستخدام حزمة `http`.
 
 ## مكتبة البحث المشتركة في GitHub
 
-تتضمن مكتبة البحث المشتركة في GitHub النماذج، مزود البيانات، المستودع، بالإضافة
-إلى الـ bloc الذي سيتم مشاركته بين AngularDart و Flutter.
+تتضمن مكتبة البحث المشتركة في GitHub النماذج، مزود البيانات، المستودع، بالإضافة إلى الـ bloc الذي سيتم مشاركته بين AngularDart و Flutter.
 
 ### الإعداد
 
@@ -68,18 +57,15 @@ AngularDart لشرح كيفية مشاركة طبقات البيانات ومن�
 
 <DartPubGetSnippet />
 
-هذا كل ما يتعلق بإعداد المشروع! الآن يمكننا البدء في بناء حزمة
-`common_github_search`.
+هذا كل ما يتعلق بإعداد المشروع! الآن يمكننا البدء في بناء حزمة `common_github_search`.
 
 ### عميل GitHub
 
-الـ `GithubClient` هو المسؤول عن توفير البيانات الخام من
-[واجهة برمجة تطبيقات GitHub](https://developer.github.com/v3/).
+الـ `GithubClient` هو المسؤول عن توفير البيانات الخام من [واجهة برمجة تطبيقات GitHub](https://developer.github.com/v3/).
 
 :::note
 
-يمكنك الاطلاع على نموذج للبيانات التي نحصل عليها من
-[هنا](https://api.github.com/search/repositories?q=dartlang).
+يمكنك الاطلاع على نموذج للبيانات التي نحصل عليها من [هنا](https://api.github.com/search/repositories?q=dartlang).
 
 :::
 
@@ -92,15 +78,13 @@ AngularDart لشرح كيفية مشاركة طبقات البيانات ومن�
 
 :::note
 
-يقوم `GithubClient` ببساطة بإجراء طلب شبكة إلى API بحث المستودعات في GitHub
-وتحويل النتيجة إلى إما `SearchResult` أو `SearchResultError` بشكل Future.
+يقوم `GithubClient` ببساطة بإجراء طلب شبكة إلى API بحث المستودعات في GitHub وتحويل النتيجة إلى إما `SearchResult` أو `SearchResultError` بشكل Future.
 
 :::
 
 :::note
 
-تعتمد طريقة تنفيذ `GithubClient` على الدالة `SearchResult.fromJson`، والتي لم
-ننفذها بعد.
+تعتمد طريقة تنفيذ `GithubClient` على الدالة `SearchResult.fromJson`، والتي لم ننفذها بعد.
 
 :::
 
@@ -108,8 +92,7 @@ AngularDart لشرح كيفية مشاركة طبقات البيانات ومن�
 
 #### نموذج نتائج البحث
 
-أنشئ `search_result.dart`، والذي يُمثّل قائمة من `SearchResultItems` تعتمد على
-استعلام المستخدم:
+أنشئ `search_result.dart`، والذي يُمثّل قائمة من `SearchResultItems` تعتمد على استعلام المستخدم:
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/models/search_result.dart"
@@ -118,8 +101,7 @@ AngularDart لشرح كيفية مشاركة طبقات البيانات ومن�
 
 :::note
 
-تعتمد طريقة تنفيذ `SearchResult` على `SearchResultItem.fromJson`، التي لم ننفذها
-بعد.
+تعتمد طريقة تنفيذ `SearchResult` على `SearchResultItem.fromJson`، التي لم ننفذها بعد.
 
 :::
 
@@ -140,8 +122,7 @@ AngularDart لشرح كيفية مشاركة طبقات البيانات ومن�
 
 :::note
 
-مرة أخرى، يعتمد تنفيذ `SearchResultItem` على `GithubUser.fromJson`، التي لم
-ننفذها بعد.
+مرة أخرى، يعتمد تنفيذ `SearchResultItem` على `GithubUser.fromJson`، التي لم ننفذها بعد.
 
 :::
 
@@ -154,8 +135,7 @@ AngularDart لشرح كيفية مشاركة طبقات البيانات ومن�
 	title="lib/src/models/github_user.dart"
 />
 
-الآن بعد أن أكملنا تنفيذ `SearchResult` واعتمادياته، سننتقل إلى
-`SearchResultError`.
+الآن بعد أن أكملنا تنفيذ `SearchResult` واعتمادياته، سننتقل إلى `SearchResultError`.
 
 #### نموذج خطأ نتيجة البحث
 
@@ -166,15 +146,11 @@ AngularDart لشرح كيفية مشاركة طبقات البيانات ومن�
 	title="lib/src/models/search_result_error.dart"
 />
 
-لقد انتهينا من `GithubClient`، لذلك سننتقل إلى `GithubCache`، الذي سيكون مسؤولًا
-عن
-[التخزين المؤقت للنتائج (Memoization)](https://en.wikipedia.org/wiki/Memoization)
-كوسيلة لتحسين الأداء.
+لقد انتهينا من `GithubClient`، لذلك سننتقل إلى `GithubCache`، الذي سيكون مسؤولًا عن [التخزين المؤقت للنتائج (Memoization)](https://en.wikipedia.org/wiki/Memoization) كوسيلة لتحسين الأداء.
 
 ### التخزين المؤقت لـ GitHub
 
-سيتولى `GithubCache` مهمة تذكر جميع الاستعلامات السابقة لتجنب إجراء طلبات شبكة
-غير ضرورية إلى API GitHub. هذا سيُساعد أيضًا على تحسين أداء التطبيق.
+سيتولى `GithubCache` مهمة تذكر جميع الاستعلامات السابقة لتجنب إجراء طلبات شبكة غير ضرورية إلى API GitHub. هذا سيُساعد أيضًا على تحسين أداء التطبيق.
 
 أنشئ `github_cache.dart`.
 
@@ -187,8 +163,7 @@ AngularDart لشرح كيفية مشاركة طبقات البيانات ومن�
 
 ### مستودع GitHub
 
-مستودع GitHub مسؤول عن خلق طبقة تجريدية بين طبقة البيانات (`GithubClient`) وطبقة
-منطق الأعمال (`Bloc`). هذه الطبقة أيضًا المكان الذي سنستخدم فيه `GithubCache`.
+مستودع GitHub مسؤول عن خلق طبقة تجريدية بين طبقة البيانات (`GithubClient`) وطبقة منطق الأعمال (`Bloc`). هذه الطبقة أيضًا المكان الذي سنستخدم فيه `GithubCache`.
 
 أنشئ `github_repository.dart`.
 
@@ -199,20 +174,15 @@ AngularDart لشرح كيفية مشاركة طبقات البيانات ومن�
 
 :::note
 
-يعتمد `GithubRepository` على `GithubCache` و `GithubClient` ويقوم بتجريد التنفيذ
-الداخلي. تطبيقنا لا يحتاج لمعرفة كيفية استرجاع البيانات أو مصدرها لأنه لا يهمه
-ذلك. يمكننا تغيير طريقة عمل المستودع في أي وقت طالما أننا لم نغير الواجهة
-(interface) فليس هناك حاجة لتعديل أي كود يستخدمه.
+يعتمد `GithubRepository` على `GithubCache` و `GithubClient` ويقوم بتجريد التنفيذ الداخلي. تطبيقنا لا يحتاج لمعرفة كيفية استرجاع البيانات أو مصدرها لأنه لا يهمه ذلك. يمكننا تغيير طريقة عمل المستودع في أي وقت طالما أننا لم نغير الواجهة (interface) فليس هناك حاجة لتعديل أي كود يستخدمه.
 
 :::
 
-الآن بعد أن أكملنا طبقة مزود البيانات وطبقة المستودع، نحن جاهزون للانتقال إلى
-طبقة منطق الأعمال.
+الآن بعد أن أكملنا طبقة مزود البيانات وطبقة المستودع، نحن جاهزون للانتقال إلى طبقة منطق الأعمال.
 
 ### حدث بحث GitHub
 
-سيتم إعلام الـ Bloc عندما يقوم المستخدم بكتابة اسم مستودع، والذي سنمثله عبر حدث
-`TextChanged` من نوع `GithubSearchEvent`.
+سيتم إعلام الـ Bloc عندما يقوم المستخدم بكتابة اسم مستودع، والذي سنمثله عبر حدث `TextChanged` من نوع `GithubSearchEvent`.
 
 أنشئ `github_search_event.dart`.
 
@@ -223,9 +193,7 @@ AngularDart لشرح كيفية مشاركة طبقات البيانات ومن�
 
 :::note
 
-نحن نستخدم الوراثة من [`Equatable`](https://pub.dev/packages/equatable) لتمكين
-مقارنة مثيلات `GithubSearchEvent`. بشكل افتراضي، عامل المساواة يعيد true فقط إذا
-كانت هذه والمثيل الآخر نفس الكائن.
+نحن نستخدم الوراثة من [`Equatable`](https://pub.dev/packages/equatable) لتمكين مقارنة مثيلات `GithubSearchEvent`. بشكل افتراضي، عامل المساواة يعيد true فقط إذا كانت هذه والمثيل الآخر نفس الكائن.
 
 :::
 
@@ -234,12 +202,9 @@ AngularDart لشرح كيفية مشاركة طبقات البيانات ومن�
 طبقة العرض لدينا ستحتاج إلى مجموعة من المعلومات لكي تعرض الواجهة بشكل صحيح:
 
 - `SearchStateEmpty`- تخبر طبقة العرض أنه لم يتم إدخال أي مدخلات من المستخدم.
-
 - `SearchStateLoading`- تخبر طبقة العرض بضرورة عرض مؤشر تحميل.
-
 - `SearchStateSuccess`- تخبر طبقة العرض بأنها تمتلك بيانات للعرض.
   - `items`- ستكون قائمة من `List<SearchResultItem>` التي سيتم عرضها.
-
 - `SearchStateError`- تخبر طبقة العرض بحدوث خطأ أثناء جلب البيانات.
   - `error`- هو الخطأ المحدد الذي حدث.
 
@@ -252,14 +217,11 @@ AngularDart لشرح كيفية مشاركة طبقات البيانات ومن�
 
 :::note
 
-نحن نستخدم الوراثة من [`Equatable`](https://pub.dev/packages/equatable) لتمكين
-مقارنة مثيلات `GithubSearchState`. بشكل افتراضي، عامل المساواة يعيد true فقط إذا
-كانت هذه والمثيل الآخر نفس الكائن.
+نحن نستخدم الوراثة من [`Equatable`](https://pub.dev/packages/equatable) لتمكين مقارنة مثيلات `GithubSearchState`. بشكل افتراضي، عامل المساواة يعيد true فقط إذا كانت هذه والمثيل الآخر نفس الكائن.
 
 :::
 
-الآن بعد أن أنشأنا الأحداث (Events) والحالات (States)، يمكننا إنشاء الـ
-`GithubSearchBloc`.
+الآن بعد أن أنشأنا الأحداث (Events) والحالات (States)، يمكننا إنشاء الـ `GithubSearchBloc`.
 
 ### Bloc بحث GitHub
 
@@ -272,35 +234,27 @@ AngularDart لشرح كيفية مشاركة طبقات البيانات ومن�
 
 :::note
 
-يقوم `GithubSearchBloc` بتحويل `GithubSearchEvent` إلى `GithubSearchState`
-ويعتمد على `GithubRepository`.
+يقوم `GithubSearchBloc` بتحويل `GithubSearchEvent` إلى `GithubSearchState` ويعتمد على `GithubRepository`.
 
 :::
 
 :::note
 
-أنشأنا مُحوّل أحداث مخصص `EventTransformer` لـ
-[تأخير التنفيذ (Debounce)](https://pub.dev/documentation/stream_transform/latest/stream_transform/RateLimit/debounce.html)
-لـ `GithubSearchEvents`. واحد من الأسباب التي دفعتنا لاستخدام Bloc بدل Cubit هو
-للاستفادة من محولات الدفق (stream transformers).
+أنشأنا مُحوّل أحداث مخصص `EventTransformer` لـ [تأخير التنفيذ (Debounce)](https://pub.dev/documentation/stream_transform/latest/stream_transform/RateLimit/debounce.html) لـ `GithubSearchEvents`. واحد من الأسباب التي دفعتنا لاستخدام Bloc بدل Cubit هو للاستفادة من محولات الدفق (stream transformers).
 
 :::
 
-رائع! لقد انتهينا من حزمة `common_github_search`. المنتج النهائي يجب أن يبدو مثل
-[هذا](https://github.com/felangel/bloc/tree/master/examples/github_search/common_github_search).
+رائع! لقد انتهينا من حزمة `common_github_search`. المنتج النهائي يجب أن يبدو مثل [هذا](https://github.com/felangel/bloc/tree/master/examples/github_search/common_github_search).
 
 بعد ذلك، سنعمل على تنفيذ Flutter.
 
 ## بحث GitHub باستخدام Flutter
 
-تطبيق Flutter GitHub Search سيكون تطبيق Flutter يعيد استخدام النماذج، مزودي
-البيانات، المستودعات (repositories)، وblocs من مكتبة `common_github_search`
-لتنفيذ وظيفة البحث في GitHub.
+تطبيق Flutter GitHub Search سيكون تطبيق Flutter يعيد استخدام النماذج، مزودي البيانات، المستودعات (repositories)، وblocs من مكتبة `common_github_search` لتنفيذ وظيفة البحث في GitHub.
 
 ### الإعداد
 
-نبدأ بإنشاء مشروع Flutter جديد داخل مجلد `github_search` على نفس المستوى الذي
-توجد به مكتبة `common_github_search`.
+نبدأ بإنشاء مشروع Flutter جديد داخل مجلد `github_search` على نفس المستوى الذي توجد به مكتبة `common_github_search`.
 
 <FlutterCreateSnippet />
 
@@ -321,8 +275,7 @@ AngularDart لشرح كيفية مشاركة طبقات البيانات ومن�
 
 <FlutterPubGetSnippet />
 
-هذا كل شيء بخصوص إعداد المشروع. بما أن مكتبة `common_github_search` تحتوي على
-طبقة البيانات وطبقة منطق العمل، ما علينا بناؤه هو فقط طبقة العرض.
+هذا كل شيء بخصوص إعداد المشروع. بما أن مكتبة `common_github_search` تحتوي على طبقة البيانات وطبقة منطق العمل، ما علينا بناؤه هو فقط طبقة العرض.
 
 ### نموذج البحث
 
@@ -333,156 +286,96 @@ AngularDart لشرح كيفية مشاركة طبقات البيانات ومن�
 
 لننشئ ملف `search_form.dart`.
 
-سيكون عنصر `SearchForm` من نوع `StatelessWidget` يعرض عناصر `_SearchBar` و
-`_SearchBody`.
-
-أما `_SearchBar` فسيكون من نوع `StatefulWidget` لأنه بحاجة للحفاظ على
-`TextEditingController` خاص به ليتتبع ما أدخله المستخدم.
-
-`_SearchBody` هو `StatelessWidget` مسؤول عن عرض نتائج البحث، الأخطاء، مؤشرات
-التحميل، وسيكون مستهلكًا لـ `GithubSearchBloc`.
-
-إذا كانت الحالة الحالية هي `SearchStateSuccess`، نعرض `_SearchResults` والتي
-سنقوم بتنفيذها لاحقًا.
-
-`_SearchResults` هو `StatelessWidget` يأخذ قائمة من النوع
-`List<SearchResultItem>` ويعرضها كمجموعة من عناصر `_SearchResultItem`.
-
-أما `_SearchResultItem` فهو `StatelessWidget` مسؤول عن عرض معلومات نتيجة بحث
-واحدة، وكذلك معالجة تفاعل المستخدم والتنقل إلى رابط المستودع عند النقر.
-
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/flutter_github_search/lib/search_form.dart"
 	title="flutter_github_search/lib/search_form.dart"
 />
 
-:::note
+لقد انتهينا من `SearchForm`! الآن نحتاج لتنفيذ `_SearchBar` و `_SearchBody`.
 
-يقوم `_SearchBar` بالوصول إلى `GitHubSearchBloc` عبر
-`context.read<GithubSearchBloc>()` ويُخطِر الـ bloc بأحداث `TextChanged`.
+### شريط البحث
 
-:::
+`_SearchBar` هو `StatefulWidget` لأنه سيحتاج إلى إدارة `TextEditingController`.
 
-:::note
-
-يستخدم `_SearchBody` `BlocBuilder` لإعادة البناء استجابة لتغييرات الحالة. ونظرًا
-لأن معامل الـ bloc في كائن `BlocBuilder` تم حذفه، فسيقوم `BlocBuilder` تلقائيًا
-بالبحث عبر `BlocProvider` وفي السياق الحالي `BuildContext`. يمكنك القراءة أكثر
-[هنا.](/flutter-bloc-concepts#blocbuilder)
-
-:::
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/flutter_github_search/lib/search_bar.dart"
+	title="flutter_github_search/lib/search_bar.dart"
+/>
 
 :::note
 
-نستخدم `ListView.builder` لبناء قائمة قابلة للتمرير من عناصر
-`_SearchResultItem`.
+عندما يتغير النص، نقوم بإضافة حدث `TextChanged` إلى `GithubSearchBloc`.
 
 :::
+
+### جسم البحث
+
+`_SearchBody` هو `StatelessWidget` مسؤول عن عرض نتائج البحث بناءً على حالة الـ Bloc.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/flutter_github_search/lib/search_body.dart"
+	title="flutter_github_search/lib/search_body.dart"
+/>
 
 :::note
 
-نستخدم مكتبة [url_launcher](https://pub.dev/packages/url_launcher) لفتح الروابط
-الخارجية.
+نحن نستخدم `BlocBuilder` لإعادة بناء الواجهة في كل مرة تتغير فيها حالة `GithubSearchBloc`.
 
 :::
 
-### جمع كل شيء معًا
+### نتائج البحث
 
-الآن ما تبقى هو تنفيذ التطبيق الرئيسي في ملف `main.dart`.
+`_SearchResults` هو `StatelessWidget` يعرض قائمة من `SearchResultItem`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/flutter_github_search/lib/search_results.dart"
+	title="flutter_github_search/lib/search_results.dart"
+/>
+
+### عنصر نتيجة البحث
+
+`_SearchResultItem` هو `StatelessWidget` يعرض تفاصيل مستودع واحد ويفتح الرابط عند النقر.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/flutter_github_search/lib/search_result_item.dart"
+	title="flutter_github_search/lib/search_result_item.dart"
+/>
+
+### تجميع كل شيء معًا
+
+أخيرًا، نحتاج لتعديل `main.dart`.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/flutter_github_search/lib/main.dart"
 	title="flutter_github_search/lib/main.dart"
 />
 
-:::note
-
-يتم إنشاء `GithubRepository` في ملف `main` ويتم حقنه داخل `App`. يتم لفّ
-`SearchForm` داخل `BlocProvider` المسؤول عن تهيئة وإغلاق وجعل نسخة
-`GithubSearchBloc` متاحة لعناصر واجهة `SearchForm` والأطفال الخاصة به.
-
-:::
-
-هذا كل شيء! لقد طبقنا بنجاح تطبيق بحث GitHub باستخدام Flutter مع مكتبات
-[bloc](https://pub.dev/packages/bloc)
-و[flutter_bloc](https://pub.dev/packages/flutter_bloc)، وفصلنا بنجاح طبقة العرض
-عن طبقة منطق العمل.
-
-يمكنك الاطلاع على الشيفرة المصدرية كاملة
-[هنا](https://github.com/felangel/bloc/tree/master/examples/github_search/flutter_github_search).
-
-أخيرًا، سنقوم ببناء تطبيق بحث GitHub باستخدام AngularDart.
+هذا كل شيء! لقد انتهينا من تطبيق Flutter. الآن سننتقل إلى AngularDart.
 
 ## بحث GitHub باستخدام AngularDart
 
-تطبيق بحث GitHub باستخدام AngularDart سيكون تطبيق AngularDart يعيد استخدام
-النماذج، موفري البيانات، المستودعات (repositories)، وbloc من
-`common_github_search` لتنفيذ ميزة البحث في GitHub.
+تطبيق AngularDart GitHub Search سيعيد استخدام نفس منطق العمل من `common_github_search`.
 
 ### الإعداد
 
-نحتاج أولاً إلى إنشاء مشروع AngularDart جديد داخل مجلد `github_search` على نفس
-المستوى مع مجلد `common_github_search`.
+أنشئ مشروع AngularDart جديد.
+
+<ActivateStagehandSnippet />
 
 <StagehandSnippet />
 
-:::note
-
-يمكنك تثبيت `stagehand` عبر الأمر التالي:
-
-<ActivateStagehandSnippet />
-:::
-
-بعدها يمكننا استبدال محتويات ملف `pubspec.yaml` بما يلي:
+حدث ملف `pubspec.yaml`.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/pubspec.yaml"
 	title="angular_github_search/pubspec.yaml"
 />
 
-### نموذج البحث (Search Form)
+ثبت التبعيات.
 
-تمامًا كما في تطبيق Flutter الخاص بنا، سنحتاج لإنشاء `SearchForm` يحتوي على مكون
-`SearchBar` و `SearchBody`.
-
-مكون `SearchForm` سيتبع واجهتي `OnInit` و `OnDestroy` لأنه سيحتاج لإنشاء وإغلاق
-`GithubSearchBloc`.
-
-- `SearchBar` سيكون مسؤولًا عن استقبال إدخال المستخدم.
-- `SearchBody` سيكون مسؤولًا عن عرض نتائج البحث، مؤشرات التحميل، والأخطاء.
-
-دعونا ننشئ `search_form_component.dart`.
-
-<RemoteCode
-	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_form_component.dart"
-	title="angular_github_search/lib/src/search_form/search_form_component.dart"
-/>
-
-:::note
-
-يتم حقن `GithubRepository` داخل `SearchFormComponent`.
-
-:::
-
-:::note
-
-يتم إنشاء وإغلاق `GithubSearchBloc` بواسطة `SearchFormComponent`.
-
-:::
-
-القالب الخاص بنا (`search_form_component.html`) سيكون كالتالي:
-
-<RemoteCode
-	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_form_component.html"
-	title="angular_github_search/lib/src/search_form/search_form_component.html"
-/>
-
-الآن، سنقوم بتنفيذ مكون `SearchBar`.
+<FlutterPubGetSnippet />
 
 ### شريط البحث (Search Bar)
-
-`SearchBar` هو مكون مسؤول عن استقبال إدخال المستخدم وإعلام `GithubSearchBloc`
-بتغييرات النص.
 
 أنشئ `search_bar_component.dart`.
 
@@ -491,14 +384,7 @@ AngularDart لشرح كيفية مشاركة طبقات البيانات ومن�
 	title="angular_github_search/lib/src/search_form/search_bar/search_bar_component.dart"
 />
 
-:::note
-
-`SearchBarComponent` يعتمد على `GitHubSearchBloc` لأنه مسؤول عن إخطار الـ bloc
-بحدث `TextChanged`.
-
-:::
-
-بعدها، يمكننا إنشاء القالب `search_bar_component.html`.
+والقالب `search_bar_component.html`.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_bar/search_bar_component.html"
@@ -509,8 +395,7 @@ AngularDart لشرح كيفية مشاركة طبقات البيانات ومن�
 
 ### جسم البحث (Search Body)
 
-`SearchBody` هو مكون مسؤول عن عرض نتائج البحث، الأخطاء، ومؤشرات التحميل. سيكون
-المستهلك لـ `GithubSearchBloc`.
+`SearchBody` هو مكون مسؤول عن عرض نتائج البحث، الأخطاء، ومؤشرات التحميل. سيكون المستهلك لـ `GithubSearchBloc`.
 
 أنشئ `search_body_component.dart`.
 
@@ -521,8 +406,7 @@ AngularDart لشرح كيفية مشاركة طبقات البيانات ومن�
 
 :::note
 
-`SearchBodyComponent` يعتمد على `GithubSearchState` والذي يتم توفيره من خلال
-`GithubSearchBloc` باستخدام أنبوب الـ bloc في `angular_bloc`.
+`SearchBodyComponent` يعتمد على `GithubSearchState` والذي يتم توفيره من خلال `GithubSearchBloc` باستخدام أنبوب الـ bloc في `angular_bloc`.
 
 :::
 
@@ -537,8 +421,7 @@ AngularDart لشرح كيفية مشاركة طبقات البيانات ومن�
 
 ### نتائج البحث (Search Results)
 
-`SearchResults` هو مكون يستقبل قائمة من `List<SearchResultItem>` ويعرضها على
-هيئة قائمة من عناصر `SearchResultItem`.
+`SearchResults` هو مكون يستقبل قائمة من `List<SearchResultItem>` ويعرضها على هيئة قائمة من عناصر `SearchResultItem`.
 
 أنشئ `search_results_component.dart`.
 
@@ -556,15 +439,15 @@ AngularDart لشرح كيفية مشاركة طبقات البيانات ومن�
 
 :::note
 
-نستخدم `ngFor` لبناء قائمة من مكونات `SearchResultItem`. :::
+نستخدم `ngFor` لبناء قائمة من مكونات `SearchResultItem`.
+
+:::
 
 الآن حان الوقت لتنفيذ `SearchResultItem`.
 
 ### عنصر نتيجة البحث (Search Result Item)
 
-`SearchResultItem` هو مكون مسؤول عن عرض المعلومات الخاصة بنتيجة بحث واحدة. وهو
-مسؤول أيضًا عن التعامل مع تفاعل المستخدم والتنقل إلى رابط المستودع عند نقر
-المستخدم.
+`SearchResultItem` هو مكون مسؤول عن عرض المعلومات الخاصة بنتيجة بحث واحدة. وهو مسؤول أيضًا عن التعامل مع تفاعل المستخدم والتنقل إلى رابط المستودع عند نقر المستخدم.
 
 أنشئ `search_result_item_component.dart`.
 
@@ -595,22 +478,14 @@ AngularDart لشرح كيفية مشاركة طبقات البيانات ومن�
 
 :::
 
-هذا كل شيء! لقد قمنا الآن بنجاح بتنفيذ تطبيق بحث GitHub باستخدام AngularDart مع
-حزمتي `bloc` و `angular_bloc`، وفصلنا بنجاح طبقة العرض عن منطق العمل/الأعمال.
+هذا كل شيء! لقد قمنا الآن بنجاح بتنفيذ تطبيق بحث GitHub باستخدام AngularDart مع حزمتي `bloc` و `angular_bloc`، وفصلنا بنجاح طبقة العرض عن منطق العمل/الأعمال.
 
-يمكنك إيجاد الشيفرة المصدرية كاملة
-[هنا](https://github.com/felangel/bloc/tree/master/examples/github_search/angular_github_search).
+يمكنك إيجاد الشيفرة المصدرية كاملة [هنا](https://github.com/felangel/bloc/tree/master/examples/github_search/angular_github_search).
 
 ## الملخص
 
-في هذا الدرس، قمنا بإنشاء تطبيق Flutter و AngularDart مع مشاركة جميع النماذج
-(models)، مزودي البيانات (data providers)، وbloc بين الاثنين.
+في هذا الدرس، قمنا بإنشاء تطبيق Flutter و AngularDart مع مشاركة جميع النماذج (models)، مزودي البيانات (data providers)، وbloc بين الاثنين.
 
-الشيء الوحيد الذي اضطررنا لكتابته مرتين فعليًا هو طبقة العرض (واجهة المستخدم)،
-وهو أمر رائع من حيث الكفاءة وسرعة التطوير. بالإضافة إلى ذلك، من الشائع جدًا أن
-تمتلك تطبيقات الويب وتطبيقات الجوال تجارب مستخدم وأنماط تصميم مختلفة، وتُظهر هذه
-الطريقة مدى سهولة بناء تطبيقين يبدوان مختلفين تمامًا بينما يشتركان في نفس بيانات
-ومنطق العمل.
+الشيء الوحيد الذي اضطررنا لكتابته مرتين فعليًا هو طبقة العرض (واجهة المستخدم)، وهو أمر رائع من حيث الكفاءة وسرعة التطوير. بالإضافة إلى ذلك، من الشائع جدًا أن تمتلك تطبيقات الويب وتطبيقات الجوال تجارب مستخدم وأنماط تصميم مختلفة، وتُظهر هذه الطريقة مدى سهولة بناء تطبيقين يبدوان مختلفين تمامًا بينما يشتركان في نفس بيانات ومنطق العمل.
 
-يمكن العثور على المصدر الكامل  
-[هنا](https://github.com/felangel/bloc/tree/master/examples/github_search).
+يمكن العثور على المصدر الكامل [هنا](https://github.com/felangel/bloc/tree/master/examples/github_search).
