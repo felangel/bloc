@@ -19,12 +19,14 @@ class TextDocument {
       _content = content;
 
   static final _ignoreForFileRegExp = RegExp(
-    r'^//\s*ignore_for_file:(.*?)$',
+    r'^\s*//\s*ignore_for_file:(.*?)$',
     dotAll: true,
     multiLine: true,
   );
 
-  static final _ignoreForLineRegExp = RegExp(r'^//\s*ignore:(.*)$');
+  static final _ignoreForLineRegExp = RegExp(r'^\s*//\s*ignore:(.*)$');
+
+  static final _ignoreAfterLineRegExp = RegExp(r'\s*//\s*ignore:(.*)$');
 
   final Uri _uri;
   final String _content;
@@ -62,7 +64,7 @@ class TextDocument {
         end: Position(character: _content.length, line: range.end.line),
       ),
     );
-    final index = afterText.indexOf('// ignore:');
+    final index = afterText.indexOf(_ignoreAfterLineRegExp);
     if (index == -1) return const <String>{};
     final line = afterText.substring(index);
     return _lineIgnores(line);

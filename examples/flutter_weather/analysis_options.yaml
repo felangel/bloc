@@ -5,6 +5,7 @@ include:
 analyzer:
   exclude:
     - lib/**/*.g.dart
+
 linter:
   rules:
     public_member_api_docs: false

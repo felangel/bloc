@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:hive_ce/hive.dart';
-// ignore: implementation_imports
 import 'package:hive_ce/src/hive_impl.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';

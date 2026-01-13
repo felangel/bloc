@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_file_naming_conventions
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -128,24 +129,28 @@ class CounterPage extends StatelessWidget {
 }
 
 class CounterCubit extends Cubit<int> {
-  CounterCubit({this.onClose}) : super(0);
+  CounterCubit({VoidCallback? onClose})
+      : _onClose = onClose,
+        super(0);
 
-  final VoidCallback? onClose;
+  final VoidCallback? _onClose;
 
   void increment() => emit(state + 1);
   void decrement() => emit(state - 1);
 
   @override
   Future<void> close() {
-    onClose?.call();
+    _onClose?.call();
     return super.close();
   }
 }
 
 class ThemeCubit extends Cubit<ThemeData> {
-  ThemeCubit({this.onClose}) : super(ThemeData.light());
+  ThemeCubit({VoidCallback? onClose})
+      : _onClose = onClose,
+        super(ThemeData.light());
 
-  final VoidCallback? onClose;
+  final VoidCallback? _onClose;
 
   void toggle() {
     emit(state == ThemeData.dark() ? ThemeData.light() : ThemeData.dark());
@@ -153,7 +158,7 @@ class ThemeCubit extends Cubit<ThemeData> {
 
   @override
   Future<void> close() {
-    onClose?.call();
+    _onClose?.call();
     return super.close();
   }
 }

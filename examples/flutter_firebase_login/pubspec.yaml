@@ -4,7 +4,7 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=3.8.0 <4.0.0"
+  sdk: ">=3.10.0 <4.0.0"
 
 dependencies:
   authentication_repository:
@@ -24,7 +24,7 @@ dependencies:
   meta: ^1.7.0
 
 dev_dependencies:
-  bloc_lint: ^0.2.0-dev.0
+  bloc_lint: ^0.3.0
   bloc_test: ^10.0.0
   flutter_test:
     sdk: flutter

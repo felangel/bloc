@@ -78,6 +78,7 @@ void mainBloc() {
   });
 }
 
+// ignore: prefer_file_naming_conventions
 class CounterCubit extends Cubit<int> {
   CounterCubit() : super(0);
 
@@ -88,6 +89,7 @@ abstract class CounterEvent {}
 
 class CounterIncrementPressed extends CounterEvent {}
 
+// ignore: prefer_file_naming_conventions
 class CounterBloc extends Bloc<CounterEvent, int> {
   CounterBloc() : super(0) {
     on<CounterIncrementPressed>((event, emit) => emit(state + 1));

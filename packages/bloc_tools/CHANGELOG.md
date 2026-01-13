@@ -1,3 +1,18 @@
+# 0.1.0-dev.20
+
+- deps: bump `pkg:bloc_lint` to `^0.3.3`
+- docs: add `bloc_lint` badge to `README`
+- refactor: analysis options updates
+
+# 0.1.0-dev.19
+
+- deps: bump `pkg:bloc_lint` to `^0.3.2`
+
+# 0.1.0-dev.18
+
+- fix: migrate to `pkg:lsp_server_ce`
+- deps: bump `pkg:bloc_lint` to `^0.3.0`
+
 # 0.1.0-dev.17
 
 - deps: bump `pkg:bloc_lint` to `^0.2.1`

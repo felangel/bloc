@@ -7,6 +7,7 @@
 <a href="https://github.com/felangel/bloc/actions"><img src="https://github.com/felangel/bloc/actions/workflows/main.yaml/badge.svg" alt="build"></a>
 <a href="https://codecov.io/gh/felangel/bloc"><img src="https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg" alt="codecov"></a>
 <a href="https://github.com/felangel/bloc"><img src="https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Star on Github"></a>
+<a href="https://pub.dev/packages/bloc_lint"><img src="https://img.shields.io/badge/style-bloc_lint-20FFE4.svg" alt="style: bloc lint"></a>
 <a href="https://flutter.dev/docs/development/data-and-backend/state-mgmt/options#bloc--rx"><img src="https://img.shields.io/badge/flutter-website-deepskyblue.svg" alt="Flutter Website"></a>
 <a href="https://github.com/Solido/awesome-flutter#standard"><img src="https://img.shields.io/badge/awesome-flutter-blue.svg?longCache=true" alt="Awesome Flutter"></a>
 <a href="https://fluttersamples.com"><img src="https://img.shields.io/badge/flutter-samples-teal.svg?longCache=true" alt="Flutter Samples"></a>
@@ -95,10 +96,12 @@ For more information, check out the [official documentation](https://bloclibrary
 
 ## All Lint Rules
 
+- [avoid_build_context_extensions](https://bloclibrary.dev/lint-rules/avoid_build_context_extensions)
 - [avoid_flutter_imports](https://bloclibrary.dev/lint-rules/avoid_flutter_imports)
 - [avoid_public_bloc_methods](https://bloclibrary.dev/lint-rules/avoid_public_bloc_methods)
 - [avoid_public_fields](https://bloclibrary.dev/lint-rules/avoid_public_fields)
 - [prefer_bloc](https://bloclibrary.dev/lint-rules/prefer_bloc)
+- [prefer_build_context_extensions](https://bloclibrary.dev/lint-rules/prefer_build_context_extensions)
 - [prefer_cubit](https://bloclibrary.dev/lint-rules/prefer_cubit)
 - [prefer_file_naming_conventions](https://bloclibrary.dev/lint-rules/prefer_file_naming_conventions)
 - [prefer_void_public_cubit_methods](https://bloclibrary.dev/lint-rules/prefer_void_public_cubit_methods)

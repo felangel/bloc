@@ -11,6 +11,7 @@
 <a href="https://github.com/felangel/bloc/actions"><img src="https://github.com/felangel/bloc/actions/workflows/main.yaml/badge.svg" alt="build"></a>
 <a href="https://codecov.io/gh/felangel/bloc"><img src="https://codecov.io/gh/felangel/Bloc/branch/master/graph/badge.svg" alt="codecov"></a>
 <a href="https://github.com/felangel/bloc"><img src="https://img.shields.io/github/stars/felangel/bloc.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Star on Github"></a>
+<a href="https://pub.dev/packages/bloc_lint"><img src="https://img.shields.io/badge/style-bloc_lint-20FFE4.svg" alt="style: bloc lint"></a>
 <a href="https://flutter.dev/docs/development/data-and-backend/state-mgmt/options#bloc--rx"><img src="https://img.shields.io/badge/flutter-website-deepskyblue.svg" alt="Flutter Website"></a>
 <a href="https://github.com/Solido/awesome-flutter#standard"><img src="https://img.shields.io/badge/awesome-flutter-blue.svg?longCache=true" alt="Awesome Flutter"></a>
 <a href="https://fluttersamples.com"><img src="https://img.shields.io/badge/flutter-samples-teal.svg?longCache=true" alt="Flutter Samples"></a>
@@ -68,7 +69,7 @@ This design pattern helps to separate _presentation_ from _business logic_. Foll
 
 ![Cubit Architecture](https://raw.githubusercontent.com/felangel/bloc/master/assets/diagrams/cubit_architecture_full.png)
 
-A `Cubit` is class which extends `BlocBase` and can be extended to manage any type of state. `Cubit` requires an initial state which will be the state before `emit` has been called. The current state of a `cubit` can be accessed via the `state` getter and the state of the `cubit` can be updated by calling `emit` with a new `state`.
+A `Cubit` is a class which extends `BlocBase` and can be extended to manage any type of state. `Cubit` requires an initial state which will be the state before `emit` has been called. The current state of a `cubit` can be accessed via the `state` getter and the state of the `cubit` can be updated by calling `emit` with a new `state`.
 
 ![Cubit Flow](https://raw.githubusercontent.com/felangel/bloc/master/assets/diagrams//cubit_flow.png)
 
@@ -173,6 +174,18 @@ void main() {
 }
 ```
 
+To register multiple `BlocObserver` instances, use `MultiBlocObserver`:
+
+```dart
+Bloc.observer = MultiBlocObserver(
+  observers: [
+    MyLoggingObserver(),
+    MyErrorObserver(),
+    MyPerformanceObserver(),
+  ],
+);
+```
+
 ### Bloc
 
 ![Bloc Architecture](https://raw.githubusercontent.com/felangel/bloc/master/assets/diagrams/bloc_architecture_full.png)
@@ -181,7 +194,7 @@ A `Bloc` is a more advanced class which relies on `events` to trigger `state` ch
 
 ![Bloc Flow](https://raw.githubusercontent.com/felangel/bloc/master/assets/diagrams/bloc_flow.png)
 
-State changes in bloc begin when events are added which triggers `onEvent`. The events are then funnelled through an `EventTransformer`. By default, each event is processed concurrently but a custom `EventTransformer` can be provided to manipulate the incoming event stream. All registered `EventHandlers` for that event type are then invoked with the incoming event. Each `EventHandler` is responsible for emitting zero or more states in response to the event. Lastly, `onTransition` is called just before the state is updated and contains the current state, event, and next state.
+State changes in bloc begin when events are added which trigger `onEvent`. The events are then funnelled through an `EventTransformer`. By default, each event is processed concurrently but a custom `EventTransformer` can be provided to manipulate the incoming event stream. All registered `EventHandlers` for that event type are then invoked with the incoming event. Each `EventHandler` is responsible for emitting zero or more states in response to the event. Lastly, `onTransition` is called just before the state is updated and contains the current state, event, and next state.
 
 #### Creating a Bloc
 
@@ -233,11 +246,13 @@ Future<void> main() async {
 
 Since all `Blocs` extend `BlocBase` just like `Cubit`, `onChange` and `onError` can be overridden in a `Bloc` as well.
 
-In addition, `Blocs` can also override `onEvent` and `onTransition`.
+In addition, `Blocs` can also override `onEvent`, `onTransition`, and `onDone`.
 
 `onEvent` is called any time a new `event` is added to the `Bloc`.
 
 `onTransition` is similar to `onChange`, however, it contains the `event` which triggered the state change in addition to the `currentState` and `nextState`.
+
+`onDone` is called whenever the event handler for a given `event` has completed.
 
 ```dart
 sealed class CounterEvent {}
@@ -265,6 +280,12 @@ class CounterBloc extends Bloc<CounterEvent, int> {
   void onTransition(Transition<CounterEvent, int> transition) {
     super.onTransition(transition);
     print(transition);
+  }
+
+  @override
+  void onDone(CounterEvent event, [Object? error, StackTrace? stackTrace]) {
+    super.onDone(event, error, stackTrace);
+    print('$event, $error');
   }
 
   @override
@@ -304,6 +325,12 @@ class MyBlocObserver extends BlocObserver {
   }
 
   @override
+  void onDone(Bloc bloc, Object? event, [Object? error, StackTrace? stackTrace]) {
+    super.onDone(bloc, event, error, stackTrace);
+    print('onDone -- ${bloc.runtimeType}, $event, $error');
+  }
+
+  @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
     print('onError -- ${bloc.runtimeType}, $error');
     super.onError(bloc, error, stackTrace);
@@ -322,6 +349,18 @@ void main() {
   Bloc.observer = MyBlocObserver();
   // Use blocs...
 }
+```
+
+Just as with `Cubit`, to register multiple `BlocObserver` instances use `MultiBlocObserver`:
+
+```dart
+Bloc.observer = MultiBlocObserver(
+  observers: [
+    MyLoggingObserver(),
+    MyErrorObserver(),
+    MyPerformanceObserver(),
+  ],
+);
 ```
 
 ## Dart Versions

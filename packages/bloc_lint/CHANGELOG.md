@@ -1,3 +1,34 @@
+# 0.3.6
+
+- feat: upgrade to latest analyzer frontend
+
+# 0.3.5
+
+- fix: adjust upper bound for `_fe_analyzer_shared`
+
+# 0.3.4
+
+- chore: various dependency upgrades
+
+# 0.3.3
+
+- fix: ignore whitespace in ignore comments
+- docs: add `bloc_lint` badge to `README`
+
+# 0.3.2
+
+- feat: add [prefer_build_context_extensions](https://bloclibrary.dev/lint-rules/prefer_build_context_extensions)
+
+# 0.3.1
+
+- fix: adjust lower bound for `_fe_analyzer_shared`
+
+# 0.3.0
+
+- fix: widen supported version ranges for `_fe_analyzer_shared`
+- feat: add [avoid_build_context_extensions](https://bloclibrary.dev/lint-rules/avoid_build_context_extensions)
+- feat: add [prefer_file_naming_conventions](https://bloclibrary.dev/lint-rules/prefer_file_naming_conventions)
+
 # 0.2.1
 
 - feat: ignore dot directories

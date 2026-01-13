@@ -1,0 +1,158 @@
+---
+title: معماری
+description: نمای کلی از الگوهای معماری پیشنهادی هنگام استفاده از Bloc.
+---
+
+import DataProviderSnippet from '~/components/architecture/DataProviderSnippet.astro';
+import RepositorySnippet from '~/components/architecture/RepositorySnippet.astro';
+import BusinessLogicComponentSnippet from '~/components/architecture/BusinessLogicComponentSnippet.astro';
+import BlocTightCouplingSnippet from '~/components/architecture/BlocTightCouplingSnippet.astro';
+import BlocLooseCouplingPresentationSnippet from '~/components/architecture/BlocLooseCouplingPresentationSnippet.astro';
+import AppIdeasRepositorySnippet from '~/components/architecture/AppIdeasRepositorySnippet.astro';
+import AppIdeaRankingBlocSnippet from '~/components/architecture/AppIdeaRankingBlocSnippet.astro';
+import PresentationComponentSnippet from '~/components/architecture/PresentationComponentSnippet.astro';
+
+![Bloc Architecture](~/assets/concepts/bloc_architecture_full.png)
+
+استفاده از کتابخانه Bloc به ما اجازه می‌دهد برنامه خود را به سه لایه جدا کنیم:
+
+- رابط کاربری Presentation
+- منطق کسب و کار Business Logic
+- داده Data
+  - Repository
+  - Data Provider
+
+ما از پایین‌ترین لایه (دورترین از رابط کاربری) شروع می‌کنیم و به سمت لایه رابط
+کاربری پیش می‌رویم.
+
+## لایه داده
+
+مسئولیت لایه داده، بازیابی/دستکاری داده‌ها از یک یا چند منبع است.
+
+لایه داده می‌تواند به دو قسمت تقسیم شود:
+
+- Repository
+- Data Provider
+
+این لایه پایین‌ترین سطح برنامه است و با پایگاه داده‌ها، درخواست‌های شبکه و سایر
+منابع داده ناهمگام تعامل دارد.
+
+### Data Provider
+
+مسئولیت data provider، ارائه داده‌های خام است. Data provider باید عمومی و همه
+منظوره باشد.
+
+Data provider معمولاً APIهای ساده‌ای برای انجام عملیات
+[CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) ارائه
+می‌دهد. ممکن است متدهایی مانند `createData`, `readData`, `updateData` و
+`deleteData` به عنوان بخشی از لایه داده داشته باشیم.
+
+<DataProviderSnippet />
+
+### Repository
+
+لایه repository یک پوشش در اطراف یک یا چند data provider است که لایه Bloc با آن
+ارتباط برقرار می‌کند.
+
+<RepositorySnippet />
+
+همانطور که می‌بینید، لایه repository می‌تواند با چندین data provider تعامل کند و
+تبدیلاتی روی داده‌ها انجام دهد قبل از اینکه نتیجه را به لایه منطق کسب‌وکار تحویل
+دهد.
+
+## لایه منطق کسب‌وکار
+
+مسئولیت لایه منطق کسب‌وکار، پاسخ به ورودی از لایه رابط کاربری با حالت‌های جدید
+است. این لایه می‌تواند به یک یا چند repository وابسته باشد تا داده‌های مورد نیاز
+برای ساخت حالت برنامه را بازیابی کند.
+
+لایه منطق کسب‌وکار را به عنوان پل بین رابط کاربری (لایه رابط کاربری) و لایه داده
+در نظر بگیرید. لایه منطق کسب‌وکار از رویدادها/اقدامات از لایه رابط کاربری مطلع
+می‌شود و سپس با repository ارتباط برقرار می‌کند تا یک حالت جدید برای لایه رابط
+کاربری بسازد.
+
+<BusinessLogicComponentSnippet />
+
+### ارتباط Bloc به Bloc
+
+از آنجایی که blocها streamها را نمایش می‌دهند، ممکن است وسوسه شوید که یک bloc
+بسازید که به bloc دیگری گوش دهد. شما **نباید** این کار را بکنید. گزینه‌های بهتری
+نسبت به استفاده از کد زیر وجود دارد:
+
+<BlocTightCouplingSnippet />
+
+در حالی که کد بالا بدون خطا است (و حتی خودش را پاکسازی می‌کند)، مشکل بزرگ‌تری
+دارد: وابستگی بین دو bloc ایجاد می‌کند.
+
+به طور کلی، وابستگی‌های خواهر و برادر بین دو موجودیت در یک لایه معماری باید به
+هر قیمتی اجتناب شود، زیرا اتصال محکم ایجاد می‌کند که نگهداری آن سخت است. از
+آنجایی که blocها در لایه معماری منطق کسب‌وکار قرار دارند، هیچ bloc نباید از هیچ
+bloc دیگری اطلاع داشته باشد.
+
+![Application Architecture Layers](~/assets/architecture/architecture.png)
+
+یک bloc باید فقط از طریق رویدادها و از repositoryهای تزریق شده (یعنی
+repositoryهایی که در سازنده bloc به آن داده می‌شود) اطلاعات دریافت کند.
+
+اگر در موقعیتی هستید که یک bloc نیاز به پاسخ به bloc دیگری دارد، دو گزینه دیگر
+دارید. می‌توانید مشکل را به لایه بالاتر (به لایه رابط کاربری) ببرید، یا به لایه
+پایین‌تر (به لایه domain).
+
+#### اتصال Blocها از طریق رابط کاربری
+
+می‌توانید از `BlocListener` استفاده کنید تا به یک bloc گوش دهید و هر زمان که
+bloc اول تغییر کند، یک رویداد به bloc دیگری اضافه کنید.
+
+<BlocLooseCouplingPresentationSnippet />
+
+کد بالا از نیاز `SecondBloc` به دانستن درباره `FirstBloc` جلوگیری می‌کند و اتصال
+شل را تشویق می‌کند. برنامه [flutter_weather](/fa/tutorials/flutter-weather) از
+[این تکنیک](https://github.com/felangel/bloc/blob/b4c8db938ad71a6b60d4a641ec357905095c3965/examples/flutter_weather/lib/weather/view/weather_page.dart#L38-L42)
+استفاده می‌کند تا تم برنامه را بر اساس اطلاعات آب و هوایی که دریافت می‌شود تغییر
+دهد.
+
+در برخی موقعیت‌ها، ممکن است نخواهید دو bloc را در لایه رابط کاربری جفت کنید. در
+عوض، اغلب منطقی است که دو bloc منبع داده یکسانی داشته باشند و هر زمان که داده‌ها
+تغییر کنند، به‌روزرسانی شوند.
+
+#### اتصال Blocها از طریق Domain
+
+دو bloc می‌توانند به یک stream از repository گوش دهند و حالت‌های خود را مستقل از
+یکدیگر هر زمان که داده‌های repository تغییر کند، به‌روزرسانی کنند. استفاده از
+repositoryهای واکنشی برای نگه داشتن حالت همگام‌سازی شده در برنامه‌های بزرگ
+سازمانی رایج است.
+
+ابتدا، یک repository ایجاد کنید یا از repository موجودی استفاده کنید که یک
+`Stream` داده ارائه می‌دهد. برای مثال، repository زیر یک stream بی‌پایان از چند
+ایده برنامه یکسانی را نمایش می‌دهد:
+
+<AppIdeasRepositorySnippet />
+
+همان repository می‌تواند به هر bloc که نیاز به واکنش به ایده‌های برنامه جدید
+دارد، تزریق شود. در مثال زیر یک `AppIdeaRankingBloc` وجود دارد که برای هر ایده
+برنامه ورودی از repository بالا، یک حالت تولید می‌کند:
+
+<AppIdeaRankingBlocSnippet />
+
+برای اطلاعات بیشتر درباره استفاده از streamها با Bloc، این مقاله را مطالعه کنید
+[How to use Bloc with streams and concurrency](https://verygood.ventures/blog/how-to-use-bloc-with-streams-and-concurrency).
+
+## لایه رابط کاربری
+
+مسئولیت لایه رابط کاربری، تصمیم‌گیری درباره نحوه رندر خود بر اساس یک یا چند حالت
+bloc است. علاوه بر این، باید ورودی کاربر و رویدادهای چرخه حیات برنامه را مدیریت
+کند.
+
+اکثر streamهای برنامه با یک رویداد `AppStart` شروع می‌شود که برنامه را برای
+واکشی برخی داده‌ها برای نمایش به کاربر راه‌اندازی می‌کند.
+
+در این سناریو، لایه رابط کاربری یک رویداد `AppStart` اضافه می‌کند.
+
+علاوه بر این، لایه رابط کاربری باید تصمیم بگیرد که چه چیزی را روی صفحه بر اساس
+حالت از لایه bloc رندر کند.
+
+<PresentationComponentSnippet />
+
+تا اینجا، حتی با وجود داشتن چند قطعه کد، همه چیز نسبتاً سطح بالا بوده است. در
+بخش آموزش، همه این‌ها را کنار هم می‌گذاریم زیرا چندین برنامه نمونه مختلف
+می‌سازیم.

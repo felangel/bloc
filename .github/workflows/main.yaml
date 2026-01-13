@@ -37,7 +37,7 @@ jobs:
 
     steps:
       - name: 📚 Git Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - uses: dorny/paths-filter@v3
         name: Angular Dart Package Detection
@@ -238,7 +238,7 @@ jobs:
 
     steps:
       - name: 📚 Git Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🐦 Setup Flutter
         uses: subosito/flutter-action@v2
@@ -271,7 +271,7 @@ jobs:
 
     steps:
       - name: 📚 Git Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🎯 Build ${{ matrix.package }}
         uses: ./.github/actions/dart_package
@@ -302,7 +302,7 @@ jobs:
 
     steps:
       - name: 📚 Git Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: ⚙️ Compile Bloc Tools for ${{ matrix.config.os }} ${{ matrix.config.arch }}
         uses: ./.github/actions/dart_compile
@@ -328,7 +328,7 @@ jobs:
 
     steps:
       - name: 📚 Git Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🎯 Build ${{ matrix.package }}
         uses: ./.github/actions/flutter_package
@@ -352,7 +352,7 @@ jobs:
 
     steps:
       - name: 📚 Git Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🎯 Build ${{ matrix.example }}
         uses: ./.github/actions/angular_dart_package
@@ -375,7 +375,7 @@ jobs:
 
     steps:
       - name: 📚 Git Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🎯 Build ${{ matrix.example }}
         uses: ./.github/actions/flutter_package
@@ -395,7 +395,7 @@ jobs:
 
     steps:
       - name: 📚 Git Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 📦 Build Docs
         uses: ./.github/actions/astro_site

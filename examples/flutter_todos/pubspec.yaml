@@ -4,7 +4,7 @@ version: 1.0.0+1
 publish_to: none
 
 environment:
-  sdk: ">=3.8.0 <4.0.0"
+  sdk: ">=3.10.0 <4.0.0"
 
 dependencies:
   bloc: ^9.0.0
@@ -23,11 +23,11 @@ dependencies:
     path: packages/todos_repository
 
 dev_dependencies:
-  bloc_lint: ^0.2.0-dev.0
+  bloc_lint: ^0.3.0
   bloc_test: ^10.0.0
   flutter_test:
     sdk: flutter
-  mockingjay: ^0.6.0
+  mockingjay: ^2.0.0
   mocktail: ^1.0.0
 
 flutter:

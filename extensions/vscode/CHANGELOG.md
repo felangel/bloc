@@ -1,3 +1,18 @@
+# 6.8.12
+
+- deps: upgrade to `bloc_tools: 0.1.0-dev.20`
+
+# 6.8.11
+
+- deps: upgrade to `bloc_tools: 0.1.0-dev.19`
+- deps: various dependency upgrades
+
+# 6.8.10
+
+- deps: upgrade to `bloc_tools: 0.1.0-dev.18`
+- deps: various dependency upgrades
+- docs: fix broken link in `README`
+
 # 6.8.9
 
 - deps: upgrade to `bloc_tools: 0.1.0-dev.17`
