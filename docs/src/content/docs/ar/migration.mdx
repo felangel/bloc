@@ -791,7 +791,6 @@ cubit لأول مرة، بدأ كفئة أساسية للـ blocs، وهو ما 
 
 لاحقاً، جربنا عكس العلاقة وجعل bloc هو القاعدة
 
-````
 والذي حل جزئياً النقطة الأولى أعلاه ولكنه قدم مشاكل أخرى:
 
 - أصبح API الـ cubit متضخماً بسبب واجهات برمجة تطبيقات bloc الأساسية مثل mapEventToState و add وغيرها ([#2228](https://github.com/felangel/bloc/issues/2228)).
@@ -826,7 +825,7 @@ class SimpleBlocObserver extends BlocObserver {
   @override
   void onClose(Cubit cubit) {...}
 }
-````
+```
 
 **v7.0.0**
 
@@ -1863,8 +1862,4 @@ class CounterBloc extends HydratedBloc<CounterEvent, int> {
 
   ...
 }
-```
-
-```
-
 ```
