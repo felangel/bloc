@@ -1,6 +1,8 @@
 ---
 title: بحث GitHub
-description: دليل شامل حول كيفية بناء تطبيق بحث GitHub باستخدام Flutter و AngularDart مع bloc.
+description:
+  دليل شامل حول كيفية بناء تطبيق بحث GitHub باستخدام Flutter و AngularDart مع
+  bloc.
 sidebar:
   order: 9
 ---
@@ -15,7 +17,8 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
-في هذا الدرس التعليمي، سنقوم ببناء تطبيق بحث GitHub باستخدام Flutter و AngularDart لشرح كيفية مشاركة طبقات البيانات ومنطق العمل بين المشروعين.
+في هذا الدرس التعليمي، سنقوم ببناء تطبيق بحث GitHub باستخدام Flutter و
+AngularDart لشرح كيفية مشاركة طبقات البيانات ومنطق العمل بين المشروعين.
 
 ![demo](~/assets/tutorials/flutter-github-search.gif)
 
@@ -23,16 +26,21 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 ## المواضيع الرئيسية
 
-- [BlocProvider](/flutter-bloc-concepts#blocprovider)، ويدجت Flutter التي توفر Bloc لأطفالها.
-- [BlocBuilder](/flutter-bloc-concepts#blocbuilder)، ويدجت Flutter التي تدير بناء الويدجت استجابة للحالات الجديدة.
+- [BlocProvider](/flutter-bloc-concepts#blocprovider)، ويدجت Flutter التي توفر
+  Bloc لأطفالها.
+- [BlocBuilder](/flutter-bloc-concepts#blocbuilder)، ويدجت Flutter التي تدير
+  بناء الويدجت استجابة للحالات الجديدة.
 - استخدام Cubit بدلاً من Bloc. [ما الفرق؟](/bloc-concepts#cubit-vs-bloc)
-- منع إعادة البناء غير الضرورية باستخدام [Equatable](/faqs#when-to-use-equatable).
-- استخدام محول أحداث مخصص `EventTransformer` مع [`bloc_concurrency`](https://pub.dev/packages/bloc_concurrency).
+- منع إعادة البناء غير الضرورية باستخدام
+  [Equatable](/faqs#when-to-use-equatable).
+- استخدام محول أحداث مخصص `EventTransformer` مع
+  [`bloc_concurrency`](https://pub.dev/packages/bloc_concurrency).
 - إجراء طلبات الشبكة باستخدام حزمة `http`.
 
 ## مكتبة البحث المشتركة في GitHub
 
-تتضمن مكتبة البحث المشتركة في GitHub النماذج، مزود البيانات، المستودع، بالإضافة إلى الـ bloc الذي سيتم مشاركته بين AngularDart و Flutter.
+تتضمن مكتبة البحث المشتركة في GitHub النماذج، مزود البيانات، المستودع، بالإضافة
+إلى الـ bloc الذي سيتم مشاركته بين AngularDart و Flutter.
 
 ### الإعداد
 
@@ -57,15 +65,18 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 <DartPubGetSnippet />
 
-هذا كل ما يتعلق بإعداد المشروع! الآن يمكننا البدء في بناء حزمة `common_github_search`.
+هذا كل ما يتعلق بإعداد المشروع! الآن يمكننا البدء في بناء حزمة
+`common_github_search`.
 
 ### عميل GitHub
 
-الـ `GithubClient` هو المسؤول عن توفير البيانات الخام من [واجهة برمجة تطبيقات GitHub](https://developer.github.com/v3/).
+الـ `GithubClient` هو المسؤول عن توفير البيانات الخام من
+[واجهة برمجة تطبيقات GitHub](https://developer.github.com/v3/).
 
 :::note
 
-يمكنك الاطلاع على نموذج للبيانات التي نحصل عليها من [هنا](https://api.github.com/search/repositories?q=dartlang).
+يمكنك الاطلاع على نموذج للبيانات التي نحصل عليها من
+[هنا](https://api.github.com/search/repositories?q=dartlang).
 
 :::
 
@@ -78,13 +89,15 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 :::note
 
-يقوم `GithubClient` ببساطة بإجراء طلب شبكة إلى API بحث المستودعات في GitHub وتحويل النتيجة إلى إما `SearchResult` أو `SearchResultError` بشكل Future.
+يقوم `GithubClient` ببساطة بإجراء طلب شبكة إلى API بحث المستودعات في GitHub
+وتحويل النتيجة إلى إما `SearchResult` أو `SearchResultError` بشكل Future.
 
 :::
 
 :::note
 
-تعتمد طريقة تنفيذ `GithubClient` على الدالة `SearchResult.fromJson`، والتي لم ننفذها بعد.
+تعتمد طريقة تنفيذ `GithubClient` على الدالة `SearchResult.fromJson`، والتي لم
+ننفذها بعد.
 
 :::
 
@@ -92,7 +105,8 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 #### نموذج نتائج البحث
 
-أنشئ `search_result.dart`، والذي يُمثّل قائمة من `SearchResultItems` تعتمد على استعلام المستخدم:
+أنشئ `search_result.dart`، والذي يُمثّل قائمة من `SearchResultItems` تعتمد على
+استعلام المستخدم:
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/models/search_result.dart"
@@ -101,7 +115,8 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 :::note
 
-تعتمد طريقة تنفيذ `SearchResult` على `SearchResultItem.fromJson`، التي لم ننفذها بعد.
+تعتمد طريقة تنفيذ `SearchResult` على `SearchResultItem.fromJson`، التي لم ننفذها
+بعد.
 
 :::
 
@@ -122,7 +137,8 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 :::note
 
-مرة أخرى، يعتمد تنفيذ `SearchResultItem` على `GithubUser.fromJson`، التي لم ننفذها بعد.
+مرة أخرى، يعتمد تنفيذ `SearchResultItem` على `GithubUser.fromJson`، التي لم
+ننفذها بعد.
 
 :::
 
@@ -135,7 +151,8 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 	title="lib/src/models/github_user.dart"
 />
 
-الآن بعد أن أكملنا تنفيذ `SearchResult` واعتمادياته، سننتقل إلى `SearchResultError`.
+الآن بعد أن أكملنا تنفيذ `SearchResult` واعتمادياته، سننتقل إلى
+`SearchResultError`.
 
 #### نموذج خطأ نتيجة البحث
 
@@ -146,11 +163,15 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 	title="lib/src/models/search_result_error.dart"
 />
 
-لقد انتهينا من `GithubClient`، لذلك سننتقل إلى `GithubCache`، الذي سيكون مسؤولًا عن [التخزين المؤقت للنتائج (Memoization)](https://en.wikipedia.org/wiki/Memoization) كوسيلة لتحسين الأداء.
+لقد انتهينا من `GithubClient`، لذلك سننتقل إلى `GithubCache`، الذي سيكون مسؤولًا
+عن
+[التخزين المؤقت للنتائج (Memoization)](https://en.wikipedia.org/wiki/Memoization)
+كوسيلة لتحسين الأداء.
 
 ### التخزين المؤقت لـ GitHub
 
-سيتولى `GithubCache` مهمة تذكر جميع الاستعلامات السابقة لتجنب إجراء طلبات شبكة غير ضرورية إلى API GitHub. هذا سيُساعد أيضًا على تحسين أداء التطبيق.
+سيتولى `GithubCache` مهمة تذكر جميع الاستعلامات السابقة لتجنب إجراء طلبات شبكة
+غير ضرورية إلى API GitHub. هذا سيُساعد أيضًا على تحسين أداء التطبيق.
 
 أنشئ `github_cache.dart`.
 
@@ -163,7 +184,8 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 ### مستودع GitHub
 
-مستودع GitHub مسؤول عن خلق طبقة تجريدية بين طبقة البيانات (`GithubClient`) وطبقة منطق الأعمال (`Bloc`). هذه الطبقة أيضًا المكان الذي سنستخدم فيه `GithubCache`.
+مستودع GitHub مسؤول عن خلق طبقة تجريدية بين طبقة البيانات (`GithubClient`) وطبقة
+منطق الأعمال (`Bloc`). هذه الطبقة أيضًا المكان الذي سنستخدم فيه `GithubCache`.
 
 أنشئ `github_repository.dart`.
 
@@ -174,15 +196,20 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 :::note
 
-يعتمد `GithubRepository` على `GithubCache` و `GithubClient` ويقوم بتجريد التنفيذ الداخلي. تطبيقنا لا يحتاج لمعرفة كيفية استرجاع البيانات أو مصدرها لأنه لا يهمه ذلك. يمكننا تغيير طريقة عمل المستودع في أي وقت طالما أننا لم نغير الواجهة (interface) فليس هناك حاجة لتعديل أي كود يستخدمه.
+يعتمد `GithubRepository` على `GithubCache` و `GithubClient` ويقوم بتجريد التنفيذ
+الداخلي. تطبيقنا لا يحتاج لمعرفة كيفية استرجاع البيانات أو مصدرها لأنه لا يهمه
+ذلك. يمكننا تغيير طريقة عمل المستودع في أي وقت طالما أننا لم نغير الواجهة
+(interface) فليس هناك حاجة لتعديل أي كود يستخدمه.
 
 :::
 
-الآن بعد أن أكملنا طبقة مزود البيانات وطبقة المستودع، نحن جاهزون للانتقال إلى طبقة منطق الأعمال.
+الآن بعد أن أكملنا طبقة مزود البيانات وطبقة المستودع، نحن جاهزون للانتقال إلى
+طبقة منطق الأعمال.
 
 ### حدث بحث GitHub
 
-سيتم إعلام الـ Bloc عندما يقوم المستخدم بكتابة اسم مستودع، والذي سنمثله عبر حدث `TextChanged` من نوع `GithubSearchEvent`.
+سيتم إعلام الـ Bloc عندما يقوم المستخدم بكتابة اسم مستودع، والذي سنمثله عبر حدث
+`TextChanged` من نوع `GithubSearchEvent`.
 
 أنشئ `github_search_event.dart`.
 
@@ -193,7 +220,9 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 :::note
 
-نحن نستخدم الوراثة من [`Equatable`](https://pub.dev/packages/equatable) لتمكين مقارنة مثيلات `GithubSearchEvent`. بشكل افتراضي، عامل المساواة يعيد true فقط إذا كانت هذه والمثيل الآخر نفس الكائن.
+نحن نستخدم الوراثة من [`Equatable`](https://pub.dev/packages/equatable) لتمكين
+مقارنة مثيلات `GithubSearchEvent`. بشكل افتراضي، عامل المساواة يعيد true فقط إذا
+كانت هذه والمثيل الآخر نفس الكائن.
 
 :::
 
@@ -217,11 +246,14 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 :::note
 
-نحن نستخدم الوراثة من [`Equatable`](https://pub.dev/packages/equatable) لتمكين مقارنة مثيلات `GithubSearchState`. بشكل افتراضي، عامل المساواة يعيد true فقط إذا كانت هذه والمثيل الآخر نفس الكائن.
+نحن نستخدم الوراثة من [`Equatable`](https://pub.dev/packages/equatable) لتمكين
+مقارنة مثيلات `GithubSearchState`. بشكل افتراضي، عامل المساواة يعيد true فقط إذا
+كانت هذه والمثيل الآخر نفس الكائن.
 
 :::
 
-الآن بعد أن أنشأنا الأحداث (Events) والحالات (States)، يمكننا إنشاء الـ `GithubSearchBloc`.
+الآن بعد أن أنشأنا الأحداث (Events) والحالات (States)، يمكننا إنشاء الـ
+`GithubSearchBloc`.
 
 ### Bloc بحث GitHub
 
@@ -234,27 +266,35 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 :::note
 
-يقوم `GithubSearchBloc` بتحويل `GithubSearchEvent` إلى `GithubSearchState` ويعتمد على `GithubRepository`.
+يقوم `GithubSearchBloc` بتحويل `GithubSearchEvent` إلى `GithubSearchState`
+ويعتمد على `GithubRepository`.
 
 :::
 
 :::note
 
-أنشأنا مُحوّل أحداث مخصص `EventTransformer` لـ [تأخير التنفيذ (Debounce)](https://pub.dev/documentation/stream_transform/latest/stream_transform/RateLimit/debounce.html) لـ `GithubSearchEvents`. واحد من الأسباب التي دفعتنا لاستخدام Bloc بدل Cubit هو للاستفادة من محولات الدفق (stream transformers).
+أنشأنا مُحوّل أحداث مخصص `EventTransformer` لـ
+[تأخير التنفيذ (Debounce)](https://pub.dev/documentation/stream_transform/latest/stream_transform/RateLimit/debounce.html)
+لـ `GithubSearchEvents`. واحد من الأسباب التي دفعتنا لاستخدام Bloc بدل Cubit هو
+للاستفادة من محولات الدفق (stream transformers).
 
 :::
 
-رائع! لقد انتهينا من حزمة `common_github_search`. المنتج النهائي يجب أن يبدو مثل [هذا](https://github.com/felangel/bloc/tree/master/examples/github_search/common_github_search).
+رائع! لقد انتهينا من حزمة `common_github_search`. المنتج النهائي يجب أن يبدو مثل
+[هذا](https://github.com/felangel/bloc/tree/master/examples/github_search/common_github_search).
 
 بعد ذلك، سنعمل على تنفيذ Flutter.
 
 ## بحث GitHub باستخدام Flutter
 
-تطبيق Flutter GitHub Search سيكون تطبيق Flutter يعيد استخدام النماذج، مزودي البيانات، المستودعات (repositories)، وblocs من مكتبة `common_github_search` لتنفيذ وظيفة البحث في GitHub.
+تطبيق Flutter GitHub Search سيكون تطبيق Flutter يعيد استخدام النماذج، مزودي
+البيانات، المستودعات (repositories)، وblocs من مكتبة `common_github_search`
+لتنفيذ وظيفة البحث في GitHub.
 
 ### الإعداد
 
-نبدأ بإنشاء مشروع Flutter جديد داخل مجلد `github_search` على نفس المستوى الذي توجد به مكتبة `common_github_search`.
+نبدأ بإنشاء مشروع Flutter جديد داخل مجلد `github_search` على نفس المستوى الذي
+توجد به مكتبة `common_github_search`.
 
 <FlutterCreateSnippet />
 
@@ -275,7 +315,8 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 <FlutterPubGetSnippet />
 
-هذا كل شيء بخصوص إعداد المشروع. بما أن مكتبة `common_github_search` تحتوي على طبقة البيانات وطبقة منطق العمل، ما علينا بناؤه هو فقط طبقة العرض.
+هذا كل شيء بخصوص إعداد المشروع. بما أن مكتبة `common_github_search` تحتوي على
+طبقة البيانات وطبقة منطق العمل، ما علينا بناؤه هو فقط طبقة العرض.
 
 ### نموذج البحث
 
@@ -310,7 +351,8 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 ### جسم البحث
 
-`_SearchBody` هو `StatelessWidget` مسؤول عن عرض نتائج البحث بناءً على حالة الـ Bloc.
+`_SearchBody` هو `StatelessWidget` مسؤول عن عرض نتائج البحث بناءً على حالة الـ
+Bloc.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/flutter_github_search/lib/search_body.dart"
@@ -319,7 +361,8 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 :::note
 
-نحن نستخدم `BlocBuilder` لإعادة بناء الواجهة في كل مرة تتغير فيها حالة `GithubSearchBloc`.
+نحن نستخدم `BlocBuilder` لإعادة بناء الواجهة في كل مرة تتغير فيها حالة
+`GithubSearchBloc`.
 
 :::
 
@@ -334,7 +377,8 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 ### عنصر نتيجة البحث
 
-`_SearchResultItem` هو `StatelessWidget` يعرض تفاصيل مستودع واحد ويفتح الرابط عند النقر.
+`_SearchResultItem` هو `StatelessWidget` يعرض تفاصيل مستودع واحد ويفتح الرابط
+عند النقر.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/flutter_github_search/lib/search_result_item.dart"
@@ -354,7 +398,8 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 ## بحث GitHub باستخدام AngularDart
 
-تطبيق AngularDart GitHub Search سيعيد استخدام نفس منطق العمل من `common_github_search`.
+تطبيق AngularDart GitHub Search سيعيد استخدام نفس منطق العمل من
+`common_github_search`.
 
 ### الإعداد
 
@@ -395,7 +440,8 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 ### جسم البحث (Search Body)
 
-`SearchBody` هو مكون مسؤول عن عرض نتائج البحث، الأخطاء، ومؤشرات التحميل. سيكون المستهلك لـ `GithubSearchBloc`.
+`SearchBody` هو مكون مسؤول عن عرض نتائج البحث، الأخطاء، ومؤشرات التحميل. سيكون
+المستهلك لـ `GithubSearchBloc`.
 
 أنشئ `search_body_component.dart`.
 
@@ -406,7 +452,8 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 :::note
 
-`SearchBodyComponent` يعتمد على `GithubSearchState` والذي يتم توفيره من خلال `GithubSearchBloc` باستخدام أنبوب الـ bloc في `angular_bloc`.
+`SearchBodyComponent` يعتمد على `GithubSearchState` والذي يتم توفيره من خلال
+`GithubSearchBloc` باستخدام أنبوب الـ bloc في `angular_bloc`.
 
 :::
 
@@ -421,7 +468,8 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 ### نتائج البحث (Search Results)
 
-`SearchResults` هو مكون يستقبل قائمة من `List<SearchResultItem>` ويعرضها على هيئة قائمة من عناصر `SearchResultItem`.
+`SearchResults` هو مكون يستقبل قائمة من `List<SearchResultItem>` ويعرضها على
+هيئة قائمة من عناصر `SearchResultItem`.
 
 أنشئ `search_results_component.dart`.
 
@@ -447,7 +495,9 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 ### عنصر نتيجة البحث (Search Result Item)
 
-`SearchResultItem` هو مكون مسؤول عن عرض المعلومات الخاصة بنتيجة بحث واحدة. وهو مسؤول أيضًا عن التعامل مع تفاعل المستخدم والتنقل إلى رابط المستودع عند نقر المستخدم.
+`SearchResultItem` هو مكون مسؤول عن عرض المعلومات الخاصة بنتيجة بحث واحدة. وهو
+مسؤول أيضًا عن التعامل مع تفاعل المستخدم والتنقل إلى رابط المستودع عند نقر
+المستخدم.
 
 أنشئ `search_result_item_component.dart`.
 
@@ -478,14 +528,22 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 :::
 
-هذا كل شيء! لقد قمنا الآن بنجاح بتنفيذ تطبيق بحث GitHub باستخدام AngularDart مع حزمتي `bloc` و `angular_bloc`، وفصلنا بنجاح طبقة العرض عن منطق العمل/الأعمال.
+هذا كل شيء! لقد قمنا الآن بنجاح بتنفيذ تطبيق بحث GitHub باستخدام AngularDart مع
+حزمتي `bloc` و `angular_bloc`، وفصلنا بنجاح طبقة العرض عن منطق العمل/الأعمال.
 
-يمكنك إيجاد الشيفرة المصدرية كاملة [هنا](https://github.com/felangel/bloc/tree/master/examples/github_search/angular_github_search).
+يمكنك إيجاد الشيفرة المصدرية كاملة
+[هنا](https://github.com/felangel/bloc/tree/master/examples/github_search/angular_github_search).
 
 ## الملخص
 
-في هذا الدرس، قمنا بإنشاء تطبيق Flutter و AngularDart مع مشاركة جميع النماذج (models)، مزودي البيانات (data providers)، وbloc بين الاثنين.
+في هذا الدرس، قمنا بإنشاء تطبيق Flutter و AngularDart مع مشاركة جميع النماذج
+(models)، مزودي البيانات (data providers)، وbloc بين الاثنين.
 
-الشيء الوحيد الذي اضطررنا لكتابته مرتين فعليًا هو طبقة العرض (واجهة المستخدم)، وهو أمر رائع من حيث الكفاءة وسرعة التطوير. بالإضافة إلى ذلك، من الشائع جدًا أن تمتلك تطبيقات الويب وتطبيقات الجوال تجارب مستخدم وأنماط تصميم مختلفة، وتُظهر هذه الطريقة مدى سهولة بناء تطبيقين يبدوان مختلفين تمامًا بينما يشتركان في نفس بيانات ومنطق العمل.
+الشيء الوحيد الذي اضطررنا لكتابته مرتين فعليًا هو طبقة العرض (واجهة المستخدم)،
+وهو أمر رائع من حيث الكفاءة وسرعة التطوير. بالإضافة إلى ذلك، من الشائع جدًا أن
+تمتلك تطبيقات الويب وتطبيقات الجوال تجارب مستخدم وأنماط تصميم مختلفة، وتُظهر هذه
+الطريقة مدى سهولة بناء تطبيقين يبدوان مختلفين تمامًا بينما يشتركان في نفس بيانات
+ومنطق العمل.
 
-يمكن العثور على المصدر الكامل [هنا](https://github.com/felangel/bloc/tree/master/examples/github_search).
+يمكن العثور على المصدر الكامل
+[هنا](https://github.com/felangel/bloc/tree/master/examples/github_search).
