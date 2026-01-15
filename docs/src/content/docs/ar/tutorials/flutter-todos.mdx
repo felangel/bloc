@@ -25,21 +25,22 @@ Bloc.
 
 ## المواضيع الرئيسية
 
-- [Bloc و Cubit](/bloc-concepts#cubit-vs-bloc) لإدارة حالات الميزات المختلفة.
-- [الهيكلية الطبقية](/architecture) لفصل الاهتمامات/المسؤوليات وتسهيل إعادة
+- [Bloc و Cubit](/ar/bloc-concepts/#cubit-مقابل-bloc) لإدارة حالات الميزات
+  المختلفة.
+- [الهيكلية الطبقية](/ar/architecture) لفصل الاهتمامات/المسؤوليات وتسهيل إعادة
   الاستخدام.
-- [BlocObserver](/bloc-concepts#blocobserver) لمراقبة تغييرات الحالة.
-- [BlocProvider](/flutter-bloc-concepts#blocprovider)، ويدجيت في Flutter يوفر
+- [BlocObserver](/ar/bloc-concepts#blocobserver) لمراقبة تغييرات الحالة.
+- [BlocProvider](/ar/flutter-bloc-concepts#blocprovider)، ويدجيت في Flutter يوفر
   Bloc للأبناء.
-- [BlocBuilder](/flutter-bloc-concepts#blocbuilder)، ويدجيت في Flutter يتولى
+- [BlocBuilder](/ar/flutter-bloc-concepts#blocbuilder)، ويدجيت في Flutter يتولى
   بناء الويدجيت استجابةً للحالات الجديدة.
-- [BlocListener](/flutter-bloc-concepts#bloclistener)، ويدجيت في Flutter ينفذ
+- [BlocListener](/ar/flutter-bloc-concepts#bloclistener)، ويدجيت في Flutter ينفذ
   تأثيرات جانبية استجابةً لتغيرات الحالة.
-- [RepositoryProvider](/flutter-bloc-concepts#repositoryprovider)، ويدجيت في
+- [RepositoryProvider](/ar/flutter-bloc-concepts#repositoryprovider)، ويدجيت في
   Flutter يوفر مستودع (repository) للأبناء.
-- [Equatable](/faqs#when-to-use-equatable) لمنع عمليات إعادة البناء غير
+- [Equatable](/ar/faqs/#متى-يجب-استخدام-equatable) لمنع عمليات إعادة البناء غير
   الضرورية.
-- [MultiBlocListener](/flutter-bloc-concepts#multibloclistener)، ويدجيت في
+- [MultiBlocListener](/ar/flutter-bloc-concepts#multibloclistener)، ويدجيت في
   Flutter يقلل التعشيش عند استخدام عدة BlocListeners.
 
 ## الإعداد
@@ -258,12 +259,12 @@ Bloc.
 
 ## طبقة المستودع (Repository Layer)
 
-يُعدّ [المستودع](/architecture#repository) جزءًا من طبقة منطق العمل/الأعمال.
-يعتمد المستودع على واحد أو أكثر من مزودي البيانات الذين لا يمتلكون قيمة منطقية
-للأعمال، ويجمع واجهات برمجة التطبيقات (APIs) الخاصة بهم في واجهات توفر قيمة
-أعمال. بالإضافة إلى ذلك، يساعد وجود طبقة المستودع في تجريد عملية الحصول على
-البيانات عن بقية التطبيق، مما يتيح لنا تغيير مكان أو طريقة تخزين البيانات دون
-التأثير على باقي أجزاء التطبيق.
+يُعدّ [المستودع](/ar/architecture/#المستودع-repository) جزءًا من طبقة منطق
+العمل/الأعمال. يعتمد المستودع على واحد أو أكثر من مزودي البيانات الذين لا
+يمتلكون قيمة منطقية للأعمال، ويجمع واجهات برمجة التطبيقات (APIs) الخاصة بهم في
+واجهات توفر قيمة أعمال. بالإضافة إلى ذلك، يساعد وجود طبقة المستودع في تجريد
+عملية الحصول على البيانات عن بقية التطبيق، مما يتيح لنا تغيير مكان أو طريقة
+تخزين البيانات دون التأثير على باقي أجزاء التطبيق.
 
 ### TodosRepository
 
@@ -516,7 +517,8 @@ repository.
 
 `emit` لا يتم استدعاؤه من داخل `onTodoSaved` والعديد من معالجات الأحداث الأخرى.
 بدلاً من ذلك، تقوم هذه المعالجات بإعلام الـ repository الذي يصدر قائمة محدثة عبر
-تيار المهام. راجع قسم [تدفق البيانات](#data-flow) لمزيد من التفاصيل.
+تيار المهام. راجع قسم [تدفق البيانات](#تدفق-البيانات-data-flow) لمزيد من
+التفاصيل.
 
 :::
 
@@ -698,7 +700,7 @@ repository.
 
 كل من `TodosOverviewBloc` و `StatsBloc` يتواصلان مع `TodosRepository`, لكن من
 المهم ملاحظة أنه لا يوجد تواصل مباشر بين الـ blocs. راجع قسم
-[تدفق البيانات](#data-flow) لمزيد من التفاصيل.
+[تدفق البيانات](#تدفق-البيانات-data-flow#data-flow) لمزيد من التفاصيل.
 
 :::
 

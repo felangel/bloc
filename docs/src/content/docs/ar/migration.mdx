@@ -122,7 +122,7 @@ void main() async {
 ##### الأسباب (Rationale)
 
 راجع
-[الأسباب الكامنة وراء إعادة تقديم واجهات Bloc.observer و Bloc.transformer](/migration#-reintroduce-blocobserver-and-bloctransformer-apis).
+[الأسباب الكامنة وراء إعادة تقديم واجهات Bloc.observer و Bloc.transformer](/ar/migration/#-إعادة-تقديم-واجهات-برمجة-التطبيقات-blocobserver-و-bloctransformer).
 
 **v8.x.x**
 
@@ -1183,13 +1183,13 @@ final name = context.select((UserBloc bloc) => bloc.state.user.name);
 ```dart
 @override
 Widget build(BuildContext context) {
+  final state = context.bloc<MyBloc>().state;
+  return Text('$state');
+}
 ```
 
-final state = context.bloc<MyBloc>().state; return Text('$state'); }
-
-````
-
-الاستخدام أعلاه عرضة للخطأ لأن عنصر الـ `Text` لن يتم إعادة بنائه إذا تغيرت حالة الـ bloc. في هذا السيناريو، يجب استخدام إما `BlocBuilder` أو `context.watch`.
+الاستخدام أعلاه عرضة للخطأ لأن عنصر الـ `Text` لن يتم إعادة بنائه إذا تغيرت حالة
+الـ bloc. في هذا السيناريو، يجب استخدام إما `BlocBuilder` أو `context.watch`.
 
 ```dart
 @override
@@ -1197,7 +1197,7 @@ Widget build(BuildContext context) {
   final state = context.watch<MyBloc>().state;
   return Text('$state');
 }
-````
+```
 
 أو
 

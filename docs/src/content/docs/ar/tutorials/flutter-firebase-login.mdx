@@ -20,17 +20,19 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 ## المواضيع الرئيسية
 
-- [BlocProvider](/flutter-bloc-concepts#blocprovider)، وهي ويدجت (Widget) من
+- [BlocProvider](/ar/flutter-bloc-concepts#blocprovider)، وهي ويدجت (Widget) من
   Flutter توفر كتلة (Bloc) لأبنائها.
-- استخدام Cubit بدلاً من Bloc. [ما هو الفرق؟](/bloc-concepts#cubit-vs-bloc)
-- إضافة الأحداث باستخدام [context.read](/flutter-bloc-concepts#contextread).
+- استخدام Cubit بدلاً من Bloc.
+  [ما هو الفرق؟](/ar/bloc-concepts/#cubit-مقابل-bloc)
+- إضافة الأحداث باستخدام [context.read](/ar/flutter-bloc-concepts#contextread).
 - منع إعادة البناء غير الضرورية باستخدام
-  [Equatable](/faqs#when-to-use-equatable).
-- [RepositoryProvider](/flutter-bloc-concepts#repositoryprovider)، وهي ويدجت من
-  Flutter توفر مستودع (Repository) لأبنائها.
-- [BlocListener](/flutter-bloc-concepts#bloclistener)، وهي ويدجت من Flutter
+  [Equatable](/ar/faqs/#متى-يجب-استخدام-equatable).
+- [RepositoryProvider](/ar/flutter-bloc-concepts#repositoryprovider)، وهي ويدجت
+  من Flutter توفر مستودع (Repository) لأبنائها.
+- [BlocListener](/ar/flutter-bloc-concepts#bloclistener)، وهي ويدجت من Flutter
   تستدعي كود المستمع (listener) استجابةً لتغيرات الحالة في الكتلة (Bloc).
-- إضافة الأحداث باستخدام [context.read](/flutter-bloc-concepts#contextselect).
+- إضافة الأحداث باستخدام
+  [context.read](/ar/flutter-bloc-concepts#contextselect).
 
 ## الإعداد
 
@@ -38,7 +40,7 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 <FlutterCreateSnippet />
 
-تمامًا كما في [دليل تسجيل الدخول](/tutorials/flutter-login)، سنقوم بإنشاء حزم
+تمامًا كما في [دليل تسجيل الدخول](/ar/tutorials/flutter-login)، سنقوم بإنشاء حزم
 داخلية لتقسيم بنية تطبيقنا بشكل أفضل والحفاظ على حدود واضحة، ولزيادة قابلية
 إعادة الاستخدام وقابلية الاختبار.
 
@@ -201,7 +203,7 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 ## التطبيق (App)
 
-تمامًا كما في [دليل تسجيل الدخول](/tutorials/flutter-login)، سيوفر ملف
+تمامًا كما في [دليل تسجيل الدخول](/ar/tutorials/flutter-login)، سيوفر ملف
 `app.dart` الخاص بنا مثيلاً من `AuthenticationRepository` للتطبيق عبر
 `RepositoryProvider`، كما يقوم بإنشاء وتوفير مثيل من `AuthenticationBloc`. بعد
 ذلك، تستهلك `AppView` كتلة `AuthenticationBloc` وتتولى تحديث المسار الحالي بناءً
@@ -265,7 +267,7 @@ trace) إلى أي `BlocObserver` يستمع.
 
 :::tip
 
-يعد [`BlocObserver`](/bloc-concepts/#blocobserver-1) رائعًا لتسجيل أحداث Bloc
+يعد [`BlocObserver`](/ar/bloc-concepts/#blocobserver) رائعًا لتسجيل أحداث Bloc
 والأخطاء وتغييرات الحالة، خاصة في سياق التحليلات وتقارير الأعطال.
 
 :::

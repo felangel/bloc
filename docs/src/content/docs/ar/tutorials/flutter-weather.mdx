@@ -5,6 +5,28 @@ sidebar:
   order: 5
 ---
 
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import FlutterCreateSnippet from '~/components/tutorials/flutter-weather/FlutterCreateSnippet.astro';
+import FeatureTreeSnippet from '~/components/tutorials/flutter-weather/FeatureTreeSnippet.astro';
+import FlutterCreateApiClientSnippet from '~/components/tutorials/flutter-weather/FlutterCreateApiClientSnippet.astro';
+import OpenMeteoModelsTreeSnippet from '~/components/tutorials/flutter-weather/OpenMeteoModelsTreeSnippet.astro';
+import LocationJsonSnippet from '~/components/tutorials/flutter-weather/LocationJsonSnippet.astro';
+import LocationDartSnippet from '~/components/tutorials/flutter-weather/LocationDartSnippet.astro';
+import WeatherJsonSnippet from '~/components/tutorials/flutter-weather/WeatherJsonSnippet.astro';
+import WeatherDartSnippet from '~/components/tutorials/flutter-weather/WeatherDartSnippet.astro';
+import OpenMeteoModelsBarrelTreeSnippet from '~/components/tutorials/flutter-weather/OpenMeteoModelsBarrelTreeSnippet.astro';
+import OpenMeteoLibrarySnippet from '~/components/tutorials/flutter-weather/OpenMeteoLibrarySnippet.astro';
+import BuildRunnerBuildSnippet from '~/components/tutorials/flutter-weather/BuildRunnerBuildSnippet.astro';
+import OpenMeteoApiClientTreeSnippet from '~/components/tutorials/flutter-weather/OpenMeteoApiClientTreeSnippet.astro';
+import LocationSearchMethodSnippet from '~/components/tutorials/flutter-weather/LocationSearchMethodSnippet.astro';
+import GetWeatherMethodSnippet from '~/components/tutorials/flutter-weather/GetWeatherMethodSnippet.astro';
+import FlutterTestCoverageSnippet from '~/components/tutorials/flutter-weather/FlutterTestCoverageSnippet.astro';
+import FlutterCreateRepositorySnippet from '~/components/tutorials/flutter-weather/FlutterCreateRepositorySnippet.astro';
+import RepositoryModelsBarrelTreeSnippet from '~/components/tutorials/flutter-weather/RepositoryModelsBarrelTreeSnippet.astro';
+import WeatherRepositoryLibrarySnippet from '~/components/tutorials/flutter-weather/WeatherRepositoryLibrarySnippet.astro';
+import WeatherCubitTreeSnippet from '~/components/tutorials/flutter-weather/WeatherCubitTreeSnippet.astro';
+import WeatherBarrelDartSnippet from '~/components/tutorials/flutter-weather/WeatherBarrelDartSnippet.astro';
+
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
 في هذا الدرس، سنقوم ببناء تطبيق طقس باستخدام Flutter يوضح كيفية إدارة عدة cubits
@@ -33,21 +55,21 @@ OpenMeteo، وسنشرح كيفية فصل تطبيقنا إلى طبقات (ا�
 
 ## المفاهيم الرئيسية
 
-- مراقبة تغييرات الحالة باستخدام [BlocObserver](/bloc-concepts#blocobserver).
-- [BlocProvider](/flutter-bloc-concepts#blocprovider)، ويدجت Flutter التي توفر
-  bloc لأبنائها.
-- [BlocBuilder](/flutter-bloc-concepts#blocbuilder)، ويدجت Flutter التي تتولى
+- مراقبة تغييرات الحالة باستخدام [BlocObserver](/ar/bloc-concepts#blocobserver).
+- [BlocProvider](/ar/flutter-bloc-concepts#blocprovider)، ويدجت Flutter التي
+  توفر bloc لأبنائها.
+- [BlocBuilder](/ar/flutter-bloc-concepts#blocbuilder)، ويدجت Flutter التي تتولى
   بناء الودجت استجابةً للحالات الجديدة.
 - تجنب عمليات إعادة البناء غير الضرورية باستخدام
-  [Equatable](/faqs#when-to-use-equatable).
-- [RepositoryProvider](/flutter-bloc-concepts#repositoryprovider)، ويدجت Flutter
-  التي توفر repository لأبنائها.
-- [BlocListener](/flutter-bloc-concepts#bloclistener)، ويدجت Flutter التي تستدعي
-  كود المستمع استجابةً لتغيرات الحالة في الـ bloc.
-- [MultiBlocProvider](/flutter-bloc-concepts#multiblocprovider)، ويدجت Flutter
-  التي تجمع عدة BlocProvider في واحد.
-- [BlocConsumer](/flutter-bloc-concepts#blocconsumer)، ويدجت Flutter التي توفر
-  builder و listener للاشتراك في حالات جديدة.
+  [Equatable](/ar/faqs/#متى-يجب-استخدام-equatable).
+- [RepositoryProvider](/ar/flutter-bloc-concepts#repositoryprovider)، ويدجت
+  Flutter التي توفر repository لأبنائها.
+- [BlocListener](/ar/flutter-bloc-concepts#bloclistener)، ويدجت Flutter التي
+  تستدعي كود المستمع استجابةً لتغيرات الحالة في الـ bloc.
+- [MultiBlocProvider](/ar/flutter-bloc-concepts#multiblocprovider)، ويدجت
+  Flutter التي تجمع عدة BlocProvider في واحد.
+- [BlocConsumer](/ar/flutter-bloc-concepts#blocconsumer)، ويدجت Flutter التي
+  توفر builder و listener للاشتراك في حالات جديدة.
 - [HydratedBloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc)
   لإدارة الحالة وحفظها بشكل مستمر.
 
@@ -69,7 +91,8 @@ OpenMeteo، وسنشرح كيفية فصل تطبيقنا إلى طبقات (ا�
 
 ### البنية المعمارية
 
-وفقًا لإرشادات [bloc architecture](/architecture)، سيتكون تطبيقنا من عدة طبقات.
+وفقًا لإرشادات [bloc architecture](/ar/architecture)، سيتكون تطبيقنا من عدة
+طبقات.
 
 في هذا الدرس، تقوم كل طبقة بالمهام التالية:
 

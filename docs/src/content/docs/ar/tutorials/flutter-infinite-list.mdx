@@ -22,14 +22,14 @@ import PostBlocTransformerSnippet from '~/components/tutorials/flutter-infinite-
 
 ## المواضيع الرئيسية
 
-- مراقبة تغييرات الحالة باستخدام [BlocObserver](/bloc-concepts#blocobserver).
-- [BlocProvider](/flutter-bloc-concepts#blocprovider)، وهي ويدجت (Widget) من
+- مراقبة تغييرات الحالة باستخدام [BlocObserver](/ar/bloc-concepts#blocobserver).
+- [BlocProvider](/ar/flutter-bloc-concepts#blocprovider)، وهي ويدجت (Widget) من
   Flutter توفر كتلة (Bloc) لأبنائها.
-- [BlocBuilder](/flutter-bloc-concepts#blocbuilder)، وهي ويدجت من Flutter تتولى
-  بناء الويدجت استجابةً للحالات الجديدة.
-- إضافة الأحداث باستخدام [context.read](/flutter-bloc-concepts#contextread).
+- [BlocBuilder](/ar/flutter-bloc-concepts#blocbuilder)، وهي ويدجت من Flutter
+  تتولى بناء الويدجت استجابةً للحالات الجديدة.
+- إضافة الأحداث باستخدام [context.read](/ar/flutter-bloc-concepts#contextread).
 - منع إعادة البناء غير الضرورية باستخدام
-  [Equatable](/faqs#when-to-use-equatable).
+  [Equatable](/ar/faqs/#متى-يجب-استخدام-equatable).
 - استخدام طريقة `transformEvents` مع Rx.
 
 ## الإعداد
@@ -186,7 +186,7 @@ jsonplaceholder هي واجهة برمجة تطبيقات REST عبر الإنت
 
 لأغراض التبسيط، سيكون لدى `PostBloc` الخاص بنا تبعية مباشرة على **عميل HTTP**؛
 ومع ذلك، في تطبيق إنتاجي، نقترح بدلاً من ذلك حقن عميل API واستخدام نمط المستودع
-(repository pattern) [وثائق](/architecture).
+(repository pattern) [وثائق](/ar/architecture).
 
 دعنا ننشئ `post_bloc.dart` وننشئ `PostBloc` الفارغ الخاص بنا.
 
@@ -206,8 +206,8 @@ jsonplaceholder هي واجهة برمجة تطبيقات REST عبر الإنت
 <PostBlocOnPostFetchedSnippet />
 
 سيقوم `PostBloc` الخاص بنا بإصدار (`emit`) حالات جديدة عبر `Emitter<PostState>`
-المقدم في معالج الحدث. تحقق من [المفاهيم الأساسية](/bloc-concepts#streams) لمزيد
-من المعلومات.
+المقدم في معالج الحدث. تحقق من
+[المفاهيم الأساسية](/ar/bloc-concepts/#التدفقات-streams) لمزيد من المعلومات.
 
 الآن في كل مرة تتم فيها إضافة `PostEvent`، إذا كان حدث `PostFetched` وهناك
 المزيد من المنشورات لجلبها، فسيقوم `PostBloc` الخاص بنا بجلب الـ 20 منشورًا
