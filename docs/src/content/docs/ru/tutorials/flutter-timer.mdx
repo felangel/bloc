@@ -1,0 +1,339 @@
+---
+title: Таймер Flutter
+description: Подробное руководство по созданию приложения таймера Flutter с использованием bloc.
+sidebar:
+  order: 2
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import FlutterCreateSnippet from '~/components/tutorials/flutter-timer/FlutterCreateSnippet.astro';
+import TimerBlocEmptySnippet from '~/components/tutorials/flutter-timer/TimerBlocEmptySnippet.astro';
+import TimerBlocInitialStateSnippet from '~/components/tutorials/flutter-timer/TimerBlocInitialStateSnippet.astro';
+import TimerBlocTickerSnippet from '~/components/tutorials/flutter-timer/TimerBlocTickerSnippet.astro';
+import TimerBlocOnStartedSnippet from '~/components/tutorials/flutter-timer/TimerBlocOnStartedSnippet.astro';
+import TimerBlocOnTickedSnippet from '~/components/tutorials/flutter-timer/TimerBlocOnTickedSnippet.astro';
+import TimerBlocOnPausedSnippet from '~/components/tutorials/flutter-timer/TimerBlocOnPausedSnippet.astro';
+import TimerBlocOnResumedSnippet from '~/components/tutorials/flutter-timer/TimerBlocOnResumedSnippet.astro';
+import TimerPageSnippet from '~/components/tutorials/flutter-timer/TimerPageSnippet.astro';
+import ActionsSnippet from '~/components/tutorials/flutter-timer/ActionsSnippet.astro';
+import BackgroundSnippet from '~/components/tutorials/flutter-timer/BackgroundSnippet.astro';
+
+![beginner](https://img.shields.io/badge/level-beginner-green.svg)
+
+В следующем руководстве мы рассмотрим, как создать приложение таймера
+используя библиотеку bloc. Готовое приложение должно выглядеть так:
+
+![demo](~/assets/tutorials/flutter-timer.gif)
+
+## Ключевые темы
+
+- Наблюдение за изменениями состояния с помощью [BlocObserver](/bloc-concepts#blocobserver).
+- [BlocProvider](/flutter-bloc-concepts#blocprovider), виджет Flutter который
+  предоставляет bloc своим дочерним элементам.
+- [BlocBuilder](/flutter-bloc-concepts#blocbuilder), виджет Flutter который обрабатывает
+  построение виджета в ответ на новые состояния.
+- Предотвращение ненужных перестроек с помощью [Equatable](/faqs#when-to-use-equatable).
+- Изучение использования `StreamSubscription` в Bloc.
+- Предотвращение ненужных перестроек с помощью `buildWhen`.
+
+## Настройка
+
+Начнем с создания нового Flutter проекта:
+
+<FlutterCreateSnippet />
+
+Затем можем заменить содержимое pubspec.yaml на:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+:::note
+
+Мы будем использовать пакеты [flutter_bloc](https://pub.dev/packages/flutter_bloc) и
+[equatable](https://pub.dev/packages/equatable) в этом приложении.
+
+:::
+
+Далее, запустите `flutter pub get` для установки всех зависимостей.
+
+## Структура проекта
+
+```
+├── lib
+|   ├── timer
+│   │   ├── bloc
+│   │   │   └── timer_bloc.dart
+|   |   |   └── timer_event.dart
+|   |   |   └── timer_state.dart
+│   │   └── view
+│   │   |   ├── timer_page.dart
+│   │   ├── timer.dart
+│   ├── app.dart
+│   ├── ticker.dart
+│   └── main.dart
+├── pubspec.lock
+├── pubspec.yaml
+```
+
+## Ticker
+
+Ticker будет нашим источником данных для приложения таймера. Он предоставит
+поток тиков, на который мы можем подписаться и реагировать.
+
+Начните с создания `ticker.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/ticker.dart"
+	title="lib/ticker.dart"
+/>
+
+Весь наш класс `Ticker` предоставляет функцию tick, которая принимает количество
+тиков (секунд), которое мы хотим, и возвращает поток, который выдает оставшиеся секунды
+каждую секунду.
+
+Далее, нам нужно создать наш `TimerBloc`, который будет использовать `Ticker`.
+
+## Timer Bloc
+
+### TimerState
+
+Начнем с определения `TimerStates`, в которых может находиться наш `TimerBloc`.
+
+Наше состояние `TimerBloc` может быть одним из следующих:
+
+- `TimerInitial`: готов начать обратный отсчет с указанной продолжительности.
+- `TimerRunInProgress`: активно ведет обратный отсчет от указанной продолжительности.
+- `TimerRunPause`: приостановлен на некоторой оставшейся продолжительности.
+- `TimerRunComplete`: завершен с оставшейся продолжительностью 0.
+
+Каждое из этих состояний будет иметь влияние на пользовательский интерфейс и действия,
+которые пользователь может выполнять. Например:
+
+- если состояние `TimerInitial`, пользователь сможет запустить таймер.
+- если состояние `TimerRunInProgress`, пользователь сможет приостановить и сбросить
+  таймер, а также увидеть оставшуюся продолжительность.
+- если состояние `TimerRunPause`, пользователь сможет возобновить таймер и
+  сбросить таймер.
+- если состояние `TimerRunComplete`, пользователь сможет сбросить таймер.
+
+Чтобы держать все наши файлы bloc вместе, создадим каталог bloc
+с `bloc/timer_state.dart`.
+
+:::tip
+
+Вы можете использовать
+[IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) или
+[VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+расширения для автоматической генерации следующих файлов bloc.
+
+:::
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/timer/bloc/timer_state.dart"
+	title="lib/timer/bloc/timer_state.dart"
+/>
+
+Обратите внимание, что все `TimerStates` расширяют абстрактный базовый класс `TimerState`,
+который имеет свойство duration. Это потому, что независимо от того, в каком состоянии находится наш
+`TimerBloc`, мы хотим знать, сколько времени осталось. Кроме того,
+`TimerState` расширяет `Equatable` для оптимизации нашего кода, гарантируя, что наше приложение
+не вызывает перестроение, если происходит то же самое состояние.
+
+Далее, определим и реализуем `TimerEvents`, которые будет обрабатывать наш `TimerBloc`.
+
+### TimerEvent
+
+Наш `TimerBloc` должен знать, как обрабатывать следующие события:
+
+- `TimerStarted`: информирует TimerBloc, что таймер должен быть запущен.
+- `TimerPaused`: информирует TimerBloc, что таймер должен быть приостановлен.
+- `TimerResumed`: информирует TimerBloc, что таймер должен быть возобновлен.
+- `TimerReset`: информирует TimerBloc, что таймер должен быть сброшен к
+  исходному состоянию.
+- `_TimerTicked`: информирует TimerBloc, что произошел тик и что он
+  должен обновить свое состояние соответственно.
+
+Если вы не использовали
+[IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc-code-generator) или
+[VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+расширения, то создайте `bloc/timer_event.dart` и реализуем эти
+события.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/timer/bloc/timer_event.dart"
+	title="lib/timer/bloc/timer_event.dart"
+/>
+
+Далее, реализуем `TimerBloc`!
+
+### TimerBloc
+
+Если вы еще не сделали это, создайте `bloc/timer_bloc.dart` и создайте пустой
+`TimerBloc`.
+
+<TimerBlocEmptySnippet />
+
+Первое, что нам нужно сделать, это определить начальное состояние нашего `TimerBloc`. В
+этом случае мы хотим, чтобы `TimerBloc` начинался в состоянии `TimerInitial` с
+предустановленной продолжительностью 1 минута (60 секунд).
+
+<TimerBlocInitialStateSnippet />
+
+Далее, нам нужно определить зависимость от нашего `Ticker`.
+
+<TimerBlocTickerSnippet />
+
+Мы также определяем `StreamSubscription` для нашего `Ticker`, к которому мы вернемся
+чуть позже.
+
+На этом этапе все, что осталось сделать, это реализовать обработчики событий. Для
+улучшения читаемости, мне нравится разбивать каждый обработчик событий на свою собственную вспомогательную
+функцию. Начнем с события `TimerStarted`.
+
+<TimerBlocOnStartedSnippet />
+
+Если `TimerBloc` получает событие `TimerStarted`, он отправляет
+состояние `TimerRunInProgress` с начальной продолжительностью. Кроме того, если уже был
+открыт `_tickerSubscription`, нам нужно отменить его для освобождения
+памяти. Нам также нужно переопределить метод `close` в нашем `TimerBloc`, чтобы
+мы могли отменить `_tickerSubscription`, когда `TimerBloc` закрыт. Наконец,
+мы слушаем поток `_ticker.tick` и на каждый тик добавляем событие `_TimerTicked`
+с оставшейся продолжительностью.
+
+Далее, реализуем обработчик события `_TimerTicked`.
+
+<TimerBlocOnTickedSnippet />
+
+Каждый раз, когда получено событие `_TimerTicked`, если продолжительность тика больше
+0, нам нужно отправить обновленное состояние `TimerRunInProgress` с новой
+продолжительностью. В противном случае, если продолжительность тика равна 0, наш таймер завершился, и нам
+нужно отправить состояние `TimerRunComplete`.
+
+Теперь реализуем обработчик события `TimerPaused`.
+
+<TimerBlocOnPausedSnippet />
+
+В `_onPaused`, если `state` нашего `TimerBloc` является `TimerRunInProgress`, то
+мы можем приостановить `_tickerSubscription` и отправить состояние `TimerRunPause` с текущей
+продолжительностью таймера.
+
+Далее, реализуем обработчик события `TimerResumed`, чтобы мы могли снять паузу с
+таймера.
+
+<TimerBlocOnResumedSnippet />
+
+Обработчик события `TimerResumed` очень похож на обработчик события `TimerPaused`.
+Если `TimerBloc` имеет `state` равный `TimerRunPause` и получает
+событие `TimerResumed`, то он возобновляет `_tickerSubscription` и отправляет
+состояние `TimerRunInProgress` с текущей продолжительностью.
+
+Наконец, нам нужно реализовать обработчик события `TimerReset`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/timer/bloc/timer_bloc.dart"
+	title="lib/timer/bloc/timer_bloc.dart"
+/>
+
+Если `TimerBloc` получает событие `TimerReset`, ему нужно отменить текущий
+`_tickerSubscription`, чтобы он не получал уведомления о дополнительных тиках и
+отправляет состояние `TimerInitial` с исходной продолжительностью.
+
+Это все, что касается `TimerBloc`. Теперь все, что осталось, это реализовать UI
+для нашего приложения таймера.
+
+## Пользовательский интерфейс приложения
+
+### MyApp
+
+Можем начать с удаления содержимого `main.dart` и замены его на
+следующее.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/main.dart"
+	title="lib/main.dart"
+/>
+
+Далее, создадим наш виджет 'App' в `app.dart`, который будет корнем нашего
+приложения.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/app.dart"
+	title="lib/app.dart"
+/>
+
+Далее, нам нужно реализовать наш виджет `Timer`.
+
+### Timer
+
+Наш виджет `Timer` (`lib/timer/view/timer_page.dart`) будет отвечать за
+отображение оставшегося времени вместе с соответствующими кнопками, которые позволят
+пользователям запускать, приостанавливать и сбрасывать таймер.
+
+<TimerPageSnippet />
+
+Пока мы просто используем `BlocProvider` для доступа к экземпляру нашего
+`TimerBloc`.
+
+Далее, мы реализуем наш виджет `Actions`, который будет иметь соответствующие
+действия (запуск, пауза и сброс).
+
+### Barrel
+
+Чтобы очистить наши импорты из раздела `Timer`, нам нужно создать
+файл barrel `timer/timer.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/timer/timer.dart"
+	title="lib/timer/timer.dart"
+/>
+
+### Actions
+
+<ActionsSnippet />
+
+Виджет `Actions` это просто еще один `StatelessWidget`, который использует
+`BlocBuilder` для перестроения UI каждый раз, когда мы получаем новый `TimerState`. `Actions`
+использует `context.read<TimerBloc>()` для доступа к экземпляру `TimerBloc` и возвращает
+различные `FloatingActionButtons` в зависимости от текущего состояния `TimerBloc`.
+Каждая из `FloatingActionButtons` добавляет событие в свой обратный вызов `onPressed` для
+уведомления `TimerBloc`.
+
+Если вы хотите более точный контроль над тем, когда вызывается функция `builder`, вы можете
+предоставить необязательный `buildWhen` в `BlocBuilder`. `buildWhen` принимает
+предыдущее состояние bloc и текущее состояние bloc и возвращает `boolean`. Если
+`buildWhen` возвращает `true`, `builder` будет вызван с `state` и виджет
+будет перестроен. Если `buildWhen` возвращает `false`, `builder` не будет вызван с
+`state` и перестроение не произойдет.
+
+В этом случае мы не хотим, чтобы виджет `Actions` перестраивался на каждом тике,
+потому что это было бы неэффективно. Вместо этого мы хотим, чтобы `Actions` перестраивался только если
+`runtimeType` `TimerState` изменяется (TimerInitial =>
+TimerRunInProgress, TimerRunInProgress => TimerRunPause, и т.д...).
+
+В результате, если бы мы случайно окрашивали виджеты при каждом перестроении, это выглядело бы
+так:
+
+![BlocBuilder buildWhen demo](https://cdn-images-1.medium.com/max/1600/1*YyjpH1rcZlYWxCX308l_Ew.gif)
+
+:::note
+
+Несмотря на то, что виджет `Text` перестраивается на каждом тике, мы перестраиваем только
+`Actions`, если они должны быть перестроены.
+
+:::
+
+### Background
+
+Наконец, добавьте виджет background следующим образом:
+
+<BackgroundSnippet />
+
+### Собираем все вместе
+
+Вот и все! На этом этапе у нас есть довольно надежное приложение таймера,
+которое эффективно перестраивает только те виджеты, которые необходимо перестроить.
+
+Полный исходный код этого примера можно найти
+[здесь](https://github.com/felangel/Bloc/tree/master/examples/flutter_timer).

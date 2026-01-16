@@ -1,0 +1,57 @@
+---
+title: Предпочитайте соглашения об именовании файлов
+description: Правило prefer_file_naming_conventions.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/prefer_file_naming_conventions/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/prefer_file_naming_conventions/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+	<Badge text="recommended" variant="success" />
+</div>
+
+Предпочитайте следовать соглашениям об именовании файлов.
+
+:::note
+
+Это правило линтера было введено в версии `0.3.0` пакета
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint)
+
+:::
+
+## Обоснование
+
+Для согласованности, простоты обслуживания и разделения ответственности предпочтительно
+определять экземпляры bloc и cubit в их соответствующих файлах Dart вместо
+встраивания их напрямую.
+
+:::tip
+
+Рассмотрите использование команды `bloc new <component>` из пакета
+[package:bloc_tools](https://pub.dev/packages/bloc_tools) для быстрого и
+последовательного генерирования новых экземпляров bloc/cubit.
+
+:::
+
+## Примеры
+
+**Предпочитайте** объявлять экземпляры bloc/cubit в их собственных соответствующих файлах.
+
+**ХОРОШО**:
+
+<GoodSnippet />
+
+**ПЛОХО**:
+
+<BadSnippet />
+
+## Включение
+
+Чтобы включить правило `prefer_file_naming_conventions`, добавьте его в
+`analysis_options.yaml` в разделе `bloc` > `rules`:
+
+<EnableRuleSnippet name="prefer_file_naming_conventions" />

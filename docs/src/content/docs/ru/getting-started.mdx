@@ -1,0 +1,41 @@
+---
+title: Начало работы
+description: Всё, что нужно для начала работы с Bloc.
+---
+
+import InstallationTabs from '~/components/getting-started/InstallationTabs.astro';
+import ImportTabs from '~/components/getting-started/ImportTabs.astro';
+
+## Пакеты
+
+Экосистема bloc состоит из нескольких пакетов, перечисленных ниже:
+
+| Пакет                                                                                      | Описание                          | Ссылка                                                                                                         |
+| ------------------------------------------------------------------------------------------ | --------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| [angular_bloc](https://github.com/felangel/bloc/tree/master/packages/angular_bloc)         | Компоненты AngularDart            | [![pub package](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dev/packages/angular_bloc)         |
+| [bloc](https://github.com/felangel/bloc/tree/master/packages/bloc)                         | Основные API Dart                 | [![pub package](https://img.shields.io/pub/v/bloc.svg)](https://pub.dev/packages/bloc)                         |
+| [bloc_concurrency](https://github.com/felangel/bloc/tree/master/packages/bloc_concurrency) | Преобразователи событий           | [![pub package](https://img.shields.io/pub/v/bloc_concurrency.svg)](https://pub.dev/packages/bloc_concurrency) |
+| [bloc_lint](https://github.com/felangel/bloc/tree/master/packages/bloc_lint)               | Пользовательский линтер           | [![pub package](https://img.shields.io/pub/v/bloc_lint.svg)](https://pub.dev/packages/bloc_lint)               |
+| [bloc_test](https://github.com/felangel/bloc/tree/master/packages/bloc_test)               | API для тестирования              | [![pub package](https://img.shields.io/pub/v/bloc_test.svg)](https://pub.dev/packages/bloc_test)               |
+| [bloc_tools](https://github.com/felangel/bloc/tree/master/packages/bloc_tools)             | Инструменты командной строки      | [![pub package](https://img.shields.io/pub/v/bloc_tools.svg)](https://pub.dev/packages/bloc_tools)             |
+| [flutter_bloc](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc)         | Виджеты Flutter                   | [![pub package](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dev/packages/flutter_bloc)         |
+| [hydrated_bloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc)       | Поддержка кэширования/сохранения  | [![pub package](https://img.shields.io/pub/v/hydrated_bloc.svg)](https://pub.dev/packages/hydrated_bloc)       |
+| [replay_bloc](https://github.com/felangel/bloc/tree/master/packages/replay_bloc)           | Поддержка отмены/повтора действий | [![pub package](https://img.shields.io/pub/v/replay_bloc.svg)](https://pub.dev/packages/replay_bloc)           |
+
+## Установка
+
+<InstallationTabs />
+
+:::note
+
+Для начала использования bloc у вас должен быть установлен
+[Dart SDK](https://dart.dev/get-dart) на вашем компьютере.
+
+:::
+
+## Импорты
+
+Теперь, когда мы успешно установили bloc, мы можем создать наш `main.dart` и
+импортировать соответствующий пакет `bloc`.
+
+<ImportTabs />

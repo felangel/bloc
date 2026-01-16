@@ -1,0 +1,54 @@
+---
+title: Предпочитайте расширения BuildContext
+description: Правило prefer_build_context_extensions.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/prefer_build_context_extensions/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/prefer_build_context_extensions/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+</div>
+
+Предпочитайте использование расширений `BuildContext` для доступа к экземпляру `Bloc` или `Repository`.
+
+:::note
+
+Это правило линтера было введено в версии `0.3.2` пакета
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint)
+
+:::
+
+## Обоснование
+
+Для согласованности предпочитайте использовать расширения `BuildContext` такие как `context.read`,
+`context.watch` и `context.select` вместо `BlocProvider.of`,
+`RepositoryProvider.of`, `BlocBuilder` или `BlocSelector`.
+
+| явный метод                                                         | расширение            |
+| ------------------------------------------------------------------- | --------------------- |
+| `BlocProvider.of<Bloc>(context, listen: false)`                     | `context.read<Bloc>`  |
+| `BlocBuilder<Bloc, State>(...)` или `BlocProvider.of<Bloc>(context)` | `context.watch<Bloc>` |
+| `BlocSelector<Bloc, State>(...)`                                    | `context.select`      |
+
+## Примеры
+
+**Избегайте** использования `BlocProvider.of<T>(context)` для доступа к экземпляру `Bloc`.
+
+**ПЛОХО**:
+
+<BadSnippet />
+
+**ХОРОШО**:
+
+<GoodSnippet />
+
+## Включение
+
+Чтобы включить правило `prefer_build_context_extensions`, добавьте его в
+`analysis_options.yaml` в разделе `bloc` > `rules`:
+
+<EnableRuleSnippet name="prefer_build_context_extensions" />

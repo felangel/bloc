@@ -1,0 +1,138 @@
+---
+title: Счетчик AngularDart
+description:
+  Подробное руководство по созданию приложения-счетчика AngularDart с использованием bloc.
+sidebar:
+  order: 8
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import ActivateStagehandSnippet from '~/components/tutorials/ngdart-counter/ActivateStagehandSnippet.astro';
+import StagehandSnippet from '~/components/tutorials/ngdart-counter/StagehandSnippet.astro';
+import InstallDependenciesSnippet from '~/components/tutorials/ngdart-counter/InstallDependenciesSnippet.astro';
+
+![beginner](https://img.shields.io/badge/level-beginner-green.svg)
+
+В следующем руководстве мы собираемся создать счетчик в AngularDart используя
+библиотеку Bloc.
+
+![demo](~/assets/tutorials/ngdart-counter.gif)
+
+## Настройка
+
+Начнем с создания нового проекта AngularDart с
+[stagehand](https://github.com/dart-lang/stagehand).
+
+Если у вас не установлен stagehand, активируйте его с помощью:
+
+<ActivateStagehandSnippet />
+
+Затем сгенерируйте новый проект с помощью:
+
+<StagehandSnippet />
+
+Затем можем заменить содержимое `pubspec.yaml` на:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+и затем установить все наши зависимости
+
+<InstallDependenciesSnippet />
+
+Наше приложение счетчика будет иметь только две кнопки для увеличения/уменьшения
+значения счетчика и элемент для отображения текущего значения. Начнем
+проектировать `CounterEvents`.
+
+## Counter Bloc
+
+Поскольку состояние нашего счетчика может быть представлено целым числом, нам не нужно
+создавать пользовательский класс, и мы можем разместить события и bloc вместе.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/src/counter_page/counter_bloc.dart"
+	title="lib/src/counter_page/counter_bloc.dart"
+/>
+
+:::note
+
+Просто из объявления класса мы можем сказать, что наш `CounterBloc` будет
+принимать `CounterEvents` в качестве входных данных и выводить целые числа.
+
+:::
+
+## Counter App
+
+Теперь, когда у нас есть полностью реализованный `CounterBloc`, мы можем начать
+создавать наш компонент AngularDart App.
+
+Наш `app.component.dart` должен выглядеть так:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/app_component.dart"
+	title="lib/app_component.dart"
+/>
+
+и наш `app.component.html` должен выглядеть так:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/app_component.html"
+	title="lib/app_component.html"
+/>
+
+## Counter Page
+
+Наконец, все, что осталось, это построить наш компонент Counter Page.
+
+Наш `counter_page_component.dart` должен выглядеть так:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/src/counter_page/counter_page_component.dart"
+	title="lib/src/counter_page/counter_page_component.dart"
+/>
+
+:::note
+
+Мы можем получить доступ к экземпляру `CounterBloc`, используя систему внедрения зависимостей AngularDart. Поскольку мы зарегистрировали его как `Provider`, AngularDart может
+правильно разрешить `CounterBloc`.
+
+:::
+
+:::note
+
+Мы закрываем `CounterBloc` в `ngOnDestroy`.
+
+:::
+
+:::note
+
+Мы импортируем `BlocPipe`, чтобы мы могли использовать его в нашем шаблоне.
+
+:::
+
+Наконец, наш `counter_page_component.html` должен выглядеть так:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/src/counter_page/counter_page_component.html"
+	title="lib/src/counter_page/counter_page_component.html"
+/>
+
+:::note
+
+Мы используем `BlocPipe`, чтобы мы могли отображать состояние нашего `CounterBloc` по мере его
+обновления.
+
+:::
+
+Вот и все! Мы отделили наш слой представления от нашего слоя бизнес-логики.
+Наш `CounterPageComponent` не знает, что происходит, когда пользователь нажимает
+кнопку; он просто добавляет событие, чтобы уведомить `CounterBloc`. Кроме того, наш
+`CounterBloc` не знает, что происходит с состоянием (значением счетчика); он
+просто преобразует `CounterEvents` в целые числа.
+
+Мы можем запустить наше приложение с помощью `webdev serve` и можем просмотреть его локально.
+
+Полный исходный код этого примера можно найти
+[здесь](https://github.com/felangel/bloc/tree/master/examples/angular_counter).
