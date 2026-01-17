@@ -1,7 +1,8 @@
 ---
 title: Счетчик AngularDart
 description:
-  Подробное руководство по созданию приложения-счетчика AngularDart с использованием bloc.
+  Подробное руководство по созданию приложения-счетчика AngularDart с
+  использованием bloc.
 sidebar:
   order: 8
 ---
@@ -48,8 +49,9 @@ import InstallDependenciesSnippet from '~/components/tutorials/ngdart-counter/In
 
 ## Counter Bloc
 
-Поскольку состояние нашего счетчика может быть представлено целым числом, нам не нужно
-создавать пользовательский класс, и мы можем разместить события и bloc вместе.
+Поскольку состояние нашего счетчика может быть представлено целым числом, нам не
+нужно создавать пользовательский класс, и мы можем разместить события и bloc
+вместе.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/src/counter_page/counter_bloc.dart"
@@ -95,8 +97,9 @@ import InstallDependenciesSnippet from '~/components/tutorials/ngdart-counter/In
 
 :::note
 
-Мы можем получить доступ к экземпляру `CounterBloc`, используя систему внедрения зависимостей AngularDart. Поскольку мы зарегистрировали его как `Provider`, AngularDart может
-правильно разрешить `CounterBloc`.
+Мы можем получить доступ к экземпляру `CounterBloc`, используя систему внедрения
+зависимостей AngularDart. Поскольку мы зарегистрировали его как `Provider`,
+AngularDart может правильно разрешить `CounterBloc`.
 
 :::
 
@@ -121,18 +124,19 @@ import InstallDependenciesSnippet from '~/components/tutorials/ngdart-counter/In
 
 :::note
 
-Мы используем `BlocPipe`, чтобы мы могли отображать состояние нашего `CounterBloc` по мере его
-обновления.
+Мы используем `BlocPipe`, чтобы мы могли отображать состояние нашего
+`CounterBloc` по мере его обновления.
 
 :::
 
-Вот и все! Мы отделили наш слой представления от нашего слоя бизнес-логики.
-Наш `CounterPageComponent` не знает, что происходит, когда пользователь нажимает
-кнопку; он просто добавляет событие, чтобы уведомить `CounterBloc`. Кроме того, наш
-`CounterBloc` не знает, что происходит с состоянием (значением счетчика); он
+Вот и все! Мы отделили наш слой представления от нашего слоя бизнес-логики. Наш
+`CounterPageComponent` не знает, что происходит, когда пользователь нажимает
+кнопку; он просто добавляет событие, чтобы уведомить `CounterBloc`. Кроме того,
+наш `CounterBloc` не знает, что происходит с состоянием (значением счетчика); он
 просто преобразует `CounterEvents` в целые числа.
 
-Мы можем запустить наше приложение с помощью `webdev serve` и можем просмотреть его локально.
+Мы можем запустить наше приложение с помощью `webdev serve` и можем просмотреть
+его локально.
 
 Полный исходный код этого примера можно найти
 [здесь](https://github.com/felangel/bloc/tree/master/examples/angular_counter).

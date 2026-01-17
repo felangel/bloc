@@ -13,7 +13,8 @@ import GoodSnippet from '~/components/lint-rules/prefer_build_context_extensions
 	<Badge text="dart" variant="note" />
 </div>
 
-Предпочитайте использование расширений `BuildContext` для доступа к экземпляру `Bloc` или `Repository`.
+Предпочитайте использование расширений `BuildContext` для доступа к экземпляру
+`Bloc` или `Repository`.
 
 :::note
 
@@ -24,19 +25,20 @@ import GoodSnippet from '~/components/lint-rules/prefer_build_context_extensions
 
 ## Обоснование
 
-Для согласованности предпочитайте использовать расширения `BuildContext` такие как `context.read`,
-`context.watch` и `context.select` вместо `BlocProvider.of`,
+Для согласованности предпочитайте использовать расширения `BuildContext` такие
+как `context.read`, `context.watch` и `context.select` вместо `BlocProvider.of`,
 `RepositoryProvider.of`, `BlocBuilder` или `BlocSelector`.
 
-| явный метод                                                         | расширение            |
-| ------------------------------------------------------------------- | --------------------- |
-| `BlocProvider.of<Bloc>(context, listen: false)`                     | `context.read<Bloc>`  |
+| явный метод                                                          | расширение            |
+| -------------------------------------------------------------------- | --------------------- |
+| `BlocProvider.of<Bloc>(context, listen: false)`                      | `context.read<Bloc>`  |
 | `BlocBuilder<Bloc, State>(...)` или `BlocProvider.of<Bloc>(context)` | `context.watch<Bloc>` |
-| `BlocSelector<Bloc, State>(...)`                                    | `context.select`      |
+| `BlocSelector<Bloc, State>(...)`                                     | `context.select`      |
 
 ## Примеры
 
-**Избегайте** использования `BlocProvider.of<T>(context)` для доступа к экземпляру `Bloc`.
+**Избегайте** использования `BlocProvider.of<T>(context)` для доступа к
+экземпляру `Bloc`.
 
 **ПЛОХО**:
 

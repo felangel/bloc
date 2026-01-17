@@ -1,7 +1,8 @@
 ---
 title: Вход Flutter Firebase
 description:
-  Подробное руководство по созданию потока входа Flutter с использованием bloc и Firebase.
+  Подробное руководство по созданию потока входа Flutter с использованием bloc и
+  Firebase.
 sidebar:
   order: 7
 ---
@@ -136,8 +137,8 @@ methods to `signUp`, `logInWithGoogle`, `logInWithEmailAndPassword`, and
 :::note
 
 The `AuthenticationRepository` is also responsible for handling low-level errors
-that can occur в каталоге data layer and exposes a clean, simple set of errors that
-align with the domain.
+that can occur в каталоге data layer and exposes a clean, simple set of errors
+that align with the domain.
 
 :::
 
@@ -170,8 +171,8 @@ following:
 />
 
 Notice that we are specifying an assets directory for all of our applications
-local assets. Create an `assets` directory в каталоге root of your project and add
-the
+local assets. Create an `assets` directory в каталоге root of your project and
+add the
 [bloc logo](https://github.com/felangel/bloc/blob/master/examples/flutter_firebase_login/assets/bloc_logo_small.png)
 asset (which we'll use later).
 
@@ -207,9 +208,9 @@ and it is an explicit constructor dependency.
 
 ## App
 
-Так же, как в [руководстве по входу](/tutorials/flutter-login), our `app.dart` will
-provide an instance of the `AuthenticationRepository` to the application via
-`RepositoryProvider` and also creates and provides an instance of
+Так же, как в [руководстве по входу](/tutorials/flutter-login), our `app.dart`
+will provide an instance of the `AuthenticationRepository` to the application
+via `RepositoryProvider` and also creates and provides an instance of
 `AuthenticationBloc`. Then `AppView` consumes the `AuthenticationBloc` and
 handles updating the current route based on the `AuthenticationState`.
 
@@ -222,8 +223,8 @@ handles updating the current route based on the `AuthenticationState`.
 
 The `AppBloc` is responsible for managing the global state of the application.
 It has a dependency on the `AuthenticationRepository` and subscribes to the
-`user` Stream in order to emit new states in response to changes в каталоге current
-user.
+`user` Stream in order to emit new states in response to changes в каталоге
+current user.
 
 ### State
 
@@ -275,8 +276,8 @@ will be canceled.
 :::tip
 
 A [`BlocObserver`](/bloc-concepts/#blocobserver-1) is great for logging Bloc
-events, errors, and state changes especially в каталоге context analytics and crash
-reporting.
+events, errors, and state changes especially в каталоге context analytics and
+crash reporting.
 
 :::
 
@@ -436,8 +437,9 @@ interactions.
 ## Домашняя страница
 
 After a user either successfully logs in or signs up, the `user` stream will be
-updated which will trigger a state change в каталоге `AuthenticationBloc` and will
-result в каталоге `AppView` pushing the `HomePage` route onto the navigation stack.
+updated which will trigger a state change в каталоге `AuthenticationBloc` and
+will result в каталоге `AppView` pushing the `HomePage` route onto the
+navigation stack.
 
 From the `HomePage`, the user can view their profile information and log out by
 tapping the exit icon в каталоге `AppBar`.
@@ -451,8 +453,8 @@ tapping the exit icon в каталоге `AppBar`.
 
 A `widgets` directory was created alongside the `view` directory withв каталоге
 `home` feature for reusable components that are specific to that particular
-feature. In this case a simple `Avatar` widget is exported and used withв каталоге
-`HomePage`.
+feature. In this case a simple `Avatar` widget is exported and used withв
+каталоге `HomePage`.
 
 :::
 

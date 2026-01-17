@@ -1,6 +1,8 @@
 ---
 title: Счетчик Flutter
-description: Подробное руководство по созданию приложения-счетчика Flutter с использованием bloc.
+description:
+  Подробное руководство по созданию приложения-счетчика Flutter с использованием
+  bloc.
 sidebar:
   order: 1
 ---
@@ -18,14 +20,16 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 ## Ключевые темы
 
-- Наблюдение за изменениями состояния с помощью [BlocObserver](/bloc-concepts#blocobserver).
+- Наблюдение за изменениями состояния с помощью
+  [BlocObserver](/bloc-concepts#blocobserver).
 - [BlocProvider](/flutter-bloc-concepts#blocprovider), виджет Flutter который
   предоставляет bloc своим дочерним элементам.
-- [BlocBuilder](/flutter-bloc-concepts#blocbuilder), виджет Flutter который обрабатывает
-  построение виджета в ответ на новые состояния.
+- [BlocBuilder](/flutter-bloc-concepts#blocbuilder), виджет Flutter который
+  обрабатывает построение виджета в ответ на новые состояния.
 - Использование Cubit вместо Bloc.
   [В чем разница?](/bloc-concepts#cubit-vs-bloc)
-- Добавление событий с помощью [context.read](/flutter-bloc-concepts#contextread).
+- Добавление событий с помощью
+  [context.read](/flutter-bloc-concepts#contextread).
 
 ## Настройка
 
@@ -63,15 +67,15 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 ├── pubspec.yaml
 ```
 
-Приложение использует структуру каталогов, ориентированную на функции. Эта структура проекта
-позволяет нам масштабировать проект, имея автономные функции. В
-этом примере у нас будет только одна функция (сам счетчик), но в более
-сложных приложениях у нас может быть сотни различных функций.
+Приложение использует структуру каталогов, ориентированную на функции. Эта
+структура проекта позволяет нам масштабировать проект, имея автономные функции.
+В этом примере у нас будет только одна функция (сам счетчик), но в более сложных
+приложениях у нас может быть сотни различных функций.
 
 ## BlocObserver
 
-Первое, на что мы обратим внимание, это как создать `BlocObserver`
-который поможет нам наблюдать все изменения состояния в приложении.
+Первое, на что мы обратим внимание, это как создать `BlocObserver` который
+поможет нам наблюдать все изменения состояния в приложении.
 
 Давайте создадим `lib/counter_observer.dart`:
 
@@ -80,8 +84,8 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 	title="lib/counter_observer.dart"
 />
 
-В данном случае мы переопределяем только `onChange` чтобы увидеть все изменения состояния, которые
-происходят.
+В данном случае мы переопределяем только `onChange` чтобы увидеть все изменения
+состояния, которые происходят.
 
 :::note
 
@@ -98,15 +102,14 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 	title="lib/main.dart"
 />
 
-Мы инициализируем только что созданный `CounterObserver` и вызываем `runApp`
-с виджетом `CounterApp`, который мы рассмотрим далее.
+Мы инициализируем только что созданный `CounterObserver` и вызываем `runApp` с
+виджетом `CounterApp`, который мы рассмотрим далее.
 
 ## Counter App
 
 Создадим `lib/app.dart`:
 
-`CounterApp` будет `MaterialApp` и указывает `home` как
-`CounterPage`.
+`CounterApp` будет `MaterialApp` и указывает `home` как `CounterPage`.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/app.dart"
@@ -116,9 +119,9 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 :::note
 
 Мы расширяем `MaterialApp` потому что `CounterApp` _является_ `MaterialApp`. В
-большинстве случаев мы будем создавать экземпляры `StatelessWidget` или `StatefulWidget`
-и компоновать виджеты в `build`, но в данном случае нет виджетов
-для компоновки, поэтому проще просто расширить `MaterialApp`.
+большинстве случаев мы будем создавать экземпляры `StatelessWidget` или
+`StatefulWidget` и компоновать виджеты в `build`, но в данном случае нет
+виджетов для компоновки, поэтому проще просто расширить `MaterialApp`.
 
 :::
 
@@ -128,8 +131,8 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 Создадим `lib/counter/view/counter_page.dart`:
 
-Виджет `CounterPage` отвечает за создание `CounterCubit` (который мы
-рассмотрим далее) и предоставление его `CounterView`.
+Виджет `CounterPage` отвечает за создание `CounterCubit` (который мы рассмотрим
+далее) и предоставление его `CounterView`.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_page.dart"
@@ -138,9 +141,9 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 :::note
 
-Важно отделить или разъединить создание `Cubit` от
-использования `Cubit`, чтобы иметь код, который намного более тестируем и
-пригоден для повторного использования.
+Важно отделить или разъединить создание `Cubit` от использования `Cubit`, чтобы
+иметь код, который намного более тестируем и пригоден для повторного
+использования.
 
 :::
 
@@ -153,8 +156,8 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 - `increment`: добавляет 1 к текущему состоянию
 - `decrement`: вычитает 1 из текущего состояния
 
-Тип состояния, которым управляет `CounterCubit`, это просто `int` и
-начальное состояние равно `0`.
+Тип состояния, которым управляет `CounterCubit`, это просто `int` и начальное
+состояние равно `0`.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/cubit/counter_cubit.dart"
@@ -165,20 +168,20 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 Используйте
 [VSCode расширение](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
-или [IntelliJ плагин](https://plugins.jetbrains.com/plugin/12129-bloc) для автоматического создания
-новых cubits.
+или [IntelliJ плагин](https://plugins.jetbrains.com/plugin/12129-bloc) для
+автоматического создания новых cubits.
 
 :::
 
-Далее, давайте рассмотрим `CounterView`, который будет отвечать за
-использование состояния и взаимодействие с `CounterCubit`.
+Далее, давайте рассмотрим `CounterView`, который будет отвечать за использование
+состояния и взаимодействие с `CounterCubit`.
 
 ## Counter View
 
 Создадим `lib/counter/view/counter_view.dart`:
 
-`CounterView` отвечает за отображение текущего счета и отображение
-двух FloatingActionButtons для увеличения/уменьшения счетчика.
+`CounterView` отвечает за отображение текущего счета и отображение двух
+FloatingActionButtons для увеличения/уменьшения счетчика.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_view.dart"
@@ -187,14 +190,15 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 `BlocBuilder` используется для обертывания виджета `Text` чтобы обновлять текст
 каждый раз когда изменяется состояние `CounterCubit`. Кроме того,
-`context.read<CounterCubit>()` используется для поиска ближайшего экземпляра `CounterCubit`.
+`context.read<CounterCubit>()` используется для поиска ближайшего экземпляра
+`CounterCubit`.
 
 :::note
 
-Только виджет `Text` обернут в `BlocBuilder` потому что это единственный
-виджет, который необходимо перестроить в ответ на изменения состояния в
-`CounterCubit`. Избегайте ненужного оборачивания виджетов, которые не нужно
-перестраивать при изменении состояния.
+Только виджет `Text` обернут в `BlocBuilder` потому что это единственный виджет,
+который необходимо перестроить в ответ на изменения состояния в `CounterCubit`.
+Избегайте ненужного оборачивания виджетов, которые не нужно перестраивать при
+изменении состояния.
 
 :::
 
@@ -218,14 +222,14 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 	title="lib/counter/counter.dart"
 />
 
-Вот и все! Мы отделили слой представления от слоя бизнес-логики.
-`CounterView` не знает, что происходит, когда пользователь нажимает кнопку; он просто
+Вот и все! Мы отделили слой представления от слоя бизнес-логики. `CounterView`
+не знает, что происходит, когда пользователь нажимает кнопку; он просто
 уведомляет `CounterCubit`. Кроме того, `CounterCubit` не знает, что происходит
-со состоянием (значением счетчика); он просто выдает новые состояния в
-ответ на вызываемые методы.
+со состоянием (значением счетчика); он просто выдает новые состояния в ответ на
+вызываемые методы.
 
-Мы можем запустить наше приложение с помощью `flutter run` и можем просмотреть его на нашем устройстве или
-симуляторе/эмуляторе.
+Мы можем запустить наше приложение с помощью `flutter run` и можем просмотреть
+его на нашем устройстве или симуляторе/эмуляторе.
 
 Полный исходный код (включая unit и widget тесты) этого примера можно найти
 [здесь](https://github.com/felangel/Bloc/tree/master/examples/flutter_counter).

@@ -13,7 +13,8 @@ import GoodSnippet from '~/components/lint-rules/avoid_build_context_extensions/
 	<Badge text="dart" variant="note" />
 </div>
 
-Избегайте использования расширений `BuildContext` для доступа к экземплярам `Bloc` или `Cubit`.
+Избегайте использования расширений `BuildContext` для доступа к экземплярам
+`Bloc` или `Cubit`.
 
 :::note
 
@@ -24,19 +25,20 @@ import GoodSnippet from '~/components/lint-rules/avoid_build_context_extensions/
 
 ## Обоснование
 
-Для согласованности и ради явности предпочтительно использовать напрямую
-базовые методы вместо расширений `BuildContext`. Это также полезно
-для тестирования, поскольку невозможно замокать метод расширения.
+Для согласованности и ради явности предпочтительно использовать напрямую базовые
+методы вместо расширений `BuildContext`. Это также полезно для тестирования,
+поскольку невозможно замокать метод расширения.
 
-| расширение       | явный метод                                                         |
-| ---------------- | ------------------------------------------------------------------- |
-| `context.read`   | `BlocProvider.of<Bloc>(context, listen: false)`                     |
+| расширение       | явный метод                                                          |
+| ---------------- | -------------------------------------------------------------------- |
+| `context.read`   | `BlocProvider.of<Bloc>(context, listen: false)`                      |
 | `context.watch`  | `BlocBuilder<Bloc, State>(...)` или `BlocProvider.of<Bloc>(context)` |
-| `context.select` | `BlocSelector<Bloc, State>(...)`                                    |
+| `context.select` | `BlocSelector<Bloc, State>(...)`                                     |
 
 ## Примеры
 
-**Избегайте** использования расширений `BuildContext` для взаимодействия с экземплярами `Bloc` или `Cubit`.
+**Избегайте** использования расширений `BuildContext` для взаимодействия с
+экземплярами `Bloc` или `Cubit`.
 
 **ПЛОХО**:
 

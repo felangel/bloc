@@ -51,7 +51,13 @@ export default defineConfig({
 			sidebar: [
 				{
 					label: 'Introduction',
-					translations: { 'zh-CN': '介绍', fa: 'مقدمه', es: 'Introducción', ja: '紹介', ru: 'Введение' },
+					translations: {
+						'zh-CN': '介绍',
+						fa: 'مقدمه',
+						es: 'Introducción',
+						ja: '紹介',
+						ru: 'Введение',
+					},
 					items: [
 						{
 							label: 'Getting Started',
@@ -100,7 +106,12 @@ export default defineConfig({
 						{
 							label: 'Architecture',
 							link: '/architecture/',
-							translations: { fa: 'معماری', es: 'Arquitectura', ja: 'アーキテクチャー', ru: 'Архитектура' },
+							translations: {
+								fa: 'معماری',
+								es: 'Arquitectura',
+								ja: 'アーキテクチャー',
+								ru: 'Архитектура',
+							},
 						},
 						{
 							label: 'Modeling State',
@@ -130,12 +141,22 @@ export default defineConfig({
 						{
 							label: 'Migration Guide',
 							link: '/migration/',
-							translations: { fa: 'راهنمای مهاجرت', es: 'Guía de Migración', ja: '移行ガイド', ru: 'Руководство по миграции' },
+							translations: {
+								fa: 'راهنمای مهاجرت',
+								es: 'Guía de Migración',
+								ja: '移行ガイド',
+								ru: 'Руководство по миграции',
+							},
 						},
 						{
 							label: 'FAQs',
 							link: '/faqs/',
-							translations: { fa: 'سوالات متداول', es: 'Preguntas Frecuentes', ja: 'よくある質問', ru: 'Часто задаваемые вопросы' },
+							translations: {
+								fa: 'سوالات متداول',
+								es: 'Preguntas Frecuentes',
+								ja: 'よくある質問',
+								ru: 'Часто задаваемые вопросы',
+							},
 						},
 					],
 				},
@@ -172,7 +193,12 @@ export default defineConfig({
 				},
 				{
 					label: 'Tutorials',
-					translations: { fa: 'آموزش ها', es: 'Tutoriales', ja: 'チュートリアル', ru: 'Руководства' },
+					translations: {
+						fa: 'آموزش ها',
+						es: 'Tutoriales',
+						ja: 'チュートリアル',
+						ru: 'Руководства',
+					},
 					autogenerate: { directory: 'tutorials' },
 				},
 				{
@@ -182,12 +208,20 @@ export default defineConfig({
 						{
 							label: 'IntelliJ Plugin',
 							link: 'https://plugins.jetbrains.com/plugin/12129-bloc',
-							translations: { fa: 'پلاگین IntelliJ', es: 'Plugin de IntelliJ', ru: 'Плагин IntelliJ' },
+							translations: {
+								fa: 'پلاگین IntelliJ',
+								es: 'Plugin de IntelliJ',
+								ru: 'Плагин IntelliJ',
+							},
 						},
 						{
 							label: 'VSCode Extension',
 							link: 'https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc',
-							translations: { fa: 'پلاگین VSCode', es: 'Extensión de VSCode', ru: 'Расширение VSCode' },
+							translations: {
+								fa: 'پلاگین VSCode',
+								es: 'Extensión de VSCode',
+								ru: 'Расширение VSCode',
+							},
 						},
 					],
 				},
