@@ -1,4 +1,5 @@
 export 'bad_cubit.dart';
+export 'counter_cubit.dart';
 export 'cyclic_cubit.dart';
 export 'freezed_cubit.dart';
 export 'from_json_state_cubit.dart';
