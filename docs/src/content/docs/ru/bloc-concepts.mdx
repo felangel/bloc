@@ -1,0 +1,644 @@
+---
+title: Концепции Bloc
+description: Обзор основных концепций для package:bloc.
+sidebar:
+  order: 1
+---
+
+import CountStreamSnippet from '~/components/concepts/bloc/CountStreamSnippet.astro';
+import SumStreamSnippet from '~/components/concepts/bloc/SumStreamSnippet.astro';
+import StreamsMainSnippet from '~/components/concepts/bloc/StreamsMainSnippet.astro';
+import CounterCubitSnippet from '~/components/concepts/bloc/CounterCubitSnippet.astro';
+import CounterCubitInitialStateSnippet from '~/components/concepts/bloc/CounterCubitInitialStateSnippet.astro';
+import CounterCubitInstantiationSnippet from '~/components/concepts/bloc/CounterCubitInstantiationSnippet.astro';
+import CounterCubitIncrementSnippet from '~/components/concepts/bloc/CounterCubitIncrementSnippet.astro';
+import CounterCubitBasicUsageSnippet from '~/components/concepts/bloc/CounterCubitBasicUsageSnippet.astro';
+import CounterCubitStreamUsageSnippet from '~/components/concepts/bloc/CounterCubitStreamUsageSnippet.astro';
+import CounterCubitOnChangeSnippet from '~/components/concepts/bloc/CounterCubitOnChangeSnippet.astro';
+import CounterCubitOnChangeUsageSnippet from '~/components/concepts/bloc/CounterCubitOnChangeUsageSnippet.astro';
+import CounterCubitOnChangeOutputSnippet from '~/components/concepts/bloc/CounterCubitOnChangeOutputSnippet.astro';
+import SimpleBlocObserverOnChangeSnippet from '~/components/concepts/bloc/SimpleBlocObserverOnChangeSnippet.astro';
+import SimpleBlocObserverOnChangeUsageSnippet from '~/components/concepts/bloc/SimpleBlocObserverOnChangeUsageSnippet.astro';
+import SimpleBlocObserverOnChangeOutputSnippet from '~/components/concepts/bloc/SimpleBlocObserverOnChangeOutputSnippet.astro';
+import CounterCubitOnErrorSnippet from '~/components/concepts/bloc/CounterCubitOnErrorSnippet.astro';
+import SimpleBlocObserverOnErrorSnippet from '~/components/concepts/bloc/SimpleBlocObserverOnErrorSnippet.astro';
+import CounterCubitOnErrorOutputSnippet from '~/components/concepts/bloc/CounterCubitOnErrorOutputSnippet.astro';
+import CounterBlocSnippet from '~/components/concepts/bloc/CounterBlocSnippet.astro';
+import CounterBlocEventHandlerSnippet from '~/components/concepts/bloc/CounterBlocEventHandlerSnippet.astro';
+import CounterBlocIncrementSnippet from '~/components/concepts/bloc/CounterBlocIncrementSnippet.astro';
+import CounterBlocUsageSnippet from '~/components/concepts/bloc/CounterBlocUsageSnippet.astro';
+import CounterBlocStreamUsageSnippet from '~/components/concepts/bloc/CounterBlocStreamUsageSnippet.astro';
+import CounterBlocOnChangeSnippet from '~/components/concepts/bloc/CounterBlocOnChangeSnippet.astro';
+import CounterBlocOnChangeUsageSnippet from '~/components/concepts/bloc/CounterBlocOnChangeUsageSnippet.astro';
+import CounterBlocOnChangeOutputSnippet from '~/components/concepts/bloc/CounterBlocOnChangeOutputSnippet.astro';
+import CounterBlocOnTransitionSnippet from '~/components/concepts/bloc/CounterBlocOnTransitionSnippet.astro';
+import CounterBlocOnTransitionOutputSnippet from '~/components/concepts/bloc/CounterBlocOnTransitionOutputSnippet.astro';
+import SimpleBlocObserverOnTransitionSnippet from '~/components/concepts/bloc/SimpleBlocObserverOnTransitionSnippet.astro';
+import SimpleBlocObserverOnTransitionUsageSnippet from '~/components/concepts/bloc/SimpleBlocObserverOnTransitionUsageSnippet.astro';
+import SimpleBlocObserverOnTransitionOutputSnippet from '~/components/concepts/bloc/SimpleBlocObserverOnTransitionOutputSnippet.astro';
+import CounterBlocOnEventSnippet from '~/components/concepts/bloc/CounterBlocOnEventSnippet.astro';
+import SimpleBlocObserverOnEventSnippet from '~/components/concepts/bloc/SimpleBlocObserverOnEventSnippet.astro';
+import SimpleBlocObserverOnEventOutputSnippet from '~/components/concepts/bloc/SimpleBlocObserverOnEventOutputSnippet.astro';
+import CounterBlocOnErrorSnippet from '~/components/concepts/bloc/CounterBlocOnErrorSnippet.astro';
+import CounterBlocOnErrorOutputSnippet from '~/components/concepts/bloc/CounterBlocOnErrorOutputSnippet.astro';
+import CounterCubitFullSnippet from '~/components/concepts/bloc/CounterCubitFullSnippet.astro';
+import CounterBlocFullSnippet from '~/components/concepts/bloc/CounterBlocFullSnippet.astro';
+import AuthenticationStateSnippet from '~/components/concepts/bloc/AuthenticationStateSnippet.astro';
+import AuthenticationTransitionSnippet from '~/components/concepts/bloc/AuthenticationTransitionSnippet.astro';
+import AuthenticationChangeSnippet from '~/components/concepts/bloc/AuthenticationChangeSnippet.astro';
+import DebounceEventTransformerSnippet from '~/components/concepts/bloc/DebounceEventTransformerSnippet.astro';
+
+:::note
+
+Пожалуйста, внимательно прочитайте следующие разделы перед началом работы с
+[`package:bloc`](https://pub.dev/packages/bloc).
+
+:::
+
+Существует несколько ключевых концепций, которые критически важны для понимания
+того, как использовать пакет bloc.
+
+В предстоящих разделах мы подробно обсудим каждую из них, а также рассмотрим,
+как они применяются на примере приложения-счетчика.
+
+## Потоки (Streams)
+
+:::note
+
+Ознакомьтесь с официальной
+[Документацией Dart](https://dart.dev/tutorials/language/streams) для получения
+дополнительной информации о `Streams`.
+
+:::
+
+Поток (stream) — это последовательность асинхронных данных.
+
+Для использования библиотеки bloc критически важно иметь базовое понимание
+`Streams` и того, как они работают.
+
+Если вы не знакомы с `Streams`, просто представьте трубу с водой, текущей через
+неё. Труба — это `Stream`, а вода — это асинхронные данные.
+
+Мы можем создать `Stream` в Dart, написав функцию `async*` (асинхронный
+генератор).
+
+<CountStreamSnippet />
+
+Помечая функцию как `async*`, мы получаем возможность использовать ключевое
+слово `yield` и возвращать `Stream` данных. В приведенном выше примере мы
+возвращаем `Stream` целых чисел до значения параметра `max`.
+
+Каждый раз, когда мы используем `yield` в функции `async*`, мы проталкиваем этот
+фрагмент данных через `Stream`.
+
+Мы можем использовать вышеуказанный `Stream` несколькими способами. Если бы мы
+хотели написать функцию для возврата суммы `Stream` целых чисел, она могла бы
+выглядеть так:
+
+<SumStreamSnippet />
+
+Помечая вышеуказанную функцию как `async`, мы получаем возможность использовать
+ключевое слово `await` и возвращать `Future` целых чисел. В этом примере мы
+ожидаем каждое значение в потоке и возвращаем сумму всех целых чисел в потоке.
+
+Мы можем собрать все это вместе следующим образом:
+
+<StreamsMainSnippet />
+
+Теперь, когда у нас есть базовое понимание того, как работают `Streams` в Dart,
+мы готовы узнать об основном компоненте пакета bloc: `Cubit`.
+
+## Cubit
+
+`Cubit` — это класс, который расширяет `BlocBase` и может быть расширен для
+управления любым типом состояния.
+
+![Cubit Architecture](~/assets/concepts/cubit_architecture_full.png)
+
+`Cubit` может предоставлять функции, которые можно вызывать для запуска
+изменений состояния.
+
+Состояния — это выходные данные `Cubit` и представляют часть состояния вашего
+приложения. Компоненты UI могут быть уведомлены о состояниях и перерисовывать
+части себя на основе текущего состояния.
+
+:::note
+
+Для получения дополнительной информации о происхождении `Cubit` ознакомьтесь с
+[этим issue](https://github.com/felangel/cubit/issues/69).
+
+:::
+
+### Создание Cubit
+
+Мы можем создать `CounterCubit` следующим образом:
+
+<CounterCubitSnippet />
+
+При создании `Cubit` нам необходимо определить тип состояния, которым будет
+управлять `Cubit`. В случае `CounterCubit` выше состояние может быть
+представлено через `int`, но в более сложных случаях может быть необходимо
+использовать `class` вместо примитивного типа.
+
+Второе, что нам нужно сделать при создании `Cubit`, — это указать начальное
+состояние. Мы можем сделать это, вызвав `super` со значением начального
+состояния. В приведенном выше фрагменте мы устанавливаем начальное состояние в
+`0` внутренне, но мы также можем позволить `Cubit` быть более гибким, принимая
+внешнее значение:
+
+<CounterCubitInitialStateSnippet />
+
+Это позволило бы нам создавать экземпляры `CounterCubit` с различными начальными
+состояниями, например:
+
+<CounterCubitInstantiationSnippet />
+
+### Изменения состояния Cubit
+
+Каждый `Cubit` имеет возможность выдавать новое состояние через `emit`.
+
+<CounterCubitIncrementSnippet />
+
+В приведенном выше фрагменте `CounterCubit` предоставляет публичный метод
+`increment`, который может быть вызван извне для уведомления `CounterCubit` об
+увеличении его состояния. Когда вызывается `increment`, мы можем получить доступ
+к текущему состоянию `Cubit` через геттер `state` и вызвать `emit` нового
+состояния, добавив 1 к текущему состоянию.
+
+:::caution
+
+Метод `emit` защищен, что означает, что он должен использоваться только внутри
+`Cubit`.
+
+:::
+
+### Использование Cubit
+
+Теперь мы можем взять реализованный `CounterCubit` и использовать его!
+
+#### Базовое использование
+
+<CounterCubitBasicUsageSnippet />
+
+В приведенном выше фрагменте мы начинаем с создания экземпляра `CounterCubit`.
+Затем мы выводим текущее состояние cubit, которое является начальным состоянием
+(поскольку новые состояния еще не были выпущены). Далее мы вызываем функцию
+`increment` для запуска изменения состояния. Наконец, мы снова выводим состояние
+`Cubit`, которое изменилось с `0` на `1`, и вызываем `close` на `Cubit` для
+закрытия внутреннего потока состояний.
+
+#### Использование Stream
+
+`Cubit` предоставляет `Stream`, который позволяет нам получать обновления
+состояния в реальном времени:
+
+<CounterCubitStreamUsageSnippet />
+
+В приведенном выше фрагменте мы подписываемся на `CounterCubit` и вызываем print
+при каждом изменении состояния. Затем мы вызываем функцию `increment`, которая
+выдаст новое состояние. Наконец, мы вызываем `cancel` на `subscription`, когда
+больше не хотим получать обновления, и закрываем `Cubit`.
+
+:::note
+
+`await Future.delayed(Duration.zero)` добавлен для этого примера, чтобы избежать
+немедленной отмены подписки.
+
+:::
+
+:::caution
+
+Только последующие изменения состояния будут получены при вызове `listen` на
+`Cubit`.
+
+:::
+
+### Наблюдение за Cubit
+
+Когда `Cubit` выдает новое состояние, происходит `Change`. Мы можем наблюдать
+все изменения для данного `Cubit`, переопределив `onChange`.
+
+<CounterCubitOnChangeSnippet />
+
+Затем мы можем взаимодействовать с `Cubit` и наблюдать все изменения, выводимые
+в консоль.
+
+<CounterCubitOnChangeUsageSnippet />
+
+Приведенный выше пример выведет:
+
+<CounterCubitOnChangeOutputSnippet />
+
+:::note
+
+`Change` происходит непосредственно перед обновлением состояния `Cubit`.
+`Change` состоит из `currentState` и `nextState`.
+
+:::
+
+#### BlocObserver
+
+Одним из дополнительных преимуществ использования библиотеки bloc является то,
+что мы можем иметь доступ ко всем `Changes` в одном месте. Хотя в этом
+приложении у нас есть только один `Cubit`, в больших приложениях довольно часто
+встречается много `Cubits`, управляющих различными частями состояния приложения.
+
+Если мы хотим иметь возможность что-то делать в ответ на все `Changes`, мы можем
+просто создать собственный `BlocObserver`.
+
+<SimpleBlocObserverOnChangeSnippet />
+
+:::note
+
+Все, что нам нужно сделать, — это расширить `BlocObserver` и переопределить
+метод `onChange`.
+
+:::
+
+Чтобы использовать `SimpleBlocObserver`, нам просто нужно изменить функцию
+`main`:
+
+<SimpleBlocObserverOnChangeUsageSnippet />
+
+Приведенный выше фрагмент затем выведет:
+
+<SimpleBlocObserverOnChangeOutputSnippet />
+
+:::note
+
+Внутреннее переопределение `onChange` вызывается первым, которое вызывает
+`super.onChange`, уведомляя `onChange` в `BlocObserver`.
+
+:::
+
+:::tip
+
+В `BlocObserver` мы имеем доступ к экземпляру `Cubit` в дополнение к самому
+`Change`.
+
+:::
+
+### Обработка ошибок в Cubit
+
+Каждый `Cubit` имеет метод `addError`, который можно использовать для указания
+на то, что произошла ошибка.
+
+<CounterCubitOnErrorSnippet />
+
+:::note
+
+`onError` может быть переопределен внутри `Cubit` для обработки всех ошибок для
+конкретного `Cubit`.
+
+:::
+
+`onError` также может быть переопределен в `BlocObserver` для глобальной
+обработки всех сообщаемых ошибок.
+
+<SimpleBlocObserverOnErrorSnippet />
+
+Если мы снова запустим ту же программу, мы должны увидеть следующий вывод:
+
+<CounterCubitOnErrorOutputSnippet />
+
+## Bloc
+
+`Bloc` — это более продвинутый класс, который полагается на `события` для
+запуска изменений `состояния`, а не на функции. `Bloc` также расширяет
+`BlocBase`, что означает, что он имеет аналогичный публичный API, как `Cubit`.
+Однако вместо вызова `функции` на `Bloc` и прямого выпуска нового `состояния`,
+`Bloc`-и получают `события` и преобразуют входящие `события` в исходящие
+`состояния`.
+
+![Bloc Architecture](~/assets/concepts/bloc_architecture_full.png)
+
+### Создание Bloc
+
+Создание `Bloc` аналогично созданию `Cubit`, за исключением того, что в
+дополнение к определению состояния, которым мы будем управлять, мы также должны
+определить событие, которое `Bloc` сможет обрабатывать.
+
+События — это входные данные для Bloc. Они обычно добавляются в ответ на
+пользовательские взаимодействия, такие как нажатия кнопок, или события
+жизненного цикла, такие как загрузка страницы.
+
+<CounterBlocSnippet />
+
+Так же, как при создании `CounterCubit`, мы должны указать начальное состояние,
+передав его в суперкласс через `super`.
+
+### Изменения состояния Bloc
+
+`Bloc` требует, чтобы мы регистрировали обработчики событий через API
+`on<Event>`, в отличие от функций в `Cubit`. Обработчик событий отвечает за
+преобразование любых входящих событий в ноль или более исходящих состояний.
+
+<CounterBlocEventHandlerSnippet />
+
+:::tip
+
+`EventHandler` имеет доступ к добавленному событию, а также к `Emitter`, который
+может использоваться для выдачи нуля или более состояний в ответ на входящее
+событие.
+
+:::
+
+Затем мы можем обновить `EventHandler` для обработки события
+`CounterIncrementPressed`:
+
+<CounterBlocIncrementSnippet />
+
+В приведенном выше фрагменте мы зарегистрировали `EventHandler` для управления
+всеми событиями `CounterIncrementPressed`. Для каждого входящего события
+`CounterIncrementPressed` мы можем получить доступ к текущему состоянию bloc
+через геттер `state` и вызвать `emit(state + 1)`.
+
+:::note
+
+Поскольку класс `Bloc` расширяет `BlocBase`, мы имеем доступ к текущему
+состоянию bloc в любой момент времени через геттер `state`, так же как в
+`Cubit`.
+
+:::
+
+:::caution
+
+Bloc-и никогда не должны напрямую вызывать `emit` для новых состояний. Вместо
+этого каждое изменение состояния должно быть выведено в ответ на входящее
+событие внутри `EventHandler`.
+
+:::
+
+:::caution
+
+И bloc-и, и cubit-ы будут игнорировать дублирующиеся состояния. Если мы выдадим
+`State nextState`, где `state == nextState`, то изменение состояния не
+произойдет.
+
+:::
+
+### Использование Bloc
+
+На этом этапе мы можем создать экземпляр нашего `CounterBloc` и использовать
+его!
+
+#### Базовое использование
+
+<CounterBlocUsageSnippet />
+
+В приведенном выше фрагменте мы начинаем с создания экземпляра `CounterBloc`.
+Затем мы выводим текущее состояние `Bloc`, которое является начальным состоянием
+(поскольку новые состояния еще не были выпущены). Далее мы добавляем событие
+`CounterIncrementPressed` для запуска изменения состояния. Наконец, мы снова
+выводим состояние `Bloc`, которое изменилось с `0` на `1`, и вызываем `close` на
+`Bloc` для закрытия внутреннего потока состояний.
+
+:::note
+
+`await Future.delayed(Duration.zero)` добавлен, чтобы убедиться, что мы ждем
+следующей итерации цикла событий (позволяя `EventHandler` обработать событие).
+
+:::
+
+#### Использование Stream
+
+Так же, как с `Cubit`, `Bloc` — это специальный тип `Stream`, что означает, что
+мы также можем подписаться на `Bloc` для получения обновлений его состояния в
+реальном времени:
+
+<CounterBlocStreamUsageSnippet />
+
+В приведенном выше фрагменте мы подписываемся на `CounterBloc` и вызываем print
+при каждом изменении состояния. Затем мы добавляем событие
+`CounterIncrementPressed`, которое запускает `EventHandler`
+`on<CounterIncrementPressed>` и выдает новое состояние. Наконец, мы вызываем
+`cancel` на подписке, когда больше не хотим получать обновления, и закрываем
+`Bloc`.
+
+:::note
+
+`await Future.delayed(Duration.zero)` добавлен для этого примера, чтобы избежать
+немедленной отмены подписки.
+
+:::
+
+### Наблюдение за Bloc
+
+Поскольку `Bloc` расширяет `BlocBase`, мы можем наблюдать все изменения
+состояния для `Bloc` с помощью `onChange`.
+
+<CounterBlocOnChangeSnippet />
+
+Затем мы можем обновить `main.dart` до:
+
+<CounterBlocOnChangeUsageSnippet />
+
+Теперь, если мы запустим приведенный выше фрагмент, вывод будет:
+
+<CounterBlocOnChangeOutputSnippet />
+
+Одним из ключевых отличительных факторов между `Bloc` и `Cubit` является то, что
+поскольку `Bloc` управляется событиями, мы также можем захватить информацию о
+том, что вызвало изменение состояния.
+
+Мы можем сделать это, переопределив `onTransition`.
+
+Изменение от одного состояния к другому называется `Transition`. `Transition`
+состоит из текущего состояния, события и следующего состояния.
+
+<CounterBlocOnTransitionSnippet />
+
+Если мы затем повторно запустим тот же фрагмент `main.dart` как раньше, мы
+должны увидеть следующий вывод:
+
+<CounterBlocOnTransitionOutputSnippet />
+
+:::note
+
+`onTransition` вызывается перед `onChange` и содержит событие, которое вызвало
+изменение от `currentState` к `nextState`.
+
+:::
+
+#### BlocObserver
+
+Так же, как и раньше, мы можем переопределить `onTransition` в пользовательском
+`BlocObserver` для наблюдения за всеми переходами, которые происходят из одного
+места.
+
+<SimpleBlocObserverOnTransitionSnippet />
+
+Мы можем инициализировать `SimpleBlocObserver` так же, как и раньше:
+
+<SimpleBlocObserverOnTransitionUsageSnippet />
+
+Теперь, если мы запустим приведенный выше фрагмент, вывод должен выглядеть так:
+
+<SimpleBlocObserverOnTransitionOutputSnippet />
+
+:::note
+
+`onTransition` вызывается первым (локальный перед глобальным), за которым
+следует `onChange`.
+
+:::
+
+Еще одной уникальной особенностью экземпляров `Bloc` является то, что они
+позволяют нам переопределить `onEvent`, который вызывается всякий раз, когда
+новое событие добавляется в `Bloc`. Так же, как с `onChange` и `onTransition`,
+`onEvent` может быть переопределен локально, а также глобально.
+
+<CounterBlocOnEventSnippet />
+
+<SimpleBlocObserverOnEventSnippet />
+
+Мы можем запустить тот же `main.dart`, как и раньше, и должны увидеть следующий
+вывод:
+
+<SimpleBlocObserverOnEventOutputSnippet />
+
+:::note
+
+`onEvent` вызывается, как только событие добавлено. Локальный `onEvent`
+вызывается перед глобальным `onEvent` в `BlocObserver`.
+
+:::
+
+### Обработка ошибок в Bloc
+
+Так же, как с `Cubit`, каждый `Bloc` имеет методы `addError` и `onError`. Мы
+можем указать, что произошла ошибка, вызвав `addError` из любого места внутри
+нашего `Bloc`. Затем мы можем реагировать на все ошибки, переопределив
+`onError`, так же как с `Cubit`.
+
+<CounterBlocOnErrorSnippet />
+
+Если мы повторно запустим тот же `main.dart`, как раньше, мы можем увидеть, как
+это выглядит, когда об ошибке сообщается:
+
+<CounterBlocOnErrorOutputSnippet />
+
+:::note
+
+Локальный `onError` вызывается первым, за которым следует глобальный `onError` в
+`BlocObserver`.
+
+:::
+
+:::note
+
+`onError` и `onChange` работают точно так же для экземпляров как `Bloc`, так и
+`Cubit`.
+
+:::
+
+:::caution
+
+Любые необработанные исключения, которые возникают внутри `EventHandler`, также
+сообщаются в `onError`.
+
+:::
+
+## Cubit против Bloc
+
+Теперь, когда мы рассмотрели основы классов `Cubit` и `Bloc`, вам может быть
+интересно, когда следует использовать `Cubit`, а когда — `Bloc`.
+
+### Преимущества Cubit
+
+#### Простота
+
+Одним из самых больших преимуществ использования `Cubit` является простота. При
+создании `Cubit` нам нужно определить только состояние, а также функции, которые
+мы хотим предоставить для изменения состояния. Для сравнения, при создании
+`Bloc` мы должны определить состояния, события и реализацию `EventHandler`. Это
+делает `Cubit` более понятным и требует меньше кода.
+
+Теперь давайте рассмотрим две реализации счетчика:
+
+##### CounterCubit
+
+<CounterCubitFullSnippet />
+
+##### CounterBloc
+
+<CounterBlocFullSnippet />
+
+Реализация `Cubit` более лаконична, и вместо отдельного определения событий
+функции действуют как события. Кроме того, при использовании `Cubit` мы можем
+просто вызвать `emit` из любого места, чтобы вызвать изменение состояния.
+
+### Преимущества Bloc
+
+#### Отслеживаемость
+
+Одним из самых больших преимуществ использования `Bloc` является знание
+последовательности изменений состояния, а также того, что именно вызвало эти
+изменения. Для состояния, которое критически важно для функциональности
+приложения, может быть очень полезно использовать более управляемый событиями
+подход, чтобы захватить все события в дополнение к изменениям состояния.
+
+Распространенным случаем использования может быть управление
+`AuthenticationState`. Для простоты предположим, что мы можем представить
+`AuthenticationState` через `enum`:
+
+<AuthenticationStateSnippet />
+
+Может быть много причин, по которым состояние приложения могло измениться с
+`authenticated` на `unauthenticated`. Например, пользователь мог нажать кнопку
+выхода и запросить выход из приложения. С другой стороны, возможно, токен
+доступа пользователя был отозван, и он был принудительно разлогинен. При
+использовании `Bloc` мы можем четко отследить, как состояние приложения попало в
+определенное состояние.
+
+<AuthenticationTransitionSnippet />
+
+Приведенный выше `Transition` дает нам всю информацию, необходимую для понимания
+того, почему изменилось состояние. Если бы мы использовали `Cubit` для
+управления `AuthenticationState`, наши логи выглядели бы так:
+
+<AuthenticationChangeSnippet />
+
+Это говорит нам, что пользователь был разлогинен, но не объясняет почему, что
+может быть критически важно для отладки и понимания того, как состояние
+приложения меняется со временем.
+
+#### Расширенные преобразования событий
+
+Еще одна область, в которой `Bloc` превосходит `Cubit`, — это когда нам нужно
+воспользоваться реактивными операторами, такими как `buffer`, `debounceTime`,
+`throttle` и т.д.
+
+:::tip
+
+См. [`package:stream_transform`](https://pub.dev/packages/stream_transform) и
+[`package:rxdart`](https://pub.dev/packages/rxdart) для преобразователей
+потоков.
+
+:::
+
+`Bloc` имеет приемник событий, который позволяет нам контролировать и
+преобразовывать входящий поток событий.
+
+Например, если бы мы создавали поиск в реальном времени, мы, вероятно, хотели бы
+отложить запросы к бэкенду, чтобы избежать ограничения скорости, а также
+сократить затраты/нагрузку на бэкенд.
+
+С `Bloc` мы можем предоставить пользовательский `EventTransformer` для изменения
+способа обработки входящих событий `Bloc`.
+
+<DebounceEventTransformerSnippet />
+
+С приведенным выше кодом мы можем легко задержать входящие события с очень
+небольшим количеством дополнительного кода.
+
+:::tip
+
+Ознакомьтесь с
+[`package:bloc_concurrency`](https://pub.dev/packages/bloc_concurrency) для
+набора преобразователей событий с определенным мнением.
+
+:::
+
+Если вы не уверены, что использовать, начните с `Cubit`, и вы сможете позже
+отрефакторить или масштабироваться до `Bloc` по мере необходимости.
