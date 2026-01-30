@@ -1,0 +1,45 @@
+---
+title: Evitare Metodi Pubblici Bloc
+description: La regola avoid_public_bloc_methods.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/avoid_public_bloc_methods/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/avoid_public_bloc_methods/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+	<Badge text="recommended" variant="success" />
+</div>
+
+Evita di esporre metodi pubblici su istanze `Bloc`.
+
+## Motivazione
+
+I bloc reagiscono a eventi in arrivo ed emettono stati in uscita. Di conseguenza, il
+modo raccomandato di comunicare con un'istanza di bloc è tramite il metodo `add`.
+Nella maggior parte dei casi, non c'è bisogno di creare astrazioni aggiuntive sopra l'API
+`add`.
+
+![Bloc Architecture](~/assets/concepts/bloc_architecture_full.png)
+
+## Esempi
+
+**NON** esporre metodi pubblici su istanze bloc.
+
+**Errato**:
+
+<BadSnippet />
+
+**Buono**:
+
+<GoodSnippet />
+
+## Abilita
+
+Per abilitare la regola `avoid_public_bloc_methods`, aggiungila al tuo
+`analysis_options.yaml` sotto `bloc` > `rules`:
+
+<EnableRuleSnippet name="avoid_public_bloc_methods" />

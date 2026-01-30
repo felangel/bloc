@@ -1,0 +1,59 @@
+---
+title: Installazione del Linter
+description: Installare il linter bloc.
+sidebar:
+  order: 2
+---
+
+import { CardGrid } from '@astrojs/starlight/components';
+import Card from '~/components/landing/Card.astro';
+import InstallBlocToolsSnippet from '~/components/lint/InstallBlocToolsSnippet.astro';
+import BlocToolsLintHelpOutputSnippet from '~/components/lint/BlocToolsLintHelpOutputSnippet.astro';
+import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.astro';
+import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
+import BlocLintMultipleRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintMultipleRecommendedAnalysisOptionsSnippet.astro';
+
+## Strumenti da Linea di Comando
+
+Per usare il linter dalla linea di comando, installa
+[`package:bloc_tools`](https://pub.dev/packages/bloc_tools) tramite il seguente
+comando:
+
+<InstallBlocToolsSnippet />
+
+Una volta che gli strumenti da linea di comando bloc sono stati installati, puoi eseguire il linter bloc
+tramite il comando `bloc lint`:
+
+<BlocToolsLintHelpOutputSnippet />
+
+## Set di Regole Raccomandato
+
+Per installare il set di regole di lint raccomandato, installa
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint) come dipendenza di sviluppo
+tramite il seguente comando:
+
+<InstallBlocLintSnippet />
+
+Poi, aggiungi un `analysis_options.yaml` alla radice del tuo progetto con il
+set di regole raccomandato:
+
+<BlocLintRecommendedAnalysisOptionsSnippet />
+
+Se necessario, puoi includere più set di regole definendoli come una lista:
+
+<BlocLintMultipleRecommendedAnalysisOptionsSnippet />
+
+## Integrazioni IDE
+
+I seguenti IDE supportano ufficialmente il linter e il language server di bloc, fornendo diagnostica in tempo reale direttamente all'interno dell'ambiente di sviluppo.
+
+<CardGrid>
+	<Card title="VSCode" icon="vscode">
+		Il supporto per l'[Estensione Bloc VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+		è disponibile nella v6.8.0.
+	</Card>
+	<Card title="IntelliJ" icon="jetbrains">
+		Il supporto per il [Plugin Bloc IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc) è disponibile nella
+		v4.1.0.
+	</Card>
+</CardGrid>

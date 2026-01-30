@@ -1,0 +1,42 @@
+---
+title: Evitare Campi Pubblici
+description: La regola avoid_public_fields.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/avoid_public_fields/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/avoid_public_fields/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+	<Badge text="recommended" variant="success" />
+</div>
+
+Evita di esporre campi pubblici su istanze `Bloc` e `Cubit`.
+
+## Motivazione
+
+I componenti di logica applicativa mantengono il proprio `state` ed emettono cambiamenti di stato tramite
+l'API `emit`. Di conseguenza, tutto lo stato pubblico dovrebbe essere esposto tramite l'oggetto
+`state`.
+
+## Esempi
+
+**NON** esporre campi pubblici su istanze bloc e cubit.
+
+**Errato**:
+
+<BadSnippet />
+
+**Buono**:
+
+<GoodSnippet />
+
+## Abilita
+
+Per abilitare la regola `avoid_public_fields`, aggiungila al tuo `analysis_options.yaml`
+sotto `bloc` > `rules`:
+
+<EnableRuleSnippet name="avoid_public_fields" />

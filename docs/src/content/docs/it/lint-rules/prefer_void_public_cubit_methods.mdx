@@ -1,0 +1,59 @@
+---
+title: Preferire Metodi Pubblici Void Cubit
+description: La regola prefer_void_public_cubit_methods.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/prefer_void_public_cubit_methods/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/prefer_void_public_cubit_methods/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+	<Badge text="recommended" variant="success" />
+</div>
+
+Preferisci metodi pubblici void su istanze `Cubit`.
+
+:::note
+
+Questa regola di lint è stata introdotta nella versione `0.2.0-dev.2` di
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint)
+
+:::
+
+## Motivazione
+
+I metodi pubblici su istanze `Cubit` dovrebbero essere usati per notificare il `Cubit` e
+iniziare cambiamenti di stato tramite il metodo `emit`. Se il chiamante ha bisogno di accedere a qualsiasi
+informazione di stato, dovrebbero accedervi trammite `state`.
+
+:::note
+
+Le seguenti regole sono correlate e sono solitamente abilitate in combinazione con
+`prefer_void_public_cubit_methods`.
+
+- [`avoid_public_bloc_methods`](/it/lint-rules/avoid_public_bloc_methods);
+- [`avoid_public_fields`](/it/lint-rules/avoid_public_fields).
+
+:::
+
+## Esempi
+
+**Evita** metodi pubblici non-void su istanze `Cubit`.
+
+**Errato**:
+
+<BadSnippet />
+
+**Buono**:
+
+<GoodSnippet />
+
+## Abilita
+
+Per abilitare la regola `prefer_void_public_cubit_methods`, aggiungila al tuo
+`analysis_options.yaml` sotto `bloc` > `rules`:
+
+<EnableRuleSnippet name="prefer_void_public_cubit_methods" />

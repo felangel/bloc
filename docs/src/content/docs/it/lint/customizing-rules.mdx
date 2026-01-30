@@ -1,0 +1,155 @@
+---
+title: Personalizzare le Regole di Lint
+description: Personalizzare le regole di lint bloc
+sidebar:
+  order: 4
+---
+
+import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.astro';
+import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
+import BlocLintEnablingRulesSnippet from '~/components/lint/BlocLintEnablingRulesSnippet.astro';
+import BlocLintDisablingRulesSnippet from '~/components/lint/BlocLintDisablingRulesSnippet.astro';
+import BlocLintChangingSeveritySnippet from '~/components/lint/BlocLintChangingSeveritySnippet.astro';
+import ImportFlutterInfoSnippet from '~/components/lint/ImportFlutterInfoSnippet.mdx';
+import ImportFlutterInfoOutputSnippet from '~/components/lint/ImportFlutterInfoOutputSnippet.astro';
+import BlocLintExcludingFilesSnippet from '~/components/lint/BlocLintExcludingFilesSnippet.astro';
+import BlocLintIgnoreForLineSnippet from '~/components/lint/BlocLintIgnoreForLineSnippet.astro';
+import BlocLintIgnoreForFileSnippet from '~/components/lint/BlocLintIgnoreForFileSnippet.astro';
+
+Puoi personalizzare il comportamento del linter bloc cambiando la gravità di
+regole individualmente, abilitando o disabilitando regole individualmente, ed escludendo file
+dall'analisi statica.
+
+## Abilitare e Disabilitare Regole
+
+Il linter bloc supporta una lista crescente di regole di lint. Nota che le regole di lint
+non devono necessariamente essere compatibili tra loro. Ad esempio, alcuni sviluppatori potrebbero preferire
+usare bloc (`prefer_bloc`) mentre altri potrebbero preferire usare cubit
+(`prefer_cubit`).
+
+:::note
+
+A differenza dell'analisi statica, le regole di lint potrebbero contenere falsi positivi. Sentiti libero di
+segnalare eventuali falsi positivi o altri problemi
+[aprendo una "issue"](https://github.com/felangel/bloc/issues/new/choose).
+
+:::
+
+### Abilitare Regole Raccomandate
+
+La libreria bloc fornisce un set di regole di lint raccomandate come parte del
+pacchetto [`bloc_lint`](https://pub.dev/packages/bloc_lint).
+
+Per abilitare il set raccomandato di lint aggiungi il pacchetto `bloc_lint` come dipendenza di sviluppo:
+
+<InstallBlocLintSnippet />
+
+Poi modifica il tuo `analysis_options.yaml` per includere il set di regole:
+
+<BlocLintRecommendedAnalysisOptionsSnippet />
+
+:::note
+
+Quando viene pubblicata una nuova versione di `bloc_lint`, il codice che precedentemente passava
+l'analisi statica potrebbe fallire. Raccomandiamo di aggiornare il tuo codice per adeguarsi
+alle nuove regole, oppure puoi anche opzionalmente abilitare o disabilitare le regole individualmente.
+
+:::
+
+### Abilitare Regole Individualmente
+
+Per abilitare regole individualmente, aggiungi `bloc:` al file `analysis_options.yaml` come
+chiave di primo livello e `rules:` come chiave di secondo livello. Nelle righe successive, specifica
+le regole che vuoi come una lista YAML (prefissate con trattini).
+
+Ad esempio:
+
+<BlocLintEnablingRulesSnippet />
+
+### Disabilitare Regole Individualmente
+
+Se includi un set di regole esistente come il set `recommended`, potresti voler
+disabilitarne una o più di queste individualmente. Disabilitare regole è simile a
+abilitarle, ma richiede l'uso di una mappa YAML piuttosto che una lista.
+
+Ad esempio, il seguente include il set raccomandato di regole di lint eccetto
+`avoid_public_bloc_methods` e inoltre abilita la regola `prefer_bloc`:
+
+<BlocLintDisablingRulesSnippet />
+
+## Personalizzare la Gravità delle Regole
+
+Puoi regolare la gravità di qualsiasi regola così:
+
+<BlocLintChangingSeveritySnippet />
+
+Ora la stessa regola di lint sarà segnalata con una gravità di `info` invece che di
+`warning`:
+
+<ImportFlutterInfoSnippet />
+
+L'output del comando `bloc lint` dovrebbe essere:
+
+<ImportFlutterInfoOutputSnippet />
+
+Le opzioni di gravità supportate sono:
+
+| Gravità  | Descrizione                                        |
+| --------- | -------------------------------------------------- |
+| `error`   | Indica che il pattern non è permesso.              |
+| `warning` | Indica che il pattern è sospetto ma permesso.   |
+| `info`    | Fornisce informazioni agli utenti ma non è un problema |
+| `hint`    | Propone un modo migliore di ottenere un risultato.       |
+
+## Escludere File
+
+A volte va bene che l'analisi statica fallisca. Ad esempio, potresti voler
+ignorare avvisi o errori segnalati nel codice generato che non è stato scritto da te
+e dal tuo team. Proprio come con le regole di lint ufficiali di Dart, puoi usare l'opzione
+`exclude:` dell'analyzer per escludere file dall'analisi statica.
+
+Puoi elencare file individuali o usare
+pattern [`glob`](https://pub.dev/packages/glob).
+
+:::note
+
+Tutti gli usi di pattern glob dovrebbero essere relativi alla directory contenente il
+file `analysis_options.yaml` corrispondente.
+
+:::
+
+Ad esempio, possiamo escludere tutto il codice Dart generato tramite le seguenti opzioni di analisi:
+
+<BlocLintExcludingFilesSnippet />
+
+## Ignorare Regole
+
+Proprio come con le regole di lint ufficiali di Dart, puoi ignorare le regole di lint bloc per un
+dato file o riga di codice usando `// ignore_for_file` e `// ignore`
+rispettivamente.
+
+:::note
+
+Per ignorare più regole per una data riga o file, fornisci una lista separata da virgole.
+
+:::
+
+### Ignorare Righe
+
+Possiamo ignorare occorrenze specifiche di violazioni di regole aggiungendo un commento `ignore`
+sia direttamente sopra la riga incriminata che aggiungendolo alla fine della riga.
+
+Ad esempio, possiamo ignorare occorrenze specifiche di
+`prefer_file_naming_conventions` in un dato file:
+
+<BlocLintIgnoreForLineSnippet />
+
+### Ignorare File
+
+Possiamo ignorare tutte le occorrenze di violazioni di regole all'interno di un file aggiungendo un
+commento `ignore_for_file` ovunque nel file.
+
+Ad esempio, possiamo ignorare tutte le occorrenze di `prefer_file_naming_conventions`
+in un dato file:
+
+<BlocLintIgnoreForFileSnippet />
