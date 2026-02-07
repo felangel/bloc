@@ -1,0 +1,86 @@
+---
+template: splash
+title: Bloc State Management Library
+description:
+  Официальная документация библиотеки управления состоянием bloc. Поддержка
+  Dart, Flutter и AngularDart. Включает примеры и руководства.
+banner:
+  content: |
+    ✨ Посетите
+    <a href="https://shop.bloclibrary.dev">Магазин Bloc</a> ✨
+editUrl: false
+lastUpdated: false
+hero:
+  title: Bloc <sup><span style="font-size:0.4em">v9.2.0</span></sup>
+  tagline: Предсказуемая библиотека управления состоянием для Dart.
+  image:
+    alt: Логотип Bloc
+    file: ~/assets/bloc.svg
+  actions:
+    - text: Начать
+      link: /ru/getting-started/
+      variant: primary
+      icon: rocket
+    - text: Посмотреть на GitHub
+      link: https://github.com/felangel/bloc
+      icon: github
+      variant: secondary
+---
+
+import { CardGrid } from '@astrojs/starlight/components';
+import SponsorsGrid from '~/components/landing/SponsorsGrid.astro';
+import Card from '~/components/landing/Card.astro';
+import ListCard from '~/components/landing/ListCard.astro';
+import SplitCard from '~/components/landing/SplitCard.astro';
+import Discord from '~/components/landing/Discord.astro';
+
+<SponsorsGrid />
+
+<hr />
+
+<CardGrid>
+
+<SplitCard title="Начать" icon="rocket">
+	```sh
+	# Добавьте bloc в ваш проект.
+	dart pub add bloc
+	```
+
+Наше [руководство по началу работы](/ru/getting-started) содержит пошаговые
+инструкции о том, как начать использовать Bloc всего за несколько минут.
+
+</SplitCard>
+
+<Card title="Пройдите экскурсию" icon="star">
+	Пройдите [официальные руководства](/ru/tutorials/flutter-counter), чтобы
+	изучить лучшие практики и создать различные приложения на основе Bloc.
+</Card>
+
+<Card title="Создавайте с Bloc" icon="laptop">
+	Изучайте высококачественные, полностью протестированные [примеры
+	приложений](https://github.com/felangel/bloc/tree/master/examples), такие как
+	счётчик, таймер, бесконечный список, погода, задачи и многое другое!
+</Card>
+
+<ListCard title="Обучение" icon="open-book">
+
+    - [Почему Bloc?](/ru/why-bloc)
+    - [Основные концепции](/ru/bloc-concepts)
+    - [Архитектура](/ru/architecture)
+    - [Тестирование](/ru/testing)
+    - [Соглашения об именовании](/ru/naming-conventions)
+    - [Часто задаваемые вопросы](/ru/faqs)
+
+</ListCard>
+
+  <ListCard title="Интеграции" icon="puzzle">
+    - [Интеграция с VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+    - [Интеграция с IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc)
+    - [Интеграция с Neovim](https://github.com/wa11breaker/flutter-bloc.nvim)
+    - [Интеграция с Mason CLI](https://github.com/felangel/bloc/blob/master/bricks/README.md)
+    - [Пользовательские шаблоны](https://brickhub.dev/search?q=bloc)
+    - [Инструменты разработчика](https://github.com/felangel/bloc/blob/master/packages/bloc_tools/README.md)
+  </ListCard>
+</CardGrid>
+
+<Discord />
