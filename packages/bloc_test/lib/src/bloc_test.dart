@@ -280,7 +280,9 @@ class _TestBlocObserver extends BlocObserver {
 
   @override
   void onTransition(
-      Bloc<dynamic, dynamic> bloc, Transition<dynamic, dynamic> transition) {
+    Bloc<dynamic, dynamic> bloc,
+    Transition<dynamic, dynamic> transition,
+  ) {
     _localObserver.onTransition(bloc, transition);
     super.onTransition(bloc, transition);
   }
