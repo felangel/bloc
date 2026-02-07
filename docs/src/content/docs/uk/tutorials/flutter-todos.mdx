@@ -27,8 +27,8 @@ import EditTodosPageTreeSnippet from '~/components/tutorials/flutter-todos/EditT
 
 ## Ключові теми
 
-- [Bloc та Cubit](/uk/bloc-concepts#cubit-vs-bloc) для керування різними станами
-  функціональних модулів.
+- [Bloc та Cubit](/uk/bloc-concepts#cubit-проти-bloc) для керування різними
+  станами функціональних модулів.
 - [Шарувата архітектура](/uk/architecture) для розділення відповідальності та
   сприяння повторному використанню.
 - [BlocObserver](/uk/bloc-concepts#blocobserver) для спостереження за змінами
@@ -41,7 +41,7 @@ import EditTodosPageTreeSnippet from '~/components/tutorials/flutter-todos/EditT
   виконує побічні ефекти у відповідь на зміни стану.
 - [RepositoryProvider](/uk/flutter-bloc-concepts#repositoryprovider), віджет
   Flutter для надання сховища дочірнім елементам.
-- [Equatable](/uk/faqs#when-to-use-equatable) для запобігання зайвим
+- [Equatable](/uk/faqs#коли-використовувати-equatable) для запобігання зайвим
   перебудовам.
 - [MultiBlocListener](/uk/flutter-bloc-concepts#multibloclistener), віджет
   Flutter, який зменшує вкладеність при використанні кількох BlocListeners.
@@ -266,12 +266,11 @@ import EditTodosPageTreeSnippet from '~/components/tutorials/flutter-todos/EditT
 
 ## Шар сховища
 
-[Сховище](/uk/architecture#repository) є частиною бізнес-шару. Сховище залежить
-від одного або кількох постачальників даних, що не мають бізнес-цінності, та
-поєднує їхні публічні API у API, що надають бізнес-цінність. Крім того,
-наявність шару сховища допомагає абстрагувати отримання даних від решти додатку,
-дозволяючи нам змінювати місце/спосіб зберігання даних без впливу на інші
-частини додатку.
+[Сховище](/uk/architecture#сховище) є частиною бізнес-шару. Сховище залежить від
+одного або кількох постачальників даних, що не мають бізнес-цінності, та поєднує
+їхні публічні API у API, що надають бізнес-цінність. Крім того, наявність шару
+сховища допомагає абстрагувати отримання даних від решти додатку, дозволяючи нам
+змінювати місце/спосіб зберігання даних без впливу на інші частини додатку.
 
 ### TodosRepository
 
