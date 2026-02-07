@@ -1,0 +1,59 @@
+---
+title: Configurazione del Linter
+description: Configurare il linter bloc.
+sidebar:
+  order: 3
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import BlocLintBasicAnalysisOptionsSnippet from '~/components/lint/BlocLintBasicAnalysisOptionsSnippet.astro';
+import RunBlocLintInCurrentDirectorySnippet from '~/components/lint/RunBlocLintInCurrentDirectorySnippet.astro';
+import RunBlocLintInSrcTestSnippet from '~/components/lint/RunBlocLintInSrcTestSnippet.astro';
+import AvoidFlutterImportsWarningSnippet from '~/components/lint/ImportFlutterWarningSnippet.mdx';
+import RunBlocLintCounterCubitSnippet from '~/components/lint/RunBlocLintCounterCubitSnippet.astro';
+import AvoidFlutterImportsWarningOutputSnippet from '~/components/lint/ImportFlutterWarningOutputSnippet.astro';
+
+Di default, il linter di bloc non segnalerà alcun avviso finché non avrai
+configurato esplicitamente le opzioni di analisi del progetto.
+
+Per iniziare, crea o modifica l'`analysis_options.yaml` esistente alla radice
+del tuo progetto per includere una lista di regole sotto la chiave bloc di primo
+livello:
+
+<BlocLintBasicAnalysisOptionsSnippet />
+
+Esegui il linter usando il seguente comando nel tuo terminale:
+
+<RunBlocLintInCurrentDirectorySnippet />
+
+Il comando sopra analizzerà tutti i file nella directory corrente e nelle sue
+sottodirectory, ma puoi anche fare il "lint" di file e directory specifici
+passandoli come argomenti da linea di comando:
+
+<RunBlocLintInSrcTestSnippet />
+
+Il comando sopra analizzerà tutto il codice nelle directory `src` e `test`.
+
+Se la regola `avoid_flutter_imports` è abilitata, qualsiasi file bloc o cubit
+che contiene un import flutter sarà segnalato come avviso:
+
+<AvoidFlutterImportsWarningSnippet />
+
+Puoi vedere l'avviso eseguendo il comando `bloc lint`:
+
+<RunBlocLintCounterCubitSnippet />
+
+L'output dovrebbe essere:
+
+<AvoidFlutterImportsWarningOutputSnippet />
+
+:::note
+
+Ecco tutte le regole di lint supportate:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/packages/bloc_lint/lib/all.yaml"
+	title="package:bloc_lint/all.yaml"
+/>
+
+:::

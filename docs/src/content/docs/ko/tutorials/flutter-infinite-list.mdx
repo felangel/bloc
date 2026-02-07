@@ -1,0 +1,372 @@
+---
+title: Flutter Infinite List
+description: Bloc을 사용한 Flutter 무한 스크롤 리스트 만들기 튜토리얼입니다.
+sidebar:
+  order: 3
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import FlutterCreateSnippet from '~/components/tutorials/flutter-infinite-list/FlutterCreateSnippet.astro';
+import FlutterPubGetSnippet from '~/components/tutorials/flutter-infinite-list/FlutterPubGetSnippet.astro';
+import PostsJsonSnippet from '~/components/tutorials/flutter-infinite-list/PostsJsonSnippet.astro';
+import PostBlocInitialStateSnippet from '~/components/tutorials/flutter-infinite-list/PostBlocInitialStateSnippet.astro';
+import PostBlocOnPostFetchedSnippet from '~/components/tutorials/flutter-infinite-list/PostBlocOnPostFetchedSnippet.astro';
+import PostBlocTransformerSnippet from '~/components/tutorials/flutter-infinite-list/PostBlocTransformerSnippet.astro';
+
+![intermediate](https://img.shields.io/badge/level-intermediate-orange.svg)
+
+이 튜토리얼에서는 Flutter와 bloc 라이브러리를 사용해서 사용자가 스크롤할 때
+네트워크에서 데이터를 가져와 로드하는 앱을 만들어 봅니다.
+
+![demo](~/assets/tutorials/flutter-infinite-list.gif)
+
+## 핵심 주제
+
+- [BlocObserver](/ko/bloc-concepts#blocobserver)로 상태 변화 관찰하기.
+- [BlocProvider](/ko/flutter-bloc-concepts#blocprovider)로 하위 위젯에 bloc
+  제공하기.
+- [BlocBuilder](/ko/flutter-bloc-concepts#blocbuilder)로 상태 변화에 따라 위젯
+  다시 그리기.
+- [context.read](/ko/flutter-bloc-concepts#contextread)로 이벤트 추가하기.
+- [Equatable](/ko/faqs#언제-equatable를-사용해야-하나요)로 불필요한 rebuild
+  방지하기.
+- Rx로 `transformEvents` 메서드 사용하기.
+
+## 프로젝트 설정
+
+새로운 Flutter 프로젝트를 생성합니다.
+
+<FlutterCreateSnippet />
+
+pubspec.yaml 파일을 아래 내용으로 교체합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+의존성을 설치합니다.
+
+<FlutterPubGetSnippet />
+
+## 프로젝트 구조
+
+```
+├── lib
+|   ├── posts
+│   │   ├── bloc
+│   │   │   └── post_bloc.dart
+|   |   |   └── post_event.dart
+|   |   |   └── post_state.dart
+|   |   └── models
+|   |   |   └── models.dart*
+|   |   |   └── post.dart
+│   │   └── view
+│   │   |   ├── posts_page.dart
+│   │   |   └── posts_list.dart
+|   |   |   └── view.dart*
+|   |   └── widgets
+|   |   |   └── bottom_loader.dart
+|   |   |   └── post_list_item.dart
+|   |   |   └── widgets.dart*
+│   │   ├── posts.dart*
+│   ├── app.dart
+│   ├── simple_bloc_observer.dart
+│   └── main.dart
+├── pubspec.lock
+├── pubspec.yaml
+```
+
+이 프로젝트는 기능 기반 디렉토리 구조를 사용합니다. 이런 구조를 사용하면 각
+기능이 독립적으로 구성되어 프로젝트 확장이 쉬워집니다. 이 예제에서는 post 기능
+하나만 있고, 별표(\*)로 표시된 barrel 파일과 함께 각각의 폴더로 나뉘어 있습니다.
+
+## REST API
+
+이 데모 앱에서는 데이터 소스로
+[jsonplaceholder](http://jsonplaceholder.typicode.com)를 사용합니다.
+
+:::note
+
+jsonplaceholder는 가짜 데이터를 제공하는 온라인 REST API입니다. 프로토타입을
+만들 때 매우 유용합니다.
+
+:::
+
+브라우저에서 새 탭을 열고
+https://jsonplaceholder.typicode.com/posts?_start=0&_limit=2 에 접속해서 API가
+뭘 반환하는지 확인해 보세요.
+
+<PostsJsonSnippet />
+
+:::note
+
+URL에서 start와 limit를 GET 요청의 쿼리 파라미터로 지정했습니다.
+
+:::
+
+이제 데이터가 어떻게 생겼는지 알았으니 모델을 만들어 봅니다.
+
+## 데이터 모델
+
+`post.dart`를 생성하고 Post 객체 모델을 만듭니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/models/post.dart"
+	title="lib/posts/models/post.dart"
+/>
+
+`Post`는 `id`, `title`, `body`를 가진 간단한 클래스입니다.
+
+:::note
+
+`Post`를 비교할 수 있도록 [`Equatable`](https://pub.dev/packages/equatable)을
+상속합니다. 이게 없으면 두 `Post` 객체의 차이를 알 수 있도록 equality와
+hashCode를 직접 override해야 합니다. 자세한 내용은
+[패키지 문서](https://pub.dev/packages/equatable)를 참고하세요.
+
+:::
+
+이제 `Post` 객체 모델이 있으니 비즈니스 로직 컴포넌트(bloc)를 만들어 봅니다.
+
+## Post Events
+
+구현에 들어가기 전에 `PostBloc`이 뭘 할 건지 정의해야 합니다.
+
+간단히 말하면 사용자 입력(스크롤)에 반응해서 프레젠테이션 레이어가 표시할 수
+있도록 더 많은 post를 가져옵니다. `Event`부터 만들어 봅니다.
+
+`PostBloc`은 하나의 이벤트에만 반응합니다. `PostFetched`는 프레젠테이션 레이어가
+더 많은 Post를 표시해야 할 때마다 추가됩니다. `PostFetched` 이벤트는
+`PostEvent`의 한 종류이므로 `bloc/post_event.dart`를 생성하고 이벤트를
+구현합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/bloc/post_event.dart"
+	title="lib/posts/bloc/post_event.dart"
+/>
+
+정리하면 `PostBloc`은 `PostEvent`를 받아서 `PostState`로 변환합니다. 모든
+`PostEvent`(PostFetched)를 정의했으니 이제 `PostState`를 정의합니다.
+
+## Post States
+
+프레젠테이션 레이어가 제대로 렌더링하려면 다음 정보가 필요합니다:
+
+- `PostInitial`: 초기 배치의 post가 로드되는 동안 로딩 인디케이터를 렌더링해야
+  함을 알립니다.
+- `PostSuccess`: 렌더링할 콘텐츠가 있음을 알립니다.
+  - `posts`: 표시할 `List<Post>`
+  - `hasReachedMax`: 최대 post 수에 도달했는지 여부
+- `PostFailure`: post를 가져오는 중 에러가 발생했음을 알립니다.
+
+이제 `bloc/post_state.dart`를 생성하고 구현합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/bloc/post_state.dart"
+	title="lib/posts/bloc/post_state.dart"
+/>
+
+:::note
+
+`PostSuccess` 인스턴스를 복사하고 0개 이상의 속성을 편리하게 업데이트할 수
+있도록 `copyWith`를 구현했습니다(나중에 유용하게 쓰입니다).
+
+:::
+
+이제 `Event`와 `State`가 구현됐으니 `PostBloc`을 만들 수 있습니다.
+
+## Post Bloc
+
+단순함을 위해 `PostBloc`은 `http client`에 직접 의존합니다. 하지만 프로덕션
+앱에서는 api client를 주입하고 repository 패턴([문서](/ko/architecture))을
+사용하는 것을 권장합니다.
+
+`post_bloc.dart`를 생성하고 빈 `PostBloc`을 만듭니다.
+
+<PostBlocInitialStateSnippet />
+
+:::note
+
+클래스 선언만 봐도 PostBloc이 PostEvent를 입력으로 받아서 PostState를 출력한다는
+걸 알 수 있습니다.
+
+:::
+
+다음으로 들어오는 `PostFetched` 이벤트를 처리할 이벤트 핸들러를 등록해야 합니다.
+`PostFetched` 이벤트에 대한 응답으로 API에서 post를 가져오는 `_fetchPosts`를
+호출합니다.
+
+<PostBlocOnPostFetchedSnippet />
+
+`PostBloc`은 이벤트 핸들러에 제공된 `Emitter<PostState>`를 통해 새로운 상태를
+`emit`합니다. 자세한 내용은 [핵심 개념](/ko/bloc-concepts#streams)을 참고하세요.
+
+이제 `PostEvent`가 추가될 때마다 `PostFetched` 이벤트이고 가져올 post가 더
+있으면 `PostBloc`이 다음 20개의 post를 가져옵니다.
+
+최대 post 수(100)를 초과해서 가져오려고 하면 API가 빈 배열을 반환합니다. 빈
+배열을 받으면 bloc은 `hasReachedMax`를 true로 설정한 currentState를
+`emit`합니다.
+
+post를 가져올 수 없으면 `PostStatus.failure`를 emit합니다.
+
+post를 가져올 수 있으면 `PostStatus.success`와 전체 post 목록을 emit합니다.
+
+API에 불필요하게 스팸을 보내는 것을 방지하기 위해 `PostFetched` 이벤트를
+`throttle`하는 최적화를 할 수 있습니다. `_onFetched` 이벤트 핸들러를 등록할 때
+`transform` 파라미터를 사용하면 됩니다.
+
+:::note
+
+`on<PostFetched>`에 `transformer`를 전달하면 이벤트가 처리되는 방식을
+커스터마이즈할 수 있습니다.
+
+:::
+
+:::note
+
+`throttle` API를 사용하려면
+[`package:stream_transform`](https://pub.dev/packages/stream_transform)을
+import해야 합니다.
+
+:::
+
+<PostBlocTransformerSnippet />
+
+완성된 `PostBloc`은 다음과 같습니다:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/bloc/post_bloc.dart"
+	title="lib/posts/bloc/post_bloc.dart"
+/>
+
+비즈니스 로직 구현이 끝났으니 이제 프레젠테이션 레이어만 구현하면 됩니다.
+
+## 프레젠테이션 레이어
+
+`main.dart`에서 main 함수를 구현하고 `runApp`을 호출해서 루트 위젯을
+렌더링합니다. 여기서 transition과 에러를 로깅하기 위한 bloc observer도 포함할 수
+있습니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/main.dart"
+	title="lib/main.dart"
+/>
+
+프로젝트의 루트인 `App` 위젯에서 home을 `PostsPage`로 설정합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/app.dart"
+	title="lib/app.dart"
+/>
+
+`PostsPage` 위젯에서 `BlocProvider`를 사용해서 `PostBloc` 인스턴스를 생성하고
+하위 트리에 제공합니다. 또한 앱이 로드될 때 초기 배치의 Post를 요청하도록
+`PostFetched` 이벤트를 추가합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/view/posts_page.dart"
+	title="lib/posts/view/posts_page.dart"
+/>
+
+다음으로 post를 표시하고 `PostBloc`에 연결할 `PostsList` 뷰를 구현합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/view/posts_list.dart"
+	title="lib/posts/view/posts_list.dart"
+/>
+
+:::note
+
+`PostsList`는 `ScrollController`를 유지해야 하므로 `StatefulWidget`입니다.
+`initState`에서 스크롤 이벤트에 반응할 수 있도록 `ScrollController`에 listener를
+추가합니다. 또한 `context.read<PostBloc>()`을 통해 `PostBloc` 인스턴스에
+접근합니다.
+
+:::
+
+build 메서드는 `BlocBuilder`를 반환합니다. `BlocBuilder`는
+[flutter_bloc 패키지](https://pub.dev/packages/flutter_bloc)의 Flutter 위젯으로,
+새로운 bloc 상태에 대한 응답으로 위젯을 빌드합니다. `PostBloc` 상태가 바뀔
+때마다 새로운 `PostState`와 함께 builder 함수가 호출됩니다.
+
+:::caution
+
+StatefulWidget이 dispose될 때 `ScrollController`를 dispose해서 정리하는 것을
+잊지 마세요.
+
+:::
+
+사용자가 스크롤할 때마다 페이지를 얼마나 스크롤했는지 계산하고, 거리가
+`maxScrollExtent`의 90% 이상이면 더 많은 post를 로드하기 위해 `PostFetched`
+이벤트를 추가합니다.
+
+다음으로 더 많은 post를 로드 중임을 사용자에게 알려주는 `BottomLoader` 위젯을
+구현합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/widgets/bottom_loader.dart"
+	title="lib/posts/widgets/bottom_loader.dart"
+/>
+
+마지막으로 개별 `Post`를 렌더링할 `PostListItem`을 구현합니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/widgets/post_list_item.dart"
+	title="lib/posts/widgets/post_list_item.dart"
+/>
+
+이 시점에서 앱을 실행하면 모든 게 동작합니다. 하지만 한 가지 더 할 수 있는 게
+있습니다.
+
+bloc 라이브러리를 사용하면 모든 `Transition`에 한 곳에서 접근할 수 있다는
+추가적인 이점이 있습니다.
+
+한 상태에서 다른 상태로의 변경을 `Transition`이라고 합니다.
+
+:::note
+
+`Transition`은 현재 상태, 이벤트, 다음 상태로 구성됩니다.
+
+:::
+
+이 앱에는 bloc이 하나뿐이지만, 큰 앱에서는 앱 상태의 다른 부분을 관리하는 많은
+bloc이 있는 게 일반적입니다.
+
+모든 `Transition`에 대해 뭔가를 하고 싶다면 간단히 `BlocObserver`를 만들면
+됩니다.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/simple_bloc_observer.dart"
+	title="lib/simple_bloc_observer.dart"
+/>
+
+:::note
+
+`BlocObserver`를 상속하고 `onTransition` 메서드를 override하기만 하면 됩니다.
+
+:::
+
+이제 Bloc `Transition`이 발생할 때마다 콘솔에 transition이 출력되는 걸 볼 수
+있습니다.
+
+:::note
+
+실제로 다른 `BlocObserver`를 만들 수 있고, 모든 상태 변경이 기록되기 때문에 모든
+사용자 상호작용과 상태 변경을 한 곳에서 쉽게 추적할 수 있습니다!
+
+:::
+
+이게 전부입니다! [bloc](https://pub.dev/packages/bloc)과
+[flutter_bloc](https://pub.dev/packages/flutter_bloc) 패키지를 사용해서
+Flutter에서 무한 리스트를 성공적으로 구현했고, 프레젠테이션 레이어와 비즈니스
+로직을 분리했습니다.
+
+`PostsPage`는 `Post`가 어디서 오는지, 어떻게 가져오는지 모릅니다. 반대로
+`PostBloc`은 `State`가 어떻게 렌더링되는지 모르고, 단순히 이벤트를 상태로
+변환합니다.
+
+이 예제의 전체 소스 코드는
+[여기](https://github.com/felangel/Bloc/tree/master/examples/flutter_infinite_list)에서
+확인할 수 있습니다.

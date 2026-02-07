@@ -1,0 +1,163 @@
+---
+title: Architettura
+description:
+  Panoramica dei modelli architetturali consigliati quando si utilizza bloc.
+---
+
+import DataProviderSnippet from '~/components/architecture/DataProviderSnippet.astro';
+import RepositorySnippet from '~/components/architecture/RepositorySnippet.astro';
+import BusinessLogicComponentSnippet from '~/components/architecture/BusinessLogicComponentSnippet.astro';
+import BlocTightCouplingSnippet from '~/components/architecture/BlocTightCouplingSnippet.astro';
+import BlocLooseCouplingPresentationSnippet from '~/components/architecture/BlocLooseCouplingPresentationSnippet.astro';
+import AppIdeasRepositorySnippet from '~/components/architecture/AppIdeasRepositorySnippet.astro';
+import AppIdeaRankingBlocSnippet from '~/components/architecture/AppIdeaRankingBlocSnippet.astro';
+import PresentationComponentSnippet from '~/components/architecture/PresentationComponentSnippet.astro';
+
+![Architettura Bloc](~/assets/concepts/bloc_architecture_full.png)
+
+L'utilizzo della libreria bloc ci consente di separare la nostra applicazione in
+tre livelli:
+
+- Presentazione
+- Logica Applicativa
+- Dati
+  - "Repository"
+  - "Data Provider"
+
+Inizieremo dal livello più basso (più lontano dall'interfaccia utente) e
+risaliremo fino al livello di presentazione.
+
+## Livello Dati
+
+Ha il compito di recuperare e manipolare i dati da uno o più sorgenti.
+
+Può essere suddiviso in due parti:
+
+- "Repository"
+- "Data Provider"
+
+Questo livello è il più basso dell'applicazione e interagisce con i database, le
+richieste di rete e altre sorgenti di dati asincrone.
+
+### Data Provider
+
+Il compito del "Data Provider" è fornire dati grezzi. Dovrebbe essere generico e
+versatile.
+
+Di solito espone API semplici per eseguire operazioni
+[CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete). Potremmo
+avere metodi come `createData`, `readData`, `updateData` e `deleteData` come
+parte del nostro livello dati.
+
+<DataProviderSnippet />
+
+### Repository
+
+Il livello "Repository" funge da "wrapper" attorno a uno o più "Data Provider" e
+comunica con il livello di logica applicativa.
+
+<RepositorySnippet />
+
+Come puoi vedere, il nostro livello repository può interagire con più "Data
+Provider" ed eseguire trasformazioni sui dati prima di passare il risultato al
+livello della logica applicativa.
+
+## Livello Logica Applicativa
+
+Il livello di logica applicativa risponde agli input provenienti dal livello di
+presentazione emettendo nuovi stati. Può dipendere da uno o più repository per
+recuperare i dati necessari a costruire lo stato dell'applicazione.
+
+Pensa a questo livello come al ponte tra l'interfaccia utente (livello di
+presentazione) e il livello dati. La logica applicativa riceve notifiche di
+eventi e azioni dalla presentazione e poi comunica con il repository per
+costruire un nuovo stato che il livello di presentazione potrà poi utilizzare.
+
+<BusinessLogicComponentSnippet />
+
+### Comunicazione tra Bloc
+
+Poiché i bloc espongono stream, potrebbe essere allettante creare un bloc che
+ascolta un altro bloc. **Non dovresti** farlo. Esistono alternative migliori
+rispetto al codice riportato di seguito:
+
+<BlocTightCouplingSnippet />
+
+Anche se il codice sopra è privo di errori (e gestisce automaticamente la
+cancellazione delle dipendenze), presenta un problema più grave: crea una
+dipendenza tra due bloc.
+
+In generale, le dipendenze tra entità dello stesso livello architetturale
+dovrebbero essere evitate a tutti i costi, poiché creano un accoppiamento
+stretto difficile da mantenere. Poiché i bloc risiedono nel livello di logica
+applicativa, nessun bloc dovrebbe conoscere altri bloc.
+
+![Layer applicativo](~/assets/architecture/architecture.png)
+
+Un bloc dovrebbe ricevere informazioni solo attraverso eventi e da repository
+iniettati (ovvero, repository forniti al bloc tramite il suo costruttore).
+
+Se ti trovi in una situazione in cui un bloc deve rispondere a un altro bloc,
+hai due alternative. Puoi spostare il problema un livello più in alto (nel
+livello di presentazione) oppure un livello più in basso (nel livello di
+dominio).
+
+#### Collegare i Bloc attraverso la Presentazione
+
+Puoi usare un `BlocListener` per ascoltare un bloc e aggiungere un evento a un
+altro bloc ogni volta che il primo bloc cambia.
+
+<BlocLooseCouplingPresentationSnippet />
+
+Il codice sopra impedisce a `SecondBloc` di dover conoscere `FirstBloc`,
+favorendo un accoppiamento lasco. L'applicazione
+[flutter_weather](/it/tutorials/flutter-weather)
+[usa questa tecnica](https://github.com/felangel/bloc/blob/b4c8db938ad71a6b60d4a641ec357905095c3965/examples/flutter_weather/lib/weather/view/weather_page.dart#L38-L42)
+per cambiare il tema dell'applicazione in base alle informazioni meteorologiche
+ricevute.
+
+In alcune situazioni, potresti non voler accoppiare due bloc nel livello di
+presentazione. In questi casi può avere senso che due bloc condividano la stessa
+sorgente di dati e si aggiornino ogni volta che i dati cambiano.
+
+#### Collegare i Bloc attraverso il Dominio
+
+Due bloc possono ascoltare uno stream da un repository e aggiornare i loro stati
+indipendentemente l'uno dall'altro ogni volta che i dati del repository
+cambiano. L'uso di repository reattivi per mantenere lo stato sincronizzato è
+comune nelle applicazioni enterprise su larga scala.
+
+Prima, crea o usa un repository che fornisce uno `Stream` di dati. Ad esempio,
+il seguente repository espone uno stream infinito di "idee":
+
+<AppIdeasRepositorySnippet />
+
+Lo stesso repository può essere iniettato in ogni bloc che deve reagire a nuove
+"idee". Di seguito è riportato un `AppIdeaRankingBloc` che emette uno stato per
+ogni "idea" in arrivo dal repository sopra:
+
+<AppIdeaRankingBlocSnippet />
+
+Per maggiori informazioni sull'uso degli stream con Bloc, consulta
+[Come usare Bloc con stream e concorrenza](https://verygood.ventures/blog/how-to-use-bloc-with-streams-and-concurrency).
+
+## Livello di Presentazione
+
+Il livello di presentazione ha il compito di capire come renderizzare se stesso
+in base a uno o più stati del bloc. Inoltre, dovrebbe gestire l'input
+dell'utente e gli eventi del ciclo di vita dell'applicazione.
+
+La maggior parte dei flussi delle applicazioni inizierà con un evento `AppStart`
+che attiva l'applicazione per recuperare alcuni dati da presentare all'utente.
+
+In questo scenario, il livello di presentazione aggiungerebbe un evento
+`AppStart`.
+
+Inoltre, il livello di presentazione dovrà capire cosa renderizzare sullo
+schermo in base allo stato proveniente dal bloc.
+
+<PresentationComponentSnippet />
+
+Finora, anche se abbiamo visto alcuni frammenti di codice, siamo rimasti
+abbastanza ad alto livello. Nella sezione tutorial metteremo tutto insieme
+mentre costruiremo diversi esempi di app.

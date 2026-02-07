@@ -68,3 +68,86 @@ abstract class BlocObserver {
   @mustCallSuper
   void onClose(BlocBase<dynamic> bloc) {}
 }
+
+/// {@template multi_bloc_observer}
+/// A [BlocObserver] which supports registering multiple [BlocObserver]
+/// instances. This is useful when maintaining multiple [BlocObserver] instances
+/// for different functions e.g. `LoggingBlocObserver`,
+/// `ErrorReportingBlocObserver`.
+///
+/// ```dart
+/// Bloc.observer = MultiBlocObserver(
+///   observers: [
+///     LoggingObserver(),
+///     ErrorObserver(),
+///     PerformanceObserver(),
+///   ],
+/// );
+/// ```
+/// {@endtemplate}
+class MultiBlocObserver implements BlocObserver {
+  /// {@macro multi_bloc_observer}
+  const MultiBlocObserver({required this.observers});
+
+  /// The list of [BlocObserver] instances that will be registered. Observers
+  /// are notified of all lifecycle events in the same order that they are
+  /// specified.
+  final List<BlocObserver> observers;
+
+  @override
+  void onCreate(BlocBase<dynamic> bloc) {
+    for (final observer in observers) {
+      observer.onCreate(bloc);
+    }
+  }
+
+  @override
+  void onEvent(Bloc<dynamic, dynamic> bloc, Object? event) {
+    for (final observer in observers) {
+      observer.onEvent(bloc, event);
+    }
+  }
+
+  @override
+  void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
+    for (final observer in observers) {
+      observer.onChange(bloc, change);
+    }
+  }
+
+  @override
+  void onTransition(
+    Bloc<dynamic, dynamic> bloc,
+    Transition<dynamic, dynamic> transition,
+  ) {
+    for (final observer in observers) {
+      observer.onTransition(bloc, transition);
+    }
+  }
+
+  @override
+  void onError(BlocBase<dynamic> bloc, Object error, StackTrace stackTrace) {
+    for (final observer in observers) {
+      observer.onError(bloc, error, stackTrace);
+    }
+  }
+
+  @override
+  void onDone(
+    Bloc<dynamic, dynamic> bloc,
+    Object? event, [
+    Object? error,
+    StackTrace? stackTrace,
+  ]) {
+    for (final observer in observers) {
+      observer.onDone(bloc, event, error, stackTrace);
+    }
+  }
+
+  @override
+  void onClose(BlocBase<dynamic> bloc) {
+    for (final observer in observers) {
+      observer.onClose(bloc);
+    }
+  }
+}
