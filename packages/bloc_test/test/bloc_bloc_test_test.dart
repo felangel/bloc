@@ -671,7 +671,6 @@ Alternatively, consider using Matchers in the expect of the blocTest rather than
 
     setUp(() {
       blocObserver = _MockBlocObserver();
-
       final previousObserver = Bloc.observer;
       addTearDown(() => Bloc.observer = previousObserver);
       Bloc.observer = blocObserver;
@@ -692,9 +691,10 @@ Alternatively, consider using Matchers in the expect of the blocTest rather than
       build: () => CounterBloc(),
       act: (bloc) => bloc.add(CounterEvent.increment),
       verify: (bloc) {
-        // ignore: invalid_use_of_protected_member
-        verify(() => blocObserver.onEvent(bloc, CounterEvent.increment))
-            .called(1);
+        verify(
+          // ignore: invalid_use_of_protected_member
+          () => blocObserver.onEvent(bloc, CounterEvent.increment),
+        ).called(1);
       },
     );
 
@@ -749,9 +749,10 @@ Alternatively, consider using Matchers in the expect of the blocTest rather than
       build: () => CounterBloc(),
       act: (bloc) => bloc.add(CounterEvent.increment),
       verify: (bloc) {
-        // ignore: invalid_use_of_protected_member
-        verify(() => blocObserver.onDone(bloc, CounterEvent.increment))
-            .called(1);
+        verify(
+          // ignore: invalid_use_of_protected_member
+          () => blocObserver.onDone(bloc, CounterEvent.increment),
+        ).called(1);
       },
     );
 
