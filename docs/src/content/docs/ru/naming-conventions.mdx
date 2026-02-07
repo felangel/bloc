@@ -1,0 +1,101 @@
+---
+title: Соглашения об именовании
+description:
+  Обзор рекомендуемых соглашений об именовании при использовании bloc.
+---
+
+import EventExamplesGood1 from '~/components/naming-conventions/EventExamplesGood1Snippet.astro';
+import EventExamplesBad1 from '~/components/naming-conventions/EventExamplesBad1Snippet.astro';
+import StateExamplesGood1Snippet from '~/components/naming-conventions/StateExamplesGood1Snippet.astro';
+import SingleStateExamplesGood1Snippet from '~/components/naming-conventions/SingleStateExamplesGood1Snippet.astro';
+import StateExamplesBad1Snippet from '~/components/naming-conventions/StateExamplesBad1Snippet.astro';
+
+Следующие соглашения об именовании являются просто рекомендациями и являются
+полностью необязательными. Не стесняйтесь использовать любые соглашения об
+именовании, которые вы предпочитаете. Вы можете обнаружить, что некоторые
+примеры/документация не следуют соглашениям об именовании в основном для
+простоты/краткости. Эти соглашения настоятельно рекомендуются для больших
+проектов с несколькими разработчиками.
+
+## Соглашения о событиях
+
+События должны быть названы в **прошедшем времени**, потому что события — это
+то, что уже произошло с точки зрения блока.
+
+### Анатомия
+
+`BlocSubject` + `Существительное (необязательно)` + `Глагол (событие)`
+
+События начальной загрузки должны следовать соглашению: `BlocSubject` +
+`Started`
+
+:::note
+
+Базовый класс события должен быть назван: `BlocSubject` + `Event`.
+
+:::
+
+### Примеры
+
+✅ **Хорошо**
+
+<EventExamplesGood1 />
+
+❌ **Плохо**
+
+<EventExamplesBad1 />
+
+## Соглашения о состояниях
+
+Состояния должны быть существительными, потому что состояние — это просто снимок
+в определенный момент времени. Существует два распространенных способа
+представления состояния: использование подклассов или использование одного
+класса.
+
+### Анатомия
+
+#### Подклассы
+
+`BlocSubject` + `Глагол (действие)` + `State`
+
+При представлении состояния в виде нескольких подклассов `State` должно быть
+одним из следующих:
+
+`Initial` | `Success` | `Failure` | `InProgress`
+
+:::note
+
+Начальные состояния должны следовать соглашению: `BlocSubject` + `Initial`.
+
+:::
+
+#### Один класс
+
+`BlocSubject` + `State`
+
+При представлении состояния в виде одного базового класса должен использоваться
+enum с именем `BlocSubject` + `Status` для представления статуса состояния:
+
+`initial` | `success` | `failure` | `loading`.
+
+:::note
+
+Базовый класс состояния всегда должен быть назван: `BlocSubject` + `State`.
+
+:::
+
+### Примеры
+
+✅ **Хорошо**
+
+##### Подклассы
+
+<StateExamplesGood1Snippet />
+
+##### Один класс
+
+<SingleStateExamplesGood1Snippet />
+
+❌ **Плохо**
+
+<StateExamplesBad1Snippet />

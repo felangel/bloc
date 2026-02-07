@@ -1,0 +1,56 @@
+---
+title: Избегайте расширений BuildContext
+description: Правило avoid_build_context_extensions.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/avoid_build_context_extensions/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/avoid_build_context_extensions/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+</div>
+
+Избегайте использования расширений `BuildContext` для доступа к экземплярам
+`Bloc` или `Cubit`.
+
+:::note
+
+Это правило линтера было введено в версии `0.3.0` пакета
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint)
+
+:::
+
+## Обоснование
+
+Для согласованности и ради явности предпочтительно использовать напрямую базовые
+методы вместо расширений `BuildContext`. Это также полезно для тестирования,
+поскольку невозможно замокать метод расширения.
+
+| расширение       | явный метод                                                          |
+| ---------------- | -------------------------------------------------------------------- |
+| `context.read`   | `BlocProvider.of<Bloc>(context, listen: false)`                      |
+| `context.watch`  | `BlocBuilder<Bloc, State>(...)` или `BlocProvider.of<Bloc>(context)` |
+| `context.select` | `BlocSelector<Bloc, State>(...)`                                     |
+
+## Примеры
+
+**Избегайте** использования расширений `BuildContext` для взаимодействия с
+экземплярами `Bloc` или `Cubit`.
+
+**ПЛОХО**:
+
+<BadSnippet />
+
+**ХОРОШО**:
+
+<GoodSnippet />
+
+## Включение
+
+Чтобы включить правило `avoid_build_context_extensions`, добавьте его в
+`analysis_options.yaml` в разделе `bloc` > `rules`:
+
+<EnableRuleSnippet name="avoid_build_context_extensions" />
