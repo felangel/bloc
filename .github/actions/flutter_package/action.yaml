@@ -21,6 +21,10 @@ inputs:
     required: false
     default: ""
     description: Globs to exclude from coverage
+  flutter_channel:
+    required: false
+    default: "stable"
+    description: The Flutter channel to use
   working_directory:
     required: false
     default: "."
@@ -47,6 +51,8 @@ runs:
   steps:
     - name: 🐦 Setup Flutter
       uses: subosito/flutter-action@v2
+      with:
+        channel: ${{ inputs.flutter_channel }}
 
     - name: 📦 Install Dependencies
       working-directory: ${{ inputs.working_directory }}
@@ -118,7 +124,7 @@ runs:
       working-directory: ${{ inputs.working_directory }}
       shell: ${{ inputs.shell }}
       run: |
-        dart pub global activate pana 0.22.17
+        dart pub global activate pana
         sudo apt-get install webp
         PANA=$(pana . --no-warning); PANA_SCORE=$(echo $PANA | sed -n "s/.*Points: \([0-9]*\)\/\([0-9]*\)./\1\/\2/p")
         echo "score: $PANA_SCORE"
