@@ -1,0 +1,113 @@
+---
+title: Modellare lo Stato
+description:
+  Una panoramica di diversi modi per modellare gli stati quando si usa
+  package:bloc.
+---
+
+import ConcreteClassAndStatusEnumSnippet from '~/components/modeling-state/ConcreteClassAndStatusEnumSnippet.astro';
+import SealedClassAndSubclassesSnippet from '~/components/modeling-state/SealedClassAndSubclassesSnippet.astro';
+
+Ci sono molti approcci diversi quando si tratta di strutturare lo stato
+dell'applicazione. Ognuno ha i suoi vantaggi e svantaggi. In questa sezione,
+daremo un'occhiata a diversi approcci, i loro pro e contro, e quando usare
+ciascuno.
+
+I seguenti approcci sono semplicemente raccomandazioni e sono completamente
+opzionali. Sentiti libero di usare qualsiasi approccio preferisci. Potresti
+notare che alcuni esempi o parti della documentazione non seguono rigorosamente
+questi approcci, principalmente per ragioni di semplicità e brevità.
+
+:::tip
+
+I seguenti frammenti di codice si concentrano sulla struttura dello stato.
+All'atto pratico, potresti anche voler:
+
+- Estendere `Equatable` da
+  [`package:equatable`](https://pub.dev/packages/equatable);
+- Annotare la classe con `@Data()` da
+  [`package:data_class`](https://pub.dev/packages/data_class);
+- Annotare la classe con **@immutable** da
+  [`package:meta`](https://pub.dev/packages/meta);
+- Implementare un metodo `copyWith`;
+- Usare la parola chiave `const` per i costruttori.
+
+:::
+
+## Classe Concreta e Enum di Stato
+
+Questo approccio consiste in una **singola classe concreta** per tutti gli stati
+con un parametro `enum` che rappresenta diversi stati. Le proprietà sono rese
+nullable e sono gestite in base allo stato corrente. Questo approccio funziona
+meglio per stati che non sono strettamente esclusivi e/o contengono molte
+proprietà condivise.
+
+<ConcreteClassAndStatusEnumSnippet />
+
+#### Pro
+
+- **Semplice**: Facile gestire una singola classe e un enum di stato e tutte le
+  proprietà sono facilmente accessibili;
+- **Conciso**: Generalmente richiede meno righe di codice rispetto ad altri
+  approcci.
+
+#### Contro
+
+- **Non "Type Safe"**: Richiede controllare lo `status` prima di accedere alle
+  proprietà. È possibile emittare (`emit`) uno stato malformato che può portare
+  a bug. Le proprietà per stati specifici sono nullable; questo può rendere la
+  gestione macchinosa, poiché richiede continui controlli sui null o l'uso del
+  "force unwrap". Alcuni di questi svantaggi possono essere mitigati scrivendo
+  unit test e definendo dei costruttori nominativi specializzati;
+- **Sovraccarico**: Il rischio è di avere un unico stato che, con il passare del
+  tempo, può sovraccaricarsi di proprietà.
+
+#### Verdetto
+
+Questo approccio funziona meglio per stati semplici o quando i requisiti
+richiedono stati che non sono esclusivi (ad es. mostrare uno snackbar quando si
+verifica un errore mentre si mostrano ancora i vecchi dati dall'ultimo stato di
+successo). Questo approccio fornisce flessibilità e concisione al costo della
+"type safety".
+
+## Classe Sealed e Sottoclassi
+
+Questo approccio consiste in una **classe sealed** che contiene qualsiasi
+proprietà condivisa e più sottoclassi per gli stati separati. Questo approccio è
+ottimo per creare stati separati con proprietà esclusive.
+
+<SealedClassAndSubclassesSnippet />
+
+#### Pro
+
+- **"Type Safe"**: Il codice è sicuro in fase di compilazione e non è possibile
+  accedere accidentalmente a una proprietà non valida. Ogni sottoclasse contiene
+  le sue proprietà, rendendo chiaro quali proprietà appartengono a quale stato;
+- **Esplicito:** Separa le proprietà condivise dalle proprietà specifiche dello
+  stato;
+- **Esaustivo**: Usare un'istruzione `switch` ci assicura che ogni stato sia
+  gestito esplicitamente.
+  - Se non vuoi
+    [switch esaustivi](https://dart.dev/language/branches#exhaustiveness-checking)
+    o vuoi essere in grado di aggiungere sottotipi in seguito senza rompere
+    l'API, usa il modificatore
+    [final](https://dart.dev/language/class-modifiers#final).
+  - Vedi la
+    [documentazione delle classi sealed](https://dart.dev/language/class-modifiers#sealed)
+    per maggiori dettagli.
+
+#### Contro
+
+- **Verboso**: Richiede più codice (una classe base e una sottoclasse per
+  stato). Inoltre può richiedere codice duplicato per proprietà condivise tra
+  alcune sottoclassi;
+- **Complesso**: Aggiungere nuove proprietà richiede aggiornare ogni sottoclasse
+  e la classe base, il che può essere scomodo e portare ad aumenti nella
+  complessità dello stato. Inoltre, può richiedere controlli di tipo non
+  necessari/eccessivi per accedere alle proprietà.
+
+#### Verdetto
+
+Questo approccio funziona meglio per stati ben definiti ed esclusivi con
+proprietà uniche. Questo approccio fornisce sicurezza sui tipi, controlli di
+esaustività e enfatizza la sicurezza rispetto a concisione e semplicità.
