@@ -12,6 +12,7 @@ const locales = {
 	es: { label: 'Español', lang: 'es' },
 	fil: { label: 'Filipino', lang: 'fil' },
 	fr: { label: 'Français', lang: 'fr' },
+	it: { label: 'Italiano', lang: 'it' },
 	ja: { label: '日本語', lang: 'ja' },
 	ko: { label: '한국어', lang: 'ko' },
 	'pt-br': { label: 'Português', lang: 'pt-BR' },
