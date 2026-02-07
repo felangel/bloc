@@ -21,6 +21,10 @@ inputs:
     required: false
     default: ""
     description: Globs to exclude from coverage
+  flutter_channel:
+    required: false
+    default: "stable"
+    description: The Flutter channel to use
   working_directory:
     required: false
     default: "."
@@ -47,6 +51,8 @@ runs:
   steps:
     - name: 🐦 Setup Flutter
       uses: subosito/flutter-action@v2
+      with:
+        channel: ${{ inputs.flutter_channel }}
 
     - name: 📦 Install Dependencies
       working-directory: ${{ inputs.working_directory }}

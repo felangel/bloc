@@ -383,6 +383,7 @@ jobs:
           analyze_directories: lib
           collect_coverage: false
           collect_score: false
+          flutter_channel: master
           working_directory: examples/${{ matrix.example }}
 
   docs_checks:
