@@ -1163,6 +1163,9 @@ Builder(
     final stateC = context.watch<BlocC>().state;
 
     // return a Widget which depends on the state of BlocA, BlocB, and BlocC
+    //
+    // it is encouraged to use `context.select` in this scenario to be more
+    // selective about what parts of the state you want to rebuild on
   }
 );
 ```

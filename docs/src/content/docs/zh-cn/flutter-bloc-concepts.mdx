@@ -393,21 +393,6 @@ Widget build(BuildContext context) {
 }
 ```
 
-✅ **建议** 将 `Builder` 和 `context.watch` 一起使用，类似于 `MultiBlocBuilder`
-的效果.
-
-```dart
-Builder(
-  builder: (context) {
-    final stateA = context.watch<BlocA>().state;
-    final stateB = context.watch<BlocB>().state;
-    final stateC = context.watch<BlocC>().state;
-
-    // 返回一个依赖于 BlocA 、BlocB, 和 BlocC 状态的 Widget。
-  }
-);
-```
-
 ❌ **避免** 使用 `context.watch` 当父 Widget 的 build 方法不依赖于状态
 
 ```dart

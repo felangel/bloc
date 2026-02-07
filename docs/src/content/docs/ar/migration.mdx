@@ -1157,6 +1157,9 @@ Builder(
     final stateC = context.watch<BlocC>().state;
 
     // إرجاع Widget يعتمد على حالة BlocA و BlocB و BlocC
+    //
+    // يُنصح باستخدام context.select في هذا السيناريو
+    // لتحديد الأجزاء المطلوبة فقط من الحالة التي تؤدي إلى إعادة البناء
   }
 );
 ```

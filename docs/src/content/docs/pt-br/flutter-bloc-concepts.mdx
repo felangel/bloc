@@ -442,20 +442,6 @@ Widget build(BuildContext context) {
 }
 ```
 
-✅ **USE** `Builder` e `context.watch` como `MultiBlocBuilder`.
-
-```dart
-Builder(
-  builder: (context) {
-    final stateA = context.watch<BlocA>().state;
-    final stateB = context.watch<BlocB>().state;
-    final stateC = context.watch<BlocC>().state;
-
-    // retorna um Widget que depende do estado de BlocA, BlocB e BlocC
-  }
-);
-```
-
 ❌ **EVITE** usar `context.watch` quando o widget pai no método `build` não
 depende do estado.
 
