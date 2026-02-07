@@ -26,15 +26,15 @@ bloc.
 ## Ключевые темы
 
 - Наблюдение за изменениями состояния с помощью
-  [BlocObserver](/bloc-concepts#blocobserver).
-- [BlocProvider](/flutter-bloc-concepts#blocprovider), виджет Flutter который
+  [BlocObserver](/ru/bloc-concepts#blocobserver).
+- [BlocProvider](/ru/flutter-bloc-concepts#blocprovider), виджет Flutter который
   предоставляет bloc своим дочерним элементам.
-- [BlocBuilder](/flutter-bloc-concepts#blocbuilder), виджет Flutter который
+- [BlocBuilder](/ru/flutter-bloc-concepts#blocbuilder), виджет Flutter который
   обрабатывает построение виджета в ответ на новые состояния.
 - Добавление событий с помощью
-  [context.read](/flutter-bloc-concepts#contextread).
+  [context.read](/ru/flutter-bloc-concepts#contextread).
 - Предотвращение ненужных перестроек с помощью
-  [Equatable](/faqs#when-to-use-equatable).
+  [Equatable](/ru/faqs/#когда-использовать-equatable).
 - Использование метода `transformEvents` с Rx.
 
 ## Настройка
@@ -201,7 +201,7 @@ Post.
 
 Для простоты наш `PostBloc` будет иметь прямую зависимость от `http client`;
 однако в производственном приложении мы предлагаем вместо этого внедрить api
-client и использовать паттерн repository [docs](/architecture).
+client и использовать паттерн repository [docs](/ru/architecture).
 
 Создадим `post_bloc.dart` и создадим наш пустой `PostBloc`.
 
@@ -222,7 +222,8 @@ PostEvents в качестве входных данных и выводить P
 
 Наш `PostBloc` будет `emit` новые состояния через `Emitter<PostState>`,
 предоставленный в обработчике событий. Смотрите
-[основные концепции](/bloc-concepts#streams) для более подробной информации.
+[основные концепции](/ru/bloc-concepts/#потоки-streams) для более подробной
+информации.
 
 Теперь каждый раз, когда добавляется `PostEvent`, если это событие `PostFetched`
 и есть больше постов для извлечения, наш `PostBloc` извлечет следующие 20

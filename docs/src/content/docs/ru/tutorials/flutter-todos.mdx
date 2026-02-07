@@ -27,21 +27,22 @@ import EditTodosPageTreeSnippet from '~/components/tutorials/flutter-todos/EditT
 
 ## Ключевые темы
 
-- [Bloc and Cubit](/bloc-concepts#cubit-vs-bloc) to manage the various feature
-  states.
-- [Layered Architecture](/architecture) for separation of concerns and to
+- [Bloc and Cubit](/ru/bloc-concepts/#cubit-против-bloc) to manage the various
+  feature states.
+- [Layered Architecture](/ru/architecture) for separation of concerns and to
   facilitate reusability.
-- [BlocObserver](/bloc-concepts#blocobserver) to observe state changes.
-- [BlocProvider](/flutter-bloc-concepts#blocprovider), a Flutter widget which
+- [BlocObserver](/ru/bloc-concepts#blocobserver) to observe state changes.
+- [BlocProvider](/ru/flutter-bloc-concepts#blocprovider), a Flutter widget which
   provides a bloc to its children.
-- [BlocBuilder](/flutter-bloc-concepts#blocbuilder), a Flutter widget that
+- [BlocBuilder](/ru/flutter-bloc-concepts#blocbuilder), a Flutter widget that
   handles building the widget in response to new states.
-- [BlocListener](/flutter-bloc-concepts#bloclistener), a Flutter widget that
+- [BlocListener](/ru/flutter-bloc-concepts#bloclistener), a Flutter widget that
   handles performing side effects in response to state changes.
-- [RepositoryProvider](/flutter-bloc-concepts#repositoryprovider), a Flutter
+- [RepositoryProvider](/ru/flutter-bloc-concepts#repositoryprovider), a Flutter
   widget to provide a repository to its children.
-- [Equatable](/faqs#when-to-use-equatable) to prevent unnecessary rebuilds.
-- [MultiBlocListener](/flutter-bloc-concepts#multibloclistener), a Flutter
+- [Equatable](/ru/faqs/#когда-использовать-equatable) to prevent unnecessary
+  rebuilds.
+- [MultiBlocListener](/ru/flutter-bloc-concepts#multibloclistener), a Flutter
   widget that reduces nesting when using multiple BlocListeners.
 
 ## Настройка
@@ -266,7 +267,7 @@ This package implements the `todos_api` using the
 
 ## Слой Repository
 
-A [repository](/architecture#repository) is part of the business layer. A
+A [repository](/ru/architecture/#репозиторий) is part of the business layer. A
 repository depends on one or more data providers that have no business value,
 and combines their public API into APIs that provide business value. In
 addition, having a repository layer helps abstract data acquisition from the
@@ -530,7 +531,7 @@ adding, modifying, and deleting todos.
 
 `emit` is never called from within `onTodoSaved` and many other event handlers.
 Instead, they notify the repository which emits an updated list via the todos
-stream. See the [data flow](#data-flow) section for more information.
+stream. See the [data flow](#поток-данных) section for more information.
 
 :::
 
@@ -718,7 +719,8 @@ A simplified representation of the widget tree for the `StatsPage` is:
 
 The `TodosOverviewBloc` and `StatsBloc` both communicate with the
 `TodosRepository`, but it is important to note there is no direct communication
-between the blocs. See the [data flow](#data-flow) section for more information.
+between the blocs. See the [data flow](#поток-данных) section for more
+information.
 
 :::
 

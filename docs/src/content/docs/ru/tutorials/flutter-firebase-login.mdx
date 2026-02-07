@@ -20,17 +20,18 @@ using the Bloc library.
 
 ## Ключевые темы
 
-- [BlocProvider](/flutter-bloc-concepts#blocprovider), a Flutter widget which
+- [BlocProvider](/ru/flutter-bloc-concepts#blocprovider), a Flutter widget which
   provides a bloc to its children.
 - Using Cubit instead of Bloc.
-  [What's the difference?](/bloc-concepts#cubit-vs-bloc)
-- Adding events with [context.read](/flutter-bloc-concepts#contextread).
-- Prevent unnecessary rebuilds with [Equatable](/faqs#when-to-use-equatable).
-- [RepositoryProvider](/flutter-bloc-concepts#repositoryprovider), a Flutter
+  [What's the difference?](/ru/bloc-concepts/#cubit-против-bloc)
+- Adding events with [context.read](/ru/flutter-bloc-concepts#contextread).
+- Prevent unnecessary rebuilds with
+  [Equatable](/ru/faqs/#когда-использовать-equatable).
+- [RepositoryProvider](/ru/flutter-bloc-concepts#repositoryprovider), a Flutter
   widget which provides a repository to its children.
-- [BlocListener](/flutter-bloc-concepts#bloclistener), a Flutter widget which
+- [BlocListener](/ru/flutter-bloc-concepts#bloclistener), a Flutter widget which
   invokes the listener code in response to state changes в каталоге bloc.
-- Adding events with [context.read](/flutter-bloc-concepts#contextselect).
+- Adding events with [context.read](/ru/flutter-bloc-concepts#contextselect).
 
 ## Настройка
 
@@ -38,8 +39,8 @@ using the Bloc library.
 
 <FlutterCreateSnippet />
 
-Так же, как в [руководстве по входу](/tutorials/flutter-login), we're going to
-create internal packages to better layer our application architecture and
+Так же, как в [руководстве по входу](/ru/tutorials/flutter-login), we're going
+to create internal packages to better layer our application architecture and
 maintain clear boundaries and to maximize both reusability as well as improve
 testability.
 
@@ -208,10 +209,10 @@ and it is an explicit constructor dependency.
 
 ## App
 
-Так же, как в [руководстве по входу](/tutorials/flutter-login), our `app.dart`
-will provide an instance of the `AuthenticationRepository` to the application
-via `RepositoryProvider` and also creates and provides an instance of
-`AuthenticationBloc`. Then `AppView` consumes the `AuthenticationBloc` and
+Так же, как в [руководстве по входу](/ru/tutorials/flutter-login), our
+`app.dart` will provide an instance of the `AuthenticationRepository` to the
+application via `RepositoryProvider` and also creates and provides an instance
+of `AuthenticationBloc`. Then `AppView` consumes the `AuthenticationBloc` and
 handles updating the current route based on the `AuthenticationState`.
 
 <RemoteCode
@@ -275,7 +276,7 @@ will be canceled.
 
 :::tip
 
-A [`BlocObserver`](/bloc-concepts/#blocobserver-1) is great for logging Bloc
+A [`BlocObserver`](/ru/bloc-concepts/#blocobserver-1) is great for logging Bloc
 events, errors, and state changes especially в каталоге context analytics and
 crash reporting.
 

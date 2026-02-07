@@ -27,13 +27,14 @@ Flutter и AngularDart, чтобы продемонстрировать, как 
 
 ## Ключевые темы
 
-- [BlocProvider](/flutter-bloc-concepts#blocprovider), Flutter widget which
+- [BlocProvider](/ru/flutter-bloc-concepts#blocprovider), Flutter widget which
   provides a bloc to its children.
-- [BlocBuilder](/flutter-bloc-concepts#blocbuilder), Flutter widget that handles
-  building the widget in response to new states.
+- [BlocBuilder](/ru/flutter-bloc-concepts#blocbuilder), Flutter widget that
+  handles building the widget in response to new states.
 - Using Cubit instead of Bloc.
-  [What's the difference?](/bloc-concepts#cubit-vs-bloc)
-- Prevent unnecessary rebuilds with [Equatable](/faqs#when-to-use-equatable).
+  [What's the difference?](/ru/bloc-concepts/#cubit-против-bloc)
+- Prevent unnecessary rebuilds with
+  [Equatable](/ru/faqs/#когда-использовать-equatable).
 - Use a custom `EventTransformer` with
   [`bloc_concurrency`](https://pub.dev/packages/bloc_concurrency).
 - Making network requests using the `http` package.
@@ -387,7 +388,7 @@ and notifies the bloc of `TextChanged` events.
 `_SearchBody` uses `BlocBuilder` in order to rebuild in response to state
 changes. Since the bloc parameter of the `BlocBuilder` object was omitted,
 `BlocBuilder` will automatically perform a lookup using `BlocProvider` and the
-current `BuildContext`. Read more [here.](/flutter-bloc-concepts#blocbuilder)
+current `BuildContext`. Read more [here.](/ru/flutter-bloc-concepts#blocbuilder)
 :::
 
 :::note

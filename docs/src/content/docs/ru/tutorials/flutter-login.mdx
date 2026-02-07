@@ -19,18 +19,18 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 ## Ключевые темы
 
-- [BlocProvider](/flutter-bloc-concepts#blocprovider), виджет Flutter который
+- [BlocProvider](/ru/flutter-bloc-concepts#blocprovider), виджет Flutter который
   предоставляет bloc своим дочерним элементам.
 - Добавление событий с помощью
-  [context.read](/flutter-bloc-concepts#contextread).
+  [context.read](/ru/flutter-bloc-concepts#contextread).
 - Предотвращение ненужных перестроек с помощью
-  [Equatable](/faqs#when-to-use-equatable).
-- [RepositoryProvider](/flutter-bloc-concepts#repositoryprovider), виджет
+  [Equatable](/ru/faqs/#когда-использовать-equatable).
+- [RepositoryProvider](/ru/flutter-bloc-concepts#repositoryprovider), виджет
   Flutter который предоставляет repository своим дочерним элементам.
-- [BlocListener](/flutter-bloc-concepts#bloclistener), виджет Flutter который
+- [BlocListener](/ru/flutter-bloc-concepts#bloclistener), виджет Flutter который
   вызывает код слушателя в ответ на изменения состояния в bloc.
 - Обновление UI на основе части состояния bloc с помощью
-  [context.select](/flutter-bloc-concepts#contextselect).
+  [context.select](/ru/flutter-bloc-concepts#contextselect).
 
 ## Настройка проекта
 
@@ -315,7 +315,7 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 :::tip
 
-[`BlocObserver`](/bloc-concepts/#blocobserver-1) отлично подходит для
+[`BlocObserver`](/ru/bloc-concepts/#blocobserver-1) отлично подходит для
 логирования событий Bloc, ошибок и изменений состояния, особенно в контексте
 аналитики и отчетов о сбоях.
 
@@ -338,9 +338,9 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 ## App
 
-Так же, как в [руководстве по входу](/tutorials/flutter-login), наш `app.dart`
-будет предоставлять экземпляр `AuthenticationRepository` приложению через
-`RepositoryProvider` и также создавать и предоставлять экземпляр
+Так же, как в [руководстве по входу](/ru/tutorials/flutter-login), наш
+`app.dart` будет предоставлять экземпляр `AuthenticationRepository` приложению
+через `RepositoryProvider` и также создавать и предоставлять экземпляр
 `AuthenticationBloc`. Затем `AppView` использует `AuthenticationBloc` и
 обрабатывает обновление текущего маршрута на основе `AuthenticationState`.
 
