@@ -13,8 +13,8 @@ import InstallDependenciesSnippet from '~/components/tutorials/ngdart-counter/In
 
 ![beginner](https://img.shields.io/badge/level-beginner-green.svg)
 
-In questo tutorial, costruiremo un counter in AngularDart usando
-la libreria bloc.
+In questo tutorial, costruiremo un counter in AngularDart usando la libreria
+bloc.
 
 ![demo](~/assets/tutorials/ngdart-counter.gif)
 
@@ -42,14 +42,15 @@ e poi installare tutte le nostre dipendenze
 
 <InstallDependenciesSnippet />
 
-La nostra app counter avrà solo due pulsanti per incrementare/decrementare il valore del
-counter e un elemento per visualizzare il valore corrente. Iniziamo
+La nostra app counter avrà solo due pulsanti per incrementare/decrementare il
+valore del counter e un elemento per visualizzare il valore corrente. Iniziamo
 progettando i `CounterEvents`.
 
 ## Counter Bloc
 
-Poiché lo stato del nostro counter può essere rappresentato da un intero non abbiamo bisogno di
-creare una classe personalizzata e possiamo co-localizzare gli eventi e il bloc.
+Poiché lo stato del nostro counter può essere rappresentato da un intero non
+abbiamo bisogno di creare una classe personalizzata e possiamo co-localizzare
+gli eventi e il bloc.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/src/counter_page/counter_bloc.dart"
@@ -58,15 +59,15 @@ creare una classe personalizzata e possiamo co-localizzare gli eventi e il bloc.
 
 :::note
 
-Solo dalla dichiarazione della classe possiamo dire che il nostro `CounterBloc` prenderà
-`CounterEvents` come input e produrrà interi.
+Solo dalla dichiarazione della classe possiamo dire che il nostro `CounterBloc`
+prenderà `CounterEvents` come input e produrrà interi.
 
 :::
 
 ## Counter App
 
-Ora che abbiamo il nostro `CounterBloc` completamente implementato, possiamo iniziare
-creando il nostro Componente App AngularDart.
+Ora che abbiamo il nostro `CounterBloc` completamente implementato, possiamo
+iniziare creando il nostro Componente App AngularDart.
 
 Il nostro `app.component.dart` dovrebbe essere:
 
@@ -95,9 +96,9 @@ Il nostro `counter_page_component.dart` dovrebbe essere:
 
 :::note
 
-Siamo in grado di accedere all'istanza del `CounterBloc` usando il sistema di dependency
-injection di AngularDart. Poiché l'abbiamo registrato come `Provider`, AngularDart può
-risolvere correttamente `CounterBloc`.
+Siamo in grado di accedere all'istanza del `CounterBloc` usando il sistema di
+dependency injection di AngularDart. Poiché l'abbiamo registrato come
+`Provider`, AngularDart può risolvere correttamente `CounterBloc`.
 
 :::
 
@@ -122,15 +123,16 @@ Infine, il nostro `counter_page_component.html` dovrebbe essere:
 
 :::note
 
-Stiamo usando il `BlocPipe` così possiamo visualizzare lo stato del nostro `CounterBloc` mentre viene
-aggiornato.
+Stiamo usando il `BlocPipe` così possiamo visualizzare lo stato del nostro
+`CounterBloc` mentre viene aggiornato.
 
 :::
 
-Questo è tutto! Abbiamo separato il nostro livello di presentazione dal nostro livello di logica applicativa.
-Il nostro `CounterPageComponent` non ha idea di cosa succede quando un utente preme un
-pulsante; aggiunge semplicemente un evento per notificare il `CounterBloc`. Inoltre, il nostro
-`CounterBloc` non ha idea di cosa sta succedendo con lo stato (valore del counter); sta semplicemente
+Questo è tutto! Abbiamo separato il nostro livello di presentazione dal nostro
+livello di logica applicativa. Il nostro `CounterPageComponent` non ha idea di
+cosa succede quando un utente preme un pulsante; aggiunge semplicemente un
+evento per notificare il `CounterBloc`. Inoltre, il nostro `CounterBloc` non ha
+idea di cosa sta succedendo con lo stato (valore del counter); sta semplicemente
 convertendo i `CounterEvents` in interi.
 
 Possiamo eseguire la nostra app con `webdev serve` e visualizzarla localmente.

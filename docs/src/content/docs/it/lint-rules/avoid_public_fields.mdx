@@ -18,9 +18,9 @@ Evita di esporre campi pubblici su istanze `Bloc` e `Cubit`.
 
 ## Motivazione
 
-I componenti di logica applicativa mantengono il proprio `state` ed emettono cambiamenti di stato tramite
-l'API `emit`. Di conseguenza, tutto lo stato pubblico dovrebbe essere esposto tramite l'oggetto
-`state`.
+I componenti di logica applicativa mantengono il proprio `state` ed emettono
+cambiamenti di stato tramite l'API `emit`. Di conseguenza, tutto lo stato
+pubblico dovrebbe essere esposto tramite l'oggetto `state`.
 
 ## Esempi
 
@@ -36,7 +36,7 @@ l'API `emit`. Di conseguenza, tutto lo stato pubblico dovrebbe essere esposto tr
 
 ## Abilita
 
-Per abilitare la regola `avoid_public_fields`, aggiungila al tuo `analysis_options.yaml`
-sotto `bloc` > `rules`:
+Per abilitare la regola `avoid_public_fields`, aggiungila al tuo
+`analysis_options.yaml` sotto `bloc` > `rules`:
 
 <EnableRuleSnippet name="avoid_public_fields" />

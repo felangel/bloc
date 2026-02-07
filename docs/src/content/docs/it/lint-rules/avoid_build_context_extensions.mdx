@@ -13,7 +13,8 @@ import GoodSnippet from '~/components/lint-rules/avoid_build_context_extensions/
 	<Badge text="dart" variant="note" />
 </div>
 
-Evita di usare estensioni di `BuildContext` per accedere a istanze di `Bloc` o `Cubit`.
+Evita di usare estensioni di `BuildContext` per accedere a istanze di `Bloc` o
+`Cubit`.
 
 :::note
 
@@ -25,18 +26,20 @@ Questa regola di lint è stata introdotta nella versione `0.3.0` di
 ## Motivazione
 
 Per coerenza e per il bene di essere espliciti, preferisci usare direttamente i
-metodi di bloc rispetto le estensioni di `BuildContext`. Questo è anche vantaggioso
-per il testing dato che non è possibile mockare un metodo di una estensione.
+metodi di bloc rispetto le estensioni di `BuildContext`. Questo è anche
+vantaggioso per il testing dato che non è possibile mockare un metodo di una
+estensione.
 
-| estensione        | metodo esplicito                                                     |
-| ---------------- | ------------------------------------------------------------------- |
-| `context.read`   | `BlocProvider.of<Bloc>(context, listen: false)`                     |
+| estensione       | metodo esplicito                                                   |
+| ---------------- | ------------------------------------------------------------------ |
+| `context.read`   | `BlocProvider.of<Bloc>(context, listen: false)`                    |
 | `context.watch`  | `BlocBuilder<Bloc, State>(...)` o `BlocProvider.of<Bloc>(context)` |
-| `context.select` | `BlocSelector<Bloc, State>(...)`                                    |
+| `context.select` | `BlocSelector<Bloc, State>(...)`                                   |
 
 ## Esempi
 
-**Evita** di usare estensioni `BuildContext` per interagire con istanze di `Bloc` o `Cubit`.
+**Evita** di usare estensioni `BuildContext` per interagire con istanze di
+`Bloc` o `Cubit`.
 
 **Errato**:
 

@@ -23,10 +23,11 @@ import BlocExternalForEachSnippet from '~/components/faqs/BlocExternalForEachSni
 
 ## Lo stato non si aggiorna
 
-❔ **Domanda**: Sto emettendo uno stato nel mio bloc ma l'interfaccia utente non si aggiorna.
-Cosa sto sbagliando?
+❔ **Domanda**: Sto emettendo uno stato nel mio bloc ma l'interfaccia utente non
+si aggiorna. Cosa sto sbagliando?
 
-💡 **Risposta**: Se stai usando Equatable assicurati di passare tutte le proprietà al getter `props`.
+💡 **Risposta**: Se stai usando Equatable assicurati di passare tutte le
+proprietà al getter `props`.
 
 ✅ **Buono**
 
@@ -38,8 +39,7 @@ Cosa sto sbagliando?
 
 <StateNotUpdatingBad2Snippet />
 
-Inoltre, assicurati di emettere una nuova istanza dello stato nel tuo
-bloc.
+Inoltre, assicurati di emettere una nuova istanza dello stato nel tuo bloc.
 
 ✅ **Buono**
 
@@ -53,10 +53,11 @@ bloc.
 
 :::caution
 
-Le proprietà `Equatable` dovrebbero sempre essere copiate piuttosto che modificate. Se una
-classe `Equatable` contiene una `List` o `Map` come proprietà, assicurati di usare
-`List.of` o `Map.of` rispettivamente per assicurarti che l'uguaglianza sia valutata in base ai
-valori delle proprietà piuttosto che al riferimento.
+Le proprietà `Equatable` dovrebbero sempre essere copiate piuttosto che
+modificate. Se una classe `Equatable` contiene una `List` o `Map` come
+proprietà, assicurati di usare `List.of` o `Map.of` rispettivamente per
+assicurarti che l'uguaglianza sia valutata in base ai valori delle proprietà
+piuttosto che al riferimento.
 
 :::
 
@@ -68,38 +69,38 @@ valori delle proprietà piuttosto che al riferimento.
 
 <EquatableEmitSnippet />
 
-Nello scenario sopra, se `StateA` estende `Equatable` si verificherà solo un cambiamento di stato
-(la seconda emissione sarà ignorata). In generale, dovresti usare `Equatable`
-se vuoi ottimizzare il tuo codice per ridurre il numero di aggiornamenti. Non dovresti
-usare `Equatable` se vuoi che lo stesso stato consecutivo attivi più
-transizioni.
+Nello scenario sopra, se `StateA` estende `Equatable` si verificherà solo un
+cambiamento di stato (la seconda emissione sarà ignorata). In generale, dovresti
+usare `Equatable` se vuoi ottimizzare il tuo codice per ridurre il numero di
+aggiornamenti. Non dovresti usare `Equatable` se vuoi che lo stesso stato
+consecutivo attivi più transizioni.
 
 Inoltre, usare `Equatable` rende molto più facile testare i bloc poiché possiamo
-aspettarci istanze specifiche degli stati del bloc piuttosto che usare `Matchers` o
-`Predicates`.
+aspettarci istanze specifiche degli stati del bloc piuttosto che usare
+`Matchers` o `Predicates`.
 
 <EquatableBlocTestSnippet />
 
-Senza `Equatable` il test sopra fallirebbe e dovrebbe essere riscritto
-così:
+Senza `Equatable` il test sopra fallirebbe e dovrebbe essere riscritto così:
 
 <NoEquatableBlocTestSnippet />
 
 ## Gestione degli Errori
 
-❔ **Domanda**: Come posso gestire un errore continuando a mostrare i dati precedenti?
+❔ **Domanda**: Come posso gestire un errore continuando a mostrare i dati
+precedenti?
 
 💡 **Risposta**:
 
-Questo dipende molto da come lo stato del bloc è stato modellato. Nei casi
-in cui i dati dovrebbero essere conservati anche in presenza di un errore, considera
-l'uso di una singola classe per lo stato.
+Questo dipende molto da come lo stato del bloc è stato modellato. Nei casi in
+cui i dati dovrebbero essere conservati anche in presenza di un errore,
+considera l'uso di una singola classe per lo stato.
 
 <SingleStateSnippet />
 
 Questo permetterà ai widget di avere accesso alle proprietà `data` e `error`
-contemporaneamente e il bloc può usare `state.copyWith` per conservare i vecchi dati anche
-quando si è verificato un errore.
+contemporaneamente e il bloc può usare `state.copyWith` per conservare i vecchi
+dati anche quando si è verificato un errore.
 
 <SingleStateUsageSnippet />
 
@@ -114,18 +115,21 @@ BLoC è un modello di progettazione basato sulle seguenti regole:
 1. Input e Output del BLoC sono semplici Stream e Sink;
 2. Le dipendenze devono essere iniettabili e indipendenti dalla piattaforma;
 3. Non è consentita alcuna ramificazione sulla base della piattaforma;
-4. L'implementazione può essere qualsiasi cosa tu voglia purché segua le regole sopra
-   indicate.
+4. L'implementazione può essere qualsiasi cosa tu voglia purché segua le regole
+   sopra indicate.
 
 Le linee guida UI sono:
 
 1. Ogni componente "abbastanza complesso" ha un BLoC corrispondente;
-2. I componenti dovrebbero inviare input "così come sono" (non deve elaborare, filtrare o trasformare il dato);
-3. I componenti dovrebbero mostrare output il più vicino possibile a "così come sono";
-4. Tutto il branching dovrebbe essere basato su semplici output booleani del BLoC.
+2. I componenti dovrebbero inviare input "così come sono" (non deve elaborare,
+   filtrare o trasformare il dato);
+3. I componenti dovrebbero mostrare output il più vicino possibile a "così come
+   sono";
+4. Tutto il branching dovrebbe essere basato su semplici output booleani del
+   BLoC.
 
-La libreria Bloc implementa il modello BLoC e mira ad astrarre RxDart
-per semplificare l'esperienza dello sviluppatore.
+La libreria Bloc implementa il modello BLoC e mira ad astrarre RxDart per
+semplificare l'esperienza dello sviluppatore.
 
 I tre principi di Redux sono:
 
@@ -134,27 +138,28 @@ I tre principi di Redux sono:
 3. I cambiamenti sono fatti con funzioni pure.
 
 La libreria bloc viola il primo principio; con bloc lo stato è distribuito
-attraverso più bloc. Inoltre, non c'è il concetto di middleware in bloc
-e bloc è progettato per facilitare i cambiamenti di stato in modo asincrono, permettendoti di emettere
-più stati per un singolo evento.
+attraverso più bloc. Inoltre, non c'è il concetto di middleware in bloc e bloc è
+progettato per facilitare i cambiamenti di stato in modo asincrono,
+permettendoti di emettere più stati per un singolo evento.
 
 ## Bloc vs. Provider
 
 ❔ **Domanda**: Qual è la differenza tra Bloc e Provider?
 
-💡 **Risposta**: `provider` è progettato per la dependency injection ("wrapper" attorno a
-`InheritedWidget`). Devi ancora capire come gestire il tuo stato (tramite
-`ChangeNotifier`, `Bloc`, `Mobx`, ecc...). La libreria Bloc usa `provider`
-internamente per rendere facile fornire e accedere ai bloc in tutto l'albero dei widget.
+💡 **Risposta**: `provider` è progettato per la dependency injection ("wrapper"
+attorno a `InheritedWidget`). Devi ancora capire come gestire il tuo stato
+(tramite `ChangeNotifier`, `Bloc`, `Mobx`, ecc...). La libreria Bloc usa
+`provider` internamente per rendere facile fornire e accedere ai bloc in tutto
+l'albero dei widget.
 
 ## BlocProvider.of() Non Trova il Bloc
 
-❔ **Domanda**: Quando uso `BlocProvider.of(context)` non riesce a trovare il bloc,
-come posso risolverlo?
+❔ **Domanda**: Quando uso `BlocProvider.of(context)` non riesce a trovare il
+bloc, come posso risolverlo?
 
-💡 **Risposta**: Non puoi accedere a un bloc dallo stesso contesto in cui è stato
-fornito (provide) quindi devi assicurarti che `BlocProvider.of()` sia chiamato all'interno di un
-`BuildContext` figlio.
+💡 **Risposta**: Non puoi accedere a un bloc dallo stesso contesto in cui è
+stato fornito (provide) quindi devi assicurarti che `BlocProvider.of()` sia
+chiamato all'interno di un `BuildContext` figlio.
 
 ✅ **Buono**
 
@@ -170,46 +175,49 @@ fornito (provide) quindi devi assicurarti che `BlocProvider.of()` sia chiamato a
 
 ❔ **Domanda**: Come dovrei strutturare il mio progetto?
 
-💡 **Risposta**: Anche se non c'è davvero una risposta giusta/sbagliata a questa domanda,
-questi sono dei riferimenti che possono risponderti:
+💡 **Risposta**: Anche se non c'è davvero una risposta giusta/sbagliata a questa
+domanda, questi sono dei riferimenti che possono risponderti:
 
 - [I/O Photobooth](https://github.com/flutter/photobooth);
 - [I/O Pinball](https://github.com/flutter/pinball);
 - [Flutter News Toolkit](https://github.com/flutter/news_toolkit).
 
-La cosa più importante è avere una struttura del progetto **consistente** e **ben definita**.
+La cosa più importante è avere una struttura del progetto **consistente** e
+**ben definita**.
 
 ## Aggiungere Eventi all'Interno di un Bloc
 
 ❔ **Domanda**: Va bene aggiungere eventi all'interno di un bloc?
 
-💡 **Risposta**: Nella maggior parte dei casi, gli eventi dovrebbero essere aggiunti esternamente ma in alcuni
-casi particolari può avere senso.
+💡 **Risposta**: Nella maggior parte dei casi, gli eventi dovrebbero essere
+aggiunti esternamente ma in alcuni casi particolari può avere senso.
 
-La situazione più comune in cui vengono usati eventi interni è quando i cambiamenti di stato
-devono verificarsi in risposta ad aggiornamenti in tempo reale da un repository. In queste
-situazioni, il repository è lo stimolo per il cambiamento di stato invece di un
-evento esterno come il tocco di un pulsante.
+La situazione più comune in cui vengono usati eventi interni è quando i
+cambiamenti di stato devono verificarsi in risposta ad aggiornamenti in tempo
+reale da un repository. In queste situazioni, il repository è lo stimolo per il
+cambiamento di stato invece di un evento esterno come il tocco di un pulsante.
 
-Nell'esempio seguente, lo stato di `MyBloc` dipende dall'utente corrente
-che è esposto tramite lo `Stream<User>` dal `UserRepository`. `MyBloc`
-ascolta i cambiamenti nell'utente corrente e aggiunge un evento interno `_UserChanged`
+Nell'esempio seguente, lo stato di `MyBloc` dipende dall'utente corrente che è
+esposto tramite lo `Stream<User>` dal `UserRepository`. `MyBloc` ascolta i
+cambiamenti nell'utente corrente e aggiunge un evento interno `_UserChanged`
 ogni volta che un utente viene emesso dallo stream degli utenti.
 
 <BlocInternalAddEventSnippet />
 
-Aggiungendo un evento interno, siamo anche in grado di specificare un `transformer`
-personalizzato per l'evento per determinare come più eventi `_UserChanged` saranno processati
--- di default saranno processati concorrentemente.
+Aggiungendo un evento interno, siamo anche in grado di specificare un
+`transformer` personalizzato per l'evento per determinare come più eventi
+`_UserChanged` saranno processati -- di default saranno processati
+concorrentemente.
 
-È altamente raccomandato che gli eventi interni siano privati. Questo è un modo esplicito
-di segnalare che un evento specifico è usato solo all'interno del bloc stesso e
-previene che i componenti esterni conoscano l'evento.
+È altamente raccomandato che gli eventi interni siano privati. Questo è un modo
+esplicito di segnalare che un evento specifico è usato solo all'interno del bloc
+stesso e previene che i componenti esterni conoscano l'evento.
 
 <BlocInternalEventSnippet />
 
 Possiamo alternativamente definire un evento esterno `Started` e usare l'API
-`emit.forEach` per gestire la reazione agli aggiornamenti degli utenti in tempo reale:
+`emit.forEach` per gestire la reazione agli aggiornamenti degli utenti in tempo
+reale:
 
 <BlocExternalForEachSnippet />
 
@@ -217,23 +225,29 @@ I vantaggi dell'approccio sopra sono:
 
 - Non abbiamo bisogno di un evento interno `_UserChanged`;
 - Non abbiamo bisogno di gestire manualmente la `StreamSubscription`;
-- Abbiamo pieno controllo su quando il bloc si sottoscrive allo stream degli aggiornamenti degli utenti.
+- Abbiamo pieno controllo su quando il bloc si sottoscrive allo stream degli
+  aggiornamenti degli utenti.
 
 Gli svantaggi dell'approccio sopra sono:
 
-- Non possiamo facilmente mettere in pausa (`pause`) o riprendere (`resume`) la sottoscrizione;
-- Dobbiamo esporre un evento pubblico `Started` che poi sarà da emittare esternamente;
-- Non possiamo usare un `transformer` personalizzato per regolare come reagiamo agli aggiornamenti degli utenti.
+- Non possiamo facilmente mettere in pausa (`pause`) o riprendere (`resume`) la
+  sottoscrizione;
+- Dobbiamo esporre un evento pubblico `Started` che poi sarà da emittare
+  esternamente;
+- Non possiamo usare un `transformer` personalizzato per regolare come reagiamo
+  agli aggiornamenti degli utenti.
 
 ## Esporre Metodi Pubblici
 
-❔ **Domanda**: Va bene esporre metodi pubblici sulle mie istanze di bloc e cubit?
+❔ **Domanda**: Va bene esporre metodi pubblici sulle mie istanze di bloc e
+cubit?
 
 💡 **Risposta**
 
-Quando crei un cubit, è raccomandato esporre metodi pubblici solo per
-attivare dei cambiamenti di stato. Di conseguenza, generalmente tutti i metodi pubblici
+Quando crei un cubit, è raccomandato esporre metodi pubblici solo per attivare
+dei cambiamenti di stato. Di conseguenza, generalmente tutti i metodi pubblici
 su un'istanza di cubit dovrebbero restituire `void` o `Future<void>`.
 
-Quando crei un bloc, è raccomandato evitare di esporre qualsiasi metodo pubblico personalizzato mentre è corretto
-notificare il bloc degli eventi chiamando `add`.
+Quando crei un bloc, è raccomandato evitare di esporre qualsiasi metodo pubblico
+personalizzato mentre è corretto notificare il bloc degli eventi chiamando
+`add`.

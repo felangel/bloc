@@ -25,14 +25,15 @@ Questa regola di lint è stata introdotta nella versione `0.2.0-dev.2` di
 
 ## Motivazione
 
-I metodi pubblici su istanze `Cubit` dovrebbero essere usati per notificare il `Cubit` e
-iniziare cambiamenti di stato tramite il metodo `emit`. Se il chiamante ha bisogno di accedere a qualsiasi
-informazione di stato, dovrebbero accedervi trammite `state`.
+I metodi pubblici su istanze `Cubit` dovrebbero essere usati per notificare il
+`Cubit` e iniziare cambiamenti di stato tramite il metodo `emit`. Se il
+chiamante ha bisogno di accedere a qualsiasi informazione di stato, dovrebbero
+accedervi trammite `state`.
 
 :::note
 
-Le seguenti regole sono correlate e sono solitamente abilitate in combinazione con
-`prefer_void_public_cubit_methods`.
+Le seguenti regole sono correlate e sono solitamente abilitate in combinazione
+con `prefer_void_public_cubit_methods`.
 
 - [`avoid_public_bloc_methods`](/it/lint-rules/avoid_public_bloc_methods);
 - [`avoid_public_fields`](/it/lint-rules/avoid_public_fields).

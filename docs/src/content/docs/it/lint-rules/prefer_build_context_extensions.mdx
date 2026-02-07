@@ -13,7 +13,8 @@ import GoodSnippet from '~/components/lint-rules/prefer_build_context_extensions
 	<Badge text="dart" variant="note" />
 </div>
 
-Preferisci usare estensioni `BuildContext` per accedere a un'istanza di `Bloc` o `Repository`.
+Preferisci usare estensioni `BuildContext` per accedere a un'istanza di `Bloc` o
+`Repository`.
 
 :::note
 
@@ -28,15 +29,16 @@ Per coerenza, preferisci usare estensioni `BuildContext` come `context.read`,
 `context.watch`, e `context.select` invece di `BlocProvider.of`,
 `RepositoryProvider.of`, `BlocBuilder` o `BlocSelector`.
 
-| metodo esplicito                                                     | estensione             |
-| ------------------------------------------------------------------- | --------------------- |
-| `BlocProvider.of<Bloc>(context, listen: false)`                     | `context.read<Bloc>`  |
+| metodo esplicito                                                   | estensione            |
+| ------------------------------------------------------------------ | --------------------- |
+| `BlocProvider.of<Bloc>(context, listen: false)`                    | `context.read<Bloc>`  |
 | `BlocBuilder<Bloc, State>(...)` o `BlocProvider.of<Bloc>(context)` | `context.watch<Bloc>` |
-| `BlocSelector<Bloc, State>(...)`                                    | `context.select`      |
+| `BlocSelector<Bloc, State>(...)`                                   | `context.select`      |
 
 ## Esempi
 
-**Evita** di usare `BlocProvider.of<T>(context)` per accedere a un'istanza di `Bloc`.
+**Evita** di usare `BlocProvider.of<T>(context)` per accedere a un'istanza di
+`Bloc`.
 
 **Errato**:
 

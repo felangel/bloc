@@ -11,11 +11,11 @@ import CounterBlocTestSetupSnippet from '~/components/testing/CounterBlocTestSet
 import CounterBlocTestInitialStateSnippet from '~/components/testing/CounterBlocTestInitialStateSnippet.astro';
 import CounterBlocTestBlocTestSnippet from '~/components/testing/CounterBlocTestBlocTestSnippet.astro';
 
-Bloc è stato progettato per essere estremamente facile da testare. In questa sezione, vedremo
-come testare un bloc con i test unitari.
+Bloc è stato progettato per essere estremamente facile da testare. In questa
+sezione, vedremo come testare un bloc con i test unitari.
 
-Per semplicità, scriviamo i test per il `CounterBloc` che abbiamo creato
-in [Concetti Bloc](/it/bloc-concepts).
+Per semplicità, scriviamo i test per il `CounterBloc` che abbiamo creato in
+[Concetti Bloc](/it/bloc-concepts).
 
 Ricapitolando, l'implementazione del `CounterBloc` è la seguente:
 
@@ -23,8 +23,8 @@ Ricapitolando, l'implementazione del `CounterBloc` è la seguente:
 
 ## Configurazione
 
-Prima di iniziare a scrivere i nostri test avremo bisogno di aggiungere un framework di test
-alle nostre dipendenze.
+Prima di iniziare a scrivere i nostri test avremo bisogno di aggiungere un
+framework di test alle nostre dipendenze.
 
 Dobbiamo aggiungere [test](https://pub.dev/packages/test) e
 [bloc_test](https://pub.dev/packages/bloc_test) al nostro progetto.
@@ -33,21 +33,24 @@ Dobbiamo aggiungere [test](https://pub.dev/packages/test) e
 
 ## Testing
 
-Iniziamo creando il file `counter_bloc_test.dart` per i nostri test del `CounterBloc` e importando il pacchetto test.
+Iniziamo creando il file `counter_bloc_test.dart` per i nostri test del
+`CounterBloc` e importando il pacchetto test.
 
 <CounterBlocTestImportsSnippet />
 
-Successivamente, dobbiamo creare il nostro `main` così come il nostro gruppo di test.
+Successivamente, dobbiamo creare il nostro `main` così come il nostro gruppo di
+test.
 
 <CounterBlocTestMainSnippet />
 
 :::note
 
-I gruppi servono sia per organizzare i singoli test, sia per creare un contesto in cui è possibile condividere le operazioni di `setUp` e `tearDown` tra tutti i test contenuti.
-:::
+I gruppi servono sia per organizzare i singoli test, sia per creare un contesto
+in cui è possibile condividere le operazioni di `setUp` e `tearDown` tra tutti i
+test contenuti. :::
 
-Iniziamo creando un'istanza del nostro `CounterBloc` che sarà usata
-in tutti i nostri test.
+Iniziamo creando un'istanza del nostro `CounterBloc` che sarà usata in tutti i
+nostri test.
 
 <CounterBlocTestSetupSnippet />
 
@@ -61,8 +64,9 @@ Possiamo eseguire tutti i nostri test con il comando `dart test`.
 
 :::
 
-A questo punto dovremmo avere il nostro primo test che passa! Ora scriviamo un test più
-complesso usando il pacchetto [bloc_test](https://pub.dev/packages/bloc_test).
+A questo punto dovremmo avere il nostro primo test che passa! Ora scriviamo un
+test più complesso usando il pacchetto
+[bloc_test](https://pub.dev/packages/bloc_test).
 
 <CounterBlocTestBlocTestSnippet />
 

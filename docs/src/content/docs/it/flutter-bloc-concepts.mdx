@@ -44,8 +44,8 @@ Assicurati di leggere attentamente le seguenti sezioni prima di lavorare con
 
 :::note
 
-Tutti i widget esportati dal pacchetto `flutter_bloc` si integrano con entrambe le istanze `Cubit`
-e `Bloc`.
+Tutti i widget esportati dal pacchetto `flutter_bloc` si integrano con entrambe
+le istanze `Cubit` e `Bloc`.
 
 :::
 
@@ -54,10 +54,10 @@ e `Bloc`.
 ### BlocBuilder
 
 **BlocBuilder** è un widget Flutter che richiede un `Bloc` e una funzione
-`builder`. `BlocBuilder` gestisce la costruzione del widget in risposta a nuovi stati.
-`BlocBuilder` è molto simile a `StreamBuilder` ma ha un'API più semplice per
-ridurre la quantità di codice boilerplate necessario. La funzione `builder` sarà
-potenzialmente chiamata molte volte e dovrebbe essere una
+`builder`. `BlocBuilder` gestisce la costruzione del widget in risposta a nuovi
+stati. `BlocBuilder` è molto simile a `StreamBuilder` ma ha un'API più semplice
+per ridurre la quantità di codice boilerplate necessario. La funzione `builder`
+sarà potenzialmente chiamata molte volte e dovrebbe essere una
 [funzione pura](https://en.wikipedia.org/wiki/Pure_function) che restituisce un
 widget in risposta allo stato.
 
@@ -75,20 +75,23 @@ singolo widget e non è accessibile tramite un `BlocProvider` padre e il
 
 <BlocBuilderExplicitBlocSnippet />
 
-Per un controllo granulare su quando la funzione `builder` viene chiamata può essere fornit opzionalmente un
-`buildWhen`. `buildWhen` prende lo stato precedente e quello corrente del bloc e restituisce un booleano. Se `buildWhen` restituisce `true`, `builder`
-sarà chiamato con `state` e il widget si ricostruirà. Se `buildWhen` restituisce
-`false`, `builder` non sarà chiamato con `state` e non si verificherà alcun aggiornamento.
+Per un controllo granulare su quando la funzione `builder` viene chiamata può
+essere fornit opzionalmente un `buildWhen`. `buildWhen` prende lo stato
+precedente e quello corrente del bloc e restituisce un booleano. Se `buildWhen`
+restituisce `true`, `builder` sarà chiamato con `state` e il widget si
+ricostruirà. Se `buildWhen` restituisce `false`, `builder` non sarà chiamato con
+`state` e non si verificherà alcun aggiornamento.
 
 <BlocBuilderConditionSnippet />
 
 ### BlocSelector
 
-**BlocSelector** è un widget Flutter che è analogo a `BlocBuilder` ma
-permette agli sviluppatori di filtrare gli aggiornamenti selezionando un nuovo valore in base allo
-stato corrente del bloc. Gli aggiornamenti non necessari sono prevenuti se il valore selezionato non
-cambia. Il valore selezionato deve essere immutabile affinché `BlocSelector` possa
-determinare accuratamente se `builder` dovrebbe essere chiamato di nuovo.
+**BlocSelector** è un widget Flutter che è analogo a `BlocBuilder` ma permette
+agli sviluppatori di filtrare gli aggiornamenti selezionando un nuovo valore in
+base allo stato corrente del bloc. Gli aggiornamenti non necessari sono
+prevenuti se il valore selezionato non cambia. Il valore selezionato deve essere
+immutabile affinché `BlocSelector` possa determinare accuratamente se `builder`
+dovrebbe essere chiamato di nuovo.
 
 Se il parametro `bloc` è omesso, `BlocSelector` eseguirà automaticamente una
 ricerca usando `BlocProvider` e il `BuildContext` corrente.
@@ -99,28 +102,30 @@ ricerca usando `BlocProvider` e il `BuildContext` corrente.
 
 **BlocProvider** è un widget Flutter che fornisce un bloc ai suoi figli tramite
 `BlocProvider.of<T>(context)`. È usato come widget di dependency injection (DI)
-così che una singola istanza di un bloc possa essere fornita a più widget all'interno di un
-sottoalbero.
+così che una singola istanza di un bloc possa essere fornita a più widget
+all'interno di un sottoalbero.
 
-Nella maggior parte dei casi, `BlocProvider` dovrebbe essere usato per creare nuovi bloc che saranno
-resi disponibili al resto del sottoalbero. In questo caso, poiché `BlocProvider` è
-responsabile della creazione del bloc, gestirà automaticamente la chiusura del
-bloc.
+Nella maggior parte dei casi, `BlocProvider` dovrebbe essere usato per creare
+nuovi bloc che saranno resi disponibili al resto del sottoalbero. In questo
+caso, poiché `BlocProvider` è responsabile della creazione del bloc, gestirà
+automaticamente la chiusura del bloc.
 
 <BlocProviderSnippet />
 
-Di default, `BlocProvider` creerà il bloc in modo pigro (`lazy`), il che significa che `create` sarà
-eseguito quando il bloc viene cercato tramite `BlocProvider.of<BlocA>(context)`.
+Di default, `BlocProvider` creerà il bloc in modo pigro (`lazy`), il che
+significa che `create` sarà eseguito quando il bloc viene cercato tramite
+`BlocProvider.of<BlocA>(context)`.
 
-Per sovrascrivere questo comportamento e forzare `create` ad essere eseguito immediatamente, `lazy` può
-essere impostato a `false`.
+Per sovrascrivere questo comportamento e forzare `create` ad essere eseguito
+immediatamente, `lazy` può essere impostato a `false`.
 
 <BlocProviderEagerSnippet />
 
-In alcuni casi, `BlocProvider` può essere usato per fornire un bloc esistente a una nuova
-porzione dell'albero dei widget. Questo sarà più comunemente usato quando un bloc esistente
-deve essere reso disponibile a una nuova route. In questo caso, `BlocProvider`
-non chiuderà automaticamente il bloc poiché non l'ha creato.
+In alcuni casi, `BlocProvider` può essere usato per fornire un bloc esistente a
+una nuova porzione dell'albero dei widget. Questo sarà più comunemente usato
+quando un bloc esistente deve essere reso disponibile a una nuova route. In
+questo caso, `BlocProvider` non chiuderà automaticamente il bloc poiché non l'ha
+creato.
 
 <BlocProviderValueSnippet />
 
@@ -131,8 +136,8 @@ poi da `ChildA`, o `ScreenA` possiamo recuperare `BlocA` con:
 ### MultiBlocProvider
 
 **MultiBlocProvider** è un widget Flutter che unisce più widget `BlocProvider`
-in uno unico. `MultiBlocProvider` migliora la leggibilità ed elimina
-la necessità di annidare più `BlocProvider`. Usando `MultiBlocProvider` possiamo
+in uno unico. `MultiBlocProvider` migliora la leggibilità ed elimina la
+necessità di annidare più `BlocProvider`. Usando `MultiBlocProvider` possiamo
 passare da:
 
 <NestedBlocProviderSnippet />
@@ -150,13 +155,15 @@ qualsiasi `child` sarà ignorato.
 
 ### BlocListener
 
-**BlocListener** è un widget Flutter che prende un `BlocWidgetListener` e opzionalmente un
-`Bloc` e invoca il `listener` in risposta ai cambiamenti di stato nel
-bloc. Dovrebbe essere usato per funzionalità che devono verificarsi una volta per cambiamento di stato
-come navigazione, mostrare uno `SnackBar`, mostrare un `Dialog`, ecc...
+**BlocListener** è un widget Flutter che prende un `BlocWidgetListener` e
+opzionalmente un `Bloc` e invoca il `listener` in risposta ai cambiamenti di
+stato nel bloc. Dovrebbe essere usato per funzionalità che devono verificarsi
+una volta per cambiamento di stato come navigazione, mostrare uno `SnackBar`,
+mostrare un `Dialog`, ecc...
 
-`listener` è chiamato solo una volta per ogni cambiamento di stato (**NON** è chiamato con lo
-stato iniziale) ed è una funzione `void` a differenza di `builder` in `BlocBuilder`.
+`listener` è chiamato solo una volta per ogni cambiamento di stato (**NON** è
+chiamato con lo stato iniziale) ed è una funzione `void` a differenza di
+`builder` in `BlocBuilder`.
 
 Se il parametro `bloc` è omesso, `BlocListener` eseguirà automaticamente una
 ricerca usando `BlocProvider` e il `BuildContext` corrente.
@@ -168,19 +175,19 @@ accessibile tramite `BlocProvider` e il `BuildContext` corrente.
 
 <BlocListenerExplicitBlocSnippet />
 
-Per un controllo granulare su quando la funzione `listener` viene chiamata può essere fornito opzionalmente un
-`listenWhen`. `listenWhen` prende lo stato precedente e quello corrente del bloc e restituisce un booleano. Se `listenWhen` restituisce `true`,
-`listener` sarà chiamato con `state`. Se `listenWhen` restituisce `false`,
-`listener` non sarà chiamato con `state`.
+Per un controllo granulare su quando la funzione `listener` viene chiamata può
+essere fornito opzionalmente un `listenWhen`. `listenWhen` prende lo stato
+precedente e quello corrente del bloc e restituisce un booleano. Se `listenWhen`
+restituisce `true`, `listener` sarà chiamato con `state`. Se `listenWhen`
+restituisce `false`, `listener` non sarà chiamato con `state`.
 
 <BlocListenerConditionSnippet />
 
 ### MultiBlocListener
 
 **MultiBlocListener** è un widget Flutter che unisce più widget `BlocListener`
-in uno. `MultiBlocListener` migliora la leggibilità ed elimina
-la necessità di annidare più `BlocListener`. Usando `MultiBlocListener` possiamo
-passare da:
+in uno. `MultiBlocListener` migliora la leggibilità ed elimina la necessità di
+annidare più `BlocListener`. Usando `MultiBlocListener` possiamo passare da:
 
 <NestedBlocListenerSnippet />
 
@@ -197,27 +204,27 @@ qualsiasi `child` sarà ignorato.
 
 ### BlocConsumer
 
-**BlocConsumer** espone un `builder` e un `listener` per reagire a nuovi
-stati. `BlocConsumer` è analogo a un `BlocListener` e `BlocBuilder` annidati
-ma riduce la quantità di boilerplate necessario. `BlocConsumer` dovrebbe essere usato solo
-quando è necessario sia ricostruire la UI che eseguire altre reazioni ai cambiamenti di stato
-nel `bloc`. `BlocConsumer` richiede un `BlocWidgetBuilder` e un
-`BlocWidgetListener`, opzionalmente prende un `bloc`, un `BlocBuilderCondition` e un
-`BlocListenerCondition`.
+**BlocConsumer** espone un `builder` e un `listener` per reagire a nuovi stati.
+`BlocConsumer` è analogo a un `BlocListener` e `BlocBuilder` annidati ma riduce
+la quantità di boilerplate necessario. `BlocConsumer` dovrebbe essere usato solo
+quando è necessario sia ricostruire la UI che eseguire altre reazioni ai
+cambiamenti di stato nel `bloc`. `BlocConsumer` richiede un `BlocWidgetBuilder`
+e un `BlocWidgetListener`, opzionalmente prende un `bloc`, un
+`BlocBuilderCondition` e un `BlocListenerCondition`.
 
 Se il parametro `bloc` è omesso, `BlocConsumer` eseguirà automaticamente una
 ricerca usando `BlocProvider` e il `BuildContext` corrente.
 
 <BlocConsumerSnippet />
 
-Un `listenWhen` e `buildWhen` opzionali possono essere implementati per un controllo più granulare
-su quando `listener` e `builder` sono chiamati. `listenWhen` e
-`buildWhen` saranno invocati su ogni cambiamento di `state` del `bloc`. Prendono ciascuno lo
-`state` precedente e lo `state` corrente e devono restituire un `bool` che determina
-se la funzione `builder` e/o `listener` sarà invocata. Lo
-`state` precedente sarà inizializzato allo `state` del `bloc` quando il
-`BlocConsumer` è inizializzato. `listenWhen` e `buildWhen` sono opzionali e se
-non sono implementati, avranno default a `true`.
+Un `listenWhen` e `buildWhen` opzionali possono essere implementati per un
+controllo più granulare su quando `listener` e `builder` sono chiamati.
+`listenWhen` e `buildWhen` saranno invocati su ogni cambiamento di `state` del
+`bloc`. Prendono ciascuno lo `state` precedente e lo `state` corrente e devono
+restituire un `bool` che determina se la funzione `builder` e/o `listener` sarà
+invocata. Lo `state` precedente sarà inizializzato allo `state` del `bloc`
+quando il `BlocConsumer` è inizializzato. `listenWhen` e `buildWhen` sono
+opzionali e se non sono implementati, avranno default a `true`.
 
 <BlocConsumerConditionSnippet />
 
@@ -225,9 +232,10 @@ non sono implementati, avranno default a `true`.
 
 **RepositoryProvider** è un widget Flutter che fornisce un repository ai suoi
 figli tramite `RepositoryProvider.of<T>(context)`. È usato come widget di
-dependency injection (DI) così che una singola istanza di un repository possa essere fornita
-a più widget all'interno di un sottoalbero. `BlocProvider` dovrebbe essere usato per fornire
-bloc mentre `RepositoryProvider` dovrebbe essere usato solo per repository.
+dependency injection (DI) così che una singola istanza di un repository possa
+essere fornita a più widget all'interno di un sottoalbero. `BlocProvider`
+dovrebbe essere usato per fornire bloc mentre `RepositoryProvider` dovrebbe
+essere usato solo per repository.
 
 <RepositoryProviderSnippet />
 
@@ -235,16 +243,16 @@ poi da `ChildA` possiamo recuperare l'istanza del `Repository` con:
 
 <RepositoryProviderLookupSnippet />
 
-I repository che gestiscono risorse che devono essere eliminate possono farlo tramite la
-callback `dispose`:
+I repository che gestiscono risorse che devono essere eliminate possono farlo
+tramite la callback `dispose`:
 
 <RepositoryProviderDisposeSnippet />
 
 ### MultiRepositoryProvider
 
-**MultiRepositoryProvider** è un widget Flutter che unisce più
-widget `RepositoryProvider` in uno. `MultiRepositoryProvider` migliora la
-leggibilità ed elimina la necessità di annidare più `RepositoryProvider`. Usando
+**MultiRepositoryProvider** è un widget Flutter che unisce più widget
+`RepositoryProvider` in uno. `MultiRepositoryProvider` migliora la leggibilità
+ed elimina la necessità di annidare più `RepositoryProvider`. Usando
 `MultiRepositoryProvider` possiamo passare da:
 
 <NestedRepositoryProviderSnippet />
@@ -271,15 +279,16 @@ Diamo un'occhiata a come usare `BlocProvider` per fornire un `CounterBloc` a una
 
 <CounterPageSnippet />
 
-A questo punto abbiamo separato con successo il nostro livello di presentazione dal nostro
-livello di logica applicativa. Nota che il widget `CounterPage` non sa nulla di
-cosa succede quando un utente tocca i pulsanti. Il widget semplicemente dice al
-`CounterBloc` che l'utente ha premuto il pulsante di incremento o decremento.
+A questo punto abbiamo separato con successo il nostro livello di presentazione
+dal nostro livello di logica applicativa. Nota che il widget `CounterPage` non
+sa nulla di cosa succede quando un utente tocca i pulsanti. Il widget
+semplicemente dice al `CounterBloc` che l'utente ha premuto il pulsante di
+incremento o decremento.
 
 ## Uso di RepositoryProvider
 
-Daremo un'occhiata a come usare `RepositoryProvider` nel
-contesto dell'esempio [`flutter_weather`][flutter_weather_link].
+Daremo un'occhiata a come usare `RepositoryProvider` nel contesto dell'esempio
+[`flutter_weather`][flutter_weather_link].
 
 <WeatherRepositorySnippet />
 
@@ -287,25 +296,25 @@ Nel nostro `main.dart`, chiamiamo `runApp` con il nostro widget `WeatherApp`.
 
 <WeatherMainSnippet />
 
-Inietteremo la nostra istanza di `WeatherRepository` nel nostro albero dei widget tramite
-`RepositoryProvider`.
+Inietteremo la nostra istanza di `WeatherRepository` nel nostro albero dei
+widget tramite `RepositoryProvider`.
 
-Quando istanziamo un bloc, possiamo accedere all'istanza di un repository tramite
-`context.read` e iniettare il repository nel bloc tramite costruttore.
+Quando istanziamo un bloc, possiamo accedere all'istanza di un repository
+tramite `context.read` e iniettare il repository nel bloc tramite costruttore.
 
 <WeatherAppSnippet />
 
 :::tip
 
-Se hai più di un repository, puoi usare `MultiRepositoryProvider` per
-fornire più istanze di repository al sottoalbero.
+Se hai più di un repository, puoi usare `MultiRepositoryProvider` per fornire
+più istanze di repository al sottoalbero.
 
 :::
 
 :::note
 
-Usa la callback `dispose` per gestire l'eliminazione di qualsiasi risorsa quando il
-`RepositoryProvider` viene smontato.
+Usa la callback `dispose` per gestire l'eliminazione di qualsiasi risorsa quando
+il `RepositoryProvider` viene smontato.
 
 :::
 
@@ -315,20 +324,18 @@ Usa la callback `dispose` per gestire l'eliminazione di qualsiasi risorsa quando
 ## Extension methods
 
 Gli ["extension methods"](https://dart.dev/guides/language/extension-methods),
-introdotti in Dart 2.7, sono un modo per aggiungere funzionalità a librerie esistenti. In
-questa sezione, daremo un'occhiata alle estensione incluse in
+introdotti in Dart 2.7, sono un modo per aggiungere funzionalità a librerie
+esistenti. In questa sezione, daremo un'occhiata alle estensione incluse in
 `package:flutter_bloc` e a come possono essere usate.
 
 `flutter_bloc` ha una dipendenza versp
-[package:provider](https://pub.dev/packages/provider) che semplifica l'uso
-di
+[package:provider](https://pub.dev/packages/provider) che semplifica l'uso di
 [`InheritedWidget`](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html).
 
 Internamente, `package:flutter_bloc` usa `package:provider` per implementare:
-`BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` e
-widget `MultiRepositoryProvider`. `package:flutter_bloc` esporta le
-estensioni `ReadContext`, `WatchContext` e `SelectContext` da
-`package:provider`.
+`BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` e widget
+`MultiRepositoryProvider`. `package:flutter_bloc` esporta le estensioni
+`ReadContext`, `WatchContext` e `SelectContext` da `package:provider`.
 
 :::note
 
@@ -340,13 +347,13 @@ Scopri di più su [`package:provider`](https://pub.dev/packages/provider).
 
 `context.read<T>()` cerca l'istanza dell'antenato più vicina di tipo `T` ed è
 funzionalmente equivalente a `BlocProvider.of<T>(context)`. `context.read` è più
-comunemente usato per recuperare un'istanza di bloc per aggiungere un evento all'interno di una
-callback `onPressed`.
+comunemente usato per recuperare un'istanza di bloc per aggiungere un evento
+all'interno di una callback `onPressed`.
 
 :::note
 
-`context.read<T>()` non ascolta `T` -- se l'oggetto fornito di tipo
-`T` cambia, `context.read` non attiverà un aggiornamento del widget.
+`context.read<T>()` non ascolta `T` -- se l'oggetto fornito di tipo `T` cambia,
+`context.read` non attiverà un aggiornamento del widget.
 
 :::
 
@@ -360,7 +367,8 @@ onPressed() {
 }
 ```
 
-❌ **EVITARE** di usare `context.read` per recuperare lo stato all'interno di un metodo `build`.
+❌ **EVITARE** di usare `context.read` per recuperare lo stato all'interno di un
+metodo `build`.
 
 ```dart
 @override
@@ -382,8 +390,8 @@ cambiamenti di stato.
 
 ### context.watch
 
-Come `context.read<T>()`, `context.watch<T>()` fornisce l'istanza dell'antenato più vicina
-di tipo `T`, tuttavia ascolta anche i cambiamenti sull'istanza. È
+Come `context.read<T>()`, `context.watch<T>()` fornisce l'istanza dell'antenato
+più vicina di tipo `T`, tuttavia ascolta anche i cambiamenti sull'istanza. È
 funzionalmente equivalente a `BlocProvider.of<T>(context, listen: true)`.
 
 Se l'oggetto fornito di tipo `T` cambia, `context.watch` attiverà un
@@ -398,7 +406,8 @@ aggiornamento.
 
 #### Uso
 
-✅ **FARE** usa `BlocBuilder` invece di `context.watch` per limitare esplicitamente gli aggiornamenti.
+✅ **FARE** usa `BlocBuilder` invece di `context.watch` per limitare
+esplicitamente gli aggiornamenti.
 
 ```dart
 Widget build(BuildContext context) {
@@ -448,8 +457,8 @@ Builder(
 );
 ```
 
-❌ **EVITARE** di usare `context.watch` quando il widget padre nel metodo `build`
-non dipende dallo stato.
+❌ **EVITARE** di usare `context.watch` quando il widget padre nel metodo
+`build` non dipende dallo stato.
 
 ```dart
 @override
@@ -467,17 +476,17 @@ Widget build(BuildContext context) {
 
 :::caution
 
-Usare `context.watch` alla radice del metodo `build` risulterà nel
-aggiornamento dell'intero widget quando lo stato del bloc cambia.
+Usare `context.watch` alla radice del metodo `build` risulterà nel aggiornamento
+dell'intero widget quando lo stato del bloc cambia.
 
 :::
 
 ### context.select
 
 Proprio come `context.watch<T>()`, `context.select<T, R>(R function(T value))`
-fornisce l'istanza dell'antenato più vicina di tipo `T` e ascolta i cambiamenti su
-`T`. A differenza di `context.watch`, `context.select` ti permette di ascoltare i cambiamenti in una
-parte più piccola di uno stato.
+fornisce l'istanza dell'antenato più vicina di tipo `T` e ascolta i cambiamenti
+su `T`. A differenza di `context.watch`, `context.select` ti permette di
+ascoltare i cambiamenti in una parte più piccola di uno stato.
 
 ```dart
 Widget build(BuildContext context) {
@@ -491,7 +500,8 @@ stato del `ProfileBloc` cambia.
 
 #### Uso
 
-✅ **FARE** usa `BlocSelector` invece di `context.select` per limitare esplicitamente gli aggiornamenti.
+✅ **FARE** usa `BlocSelector` invece di `context.select` per limitare
+esplicitamente gli aggiornamenti.
 
 ```dart
 Widget build(BuildContext context) {
@@ -528,8 +538,8 @@ Widget build(BuildContext context) {
 }
 ```
 
-❌ **EVITARE** di usare `context.select` quando il widget padre in un metodo build
-non dipende dallo stato.
+❌ **EVITARE** di usare `context.select` quando il widget padre in un metodo
+build non dipende dallo stato.
 
 ```dart
 @override

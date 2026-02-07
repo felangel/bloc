@@ -14,25 +14,26 @@ import GoodSnippet from '~/components/lint-rules/avoid_flutter_imports/GoodSnipp
 	<Badge text="recommended" variant="success" />
 </div>
 
-Evita di introdurre dipendenze su Flutter all'interno di componenti di logica applicativa
-(istanze `Bloc` o `Cubit`).
+Evita di introdurre dipendenze su Flutter all'interno di componenti di logica
+applicativa (istanze `Bloc` o `Cubit`).
 
 ## Motivazione
 
-Stratificare un'applicazione è una parte chiave della costruzione di un progetto mantenibile e
-aiuta gli sviluppatori a iterare rapidamente e con fiducia. Ogni livello dovrebbe avere una
-singola responsabilità ed essere in grado di funzionare e di essere testato in modo isolato. Questo
-ti permette di contenere i cambiamenti a livelli specifici, minimizzando l'impatto su
-tutta l'applicazione.
+Stratificare un'applicazione è una parte chiave della costruzione di un progetto
+mantenibile e aiuta gli sviluppatori a iterare rapidamente e con fiducia. Ogni
+livello dovrebbe avere una singola responsabilità ed essere in grado di
+funzionare e di essere testato in modo isolato. Questo ti permette di contenere
+i cambiamenti a livelli specifici, minimizzando l'impatto su tutta
+l'applicazione.
 
-Di conseguenza, i componenti di logica applicativa dovrebbero generalmente gestire lo stato delle funzionalità ed
-essere disaccoppiati dal livello UI. Gli eventi dovrebbero fluire nei componenti di logica applicativa
-dal livello UI e lo stato dovrebbe fluire dal livello di logica applicativa
-nel livello UI.
+Di conseguenza, i componenti di logica applicativa dovrebbero generalmente
+gestire lo stato delle funzionalità ed essere disaccoppiati dal livello UI. Gli
+eventi dovrebbero fluire nei componenti di logica applicativa dal livello UI e
+lo stato dovrebbe fluire dal livello di logica applicativa nel livello UI.
 
-Mantenere i componenti di logica applicativa disaccoppiati da Flutter fornisce la capacità di
-riutilizzare la logica applicativa su più piattaforme/framework (ad es. Flutter,
-AngularDart, Jaspr, ecc.).
+Mantenere i componenti di logica applicativa disaccoppiati da Flutter fornisce
+la capacità di riutilizzare la logica applicativa su più piattaforme/framework
+(ad es. Flutter, AngularDart, Jaspr, ecc.).
 
 ## Esempi
 

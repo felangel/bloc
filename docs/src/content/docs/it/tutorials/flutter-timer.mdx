@@ -1,6 +1,7 @@
 ---
 title: Flutter Timer
-description: Una guida approfondita su come costruire un'app Flutter timer con bloc.
+description:
+  Una guida approfondita su come costruire un'app Flutter timer con bloc.
 sidebar:
   order: 2
 ---
@@ -20,19 +21,21 @@ import BackgroundSnippet from '~/components/tutorials/flutter-timer/BackgroundSn
 
 ![beginner](https://img.shields.io/badge/level-beginner-green.svg)
 
-In questo tutorial vedremo come costruire un timer
-usando la libreria bloc. L'applicazione risultante dovrebbe essere così:
+In questo tutorial vedremo come costruire un timer usando la libreria bloc.
+L'applicazione risultante dovrebbe essere così:
 
 ![demo](~/assets/tutorials/flutter-timer.gif)
 
 ## Argomenti Chiave
 
-- Osservare i cambiamenti di stato con [BlocObserver](/it/bloc-concepts#blocobserver);
+- Osservare i cambiamenti di stato con
+  [BlocObserver](/it/bloc-concepts#blocobserver);
 - [BlocProvider](/it/flutter-bloc-concepts#blocprovider), widget Flutter che
   fornisce un bloc ai suoi figli;
-- [BlocBuilder](/it/flutter-bloc-concepts#blocbuilder), widget Flutter che gestisce
-  la costruzione del widget in risposta a nuovi stati;
-- Prevenire aggiornamenti non necessari con [Equatable](/it/faqs#when-to-use-equatable);
+- [BlocBuilder](/it/flutter-bloc-concepts#blocbuilder), widget Flutter che
+  gestisce la costruzione del widget in risposta a nuovi stati;
+- Prevenire aggiornamenti non necessari con
+  [Equatable](/it/faqs#when-to-use-equatable);
 - Imparare a usare `StreamSubscription` in un Bloc;
 - Prevenire aggiornamenti non necessari con `buildWhen`.
 
@@ -79,8 +82,8 @@ Successivamente, esegui `flutter pub get` per installare tutte le dipendenze.
 
 ## Ticker
 
-Il ticker sarà la sorgente di dati per l'applicazione timer. Esporrà uno
-stream di "tick" a cui possiamo sottoscriverci e reagire.
+Il ticker sarà la sorgente di dati per l'applicazione timer. Esporrà uno stream
+di "tick" a cui possiamo sottoscriverci e reagire.
 
 Inizia creando `ticker.dart`.
 
@@ -89,9 +92,9 @@ Inizia creando `ticker.dart`.
 	title="lib/ticker.dart"
 />
 
-Tutto ciò che fa la classe `Ticker` è esporre una funzione `tick` che prende il numero di
-tick (secondi) che vogliamo e restituisce uno stream che emette i secondi rimanenti
-ogni secondo.
+Tutto ciò che fa la classe `Ticker` è esporre una funzione `tick` che prende il
+numero di tick (secondi) che vogliamo e restituisce uno stream che emette i
+secondi rimanenti ogni secondo.
 
 Successivamente, dobbiamo creare il `TimerBloc` che consumerà il `Ticker`.
 
@@ -103,23 +106,25 @@ Inizieremo definendo i `TimerStates` in cui il `TimerBloc` può trovarsi.
 
 Lo stato del `TimerBloc` può essere uno dei seguenti:
 
-- `TimerInitial`: pronto per iniziare il conteggio alla rovescia dalla durata specificata.
-- `TimerRunInProgress`: sta attivamente contando alla rovescia dalla durata specificata.
+- `TimerInitial`: pronto per iniziare il conteggio alla rovescia dalla durata
+  specificata.
+- `TimerRunInProgress`: sta attivamente contando alla rovescia dalla durata
+  specificata.
 - `TimerRunPause`: in pausa a una durata rimanente.
 - `TimerRunComplete`: completato con una durata rimanente di 0.
 
-Ognuno di questi stati avrà un'implicazione sull'interfaccia utente e sulle azioni
-che l'utente può eseguire. Ad esempio:
+Ognuno di questi stati avrà un'implicazione sull'interfaccia utente e sulle
+azioni che l'utente può eseguire. Ad esempio:
 
 - se lo stato è `TimerInitial` l'utente sarà in grado di avviare il timer;
-- se lo stato è `TimerRunInProgress` l'utente sarà in grado di mettere in pausa e resettare
-  il timer così come vedere la durata rimanente;
+- se lo stato è `TimerRunInProgress` l'utente sarà in grado di mettere in pausa
+  e resettare il timer così come vedere la durata rimanente;
 - se lo stato è `TimerRunPause` l'utente sarà in grado di riprendere il timer e
   resettare il timer;
 - se lo stato è `TimerRunComplete` l'utente sarà in grado di resettare il timer.
 
-Per mantenere tutti i nostri file bloc insieme, creiamo una directory bloc
-con `bloc/timer_state.dart`.
+Per mantenere tutti i nostri file bloc insieme, creiamo una directory bloc con
+`bloc/timer_state.dart`.
 
 :::tip
 
@@ -136,20 +141,22 @@ estensioni per autogenerare i seguenti file bloc per te.
 />
 
 Nota che tutti i `TimerStates` estendono la classe base astratta `TimerState`
-che ha una proprietà duration. Questo è perché non importa in quale stato il nostro
-`TimerBloc` sia, vogliamo sempre sapere quanto tempo rimane. Inoltre,
-`TimerState` estende `Equatable` per ottimizzare il nostro codice assicurandoci che la nostra app
-non attivi aggiornamenti se viene emesso uno stato uguale al precedente.
+che ha una proprietà duration. Questo è perché non importa in quale stato il
+nostro `TimerBloc` sia, vogliamo sempre sapere quanto tempo rimane. Inoltre,
+`TimerState` estende `Equatable` per ottimizzare il nostro codice assicurandoci
+che la nostra app non attivi aggiornamenti se viene emesso uno stato uguale al
+precedente.
 
-Successivamente, definiamo e implementiamo i `TimerEvents` che il nostro `TimerBloc`
-processerà.
+Successivamente, definiamo e implementiamo i `TimerEvents` che il nostro
+`TimerBloc` processerà.
 
 ### TimerEvent
 
 Il nostro `TimerBloc` dovrà sapere come processare i seguenti eventi:
 
 - `TimerStarted`: informa il TimerBloc che il timer dovrebbe essere avviato;
-- `TimerPaused`: informa il TimerBloc che il timer dovrebbe essere messo in pausa;
+- `TimerPaused`: informa il TimerBloc che il timer dovrebbe essere messo in
+  pausa;
 - `TimerResumed`: informa il TimerBloc che il timer dovrebbe essere ripreso;
 - `TimerReset`: informa il TimerBloc che il timer dovrebbe essere resettato allo
   stato originale;
@@ -170,14 +177,13 @@ Successivamente, implementiamo il `TimerBloc`!
 
 ### TimerBloc
 
-Se non l'hai già fatto, crea `bloc/timer_bloc.dart` e crea un `TimerBloc`
-vuoto.
+Se non l'hai già fatto, crea `bloc/timer_bloc.dart` e crea un `TimerBloc` vuoto.
 
 <TimerBlocEmptySnippet />
 
-La prima cosa che dobbiamo fare è definire lo stato iniziale del nostro `TimerBloc`. In
-questo caso, vogliamo che il `TimerBloc` inizi nello stato `TimerInitial` con
-una durata preimpostata di 1 minuto (60 secondi).
+La prima cosa che dobbiamo fare è definire lo stato iniziale del nostro
+`TimerBloc`. In questo caso, vogliamo che il `TimerBloc` inizi nello stato
+`TimerInitial` con una durata preimpostata di 1 minuto (60 secondi).
 
 <TimerBlocInitialStateSnippet />
 
@@ -185,48 +191,49 @@ Successivamente, dobbiamo definire la dipendenza sul nostro `Ticker`.
 
 <TimerBlocTickerSnippet />
 
-Stiamo anche definendo una `StreamSubscription` per il nostro `Ticker` che implementeremo
-tra poco.
+Stiamo anche definendo una `StreamSubscription` per il nostro `Ticker` che
+implementeremo tra poco.
 
-A questo punto, tutto ciò che resta da fare è implementare i gestori di eventi. Per
-migliorare la leggibilità, mi piace separare ogni gestore di eventi in una funzione dedicata.
-Inizieremo con l'evento `TimerStarted`.
+A questo punto, tutto ciò che resta da fare è implementare i gestori di eventi.
+Per migliorare la leggibilità, mi piace separare ogni gestore di eventi in una
+funzione dedicata. Inizieremo con l'evento `TimerStarted`.
 
 <TimerBlocOnStartedSnippet />
 
-Se il `TimerBloc` riceve un evento `TimerStarted`, emette uno
-stato `TimerRunInProgress` con la durata iniziale. Inoltre, se c'era
-già una `_tickerSubscription` aperta dobbiamo cancellarla per deallocare la
-memoria. Dobbiamo anche sovrascrivere il metodo `close` sul nostro `TimerBloc` così che
-possiamo cancellare la `_tickerSubscription` quando il `TimerBloc` è chiuso. Infine,
-ascoltiamo lo stream `_ticker.tick` e su ogni tick aggiungiamo un evento `_TimerTicked`
-con la durata rimanente.
+Se il `TimerBloc` riceve un evento `TimerStarted`, emette uno stato
+`TimerRunInProgress` con la durata iniziale. Inoltre, se c'era già una
+`_tickerSubscription` aperta dobbiamo cancellarla per deallocare la memoria.
+Dobbiamo anche sovrascrivere il metodo `close` sul nostro `TimerBloc` così che
+possiamo cancellare la `_tickerSubscription` quando il `TimerBloc` è chiuso.
+Infine, ascoltiamo lo stream `_ticker.tick` e su ogni tick aggiungiamo un evento
+`_TimerTicked` con la durata rimanente.
 
 Successivamente, implementiamo il gestore di eventi `_TimerTicked`.
 
 <TimerBlocOnTickedSnippet />
 
-Ogni volta che viene ricevuto un evento `_TimerTicked`, se la durata del tick è maggiore
-di 0, dobbiamo emettere uno stato `TimerRunInProgress` aggiornato con la nuova
-durata. Altrimenti, se la durata del tick è 0, il nostro timer è terminato e dobbiamo
-emettere uno stato `TimerRunComplete`.
+Ogni volta che viene ricevuto un evento `_TimerTicked`, se la durata del tick è
+maggiore di 0, dobbiamo emettere uno stato `TimerRunInProgress` aggiornato con
+la nuova durata. Altrimenti, se la durata del tick è 0, il nostro timer è
+terminato e dobbiamo emettere uno stato `TimerRunComplete`.
 
 Ora implementiamo il gestore di eventi `TimerPaused`.
 
 <TimerBlocOnPausedSnippet />
 
-In `_onPaused` se lo `state` del nostro `TimerBloc` è `TimerRunInProgress`, allora
-possiamo mettere in pausa la `_tickerSubscription` ed emettere uno stato `TimerRunPause` con la
-durata del timer corrente.
+In `_onPaused` se lo `state` del nostro `TimerBloc` è `TimerRunInProgress`,
+allora possiamo mettere in pausa la `_tickerSubscription` ed emettere uno stato
+`TimerRunPause` con la durata del timer corrente.
 
-Successivamente, implementiamo il gestore di eventi `TimerResumed` così possiamo riprendere
-il timer.
+Successivamente, implementiamo il gestore di eventi `TimerResumed` così possiamo
+riprendere il timer.
 
 <TimerBlocOnResumedSnippet />
 
-Il gestore di eventi `TimerResumed` è molto simile al gestore di eventi `TimerPaused`. Se il `TimerBloc` ha uno
-`state` di `TimerRunPause` e riceve un evento `TimerResumed`, riprende la `_tickerSubscription` ed emette uno
-stato `TimerRunInProgress` con la durata corrente.
+Il gestore di eventi `TimerResumed` è molto simile al gestore di eventi
+`TimerPaused`. Se il `TimerBloc` ha uno `state` di `TimerRunPause` e riceve un
+evento `TimerResumed`, riprende la `_tickerSubscription` ed emette uno stato
+`TimerRunInProgress` con la durata corrente.
 
 Infine, dobbiamo implementare il gestore di eventi `TimerReset`.
 
@@ -236,8 +243,8 @@ Infine, dobbiamo implementare il gestore di eventi `TimerReset`.
 />
 
 Se il `TimerBloc` riceve un evento `TimerReset`, deve cancellare la corrente
-`_tickerSubscription` così che non viene notificato di tick aggiuntivi ed
-emette uno stato `TimerInitial` con la durata originale.
+`_tickerSubscription` così che non viene notificato di tick aggiuntivi ed emette
+uno stato `TimerInitial` con la durata originale.
 
 Questo è tutto per il `TimerBloc`. Ora tutto ciò che resta è implementare l'UI
 per il nostro Timer.
@@ -246,16 +253,16 @@ per il nostro Timer.
 
 ### MyApp
 
-Possiamo iniziare cancellando il contenuto di `main.dart` e sostituendolo con
-il seguente.
+Possiamo iniziare cancellando il contenuto di `main.dart` e sostituendolo con il
+seguente.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/main.dart"
 	title="lib/main.dart"
 />
 
-Successivamente, creiamo il nostro widget `App` in `app.dart`, che sarà la radice della nostra
-applicazione.
+Successivamente, creiamo il nostro widget `App` in `app.dart`, che sarà la
+radice della nostra applicazione.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/app.dart"
@@ -267,21 +274,21 @@ Successivamente, dobbiamo implementare il nostro widget `Timer`.
 ### Timer
 
 Il nostro widget `Timer` (`lib/timer/view/timer_page.dart`) sarà responsabile di
-visualizzare il tempo rimanente insieme ai pulsanti appropriati che permetteranno
-agli utenti di avviare, mettere in pausa e resettare il timer.
+visualizzare il tempo rimanente insieme ai pulsanti appropriati che
+permetteranno agli utenti di avviare, mettere in pausa e resettare il timer.
 
 <TimerPageSnippet />
 
 Finora, stiamo solo usando `BlocProvider` per accedere all'istanza del nostro
 `TimerBloc`.
 
-Successivamente, implementeremo il nostro widget `Actions` che avrà le
-azioni appropriate (avvia, pausa e reset).
+Successivamente, implementeremo il nostro widget `Actions` che avrà le azioni
+appropriate (avvia, pausa e reset).
 
 ### Barrel
 
-Per pulire i nostri import dalla sezione `Timer`, dobbiamo creare un file "barrel"
-`timer/timer.dart`.
+Per pulire i nostri import dalla sezione `Timer`, dobbiamo creare un file
+"barrel" `timer/timer.dart`.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_timer/lib/timer/timer.dart"
@@ -292,32 +299,35 @@ Per pulire i nostri import dalla sezione `Timer`, dobbiamo creare un file "barre
 
 <ActionsSnippet />
 
-Il widget `Actions` è solo un altro `StatelessWidget` che usa un
-`BlocBuilder` per ricostruire la UI ogni volta che otteniamo un nuovo `TimerState`. `Actions`
-usa `context.read<TimerBloc>()` per accedere all'istanza del `TimerBloc` e restituisce
-diversi `FloatingActionButtons` in base allo stato corrente del `TimerBloc`.
-Ognuno dei `FloatingActionButtons` aggiunge un evento nel suo callback `onPressed` per
-notificare il `TimerBloc`.
+Il widget `Actions` è solo un altro `StatelessWidget` che usa un `BlocBuilder`
+per ricostruire la UI ogni volta che otteniamo un nuovo `TimerState`. `Actions`
+usa `context.read<TimerBloc>()` per accedere all'istanza del `TimerBloc` e
+restituisce diversi `FloatingActionButtons` in base allo stato corrente del
+`TimerBloc`. Ognuno dei `FloatingActionButtons` aggiunge un evento nel suo
+callback `onPressed` per notificare il `TimerBloc`.
 
-Se vuoi un controllo granulare su quando la funzione `builder` viene chiamata puoi
-fornire opzionalmente un `buildWhen` a `BlocBuilder`. Il `buildWhen` prende lo stato precedente del bloc e lo stato corrente del bloc e restituisce un `booleano`. Se
-`buildWhen` restituisce `true`, `builder` sarà chiamato con `state` e il widget
-si ricostruirà. Se `buildWhen` restituisce `false`, `builder` non sarà chiamato con
-`state` e non si verificherà alcun aggiornamento.
+Se vuoi un controllo granulare su quando la funzione `builder` viene chiamata
+puoi fornire opzionalmente un `buildWhen` a `BlocBuilder`. Il `buildWhen` prende
+lo stato precedente del bloc e lo stato corrente del bloc e restituisce un
+`booleano`. Se `buildWhen` restituisce `true`, `builder` sarà chiamato con
+`state` e il widget si ricostruirà. Se `buildWhen` restituisce `false`,
+`builder` non sarà chiamato con `state` e non si verificherà alcun
+aggiornamento.
 
-In questo caso, non vogliamo che il widget `Actions` sia ricostruito su ogni tick
-perché sarebbe inefficiente. Invece, vogliamo che `Actions` si ricostruisca solo se
-il `runtimeType` del `TimerState` cambia (TimerInitial =>
+In questo caso, non vogliamo che il widget `Actions` sia ricostruito su ogni
+tick perché sarebbe inefficiente. Invece, vogliamo che `Actions` si ricostruisca
+solo se il `runtimeType` del `TimerState` cambia (TimerInitial =>
 TimerRunInProgress, TimerRunInProgress => TimerRunPause, ecc...).
 
-Di conseguenza, se colorassimo casualmente i widget su ogngli aggiornamenti, sarebbe:
+Di conseguenza, se colorassimo casualmente i widget su ogngli aggiornamenti,
+sarebbe:
 
 ![BlocBuilder buildWhen demo](https://cdn-images-1.medium.com/max/1600/1*YyjpH1rcZlYWxCX308l_Ew.gif)
 
 :::note
 
-Anche se il widget `Text` è ricostruito su ogni tick, ricostruiamo le
-`Actions` solo se necessario.
+Anche se il widget `Text` è ricostruito su ogni tick, ricostruiamo le `Actions`
+solo se necessario.
 
 :::
 

@@ -13,10 +13,12 @@ import AvoidFlutterImportsWarningSnippet from '~/components/lint/ImportFlutterWa
 import RunBlocLintCounterCubitSnippet from '~/components/lint/RunBlocLintCounterCubitSnippet.astro';
 import AvoidFlutterImportsWarningOutputSnippet from '~/components/lint/ImportFlutterWarningOutputSnippet.astro';
 
-Di default, il linter di bloc non segnalerà alcun avviso finché non avrai configurato esplicitamente le opzioni di analisi del progetto.
+Di default, il linter di bloc non segnalerà alcun avviso finché non avrai
+configurato esplicitamente le opzioni di analisi del progetto.
 
-Per iniziare, crea o modifica l'`analysis_options.yaml` esistente alla
-radice del tuo progetto per includere una lista di regole sotto la chiave bloc di primo livello:
+Per iniziare, crea o modifica l'`analysis_options.yaml` esistente alla radice
+del tuo progetto per includere una lista di regole sotto la chiave bloc di primo
+livello:
 
 <BlocLintBasicAnalysisOptionsSnippet />
 
@@ -25,15 +27,15 @@ Esegui il linter usando il seguente comando nel tuo terminale:
 <RunBlocLintInCurrentDirectorySnippet />
 
 Il comando sopra analizzerà tutti i file nella directory corrente e nelle sue
-sottodirectory, ma puoi anche fare il "lint" di file e directory specifici passandoli
-come argomenti da linea di comando:
+sottodirectory, ma puoi anche fare il "lint" di file e directory specifici
+passandoli come argomenti da linea di comando:
 
 <RunBlocLintInSrcTestSnippet />
 
 Il comando sopra analizzerà tutto il codice nelle directory `src` e `test`.
 
-Se la regola `avoid_flutter_imports` è abilitata, qualsiasi file bloc o cubit che
-contiene un import flutter sarà segnalato come avviso:
+Se la regola `avoid_flutter_imports` è abilitata, qualsiasi file bloc o cubit
+che contiene un import flutter sarà segnalato come avviso:
 
 <AvoidFlutterImportsWarningSnippet />
 
