@@ -57,9 +57,8 @@ import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSn
 `BlocBuilder` обробляє побудову віджета у відповідь на нові стани. `BlocBuilder`
 дуже схожий на `StreamBuilder`, але має простіший API для зменшення кількості
 шаблонного коду. Функція `builder` може потенційно викликатися багато разів і
-повинна бути
-[чистою функцією](https://en.wikipedia.org/wiki/Pure_function), яка повертає
-віджет у відповідь на стан.
+повинна бути [чистою функцією](https://en.wikipedia.org/wiki/Pure_function), яка
+повертає віджет у відповідь на стан.
 
 Дивіться `BlocListener`, якщо ви хочете "робити" щось у відповідь на зміни
 стану, такі як навігація, показ діалогу тощо.
@@ -78,9 +77,9 @@ import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSn
 Для точного контролю над тим, коли викликається функція `builder`, можна надати
 необов'язковий параметр `buildWhen`. `buildWhen` приймає попередній стан bloc та
 поточний стан bloc і повертає булеве значення. Якщо `buildWhen` повертає true,
-`builder` буде викликаний з `state` і віджет буде перебудований. Якщо `buildWhen`
-повертає false, `builder` не буде викликаний з `state` і перебудова не
-відбудеться.
+`builder` буде викликаний з `state` і віджет буде перебудований. Якщо
+`buildWhen` повертає false, `builder` не буде викликаний з `state` і перебудова
+не відбудеться.
 
 <BlocBuilderConditionSnippet />
 
@@ -104,15 +103,16 @@ import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSn
 залежностей (DI), щоб один екземпляр bloc міг бути наданий кільком віджетам у
 піддереві.
 
-У більшості випадків `BlocProvider` повинен використовуватися для створення нових
-bloc, які будуть доступні решті піддерева. У цьому випадку, оскільки
+У більшості випадків `BlocProvider` повинен використовуватися для створення
+нових bloc, які будуть доступні решті піддерева. У цьому випадку, оскільки
 `BlocProvider` відповідає за створення bloc, він автоматично обробить закриття
 bloc.
 
 <BlocProviderSnippet />
 
 За замовчуванням `BlocProvider` створить bloc ліниво, що означає, що `create`
-буде виконаний, коли bloc буде знайдений через `BlocProvider.of<BlocA>(context)`.
+буде виконаний, коли bloc буде знайдений через
+`BlocProvider.of<BlocA>(context)`.
 
 Щоб перевизначити цю поведінку та примусово запустити `create` негайно, `lazy`
 можна встановити у `false`.
@@ -120,9 +120,10 @@ bloc.
 <BlocProviderEagerSnippet />
 
 У деяких випадках `BlocProvider` може використовуватися для надання існуючого
-bloc новій частині дерева віджетів. Це найчастіше використовується, коли існуючий
-bloc потрібно зробити доступним для нового маршруту. У цьому випадку
-`BlocProvider` не буде автоматично закривати bloc, оскільки він його не створював.
+bloc новій частині дерева віджетів. Це найчастіше використовується, коли
+існуючий bloc потрібно зробити доступним для нового маршруту. У цьому випадку
+`BlocProvider` не буде автоматично закривати bloc, оскільки він його не
+створював.
 
 <BlocProviderValueSnippet />
 
@@ -134,8 +135,8 @@ bloc потрібно зробити доступним для нового ма
 
 **MultiBlocProvider** — це Flutter віджет, який об'єднує кілька віджетів
 `BlocProvider` в один. `MultiBlocProvider` покращує читабельність та усуває
-необхідність вкладати кілька `BlocProviders`. Використовуючи `MultiBlocProvider`,
-ми можемо перейти від:
+необхідність вкладати кілька `BlocProviders`. Використовуючи
+`MultiBlocProvider`, ми можемо перейти від:
 
 <NestedBlocProviderSnippet />
 
@@ -145,8 +146,8 @@ bloc потрібно зробити доступним для нового ма
 
 :::caution
 
-Коли `BlocProvider` визначений у контексті `MultiBlocProvider`, будь-який `child`
-буде ігноруватися.
+Коли `BlocProvider` визначений у контексті `MultiBlocProvider`, будь-який
+`child` буде ігноруватися.
 
 :::
 
@@ -154,9 +155,9 @@ bloc потрібно зробити доступним для нового ма
 
 **BlocListener** — це Flutter віджет, який приймає `BlocWidgetListener` та
 необов'язковий `Bloc` і викликає `listener` у відповідь на зміни стану в bloc.
-Він повинен використовуватися для функціональності, яка повинна виконуватися один
-раз на кожну зміну стану, такої як навігація, показ `SnackBar`, показ `Dialog`
-тощо.
+Він повинен використовуватися для функціональності, яка повинна виконуватися
+один раз на кожну зміну стану, такої як навігація, показ `SnackBar`, показ
+`Dialog` тощо.
 
 `listener` викликається лише один раз для кожної зміни стану (**НЕ** включаючи
 початковий стан), на відміну від `builder` у `BlocBuilder`, і є функцією `void`.
@@ -172,9 +173,9 @@ bloc потрібно зробити доступним для нового ма
 <BlocListenerExplicitBlocSnippet />
 
 Для точного контролю над тим, коли викликається функція `listener`, можна надати
-необов'язковий параметр `listenWhen`. `listenWhen` приймає попередній стан bloc та
-поточний стан bloc і повертає булеве значення. Якщо `listenWhen` повертає true,
-`listener` буде викликаний з `state`. Якщо `listenWhen` повертає false,
+необов'язковий параметр `listenWhen`. `listenWhen` приймає попередній стан bloc
+та поточний стан bloc і повертає булеве значення. Якщо `listenWhen` повертає
+true, `listener` буде викликаний з `state`. Якщо `listenWhen` повертає false,
 `listener` не буде викликаний з `state`.
 
 <BlocListenerConditionSnippet />
@@ -194,8 +195,8 @@ bloc потрібно зробити доступним для нового ма
 
 :::caution
 
-Коли `BlocListener` визначений у контексті `MultiBlocListener`, будь-який `child`
-буде ігноруватися.
+Коли `BlocListener` визначений у контексті `MultiBlocListener`, будь-який
+`child` буде ігноруватися.
 
 :::
 
@@ -217,11 +218,11 @@ bloc потрібно зробити доступним для нового ма
 Необов'язкові `listenWhen` та `buildWhen` можуть бути реалізовані для більш
 детального контролю над тим, коли викликаються `listener` та `builder`.
 `listenWhen` та `buildWhen` будуть викликані при кожній зміні `state` в `bloc`.
-Кожний приймає попередній `state` та поточний `state` і повинен повернути `bool`,
-який визначає, чи буде викликана функція `builder` та/або `listener`. Попередній
-`state` буде ініціалізований станом `state` блоку `bloc` при ініціалізації
-`BlocConsumer`. `listenWhen` та `buildWhen` є необов'язковими, і якщо вони не
-реалізовані, за замовчуванням буде `true`.
+Кожний приймає попередній `state` та поточний `state` і повинен повернути
+`bool`, який визначає, чи буде викликана функція `builder` та/або `listener`.
+Попередній `state` буде ініціалізований станом `state` блоку `bloc` при
+ініціалізації `BlocConsumer`. `listenWhen` та `buildWhen` є необов'язковими, і
+якщо вони не реалізовані, за замовчуванням буде `true`.
 
 <BlocConsumerConditionSnippet />
 
@@ -231,8 +232,8 @@ bloc потрібно зробити доступним для нового ма
 елементам через `RepositoryProvider.of<T>(context)`. Він використовується як
 віджет впровадження залежностей (DI), щоб один екземпляр сховища міг бути
 наданий кільком віджетам у піддереві. `BlocProvider` повинен використовуватися
-для надання bloc, тоді як `RepositoryProvider` повинен використовуватися лише для
-сховищ.
+для надання bloc, тоді як `RepositoryProvider` повинен використовуватися лише
+для сховищ.
 
 <RepositoryProviderSnippet />
 
@@ -267,8 +268,8 @@ bloc потрібно зробити доступним для нового ма
 
 ## Використання BlocProvider
 
-Давайте розглянемо, як використовувати `BlocProvider` для надання `CounterBloc` у
-`CounterPage` та реагувати на зміни стану за допомогою `BlocBuilder`.
+Давайте розглянемо, як використовувати `BlocProvider` для надання `CounterBloc`
+у `CounterPage` та реагувати на зміни стану за допомогою `BlocBuilder`.
 
 <CounterBlocSnippet />
 
@@ -328,9 +329,9 @@ bloc потрібно зробити доступним для нового ма
 [package:provider](https://pub.dev/packages/provider), яка спрощує використання
 [`InheritedWidget`](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html).
 
-Внутрішньо `package:flutter_bloc` використовує `package:provider` для реалізації:
-`BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` та віджетів
-`MultiRepositoryProvider`. `package:flutter_bloc` експортує розширення
+Внутрішньо `package:flutter_bloc` використовує `package:provider` для
+реалізації: `BlocProvider`, `MultiBlocProvider`, `RepositoryProvider` та
+віджетів `MultiRepositoryProvider`. `package:flutter_bloc` експортує розширення
 `ReadContext`, `WatchContext` та `SelectContext` з `package:provider`.
 
 :::note
@@ -363,7 +364,8 @@ onPressed() {
 }
 ```
 
-❌ **УНИКАЙТЕ** використання `context.read` для отримання стану в методі `build`.
+❌ **УНИКАЙТЕ** використання `context.read` для отримання стану в методі
+`build`.
 
 ```dart
 @override

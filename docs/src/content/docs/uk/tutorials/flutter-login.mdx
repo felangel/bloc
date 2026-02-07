@@ -1,6 +1,7 @@
 ---
 title: Вхід Flutter
-description: Детальний посібник зі створення потоку входу Flutter з використанням bloc.
+description:
+  Детальний посібник зі створення потоку входу Flutter з використанням bloc.
 sidebar:
   order: 4
 ---
@@ -110,8 +111,8 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 ## User Repository
 
-Так само, як і з `AuthenticationRepository`, ми створимо пакет
-`user_repository` всередині каталогу `packages`.
+Так само, як і з `AuthenticationRepository`, ми створимо пакет `user_repository`
+всередині каталогу `packages`.
 
 ```
 ├── android
@@ -141,8 +142,8 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 	title="packages/user_repository/lib/src/models/user.dart"
 />
 
-Для простоти користувач має лише властивість `id`, але на практиці ми можемо мати
-додаткові властивості, такі як `firstName`, `lastName`, `avatarUrl` тощо...
+Для простоти користувач має лише властивість `id`, але на практиці ми можемо
+мати додаткові властивості, такі як `firstName`, `lastName`, `avatarUrl` тощо...
 
 :::note
 
@@ -230,9 +231,8 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 ### authentication_event.dart
 
-Екземпляри `AuthenticationEvent` будуть вхідними даними для
-`AuthenticationBloc` та оброблятимуться для випуску нових екземплярів
-`AuthenticationState`.
+Екземпляри `AuthenticationEvent` будуть вхідними даними для `AuthenticationBloc`
+та оброблятимуться для випуску нових екземплярів `AuthenticationState`.
 
 У цьому додатку `AuthenticationBloc` реагуватиме на дві різні події:
 
@@ -257,8 +257,8 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 - `AuthenticationState.unknown()`: стан за замовчуванням, який вказує, що bloc
   ще не знає, чи автентифікований поточний користувач.
 
-- `AuthenticationState.authenticated()`: стан, який вказує, що користувач
-  наразі автентифікований.
+- `AuthenticationState.authenticated()`: стан, який вказує, що користувач наразі
+  автентифікований.
 
 - `AuthenticationState.unauthenticated()`: стан, який вказує, що користувач
   наразі не автентифікований.
@@ -282,8 +282,7 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 />
 
 `AuthenticationBloc` залежить як від `AuthenticationRepository`, так і від
-`UserRepository` та визначає початковий стан як
-`AuthenticationState.unknown()`.
+`UserRepository` та визначає початковий стан як `AuthenticationState.unknown()`.
 
 У тілі конструктора підкласи `AuthenticationEvent` зіставляються з відповідними
 обробниками подій.
@@ -295,8 +294,8 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 `emit.onEach` створює підписку на потік внутрішньо та піклується про її
 скасування, коли `AuthenticationBloc` або потік `status` закривається.
 
-Якщо потік `status` випускає помилку, `addError` пересилає помилку та
-stackTrace будь-якому `BlocObserver`, що слухає.
+Якщо потік `status` випускає помилку, `addError` пересилає помилку та stackTrace
+будь-якому `BlocObserver`, що слухає.
 
 :::caution
 
@@ -342,7 +341,8 @@ stackTrace будь-якому `BlocObserver`, що слухає.
 
 `app.dart` розділений на дві частини: `App` та `AppView`. `App` відповідає за
 створення/надання `AuthenticationBloc`, який споживатиметься `AppView`. Це
-розділення дозволить нам легко тестувати обидва віджети `App` та `AppView` надалі.
+розділення дозволить нам легко тестувати обидва віджети `App` та `AppView`
+надалі.
 
 :::
 
@@ -426,8 +426,8 @@ lib
 	title="lib/login/models/username.dart"
 />
 
-Для простоти ми лише перевіряємо, що ім'я користувача не порожнє, але на практиці
-можна вимагати використання спеціальних символів, довжину тощо...
+Для простоти ми лише перевіряємо, що ім'я користувача не порожнє, але на
+практиці можна вимагати використання спеціальних символів, довжину тощо...
 
 #### Password
 
@@ -440,8 +440,8 @@ lib
 
 #### Barrel моделей
 
-Як і раніше, є barrel-файл `models.dart` для зручного імпорту моделей
-`Username` та `Password` одним імпортом.
+Як і раніше, є barrel-файл `models.dart` для зручного імпорту моделей `Username`
+та `Password` одним імпортом.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/models/models.dart"
@@ -450,8 +450,8 @@ lib
 
 ### Login Bloc
 
-`LoginBloc` керує станом `LoginForm` та відповідає за валідацію введення
-імені користувача та пароля, а також стану форми.
+`LoginBloc` керує станом `LoginForm` та відповідає за валідацію введення імені
+користувача та пароля, а також стану форми.
 
 #### login_event.dart
 
@@ -534,8 +534,8 @@ lib
 />
 
 `BlocListener` використовується для показу `SnackBar`, якщо відправка входу не
-вдалася. Крім того, `context.select` використовується для ефективного доступу
-до конкретних частин `LoginState` для кожного віджета, запобігаючи зайвим
+вдалася. Крім того, `context.select` використовується для ефективного доступу до
+конкретних частин `LoginState` для кожного віджета, запобігаючи зайвим
 перебудовам. Зворотний виклик `onChanged` використовується для сповіщення
 `LoginBloc` про зміни імені користувача/пароля.
 
@@ -545,8 +545,8 @@ lib
 ## Home
 
 Після успішного запиту `logIn` стан `AuthenticationBloc` зміниться на
-`authenticated`, і користувач буде переведений на `HomePage`, де ми
-відображаємо `id` користувача, а також кнопку виходу.
+`authenticated`, і користувач буде переведений на `HomePage`, де ми відображаємо
+`id` користувача, а також кнопку виходу.
 
 ```
 ├── lib

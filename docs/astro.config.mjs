@@ -135,7 +135,13 @@ export default defineConfig({
 						{
 							label: 'Testing',
 							link: '/testing/',
-							translations: { fa: 'آزمایش کردن', es: 'Pruebas', ja: 'テスト', ru: 'Тестирование', uk: 'Тестування' },
+							translations: {
+								fa: 'آزمایش کردن',
+								es: 'Pruebas',
+								ja: 'テスト',
+								ru: 'Тестирование',
+								uk: 'Тестування',
+							},
 						},
 						{
 							label: 'Naming Conventions',
@@ -195,7 +201,11 @@ export default defineConfig({
 						{
 							label: 'Customizing Rules ',
 							link: '/lint/customizing-rules/',
-							translations: { fa: 'سفارشی سازی قوانین', ru: 'Настройка правил', uk: 'Налаштування правил' },
+							translations: {
+								fa: 'سفارشی سازی قوانین',
+								ru: 'Настройка правил',
+								uk: 'Налаштування правил',
+							},
 						},
 						{
 							label: 'Rules',
@@ -217,7 +227,13 @@ export default defineConfig({
 				},
 				{
 					label: 'Tools',
-					translations: { fa: 'ابزار', es: 'Herramientas', ja: 'ツール', ru: 'Инструменты', uk: 'Інструменти' },
+					translations: {
+						fa: 'ابزار',
+						es: 'Herramientas',
+						ja: 'ツール',
+						ru: 'Инструменты',
+						uk: 'Інструменти',
+					},
 					items: [
 						{
 							label: 'IntelliJ Plugin',
@@ -243,7 +259,13 @@ export default defineConfig({
 				},
 				{
 					label: 'Reference',
-					translations: { fa: 'مرجع', es: 'Referencia', ja: 'APIリファレンス', ru: 'Справочник', uk: 'Довідник' },
+					translations: {
+						fa: 'مرجع',
+						es: 'Referencia',
+						ja: 'APIリファレンス',
+						ru: 'Справочник',
+						uk: 'Довідник',
+					},
 					items: [
 						{
 							label: 'angular_bloc',

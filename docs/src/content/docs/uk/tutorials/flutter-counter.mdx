@@ -118,10 +118,10 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 :::note
 
-Ми розширюємо `MaterialApp`, тому що `CounterApp` _є_ `MaterialApp`. У
-більшості випадків ми будемо створювати екземпляри `StatelessWidget` або
-`StatefulWidget` та компонувати віджети в `build`, але в цьому випадку немає
-віджетів для компонування, тому простіше просто розширити `MaterialApp`.
+Ми розширюємо `MaterialApp`, тому що `CounterApp` _є_ `MaterialApp`. У більшості
+випадків ми будемо створювати екземпляри `StatelessWidget` або `StatefulWidget`
+та компонувати віджети в `build`, але в цьому випадку немає віджетів для
+компонування, тому простіше просто розширити `MaterialApp`.
 
 :::
 
@@ -194,10 +194,9 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 :::note
 
-Тільки віджет `Text` обгорнутий у `BlocBuilder`, оскільки це єдиний віджет,
-який потрібно перебудовувати у відповідь на зміни стану в `CounterCubit`.
-Уникайте зайвого обгортання віджетів, які не потребують перебудови при зміні
-стану.
+Тільки віджет `Text` обгорнутий у `BlocBuilder`, оскільки це єдиний віджет, який
+потрібно перебудовувати у відповідь на зміни стану в `CounterCubit`. Уникайте
+зайвого обгортання віджетів, які не потребують перебудови при зміні стану.
 
 :::
 
