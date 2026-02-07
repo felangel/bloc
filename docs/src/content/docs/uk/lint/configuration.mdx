@@ -1,0 +1,58 @@
+---
+title: Конфігурація лінтера
+description: Налаштування лінтера bloc.
+sidebar:
+  order: 3
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import BlocLintBasicAnalysisOptionsSnippet from '~/components/lint/BlocLintBasicAnalysisOptionsSnippet.astro';
+import RunBlocLintInCurrentDirectorySnippet from '~/components/lint/RunBlocLintInCurrentDirectorySnippet.astro';
+import RunBlocLintInSrcTestSnippet from '~/components/lint/RunBlocLintInSrcTestSnippet.astro';
+import AvoidFlutterImportsWarningSnippet from '~/components/lint/ImportFlutterWarningSnippet.mdx';
+import RunBlocLintCounterCubitSnippet from '~/components/lint/RunBlocLintCounterCubitSnippet.astro';
+import AvoidFlutterImportsWarningOutputSnippet from '~/components/lint/ImportFlutterWarningOutputSnippet.astro';
+
+За замовчуванням лінтер bloc не видаватиме жодної діагностики, якщо ви явно не
+налаштували параметри аналізу проєкту.
+
+Для початку створіть або змініть наявний файл `analysis_options.yaml` у корені
+вашого проєкту, щоб включити список правил під ключем верхнього рівня bloc:
+
+<BlocLintBasicAnalysisOptionsSnippet />
+
+Запустіть лінтер за допомогою наступної команди в терміналі:
+
+<RunBlocLintInCurrentDirectorySnippet />
+
+Наведена вище команда проаналізує всі файли в поточному каталозі та його
+підкаталогах, але ви також можете перевірити конкретні файли та каталоги, передавши
+їх як аргументи командного рядка:
+
+<RunBlocLintInSrcTestSnippet />
+
+Наведена вище команда проаналізує весь код у каталогах `src` та `test`.
+
+Якщо правило `avoid_flutter_imports` увімкнено, будь-який файл bloc або cubit,
+що містить імпорт flutter, буде позначено як попередження:
+
+<AvoidFlutterImportsWarningSnippet />
+
+Ви можете побачити попередження, запустивши команду `bloc lint`:
+
+<RunBlocLintCounterCubitSnippet />
+
+Вивід має виглядати так:
+
+<AvoidFlutterImportsWarningOutputSnippet />
+
+:::note
+
+Ось усі підтримувані правила лінтера:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/packages/bloc_lint/lib/all.yaml"
+	title="package:bloc_lint/all.yaml"
+/>
+
+:::

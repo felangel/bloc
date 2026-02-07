@@ -1,0 +1,162 @@
+---
+title: Налаштування правил лінтера
+description: Налаштування правил лінтера bloc
+sidebar:
+  order: 4
+---
+
+import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.astro';
+import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
+import BlocLintEnablingRulesSnippet from '~/components/lint/BlocLintEnablingRulesSnippet.astro';
+import BlocLintDisablingRulesSnippet from '~/components/lint/BlocLintDisablingRulesSnippet.astro';
+import BlocLintChangingSeveritySnippet from '~/components/lint/BlocLintChangingSeveritySnippet.astro';
+import ImportFlutterInfoSnippet from '~/components/lint/ImportFlutterInfoSnippet.mdx';
+import ImportFlutterInfoOutputSnippet from '~/components/lint/ImportFlutterInfoOutputSnippet.astro';
+import BlocLintExcludingFilesSnippet from '~/components/lint/BlocLintExcludingFilesSnippet.astro';
+import BlocLintIgnoreForLineSnippet from '~/components/lint/BlocLintIgnoreForLineSnippet.astro';
+import BlocLintIgnoreForFileSnippet from '~/components/lint/BlocLintIgnoreForFileSnippet.astro';
+
+Ви можете налаштувати поведінку лінтера bloc, змінюючи серйозність окремих
+правил, індивідуально вмикаючи або вимикаючи правила, а також виключаючи файли
+зі статичного аналізу.
+
+## Увімкнення та вимкнення правил
+
+Лінтер bloc підтримує зростаючий список правил лінтера. Зверніть увагу, що
+правила лінтера не обов'язково повинні узгоджуватися між собою. Наприклад,
+деякі розробники можуть надавати перевагу використанню блоків (`prefer_bloc`),
+тоді як інші можуть надавати перевагу використанню кубітів (`prefer_cubit`).
+
+:::note
+
+На відміну від статичного аналізу, правила лінтера можуть містити хибні
+спрацювання. Не соромтеся повідомляти про будь-які хибні спрацювання або інші
+проблеми, [створивши issue](https://github.com/felangel/bloc/issues/new/choose).
+
+:::
+
+### Увімкнення рекомендованих правил
+
+Бібліотека bloc надає набір рекомендованих правил лінтера у складі пакета
+[`bloc_lint`](https://pub.dev/packages/bloc_lint).
+
+Для увімкнення рекомендованого набору лінтів додайте пакет `bloc_lint` як
+dev-залежність:
+
+<InstallBlocLintSnippet />
+
+Потім відредагуйте ваш файл `analysis_options.yaml`, щоб включити набір правил:
+
+<BlocLintRecommendedAnalysisOptionsSnippet />
+
+:::note
+
+Коли публікується нова версія `bloc_lint`, код, який раніше проходив статичний
+аналіз, може почати не проходити його. Ми рекомендуємо оновити ваш код для
+роботи з новими правилами, або ви також можете за бажанням увімкнути чи вимкнути
+окремі правила.
+
+:::
+
+### Увімкнення окремих правил
+
+Для увімкнення окремих правил додайте `bloc:` до файлу `analysis_options.yaml` як
+ключ верхнього рівня та `rules:` як ключ другого рівня. У наступних рядках
+вкажіть правила, які ви бажаєте, у вигляді списку YAML (з префіксом у вигляді
+дефісів).
+
+Наприклад:
+
+<BlocLintEnablingRulesSnippet />
+
+### Вимкнення окремих правил
+
+Якщо ви включаєте наявний набір правил, такий як набір `recommended`, ви можете
+захотіти вимкнути одне або кілька включених правил лінтера. Вимкнення правил
+аналогічне їх увімкненню, але потребує використання YAML-карти замість списку.
+
+Наприклад, наступне включає рекомендований набір правил лінтера за винятком
+`avoid_public_bloc_methods` та додатково вмикає правило `prefer_bloc`:
+
+<BlocLintDisablingRulesSnippet />
+
+## Налаштування серйозності правил
+
+Ви можете налаштувати серйозність будь-якого правила таким чином:
+
+<BlocLintChangingSeveritySnippet />
+
+Тепер те саме правило лінтера відображатиметься з серйозністю `info` замість
+`warning`:
+
+<ImportFlutterInfoSnippet />
+
+Вивід команди `bloc lint` має виглядати так:
+
+<ImportFlutterInfoOutputSnippet />
+
+Підтримувані варіанти серйозності:
+
+| Серйозність | Опис                                                      |
+| ----------- | --------------------------------------------------------- |
+| `error`     | Вказує, що шаблон не дозволений.                          |
+| `warning`   | Вказує, що шаблон підозрілий, але дозволений.             |
+| `info`      | Надає інформацію користувачам, але не є проблемою         |
+| `hint`      | Пропонує кращий спосіб досягнення результату.             |
+
+## Виключення файлів
+
+Іноді допустимо, що статичний аналіз не проходить. Наприклад, ви можете захотіти
+ігнорувати попередження або помилки, що відображаються у згенерованому коді, який
+не був написаний вами та вашою командою. Так само, як і з офіційними правилами
+лінтера Dart, ви можете використовувати опцію аналізатора `exclude:`, щоб
+виключити файли зі статичного аналізу.
+
+Ви можете або перелічити окремі файли, або використовувати патерни
+[`glob`](https://pub.dev/packages/glob).
+
+:::note
+
+Усі використання патернів glob мають бути відносно каталогу, що містить
+відповідний файл `analysis_options.yaml`.
+
+:::
+
+Наприклад, ми можемо виключити весь згенерований код Dart за допомогою наступних
+параметрів аналізу:
+
+<BlocLintExcludingFilesSnippet />
+
+## Ігнорування правил
+
+Так само, як і з офіційними правилами лінтера Dart, ви можете ігнорувати правила
+лінтера bloc для певного файлу або рядка коду, використовуючи
+`// ignore_for_file` та `// ignore` відповідно.
+
+:::note
+
+Щоб ігнорувати кілька правил для певного рядка або файлу, вкажіть список,
+розділений комами.
+
+:::
+
+### Ігнорування рядків
+
+Ми можемо ігнорувати конкретні випадки порушень правил, додавши коментар
+`ignore` безпосередньо над проблемним рядком або додавши його в кінець
+проблемного рядка.
+
+Наприклад, ми можемо ігнорувати конкретні випадки
+`prefer_file_naming_conventions` у певному файлі:
+
+<BlocLintIgnoreForLineSnippet />
+
+### Ігнорування файлів
+
+Ми можемо ігнорувати всі випадки порушень правил у файлі, додавши коментар
+`ignore_for_file` у будь-якому місці файлу.
+
+Наприклад, ми можемо ігнорувати всі випадки `prefer_file_naming_conventions` у
+певному файлі:
+
+<BlocLintIgnoreForFileSnippet />

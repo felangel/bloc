@@ -1,0 +1,81 @@
+---
+title: Тестування
+description: Основи написання тестів для ваших блоків.
+---
+
+import CounterBlocSnippet from '~/components/testing/CounterBlocSnippet.astro';
+import AddDevDependenciesSnippet from '~/components/testing/AddDevDependenciesSnippet.astro';
+import CounterBlocTestImportsSnippet from '~/components/testing/CounterBlocTestImportsSnippet.astro';
+import CounterBlocTestMainSnippet from '~/components/testing/CounterBlocTestMainSnippet.astro';
+import CounterBlocTestSetupSnippet from '~/components/testing/CounterBlocTestSetupSnippet.astro';
+import CounterBlocTestInitialStateSnippet from '~/components/testing/CounterBlocTestInitialStateSnippet.astro';
+import CounterBlocTestBlocTestSnippet from '~/components/testing/CounterBlocTestBlocTestSnippet.astro';
+
+Bloc був розроблений так, щоб його було надзвичайно легко тестувати. У цьому
+розділі ми розглянемо, як провести модульне тестування блоку.
+
+Для простоти давайте напишемо тести для `CounterBloc`, який ми створили в розділі
+[Основні концепції](/uk/bloc-concepts).
+
+Нагадаємо, що реалізація `CounterBloc` виглядає так:
+
+<CounterBlocSnippet />
+
+## Налаштування
+
+Перш ніж почати писати наші тести, нам потрібно додати фреймворк для тестування
+до наших залежностей.
+
+Нам потрібно додати [test](https://pub.dev/packages/test) та
+[bloc_test](https://pub.dev/packages/bloc_test) до нашого проєкту.
+
+<AddDevDependenciesSnippet />
+
+## Тестування
+
+Давайте почнемо зі створення файлу для наших тестів `CounterBloc`,
+`counter_bloc_test.dart`, та імпортуємо пакет test.
+
+<CounterBlocTestImportsSnippet />
+
+Далі нам потрібно створити нашу функцію `main`, а також нашу групу тестів.
+
+<CounterBlocTestMainSnippet />
+
+:::note
+
+Групи використовуються для організації окремих тестів, а також для створення
+контексту, в якому ви можете спільно використовувати загальні `setUp` та
+`tearDown` для всіх окремих тестів.
+
+:::
+
+Давайте почнемо зі створення екземпляру нашого `CounterBloc`, який буде
+використовуватися у всіх наших тестах.
+
+<CounterBlocTestSetupSnippet />
+
+Тепер ми можемо почати писати наші окремі тести.
+
+<CounterBlocTestInitialStateSnippet />
+
+:::note
+
+Ми можемо запустити всі наші тести за допомогою команди `dart test`.
+
+:::
+
+На цьому етапі у нас повинен бути перший пройдений тест! Тепер давайте напишемо
+складніший тест, використовуючи пакет
+[bloc_test](https://pub.dev/packages/bloc_test).
+
+<CounterBlocTestBlocTestSnippet />
+
+Ми повинні мати можливість запустити тести та побачити, що всі вони проходять.
+
+Ось і все, тестування має бути легким, і ми повинні відчувати впевненість при
+внесенні змін та рефакторингу нашого коду.
+
+Ви можете звернутися до
+[додатку Weather](https://github.com/felangel/bloc/tree/master/examples/flutter_weather)
+як прикладу повністю протестованого додатку.

@@ -18,6 +18,7 @@ const locales = {
 	'pt-br': { label: 'Português', lang: 'pt-BR' },
 	ru: { label: 'Русский', lang: 'ru' },
 	'zh-cn': { label: '简体中文', lang: 'zh-CN' },
+	uk: { label: 'Українська', lang: 'uk' },
 	ar: { label: 'العربية', lang: 'ar', dir: 'rtl' },
 	fa: { label: 'فارسی', lang: 'fa', dir: 'rtl' },
 	bn: { label: 'বাংলা', lang: 'bn' },
@@ -58,6 +59,7 @@ export default defineConfig({
 						es: 'Introducción',
 						ja: '紹介',
 						ru: 'Введение',
+						uk: 'Вступ',
 					},
 					items: [
 						{
@@ -69,6 +71,7 @@ export default defineConfig({
 								es: 'Empezando',
 								ja: 'はじめに',
 								ru: 'Начало работы',
+								uk: 'Початок роботи',
 							},
 						},
 						{
@@ -80,6 +83,7 @@ export default defineConfig({
 								es: '¿Por qué Bloc?',
 								ja: 'なぜBloc？',
 								ru: 'Почему Bloc?',
+								uk: 'Чому Bloc?',
 							},
 						},
 						{
@@ -91,6 +95,7 @@ export default defineConfig({
 								es: 'Conceptos de Bloc',
 								ja: 'Blocのコンセプト',
 								ru: 'Концепции Bloc',
+								uk: 'Концепції Bloc',
 							},
 						},
 						{
@@ -102,6 +107,7 @@ export default defineConfig({
 								es: 'Conceptos de Flutter Bloc',
 								ja: 'Flutter Blocのコンセプト',
 								ru: 'Концепции Flutter Bloc',
+								uk: 'Концепції Flutter Bloc',
 							},
 						},
 						{
@@ -112,6 +118,7 @@ export default defineConfig({
 								es: 'Arquitectura',
 								ja: 'アーキテクチャー',
 								ru: 'Архитектура',
+								uk: 'Архітектура',
 							},
 						},
 						{
@@ -122,12 +129,13 @@ export default defineConfig({
 								es: 'Modelando el Estado',
 								ja: '状態のモデリング',
 								ru: 'Моделирование состояния',
+								uk: 'Моделювання стану',
 							},
 						},
 						{
 							label: 'Testing',
 							link: '/testing/',
-							translations: { fa: 'آزمایش کردن', es: 'Pruebas', ja: 'テスト', ru: 'Тестирование' },
+							translations: { fa: 'آزمایش کردن', es: 'Pruebas', ja: 'テスト', ru: 'Тестирование', uk: 'Тестування' },
 						},
 						{
 							label: 'Naming Conventions',
@@ -137,6 +145,7 @@ export default defineConfig({
 								es: 'Convenciones de Nomenclatura',
 								ja: '命名規則',
 								ru: 'Соглашения об именовании',
+								uk: 'Угоди про іменування',
 							},
 						},
 						{
@@ -147,6 +156,7 @@ export default defineConfig({
 								es: 'Guía de Migración',
 								ja: '移行ガイド',
 								ru: 'Руководство по миграции',
+								uk: 'Посібник з міграції',
 							},
 						},
 						{
@@ -157,6 +167,7 @@ export default defineConfig({
 								es: 'Preguntas Frecuentes',
 								ja: 'よくある質問',
 								ru: 'Часто задаваемые вопросы',
+								uk: 'Часті запитання',
 							},
 						},
 					],
@@ -164,31 +175,32 @@ export default defineConfig({
 				{
 					label: 'Linter',
 					badge: { text: 'new' },
+					translations: { uk: 'Лінтер' },
 					items: [
 						{
 							label: 'Overview ',
 							link: '/lint/',
-							translations: { fa: 'بررسی اجمالی', ru: 'Обзор' },
+							translations: { fa: 'بررسی اجمالی', ru: 'Обзор', uk: 'Огляд' },
 						},
 						{
 							label: 'Installation ',
 							link: '/lint/installation/',
-							translations: { fa: 'نصب', ru: 'Установка' },
+							translations: { fa: 'نصب', ru: 'Установка', uk: 'Встановлення' },
 						},
 						{
 							label: 'Configuration ',
 							link: '/lint/configuration/',
-							translations: { fa: 'پیکربندی', ru: 'Конфигурация' },
+							translations: { fa: 'پیکربندی', ru: 'Конфигурация', uk: 'Конфігурація' },
 						},
 						{
 							label: 'Customizing Rules ',
 							link: '/lint/customizing-rules/',
-							translations: { fa: 'سفارشی سازی قوانین', ru: 'Настройка правил' },
+							translations: { fa: 'سفارشی سازی قوانین', ru: 'Настройка правил', uk: 'Налаштування правил' },
 						},
 						{
 							label: 'Rules',
 							autogenerate: { directory: '/lint-rules' },
-							translations: { fa: 'قوانین', ru: 'Правила' },
+							translations: { fa: 'قوانین', ru: 'Правила', uk: 'Правила' },
 						},
 					],
 				},
@@ -199,12 +211,13 @@ export default defineConfig({
 						es: 'Tutoriales',
 						ja: 'チュートリアル',
 						ru: 'Руководства',
+						uk: 'Посібники',
 					},
 					autogenerate: { directory: 'tutorials' },
 				},
 				{
 					label: 'Tools',
-					translations: { fa: 'ابزار', es: 'Herramientas', ja: 'ツール', ru: 'Инструменты' },
+					translations: { fa: 'ابزار', es: 'Herramientas', ja: 'ツール', ru: 'Инструменты', uk: 'Інструменти' },
 					items: [
 						{
 							label: 'IntelliJ Plugin',
@@ -213,6 +226,7 @@ export default defineConfig({
 								fa: 'پلاگین IntelliJ',
 								es: 'Plugin de IntelliJ',
 								ru: 'Плагин IntelliJ',
+								uk: 'Плагін IntelliJ',
 							},
 						},
 						{
@@ -222,13 +236,14 @@ export default defineConfig({
 								fa: 'پلاگین VSCode',
 								es: 'Extensión de VSCode',
 								ru: 'Расширение VSCode',
+								uk: 'Розширення VSCode',
 							},
 						},
 					],
 				},
 				{
 					label: 'Reference',
-					translations: { fa: 'مرجع', es: 'Referencia', ja: 'APIリファレンス', ru: 'Справочник' },
+					translations: { fa: 'مرجع', es: 'Referencia', ja: 'APIリファレンス', ru: 'Справочник', uk: 'Довідник' },
 					items: [
 						{
 							label: 'angular_bloc',

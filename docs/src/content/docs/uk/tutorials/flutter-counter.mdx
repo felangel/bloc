@@ -1,0 +1,235 @@
+---
+title: Лічильник Flutter
+description:
+  Детальний посібник зі створення додатку-лічильника на Flutter з використанням
+  bloc.
+sidebar:
+  order: 1
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import FlutterCreateSnippet from '~/components/tutorials/flutter-counter/FlutterCreateSnippet.astro';
+import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.astro';
+
+![beginner](https://img.shields.io/badge/level-beginner-green.svg)
+
+У наступному підручнику ми створимо лічильник на Flutter з використанням
+бібліотеки Bloc.
+
+![demo](~/assets/tutorials/flutter-counter.gif)
+
+## Ключові теми
+
+- Спостереження за змінами стану за допомогою
+  [BlocObserver](/uk/bloc-concepts#blocobserver).
+- [BlocProvider](/uk/flutter-bloc-concepts#blocprovider), віджет Flutter, який
+  надає bloc своїм дочірнім елементам.
+- [BlocBuilder](/uk/flutter-bloc-concepts#blocbuilder), віджет Flutter, який
+  обробляє побудову віджета у відповідь на нові стани.
+- Використання Cubit замість Bloc.
+  [У чому різниця?](/uk/bloc-concepts#cubit-vs-bloc)
+- Додавання подій за допомогою
+  [context.read](/uk/flutter-bloc-concepts#contextread).
+
+## Налаштування
+
+Почнемо зі створення нового Flutter проєкту
+
+<FlutterCreateSnippet />
+
+Потім ми можемо замінити вміст `pubspec.yaml` на
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+а потім встановити всі наші залежності
+
+<FlutterPubGetSnippet />
+
+## Структура проєкту
+
+```
+├── lib
+│   ├── app.dart
+│   ├── counter
+│   │   ├── counter.dart
+│   │   ├── cubit
+│   │   │   └── counter_cubit.dart
+│   │   └── view
+│   │       ├── counter_page.dart
+│   │       ├── counter_view.dart
+│   │       └── view.dart
+│   ├── counter_observer.dart
+│   └── main.dart
+├── pubspec.lock
+├── pubspec.yaml
+```
+
+Додаток використовує структуру каталогів, орієнтовану на функціональність. Ця
+структура проєкту дозволяє нам масштабувати проєкт, маючи самодостатні
+функціональні модулі. У цьому прикладі ми матимемо лише один модуль (сам
+лічильник), але у складніших додатках може бути сотні різних модулів.
+
+## BlocObserver
+
+Перше, на що ми звернемо увагу — як створити `BlocObserver`, який допоможе нам
+спостерігати за всіма змінами стану в додатку.
+
+Створимо `lib/counter_observer.dart`:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter_observer.dart"
+	title="lib/counter_observer.dart"
+/>
+
+У цьому випадку ми перевизначаємо лише `onChange`, щоб бачити всі зміни стану,
+які відбуваються.
+
+:::note
+
+`onChange` працює однаково для екземплярів `Bloc` та `Cubit`.
+
+:::
+
+## main.dart
+
+Далі замінимо вміст `lib/main.dart` на:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/main.dart"
+	title="lib/main.dart"
+/>
+
+Ми ініціалізуємо щойно створений `CounterObserver` і викликаємо `runApp` з
+віджетом `CounterApp`, який ми розглянемо далі.
+
+## Counter App
+
+Створимо `lib/app.dart`:
+
+`CounterApp` буде `MaterialApp` і вказує `home` як `CounterPage`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/app.dart"
+	title="lib/app.dart"
+/>
+
+:::note
+
+Ми розширюємо `MaterialApp`, тому що `CounterApp` _є_ `MaterialApp`. У
+більшості випадків ми будемо створювати екземпляри `StatelessWidget` або
+`StatefulWidget` та компонувати віджети в `build`, але в цьому випадку немає
+віджетів для компонування, тому простіше просто розширити `MaterialApp`.
+
+:::
+
+Давайте розглянемо `CounterPage` далі!
+
+## Counter Page
+
+Створимо `lib/counter/view/counter_page.dart`:
+
+Віджет `CounterPage` відповідає за створення `CounterCubit` (який ми розглянемо
+далі) та надання його `CounterView`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_page.dart"
+	title="lib/counter/view/counter_page.dart"
+/>
+
+:::note
+
+Важливо відокремити або розділити створення `Cubit` від споживання `Cubit`, щоб
+мати код, який значно легше тестувати та повторно використовувати.
+
+:::
+
+## Counter Cubit
+
+Створимо `lib/counter/cubit/counter_cubit.dart`:
+
+Клас `CounterCubit` надасть два методи:
+
+- `increment`: додає 1 до поточного стану
+- `decrement`: віднімає 1 від поточного стану
+
+Тип стану, яким керує `CounterCubit` — це просто `int`, а початковий стан
+дорівнює `0`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/cubit/counter_cubit.dart"
+	title="lib/counter/cubit/counter_cubit.dart"
+/>
+
+:::tip
+
+Використовуйте
+[розширення VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+або [плагін IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc) для
+автоматичного створення нових cubit-ів.
+
+:::
+
+Далі розглянемо `CounterView`, який відповідатиме за споживання стану та
+взаємодію з `CounterCubit`.
+
+## Counter View
+
+Створимо `lib/counter/view/counter_view.dart`:
+
+`CounterView` відповідає за відображення поточного значення лічильника та
+відображення двох FloatingActionButton для збільшення/зменшення лічильника.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_view.dart"
+	title="lib/counter/view/counter_view.dart"
+/>
+
+`BlocBuilder` використовується для обгортання віджета `Text`, щоб оновлювати
+текст кожного разу, коли змінюється стан `CounterCubit`. Крім того,
+`context.read<CounterCubit>()` використовується для пошуку найближчого
+екземпляра `CounterCubit`.
+
+:::note
+
+Тільки віджет `Text` обгорнутий у `BlocBuilder`, оскільки це єдиний віджет,
+який потрібно перебудовувати у відповідь на зміни стану в `CounterCubit`.
+Уникайте зайвого обгортання віджетів, які не потребують перебудови при зміні
+стану.
+
+:::
+
+## Barrel
+
+Створимо `lib/counter/view/view.dart`:
+
+Додамо `view.dart` для експорту всіх публічних частин counter view.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/view.dart"
+	title="lib/counter/view/view.dart"
+/>
+
+Створимо `lib/counter/counter.dart`:
+
+Додамо `counter.dart` для експорту всіх публічних частин функціональності
+лічильника.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/counter.dart"
+	title="lib/counter/counter.dart"
+/>
+
+Ось і все! Ми відокремили шар представлення від шару бізнес-логіки.
+`CounterView` не знає, що відбувається, коли користувач натискає кнопку; він
+просто повідомляє `CounterCubit`. Крім того, `CounterCubit` не знає, що
+відбувається зі станом (значенням лічильника); він просто випускає нові стани у
+відповідь на виклики методів.
+
+Ми можемо запустити наш додаток за допомогою `flutter run` та переглянути його
+на нашому пристрої або симуляторі/емуляторі.
+
+Повний вихідний код (включаючи unit та widget тести) цього прикладу можна знайти
+[тут](https://github.com/felangel/Bloc/tree/master/examples/flutter_counter).

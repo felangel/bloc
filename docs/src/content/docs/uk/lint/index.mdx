@@ -1,0 +1,70 @@
+---
+title: Огляд лінтера
+description: Вступ до лінтера bloc.
+sidebar:
+  order: 1
+---
+
+import AvoidFlutterImportsWarningSnippet from '~/components/lint/ImportFlutterWarningSnippet.mdx';
+import AvoidFlutterImportsWarningOutputSnippet from '~/components/lint/ImportFlutterWarningOutputSnippet.astro';
+import InstallBlocToolsSnippet from '~/components/lint/InstallBlocToolsSnippet.astro';
+import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.astro';
+import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
+import RunBlocLintInCurrentDirectorySnippet from '~/components/lint/RunBlocLintInCurrentDirectorySnippet.astro';
+
+Лінтинг — це процес статичного аналізу коду для виявлення потенційних помилок,
+а також програмних і стилістичних проблем.
+
+Bloc має вбудований лінтер, який можна використовувати через вашу IDE або
+[`інструменти командного рядка bloc`](https://pub.dev/packages/bloc_tools) за
+допомогою команди `bloc lint`.
+
+За допомогою лінтера bloc ви можете підвищити якість вашої кодової бази та
+забезпечити узгодженість без виконання жодного рядка коду.
+
+Наприклад, можливо, ви випадково імпортували залежність Flutter у ваш cubit:
+
+<AvoidFlutterImportsWarningSnippet />
+
+За правильного налаштування лінтер bloc вкаже на імпорт і видасть наступне
+попередження:
+
+<AvoidFlutterImportsWarningOutputSnippet />
+
+У наступних розділах ми розглянемо, як встановити, налаштувати та кастомізувати
+лінтер bloc, щоб ви могли скористатися перевагами статичного аналізу у вашій
+кодовій базі.
+
+## Швидкий старт
+
+Почніть використовувати лінтер bloc всього за кілька швидких і простих кроків.
+
+:::note
+
+Для початку використання bloc у вас має бути встановлений
+[Dart SDK](https://dart.dev/get-dart) на вашому комп'ютері.
+
+:::
+
+1. Встановіть
+   [інструменти командного рядка bloc](https://pub.dev/packages/bloc_tools)
+
+   <InstallBlocToolsSnippet />
+
+1. Встановіть пакет [bloc_lint](https://pub.dev/packages/bloc_lint)
+
+   <InstallBlocLintSnippet />
+
+1. Додайте файл `analysis_options.yaml` у корінь вашого проєкту з рекомендованими
+   правилами
+
+   <BlocLintRecommendedAnalysisOptionsSnippet />
+
+1. Запустіть лінтер
+
+   <RunBlocLintInCurrentDirectorySnippet />
+
+Ось і все 🎉
+
+Продовжуйте читання для більш детального вивчення налаштування та кастомізації
+лінтера bloc.

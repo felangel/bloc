@@ -1,0 +1,60 @@
+---
+title: Надавайте перевагу void публічним методам Cubit
+description: Правило prefer_void_public_cubit_methods.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/prefer_void_public_cubit_methods/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/prefer_void_public_cubit_methods/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+	<Badge text="recommended" variant="success" />
+</div>
+
+Надавайте перевагу void публічним методам в екземплярах `Cubit`.
+
+:::note
+
+Це правило лінтера було введено у версії `0.2.0-dev.2` пакета
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint)
+
+:::
+
+## Обґрунтування
+
+Публічні методи в екземплярах `Cubit` повинні використовуватися для сповіщення
+`Cubit` та ініціювання змін стану через метод `emit`. Якщо викликаючій стороні
+потрібен доступ до будь-якої інформації про стан, вона повинна отримувати її
+з `state`.
+
+:::note
+
+Наступні правила є пов'язаними і зазвичай вмикаються в комбінації з
+`prefer_void_public_cubit_methods`.
+
+- [`avoid_public_bloc_methods`](/uk/lint-rules/avoid_public_bloc_methods)
+- [`avoid_public_fields`](/uk/lint-rules/avoid_public_fields)
+
+:::
+
+## Приклади
+
+**Уникайте** не-void публічних методів в екземплярах `Cubit`.
+
+**ПОГАНО**:
+
+<BadSnippet />
+
+**ДОБРЕ**:
+
+<GoodSnippet />
+
+## Увімкнення
+
+Щоб увімкнути правило `prefer_void_public_cubit_methods`, додайте його до
+`analysis_options.yaml` у розділі `bloc` > `rules`:
+
+<EnableRuleSnippet name="prefer_void_public_cubit_methods" />

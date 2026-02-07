@@ -1,0 +1,99 @@
+---
+title: Угоди про іменування
+description:
+  Огляд рекомендованих угод про іменування при використанні bloc.
+---
+
+import EventExamplesGood1 from '~/components/naming-conventions/EventExamplesGood1Snippet.astro';
+import EventExamplesBad1 from '~/components/naming-conventions/EventExamplesBad1Snippet.astro';
+import StateExamplesGood1Snippet from '~/components/naming-conventions/StateExamplesGood1Snippet.astro';
+import SingleStateExamplesGood1Snippet from '~/components/naming-conventions/SingleStateExamplesGood1Snippet.astro';
+import StateExamplesBad1Snippet from '~/components/naming-conventions/StateExamplesBad1Snippet.astro';
+
+Наведені нижче угоди про іменування є лише рекомендаціями і є повністю
+необов'язковими. Використовуйте будь-які угоди про іменування, які вам
+подобаються. Ви можете виявити, що деякі приклади/документація не дотримуються
+угод про іменування, переважно для простоти/стислості. Ці угоди настійно
+рекомендуються для великих проєктів з кількома розробниками.
+
+## Угоди про події
+
+Події повинні бути названі в **минулому часі**, тому що події -- це те, що вже
+відбулося з точки зору блоку.
+
+### Анатомія
+
+`BlocSubject` + `Іменник (необов'язково)` + `Дієслово (подія)`
+
+Події початкового завантаження повинні дотримуватися угоди: `BlocSubject` +
+`Started`
+
+:::note
+
+Базовий клас події повинен бути названий: `BlocSubject` + `Event`.
+
+:::
+
+### Приклади
+
+✅ **Добре**
+
+<EventExamplesGood1 />
+
+❌ **Погано**
+
+<EventExamplesBad1 />
+
+## Угоди про стани
+
+Стани повинні бути іменниками, тому що стан -- це просто знімок у певний момент
+часу. Існує два поширені способи представлення стану: використання підкласів або
+використання одного класу.
+
+### Анатомія
+
+#### Підкласи
+
+`BlocSubject` + `Дієслово (дія)` + `State`
+
+При представленні стану у вигляді кількох підкласів `State` повинен бути одним з
+наступних:
+
+`Initial` | `Success` | `Failure` | `InProgress`
+
+:::note
+
+Початкові стани повинні дотримуватися угоди: `BlocSubject` + `Initial`.
+
+:::
+
+#### Один клас
+
+`BlocSubject` + `State`
+
+При представленні стану у вигляді одного базового класу повинен використовуватися
+enum з назвою `BlocSubject` + `Status` для представлення статусу стану:
+
+`initial` | `success` | `failure` | `loading`.
+
+:::note
+
+Базовий клас стану завжди повинен бути названий: `BlocSubject` + `State`.
+
+:::
+
+### Приклади
+
+✅ **Добре**
+
+##### Підкласи
+
+<StateExamplesGood1Snippet />
+
+##### Один клас
+
+<SingleStateExamplesGood1Snippet />
+
+❌ **Погано**
+
+<StateExamplesBad1Snippet />

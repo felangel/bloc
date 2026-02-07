@@ -1,0 +1,54 @@
+---
+title: Уникайте імпортів Flutter
+description: Правило лінтера bloc avoid_flutter_imports.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/avoid_flutter_imports/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/avoid_flutter_imports/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+	<Badge text="recommended" variant="success" />
+</div>
+
+Уникайте введення залежностей від Flutter у компонентах бізнес-логіки
+(екземплярах `Bloc` або `Cubit`).
+
+## Обґрунтування
+
+Розділення застосунку на шари є ключовою частиною побудови підтримуваної
+кодової бази та допомагає розробникам ітерувати швидко й впевнено. Кожен шар
+повинен мати єдину відповідальність і бути здатним функціонувати та
+тестуватися ізольовано. Це дозволяє обмежувати зміни конкретними шарами,
+мінімізуючи вплив на весь застосунок.
+
+У результаті компоненти бізнес-логіки зазвичай повинні керувати станом функцій
+і бути відокремленими від шару користувацького інтерфейсу. Події повинні
+надходити до компонентів бізнес-логіки з шару UI, а стан повинен витікати з
+шару бізнес-логіки у шар UI.
+
+Збереження компонентів бізнес-логіки відокремленими від Flutter надає можливість
+повторно використовувати бізнес-логіку на кількох платформах/фреймворках
+(наприклад, Flutter, AngularDart, Jaspr тощо).
+
+## Приклади
+
+**НЕ ІМПОРТУЙТЕ** Flutter у ваших компонентах бізнес-логіки.
+
+**ПОГАНО**:
+
+<BadSnippet />
+
+**ДОБРЕ**:
+
+<GoodSnippet />
+
+## Увімкнення
+
+Щоб увімкнути правило `avoid_flutter_imports`, додайте його до
+`analysis_options.yaml` у розділі `bloc` > `rules`:
+
+<EnableRuleSnippet name="avoid_flutter_imports" />
