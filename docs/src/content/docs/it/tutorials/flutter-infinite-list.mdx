@@ -31,7 +31,7 @@ dati tramite la rete e li carica mentre l'utente scorre una lista.
   gestisce la costruzione del widget in risposta a nuovi stati;
 - Aggiungere eventi con [context.read](/it/flutter-bloc-concepts#contextread);
 - Prevenire aggiornamenti non necessari con
-  [Equatable](/it/faqs#when-to-use-equatable);
+  [Equatable](/it/faqs/#quando-usare-equatable);
 - Usare il metodo `transformEvents` con Rx.
 
 ## Configurazione
@@ -217,7 +217,7 @@ Successivamente, dobbiamo registrare un gestore di eventi per gestire gli eventi
 <PostBlocOnPostFetchedSnippet />
 
 Il nostro `PostBloc` emetterà nuovi stati tramite l'`Emitter<PostState>` fornito
-nel gestore di eventi. Consulta [concetti base](/it/bloc-concepts#streams) per
+nel gestore di eventi. Consulta [concetti base](/it/bloc-concepts/#stream) per
 maggiori informazioni.
 
 Ogni volta che viene aggiunto un `PostEvent`, se è un evento `PostFetched` e ci

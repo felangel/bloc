@@ -40,7 +40,7 @@ da fare usando la libreria bloc.
   cambiamenti di stato;
 - [RepositoryProvider](/it/flutter-bloc-concepts#repositoryprovider), widget
   Flutter per fornire un repository ai suoi figli;
-- [Equatable](/it/faqs#when-to-use-equatable) per prevenire aggiornamenti non
+- [Equatable](/it/faqs/#quando-usare-equatable) per prevenire aggiornamenti non
   necessari;
 - [MultiBlocListener](/it/flutter-bloc-concepts#multibloclistener), widget
   Flutter che riduce l'annidamento quando si usano più BlocListener.
@@ -545,8 +545,8 @@ modificare ed eliminare i todos.
 
 `emit` non è mai chiamato dentro `onTodoSaved` e in molti altri gestori di
 eventi. Invece, questi notificano il repository che emette una lista aggiornata
-tramite lo stream todos. Vedi la sezione [flusso dati](#data-flow) per maggiori
-informazioni.
+tramite lo stream todos. Vedi la sezione [flusso dati](#flusso-dati) per
+maggiori informazioni.
 
 :::
 
@@ -730,7 +730,7 @@ Una rappresentazione semplificata dell'albero dei widget per la `StatsPage` è:
 
 `TodosOverviewBloc` e `StatsBloc` comunicano entrambi con il `TodosRepository`,
 ma è importante notare che non c'è comunicazione diretta tra i bloc. Vedi la
-sezione [flusso dati](#data-flow) per maggiori informazioni.
+sezione [flusso dati](#flusso-dati) per maggiori informazioni.
 
 :::
 
