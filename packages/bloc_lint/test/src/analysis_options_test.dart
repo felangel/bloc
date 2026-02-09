@@ -132,6 +132,19 @@ bloc:
   ]
 }
 ''');
+        File(p.join(tempDir.path, 'pubspec.lock')).writeAsStringSync('''
+packages:
+  bloc:
+    dependency: "direct main"
+    description:
+      name: bloc
+      sha256: "52c10575f4445c61dd9e0cafcc6356fdd827c4c64dd7945ef3c4105f6b6ac189"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.0.0"
+sdks:
+  dart: ">=3.6.0 <4.0.0"
+''');
         final file = File(p.join(tempDir.path, 'analysis_options.yaml'))
           ..writeAsStringSync('''
 include: package:bloc_lint/recommended.yaml

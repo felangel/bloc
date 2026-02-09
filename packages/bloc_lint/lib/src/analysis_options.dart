@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bloc_lint/src/diagnostic.dart';
+import 'package:bloc_lint/src/env.dart';
 import 'package:checked_yaml/checked_yaml.dart';
 import 'package:collection/collection.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -85,10 +86,8 @@ class AnalysisOptions {
   static AnalysisOptions? tryInclude(String include, {required Directory cwd}) {
     final packagePrefix = include.split('/').first;
     final packageName = packagePrefix.split('package:').last;
-    final packageConfigFile = File(
-      p.join(cwd.path, '.dart_tool', 'package_config.json'),
-    );
-    if (!packageConfigFile.existsSync()) return null;
+    final packageConfigFile = findPackageConfigFile(cwd);
+    if (packageConfigFile == null) return null;
     final packageConfig =
         json.decode(packageConfigFile.readAsStringSync())
             as Map<String, dynamic>;
