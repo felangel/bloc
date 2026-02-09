@@ -279,6 +279,8 @@ jobs:
           codecov_token: ${{ secrets.CODECOV_TOKEN }}
           working_directory: packages/${{ matrix.package }}
           min_coverage: 100
+          # TODO(felangel): remove when bloc_lint v0.4.0 is released.
+          collect_score: ${{ matrix.package != 'bloc_lint' }}
 
   bloc_tools_compile_checks:
     needs: changes
