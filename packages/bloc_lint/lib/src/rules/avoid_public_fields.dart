@@ -52,8 +52,7 @@ class _Listener extends Listener {
   }
 
   @override
-  void endFields(
-    DeclarationKind kind,
+  void endClassFields(
     Token? abstractToken,
     Token? augmentToken,
     Token? externalToken,
