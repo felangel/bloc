@@ -1,3 +1,7 @@
+# 0.4.0
+
+- feat: upgrade to latest analyzer frontend
+
 # 0.3.7
 
 - fix: `analysis_options.yaml` resolution in pub workspace
