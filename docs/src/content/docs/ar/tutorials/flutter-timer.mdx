@@ -173,9 +173,8 @@ import BackgroundSnippet from '~/components/tutorials/flutter-timer/BackgroundSn
 
 <TimerBlocEmptySnippet />
 
-أول خطوة هي تحديد الحالة الأولية لـ `TimerBloc`. هنا نريد أن يبدأ `TimerBloc`
-في حالة `TimerInitial` بمدة مضبوطة مسبقًا
-تبلغ دقيقة واحدة (60 ثانية).
+أول خطوة هي تحديد الحالة الأولية لـ `TimerBloc`. هنا نريد أن يبدأ `TimerBloc` في
+حالة `TimerInitial` بمدة مضبوطة مسبقًا تبلغ دقيقة واحدة (60 ثانية).
 
 <TimerBlocInitialStateSnippet />
 
@@ -202,8 +201,7 @@ import BackgroundSnippet from '~/components/tutorials/flutter-timer/BackgroundSn
 
 في كل مرة نستقبل فيها حدث `_TimerTicked`، إذا كانت مدة النبضة أكبر من 0 فنحن
 بحاجة إلى إصدار حالة `TimerRunInProgress` محدثة بالمدة الجديدة. أما إذا كانت مدة
-النبضة تساوي 0 فقد انتهى المؤقّت ونحتاج إلى إصدار حالة
-`TimerRunComplete`.
+النبضة تساوي 0 فقد انتهى المؤقّت ونحتاج إلى إصدار حالة `TimerRunComplete`.
 
 الآن دعنا ننفذ معالج حدث `TimerPaused`.
 
@@ -264,8 +262,8 @@ Widget `Timer` في (`lib/timer/view/timer_page.dart`) مسؤولة عن عرض 
 
 حتى الآن، نستخدم `BlocProvider` فقط للوصول إلى instance من `TimerBloc`.
 
-بعد ذلك، سننفّذ Widget `Actions` والتي ستحتوي على الإجراءات
-المناسبة (بدء، إيقاف مؤقت، وإعادة تعيين).
+بعد ذلك، سننفّذ Widget `Actions` والتي ستحتوي على الإجراءات المناسبة (بدء، إيقاف
+مؤقت، وإعادة تعيين).
 
 ### ملف التجميع (Barrel)
 
@@ -305,8 +303,8 @@ TimerRunInProgress => TimerRunPause، إلخ...).
 
 :::note
 
-على الرغم من أن Widget `Text` تُعاد بناؤها في كل نبضة، فإننا نعيد بناء
-`Actions` فقط إذا كانت بحاجة إلى إعادة بناء.
+على الرغم من أن Widget `Text` تُعاد بناؤها في كل نبضة، فإننا نعيد بناء `Actions`
+فقط إذا كانت بحاجة إلى إعادة بناء.
 
 :::
 

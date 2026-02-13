@@ -1,7 +1,8 @@
 ---
 title: تسجيل الدخول باستخدام Flutter وFirebase
 description:
-  دليل متعمق لبناء تدفق تسجيل دخول (Login Flow) في Flutter باستخدام Bloc وFirebase.
+  دليل متعمق لبناء تدفق تسجيل دخول (Login Flow) في Flutter باستخدام Bloc
+  وFirebase.
 sidebar:
   order: 7
 ---
@@ -21,8 +22,7 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 - [BlocProvider](/ar/flutter-bloc-concepts#blocprovider)، وهو `widget` من
   Flutter يوفّر Bloc للأبناء.
-- استخدام Cubit بدلًا من Bloc.
-  [ما الفرق؟](/ar/bloc-concepts/#cubit-مقابل-bloc)
+- استخدام Cubit بدلًا من Bloc. [ما الفرق؟](/ar/bloc-concepts/#cubit-مقابل-bloc)
 - إضافة الأحداث (events) باستخدام
   [context.read](/ar/flutter-bloc-concepts#contextread).
 - تجنب إعادة البناء غير الضرورية باستخدام
@@ -42,8 +42,8 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 وكما فعلنا في [دليل تسجيل الدخول](/ar/tutorials/flutter-login)، سننشئ حزمًا
 داخلية لتقسيم معمارية التطبيق (application architecture) إلى طبقات أوضح، مع
-الحفاظ على حدود واضحة بين الطبقات، وتحسين قابلية إعادة الاستخدام
-(reusability) والاختبار (testability).
+الحفاظ على حدود واضحة بين الطبقات، وتحسين قابلية إعادة الاستخدام (reusability)
+والاختبار (testability).
 
 في هذا المثال، ستكون حزمتا
 [firebase_auth](https://pub.dev/packages/firebase_auth) و
@@ -136,9 +136,9 @@ models.
 
 :::note
 
-`AuthenticationRepository` مسؤول أيضًا عن التعامل مع أخطاء طبقة البيانات
-(data layer) منخفضة المستوى، ويقدّم مجموعة أخطاء أبسط وأنظف ومتوافقة مع
-النطاق (domain).
+`AuthenticationRepository` مسؤول أيضًا عن التعامل مع أخطاء طبقة البيانات (data
+layer) منخفضة المستوى، ويقدّم مجموعة أخطاء أبسط وأنظف ومتوافقة مع النطاق
+(domain).
 
 :::
 
@@ -245,12 +245,12 @@ Flutter الذي أنشأناه.
 
 ### Bloc
 
-داخل المُنشئ (constructor body)، يتم ربط الفئات الفرعية من `AppEvent` مع
-معالجات الأحداث (event handlers) المقابلة لها.
+داخل المُنشئ (constructor body)، يتم ربط الفئات الفرعية من `AppEvent` مع معالجات
+الأحداث (event handlers) المقابلة لها.
 
-داخل معالج `_onUserSubscriptionRequested`، يستخدم `AppBloc` الدالة
-`emit.onEach` للاشتراك في تدفق المستخدم الخاص بـ `AuthenticationRepository`، ثم
-إصدار حالة لكل `User` جديد.
+داخل معالج `_onUserSubscriptionRequested`، يستخدم `AppBloc` الدالة `emit.onEach`
+للاشتراك في تدفق المستخدم الخاص بـ `AuthenticationRepository`، ثم إصدار حالة لكل
+`User` جديد.
 
 `emit.onEach` تنشئ اشتراكًا داخليًا في التدفق (stream subscription)، وتتكفل
 بإلغائه عند إغلاق `AppBloc` أو إغلاق تدفق المستخدم.
@@ -312,17 +312,17 @@ Flutter الذي أنشأناه.
 
 :::tip
 
-من المهم جدًا فصل مكان إنشاء blocs/cubits عن مكان استهلاكها. هذا يجعل حقن
-نسخ وهمية (mock instances) أسهل، ويسهّل اختبار الواجهة (view) بشكل مستقل
-(in isolation).
+من المهم جدًا فصل مكان إنشاء blocs/cubits عن مكان استهلاكها. هذا يجعل حقن نسخ
+وهمية (mock instances) أسهل، ويسهّل اختبار الواجهة (view) بشكل مستقل (in
+isolation).
 
 :::
 
 ## Login Cubit
 
 `LoginCubit` مسؤول عن إدارة `LoginState` الخاص بالنموذج. وهو يوفّر APIs مثل
-`logInWithCredentials` و`logInWithGoogle`، كما يتلقى إشعارات عند تحديث
-البريد الإلكتروني/كلمة المرور.
+`logInWithCredentials` و`logInWithGoogle`، كما يتلقى إشعارات عند تحديث البريد
+الإلكتروني/كلمة المرور.
 
 ### الحالة (State)
 
@@ -347,8 +347,8 @@ Flutter الذي أنشأناه.
 :::note
 
 استخدمنا `Cubit` بدلًا من `Bloc` هنا لأن `LoginState` بسيط ومحصور في نطاق صغير.
-حتى بدون events، يمكن فهم ما حدث من خلال الانتقال بين الحالات، مع كود أبسط
-وأكثر اختصارًا.
+حتى بدون events، يمكن فهم ما حدث من خلال الانتقال بين الحالات، مع كود أبسط وأكثر
+اختصارًا.
 
 :::
 
@@ -370,8 +370,8 @@ Flutter الذي أنشأناه.
 بنية `SignUp` تعكس بنية `Login`، وتتكوّن من `SignUpPage` و`SignUpView` و
 `SignUpCubit`.
 
-`SignUpPage` مسؤولة فقط عن إنشاء نسخة من `SignUpCubit` وتوفيرها إلى
-`SignUpForm` (تمامًا كما في `LoginPage`).
+`SignUpPage` مسؤولة فقط عن إنشاء نسخة من `SignUpCubit` وتوفيرها إلى `SignUpForm`
+(تمامًا كما في `LoginPage`).
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/view/sign_up_page.dart"
@@ -422,9 +422,9 @@ Flutter الذي أنشأناه.
 
 ## الصفحة الرئيسية (Home Page)
 
-بعد أن يسجل المستخدم الدخول أو ينشئ حسابًا بنجاح، يتم تحديث تدفق `user`، ما
-يؤدي إلى تغيّر الحالة في `AuthenticationBloc`، ثم تدفع `AppView` صفحة
-`HomePage` إلى مكدس التنقل (navigation stack).
+بعد أن يسجل المستخدم الدخول أو ينشئ حسابًا بنجاح، يتم تحديث تدفق `user`، ما يؤدي
+إلى تغيّر الحالة في `AuthenticationBloc`، ثم تدفع `AppView` صفحة `HomePage` إلى
+مكدس التنقل (navigation stack).
 
 من `HomePage` يمكن للمستخدم عرض معلومات ملفه الشخصي وتسجيل الخروج عبر النقر على
 أيقونة الخروج في `AppBar`.

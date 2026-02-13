@@ -17,8 +17,8 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
 في هذا الدليل، سنبني تطبيق بحث GitHub باستخدام Flutter وAngularDart لشرح كيف
-يمكننا مشاركة طبقة البيانات (data layer) وطبقة منطق الأعمال
-(business logic layer) بين المشروعين.
+يمكننا مشاركة طبقة البيانات (data layer) وطبقة منطق الأعمال (business logic
+layer) بين المشروعين.
 
 ![demo](~/assets/tutorials/flutter-github-search.gif)
 
@@ -30,8 +30,7 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
   Flutter يوفّر bloc للأبناء.
 - [BlocBuilder](/ar/flutter-bloc-concepts#blocbuilder)، وهو `widget` في Flutter
   يتولى بناء الواجهة استجابةً للحالات الجديدة.
-- استخدام Cubit بدلًا من Bloc.
-  [ما الفرق؟](/ar/bloc-concepts/#cubit-مقابل-bloc)
+- استخدام Cubit بدلًا من Bloc. [ما الفرق؟](/ar/bloc-concepts/#cubit-مقابل-bloc)
 - تجنب إعادة البناء غير الضرورية باستخدام
   [Equatable](/ar/faqs/#متى-يجب-استخدام-equatable).
 - استخدام `EventTransformer` مخصص مع
@@ -40,9 +39,9 @@ import ActivateStagehandSnippet from '~/components/tutorials/github-search/Activ
 
 ## مكتبة GitHub Search المشتركة
 
-ستتضمن مكتبة GitHub Search المشتركة النماذج (models)، ومزوّد البيانات
-(data provider)، وRepository، بالإضافة إلى bloc الذي سنعيد استخدامه بين
-AngularDart وFlutter.
+ستتضمن مكتبة GitHub Search المشتركة النماذج (models)، ومزوّد البيانات (data
+provider)، وRepository، بالإضافة إلى bloc الذي سنعيد استخدامه بين AngularDart
+وFlutter.
 
 ### الإعداد
 
@@ -163,9 +162,7 @@ AngularDart وFlutter.
 />
 
 انتهينا من `GithubClient`، والخطوة التالية هي `GithubCache`، والذي سيكون مسؤولًا
-عن
-[memoization](https://en.wikipedia.org/wiki/Memoization)
-كتحسين للأداء.
+عن [memoization](https://en.wikipedia.org/wiki/Memoization) كتحسين للأداء.
 
 ### GitHub Cache
 
@@ -184,8 +181,7 @@ AngularDart وFlutter.
 ### GitHub Repository
 
 `GithubRepository` مسؤول عن إنشاء طبقة تجريد (abstraction) بين طبقة البيانات
-(`GithubClient`) وطبقة منطق الأعمال (`Bloc`). وهنا أيضًا سنستخدم
-`GithubCache`.
+(`GithubClient`) وطبقة منطق الأعمال (`Bloc`). وهنا أيضًا سنستخدم `GithubCache`.
 
 أنشئ `github_repository.dart`.
 
@@ -220,9 +216,9 @@ AngularDart وFlutter.
 
 :::note
 
-نرث من [`Equatable`](https://pub.dev/packages/equatable) حتى نتمكن من مقارنة
-نسخ `GithubSearchEvent`. افتراضيًا، عامل المساواة يعيد `true` فقط إذا كان
-الكائنان نفس النسخة.
+نرث من [`Equatable`](https://pub.dev/packages/equatable) حتى نتمكن من مقارنة نسخ
+`GithubSearchEvent`. افتراضيًا، عامل المساواة يعيد `true` فقط إذا كان الكائنان
+نفس النسخة.
 
 :::
 
@@ -249,9 +245,9 @@ AngularDart وFlutter.
 
 :::note
 
-نرث من [`Equatable`](https://pub.dev/packages/equatable) حتى نتمكن من مقارنة
-نسخ `GithubSearchState`. افتراضيًا، عامل المساواة يعيد `true` فقط إذا كان
-الكائنان نفس النسخة.
+نرث من [`Equatable`](https://pub.dev/packages/equatable) حتى نتمكن من مقارنة نسخ
+`GithubSearchState`. افتراضيًا، عامل المساواة يعيد `true` فقط إذا كان الكائنان
+نفس النسخة.
 
 :::
 
@@ -354,8 +350,8 @@ Flutter GitHub Search سيكون تطبيق Flutter يعيد استخدام ال
 
 :::note
 
-`_SearchBar` يصل إلى `GithubSearchBloc` عبر
-`context.read<GithubSearchBloc>()` ويُشعِر bloc بأحداث `TextChanged`.
+`_SearchBar` يصل إلى `GithubSearchBloc` عبر `context.read<GithubSearchBloc>()`
+ويُشعِر bloc بأحداث `TextChanged`.
 
 :::
 
@@ -477,8 +473,8 @@ AngularDart GitHub Search سيكون تطبيق AngularDart يعيد استخد�
 
 ### Search Bar
 
-`SearchBar` هو مكوّن مسؤول عن استقبال إدخال المستخدم، وإشعار
-`GithubSearchBloc` بتغيّر النص.
+`SearchBar` هو مكوّن مسؤول عن استقبال إدخال المستخدم، وإشعار `GithubSearchBloc`
+بتغيّر النص.
 
 أنشئ `search_bar_component.dart`.
 

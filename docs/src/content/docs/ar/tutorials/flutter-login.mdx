@@ -1,7 +1,6 @@
 ---
 title: تسجيل الدخول في Flutter
-description:
-  دليل متعمّق لبناء مسار تسجيل الدخول في Flutter باستخدام مكتبة Bloc.
+description: دليل متعمّق لبناء مسار تسجيل الدخول في Flutter باستخدام مكتبة Bloc.
 sidebar:
   order: 4
 ---
@@ -168,9 +167,8 @@ controller عندما لا يعود مطلوبًا.
 />
 
 في هذا المثال البسيط، توفّر `UserRepository` دالة واحدة فقط هي `getUser` والتي
-تسترجع المستخدم الحالي. نحن هنا نستخدم stubbing، لكن في
-التطبيق الفعلي ستكون هذه الدالة هي التي تستعلم المستخدم الحالي من الخادم
-(backend).
+تسترجع المستخدم الحالي. نحن هنا نستخدم stubbing، لكن في التطبيق الفعلي ستكون هذه
+الدالة هي التي تستعلم المستخدم الحالي من الخادم (backend).
 
 لقد اقتربنا من الانتهاء من حزمة `user_repository`، والشيء الوحيد المتبقي هو
 إنشاء ملف `user_repository.dart` في المسار `packages/user_repository/lib` والذي
@@ -335,10 +333,9 @@ blocs تلقائيًا.
 
 :::note
 
-تم تقسيم `app.dart` إلى جزأين: `App` و`AppView`. يتحمل `App` مسؤولية
-إنشاء/توفير `AuthenticationBloc` الذي سيتم استهلاكه من قبل `AppView`. هذا
-الفصل (decoupling) يسمح لنا باختبار كل من Widget `App` و`AppView` بسهولة
-لاحقًا.
+تم تقسيم `app.dart` إلى جزأين: `App` و`AppView`. يتحمل `App` مسؤولية إنشاء/توفير
+`AuthenticationBloc` الذي سيتم استهلاكه من قبل `AppView`. هذا الفصل (decoupling)
+يسمح لنا باختبار كل من Widget `App` و`AppView` بسهولة لاحقًا.
 
 :::
 
@@ -349,8 +346,8 @@ blocs تلقائيًا.
 
 :::
 
-افتراضيًا، `BlocProvider` يكون lazy ولا يستدعي `create` إلا عند أول وصول إلى
-الـ Bloc. وبما أن `AuthenticationBloc` يجب أن يشترك دائمًا في stream
+افتراضيًا، `BlocProvider` يكون lazy ولا يستدعي `create` إلا عند أول وصول إلى الـ
+Bloc. وبما أن `AuthenticationBloc` يجب أن يشترك دائمًا في stream
 `AuthenticationStatus` فورًا (عبر الحدث `AuthenticationSubscriptionRequested`)،
 يمكننا تجاوز هذا السلوك صراحةً عن طريق ضبط `lazy: false`.
 
@@ -518,8 +515,8 @@ bloc باستدعاء `logIn` ويُحدّث الحالة بناءً على نت
 
 ### نموذج تسجيل الدخول
 
-يتولى `LoginForm` إخطار `LoginBloc` بأحداث المستخدم ويستجيب أيضًا للتغيرات
-في الحالة باستخدام `BlocBuilder` و `BlocListener`.
+يتولى `LoginForm` إخطار `LoginBloc` بأحداث المستخدم ويستجيب أيضًا للتغيرات في
+الحالة باستخدام `BlocBuilder` و `BlocListener`.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/view/login_form.dart"

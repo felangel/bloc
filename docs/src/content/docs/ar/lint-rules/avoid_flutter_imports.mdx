@@ -14,8 +14,8 @@ import GoodSnippet from '~/components/lint-rules/avoid_flutter_imports/GoodSnipp
 	<Badge text="recommended" variant="success" />
 </div>
 
-تجنب إضافة تبعيات (dependencies) على Flutter داخل مكونات منطق الأعمال
-(Business Logic Components) (نسخ (instances) من `Bloc` أو `Cubit`).
+تجنب إضافة تبعيات (dependencies) على Flutter داخل مكونات منطق الأعمال (Business
+Logic Components) (نسخ (instances) من `Bloc` أو `Cubit`).
 
 ## المبرر (Rationale)
 
@@ -25,12 +25,12 @@ import GoodSnippet from '~/components/lint-rules/avoid_flutter_imports/GoodSnipp
 وأن تكون قابلة للعمل والاختبار بشكل مستقل (in isolation). هذا يسهّل حصر
 التغييرات داخل طبقات محددة ويقلل تأثيرها على التطبيق بالكامل.
 
-بناءً على ذلك، من الأفضل أن تركز مكونات منطق الأعمال (Business Logic
-Components) على إدارة حالة الميزة (`feature state`) فقط، مع بقائها مفصولة عن
-طبقة واجهة المستخدم (UI layer). يجب أن تتدفق الأحداث (`events`) من طبقة واجهة
-المستخدم (UI layer) إلى مكونات منطق الأعمال (Business Logic Components)، بينما
-تتدفق الحالة (`state`) من طبقة منطق الأعمال (Business Logic layer) إلى طبقة
-واجهة المستخدم (UI layer).
+بناءً على ذلك، من الأفضل أن تركز مكونات منطق الأعمال (Business Logic Components)
+على إدارة حالة الميزة (`feature state`) فقط، مع بقائها مفصولة عن طبقة واجهة
+المستخدم (UI layer). يجب أن تتدفق الأحداث (`events`) من طبقة واجهة المستخدم (UI
+layer) إلى مكونات منطق الأعمال (Business Logic Components)، بينما تتدفق الحالة
+(`state`) من طبقة منطق الأعمال (Business Logic layer) إلى طبقة واجهة المستخدم
+(UI layer).
 
 فصل مكونات منطق الأعمال (Business Logic Components) عن Flutter يسهّل إعادة
 استخدام منطق الأعمال عبر منصات أو أطر عمل (frameworks) متعددة (مثل Flutter

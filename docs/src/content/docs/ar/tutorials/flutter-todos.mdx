@@ -1,6 +1,7 @@
 ---
 title: Flutter Todos
-description: دليل متعمّق لبناء تطبيق مهام (Todos) في Flutter باستخدام مكتبة Bloc.
+description:
+  دليل متعمّق لبناء تطبيق مهام (Todos) في Flutter باستخدام مكتبة Bloc.
 sidebar:
   order: 6
 ---
@@ -18,8 +19,7 @@ import EditTodosPageTreeSnippet from '~/components/tutorials/flutter-todos/EditT
 
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
-في هذا الدليل التعليمي، سنبني تطبيق مهام (Todos) في Flutter باستخدام مكتبة
-Bloc.
+في هذا الدليل التعليمي، سنبني تطبيق مهام (Todos) في Flutter باستخدام مكتبة Bloc.
 
 ![demo](~/assets/tutorials/flutter-todos.gif)
 
@@ -80,8 +80,8 @@ Bloc.
 
 <ProjectStructureSnippet />
 
-نقسم المشروع إلى عدة حزم للحفاظ على تبعيات واضحة وصريحة لكل حزمة، مع حدود
-واضحة تفرض
+نقسم المشروع إلى عدة حزم للحفاظ على تبعيات واضحة وصريحة لكل حزمة، مع حدود واضحة
+تفرض
 [مبدأ المسؤولية الواحدة](https://en.wikipedia.org/wiki/Single-responsibility_principle).
 تؤدي هذه الطريقة في تنظيم المشروع إلى فوائد عديدة تشمل، ولكن لا تقتصر على:
 
@@ -119,10 +119,10 @@ Bloc.
 
 **طبقة المجال**
 
-تجمع هذه الطبقة بين مزود بيانات أو أكثر وتطبق قواعد الأعمال على
-البيانات. كل مكون في هذه الطبقة يسمى repository وتدير كل repository مجالًا
-واحدًا عادةً. الحزم في طبقة الـ repository ينبغي أن تتعامل فقط مع طبقة البيانات.
-في هذا المثال، تتكون طبقة الـ repository لدينا من حزمة `todos_repository`.
+تجمع هذه الطبقة بين مزود بيانات أو أكثر وتطبق قواعد الأعمال على البيانات. كل
+مكون في هذه الطبقة يسمى repository وتدير كل repository مجالًا واحدًا عادةً.
+الحزم في طبقة الـ repository ينبغي أن تتعامل فقط مع طبقة البيانات. في هذا
+المثال، تتكون طبقة الـ repository لدينا من حزمة `todos_repository`.
 
 **طبقة المميزات**
 
