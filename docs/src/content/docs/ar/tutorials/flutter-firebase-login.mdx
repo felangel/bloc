@@ -1,8 +1,8 @@
 ---
-title: تسجيل الدخول باستخدام Flutter و Firebase
+title: تسجيل الدخول باستخدام Flutter وFirebase
 description:
-  دليل متعمق حول كيفية بناء تدفق تسجيل دخول في Flutter باستخدام مكتبتي Bloc و
-  Firebase.
+  دليل متعمق لبناء تدفق تسجيل دخول (Login Flow) في Flutter باستخدام Bloc
+  وFirebase.
 sidebar:
   order: 7
 ---
@@ -13,26 +13,26 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 ![advanced](https://img.shields.io/badge/level-advanced-red.svg)
 
-في هذا الدليل، سنقوم ببناء **تدفق تسجيل دخول باستخدام Firebase في Flutter**
-بالاستعانة بمكتبة **Bloc**.
+في هذا الدليل، سنبني تدفق تسجيل دخول (Firebase Login Flow) في Flutter باستخدام
+مكتبة Bloc.
 
 ![demo](~/assets/tutorials/flutter-firebase-login.gif)
 
 ## المواضيع الرئيسية
 
-- [BlocProvider](/ar/flutter-bloc-concepts#blocprovider)، وهي ويدجت (Widget) من
-  Flutter توفر كتلة (Bloc) لأبنائها.
-- استخدام Cubit بدلاً من Bloc.
-  [ما هو الفرق؟](/ar/bloc-concepts/#cubit-مقابل-bloc)
-- إضافة الأحداث باستخدام [context.read](/ar/flutter-bloc-concepts#contextread).
-- منع إعادة البناء غير الضرورية باستخدام
+- [BlocProvider](/ar/flutter-bloc-concepts#blocprovider)، وهو `widget` من
+  Flutter يوفّر Bloc للأبناء.
+- استخدام Cubit بدلًا من Bloc. [ما الفرق؟](/ar/bloc-concepts/#cubit-مقابل-bloc)
+- إضافة الأحداث (events) باستخدام
+  [context.read](/ar/flutter-bloc-concepts#contextread).
+- تجنب إعادة البناء غير الضرورية باستخدام
   [Equatable](/ar/faqs/#متى-يجب-استخدام-equatable).
-- [RepositoryProvider](/ar/flutter-bloc-concepts#repositoryprovider)، وهي ويدجت
-  من Flutter توفر مستودع (Repository) لأبنائها.
-- [BlocListener](/ar/flutter-bloc-concepts#bloclistener)، وهي ويدجت من Flutter
-  تستدعي كود المستمع (listener) استجابةً لتغيرات الحالة في الكتلة (Bloc).
-- إضافة الأحداث باستخدام
-  [context.read](/ar/flutter-bloc-concepts#contextselect).
+- [RepositoryProvider](/ar/flutter-bloc-concepts#repositoryprovider)، وهو
+  `widget` من Flutter يوفّر Repository للأبناء.
+- [BlocListener](/ar/flutter-bloc-concepts#bloclistener)، وهو `widget` من
+  Flutter يستدعي منطق `listener` عند تغيّر الحالة (state) في Bloc.
+- قراءة جزء محدد من الحالة باستخدام
+  [context.select](/ar/flutter-bloc-concepts#contextselect).
 
 ## الإعداد
 
@@ -40,21 +40,23 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 <FlutterCreateSnippet />
 
-تمامًا كما في [دليل تسجيل الدخول](/ar/tutorials/flutter-login)، سنقوم بإنشاء حزم
-داخلية لتقسيم بنية تطبيقنا بشكل أفضل والحفاظ على حدود واضحة، ولزيادة قابلية
-إعادة الاستخدام وقابلية الاختبار.
+وكما فعلنا في [دليل تسجيل الدخول](/ar/tutorials/flutter-login)، سننشئ حزمًا
+داخلية لتقسيم معمارية التطبيق (application architecture) إلى طبقات أوضح، مع
+الحفاظ على حدود واضحة بين الطبقات، وتحسين قابلية إعادة الاستخدام (reusability)
+والاختبار (testability).
 
-في هذه الحالة، ستكون حزمتا
+في هذا المثال، ستكون حزمتا
 [firebase_auth](https://pub.dev/packages/firebase_auth) و
 [google_sign_in](https://pub.dev/packages/google_sign_in) هما طبقة البيانات
-لدينا، لذا سنقوم بإنشاء `AuthenticationRepository` فقط لتجميع البيانات من عميلي
-(clients) واجهة برمجة التطبيقات (API) هذين.
+(data layer). لذلك سننشئ `AuthenticationRepository` فقط لدمج البيانات من عميلَي
+واجهات البرمجة (API clients).
 
 ## مستودع المصادقة (Authentication Repository)
 
-سيكون `AuthenticationRepository` مسؤولاً عن تجريد تفاصيل التنفيذ الداخلية لكيفية
-مصادقة المستخدم وجلب معلوماته. في هذه الحالة، سيتم التكامل مع Firebase، ولكن
-يمكننا دائمًا تغيير التنفيذ الداخلي لاحقًا ولن يتأثر تطبيقنا.
+سيكون `AuthenticationRepository` مسؤولًا عن إخفاء تفاصيل التنفيذ الداخلية
+(implementation details) لطريقة مصادقة المستخدم وجلب بياناته. في هذا المثال
+سيتكامل مع Firebase، لكن يمكننا لاحقًا تغيير التنفيذ الداخلي دون التأثير على
+باقي التطبيق.
 
 ### الإعداد
 
@@ -66,15 +68,15 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 	title="packages/authentication_repository/pubspec.yaml"
 />
 
-بعد ذلك، يمكننا تثبيت التبعيات عن طريق تشغيل:
+بعد ذلك، يمكننا تثبيت dependencies عبر تشغيل:
 
 <FlutterPubGetSnippet />
 
-في مجلد `authentication_repository`.
+داخل مجلد `authentication_repository`.
 
-تمامًا مثل معظم الحزم، سيحدد `authentication_repository` واجهة برمجة التطبيقات
-الخاصة به عبر
-`packages/authentication_repository/lib/authentication_repository.dart`
+مثل أغلب الحزم، يعرّف `authentication_repository` واجهته العامة (API surface)
+عبر الملف
+`packages/authentication_repository/lib/authentication_repository.dart`.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/authentication_repository/lib/authentication_repository.dart"
@@ -83,22 +85,21 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 :::note
 
-ستقوم حزمة `authentication_repository` بكشف `AuthenticationRepository` بالإضافة
-إلى النماذج (models).
+حزمة `authentication_repository` توفّر `AuthenticationRepository` بالإضافة إلى
+models.
 
 :::
 
-بعد ذلك، دعونا نلقي نظرة على النماذج.
+الخطوة التالية هي مراجعة models.
 
 ### المستخدم (User)
 
-سيصف نموذج `User` المستخدم في سياق نطاق المصادقة. لأغراض هذا المثال، سيتكون
-المستخدم من `email` و `id` و `name` و `photo`.
+نموذج `User` يصف المستخدم ضمن نطاق المصادقة (authentication domain). وفي هذا
+المثال، يتكوّن المستخدم من `email` و`id` و`name` و`photo`.
 
 :::note
 
-الأمر متروك لك تمامًا لتحديد الشكل الذي يجب أن يبدو عليه المستخدم في سياق نطاق
-عملك.
+شكل `User` النهائي يعتمد بالكامل على متطلبات نطاق عملك (domain).
 
 :::
 
@@ -106,79 +107,80 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 :::note
 
-يرث صنف `User` من [equatable](https://pub.dev/packages/equatable) من أجل تجاوز
-مقارنات التساوي بحيث يمكننا مقارنة مثيلات مختلفة من `User` حسب القيمة.
+الصنف `User` يرث من [equatable](https://pub.dev/packages/equatable) لتجاوز
+مقارنات التساوي (equality comparisons)، حتى نتمكن من مقارنة كائنات `User`
+المختلفة بالقيمة (by value).
 
 :::
 
 :::tip
 
-من المفيد تعريف `User` فارغ `static` حتى لا نضطر إلى التعامل مع المستخدمين
-`null` ويمكننا دائمًا العمل مع كائن `User` ملموس.
+من المفيد تعريف `User.empty` بشكل `static` لتجنب التعامل مع `null User`،
+والتعامل دائمًا مع كائن `User` فعلي.
 
 :::
 
 ### المستودع (Repository)
 
-إن `AuthenticationRepository` مسؤول عن تجريد التنفيذ الأساسي لكيفية مصادقة
-المستخدم، وكذلك كيفية جلب المستخدم.
+`AuthenticationRepository` مسؤول عن تجريد (abstraction) تنفيذ المصادقة الفعلي
+وكذلك آلية جلب بيانات المستخدم.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/authentication_repository/lib/src/authentication_repository.dart"
 	title="packages/authentication_repository/lib/src/authentication_repository.dart"
 />
 
-يكشف `AuthenticationRepository` عن `Stream<User>` يمكننا الاشتراك فيه لتلقي
-إشعارات عندما يتغير `User`. بالإضافة إلى ذلك، فإنه يكشف عن طرق لـ `signUp` و
-`logInWithGoogle` و `logInWithEmailAndPassword` و `logOut`.
+يوفّر `AuthenticationRepository` تدفقًا `Stream<User>` يمكننا الاشتراك فيه
+للحصول على إشعار عند تغيّر `User`. كما يوفّر methods مثل `signUp` و
+`logInWithGoogle` و`logInWithEmailAndPassword` و`logOut`.
 
 :::note
 
-إن `AuthenticationRepository` مسؤول أيضًا عن التعامل مع الأخطاء منخفضة المستوى
-التي يمكن أن تحدث في طبقة البيانات ويكشف عن مجموعة نظيفة وبسيطة من الأخطاء التي
-تتوافق مع نطاق العمل.
+`AuthenticationRepository` مسؤول أيضًا عن التعامل مع أخطاء طبقة البيانات (data
+layer) منخفضة المستوى، ويقدّم مجموعة أخطاء أبسط وأنظف ومتوافقة مع النطاق
+(domain).
 
 :::
 
-هذا كل شيء بالنسبة لـ `AuthenticationRepository`. بعد ذلك، دعونا نلقي نظرة على
-كيفية دمجه في مشروع Flutter الذي أنشأناه.
+هذا كل ما نحتاجه في `AuthenticationRepository`. الخطوة التالية هي دمجه في مشروع
+Flutter الذي أنشأناه.
 
 ## إعداد Firebase
 
 نحتاج إلى اتباع
-[تعليمات استخدام firebase_auth](https://pub.dev/packages/firebase_auth#usage) من
-أجل ربط تطبيقنا بـ Firebase وتمكين
+[تعليمات استخدام firebase_auth](https://pub.dev/packages/firebase_auth#usage)
+لتوصيل التطبيق مع Firebase وتفعيل
 [google_sign_in](https://pub.dev/packages/google_sign_in).
 
 :::caution
 
-تذكر تحديث `google-services.json` على Android و `GoogleService-Info.plist` و
-`Info.plist` على iOS، وإلا سيتعطل التطبيق.
+تأكد من تحديث `google-services.json` على Android، و`GoogleService-Info.plist`
+و`Info.plist` على iOS، وإلا سيتعطل التطبيق.
 
 :::
 
 ## تبعيات المشروع (Project Dependencies)
 
-يمكننا استبدال ملف `pubspec.yaml` الذي تم إنشاؤه في جذر المشروع بما يلي:
+يمكننا استبدال ملف `pubspec.yaml` المُولّد في جذر المشروع بما يلي:
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/pubspec.yaml"
 	title="pubspec.yaml"
 />
 
-لاحظ أننا نحدد مجلد الأصول (assets) لجميع الأصول المحلية لتطبيقاتنا. قم بإنشاء
-مجلد `assets` في جذر مشروعك وأضف أصل
-[شعار bloc](https://github.com/felangel/bloc/blob/master/examples/flutter_firebase_login/assets/bloc_logo_small.png)
-(الذي سنستخدمه لاحقًا).
+لاحظ أننا نحدد مجلد `assets` لكل الأصول المحلية (local assets) الخاصة بالتطبيق.
+أنشئ مجلد `assets` في جذر المشروع، ثم أضف أصل شعار bloc
+[bloc logo](https://github.com/felangel/bloc/blob/master/examples/flutter_firebase_login/assets/bloc_logo_small.png)
+(سنستخدمه لاحقًا).
 
-ثم قم بتثبيت جميع التبعيات:
+بعد ذلك ثبّت جميع dependencies:
 
 <FlutterPubGetSnippet />
 
 :::note
 
-نحن نعتمد على حزمة `authentication_repository` عبر المسار (path)، مما سيسمح لنا
-بالتكرار بسرعة مع الحفاظ على فصل واضح.
+نحن نستخدم حزمة `authentication_repository` عبر `path`، وهذا يتيح لنا التطوير
+بسرعة مع الحفاظ على فصل واضح بين الطبقات.
 
 :::
 
@@ -191,39 +193,38 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 	title="lib/main.dart"
 />
 
-إنه يقوم ببساطة بإعداد بعض التكوينات العامة للتطبيق واستدعاء `runApp` مع مثيل من
-`App`.
+الملف يضبط إعدادات عامة للتطبيق، ثم يستدعي `runApp` مع نسخة من `App`.
 
 :::note
 
-نحن نقوم بحقن مثيل واحد من `AuthenticationRepository` في `App` وهو تبعية صريحة
-للمنشئ (constructor dependency).
+نحقن (inject) نسخة واحدة من `AuthenticationRepository` داخل `App` كاعتمادية
+صريحة في المُنشئ (constructor dependency).
 
 :::
 
 ## التطبيق (App)
 
-تمامًا كما في [دليل تسجيل الدخول](/ar/tutorials/flutter-login)، سيوفر ملف
-`app.dart` الخاص بنا مثيلاً من `AuthenticationRepository` للتطبيق عبر
-`RepositoryProvider`، كما يقوم بإنشاء وتوفير مثيل من `AuthenticationBloc`. بعد
-ذلك، تستهلك `AppView` كتلة `AuthenticationBloc` وتتولى تحديث المسار الحالي بناءً
-على `AuthenticationState`.
+كما في [دليل تسجيل الدخول](/ar/tutorials/flutter-login)، يوفّر `app.dart` نسخة
+`AuthenticationRepository` للتطبيق عبر `RepositoryProvider`، كما ينشئ نسخة من
+`AuthenticationBloc` ويجعلها متاحة. بعد ذلك، تتعامل `AppView` مع
+`AuthenticationBloc` وتحدّث المسار الحالي (current route) بناءً على
+`AuthenticationState`.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/app/view/app.dart"
 	title="lib/app/view/app.dart"
 />
 
-## كتلة التطبيق (App Bloc)
+## App Bloc
 
-إن `AppBloc` مسؤول عن إدارة الحالة العامة للتطبيق. لديه تبعية على
-`AuthenticationRepository` ويشترك في دفق `user` من أجل إصدار حالات جديدة
-استجابةً للتغييرات في المستخدم الحالي.
+`AppBloc` مسؤول عن إدارة الحالة العامة (global state) للتطبيق. وهو يعتمد على
+`AuthenticationRepository`، ويشترك في تدفق `user` لإصدار حالات جديدة عند تغيّر
+المستخدم الحالي.
 
 ### الحالة (State)
 
-تتكون `AppState` من `AppStatus` و `User`. يقبل المنشئ الافتراضي `User` اختياريًا
-ويعيد التوجيه إلى المنشئ الخاص مع حالة المصادقة المناسبة.
+تتكوّن `AppState` من `AppStatus` و`User`. يقبل المُنشئ الافتراضي `User`
+اختياريًا، ثم يعيد التوجيه إلى المُنشئ الخاص مع حالة المصادقة المناسبة.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/app/bloc/app_state.dart"
@@ -232,43 +233,43 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 ### الحدث (Event)
 
-يحتوي `AppEvent` على فئتين فرعيتين:
+يحتوي `AppEvent` على فئتين فرعيتين (subclasses):
 
-- `AppUserSubscriptionRequested` التي تخبر الكتلة (bloc) بالاشتراك في دفق
-  المستخدم.
-- `AppLogoutPressed` التي تخبر الكتلة بإجراء تسجيل خروج للمستخدم.
+- `AppUserSubscriptionRequested` لإعلام الـ Bloc ببدء الاشتراك في تدفق المستخدم.
+- `AppLogoutPressed` لإعلام الـ Bloc بأن المستخدم طلب تسجيل الخروج.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/app/bloc/app_event.dart"
 	title="lib/app/bloc/app_event.dart"
 />
 
-### الكتلة (Bloc)
+### Bloc
 
-في جسم المنشئ (constructor body)، يتم تعيين الفئات الفرعية لـ `AppEvent`
-لمعالجات الأحداث المقابلة لها.
+داخل المُنشئ (constructor body)، يتم ربط الفئات الفرعية من `AppEvent` مع معالجات
+الأحداث (event handlers) المقابلة لها.
 
-في معالج الحدث `_onUserSubscriptionRequested`، يستخدم `AppBloc` الدالة
-`emit.onEach` للاشتراك في دفق المستخدم الخاص بـ `AuthenticationRepository`
-وإصدار حالة استجابةً لكل `User`.
+داخل معالج `_onUserSubscriptionRequested`، يستخدم `AppBloc` الدالة `emit.onEach`
+للاشتراك في تدفق المستخدم الخاص بـ `AuthenticationRepository`، ثم إصدار حالة لكل
+`User` جديد.
 
-تقوم `emit.onEach` بإنشاء اشتراك دفق داخليًا وتتولى إلغاءه عند إغلاق `AppBloc`
-أو دفق المستخدم.
+`emit.onEach` تنشئ اشتراكًا داخليًا في التدفق (stream subscription)، وتتكفل
+بإلغائه عند إغلاق `AppBloc` أو إغلاق تدفق المستخدم.
 
-إذا أصدر دفق المستخدم خطأً، فإن `addError` يعيد توجيه الخطأ وتتبع المكدس (stack
-trace) إلى أي `BlocObserver` يستمع.
+إذا أصدر تدفق المستخدم خطأً، تقوم `addError` بتمرير الخطأ و`stack trace` إلى أي
+`BlocObserver` يستمع.
 
 :::caution
 
-إذا تم حذف `onError`، فسيتم اعتبار أي أخطاء في دفق المستخدم غير معالجة، وسيتم
-طرحها بواسطة `onEach`. ونتيجة لذلك، سيتم إلغاء الاشتراك في دفق المستخدم.
+إذا لم يتم تمرير `onError`، فسيتم اعتبار أي خطأ في تدفق المستخدم غير مُعالَج،
+وسيتم رميه من `onEach`. ونتيجة لذلك سيتم إلغاء الاشتراك في تدفق المستخدم.
 
 :::
 
 :::tip
 
-يعد [`BlocObserver`](/ar/bloc-concepts/#blocobserver) رائعًا لتسجيل أحداث Bloc
-والأخطاء وتغييرات الحالة، خاصة في سياق التحليلات وتقارير الأعطال.
+[`BlocObserver`](/ar/bloc-concepts/#blocobserver) مفيد جدًا لتسجيل أحداث Bloc
+والأخطاء وتغيّرات الحالة، خصوصًا في سياق التحليلات (analytics) وتقارير الأعطال
+(crash reporting).
 
 :::
 
@@ -279,13 +280,12 @@ trace) إلى أي `BlocObserver` يستمع.
 
 ## النماذج (Models)
 
-يعد نموذج إدخال `Email` و `Password` مفيدًا لتغليف منطق التحقق من الصحة
-(validation logic) وسيتم استخدامه في كل من `LoginForm` و `SignUpForm` (في وقت
-لاحق من الدليل).
+نماذج إدخال `Email` و`Password` مفيدة لتغليف منطق التحقق (validation logic)،
+وسيتم استخدامها في `LoginForm` و`SignUpForm` (لاحقًا في هذا الدليل).
 
-يتم إنشاء كلا نموذجي الإدخال باستخدام حزمة
-[formz](https://pub.dev/packages/formz) ويسمحان لنا بالعمل مع كائن تم التحقق من
-صحته بدلاً من نوع بدائي مثل `String`.
+كلا النموذجين مبنيّ باستخدام حزمة [formz](https://pub.dev/packages/formz)، وهذا
+يسمح لنا بالتعامل مع كائن مُتحقَّق منه (validated object) بدلًا من نوع بدائي
+(primitive type) مثل `String`.
 
 ### البريد الإلكتروني (Email)
 
@@ -303,7 +303,7 @@ trace) إلى أي `BlocObserver` يستمع.
 
 ## صفحة تسجيل الدخول (Login Page)
 
-إن `LoginPage` مسؤولة عن إنشاء وتوفير مثيل من `LoginCubit` إلى `LoginForm`.
+`LoginPage` مسؤولة عن إنشاء نسخة من `LoginCubit` وتوفيرها إلى `LoginForm`.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/login/view/login_page.dart"
@@ -312,22 +312,22 @@ trace) إلى أي `BlocObserver` يستمع.
 
 :::tip
 
-من المهم جدًا إبقاء عملية إنشاء الكتل/الـ Cubits منفصلة عن مكان استهلاكها. سيسمح
-لك هذا بحقن مثيلات وهمية (mock instances) بسهولة واختبار العرض الخاص بك بمعزل عن
-غيره.
+من المهم جدًا فصل مكان إنشاء blocs/cubits عن مكان استهلاكها. هذا يجعل حقن نسخ
+وهمية (mock instances) أسهل، ويسهّل اختبار الواجهة (view) بشكل مستقل (in
+isolation).
 
 :::
 
 ## Login Cubit
 
-إن `LoginCubit` مسؤول عن إدارة `LoginState` للنموذج. يكشف عن واجهات برمجة
-تطبيقات لـ `logInWithCredentials` و `logInWithGoogle`، بالإضافة إلى تلقي إشعارات
-عند تحديث البريد الإلكتروني/كلمة المرور.
+`LoginCubit` مسؤول عن إدارة `LoginState` الخاص بالنموذج. وهو يوفّر APIs مثل
+`logInWithCredentials` و`logInWithGoogle`، كما يتلقى إشعارات عند تحديث البريد
+الإلكتروني/كلمة المرور.
 
 ### الحالة (State)
 
-تتكون `LoginState` من `Email` و `Password` و `FormzStatus`. يوسع نموذجا `Email`
-و `Password` من `FormzInput` من حزمة [formz](https://pub.dev/packages/formz).
+تتكوّن `LoginState` من `Email` و`Password` و`FormzStatus`. ويرث نموذجا `Email`
+و`Password` من `FormzInput` في حزمة [formz](https://pub.dev/packages/formz).
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/login/cubit/login_state.dart"
@@ -336,8 +336,8 @@ trace) إلى أي `BlocObserver` يستمع.
 
 ### Cubit
 
-لدى `LoginCubit` تبعية على `AuthenticationRepository` من أجل تسجيل دخول المستخدم
-إما عبر بيانات الاعتماد أو عبر تسجيل الدخول باستخدام Google.
+يعتمد `LoginCubit` على `AuthenticationRepository` لتسجيل دخول المستخدم إما عبر
+بيانات الاعتماد (credentials) أو عبر Google Sign-In.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/login/cubit/login_cubit.dart"
@@ -346,15 +346,15 @@ trace) إلى أي `BlocObserver` يستمع.
 
 :::note
 
-لقد استخدمنا `Cubit` بدلاً من `Bloc` هنا لأن `LoginState` بسيط ومحلي إلى حد ما.
-حتى بدون الأحداث، لا يزال بإمكاننا الحصول على فكرة جيدة عما حدث بمجرد النظر إلى
-التغييرات من حالة إلى أخرى، ويكون الكود الخاص بنا أبسط وأكثر إيجازًا.
+استخدمنا `Cubit` بدلًا من `Bloc` هنا لأن `LoginState` بسيط ومحصور في نطاق صغير.
+حتى بدون events، يمكن فهم ما حدث من خلال الانتقال بين الحالات، مع كود أبسط وأكثر
+اختصارًا.
 
 :::
 
 ## نموذج تسجيل الدخول (Login Form)
 
-إن `LoginForm` مسؤول عن عرض النموذج استجابةً لـ `LoginState` ويستدعي طرقًا على
+`LoginForm` مسؤول عن عرض النموذج بناءً على `LoginState`، ويستدعي methods على
 `LoginCubit` استجابةً لتفاعلات المستخدم.
 
 <RemoteCode
@@ -362,16 +362,16 @@ trace) إلى أي `BlocObserver` يستمع.
 	title="lib/login/view/login_form.dart"
 />
 
-يعرض `LoginForm` أيضًا زر "إنشاء حساب" (Create Account) الذي ينتقل إلى
-`SignUpPage` حيث يمكن للمستخدم إنشاء حساب جديد تمامًا.
+كما يعرض `LoginForm` زر "إنشاء حساب" (Create Account) الذي ينقل المستخدم إلى
+`SignUpPage` لإنشاء حساب جديد.
 
-## صفحة التسجيل (Sign Up Page)
+## صفحة إنشاء الحساب (Sign Up Page)
 
-يعكس هيكل `SignUp` هيكل `Login` ويتكون من `SignUpPage` و `SignUpView` و
+بنية `SignUp` تعكس بنية `Login`، وتتكوّن من `SignUpPage` و`SignUpView` و
 `SignUpCubit`.
 
-إن `SignUpPage` مسؤولة فقط عن إنشاء وتوفير مثيل من `SignUpCubit` إلى
-`SignUpForm` (تمامًا كما في `LoginPage`).
+`SignUpPage` مسؤولة فقط عن إنشاء نسخة من `SignUpCubit` وتوفيرها إلى `SignUpForm`
+(تمامًا كما في `LoginPage`).
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/view/sign_up_page.dart"
@@ -380,20 +380,20 @@ trace) إلى أي `BlocObserver` يستمع.
 
 :::note
 
-تمامًا كما في `LoginCubit`، لدى `SignUpCubit` تبعية على
-`AuthenticationRepository` من أجل إنشاء حسابات مستخدمين جديدة.
+كما في `LoginCubit`، يعتمد `SignUpCubit` على `AuthenticationRepository` لإنشاء
+حسابات مستخدمين جديدة.
 
 :::
 
-## SignUp Cubit
+## Sign Up Cubit
 
-يدير `SignUpCubit` حالة `SignUpForm` ويتواصل مع `AuthenticationRepository` من
-أجل إنشاء حسابات مستخدمين جديدة.
+يدير `SignUpCubit` حالة `SignUpForm`، ويتواصل مع `AuthenticationRepository`
+لإنشاء حسابات جديدة.
 
 ### الحالة (State)
 
-تُعيد `SignUpState` استخدام نفس نماذج إدخال النموذج `Email` و `Password` لأن
-منطق التحقق من الصحة هو نفسه.
+تُعيد `SignUpState` استخدام نموذجي إدخال `Email` و`Password` لأن منطق التحقق
+(validation logic) هو نفسه.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/cubit/sign_up_state.dart"
@@ -402,17 +402,17 @@ trace) إلى أي `BlocObserver` يستمع.
 
 ### Cubit
 
-إن `SignUpCubit` مشابه للغاية لـ `LoginCubit` مع استثناء رئيسي وهو أنه يكشف عن
-واجهة برمجة تطبيقات لإرسال النموذج بدلاً من تسجيل الدخول.
+`SignUpCubit` قريب جدًا من `LoginCubit`، والفرق الأساسي أنه يوفّر API لإرسال
+النموذج (submit) بدلًا من تسجيل الدخول.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/cubit/sign_up_cubit.dart"
 	title="lib/sign_up/cubit/sign_up_cubit.dart"
 />
 
-## نموذج التسجيل (Sign Up Form)
+## نموذج إنشاء الحساب (Sign Up Form)
 
-إن `SignUpForm` مسؤول عن عرض النموذج استجابةً لـ `SignUpState` ويستدعي طرقًا على
+`SignUpForm` مسؤول عن عرض النموذج بناءً على `SignUpState`، ويستدعي methods على
 `SignUpCubit` استجابةً لتفاعلات المستخدم.
 
 <RemoteCode
@@ -422,12 +422,12 @@ trace) إلى أي `BlocObserver` يستمع.
 
 ## الصفحة الرئيسية (Home Page)
 
-بعد أن يقوم المستخدم بتسجيل الدخول أو التسجيل بنجاح، سيتم تحديث دفق `user` مما
-سيؤدي إلى تغيير الحالة في `AuthenticationBloc` وسيؤدي إلى دفع `HomePage` إلى
-مكدس التنقل بواسطة `AppView`.
+بعد أن يسجل المستخدم الدخول أو ينشئ حسابًا بنجاح، يتم تحديث تدفق `user`، ما يؤدي
+إلى تغيّر الحالة في `AuthenticationBloc`، ثم تدفع `AppView` صفحة `HomePage` إلى
+مكدس التنقل (navigation stack).
 
-من `HomePage`، يمكن للمستخدم عرض معلومات ملفه الشخصي وتسجيل الخروج من خلال النقر
-على أيقونة الخروج في `AppBar`.
+من `HomePage` يمكن للمستخدم عرض معلومات ملفه الشخصي وتسجيل الخروج عبر النقر على
+أيقونة الخروج في `AppBar`.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/home/view/home_page.dart"
@@ -436,22 +436,23 @@ trace) إلى أي `BlocObserver` يستمع.
 
 :::note
 
-تم إنشاء مجلد `widgets` جنبًا إلى جنب مع مجلد `view` ضمن ميزة `home` للمكونات
-القابلة لإعادة الاستخدام والخاصة بتلك الميزة المعينة. في هذه الحالة، يتم تصدير
-ويدجت `Avatar` بسيط واستخدامه داخل `HomePage`.
+تم إنشاء مجلد `widgets` بجانب مجلد `view` داخل ميزة `home` للمكونات القابلة
+لإعادة الاستخدام الخاصة بهذه الميزة. في هذا المثال، يتم تصدير `Avatar` بسيط
+واستخدامه داخل `HomePage`.
 
 :::
 
 :::note
 
-عند النقر على `IconButton` الخاص بتسجيل الخروج، يتم إضافة حدث
-`AuthenticationLogoutRequested` إلى `AuthenticationBloc` الذي يقوم بتسجيل خروج
+عند النقر على `IconButton` الخاص بتسجيل الخروج، يُضاف الحدث
+`AuthenticationLogoutRequested` إلى `AuthenticationBloc`، فيتم تسجيل خروج
 المستخدم وإعادته إلى `LoginPage`.
 
 :::
 
-في هذه المرحلة، لدينا تطبيق تسجيل دخول قوي إلى حد ما باستخدام Firebase وقمنا
-بفصل طبقة العرض لدينا عن طبقة منطق الأعمال باستخدام مكتبة Bloc.
+بهذه المرحلة أصبح لدينا تنفيذ قوي لتسجيل الدخول باستخدام Firebase، وتمكّنا من
+فصل طبقة العرض (presentation layer) عن طبقة منطق الأعمال (business logic layer)
+باستخدام مكتبة Bloc.
 
-يمكن العثور على المصدر الكامل لهذا المثال
+يمكنك الاطلاع على المصدر الكامل لهذا المثال من
 [هنا](https://github.com/felangel/bloc/tree/master/examples/flutter_firebase_login).

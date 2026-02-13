@@ -1,6 +1,6 @@
 ---
 title: الاختبار (Testing)
-description: أساسيات كيفية كتابة الاختبارات للـ blocs الخاصة بك.
+description: أساسيات كيفية كتابة اختبارات للـ blocs الخاصة بك.
 ---
 
 import CounterBlocSnippet from '~/components/testing/CounterBlocSnippet.astro';
@@ -11,46 +11,45 @@ import CounterBlocTestSetupSnippet from '~/components/testing/CounterBlocTestSet
 import CounterBlocTestInitialStateSnippet from '~/components/testing/CounterBlocTestInitialStateSnippet.astro';
 import CounterBlocTestBlocTestSnippet from '~/components/testing/CounterBlocTestBlocTestSnippet.astro';
 
-تم تصميم Bloc ليكون من السهل جداً اختباره. في هذا القسم، سنستعرض كيفية إجراء
-اختبار الوحدة (unit test) للـ bloc.
+تم تصميم Bloc ليكون سهل الاختبار إلى حدٍ كبير. في هذا القسم، سنستعرض كيفية كتابة
+اختبارات وحدة (unit tests) للـ bloc.
 
-من أجل التبسيط، دعونا نكتب اختبارات لـ `CounterBloc` الذي أنشأناه في
+لأغراض التبسيط، سنقوم بكتابة اختبارات لـ `CounterBloc` الذي أنشأناه في
 [المفاهيم الأساسية](/ar/bloc-concepts).
 
-للتذكير، يبدو تطبيق `CounterBloc` كالتالي:
+للتذكير، فإن تنفيذ `CounterBloc` يبدو كالتالي:
 
 <CounterBlocSnippet />
 
 ## الإعداد (Setup)
 
-قبل أن نبدأ في كتابة اختباراتنا، سنحتاج إلى إضافة إطار عمل للاختبار (testing
-framework) إلى تبعيات المشروع.
+قبل البدء في كتابة الاختبارات، نحتاج إلى إضافة إطار عمل للاختبار إلى تبعيات
+المشروع.
 
-نحتاج إلى إضافة [test](https://pub.dev/packages/test) و
+نحتاج إلى إضافة حزمتَي [test](https://pub.dev/packages/test) و
 [bloc_test](https://pub.dev/packages/bloc_test) إلى مشروعنا.
 
 <AddDevDependenciesSnippet />
 
 ## الاختبار (Testing)
 
-لنبدأ بإنشاء ملف لاختبارات `CounterBloc` ، باسم `counter_bloc_test.dart`
-واستيراد حزمة الاختبار.
+لنبدأ بإنشاء ملف لاختبارات `CounterBloc` باسم `counter_bloc_test.dart` واستيراد
+حزمة الاختبار.
 
 <CounterBlocTestImportsSnippet />
 
-بعد ذلك، نحتاج إلى إنشاء دالة `main` بالإضافة إلى مجموعة الاختبار (test group).
+بعد ذلك، نحتاج إلى إنشاء دالة `main` بالإضافة إلى مجموعة اختبارات (test group).
 
 <CounterBlocTestMainSnippet />
 
 :::note
 
-تُستخدم المجموعات (Groups) لتنظيم الاختبارات الفردية بالإضافة إلى إنشاء سياق
-يمكنك من خلاله مشاركة `setUp` و `tearDown` مشتركين عبر جميع الاختبارات الفردية.
+تُستخدم المجموعات (Groups) لتنظيم الاختبارات الفردية، وكذلك لإنشاء سياق يمكن من
+خلاله مشاركة دوال `setUp` و `tearDown` بين جميع الاختبارات داخل المجموعة.
 
 :::
 
-لنبدأ بإنشاء مثيل من `CounterBloc` الخاص بنا والذي سيتم استخدامه عبر جميع
-اختباراتنا.
+لنبدأ بإنشاء مثيل من `CounterBloc` سيتم استخدامه عبر جميع اختباراتنا.
 
 <CounterBlocTestSetupSnippet />
 
@@ -60,20 +59,20 @@ framework) إلى تبعيات المشروع.
 
 :::note
 
-يمكننا تشغيل جميع اختباراتنا باستخدام الأمر `dart test`.
+يمكن تشغيل جميع الاختبارات باستخدام الأمر `dart test`.
 
 :::
 
-في هذه المرحلة، يجب أن يكون لدينا أول اختبار ناجح! الآن دعونا نكتب اختباراً أكثر
-تعقيداً باستخدام حزمة [bloc_test](https://pub.dev/packages/bloc_test).
+في هذه المرحلة، يجب أن يكون لدينا أول اختبار ناجح! الآن دعونا نكتب اختبارًا أكثر
+تقدمًا باستخدام حزمة [bloc_test](https://pub.dev/packages/bloc_test).
 
 <CounterBlocTestBlocTestSnippet />
 
-يجب أن نكون قادرين على تشغيل الاختبارات ورؤية أن جميعها ناجحة.
+يجب أن نتمكن من تشغيل الاختبارات والتأكد من أن جميعها ناجحة.
 
-هذا كل ما في الأمر، يجب أن يكون الاختبار سهلاً للغاية ويجب أن نشعر بالثقة عند
-إجراء التغييرات وإعادة هيكلة الكود الخاص بنا.
+بهذا نكون قد انتهينا. ينبغي أن يكون الاختبار أمرًا سهلًا، وأن نشعر بالثقة عند
+إجراء التعديلات أو إعادة هيكلة الكود.
 
 يمكنك الرجوع إلى
-[تطبيق الطقس (Weather App)](https://github.com/felangel/bloc/tree/master/examples/flutter_weather)
-للحصول على مثال لتطبيق مختبر بالكامل.
+[تطبيق Weather App](https://github.com/felangel/bloc/tree/master/examples/flutter_weather)
+للاطلاع على مثال لتطبيق مختبَر بالكامل.

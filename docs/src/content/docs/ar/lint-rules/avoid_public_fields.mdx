@@ -1,6 +1,6 @@
 ---
 title: تجنب استخدام الحقول العامة
-description: قاعدة avoid_public_fields.
+description: قاعدة `avoid_public_fields`.
 ---
 
 import { Badge } from '@astrojs/starlight/components';
@@ -14,29 +14,29 @@ import GoodSnippet from '~/components/lint-rules/avoid_public_fields/GoodSnippet
 	<Badge text="recommended" variant="success" />
 </div>
 
-تجنب كشف الحقول العامة (Public Fields) على كائنات `Bloc` و `Cubit`.
+تجنب كشف الحقول العامة (public fields) على instances من `Bloc` و`Cubit`.
 
-## الأساس المنطقي
+## المبرر (Rationale)
 
-تحافظ مكونات منطق الأعمال (Business logic components) على `state` الخاص بها
-وتُصدر تغييرات الحالة عبر واجهة برمجة التطبيقات `emit`. ونتيجة لذلك، يجب كشف
-جميع الحالات الظاهرة للعامة (public facing state) عبر كائن `state`.
+تحافظ مكونات منطق الأعمال (Business Logic Components) على `state` الخاص بها
+وتُصدر تغييرات الحالة عبر واجهة `emit` (API). لذلك، يجب كشف كل الحالة الظاهرة
+للعامة (public-facing state) من خلال كائن `state`.
 
-## أمثلة
+## أمثلة (Examples)
 
-**لا تقم** بكشف الحقول العامة على كائنات Bloc و Cubit.
+**لا تقم** بكشف الحقول العامة على instances من `Bloc` و`Cubit`.
 
-**مثال سيئ**:
+**مثال سيئ (BAD)**:
 
 <BadSnippet />
 
-**مثال جيد**:
+**مثال جيد (GOOD)**:
 
 <GoodSnippet />
 
-## التفعيل
+## التفعيل (Enable)
 
-لتفعيل قاعدة `avoid_public_fields`، أضفها إلى ملف `analysis_options.yaml` الخاص
-بك تحت المسار `bloc` > `rules`:
+لتفعيل قاعدة `avoid_public_fields`، أضفها إلى `analysis_options.yaml` ضمن
+`bloc` > `rules`:
 
 <EnableRuleSnippet name="avoid_public_fields" />

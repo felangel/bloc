@@ -1,6 +1,6 @@
 ---
 title: تفضيل اصطلاحات تسمية الملفات
-description: قاعدة prefer_file_naming_conventions.
+description: قاعدة `prefer_file_naming_conventions`.
 ---
 
 import { Badge } from '@astrojs/starlight/components';
@@ -14,32 +14,32 @@ import GoodSnippet from '~/components/lint-rules/prefer_file_naming_conventions/
 	<Badge text="recommended" variant="success" />
 </div>
 
-**تفضيل** اتباع اصطلاحات تسمية الملفات.
+يفضَّل اتباع اصطلاحات تسمية الملفات.
 
 :::note
 
-تم تقديم قاعدة التحليل (lint rule) هذه في الإصدار `0.3.0` من حزمة
+تم تقديم قاعدة التدقيق (lint rule) هذه في الإصدار `0.3.0` من حزمة
 [`package:bloc_lint`](https://pub.dev/packages/bloc_lint)
 
 :::
 
-## الأساس المنطقي (Rationale)
+## المبرر (Rationale)
 
-من أجل الاتساق، وسهولة الصيانة، وفصل الاهتمامات (separation of concerns)،
-**يُفضل** تعريف كائنات `bloc` و `cubit` في ملفات Dart الخاصة بها بدلاً من
-تضمينها مباشرة (inlining).
+لتحقيق الاتساق وسهولة الصيانة وفصل الاهتمامات (separation of concerns)، يفضَّل
+تعريف instances من `bloc` و`cubit` في ملفات Dart الخاصة بها بدلًا من تضمينها
+مباشرة (inlining).
 
 :::tip
 
 فكر في استخدام الأمر `bloc new <component>` من حزمة
-[package:bloc_tools](https://pub.dev/packages/bloc_tools) لإنشاء كائنات
-bloc/cubit جديدة بسرعة وبشكل متسق.
+[package:bloc_tools](https://pub.dev/packages/bloc_tools) لإنشاء instances جديدة
+من bloc/cubit بسرعة وبشكل متسق.
 
 :::
 
-## الأمثلة (Examples)
+## أمثلة (Examples)
 
-**يُفضل** التصريح عن كائنات bloc/cubit في ملفاتها الخاصة.
+**يفضَّل** التصريح عن instances من bloc/cubit في ملفاتها الخاصة.
 
 **مثال جيد (GOOD)**:
 
@@ -52,6 +52,6 @@ bloc/cubit جديدة بسرعة وبشكل متسق.
 ## التفعيل (Enable)
 
 لتفعيل قاعدة `prefer_file_naming_conventions`، أضفها إلى ملف
-`analysis_options.yaml` الخاص بك ضمن قسم `bloc` > `rules`:
+`analysis_options.yaml` ضمن `bloc` > `rules`:
 
 <EnableRuleSnippet name="prefer_file_naming_conventions" />
