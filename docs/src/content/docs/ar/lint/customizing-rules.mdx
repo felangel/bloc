@@ -28,7 +28,7 @@ import BlocLintIgnoreForFileSnippet from '~/components/lint/BlocLintIgnoreForFil
 
 :::note
 
-بعكس بعض نتائج التحليل الساكن، قد تنتج قواعد التدقيق أحيانًا **إنذارات كاذبة
+بعكس التحليل الساكن، قد تنتج قواعد التدقيق أحيانًا **إنذارات كاذبة
 (`false positives`)**. إذا صادفت ذلك أو أي مشكلة أخرى، يمكنك الإبلاغ عنها عبر
 [فتح Issue](https://github.com/felangel/bloc/issues/new/choose).
 
@@ -59,7 +59,7 @@ import BlocLintIgnoreForFileSnippet from '~/components/lint/BlocLintIgnoreForFil
 
 لتمكين قواعد فردية، أضف `bloc:` إلى ملف `analysis_options.yaml` كمفتاح من
 المستوى الأعلى (`top-level key`)، ثم أضف `rules:` كمفتاح من المستوى الثاني. بعد
-ذلك، اكتب القواعد المطلوبة على شكل قائمة YAML (بعلامات - dashes).
+ذلك، اكتب القواعد المطلوبة على شكل قائمة YAML (مسبوقة بعلامة الشرطة `-`).
 
 على سبيل المثال:
 
