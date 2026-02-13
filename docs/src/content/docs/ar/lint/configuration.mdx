@@ -1,6 +1,6 @@
 ---
-title: إعدادات المدقق (Linter Configuration)
-description: إعداد مدقق bloc (bloc linter).
+title: إعداد أداة التدقيق (Linter Configuration)
+description: كيفية إعداد أداة التدقيق الخاصة بـ bloc.
 sidebar:
   order: 3
 ---
@@ -13,42 +13,42 @@ import AvoidFlutterImportsWarningSnippet from '~/components/lint/ImportFlutterWa
 import RunBlocLintCounterCubitSnippet from '~/components/lint/RunBlocLintCounterCubitSnippet.astro';
 import AvoidFlutterImportsWarningOutputSnippet from '~/components/lint/ImportFlutterWarningOutputSnippet.astro';
 
-بشكل افتراضي، لن يقوم مدقق bloc بالإبلاغ عن أي تشخيصات (diagnostics) ما لم تقم
-**بإعداد خيارات التحليل (analysis options) للمشروع بشكل صريح**.
+افتراضيًا، لن تعرض أداة التدقيق في bloc أي تشخيصات ما لم تُعدّ خيارات التحليل
+(analysis options) في المشروع بشكل صريح.
 
-للبدء، قم بإنشاء أو تعديل ملف `analysis_options.yaml` الموجود في **الجذر الرئيسي
-لمشروعك**، بحيث يتضمن قائمة بالقواعد تحت المفتاح الرئيسي `bloc`:
+للبدء، أنشئ ملف `analysis_options.yaml` أو عدّله في جذر المشروع، بحيث يحتوي على
+قائمة القواعد تحت المفتاح الأعلى `bloc`:
 
 <BlocLintBasicAnalysisOptionsSnippet />
 
-قم بتشغيل المدقق باستخدام الأمر التالي في الطرفية (terminal):
+شغّل أداة التدقيق باستخدام الأمر التالي في terminal:
 
 <RunBlocLintInCurrentDirectorySnippet />
 
-سيقوم الأمر أعلاه بتحليل جميع الملفات في المجلد الحالي والمجلدات الفرعية التابعة
-له، ولكن يمكنك أيضًا فحص ملفات ومجلدات محددة عن طريق تمريرها كمعاملات للأمر
-(command-line arguments):
+سيحلّل الأمر أعلاه جميع الملفات في المجلد الحالي ومجلداته الفرعية. ويمكنك أيضًا
+تدقيق ملفات أو مجلدات محددة عبر تمريرها كوسائط لسطر الأوامر (command-line
+arguments):
 
 <RunBlocLintInSrcTestSnippet />
 
-سيقوم الأمر أعلاه بتحليل جميع الأكواد البرمجية في مجلدات `src` و `test`.
+سيحلّل الأمر أعلاه كل الأكواد البرمجية داخل مجلدي `src` و`test`.
 
-إذا كانت قاعدة `avoid_flutter_imports` مُفعلة، فسيتم الإبلاغ عن أي ملف `bloc` أو
-`cubit` يحتوي على استيراد (import) لـ Flutter كتحذير:
+إذا كانت قاعدة `avoid_flutter_imports` مفعّلة، فسيُبلّغ عن أي ملف `bloc` أو
+`cubit` يحتوي على `import` لـ Flutter على أنه تحذير:
 
 <AvoidFlutterImportsWarningSnippet />
 
-يمكنك رؤية التحذير عن طريق تشغيل الأمر `bloc lint`:
+يمكنك مشاهدة التحذير عبر تشغيل الأمر `bloc lint`:
 
 <RunBlocLintCounterCubitSnippet />
 
-يجب أن يبدو الإخراج (output) كما يلي:
+يجب أن يكون المخرج (output) بالشكل التالي:
 
 <AvoidFlutterImportsWarningOutputSnippet />
 
 :::note
 
-فيما يلي جميع قواعد المدقق (lint rules) المدعومة:
+فيما يلي جميع قواعد التدقيق المدعومة (lint rules):
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/packages/bloc_lint/lib/all.yaml"

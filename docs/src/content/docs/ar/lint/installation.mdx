@@ -1,6 +1,6 @@
 ---
-title: تثبيت المدقق (Linter Installation)
-description: تثبيت مدقق bloc.
+title: تثبيت أداة التدقيق (Linter Installation)
+description: كيفية تثبيت أداة التدقيق الخاصة بـ bloc.
 sidebar:
   order: 2
 ---
@@ -15,29 +15,28 @@ import BlocLintMultipleRecommendedAnalysisOptionsSnippet from '~/components/lint
 
 ## أدوات سطر الأوامر
 
-لاستخدام المدقق من سطر الأوامر، قم بتثبيت حزمة
+لاستخدام أداة التدقيق من سطر الأوامر، ثبّت حزمة
 [`package:bloc_tools`](https://pub.dev/packages/bloc_tools) عبر الأمر التالي:
 
 <InstallBlocToolsSnippet />
 
-بمجرد تثبيت أدوات سطر أوامر bloc، يمكنك تشغيل مدقق bloc عبر الأمر `bloc lint`:
+بعد تثبيت أدوات سطر أوامر bloc، يمكنك تشغيل أداة التدقيق عبر الأمر `bloc lint`:
 
 <BlocToolsLintHelpOutputSnippet />
 
 ## مجموعة القواعد الموصى بها
 
-لتثبيت مجموعة قواعد التدقيق الموصى بها، قم بتثبيت حزمة
-[`package:bloc_lint`](https://pub.dev/packages/bloc_lint) كاعتماد تطوير (dev
-dependency) عبر الأمر التالي:
+لتثبيت مجموعة قواعد التدقيق الموصى بها، ثبّت حزمة
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint) كاعتماد تطوير
+(`dev dependency`) باستخدام الأمر التالي:
 
 <InstallBlocLintSnippet />
 
-بعد ذلك، أضف ملف `analysis_options.yaml` إلى الجذر الرئيسي لمشروعك مع مجموعة
-القواعد الموصى بها:
+ثم أضف ملف `analysis_options.yaml` إلى جذر المشروع مع مجموعة القواعد الموصى بها:
 
 <BlocLintRecommendedAnalysisOptionsSnippet />
 
-إذا لزم الأمر، يمكنك تضمين مجموعات قواعد متعددة عن طريق تعريفها كقائمة:
+عند الحاجة، يمكنك تضمين أكثر من مجموعة قواعد عبر تعريفها كقائمة:
 
 <BlocLintMultipleRecommendedAnalysisOptionsSnippet />
 
@@ -48,13 +47,13 @@ dependency) عبر الأمر التالي:
 
 <CardGrid>
 	<Card title="VSCode" icon="vscode">
-		يتوفر دعم [إضافة Bloc
+		يتوفر دعم [إضافة Bloc لـ
 		VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
-		في الإصدار v6.8.0.
+		ابتداءً من الإصدار `v6.8.0`.
 	</Card>
 	<Card title="IntelliJ" icon="jetbrains">
-		يتوفر دعم [إضافة Bloc
-		IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc) في الإصدار
-		v4.1.0.
+		يتوفر دعم [إضافة Bloc لـ
+		IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc) ابتداءً من
+		الإصدار `v4.1.0`.
 	</Card>
 </CardGrid>
