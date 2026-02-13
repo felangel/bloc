@@ -1,6 +1,6 @@
 ---
 title: قائمة Flutter اللانهائية (Infinite List)
-description: دليل متعمق حول كيفية بناء قائمة Flutter لانهائية باستخدام Bloc.
+description: دليل متعمّق لبناء قائمة Flutter لانهائية باستخدام مكتبة Bloc.
 sidebar:
   order: 3
 ---
@@ -15,37 +15,37 @@ import PostBlocTransformerSnippet from '~/components/tutorials/flutter-infinite-
 
 ![intermediate](https://img.shields.io/badge/level-intermediate-orange.svg)
 
-في هذا الدليل، سنقوم بتطبيق تطبيق يجلب البيانات عبر الشبكة ويقوم بتحميلها أثناء
-قيام المستخدم بالتمرير، وذلك باستخدام Flutter ومكتبة Bloc.
+في هذا الدليل، سنبني تطبيقًا يجلب البيانات عبر الشبكة ويحمّلها تدريجيًا أثناء
+تمرير المستخدم، باستخدام Flutter ومكتبة Bloc.
 
 ![demo](~/assets/tutorials/flutter-infinite-list.gif)
 
 ## المواضيع الرئيسية
 
 - مراقبة تغييرات الحالة باستخدام [BlocObserver](/ar/bloc-concepts#blocobserver).
-- [BlocProvider](/ar/flutter-bloc-concepts#blocprovider)، وهي ويدجت (Widget) من
-  Flutter توفر كتلة (Bloc) لأبنائها.
-- [BlocBuilder](/ar/flutter-bloc-concepts#blocbuilder)، وهي ويدجت من Flutter
-  تتولى بناء الويدجت استجابةً للحالات الجديدة.
+- [BlocProvider](/ar/flutter-bloc-concepts#blocprovider)، وهي Widget في Flutter
+  توفّر Bloc للأبناء.
+- [BlocBuilder](/ar/flutter-bloc-concepts#blocbuilder)، وهي Widget في Flutter
+  تتولّى إعادة البناء استجابةً للحالات الجديدة.
 - إضافة الأحداث باستخدام [context.read](/ar/flutter-bloc-concepts#contextread).
 - منع إعادة البناء غير الضرورية باستخدام
   [Equatable](/ar/faqs/#متى-يجب-استخدام-equatable).
-- استخدام طريقة `transformEvents` مع Rx.
+- استخدام `transformEvents` مع Rx.
 
 ## الإعداد
 
-سنبدأ بإنشاء مشروع Flutter جديد تمامًا.
+سنبدأ بإنشاء مشروع Flutter جديد بالكامل.
 
 <FlutterCreateSnippet />
 
-يمكننا بعد ذلك المضي قدمًا واستبدال محتويات `pubspec.yaml` بما يلي:
+بعد ذلك، يمكننا استبدال محتويات `pubspec.yaml` بما يلي:
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/pubspec.yaml"
 	title="pubspec.yaml"
 />
 
-ثم نقوم بتثبيت جميع التبعيات لدينا:
+ثم نثبّت جميع التبعيات (dependencies):
 
 <FlutterPubGetSnippet />
 
@@ -77,25 +77,25 @@ import PostBlocTransformerSnippet from '~/components/tutorials/flutter-infinite-
 ├── pubspec.yaml
 ```
 
-يستخدم التطبيق هيكل دليل يعتمد على الميزات (feature-driven directory structure).
-يتيح لنا هيكل المشروع هذا توسيع نطاق المشروع من خلال وجود ميزات مكتفية ذاتيًا.
+يستخدم التطبيق هيكل مجلدات يعتمد على الميزات (feature-driven directory
+structure). يتيح لنا هذا النمط توسيع المشروع عبر ميزات مستقلة بذاتها.
 في هذا المثال، سيكون لدينا ميزة واحدة فقط (ميزة المنشورات `post feature`) وهي
 مقسمة إلى مجلدات خاصة بها مع ملفات تجميع (barrel files)، المشار إليها بعلامة
 النجمة (\*).
 
 ## واجهة برمجة تطبيقات REST
 
-بالنسبة لهذا التطبيق التجريبي، سنستخدم
+في هذا التطبيق التجريبي، سنستخدم
 [jsonplaceholder](http://jsonplaceholder.typicode.com) كمصدر للبيانات.
 
 :::note
 
-jsonplaceholder هي واجهة برمجة تطبيقات REST عبر الإنترنت تقدم بيانات وهمية؛ وهي
+`jsonplaceholder` هي REST API عبر الإنترنت تقدم بيانات وهمية؛ وهي
 مفيدة جدًا لبناء النماذج الأولية.
 
 :::
 
-افتح علامة تبويب جديدة في متصفحك وقم بزيارة
+افتح علامة تبويب جديدة في المتصفح وزر الرابط التالي:
 `https://jsonplaceholder.typicode.com/posts?_start=0&_limit=2` لترى ما ترجعه
 واجهة برمجة التطبيقات.
 
@@ -103,70 +103,68 @@ jsonplaceholder هي واجهة برمجة تطبيقات REST عبر الإنت
 
 :::note
 
-في عنوان URL الخاص بنا، حددنا البداية (`start`) والحد (`limit`) كمعلمات استعلام
-(query parameters) لطلب GET.
+في URL هذا، حددنا `start` و`limit` كمعاملات استعلام (query parameters) في طلب
+GET.
 
 :::
 
-رائع، الآن بعد أن عرفنا كيف ستبدو بياناتنا، دعنا ننشئ النموذج (Model).
+ممتاز، بعد أن عرفنا شكل البيانات، لننشئ الـ model.
 
 ## نموذج البيانات (Data Model)
 
-قم بإنشاء `post.dart` ودعنا نبدأ العمل على إنشاء نموذج كائن المنشور (`Post`).
+أنشئ `post.dart` ولنبدأ ببناء model كائن المنشور (`Post`).
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/models/post.dart"
 	title="lib/posts/models/post.dart"
 />
 
-`Post` هو مجرد صنف يحتوي على `id` و `title` و `body`.
+`Post` عبارة عن class بسيط يحتوي على `id` و`title` و`body`.
 
 :::note
 
-نحن نوسع [`Equatable`](https://pub.dev/packages/equatable) حتى نتمكن من مقارنة
-كائنات `Posts`. بدون هذا، سنحتاج إلى تغيير الصنف يدويًا لتجاوز التساوي
-(`equality`) ورمز التجزئة (`hashCode`) حتى نتمكن من التمييز بين كائني `Posts`
-مختلفين. راجع [الحزمة](https://pub.dev/packages/equatable) لمزيد من التفاصيل.
+نحن نرث من [`Equatable`](https://pub.dev/packages/equatable) حتى نتمكن من مقارنة
+كائنات `Posts`. بدون ذلك سنحتاج لتعديل الـ class يدويًا وعمل override لـ
+`equality` و`hashCode` حتى نميّز بين كائنين مختلفين من `Posts`. راجع
+[الحزمة](https://pub.dev/packages/equatable) لمزيد من التفاصيل.
 
 :::
 
-الآن بعد أن أصبح لدينا نموذج كائن `Post`، دعنا نبدأ العمل على مكون منطق الأعمال
-(Business Logic Component) أو (bloc).
+الآن بعد أن أصبح لدينا model كائن `Post`، لنبدأ العمل على مكوّن منطق الأعمال
+(Business Logic Component) أي `bloc`.
 
 ## أحداث المنشور (Post Events)
 
-قبل أن نتعمق في التنفيذ، نحتاج إلى تحديد ما سيفعله `PostBloc` الخاص بنا.
+قبل التعمّق في التنفيذ، نحتاج إلى تحديد ما الذي سيفعله `PostBloc`.
 
-على مستوى عالٍ، سيستجيب لإدخال المستخدم (التمرير) ويجلب المزيد من المنشورات لكي
-تعرضها طبقة العرض. لنبدأ بإنشاء `Event` الخاص بنا.
+على مستوى عام، سيستجيب لإدخال المستخدم (التمرير) ويجلب المزيد من المنشورات حتى
+تتمكن طبقة العرض من عرضها. لنبدأ بإنشاء `Event`.
 
-سيستجيب `PostBloc` الخاص بنا لحدث واحد فقط؛ وهو `PostFetched` الذي ستتم إضافته
-بواسطة طبقة العرض كلما احتاجت إلى المزيد من المنشورات لعرضها. نظرًا لأن حدث
-`PostFetched` هو نوع من `PostEvent`، يمكننا إنشاء `bloc/post_event.dart` وتنفيذ
-الحدث على النحو التالي.
+سيستجيب `PostBloc` لحدث واحد فقط هو `PostFetched`، والذي تضيفه طبقة العرض كلما
+احتاجت إلى مزيد من المنشورات. وبما أن `PostFetched` نوع من `PostEvent`، يمكننا
+إنشاء `bloc/post_event.dart` وتنفيذه كالتالي.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/bloc/post_event.dart"
 	title="lib/posts/bloc/post_event.dart"
 />
 
-للتلخيص، سيتلقى `PostBloc` الخاص بنا `PostEvents` ويحولها إلى `PostStates`. لقد
-قمنا بتعريف جميع `PostEvents` (PostFetched)، لذا دعنا نحدد `PostState` الخاص بنا
-بعد ذلك.
+باختصار، سيتلقى `PostBloc` أحداث `PostEvents` ويحوّلها إلى حالات `PostStates`.
+بعد تعريف `PostEvents` (`PostFetched`)، ننتقل لتعريف `PostState`.
 
 ## حالات المنشور (Post States)
 
-ستحتاج طبقة العرض لدينا إلى عدة أجزاء من المعلومات لترتيب نفسها بشكل صحيح:
+تحتاج طبقة العرض إلى عدة معلومات لتتمكن من البناء بشكل صحيح:
 
 - `PostInitial`: ستخبر طبقة العرض بأنها بحاجة إلى عرض مؤشر تحميل أثناء تحميل
   الدفعة الأولية من المنشورات.
-- `PostSuccess`: ستخبر طبقة العرض بأن لديها محتوى لعرضه.
+- `PostSuccess`: تخبر طبقة العرض أن لديها محتوى جاهزًا للعرض.
   - `posts`: ستكون قائمة (`List<Post>`) سيتم عرضها.
   - `hasReachedMax`: ستخبر طبقة العرض بما إذا كانت قد وصلت إلى الحد الأقصى لعدد
     المنشورات أم لا.
 - `PostFailure`: ستخبر طبقة العرض بحدوث خطأ أثناء جلب المنشورات.
 
-يمكننا الآن إنشاء `bloc/post_state.dart` وتنفيذه على النحو التالي.
+يمكننا الآن إنشاء `bloc/post_state.dart` وتنفيذه بالشكل التالي.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/bloc/post_state.dart"
@@ -175,47 +173,45 @@ jsonplaceholder هي واجهة برمجة تطبيقات REST عبر الإنت
 
 :::note
 
-لقد قمنا بتنفيذ `copyWith` حتى نتمكن من نسخ مثيل من `PostSuccess` وتحديث صفر أو
-أكثر من الخصائص بسهولة (سيكون هذا مفيدًا لاحقًا).
+قمنا بتنفيذ `copyWith` حتى نتمكن من نسخ instance من `PostSuccess` وتحديث صفر أو
+أكثر من الخصائص بسهولة (وسيكون ذلك مفيدًا لاحقًا).
 
 :::
 
-الآن بعد أن قمنا بتنفيذ `Events` و `States`، يمكننا إنشاء `PostBloc` الخاص بنا.
+الآن بعد تنفيذ `Events` و`States`، يمكننا إنشاء `PostBloc`.
 
-## كتلة المنشور (Post Bloc)
+## Post Bloc
 
-لأغراض التبسيط، سيكون لدى `PostBloc` الخاص بنا تبعية مباشرة على **عميل HTTP**؛
-ومع ذلك، في تطبيق إنتاجي، نقترح بدلاً من ذلك حقن عميل API واستخدام نمط المستودع
-(repository pattern) [وثائق](/ar/architecture).
+للتبسيط، سيعتمد `PostBloc` مباشرة على `http client`. لكن في تطبيق إنتاجي يُفضل
+حقن API client واستخدام نمط المستودع (repository pattern). راجع
+[الوثائق](/ar/architecture).
 
-دعنا ننشئ `post_bloc.dart` وننشئ `PostBloc` الفارغ الخاص بنا.
+لننشئ `post_bloc.dart` ونبدأ بـ `PostBloc` فارغ.
 
 <PostBlocInitialStateSnippet />
 
 :::note
 
-من إعلان الصنف (class declaration) فقط، يمكننا أن نعرف أن `PostBloc` الخاص بنا
-سيأخذ `PostEvents` كمدخلات ويخرج `PostStates`.
+من class declaration فقط، يمكننا معرفة أن `PostBloc` يستقبل `PostEvents`
+كمدخلات ويخرج `PostStates`.
 
 :::
 
-بعد ذلك، نحتاج إلى تسجيل معالج حدث للتعامل مع أحداث `PostFetched` الواردة.
-استجابةً لحدث `PostFetched`، سنستدعي `_fetchPosts` لجلب المنشورات من واجهة برمجة
-التطبيقات.
+بعد ذلك، نحتاج لتسجيل event handler لمعالجة أحداث `PostFetched` الواردة.
+استجابةً لهذا الحدث، سنستدعي `_fetchPosts` لجلب المنشورات من API.
 
 <PostBlocOnPostFetchedSnippet />
 
-سيقوم `PostBloc` الخاص بنا بإصدار (`emit`) حالات جديدة عبر `Emitter<PostState>`
-المقدم في معالج الحدث. تحقق من
+سيقوم `PostBloc` بإصدار (`emit`) حالات جديدة عبر `Emitter<PostState>` الممرر إلى
+event handler. راجع
 [المفاهيم الأساسية](/ar/bloc-concepts/#التدفقات-streams) لمزيد من المعلومات.
 
-الآن في كل مرة تتم فيها إضافة `PostEvent`، إذا كان حدث `PostFetched` وهناك
-المزيد من المنشورات لجلبها، فسيقوم `PostBloc` الخاص بنا بجلب الـ 20 منشورًا
-التالية.
+الآن، في كل مرة يُضاف فيها `PostEvent` وكان الحدث هو `PostFetched` وما زالت هناك
+منشورات متاحة، سيقوم `PostBloc` بجلب 20 منشورًا إضافيًا.
 
-ستُرجع واجهة برمجة التطبيقات مصفوفة فارغة إذا حاولنا الجلب بعد الحد الأقصى لعدد
-المنشورات (100)، لذلك إذا حصلنا على مصفوفة فارغة، فسيقوم الـ bloc الخاص بنا
-بإصدار (`emit`) الحالة الحالية باستثناء أننا سنقوم بتعيين `hasReachedMax` إلى
+ستعيد API مصفوفة فارغة إذا حاولنا الجلب بعد الحد الأقصى (100 منشور). لذلك إذا
+حصلنا على مصفوفة فارغة، فسيقوم bloc بإصدار (`emit`) الحالة الحالية مع تعيين
+`hasReachedMax` إلى
 `true`.
 
 إذا لم نتمكن من استرداد المنشورات، فإننا نصدر `PostStatus.failure`.
@@ -223,9 +219,9 @@ jsonplaceholder هي واجهة برمجة تطبيقات REST عبر الإنت
 إذا تمكنا من استرداد المنشورات، فإننا نصدر `PostStatus.success` والقائمة الكاملة
 للمنشورات.
 
-أحد التحسينات التي يمكننا إجراؤها هو **تخنيق** (`throttle`) حدث `PostFetched`
-لمنع إرسال طلبات غير ضرورية إلى واجهة برمجة التطبيقات الخاصة بنا. يمكننا القيام
-بذلك باستخدام معلمة `transform` عندما نسجل معالج الحدث `_onFetched`.
+أحد التحسينات الممكنة هو عمل **throttle** لحدث `PostFetched` لتجنب إرسال طلبات
+غير ضرورية إلى API. ويمكن تنفيذ ذلك باستخدام معامل `transform` عند تسجيل معالج
+الحدث `_onFetched`.
 
 :::note
 
@@ -237,7 +233,7 @@ jsonplaceholder هي واجهة برمجة تطبيقات REST عبر الإنت
 
 تأكد من استيراد
 [`package:stream_transform`](https://pub.dev/packages/stream_transform) لاستخدام
-واجهة برمجة تطبيقات `throttle`.
+API الخاصة بـ `throttle`.
 
 :::
 
@@ -250,13 +246,12 @@ jsonplaceholder هي واجهة برمجة تطبيقات REST عبر الإنت
 	title="lib/posts/bloc/post_bloc.dart"
 />
 
-عظيم! الآن بعد أن انتهينا من تنفيذ منطق الأعمال، كل ما تبقى هو تنفيذ طبقة العرض.
+ممتاز! بعد الانتهاء من منطق الأعمال، المتبقي هو تنفيذ طبقة العرض.
 
 ## طبقة العرض (Presentation Layer)
 
-في `main.dart`، يمكننا أن نبدأ بتنفيذ الدالة الرئيسية واستدعاء `runApp` لعرض
-الويدجت الجذر لدينا. هنا، يمكننا أيضًا تضمين مراقب الـ bloc الخاص بنا
-(`bloc observer`) لتسجيل الانتقالات وأي أخطاء.
+في `main.dart`، نبدأ بتنفيذ الدالة الرئيسية واستدعاء `runApp` لعرض Widget الجذر.
+وهنا يمكننا أيضًا تضمين `bloc observer` لتسجيل الانتقالات وأي أخطاء.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/main.dart"
@@ -271,17 +266,16 @@ jsonplaceholder هي واجهة برمجة تطبيقات REST عبر الإنت
 	title="lib/app.dart"
 />
 
-في ويدجت `PostsPage`، نستخدم `BlocProvider` لإنشاء وتوفير مثيل من `PostBloc`
-للشجرة الفرعية. أيضًا، نضيف حدث `PostFetched` بحيث عندما يتم تحميل التطبيق، فإنه
-يطلب الدفعة الأولية من المنشورات.
+في Widget `PostsPage`، نستخدم `BlocProvider` لإنشاء وتوفير instance من `PostBloc`
+للشجرة الفرعية. كما نضيف حدث `PostFetched` بحيث يطلب التطبيق الدفعة الأولية من
+المنشورات عند التحميل.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/view/posts_page.dart"
 	title="lib/posts/view/posts_page.dart"
 />
 
-بعد ذلك، نحتاج إلى تنفيذ عرض `PostsList` الخاص بنا والذي سيعرض منشوراتنا ويتصل
-بـ `PostBloc` الخاص بنا.
+بعد ذلك، نحتاج إلى تنفيذ `PostsList` التي ستعرض المنشورات وتتصل بـ `PostBloc`.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/view/posts_list.dart"
@@ -290,56 +284,54 @@ jsonplaceholder هي واجهة برمجة تطبيقات REST عبر الإنت
 
 :::note
 
-`PostsList` هو `StatefulWidget` لأنه سيحتاج إلى الاحتفاظ بـ `ScrollController`.
-في `initState`، نضيف مستمعًا إلى `ScrollController` الخاص بنا حتى نتمكن من
-الاستجابة لأحداث التمرير. نصل أيضًا إلى مثيل `PostBloc` الخاص بنا عبر
+`PostsList` هي `StatefulWidget` لأنها تحتاج للاحتفاظ بـ `ScrollController`.
+في `initState`، نضيف listener إلى `ScrollController` حتى نستجيب لأحداث التمرير.
+كما نصل إلى instance من `PostBloc` عبر
 `context.read<PostBloc>()`.
 
 :::
 
-بالانتقال إلى الأمام، تُرجع طريقة البناء (`build method`) لدينا `BlocBuilder`.
-`BlocBuilder` هي ويدجت من Flutter من
+في خطوة البناء، تعيد `build method` لدينا `BlocBuilder`. و`BlocBuilder` هي Widget
+من Flutter ضمن
 [حزمة flutter_bloc](https://pub.dev/packages/flutter_bloc) تتولى بناء ويدجت
-استجابةً لحالات الـ bloc الجديدة. في أي وقت تتغير فيه حالة `PostBloc` الخاصة
-بنا، سيتم استدعاء دالة البناء لدينا بالحالة الجديدة `PostState`.
+استجابةً لحالات bloc الجديدة. وعند تغيّر حالة `PostBloc`، سيتم استدعاء `builder`
+بالحالة الجديدة `PostState`.
 
 :::caution
 
-نحتاج إلى تذكر تنظيف ما قمنا به والتخلص من `ScrollController` الخاص بنا عند
-التخلص من `StatefulWidget`.
+يجب أن نتذكر تنظيف الموارد والتخلّص من `ScrollController` عند التخلص من
+`StatefulWidget`.
 
 :::
 
-عندما يقوم المستخدم بالتمرير، نحسب المسافة التي مررها لأسفل الصفحة، وإذا كانت
-المسافة لدينا ≥ 90% من `maxScrollextent`، فإننا نضيف حدث `PostFetched` من أجل
-تحميل المزيد من المنشورات.
+عند تمرير المستخدم، نحسب المسافة التي وصل إليها داخل الصفحة. وإذا بلغت المسافة
+`>= 90%` من `maxScrollExtent` نضيف حدث `PostFetched` لتحميل مزيد من المنشورات.
 
-بعد ذلك، نحتاج إلى تنفيذ ويدجت `BottomLoader` الخاص بنا والذي سيشير إلى المستخدم
-بأننا نقوم بتحميل المزيد من المنشورات.
+بعد ذلك، نحتاج لتنفيذ Widget `BottomLoader` التي توضح للمستخدم أننا نحمّل المزيد
+من المنشورات.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/widgets/bottom_loader.dart"
 	title="lib/posts/widgets/bottom_loader.dart"
 />
 
-أخيرًا، نحتاج إلى تنفيذ `PostListItem` الخاص بنا والذي سيعرض `Post` فرديًا.
+أخيرًا، نحتاج إلى تنفيذ `PostListItem` التي تعرض عنصر `Post` واحدًا.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/widgets/post_list_item.dart"
 	title="lib/posts/widgets/post_list_item.dart"
 />
 
-في هذه المرحلة، يجب أن نكون قادرين على تشغيل تطبيقنا ويجب أن يعمل كل شيء؛ ومع
-ذلك، هناك شيء آخر يمكننا القيام به.
+في هذه المرحلة يفترض أن يعمل التطبيق بشكل صحيح، لكن ما زال هناك تحسين إضافي.
 
-إحدى الميزات الإضافية لاستخدام مكتبة bloc هي أنه يمكننا الوصول إلى جميع
-**الانتقالات** (`Transitions`) في مكان واحد.
+من مزايا مكتبة bloc أننا نستطيع الوصول إلى جميع الانتقالات (`Transitions`) في
+مكان واحد.
 
-يُطلق على التغيير من حالة إلى أخرى اسم **انتقال** (`Transition`).
+التغيير من حالة إلى أخرى يسمى انتقالًا (`Transition`).
 
 :::note
 
-يتكون **الانتقال** من الحالة الحالية، والحدث، والحالة التالية.
+يتكون الانتقال (`Transition`) من الحالة الحالية، والحدث، والحالة التالية.
 
 :::
 
@@ -347,7 +339,7 @@ jsonplaceholder هي واجهة برمجة تطبيقات REST عبر الإنت
 التطبيقات الأكبر أن يكون لدينا العديد من الكتل التي تدير أجزاء مختلفة من حالة
 التطبيق.
 
-إذا أردنا أن نكون قادرين على فعل شيء ما استجابةً لجميع **الانتقالات**، يمكننا
+إذا أردنا تنفيذ منطق معيّن استجابةً لكل الانتقالات (`Transitions`)، يمكننا
 ببساطة إنشاء `BlocObserver` خاص بنا.
 
 <RemoteCode
@@ -357,29 +349,28 @@ jsonplaceholder هي واجهة برمجة تطبيقات REST عبر الإنت
 
 :::note
 
-كل ما نحتاجه هو توسيع `BlocObserver` وتجاوز طريقة `onTransition`.
+كل ما نحتاجه هو التوسيع (extend) من `BlocObserver` وعمل override للدالة
+`onTransition`.
 
 :::
 
-الآن في كل مرة يحدث فيها **انتقال** في Bloc، يمكننا رؤية الانتقال مطبوعًا على
-وحدة التحكم.
+الآن، في كل مرة يحدث فيها انتقال (`Transition`) داخل Bloc، يمكننا رؤية تفاصيله
+مطبوعة في terminal.
 
 :::note
 
-من الناحية العملية، يمكنك إنشاء `BlocObservers` مختلفة، ونظرًا لتسجيل كل تغيير
-في الحالة، يمكننا بسهولة تامة فحص تطبيقاتنا وتتبع جميع تفاعلات المستخدم وتغييرات
-الحالة في مكان واحد!
+عمليًا، يمكنك إنشاء `BlocObservers` مختلفة. وبما أن كل تغيّر في الحالة يُسجّل،
+يمكننا بسهولة فحص التطبيق وتتبع تفاعلات المستخدم وتغييرات الحالة في مكان واحد.
 
 :::
 
-هذا كل ما في الأمر! لقد نجحنا الآن في تنفيذ قائمة لانهائية في Flutter باستخدام
+هذا كل ما في الأمر! نجحنا الآن في تنفيذ قائمة لانهائية في Flutter باستخدام
 حزمتي [bloc](https://pub.dev/packages/bloc) و
-[flutter_bloc](https://pub.dev/packages/flutter_bloc)، ونجحنا في فصل طبقة العرض
-لدينا عن منطق الأعمال.
+[flutter_bloc](https://pub.dev/packages/flutter_bloc)، مع فصل طبقة العرض عن منطق
+الأعمال.
 
-لا تملك `PostsPage` الخاصة بنا أي فكرة عن مصدر `Posts` أو كيفية استردادها. وعلى
-العكس من ذلك، لا يملك `PostBloc` الخاص بنا أي فكرة عن كيفية عرض `State`، فهو
-ببساطة يحول الأحداث إلى حالات.
+لا تعرف `PostsPage` من أين تأتي `Posts` أو كيف يتم جلبها. وفي المقابل، لا يعرف
+`PostBloc` كيف تُعرض `State`؛ هو فقط يحوّل الأحداث إلى حالات.
 
 يمكن العثور على المصدر الكامل لهذا المثال
 [هنا](https://github.com/felangel/Bloc/tree/master/examples/flutter_infinite_list).
