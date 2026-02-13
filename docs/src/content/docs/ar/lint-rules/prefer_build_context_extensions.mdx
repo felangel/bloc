@@ -1,6 +1,6 @@
 ---
 title: تفضيل استخدام امتدادات BuildContext
-description: قاعدة prefer_build_context_extensions.
+description: قاعدة `prefer_build_context_extensions`.
 ---
 
 import { Badge } from '@astrojs/starlight/components';
@@ -13,20 +13,21 @@ import GoodSnippet from '~/components/lint-rules/prefer_build_context_extensions
 	<Badge text="dart" variant="note" />
 </div>
 
-فضل استخدام امتدادات `BuildContext` للوصول إلى كائن `Bloc` أو `Repository`.
+يفضَّل استخدام امتدادات `BuildContext` للوصول إلى instance من `Bloc` أو
+`Repository`.
 
 :::note
 
-تم تقديم قاعدة التحقق هذه (lint rule) في الإصدار `0.3.2` من حزمة
+تم تقديم قاعدة التدقيق (lint rule) هذه في الإصدار `0.3.2` من
 [`package:bloc_lint`](https://pub.dev/packages/bloc_lint).
 
 :::
 
-## الأساس المنطقي
+## المبرر (Rationale)
 
-من أجل الاتساق (consistency)، فضل استخدام امتدادات `BuildContext` مثل
-`context.read` و `context.watch` و `context.select` بدلاً من `BlocProvider.of` و
-`RepositoryProvider.of` و `BlocBuilder` أو `BlocSelector`.
+لتحقيق الاتساق (consistency)، يفضَّل استخدام امتدادات `BuildContext` مثل
+`context.read` و`context.watch` و`context.select` بدلًا من `BlocProvider.of` و
+`RepositoryProvider.of` و`BlocBuilder` و`BlocSelector`.
 
 | الطريقة الصريحة (explicit method)                                   | الامتداد (extension)  |
 | ------------------------------------------------------------------- | --------------------- |
@@ -34,21 +35,21 @@ import GoodSnippet from '~/components/lint-rules/prefer_build_context_extensions
 | `BlocBuilder<Bloc, State>(...)` أو `BlocProvider.of<Bloc>(context)` | `context.watch<Bloc>` |
 | `BlocSelector<Bloc, State>(...)`                                    | `context.select`      |
 
-## أمثلة
+## أمثلة (Examples)
 
-**تجنب** استخدام `BlocProvider.of<T>(context)` للوصول إلى كائن `Bloc`.
+**تجنب** استخدام `BlocProvider.of<T>(context)` للوصول إلى instance من `Bloc`.
 
-**مثال سيئ**:
+**مثال سيئ (BAD)**:
 
 <BadSnippet />
 
-**مثال جيد**:
+**مثال جيد (GOOD)**:
 
 <GoodSnippet />
 
-## التفعيل
+## التفعيل (Enable)
 
-لتفعيل قاعدة `prefer_build_context_extensions`، أضفها إلى ملف
-`analysis_options.yaml` الخاص بك تحت المسار `bloc` > `rules`:
+لتفعيل قاعدة `prefer_build_context_extensions`، أضفها إلى `analysis_options.yaml`
+ضمن `bloc` > `rules`:
 
 <EnableRuleSnippet name="prefer_build_context_extensions" />

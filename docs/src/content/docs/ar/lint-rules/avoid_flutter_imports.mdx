@@ -1,6 +1,6 @@
 ---
 title: تجنب استيراد Flutter (Avoid Flutter Imports)
-description: قاعدة avoid_flutter_imports البرمجية الخاصة بـ Bloc.
+description: قاعدة `avoid_flutter_imports` الخاصة بـ Bloc.
 ---
 
 import { Badge } from '@astrojs/starlight/components';
@@ -14,24 +14,27 @@ import GoodSnippet from '~/components/lint-rules/avoid_flutter_imports/GoodSnipp
 	<Badge text="recommended" variant="success" />
 </div>
 
-تجنب إدخال تبعيات على Flutter ضمن مكونات منطق الأعمال (Business Logic
-Components) (نُسخ `Bloc` أو `Cubit`).
+تجنب إضافة تبعيات (dependencies) على Flutter داخل مكونات منطق الأعمال
+(Business Logic Components) (نسخ (instances) من `Bloc` أو `Cubit`).
 
-## الأساس المنطقي (Rationale)
+## المبرر (Rationale)
 
-يعد تقسيم التطبيق إلى طبقات (Layering an application) جزءًا أساسيًا من بناء
-قاعدة أكواد قابلة للصيانة (maintainable codebase) ويساعد المطورين على التكرار
-بسرعة وثقة. يجب أن يكون لكل طبقة مسؤولية واحدة (single responsibility) وأن تكون
-قادرة على العمل والاختبار بشكل مستقل (in isolation). يتيح لك هذا احتواء
-التغييرات في طبقات محددة، مما يقلل من تأثيرها على التطبيق بأكمله.
+يعد تقسيم التطبيق إلى طبقات (Layering an application) جزءًا أساسيًا لبناء قاعدة
+أكواد برمجية قابلة للصيانة (maintainable codebase)، كما يساعد المطورين على
+التطوير بسرعة وثقة. يجب أن تمتلك كل طبقة مسؤولية واحدة (single responsibility)
+وأن تكون قابلة للعمل والاختبار بشكل مستقل (in isolation). هذا يسهّل حصر
+التغييرات داخل طبقات محددة ويقلل تأثيرها على التطبيق بالكامل.
 
-ونتيجة لذلك، يجب أن تدير مكونات منطق الأعمال حالة الميزة (feature state) وأن
-تكون مفصولة عن طبقة واجهة المستخدم (UI layer). يجب أن تتدفق الأحداث (Events) إلى
-مكونات منطق الأعمال من طبقة واجهة المستخدم، ويجب أن تتدفق الحالة (State) من طبقة
-منطق الأعمال إلى طبقة واجهة المستخدم.
+بناءً على ذلك، من الأفضل أن تركز مكونات منطق الأعمال (Business Logic
+Components) على إدارة حالة الميزة (`feature state`) فقط، مع بقائها مفصولة عن
+طبقة واجهة المستخدم (UI layer). يجب أن تتدفق الأحداث (`events`) من طبقة واجهة
+المستخدم (UI layer) إلى مكونات منطق الأعمال (Business Logic Components)، بينما
+تتدفق الحالة (`state`) من طبقة منطق الأعمال (Business Logic layer) إلى طبقة
+واجهة المستخدم (UI layer).
 
-إن إبقاء مكونات منطق الأعمال مفصولة عن Flutter يوفر القدرة على إعادة استخدام
-منطق الأعمال عبر منصات/أطر عمل متعددة (مثل Flutter، AngularDart، Jaspr، إلخ).
+فصل مكونات منطق الأعمال (Business Logic Components) عن Flutter يسهّل إعادة
+استخدام منطق الأعمال عبر منصات أو أطر عمل (frameworks) متعددة (مثل Flutter
+وAngularDart وJaspr وغيرها).
 
 ## أمثلة (Examples)
 
@@ -47,7 +50,7 @@ Components) (نُسخ `Bloc` أو `Cubit`).
 
 ## التفعيل (Enable)
 
-لتفعيل قاعدة `avoid_flutter_imports`، أضفها إلى ملف `analysis_options.yaml`
-الخاص بك ضمن `bloc` > `rules`:
+لتفعيل قاعدة `avoid_flutter_imports`، أضفها إلى `analysis_options.yaml` ضمن
+`bloc` > `rules`:
 
 <EnableRuleSnippet name="avoid_flutter_imports" />
