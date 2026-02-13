@@ -106,7 +106,7 @@ export default defineConfig({
 							label: 'Flutter Bloc Concepts',
 							link: '/flutter-bloc-concepts/',
 							translations: {
-								 ar: 'مفاهيم Flutter Bloc',
+								ar: 'مفاهيم Flutter Bloc',
 								'zh-CN': 'Flutter Bloc 核心概念',
 								fa: 'مفاهیم Bloc فلاتر',
 								es: 'Conceptos de Flutter Bloc',
@@ -143,7 +143,7 @@ export default defineConfig({
 							label: 'Testing',
 							link: '/testing/',
 							translations: {
-								 ar: 'الاختبارات',
+								ar: 'الاختبارات',
 								fa: 'آزمایش کردن',
 								es: 'Pruebas',
 								ja: 'テスト',
@@ -207,7 +207,12 @@ export default defineConfig({
 						{
 							label: 'Configuration ',
 							link: '/lint/configuration/',
-							translations: { ar: 'الإعداد', fa: 'پیکربندی', ru: 'Конфигурация', uk: 'Конфігурація' },
+							translations: {
+								ar: 'الإعداد',
+								fa: 'پیکربندی',
+								ru: 'Конфигурация',
+								uk: 'Конфігурація',
+							},
 						},
 						{
 							label: 'Customizing Rules ',
