@@ -1,0 +1,63 @@
+---
+title: Установка линтера
+description: Установка линтера bloc.
+sidebar:
+  order: 2
+---
+
+import { CardGrid } from '@astrojs/starlight/components';
+import Card from '~/components/landing/Card.astro';
+import InstallBlocToolsSnippet from '~/components/lint/InstallBlocToolsSnippet.astro';
+import BlocToolsLintHelpOutputSnippet from '~/components/lint/BlocToolsLintHelpOutputSnippet.astro';
+import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.astro';
+import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
+import BlocLintMultipleRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintMultipleRecommendedAnalysisOptionsSnippet.astro';
+
+## Инструменты командной строки
+
+Для использования линтера из командной строки установите
+[`package:bloc_tools`](https://pub.dev/packages/bloc_tools) с помощью следующей
+команды:
+
+<InstallBlocToolsSnippet />
+
+После установки инструментов командной строки bloc вы можете запустить линтер
+bloc с помощью команды `bloc lint`:
+
+<BlocToolsLintHelpOutputSnippet />
+
+## Рекомендуемый набор правил
+
+Для установки рекомендуемого набора правил линтера установите
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint) как dev-зависимость с
+помощью следующей команды:
+
+<InstallBlocLintSnippet />
+
+Затем добавьте файл `analysis_options.yaml` в корень вашего проекта с
+рекомендуемым набором правил:
+
+<BlocLintRecommendedAnalysisOptionsSnippet />
+
+При необходимости вы можете включить несколько наборов правил, определив их в
+виде списка:
+
+<BlocLintMultipleRecommendedAnalysisOptionsSnippet />
+
+## Интеграции с IDE
+
+Следующие IDE официально поддерживают линтер bloc и языковой сервер для
+предоставления мгновенной диагностики непосредственно в вашей IDE.
+
+<CardGrid>
+	<Card title="VSCode" icon="vscode">
+		Поддержка в [Bloc VSCode
+		Extension](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+		доступна начиная с версии v6.8.0.
+	</Card>
+	<Card title="IntelliJ" icon="jetbrains">
+		Поддержка в [Bloc IntelliJ
+		Plugin](https://plugins.jetbrains.com/plugin/12129-bloc) доступна начиная с
+		версии v4.1.0.
+	</Card>
+</CardGrid>

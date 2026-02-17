@@ -5,6 +5,16 @@ import 'package:bloc_lint/src/analysis_options.dart';
 import 'package:path/path.dart' as p;
 import 'package:pubspec_lock_parse/pubspec_lock_parse.dart';
 
+/// The `package_config.json` file path for this project.
+String packageConfigPath(Directory cwd) {
+  return p.join(cwd.path, '.dart_tool', 'package_config.json');
+}
+
+/// The `pubspec.yaml` file path for this project.
+String pubspecYamlPath(Directory cwd) {
+  return p.join(cwd.path, 'pubspec.yaml');
+}
+
 /// The `pubspec.lock` file path for this project.
 String pubspecLockPath(Directory cwd) {
   return p.join(cwd.path, 'pubspec.lock');
@@ -15,11 +25,22 @@ String analysisOptionsPath(Directory cwd) {
   return p.join(cwd.path, 'analysis_options.yaml');
 }
 
-/// The `analysis_options.yaml` file for this project.
+/// The `package_config.json` file for this package.
+///
+/// Returns `null` if the file does not exist or is invalid.
+File? findPackageConfigFile(Directory cwd) {
+  final root = findProjectRoot(cwd);
+  if (root == null) return null;
+  final file = File(packageConfigPath(root));
+  if (!file.existsSync()) return null;
+  return file;
+}
+
+/// The `analysis_options.yaml` file for this package.
 ///
 /// Returns `null` if the file does not exist or is invalid.
 File? findAnalysisOptionsFile(Directory cwd) {
-  final root = findProjectRoot(cwd);
+  final root = findPackageRoot(cwd);
   if (root == null) return null;
   final file = File(analysisOptionsPath(root));
   if (!file.existsSync()) return null;
@@ -49,6 +70,16 @@ PubspecLock? findPubspecLock(Directory cwd) {
   } on Exception {
     return null;
   }
+}
+
+/// Returns the root directory of the nearest package.
+Directory? findPackageRoot(Directory cwd) {
+  final file = findNearestAncestor(
+    where: (path) => File(pubspecYamlPath(Directory(path))),
+    cwd: cwd,
+  );
+  if (file == null) return null;
+  return Directory(p.dirname(file.path));
 }
 
 /// Returns the root directory of the nearest project.
