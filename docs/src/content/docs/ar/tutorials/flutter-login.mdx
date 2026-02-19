@@ -1,7 +1,6 @@
 ---
 title: تسجيل الدخول في Flutter
-description:
-  دليل متعمق حول كيفية بناء مسار تسجيل دخول في Flutter باستخدام مكتبة bloc.
+description: دليل متعمّق لبناء مسار تسجيل الدخول في Flutter باستخدام مكتبة Bloc.
 sidebar:
   order: 4
 ---
@@ -18,25 +17,25 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 
 ## المواضيع الرئيسية
 
-- [BlocProvider](/ar/flutter-bloc-concepts#blocprovider)، ويدجت Flutter يقوم
-  بتوفير bloc للأطفال (العناصر الفرعية) الخاصة به.
+- [BlocProvider](/ar/flutter-bloc-concepts#blocprovider)، وهي Widget في Flutter
+  توفّر bloc للأبناء (subtree).
 - إضافة الأحداث باستخدام [context.read](/ar/flutter-bloc-concepts#contextread).
 - تجنب إعادة البناء غير الضرورية باستخدام
   [Equatable](/ar/faqs/#متى-يجب-استخدام-equatable).
-- [RepositoryProvider](/ar/flutter-bloc-concepts#repositoryprovider)، ويدجت
-  Flutter يقوم بتوفير repository للأطفال الخاصة به.
-- [BlocListener](/ar/flutter-bloc-concepts#bloclistener)، ويدجت Flutter يقوم
-  بتنفيذ كود المستمع استجابة لتغيرات الحالة في الـ bloc.
+- [RepositoryProvider](/ar/flutter-bloc-concepts#repositoryprovider)، وهي Widget
+  في Flutter توفّر repository للأبناء.
+- [BlocListener](/ar/flutter-bloc-concepts#bloclistener)، وهي Widget في Flutter
+  تنفّذ كود المستمع استجابةً لتغيّرات حالة الـ bloc.
 - تحديث واجهة المستخدم بناءً على جزء من حالة الـ bloc باستخدام
   [context.select](/ar/flutter-bloc-concepts#contextselect).
 
 ## إعداد المشروع
 
-سنبدأ بإنشاء مشروع Flutter جديد تمامًا
+سنبدأ بإنشاء مشروع Flutter جديد بالكامل.
 
 <FlutterCreateSnippet />
 
-بعد ذلك، يمكننا تثبيت جميع الاعتمادات الخاصة بنا
+بعد ذلك، يمكننا تثبيت جميع التبعيات (dependencies).
 
 <FlutterPubGetSnippet />
 
@@ -48,7 +47,7 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 سنبدأ بإنشاء مجلد `packages/authentication_repository` في جذر المشروع والذي
 سيحتوي على جميع الحزم الداخلية.
 
-على مستوى الهيكلية العامة، يجب أن يبدو هيكل الدليل كما يلي:
+على مستوى عالٍ، يجب أن يبدو هيكل المجلدات بالشكل التالي:
 
 ```
 ├── android
@@ -81,16 +80,17 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 	title="packages/authentication_repository/lib/src/authentication_repository.dart"
 />
 
-توفر `AuthenticationRepository` تدفق `Stream` من تحديثات `AuthenticationStatus`
-والذي سيتم استخدامه لإبلاغ التطبيق عندما يقوم المستخدم بتسجيل الدخول أو الخروج.
+توفّر `AuthenticationRepository` تدفق `Stream` من تحديثات
+`AuthenticationStatus`، ويُستخدم هذا التدفق لإبلاغ التطبيق عند تسجيل المستخدم
+الدخول أو الخروج.
 
-بالإضافة إلى ذلك، هناك طرق `logIn` و `logOut` مبسطة للشرح، لكنها يمكن بسهولة
+بالإضافة إلى ذلك، هناك دالتا `logIn` و`logOut` مبسّطتان للشرح، لكن يمكن بسهولة
 توسيعها للمصادقة باستخدام `FirebaseAuth` مثلاً أو أي مزود مصادقة آخر.
 
 :::note
 
-بما أننا ندير `StreamController` داخليًا، يتم عرض طريقة `dispose` ليتمكن
-المستخدم من إغلاق الـ controller عندما لا يكون مطلوبًا بعد الآن.
+بما أننا ندير `StreamController` داخليًا، تم توفير دالة `dispose` لإغلاق
+controller عندما لا يعود مطلوبًا.
 
 :::
 
@@ -128,8 +128,8 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 	title="packages/user_repository/pubspec.yaml"
 />
 
-حزمة `user_repository` ستكون مسؤولة عن نطاق المستخدم وستوفر واجهات برمجية (APIs)
-للتفاعل مع المستخدم الحالي.
+حزمة `user_repository` مسؤولة عن نطاق المستخدم، وتوفّر APIs للتفاعل مع المستخدم
+الحالي.
 
 أول شيء سنحدده هو نموذج المستخدم في الملف  
 `packages/user_repository/lib/src/models/user.dart`:
@@ -167,9 +167,8 @@ import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.as
 />
 
 في هذا المثال البسيط، توفّر `UserRepository` دالة واحدة فقط هي `getUser` والتي
-تسترجع المستخدم الحالي. نحن هنا نقوم بعمل تمثيل تجريبي (stubbing)، لكن في
-التطبيق الفعلي ستكون هذه الدالة هي التي تستعلم المستخدم الحالي من الخادم
-(backend).
+تسترجع المستخدم الحالي. نحن هنا نستخدم stubbing، لكن في التطبيق الفعلي ستكون هذه
+الدالة هي التي تستعلم المستخدم الحالي من الخادم (backend).
 
 لقد اقتربنا من الانتهاء من حزمة `user_repository`، والشيء الوحيد المتبقي هو
 إنشاء ملف `user_repository.dart` في المسار `packages/user_repository/lib` والذي
@@ -291,8 +290,8 @@ blocs تلقائيًا.
 `emit.onEach` يقوم بإنشاء اشتراك داخلي في التدفق ويتولى إلغاءه تلقائيًا عند
 إغلاق `AuthenticationBloc` أو تدفق `status`.
 
-إذا أصدر تدفق `status` خطأً، فإن `addError` يمرر الخطأ مع `stackTrace` لأي
-`BlocObserver` مستمع.
+إذا أصدر تدفق `status` خطأً، فإن `addError` يمرّر الخطأ مع `stackTrace` لأي
+`BlocObserver` يستمع.
 
 :::caution
 
@@ -334,22 +333,21 @@ blocs تلقائيًا.
 
 :::note
 
-تم تقسيم `app.dart` إلى جزأين: `App` و `AppView`. يتحمل `App` مسؤولية
-إنشاء/توفير `AuthenticationBloc` الذي سيتم استهلاكه من قبل `AppView`. هذا
-الانفصال/الغير مترابط يسمح لنا باختبار كل من ويدجت `App` و`AppView` بسهولة
-لاحقًا.
+تم تقسيم `app.dart` إلى جزأين: `App` و`AppView`. يتحمل `App` مسؤولية إنشاء/توفير
+`AuthenticationBloc` الذي سيتم استهلاكه من قبل `AppView`. هذا الفصل (decoupling)
+يسمح لنا باختبار كل من Widget `App` و`AppView` بسهولة لاحقًا.
 
 :::
 
 :::note
 
-يُستخدم `RepositoryProvider` لتوفير نسخة واحدة من `AuthenticationRepository`
+يُستخدم `RepositoryProvider` لتوفير instance واحدة من `AuthenticationRepository`
 لكامل التطبيق، وهو ما سيكون مفيدًا لاحقًا.
 
 :::
 
-افتراضيًا، `BlocProvider` يكون كسولًا (lazy) ولا يستدعي `create` إلا عند أول
-وصول إلى الـ Bloc. بما أن `AuthenticationBloc` يجب أن يشترك دائمًا في تيار
+افتراضيًا، `BlocProvider` يكون lazy ولا يستدعي `create` إلا عند أول وصول إلى الـ
+Bloc. وبما أن `AuthenticationBloc` يجب أن يشترك دائمًا في stream
 `AuthenticationStatus` فورًا (عبر الحدث `AuthenticationSubscriptionRequested`)،
 يمكننا تجاوز هذا السلوك صراحةً عن طريق ضبط `lazy: false`.
 
@@ -378,7 +376,7 @@ lib
 
 :::tip
 
-`SplashPage` تعرض مسار (`Route`) ثابت مما يسهل التنقل إليها باستخدام  
+`SplashPage` توفّر مسارًا (`Route`) ثابتًا، مما يجعل التنقل إليها سهلًا باستخدام
 `Navigator.of(context).push(SplashPage.route())`;
 
 :::
@@ -440,18 +438,18 @@ lib
 	title="lib/login/models/models.dart"
 />
 
-### الـ Login Bloc
+### Login Bloc
 
-يقوم الـ `LoginBloc` بإدارة حالة `LoginForm` ويتولى التحقق من صحة إدخالات اسم
+يقوم `LoginBloc` بإدارة حالة `LoginForm` ويتولى التحقق من صحة إدخالات اسم
 المستخدم وكلمة المرور بالإضافة إلى حالة النموذج.
 
 #### login_event.dart
 
 في هذا التطبيق، هناك ثلاثة أنواع مختلفة من `LoginEvent`:
 
-- `LoginUsernameChanged`: يُخطر الـ bloc بأنه تم تعديل اسم المستخدم.
-- `LoginPasswordChanged`: يُخطر الـ bloc بأنه تم تعديل كلمة المرور.
-- `LoginSubmitted`: يُخطر الـ bloc بأنه تم تقديم النموذج.
+- `LoginUsernameChanged`: يخطر الـ bloc بأنه تم تعديل اسم المستخدم.
+- `LoginPasswordChanged`: يخطر الـ bloc بأنه تم تعديل كلمة المرور.
+- `LoginSubmitted`: يخطر الـ bloc بأنه تم تقديم النموذج.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/bloc/login_event.dart"
@@ -485,11 +483,11 @@ lib
 	title="lib/login/bloc/login_bloc.dart"
 />
 
-يعتمد الـ `LoginBloc` على `AuthenticationRepository` لأنه عند تقديم النموذج،
-يقوم باستدعاء `logIn`. الحالة الابتدائية للـ bloc هي `pure`، مما يعني أن
-الإدخالات والنموذج لم يتم لمسهم أو التفاعل معهم بعد.
+يعتمد `LoginBloc` على `AuthenticationRepository` لأنه عند تقديم النموذج يستدعي
+`logIn`. الحالة الابتدائية للـ bloc هي `pure`، ما يعني أن الحقول والنموذج لم يتم
+التفاعل معهما بعد.
 
-عندما يتغير اسم المستخدم أو كلمة المرور، يقوم الـ bloc بإنشاء نسخة “متسخة”
+عندما يتغير اسم المستخدم أو كلمة المرور، يقوم الـ bloc بإنشاء نسخة "متسخة"
 (dirty) من نموذج `Username` أو `Password` ويُحدّث حالة النموذج عبر واجهة برمجة
 التطبيقات `Formz.validate`.
 
@@ -500,7 +498,7 @@ bloc باستدعاء `logIn` ويُحدّث الحالة بناءً على نت
 
 ### صفحة تسجيل الدخول
 
-تتولى `LoginPage` مسؤولية توفير الـ `Route` بالإضافة إلى إنشاء وتوفير الـ
+تتولى `LoginPage` مسؤولية توفير الـ `Route` بالإضافة إلى إنشاء وتوفير
 `LoginBloc` لـ `LoginForm`.
 
 <RemoteCode
@@ -510,15 +508,15 @@ bloc باستدعاء `logIn` ويُحدّث الحالة بناءً على نت
 
 :::note
 
-يُستخدم `context.read<AuthenticationRepository>()` للبحث عن نسخة من
+يُستخدم `context.read<AuthenticationRepository>()` للعثور على instance من
 `AuthenticationRepository` عبر `BuildContext`.
 
 :::
 
 ### نموذج تسجيل الدخول
 
-يتولى `LoginForm` إخطار الـ `LoginBloc` بأحداث المستخدم ويستجيب أيضًا للتغيرات
-في الحالة باستخدام `BlocBuilder` و `BlocListener`.
+يتولى `LoginForm` إخطار `LoginBloc` بأحداث المستخدم ويستجيب أيضًا للتغيرات في
+الحالة باستخدام `BlocBuilder` و `BlocListener`.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_login/lib/login/view/login_form.dart"
@@ -527,16 +525,16 @@ bloc باستدعاء `logIn` ويُحدّث الحالة بناءً على نت
 
 يُستخدم `BlocListener` لعرض `SnackBar` في حال فشل تقديم بيانات تسجيل الدخول.
 بالإضافة إلى ذلك، يُستخدم `context.select` للوصول بكفاءة إلى أجزاء محددة من
-`LoginState` لكل ويدجت، مما يمنع عمليات البناء غير الضرورية. تُستخدم دالة
-`onChanged` لإخطار الـ `LoginBloc` بالتغييرات التي تطرأ على اسم المستخدم أو كلمة
+`LoginState` لكل Widget، مما يمنع عمليات البناء غير الضرورية. تُستخدم دالة
+`onChanged` لإخطار `LoginBloc` بالتغييرات التي تطرأ على اسم المستخدم أو كلمة
 المرور.
 
-ويدجت `_LoginButton` يتم تفعيله فقط إذا كانت حالة النموذج صالحة، ويُعرض مؤشر
+يتم تفعيل Widget `_LoginButton` فقط إذا كانت حالة النموذج صالحة، ويُعرض مؤشر
 تحميل دائري `CircularProgressIndicator` مكانه أثناء تقديم النموذج.
 
 ## الصفحة الرئيسية
 
-عند نجاح طلب `logIn`، سيتغير حالة `AuthenticationBloc` إلى `authenticated` وسيتم
+عند نجاح طلب `logIn`، ستتغير حالة `AuthenticationBloc` إلى `authenticated` وسيتم
 توجيه المستخدم إلى صفحة `HomePage` حيث نعرض معرف المستخدم (`id`) بالإضافة إلى زر
 لتسجيل الخروج.
 
@@ -548,11 +546,11 @@ bloc باستدعاء `logIn` ويُحدّث الحالة بناءً على نت
 │   │       └── home_page.dart
 ```
 
-### صفحة الرئيسية
+### الصفحة الرئيسية
 
 يمكن لصفحة `HomePage` الوصول إلى معرف المستخدم الحالي عبر  
 `context.select((AuthenticationBloc bloc) => bloc.state.user.id)` وعرضه باستخدام
-ويدجت `Text`. بالإضافة إلى ذلك، عند الضغط على زر تسجيل الخروج يتم إضافة حدث
+Widget `Text`. بالإضافة إلى ذلك، عند الضغط على زر تسجيل الخروج يتم إضافة حدث
 `AuthenticationLogoutPressed` إلى الـ `AuthenticationBloc`.
 
 <RemoteCode
@@ -570,6 +568,6 @@ bloc باستدعاء `logIn` ويُحدّث الحالة بناءً على نت
 في هذه المرحلة لدينا تنفيذ قوي لمسار تسجيل الدخول وقد قمنا بفصل طبقة العرض عن
 طبقة منطق الأعمال باستخدام Bloc.
 
-يمكن العثور على الشيفرة المصدرية الكاملة لهذا المثال (بما في ذلك اختبارات الوحدة
-والويدجت)  
+يمكن العثور على الأكواد البرمجية المصدرية الكاملة لهذا المثال (بما في ذلك
+اختبارات الوحدة واختبارات Widgets)
 [هنا](https://github.com/felangel/Bloc/tree/master/examples/flutter_login).

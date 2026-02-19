@@ -54,6 +54,7 @@ export default defineConfig({
 				{
 					label: 'Introduction',
 					translations: {
+						ar: 'المقدمة',
 						'zh-CN': '介绍',
 						fa: 'مقدمه',
 						es: 'Introducción',
@@ -66,6 +67,7 @@ export default defineConfig({
 							label: 'Getting Started',
 							link: '/getting-started/',
 							translations: {
+								ar: 'ابدأ الآن',
 								'zh-CN': '快速入门',
 								fa: 'شروع شدن',
 								es: 'Empezando',
@@ -78,6 +80,7 @@ export default defineConfig({
 							label: 'Why Bloc?',
 							link: '/why-bloc/',
 							translations: {
+								ar: 'لماذا Bloc؟',
 								'zh-CN': '为什么用 Bloc?',
 								fa: 'چرا Bloc؟',
 								es: '¿Por qué Bloc?',
@@ -90,6 +93,7 @@ export default defineConfig({
 							label: 'Bloc Concepts',
 							link: '/bloc-concepts/',
 							translations: {
+								ar: 'مفاهيم Bloc',
 								'zh-CN': 'Bloc 核心概念',
 								fa: 'مفاهیم Bloc',
 								es: 'Conceptos de Bloc',
@@ -102,6 +106,7 @@ export default defineConfig({
 							label: 'Flutter Bloc Concepts',
 							link: '/flutter-bloc-concepts/',
 							translations: {
+								ar: 'مفاهيم Flutter Bloc',
 								'zh-CN': 'Flutter Bloc 核心概念',
 								fa: 'مفاهیم Bloc فلاتر',
 								es: 'Conceptos de Flutter Bloc',
@@ -114,6 +119,7 @@ export default defineConfig({
 							label: 'Architecture',
 							link: '/architecture/',
 							translations: {
+								ar: 'البنية المعمارية',
 								fa: 'معماری',
 								es: 'Arquitectura',
 								ja: 'アーキテクチャー',
@@ -125,6 +131,7 @@ export default defineConfig({
 							label: 'Modeling State',
 							link: '/modeling-state/',
 							translations: {
+								ar: 'نمذجة الحالة',
 								fa: 'حالت (State) مدل سازی',
 								es: 'Modelando el Estado',
 								ja: '状態のモデリング',
@@ -136,6 +143,7 @@ export default defineConfig({
 							label: 'Testing',
 							link: '/testing/',
 							translations: {
+								ar: 'الاختبارات',
 								fa: 'آزمایش کردن',
 								es: 'Pruebas',
 								ja: 'テスト',
@@ -147,6 +155,7 @@ export default defineConfig({
 							label: 'Naming Conventions',
 							link: '/naming-conventions/',
 							translations: {
+								ar: 'اتفاقيات التسمية',
 								fa: 'قراردادهای نامگذاری',
 								es: 'Convenciones de Nomenclatura',
 								ja: '命名規則',
@@ -158,6 +167,7 @@ export default defineConfig({
 							label: 'Migration Guide',
 							link: '/migration/',
 							translations: {
+								ar: 'دليل الترقية',
 								fa: 'راهنمای مهاجرت',
 								es: 'Guía de Migración',
 								ja: '移行ガイド',
@@ -169,6 +179,7 @@ export default defineConfig({
 							label: 'FAQs',
 							link: '/faqs/',
 							translations: {
+								ar: 'الأسئلة الشائعة',
 								fa: 'سوالات متداول',
 								es: 'Preguntas Frecuentes',
 								ja: 'よくある質問',
@@ -181,27 +192,33 @@ export default defineConfig({
 				{
 					label: 'Linter',
 					badge: { text: 'new' },
-					translations: { uk: 'Лінтер' },
+					translations: { ar: 'المدقق', uk: 'Лінтер' },
 					items: [
 						{
 							label: 'Overview ',
 							link: '/lint/',
-							translations: { fa: 'بررسی اجمالی', ru: 'Обзор', uk: 'Огляд' },
+							translations: { ar: 'نظرة عامة', fa: 'بررسی اجمالی', ru: 'Обзор', uk: 'Огляд' },
 						},
 						{
 							label: 'Installation ',
 							link: '/lint/installation/',
-							translations: { fa: 'نصب', ru: 'Установка', uk: 'Встановлення' },
+							translations: { ar: 'التثبيت', fa: 'نصب', ru: 'Установка', uk: 'Встановлення' },
 						},
 						{
 							label: 'Configuration ',
 							link: '/lint/configuration/',
-							translations: { fa: 'پیکربندی', ru: 'Конфигурация', uk: 'Конфігурація' },
+							translations: {
+								ar: 'الإعداد',
+								fa: 'پیکربندی',
+								ru: 'Конфигурация',
+								uk: 'Конфігурація',
+							},
 						},
 						{
 							label: 'Customizing Rules ',
 							link: '/lint/customizing-rules/',
 							translations: {
+								ar: 'تخصيص القواعد',
 								fa: 'سفارشی سازی قوانین',
 								ru: 'Настройка правил',
 								uk: 'Налаштування правил',
@@ -210,13 +227,14 @@ export default defineConfig({
 						{
 							label: 'Rules',
 							autogenerate: { directory: '/lint-rules' },
-							translations: { fa: 'قوانین', ru: 'Правила', uk: 'Правила' },
+							translations: { ar: 'القواعد', fa: 'قوانین', ru: 'Правила', uk: 'Правила' },
 						},
 					],
 				},
 				{
 					label: 'Tutorials',
 					translations: {
+						ar: 'الدروس التعليمية',
 						fa: 'آموزش ها',
 						es: 'Tutoriales',
 						ja: 'チュートリアル',
@@ -228,6 +246,7 @@ export default defineConfig({
 				{
 					label: 'Tools',
 					translations: {
+						ar: 'الأدوات',
 						fa: 'ابزار',
 						es: 'Herramientas',
 						ja: 'ツール',
@@ -239,6 +258,7 @@ export default defineConfig({
 							label: 'IntelliJ Plugin',
 							link: 'https://plugins.jetbrains.com/plugin/12129-bloc',
 							translations: {
+								ar: 'إضافة IntelliJ',
 								fa: 'پلاگین IntelliJ',
 								es: 'Plugin de IntelliJ',
 								ru: 'Плагин IntelliJ',
@@ -249,6 +269,7 @@ export default defineConfig({
 							label: 'VSCode Extension',
 							link: 'https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc',
 							translations: {
+								ar: 'إضافة VS Code',
 								fa: 'پلاگین VSCode',
 								es: 'Extensión de VSCode',
 								ru: 'Расширение VSCode',
@@ -260,6 +281,7 @@ export default defineConfig({
 				{
 					label: 'Reference',
 					translations: {
+						ar: 'المرجع',
 						fa: 'مرجع',
 						es: 'Referencia',
 						ja: 'APIリファレンス',
