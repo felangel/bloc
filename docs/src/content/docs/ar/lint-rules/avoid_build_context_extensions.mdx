@@ -1,6 +1,6 @@
 ---
 title: تجنب امتدادات BuildContext (Avoid BuildContext Extensions)
-description: قاعدة avoid_build_context_extensions البرمجية.
+description: قاعدة `avoid_build_context_extensions`.
 ---
 
 import { Badge } from '@astrojs/starlight/components';
@@ -13,21 +13,20 @@ import GoodSnippet from '~/components/lint-rules/avoid_build_context_extensions/
 	<Badge text="dart" variant="note" />
 </div>
 
-تجنب استخدام امتدادات (`BuildContext` extensions) للوصول إلى نُسخ (`instances`)
-من `Bloc` أو `Cubit`.
+تجنب استخدام امتدادات `BuildContext` للوصول إلى instances من `Bloc` أو `Cubit`.
 
 :::note
 
-تم تقديم قاعدة التحليل البرمجي (lint rule) هذه في الإصدار `0.3.0` من حزمة
+تم تقديم قاعدة التدقيق (lint rule) هذه في الإصدار `0.3.0` من
 [`package:bloc_lint`](https://pub.dev/packages/bloc_lint).
 
 :::
 
-## الأساس المنطقي (Rationale)
+## المبرر (Rationale)
 
-من أجل الاتساق ولغرض أن تكون أكثر وضوحًا وصراحةً، يُفضل استخدام الطرق الأساسية
-مباشرةً بدلاً من امتدادات `BuildContext`. هذا مفيد أيضًا للاختبار لأنه **لا
-يمكن** محاكاة (`mock`) طريقة امتداد (`extension method`).
+لتحقيق الاتساق والوضوح، يفضَّل استخدام الطرق الأساسية (methods) بشكل مباشر بدلًا
+من امتدادات `BuildContext`. وهذا مفيد أيضًا في الاختبارات، لأنه **لا يمكن**
+إنشاء محاكاة (`mock`) لـ `extension method`.
 
 | الامتداد (extension) | الطريقة الصريحة (explicit method)                                   |
 | -------------------- | ------------------------------------------------------------------- |
@@ -37,7 +36,8 @@ import GoodSnippet from '~/components/lint-rules/avoid_build_context_extensions/
 
 ## أمثلة (Examples)
 
-**تجنب** استخدام امتدادات `BuildContext` للتفاعل مع نُسخ `Bloc` أو `Cubit`.
+**تجنب** استخدام امتدادات `BuildContext` للتعامل مع نسخ (instances) من `Bloc` أو
+`Cubit`.
 
 **مثال سيئ (BAD)**:
 
@@ -49,7 +49,7 @@ import GoodSnippet from '~/components/lint-rules/avoid_build_context_extensions/
 
 ## التفعيل (Enable)
 
-لتفعيل قاعدة `avoid_build_context_extensions`، أضفها إلى ملف
-`analysis_options.yaml` الخاص بك ضمن `bloc` > `rules`:
+لتفعيل قاعدة `avoid_build_context_extensions`، أضفها إلى `analysis_options.yaml`
+ضمن `bloc` > `rules`:
 
 <EnableRuleSnippet name="avoid_build_context_extensions" />

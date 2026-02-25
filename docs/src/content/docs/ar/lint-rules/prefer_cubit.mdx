@@ -1,6 +1,6 @@
 ---
 title: تفضيل Cubit
-description: قاعدة prefer_cubit.
+description: قاعدة `prefer_cubit`.
 ---
 
 import { Badge } from '@astrojs/starlight/components';
@@ -13,23 +13,24 @@ import GoodSnippet from '~/components/lint-rules/prefer_cubit/GoodSnippet.astro'
 	<Badge text="dart" variant="note" />
 </div>
 
-**تفضيل** استخدام كائنات (`Cubit`) بدلاً من كائنات (`Bloc`).
+يفضَّل استخدام instances من `Cubit` بدلًا من instances من `Bloc`.
 
-## الأساس المنطقي (Rationale)
+## المبرر (Rationale)
 
-هذه القاعدة هي قاعدة أسلوبية بحتة. في بعض الحالات، قد تفضل الفرق توحيد استخدام
-كائنات `Cubit` فقط في جميع أنحاء تطبيقها بالكامل لضمان الاتساق.
+هذه قاعدة أسلوبية (stylistic rule) بحتة. في بعض الحالات، قد تفضّل الفرق توحيد
+استخدام instances من `Cubit` فقط على مستوى التطبيق بالكامل لتحقيق الاتساق
+(consistency).
 
 :::tip
 
 تعرّف على المزيد حول مزايا `Cubit` في
-[المفاهيم الأساسية (Core Concepts)](/ar/bloc-concepts/#مزايا-cubit).
+[المفاهيم الأساسية](/ar/bloc-concepts/#مزايا-cubit).
 
 :::
 
-## الأمثلة (Examples)
+## أمثلة (Examples)
 
-**تجنب** استخدام كائنات `Bloc`.
+**تجنب** استخدام instances من `Bloc`.
 
 **مثال سيئ (BAD)**:
 
@@ -41,7 +42,7 @@ import GoodSnippet from '~/components/lint-rules/prefer_cubit/GoodSnippet.astro'
 
 ## التفعيل (Enable)
 
-لتفعيل قاعدة `prefer_cubit`، أضفها إلى ملف `analysis_options.yaml` الخاص بك ضمن
-قسم `bloc` > `rules`:
+لتفعيل قاعدة `prefer_cubit`، أضفها إلى `analysis_options.yaml` ضمن `bloc` >
+`rules`:
 
 <EnableRuleSnippet name="prefer_cubit" />

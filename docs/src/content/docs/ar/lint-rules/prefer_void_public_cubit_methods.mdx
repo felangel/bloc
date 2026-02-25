@@ -1,6 +1,6 @@
 ---
 title: تفضيل الدوال العامة ذات القيمة المرتجعة Void في Cubit
-description: قاعدة prefer_void_public_cubit_methods.
+description: قاعدة `prefer_void_public_cubit_methods`.
 ---
 
 import { Badge } from '@astrojs/starlight/components';
@@ -14,24 +14,25 @@ import GoodSnippet from '~/components/lint-rules/prefer_void_public_cubit_method
 	<Badge text="recommended" variant="success" />
 </div>
 
-**تفضيل** استخدام الدوال العامة ذات القيمة المرتجعة `void` في كائنات `Cubit`.
+يفضَّل أن تكون الدوال العامة (public methods) في instances من `Cubit` ذات قيمة
+مرتجعة `void`.
 
 :::note
 
-تم تقديم قاعدة التحليل (lint rule) هذه في الإصدار `0.2.0-dev.2` من حزمة
+تم تقديم قاعدة التدقيق (lint rule) هذه في الإصدار `0.2.0-dev.2` من حزمة
 [`package:bloc_lint`](https://pub.dev/packages/bloc_lint)
 
 :::
 
-## الأساس المنطقي (Rationale)
+## المبرر (Rationale)
 
-يجب استخدام الدوال العامة في كائنات `Cubit` لإخطار `Cubit` وبدء تغييرات الحالة
-عبر دالة `emit`. إذا احتاج المُستدعي (caller) إلى الوصول إلى أي معلومات عن
-الحالة، فيجب عليه الوصول إليها من خلال خاصية `state` بدلاً من ذلك.
+يجب استخدام الدوال العامة (public methods) في instances من `Cubit` لإخطار
+`Cubit` وبدء تغييرات الحالة عبر الدالة `emit`. وإذا احتاج المستدعي (caller) إلى
+أي معلومات عن الحالة، فيفترض أن يحصل عليها من `state` بدلًا من ذلك.
 
 :::note
 
-القواعد التالية ذات صلة ويتم تفعيلها عادةً بالتزامن مع قاعدة
+القواعد التالية مرتبطة، وغالبًا ما تُفعّل مع قاعدة
 `prefer_void_public_cubit_methods`:
 
 - [`avoid_public_bloc_methods`](/ar/lint-rules/avoid_public_bloc_methods)
@@ -39,9 +40,10 @@ import GoodSnippet from '~/components/lint-rules/prefer_void_public_cubit_method
 
 :::
 
-## الأمثلة (Examples)
+## أمثلة (Examples)
 
-**تجنب** الدوال العامة ذات القيمة المرتجعة غير `void` في كائنات `Cubit`.
+**تجنب** الدوال العامة (public methods) ذات القيمة المرتجعة غير `void` في
+instances من `Cubit`.
 
 **مثال سيئ (BAD)**:
 
@@ -54,6 +56,6 @@ import GoodSnippet from '~/components/lint-rules/prefer_void_public_cubit_method
 ## التفعيل (Enable)
 
 لتفعيل قاعدة `prefer_void_public_cubit_methods`، أضفها إلى ملف
-`analysis_options.yaml` الخاص بك ضمن قسم `bloc` > `rules`:
+`analysis_options.yaml` ضمن `bloc` > `rules`:
 
 <EnableRuleSnippet name="prefer_void_public_cubit_methods" />

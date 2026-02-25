@@ -55,41 +55,40 @@ import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSn
 
 **BlocBuilder** هو ويدجت (Widget) في Flutter يتطلب `Bloc` ودالة `builder`.
 يتعامل `BlocBuilder` مع بناء الـ Widget استجابةً للحالات الجديدة (new states).
-يشبه `BlocBuilder` إلى حد كبير `StreamBuilder` ولكنه يمتلك واجهة برمجية (API)
-أبسط لتقليل كمية الكود المتكرر (boilerplate code) المطلوب. من المحتمل أن يتم
-استدعاء دالة `builder` عدة مرات، ويجب أن تكون
+يشبه `BlocBuilder` إلى حد كبير `StreamBuilder` لكنه يوفر واجهة (API) أبسط لتقليل
+كمية الكود المتكرر (boilerplate) المطلوبة. قد يتم استدعاء دالة `builder` مرات
+عديدة، لذلك يُفضل أن تكون
 [دالة نقية (pure function)](https://en.wikipedia.org/wiki/Pure_function) تعيد
 ويدجت استجابةً للحالة.
 
-راجع `BlocListener` إذا كنت ترغب في "القيام" بأي شيء استجابةً لتغيرات الحالة مثل
-التنقل (navigation)، أو إظهار مربع حوار (dialog)، وما إلى ذلك...
+راجع `BlocListener` إذا كنت تريد "تنفيذ" شيء استجابةً لتغيرات الحالة مثل التنقل
+(navigation) أو إظهار مربع حوار (dialog) وغيرها.
 
 إذا تم حذف معامل `bloc`، فسيقوم `BlocBuilder` تلقائيًا بإجراء بحث (lookup)
 باستخدام `BlocProvider` و `BuildContext` الحالي.
 
 <BlocBuilderSnippet />
 
-قم بتحديد الـ bloc فقط إذا كنت ترغب في توفير bloc سيكون نطاقه (scoped) مقتصراً
+قم بتحديد الـ bloc فقط إذا كنت ترغب في توفير bloc سيكون نطاقه (scoped) مقتصرًا
 على ويدجت واحد ولا يمكن الوصول إليه عبر `BlocProvider` أبوي و `BuildContext`
 الحالي.
 
 <BlocBuilderExplicitBlocSnippet />
 
-للحصول على تحكم دقيق في وقت استدعاء دالة `builder`، يمكن توفير دالة اختيارية
-تسمى `buildWhen`. تأخذ `buildWhen` حالة الـ bloc السابقة وحالة الـ bloc الحالية
-وتعيد قيمة منطقية (boolean). إذا أعادت `buildWhen` القيمة `true`، فسيتم استدعاء
-`builder` مع `state` وسيتم إعادة بناء الـ Widget. إذا أعادت `buildWhen` القيمة
-`false`، فلن يتم استدعاء `builder` مع `state` ولن تحدث إعادة بناء.
+لتحكم أدق في وقت استدعاء دالة `builder`، يمكن تمرير دالة اختيارية `buildWhen`.
+تأخذ `buildWhen` حالة الـ bloc السابقة والحالة الحالية وتعيد قيمة منطقية
+(boolean). إذا أعادت `true` فسيتم استدعاء `builder` وإعادة بناء الـ Widget، وإذا
+أعادت `false` فلن يتم استدعاء `builder` ولن تحدث إعادة بناء.
 
 <BlocBuilderConditionSnippet />
 
 ### BlocSelector
 
-**BlocSelector** هو ويدجت في Flutter يشبه `BlocBuilder` ولكنه يسمح للمطورين
-بتصفية التحديثات عن طريق اختيار قيمة جديدة بناءً على حالة الـ bloc الحالية. يتم
-منع عمليات البناء غير الضرورية إذا لم تتغير القيمة المختارة. يجب أن تكون القيمة
-المختارة غير قابلة للتغيير (immutable) لكي يتمكن `BlocSelector` من تحديد ما إذا
-كان يجب استدعاء `builder` مرة أخرى بدقة.
+**BlocSelector** هو ويدجت في Flutter يشبه `BlocBuilder` لكنه يسمح بتصفية
+التحديثات عبر اختيار قيمة جديدة بناءً على حالة الـ bloc الحالية. يتم منع عمليات
+البناء غير الضرورية إذا لم تتغير القيمة المختارة. يجب أن تكون القيمة المختارة
+غير قابلة للتغيير (immutable) حتى يتمكن `BlocSelector` من تحديد ما إذا كان يجب
+استدعاء `builder` مجددًا بدقة.
 
 إذا تم حذف معامل `bloc`، فسيقوم `BlocSelector` تلقائيًا بإجراء بحث باستخدام
 `BlocProvider` و `BuildContext` الحالي.
@@ -99,19 +98,18 @@ import WeatherPageSnippet from '~/components/concepts/flutter-bloc/WeatherPageSn
 ### BlocProvider
 
 **BlocProvider** هو ويدجت في Flutter يوفر bloc لأبنائه عبر
-`BlocProvider.of<T>(context)`. يتم استخدامه كويدجت لحقن التبعية (Dependency
+`BlocProvider.of<T>(context)`. يُستخدم كويدجت لحقن التبعية (Dependency
 Injection - DI) بحيث يمكن توفير مثيل واحد من الـ bloc لعدة ويدجتات داخل شجرة
 فرعية (subtree).
 
-في معظم الحالات، يجب استخدام `BlocProvider` لإنشاء blocs جديدة ستكون متاحة لبقية
-الشجرة الفرعية. في هذه الحالة، بما أن `BlocProvider` هو المسؤول عن إنشاء الـ
-bloc، فإنه سيتولى تلقائيًا إغلاق الـ bloc.
+في أغلب الحالات، يجب استخدام `BlocProvider` لإنشاء blocs جديدة ستكون متاحة لبقية
+الشجرة الفرعية. وبما أن `BlocProvider` هو المسؤول عن الإنشاء، فسيتولى تلقائيًا
+إغلاق الـ bloc.
 
 <BlocProviderSnippet />
 
-بشكل افتراضي، سيقوم `BlocProvider` بإنشاء الـ bloc بشكل كسول (lazily)، مما يعني
-أن `create` سيتم تنفيذه عند البحث عن الـ bloc عبر
-`BlocProvider.of<BlocA>(context)`.
+بشكل افتراضي، ينشئ `BlocProvider` الـ bloc بشكل كسول (lazily)، أي أن `create`
+سيتم تنفيذه عند البحث عن الـ bloc عبر `BlocProvider.of<BlocA>(context)`.
 
 لتجاوز هذا السلوك وإجبار `create` على العمل فورًا، يمكن تعيين `lazy` إلى
 `false`.
@@ -119,21 +117,20 @@ bloc، فإنه سيتولى تلقائيًا إغلاق الـ bloc.
 <BlocProviderEagerSnippet />
 
 في بعض الحالات، يمكن استخدام `BlocProvider` لتوفير bloc موجود بالفعل لجزء جديد
-من شجرة الـ Widgets. سيتم استخدام هذا بشكل شائع عندما يحتاج bloc موجود إلى أن
-يكون متاحًا لمسار (route) جديد. في هذه الحالة، لن يقوم `BlocProvider` بإغلاق الـ
-bloc تلقائيًا لأنه لم يقم بإنشائه.
+من شجرة الـ Widgets (مثلاً عند فتح Route جديد). في هذه الحالة، لن يقوم
+`BlocProvider` بإغلاق الـ bloc تلقائيًا لأنه لم يقم بإنشائه.
 
 <BlocProviderValueSnippet />
 
-بعد ذلك، من أي من `ChildA` أو `ScreenA`، يمكننا استرداد `BlocA` باستخدام:
+بعد ذلك، من أي من `ChildA` أو `ScreenA` يمكننا استرداد `BlocA` باستخدام:
 
 <BlocProviderLookupSnippet />
 
 ### MultiBlocProvider
 
-**MultiBlocProvider** هو ويدجت في Flutter يدمج عدة ويدجتات `BlocProvider` في
-ويدجت واحد. يحسن `MultiBlocProvider` من قابلية القراءة ويزيل الحاجة إلى تداخل
-(nesting) عدة `BlocProviders`. باستخدام `MultiBlocProvider` يمكننا الانتقال من:
+**MultiBlocProvider** هو ويدجت في Flutter يدمج عدة `BlocProvider` في ويدجت واحد.
+يحسن قابلية القراءة ويزيل الحاجة إلى تداخل (nesting) عدة `BlocProvider`.
+باستخدام `MultiBlocProvider` يمكننا الانتقال من:
 
 <NestedBlocProviderSnippet />
 
@@ -151,36 +148,32 @@ bloc تلقائيًا لأنه لم يقم بإنشائه.
 ### BlocListener
 
 **BlocListener** هو ويدجت في Flutter يأخذ `BlocWidgetListener` و `Bloc` اختياري،
-ويستدعي `listener` استجابةً لتغيرات الحالة في الـ bloc. يجب استخدامه للوظائف
-التي تحتاج إلى الحدوث مرة واحدة لكل تغيير في الحالة، مثل التنقل، إظهار
-`SnackBar`، إظهار `Dialog`، وما إلى ذلك...
+ويستدعي `listener` استجابةً لتغيرات الحالة في الـ bloc. يُستخدم للوظائف التي يجب
+أن تحدث مرة واحدة لكل تغيير حالة مثل التنقل، إظهار `SnackBar` أو `Dialog`.
 
 يتم استدعاء `listener` مرة واحدة فقط لكل تغيير في الحالة (**لا** يشمل الحالة
-الأولية) على عكس `builder` في `BlocBuilder`، وهي دالة `void`.
+الأولية) على عكس `builder` في `BlocBuilder`، وهو دالة `void`.
 
 إذا تم حذف معامل `bloc`، فسيقوم `BlocListener` تلقائيًا بإجراء بحث باستخدام
 `BlocProvider` و `BuildContext` الحالي.
 
 <BlocListenerSnippet />
 
-قم بتحديد الـ bloc فقط إذا كنت ترغب في توفير bloc لا يمكن الوصول إليه بطريقة
-أخرى عبر `BlocProvider` و `BuildContext` الحالي.
+قم بتحديد الـ bloc فقط إذا كنت ترغب في توفير bloc لا يمكن الوصول إليه عبر
+`BlocProvider` و `BuildContext` الحالي.
 
 <BlocListenerExplicitBlocSnippet />
 
-للحصول على تحكم دقيق في وقت استدعاء دالة `listener`، يمكن توفير دالة اختيارية
-تسمى `listenWhen`. تأخذ `listenWhen` حالة الـ bloc السابقة وحالة الـ bloc
-الحالية وتعيد قيمة منطقية. إذا أعادت `listenWhen` القيمة `true`، فسيتم استدعاء
-`listener` مع `state`. إذا أعادت `listenWhen` القيمة `false`، فلن يتم استدعاء
-`listener` مع `state`.
+لتحكم أدق في وقت استدعاء `listener`، يمكن تمرير `listenWhen`. تأخذ `listenWhen`
+حالة الـ bloc السابقة والحالة الحالية وتعيد قيمة منطقية. إذا أعادت `true` فسيتم
+استدعاء `listener`، وإذا أعادت `false` فلن يتم استدعاؤه.
 
 <BlocListenerConditionSnippet />
 
 ### MultiBlocListener
 
-**MultiBlocListener** هو ويدجت في Flutter يدمج عدة ويدجتات `BlocListener` في
-ويدجت واحد. يحسن `MultiBlocListener` من قابلية القراءة ويزيل الحاجة إلى تداخل
-عدة `BlocListeners`. باستخدام `MultiBlocListener` يمكننا الانتقال من:
+**MultiBlocListener** يدمج عدة `BlocListener` في ويدجت واحد لتحسين قابلية
+القراءة وتجنب التداخل. باستخدامه يمكننا الانتقال من:
 
 <NestedBlocListenerSnippet />
 
@@ -197,51 +190,45 @@ bloc تلقائيًا لأنه لم يقم بإنشائه.
 
 ### BlocConsumer
 
-**BlocConsumer** يكشف عن `builder` و `listener` من أجل التفاعل مع الحالات
-الجديدة. يشبه `BlocConsumer` تداخل `BlocListener` و `BlocBuilder` ولكنه يقلل من
-كمية الكود المتكرر المطلوب. يجب استخدام `BlocConsumer` فقط عندما يكون من الضروري
-إعادة بناء واجهة المستخدم (UI) وتنفيذ تفاعلات أخرى لتغيرات الحالة في الـ bloc.
-يأخذ `BlocConsumer` دالة `BlocWidgetBuilder` و `BlocWidgetListener` مطلوبتين، و
-`bloc` و `BlocBuilderCondition` و `BlocListenerCondition` اختيارية.
+**BlocConsumer** يجمع بين `builder` و `listener` للتفاعل مع الحالات الجديدة.
+يشبه استخدام `BlocListener` و `BlocBuilder` معًا لكنه يقلل من الكود المتكرر.
+يُستخدم فقط عندما تحتاج إلى إعادة بناء UI وتنفيذ تفاعل آخر مع تغيرات الحالة في
+نفس الوقت.
 
 إذا تم حذف معامل `bloc`، فسيقوم `BlocConsumer` تلقائيًا بإجراء بحث باستخدام
 `BlocProvider` و `BuildContext` الحالي.
 
 <BlocConsumerSnippet />
 
-يمكن تطبيق `listenWhen` و `buildWhen` اختياريًا للتحكم بشكل أدق في وقت استدعاء
-`listener` و `builder`. سيتم استدعاء `listenWhen` و `buildWhen` عند كل تغيير في
-`state` الخاص بالـ `bloc`. يأخذ كل منهما `state` السابق و `state` الحالي ويجب أن
-يعيد قيمة `bool` تحدد ما إذا كان سيتم استدعاء دالة `builder` و/أو `listener`.
-سيتم تهيئة `state` السابق إلى `state` الخاص بالـ `bloc` عند تهيئة
-`BlocConsumer`. يعتبر `listenWhen` و `buildWhen` اختياريين، وإذا لم يتم
-تطبيقهما، فسيتم تعيينهما افتراضيًا على `true`.
+يمكن تمرير `listenWhen` و `buildWhen` اختياريًا للتحكم بشكل أدق في وقت استدعاء
+`listener` و `builder`. سيتم استدعاؤهما عند كل تغيير في `state` الخاص بالـ bloc.
+كل منهما يأخذ الحالة السابقة والحالية ويعيد `bool`. إذا لم يتم توفيرهما فالقيمة
+الافتراضية هي `true`.
 
 <BlocConsumerConditionSnippet />
 
 ### RepositoryProvider
 
 **RepositoryProvider** هو ويدجت في Flutter يوفر مستودعًا (repository) لأبنائه
-عبر `RepositoryProvider.of<T>(context)`. يتم استخدامه كويدجت لحقن التبعية (DI)
-بحيث يمكن توفير مثيل واحد من المستودع لعدة ويدجتات داخل شجرة فرعية. يجب استخدام
-`BlocProvider` لتوفير الـ blocs بينما يجب استخدام `RepositoryProvider` فقط
-للمستودعات.
+عبر `RepositoryProvider.of<T>(context)`. يُستخدم لحقن التبعية (DI) لتوفير مثيل
+واحد من المستودع لعدة ويدجتات داخل شجرة فرعية. يُستخدم `BlocProvider` للـ blocs
+بينما يُستخدم `RepositoryProvider` للمستودعات فقط.
 
 <RepositoryProviderSnippet />
 
+ثم من `ChildA` يمكننا استرداد مثيل `Repository` باستخدام:
+
 <RepositoryProviderLookupSnippet />
 
-يمكن للمستودعات التي تدير موارد يجب التخلص منها (dispose) أن تفعل ذلك عبر دالة
-الاستدعاء العكسي (callback) المسماة `dispose`:
+يمكن للمستودعات التي تدير موارد يجب التخلص منها (dispose) القيام بذلك عبر دالة
+`dispose`:
 
 <RepositoryProviderDisposeSnippet />
 
 ### MultiRepositoryProvider
 
-**MultiRepositoryProvider** هو ويدجت في Flutter يدمج عدة ويدجتات
-`RepositoryProvider` في ويدجت واحد. يحسن `MultiRepositoryProvider` من قابلية
-القراءة ويزيل الحاجة إلى تداخل عدة `RepositoryProvider`. باستخدام
-`MultiRepositoryProvider` يمكننا الانتقال من:
+**MultiRepositoryProvider** يدمج عدة `RepositoryProvider` في ويدجت واحد لتحسين
+قابلية القراءة وتجنب التداخل. باستخدامه يمكننا الانتقال من:
 
 <NestedRepositoryProviderSnippet />
 
@@ -270,7 +257,7 @@ bloc تلقائيًا لأنه لم يقم بإنشائه.
 في هذه المرحلة، نجحنا في فصل طبقة العرض (presentational layer) عن طبقة منطق
 الأعمال (business logic layer). لاحظ أن ويدجت `CounterPage` لا يعرف شيئًا عما
 يحدث عندما ينقر المستخدم على الأزرار. يخبر الـ Widget ببساطة `CounterBloc` بأن
-المستخدم قد ضغط على زر الزيادة أو النقصان.
+المستخدم ضغط زر الزيادة أو النقصان.
 
 ## استخدام RepositoryProvider
 
@@ -279,29 +266,29 @@ bloc تلقائيًا لأنه لم يقم بإنشائه.
 
 <WeatherRepositorySnippet />
 
-في ملف `main.dart`، نستدعي `runApp` مع ويدجت `WeatherApp` الخاص بنا.
+في ملف `main.dart` نستدعي `runApp` مع ويدجت `WeatherApp`.
 
 <WeatherMainSnippet />
 
-سنقوم بحقن مثيل `WeatherRepository` الخاص بنا في شجرة الـ Widgets عبر
+سنقوم بحقن مثيل `WeatherRepository` في شجرة الـ Widgets عبر
 `RepositoryProvider`.
 
-عند إنشاء مثيل لـ bloc، يمكننا الوصول إلى مثيل المستودع عبر `context.read` وحقن
-المستودع في الـ bloc عبر المُنشئ (constructor).
+عند إنشاء bloc، يمكننا الوصول إلى مثيل المستودع عبر `context.read` وحقن المستودع
+في الـ bloc عبر المُنشئ (constructor).
 
 <WeatherAppSnippet />
 
 :::tip
 
 إذا كان لديك أكثر من مستودع واحد، يمكنك استخدام `MultiRepositoryProvider` لتوفير
-مثيلات مستودعات متعددة للشجرة الفرعية.
+عدة مستودعات للشجرة الفرعية.
 
 :::
 
 :::note
 
-استخدم دالة الاستدعاء العكسي `dispose` للتعامل مع تحرير أي موارد عند إزالة
-`RepositoryProvider` من شجرة الـ Widgets (unmounted).
+استخدم `dispose` للتعامل مع تحرير الموارد عند إزالة `RepositoryProvider` من شجرة
+الـ Widgets.
 
 :::
 
@@ -312,42 +299,38 @@ bloc تلقائيًا لأنه لم يقم بإنشائه.
 
 [دوال الامتداد](https://dart.dev/guides/language/extension-methods)، التي تم
 تقديمها في Dart 2.7، هي طريقة لإضافة وظائف إلى المكتبات الموجودة. في هذا القسم،
-سنلقي نظرة على دوال الامتداد المضمنة في `package:flutter_bloc` وكيف يمكن
-استخدامها.
+سنلقي نظرة على دوال الامتداد في `package:flutter_bloc` وكيف يمكن استخدامها.
 
-تعتمد `flutter_bloc` على حزمة
-[package:provider](https://pub.dev/packages/provider) التي تبسط استخدام
+تعتمد `flutter_bloc` على [package:provider](https://pub.dev/packages/provider)
+والتي تبسط استخدام
 [`InheritedWidget`](https://api.flutter.dev/flutter/widgets/InheritedWidget-class.html).
 
-داخليًا، تستخدم `package:flutter_bloc` حزمة `package:provider` لتطبيق ويدجتات:
-`BlocProvider`، `MultiBlocProvider`، `RepositoryProvider`، و
-`MultiRepositoryProvider`. تصدر `package:flutter_bloc` امتدادات `ReadContext` و
-`WatchContext` و `SelectContext` من حزمة `package:provider`.
+داخليًا، تستخدم `package:flutter_bloc` حزمة `provider` لتنفيذ: `BlocProvider` و
+`MultiBlocProvider` و `RepositoryProvider` و `MultiRepositoryProvider`. كما تصدر
+امتدادات `ReadContext` و `WatchContext` و `SelectContext` من `provider`.
 
 :::note
 
-تعرف على المزيد حول حزمة
-[`package:provider`](https://pub.dev/packages/provider).
+تعرف على المزيد حول [`package:provider`](https://pub.dev/packages/provider).
 
 :::
 
 ### context.read
 
-تقوم `context.read<T>()` بالبحث عن أقرب مثيل سلف (ancestor instance) من النوع
-`T` وهي مكافئة وظيفيًا لـ `BlocProvider.of<T>(context)`. تُستخدم `context.read`
-بشكل شائع لاسترداد مثيل bloc من أجل إضافة حدث (event) داخل دوال الاستدعاء العكسي
-`onPressed`.
+تقوم `context.read<T>()` بالبحث عن أقرب مثيل سلف من النوع `T` وهي مكافئة وظيفيًا
+لـ `BlocProvider.of<T>(context)`. تُستخدم غالبًا لاسترداد مثيل bloc لإضافة حدث
+داخل `onPressed`.
 
 :::note
 
-`context.read<T>()` لا تستمع إلى `T` - إذا تغير الكائن (Object) المقدم من النوع
-`T`، فلن تؤدي `context.read` إلى إعادة بناء الـ Widget.
+`context.read<T>()` لا تستمع إلى `T` - إذا تغير الكائن المقدم من النوع `T` فلن
+تؤدي `context.read` إلى إعادة بناء الـ Widget.
 
 :::
 
 #### الاستخدام
 
-✅ **افعل** استخدام `context.read` لإضافة الأحداث في دوال الاستدعاء العكسي.
+✅ **افعل** استخدام `context.read` لإضافة الأحداث في callbacks.
 
 ```dart
 onPressed() {
@@ -355,7 +338,7 @@ onPressed() {
 }
 ```
 
-❌ **تجنب** استخدام `context.read` لاسترداد الحالة داخل دالة `build`.
+❌ **تجنب** استخدام `context.read` لاسترداد الحالة داخل `build`.
 
 ```dart
 @override
@@ -370,31 +353,30 @@ Widget build(BuildContext context) {
 
 :::caution
 
-استخدم `BlocBuilder` أو `context.watch` بدلاً من ذلك من أجل إعادة البناء
-استجابةً لتغيرات الحالة.
+استخدم `BlocBuilder` أو `context.watch` بدلًا من ذلك لإعادة البناء عند تغير
+الحالة.
 
 :::
 
 ### context.watch
 
-مثل `context.read<T>()`، توفر `context.watch<T>()` أقرب مثيل سلف من النوع `T`،
-ولكنها تستمع أيضًا إلى التغييرات على المثيل. وهي مكافئة وظيفيًا لـ
+مثل `context.read<T>()`، توفر `context.watch<T>()` أقرب مثيل سلف من النوع `T`
+لكنها تستمع أيضًا للتغييرات على المثيل. وهي مكافئة وظيفيًا لـ
 `BlocProvider.of<T>(context, listen: true)`.
 
-إذا تغير الكائن المقدم من النوع `T`، فستؤدي `context.watch` إلى إعادة بناء
+إذا تغير الكائن المقدم من النوع `T` فستؤدي `context.watch` إلى إعادة بناء
 (rebuild).
 
 :::caution
 
-يمكن الوصول إلى `context.watch` فقط ضمن دالة `build` الخاصة بـ `StatelessWidget`
-أو فئة `State`.
+`context.watch` متاحة فقط داخل `build` في `StatelessWidget` أو `State`.
 
 :::
 
 #### الاستخدام
 
-✅ **افعل** استخدام `BlocBuilder` بدلاً من `context.watch` لتحديد نطاق عمليات
-إعادة البناء بشكل صريح.
+✅ **افعل** استخدام `BlocBuilder` بدلًا من `context.watch` لتحديد نطاق إعادة
+البناء بشكل صريح.
 
 ```dart
 Widget build(BuildContext context) {
@@ -411,7 +393,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-بدلاً من ذلك، استخدم `Builder` لتحديد نطاق عمليات إعادة البناء.
+بدلًا من ذلك، استخدم `Builder` لتحديد نطاق إعادة البناء.
 
 ```dart
 @override
@@ -430,7 +412,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-✅ **افعل** استخدام `Builder` و `context.watch` كـ `MultiBlocBuilder`.
+✅ **افعل** استخدام `Builder` و `context.watch` كبديل لـ `MultiBlocBuilder`.
 
 ```dart
 Builder(
@@ -444,8 +426,7 @@ Builder(
 );
 ```
 
-❌ **تجنب** استخدام `context.watch` عندما لا يعتمد الـ Widget الأب (parent
-widget) في دالة `build` على الحالة.
+❌ **تجنب** استخدام `context.watch` عندما لا يعتمد الـ Widget الأب على الحالة.
 
 ```dart
 @override
@@ -463,17 +444,16 @@ Widget build(BuildContext context) {
 
 :::caution
 
-سيؤدي استخدام `context.watch` في جذر دالة `build` إلى إعادة بناء الـ Widget
-بالكامل عندما تتغير حالة الـ bloc.
+سيؤدي استخدام `context.watch` في جذر `build` إلى إعادة بناء الـ Widget بالكامل
+عند تغير حالة الـ bloc.
 
 :::
 
 ### context.select
 
-تمامًا مثل `context.watch<T>()`، توفر
-`context.select<T, R>(R function(T value))` أقرب مثيل سلف من النوع `T` وتستمع
-إلى التغييرات على `T`. على عكس `context.watch`، تسمح لك `context.select`
-بالاستماع إلى التغييرات في جزء أصغر من الحالة.
+تمامًا مثل `context.watch<T>()`، توفر `context.select<T, R>(...)` أقرب مثيل سلف
+من النوع `T` وتستمع إلى التغييرات عليه، لكنها تسمح بالاستماع إلى جزء أصغر من
+الحالة.
 
 ```dart
 Widget build(BuildContext context) {
@@ -482,13 +462,12 @@ Widget build(BuildContext context) {
 }
 ```
 
-ما ورد أعلاه سيؤدي فقط إلى إعادة بناء الـ Widget عندما تتغير خاصية `name` الخاصة
-بحالة `ProfileBloc`.
+سيُعاد بناء الـ Widget فقط عند تغير خاصية `name` في حالة `ProfileBloc`.
 
 #### الاستخدام
 
-✅ **افعل** استخدام `BlocSelector` بدلاً من `context.select` لتحديد نطاق عمليات
-إعادة البناء بشكل صريح.
+✅ **افعل** استخدام `BlocSelector` بدلًا من `context.select` لتحديد نطاق إعادة
+البناء بشكل صريح.
 
 ```dart
 Widget build(BuildContext context) {
@@ -506,7 +485,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-بدلاً من ذلك، استخدم `Builder` لتحديد نطاق عمليات إعادة البناء.
+بدلًا من ذلك، استخدم `Builder` لتحديد نطاق إعادة البناء.
 
 ```dart
 @override
@@ -525,8 +504,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-❌ **تجنب** استخدام `context.select` عندما لا يعتمد الـ Widget الأب في دالة
-`build` على الحالة.
+❌ **تجنب** استخدام `context.select` عندما لا يعتمد الـ Widget الأب على الحالة.
 
 ```dart
 @override
@@ -544,7 +522,7 @@ Widget build(BuildContext context) {
 
 :::caution
 
-سيؤدي استخدام `context.select` في جذر دالة `build` إلى إعادة بناء الـ Widget
-بالكامل عندما يتغير التحديد (selection).
+سيؤدي استخدام `context.select` في جذر `build` إلى إعادة بناء الـ Widget بالكامل
+عند تغير الاختيار (selection).
 
 :::
