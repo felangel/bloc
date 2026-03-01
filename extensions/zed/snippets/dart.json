@@ -1,0 +1,326 @@
+{
+  "Bloc": {
+    "prefix": "bloc",
+    "body": [
+      "class ${1:Subject}Bloc extends Bloc<$1Event, $1State> {",
+      "\t${1:Subject}Bloc() : super(${1:Subject}Initial()) {",
+      "\t\ton<$1Event>((event, emit) {",
+      "\t\t\t$0",
+      "\t\t});",
+      "\t}",
+      "}"
+    ],
+    "description": "Creates a Bloc class"
+  },
+  "Cubit": {
+    "prefix": "cubit",
+    "body": [
+      "class ${1:Subject}Cubit extends Cubit<$1State> {",
+      "\t${1:Subject}Cubit() : super(${1:Subject}Initial());",
+      "}"
+    ],
+    "description": "Creates a Cubit class"
+  },
+  "BlocObserver": {
+    "prefix": "blocobserver",
+    "body": [
+      "import 'package:bloc/bloc.dart';",
+      "",
+      "class ${1:My}BlocObserver extends BlocObserver {",
+      "\t@override",
+      "\tvoid onEvent(Bloc bloc, Object? event) {",
+      "\t\tsuper.onEvent(bloc, event);",
+      "\t\t$0",
+      "\t}",
+      "",
+      "\t@override",
+      "\tvoid onError(BlocBase bloc, Object error, StackTrace stackTrace) {",
+      "\t\tsuper.onError(bloc, error, stackTrace);",
+      "\t}",
+      "",
+      "\t@override",
+      "\tvoid onChange(BlocBase bloc, Change change) {",
+      "\t\tsuper.onChange(bloc, change);",
+      "\t}",
+      "",
+      "\t@override",
+      "\tvoid onTransition(Bloc bloc, Transition transition) {",
+      "\t\tsuper.onTransition(bloc, transition);",
+      "\t}",
+      "}"
+    ],
+    "description": "Creates a BlocObserver class"
+  },
+  "Bloc State": {
+    "prefix": "blocstate",
+    "body": [
+      "class ${1:Subject}${2:Verb}${3:State} extends $1State {",
+      "\tconst $1$2$3($5);",
+      "",
+      "\t$4",
+      "",
+      "\t@override",
+      "\tList<Object> get props => [$6];",
+      "}"
+    ],
+    "description": "Creates a Bloc state class (Subject + Verb + State)"
+  },
+  "Bloc Event": {
+    "prefix": "blocevent",
+    "body": [
+      "class ${1:Subject}${2:Noun}${3:Verb} extends $1Event {",
+      "\tconst $1$2$3($5);",
+      "",
+      "\t$4",
+      "",
+      "\t@override",
+      "\tList<Object> get props => [$6];",
+      "}"
+    ],
+    "description": "Creates a Bloc event class (Subject + Noun + Verb)"
+  },
+  "Import package:bloc": {
+    "prefix": "importbloc",
+    "body": "import 'package:bloc/bloc.dart';",
+    "description": "Import package:bloc/bloc.dart"
+  },
+  "Register Event Handler": {
+    "prefix": "onevent",
+    "body": [
+      "on<${1:Subject}Event>((event, emit) {",
+      "\t$0",
+      "});"
+    ],
+    "description": "Register a new EventHandler"
+  },
+  "Define Event Handler": {
+    "prefix": "_onevent",
+    "body": [
+      "${1:void} _on${2:Event}(",
+      "\t$2 event,",
+      "\tEmitter<${3:Subject}State> emit,",
+      ") {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Define a new EventHandler"
+  },
+  "BlocTest": {
+    "prefix": "bloctest",
+    "body": [
+      "blocTest<${1:Subject}${2:Bloc}, $1State>(",
+      "\t'emits [${3:MyState}] when ${4:MyEvent} is added.',",
+      "\tbuild: () => $1$2(),",
+      "\tact: (bloc) => bloc.add($4()),",
+      "\texpect: () => const <$1State>[$3()],",
+      ");"
+    ],
+    "description": "Creates a blocTest"
+  },
+  "Import package:bloc_test": {
+    "prefix": "importbloctest",
+    "body": "import 'package:bloc_test/bloc_test.dart';",
+    "description": "Import package:bloc_test/bloc_test.dart"
+  },
+  "MockBloc": {
+    "prefix": "mockbloc",
+    "body": "class Mock${1:Subject}Bloc extends MockBloc<${1}Event, ${1}State> implements ${1}Bloc {}",
+    "description": "Creates a MockBloc class"
+  },
+  "_MockBloc": {
+    "prefix": "_mockbloc",
+    "body": "class _Mock${1:Subject}Bloc extends MockBloc<${1}Event, ${1}State> implements ${1}Bloc {}",
+    "description": "Creates a private MockBloc class"
+  },
+  "MockCubit": {
+    "prefix": "mockcubit",
+    "body": "class Mock${1:Subject}Cubit extends MockCubit<${1}State> implements ${1}Cubit {}",
+    "description": "Creates a MockCubit class"
+  },
+  "_MockCubit": {
+    "prefix": "_mockcubit",
+    "body": "class _Mock${1:Subject}Cubit extends MockCubit<${1}State> implements ${1}Cubit {}",
+    "description": "Creates a private MockCubit class"
+  },
+  "Fake": {
+    "prefix": "fake",
+    "body": "class Fake${1:Subject} extends Fake implements ${1} {}",
+    "description": "Creates a Fake class"
+  },
+  "_Fake": {
+    "prefix": "_fake",
+    "body": "class _Fake${1:Subject} extends Fake implements ${1} {}",
+    "description": "Creates a private Fake class"
+  },
+  "Mock": {
+    "prefix": "mock",
+    "body": "class Mock${1:Subject} extends Mock implements ${1} {}",
+    "description": "Creates a Mock class"
+  },
+  "_Mock": {
+    "prefix": "_mock",
+    "body": "class _Mock${1:Subject} extends Mock implements ${1} {}",
+    "description": "Creates a private Mock class"
+  },
+  "BlocProvider": {
+    "prefix": "blocprovider",
+    "body": [
+      "BlocProvider(",
+      "\tcreate: (context) => ${1:Subject}${2:Bloc}(),",
+      "\tchild: ${3:Container()},",
+      ")"
+    ],
+    "description": "Creates a BlocProvider widget"
+  },
+  "MultiBlocProvider": {
+    "prefix": "multiblocprovider",
+    "body": [
+      "MultiBlocProvider(",
+      "\tproviders: [",
+      "\t\tBlocProvider(",
+      "\t\t\tcreate: (context) => ${1:Subject}${2:Bloc}(),",
+      "\t\t),",
+      "\t\tBlocProvider(",
+      "\t\t\tcreate: (context) => ${3:Subject}${4:Bloc}(),",
+      "\t\t),",
+      "\t],",
+      "\tchild: ${5:Container()},",
+      ")"
+    ],
+    "description": "Creates a MultiBlocProvider widget"
+  },
+  "RepositoryProvider": {
+    "prefix": "repoprovider",
+    "body": [
+      "RepositoryProvider(",
+      "\tcreate: (context) => ${1:Subject}Repository(),",
+      "\tchild: ${2:Container()},",
+      ")"
+    ],
+    "description": "Creates a RepositoryProvider widget"
+  },
+  "MultiRepositoryProvider": {
+    "prefix": "multirepoprovider",
+    "body": [
+      "MultiRepositoryProvider(",
+      "\tproviders: [",
+      "\t\tRepositoryProvider(",
+      "\t\t\tcreate: (context) => ${1:Subject}Repository(),",
+      "\t\t),",
+      "\t\tRepositoryProvider(",
+      "\t\t\tcreate: (context) => ${2:Subject}Repository(),",
+      "\t\t),",
+      "\t],",
+      "\tchild: ${3:Container()},",
+      ")"
+    ],
+    "description": "Creates a MultiRepositoryProvider widget"
+  },
+  "BlocBuilder": {
+    "prefix": "blocbuilder",
+    "body": [
+      "BlocBuilder<${1:Subject}${2:Bloc}, $1State>(",
+      "\tbuilder: (context, state) {",
+      "\t\treturn ${3:Container()};",
+      "\t},",
+      ")"
+    ],
+    "description": "Creates a BlocBuilder widget"
+  },
+  "BlocSelector": {
+    "prefix": "blocselector",
+    "body": [
+      "BlocSelector<${1:Subject}${2:Bloc}, $1State, ${3:Selected}>(",
+      "\tselector: (state) {",
+      "\t\treturn ${4:state};",
+      "\t},",
+      "\tbuilder: (context, state) {",
+      "\t\treturn ${5:Container()};",
+      "\t},",
+      ")"
+    ],
+    "description": "Creates a BlocSelector widget"
+  },
+  "BlocListener": {
+    "prefix": "bloclistener",
+    "body": [
+      "BlocListener<${1:Subject}${2:Bloc}, $1State>(",
+      "\tlistener: (context, state) {",
+      "\t\t$0",
+      "\t},",
+      "\tchild: ${3:Container()},",
+      ")"
+    ],
+    "description": "Creates a BlocListener widget"
+  },
+  "MultiBlocListener": {
+    "prefix": "multibloclistener",
+    "body": [
+      "MultiBlocListener(",
+      "\tlisteners: [",
+      "\t\tBlocListener<${1:Subject}${2:Bloc}, $1State>(",
+      "\t\t\tlistener: (context, state) {",
+      "\t\t\t\t$0",
+      "\t\t\t},",
+      "\t\t),",
+      "\t],",
+      "\tchild: ${3:Container()},",
+      ")"
+    ],
+    "description": "Creates a MultiBlocListener widget"
+  },
+  "BlocConsumer": {
+    "prefix": "blocconsumer",
+    "body": [
+      "BlocConsumer<${1:Subject}${2:Bloc}, $1State>(",
+      "\tlistener: (context, state) {",
+      "\t\t$0",
+      "\t},",
+      "\tbuilder: (context, state) {",
+      "\t\treturn ${3:Container()};",
+      "\t},",
+      ")"
+    ],
+    "description": "Creates a BlocConsumer widget"
+  },
+  "BlocProvider.of()": {
+    "prefix": "blocof",
+    "body": "BlocProvider.of<${1:Subject}${2:Bloc}>(context)",
+    "description": "Shortcut for BlocProvider.of()"
+  },
+  "RepositoryProvider.of()": {
+    "prefix": "repoof",
+    "body": "RepositoryProvider.of<${1:Subject}Repository>(context)",
+    "description": "Shortcut for RepositoryProvider.of()"
+  },
+  "context.read()": {
+    "prefix": "read",
+    "body": "context.read<${1:Subject}${2:Bloc}>()",
+    "description": "Shortcut for context.read()"
+  },
+  "context.select()": {
+    "prefix": "select",
+    "body": "context.select((${1:Subject}${2:Bloc} ${3:bloc}) => $3$0)",
+    "description": "Shortcut for context.select()"
+  },
+  "context.watch()": {
+    "prefix": "watch",
+    "body": "context.watch<${1:Subject}${2:Bloc}>()",
+    "description": "Shortcut for context.watch()"
+  },
+  "Import package:flutter_bloc": {
+    "prefix": "importflutterbloc",
+    "body": "import 'package:flutter_bloc/flutter_bloc.dart';",
+    "description": "Import package:flutter_bloc/flutter_bloc.dart"
+  },
+  "New freezed state": {
+    "prefix": "fstate",
+    "body": "const factory ${1:ClassName}.${2:stateName}($3) = _${4:StateName};\n$0",
+    "description": "Creates a freezed state"
+  },
+  "New freezed event": {
+    "prefix": "fevent",
+    "body": "const factory ${1:ClassName}.${2:eventName}($3) = _${4:EventName};\n$0",
+    "description": "Creates a freezed event"
+  }
+}
