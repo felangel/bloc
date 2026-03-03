@@ -1,0 +1,144 @@
+{
+  "BlocProvider": {
+    "prefix": "blocprovider",
+    "body": [
+      "BlocProvider(",
+      "\tcreate: (context) => ${1:Subject}${2|Bloc,Cubit|}(),",
+      "\tchild: ${3:Container()},",
+      ")"
+    ]
+  },
+  "MultiBlocProvider": {
+    "prefix": "multiblocprovider",
+    "body": [
+      "MultiBlocProvider(",
+      "\tproviders: [",
+      "\t\tBlocProvider(",
+      "\t\t\tcreate: (context) => ${1:Subject}${2|Bloc,Cubit|}(),",
+      "\t\t),",
+      "\t\tBlocProvider(",
+      "\t\t\tcreate: (context) => ${3:Subject}${4|Bloc,Cubit|}(),",
+      "\t\t),",
+      "\t],",
+      "\tchild: ${5:Container()},",
+      ")"
+    ]
+  },
+  "RepositoryProvider": {
+    "prefix": "repoprovider",
+    "body": [
+      "RepositoryProvider(",
+      "\tcreate: (context) => ${1:Subject}Repository(),",
+      "\tchild: ${2:Container()},",
+      ")"
+    ]
+  },
+  "MultiRepositoryProvider": {
+    "prefix": "multirepoprovider",
+    "body": [
+      "MultiRepositoryProvider(",
+      "\tproviders: [",
+      "\t\tRepositoryProvider(",
+      "\t\t\tcreate: (context) => ${1:Subject}Repository(),",
+      "\t\t),",
+      "\t\tRepositoryProvider(",
+      "\t\t\tcreate: (context) => ${2:Subject}Repository(),",
+      "\t\t),",
+      "\t],",
+      "\tchild: ${3:Container()},",
+      ")"
+    ]
+  },
+  "BlocBuilder": {
+    "prefix": "blocbuilder",
+    "body": [
+      "BlocBuilder<${1:Subject}${2|Bloc,Cubit|}, $1State>(",
+      "\tbuilder: (context, state) {",
+      "\t\treturn ${3:Container()};",
+      "\t},",
+      ")"
+    ]
+  },
+  "BlocSelector": {
+    "prefix": "blocselector",
+    "body": [
+      "BlocSelector<${1:Subject}${2|Bloc,Cubit|}, $1State, ${3:Selected}>(",
+      "\tselector: (state) {",
+      "\t\treturn ${4:state};",
+      "\t},",
+      "\tbuilder: (context, state) {",
+      "\t\treturn ${5:Container()};",
+      "\t},",
+      ")"
+    ]
+  },
+  "BlocListener": {
+    "prefix": "bloclistener",
+    "body": [
+      "BlocListener<${1:Subject}${2|Bloc,Cubit|}, $1State>(",
+      "\tlistener: (context, state) {",
+      "\t\t${3:// TODO: implement listener}",
+      "\t},",
+      "\tchild: ${4:Container()},",
+      ")"
+    ]
+  },
+  "MultiBlocListener": {
+    "prefix": "multibloclistener",
+    "body": [
+      "MultiBlocListener(",
+      "\tlisteners: [",
+      "\t\tBlocListener<${1:Subject}${2|Bloc,Cubit|}, $1State>(",
+      "\t\t\tlistener: (context, state) {",
+      "\t\t\t\t${3:// TODO: implement listener}",
+      "\t\t\t},",
+      "\t\t),",
+      "\t\tBlocListener<${4:Subject}${5|Bloc,Cubit|}, $4State>(",
+      "\t\t\tlistener: (context, state) {",
+      "\t\t\t\t${6:// TODO: implement listener}",
+      "\t\t\t},",
+      "\t\t),",
+      "\t],",
+      "\tchild: ${7:Container()},",
+      ")"
+    ]
+  },
+  "BlocConsumer": {
+    "prefix": "blocconsumer",
+    "body": [
+      "BlocConsumer<${1:Subject}${2|Bloc,Cubit|}, $1State>(",
+      "\tlistener: (context, state) {",
+      "\t\t${3:// TODO: implement listener}",
+      "\t},",
+      "\tbuilder: (context, state) {",
+      "\t\treturn ${4:Container()};",
+      "\t},",
+      ")"
+    ]
+  },
+  "BlocProvider.of()": {
+    "prefix": "blocof",
+    "body": "BlocProvider.of<${1:Subject}${2|Bloc,Cubit|}>(context)"
+  },
+  "RepositoryProvider.of()": {
+    "prefix": "repoof",
+    "body": "RepositoryProvider.of<${1:Subject}Repository>(context)"
+  },
+  "context.read()": {
+    "prefix": "read",
+    "body": "context.read<${1:Subject}${2|Bloc,Cubit,Repository|}>()"
+  },
+  "context.select()": {
+    "prefix": "select",
+    "body": "context.select((${1:Subject}${2|Bloc,Cubit|} ${3:bloc}) => $3$4)"
+  },
+  "context.watch()": {
+    "prefix": "watch",
+    "body": "context.watch<${1:Subject}${2|Bloc,Cubit,Repository|}>()"
+  },
+  "Import package:flutter_bloc": {
+    "prefix": "importflutterbloc",
+    "body": "import 'package:flutter_bloc/flutter_bloc.dart';",
+    "description": "import package:flutter_bloc/flutter_bloc.dart;"
+  }
+}
