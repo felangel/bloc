@@ -65,8 +65,13 @@ abstract class HydratedBloc<Event, State> extends Bloc<Event, State>
     State state, {
     Storage? storage,
     OnHydrationError onHydrationError = defaultOnHydrationError,
+    Duration? expirationDuration,
   }) : super(state) {
-    hydrate(storage: storage, onError: onHydrationError);
+    hydrate(
+      storage: storage,
+      onError: onHydrationError,
+      expirationDuration: expirationDuration,
+    );
   }
 
   static Storage? _storage;
@@ -111,8 +116,13 @@ abstract class HydratedCubit<State> extends Cubit<State>
     State state, {
     Storage? storage,
     OnHydrationError onHydrationError = defaultOnHydrationError,
+    Duration? expirationDuration,
   }) : super(state) {
-    hydrate(storage: storage, onError: onHydrationError);
+    hydrate(
+      storage: storage,
+      onError: onHydrationError,
+      expirationDuration: expirationDuration,
+    );
   }
 }
 
@@ -145,6 +155,7 @@ mixin HydratedMixin<State> on BlocBase<State> {
   late final Storage __storage;
   HydrationErrorBehavior? _errorBehavior;
   var _onErrorCallbackInProgress = false;
+  Duration? _expirationDuration;
 
   /// Populates the internal state storage with the latest state.
   /// This should be called when using the [HydratedMixin]
@@ -179,11 +190,25 @@ mixin HydratedMixin<State> on BlocBase<State> {
   void hydrate({
     Storage? storage,
     OnHydrationError onError = defaultOnHydrationError,
+    Duration? expirationDuration,
   }) {
     __storage = storage ??= HydratedBloc.storage;
+    _expirationDuration = expirationDuration;
+    var wasExpired = false;
     try {
       final stateJson = __storage.read(storageToken) as Map<dynamic, dynamic>?;
-      _state = stateJson != null ? _fromJson(stateJson) : super.state;
+      if (stateJson != null) {
+        final result = _fromJsonWithExpiration(stateJson);
+        wasExpired = result.wasExpired;
+        _state = result.state ?? super.state;
+
+        // Clear expired data from storage if it was expired
+        if (wasExpired) {
+          __storage.delete(storageToken).then((_) {}, onError: this.onError);
+        }
+      } else {
+        _state = super.state;
+      }
       _errorBehavior = null;
     } catch (error, stackTrace) {
       this.onError(error, stackTrace);
@@ -234,14 +259,56 @@ mixin HydratedMixin<State> on BlocBase<State> {
     }
   }
 
-  State? _fromJson(dynamic json) {
+  _HydrationResult<State> _fromJsonWithExpiration(dynamic json) {
     final dynamic traversedJson = _traverseRead(json);
     final castJson = _cast<Map<String, dynamic>>(traversedJson);
-    return fromJson(castJson ?? <String, dynamic>{});
+    if (castJson == null) {
+      return _HydrationResult(fromJson(<String, dynamic>{}), wasExpired: false);
+    }
+
+    // Check if this is wrapped data with expiration metadata
+    if (castJson.containsKey('__hydrated_state__')) {
+      final timestamp = castJson['__hydrated_timestamp__'] as int?;
+      final stateData = castJson['__hydrated_state__'];
+
+      if (timestamp != null && _expirationDuration != null) {
+        final savedTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
+        final expirationTime = savedTime.add(_expirationDuration!);
+        final now = DateTime.now();
+
+        // If expired, return null to use default state
+        if (now.isAfter(expirationTime)) {
+          return _HydrationResult(null, wasExpired: true);
+        }
+      }
+
+      // Not expired or no timestamp, unwrap the state
+      final unwrappedJson = _cast<Map<String, dynamic>>(stateData);
+      return _HydrationResult(
+        fromJson(unwrappedJson ?? <String, dynamic>{}),
+        wasExpired: false,
+      );
+    }
+
+    // Legacy format without expiration wrapper
+    return _HydrationResult(fromJson(castJson), wasExpired: false);
   }
 
+
   Map<String, dynamic>? _toJson(State state) {
-    return _cast<Map<String, dynamic>>(_traverseWrite(toJson(state)).value);
+    final stateJson =
+        _cast<Map<String, dynamic>>(_traverseWrite(toJson(state)).value);
+    if (stateJson == null) return null;
+
+    // If expiration is enabled, wrap state with timestamp
+    if (_expirationDuration != null) {
+      return {
+        '__hydrated_state__': stateJson,
+        '__hydrated_timestamp__': DateTime.now().millisecondsSinceEpoch,
+      };
+    }
+
+    return stateJson;
   }
 
   dynamic _traverseRead(dynamic value) {
@@ -487,4 +554,10 @@ class _Traversed {
       : this._(outcome: _Outcome.complex, value: value);
   final _Outcome outcome;
   final dynamic value;
+}
+
+class _HydrationResult<T> {
+  _HydrationResult(this.state, {required this.wasExpired});
+  final T? state;
+  final bool wasExpired;
 }
