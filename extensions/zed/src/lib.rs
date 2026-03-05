@@ -14,7 +14,7 @@ impl BlocExtension {
         language_server_id: &LanguageServerId,
         worktree: &zed::Worktree,
     ) -> Result<String> {
-        let binary_settings = LspSettings::for_worktree("bloc-language-server", worktree)
+        let binary_settings = LspSettings::for_worktree("bloc", worktree)
             .ok()
             .and_then(|s| s.binary);
 
@@ -123,7 +123,7 @@ impl zed::Extension for BlocExtension {
     ) -> Result<zed::Command> {
         let binary_path = self.language_server_binary_path(language_server_id, worktree)?;
 
-        let args = LspSettings::for_worktree("bloc-language-server", worktree)
+        let args = LspSettings::for_worktree("bloc", worktree)
             .ok()
             .and_then(|s| s.binary)
             .and_then(|b| b.arguments)
