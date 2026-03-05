@@ -8,6 +8,6 @@ repository = "https://github.com/felangel/bloc"
 
 snippets = ["snippets/dart.json"]
 
-[language_servers.bloc-language-server]
+[language_servers.bloc]
 name = "Bloc Language Server"
 languages = ["Dart"]
