@@ -1,8 +1,8 @@
 use std::fs;
-use zed_extension_api::{self as zed, settings::LspSettings, LanguageServerId, Result};
+use zed_extension_api::{self as zed, LanguageServerId, Result, settings::LspSettings};
 
 const BLOC_TOOLS_REPO: &str = "felangel/bloc";
-const BLOC_TOOLS_RELEASE_TAG_PREFIX: &str = "bloc_tools-v";
+const BLOC_TOOLS_RELEASE_TAG: &str = "bloc_tools-v0.1.0-dev.22";
 
 struct BlocExtension {
     cached_binary_path: Option<String>,
@@ -33,21 +33,16 @@ impl BlocExtension {
             &zed::LanguageServerInstallationStatus::CheckingForUpdate,
         );
 
-        let release = zed::latest_github_release(
-            BLOC_TOOLS_REPO,
-            zed::GithubReleaseOptions {
-                require_assets: true,
-                pre_release: true,
-            },
-        )?;
-
-        // Only consider bloc_tools releases
-        if !release.version.starts_with(BLOC_TOOLS_RELEASE_TAG_PREFIX) {
-            return Err(format!(
-                "Latest release '{}' is not a bloc_tools release",
-                release.version
-            ));
-        }
+        let release = match zed::github_release_by_tag_name(BLOC_TOOLS_REPO, BLOC_TOOLS_RELEASE_TAG)
+        {
+            Ok(release) => release,
+            Err(e) => {
+                let url = format!(
+                    "https://api.github.com/repos/{BLOC_TOOLS_REPO}/releases/tags/{BLOC_TOOLS_RELEASE_TAG}"
+                );
+                return Err(format!("Failed to fetch release from {url}: {e}"));
+            }
+        };
 
         let (os, arch) = zed::current_platform();
 
@@ -85,9 +80,8 @@ impl BlocExtension {
                 &zed::LanguageServerInstallationStatus::Downloading,
             );
 
-            fs::create_dir_all(&version_dir).map_err(|e| {
-                format!("Failed to create directory '{version_dir}': {e}")
-            })?;
+            fs::create_dir_all(&version_dir)
+                .map_err(|e| format!("Failed to create directory '{version_dir}': {e}"))?;
 
             zed::download_file(
                 &asset.download_url,
