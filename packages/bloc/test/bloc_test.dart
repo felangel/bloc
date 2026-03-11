@@ -1656,8 +1656,95 @@ void main() {
         bloc.close();
         expect(bloc.isClosed, isTrue);
       });
+
+      test(
+        'returns true during close teardown so add() guard works '
+        'in onEach callbacks',
+        () async {
+          // Reproduces https://github.com/felangel/bloc/issues/4749
+          //
+          // Scenario: a Bloc uses emit.onEach to listen to an external
+          // stream. In the onData callback, it guards add() with
+          // if (!isClosed). When the bloc is closed, the external stream
+          // may still emit data during teardown. Previously, isClosed
+          // returned false during this window (because it checked
+          // _stateController.isClosed, which closes last), causing
+          // add() to throw a StateError on the already-closed
+          // _eventController.
+          final streamController = StreamController<int>.broadcast();
+
+          final bloc = _OnEachAddBloc(streamController.stream);
+          bloc.add(const _Subscribe());
+          await tick();
+
+          // Start closing the bloc. This closes _eventController first.
+          final closeFuture = bloc.close();
+
+          // Emit data on the external stream during teardown.
+          // Without the fix, onData fires, isClosed returns false,
+          // add() throws StateError.
+          streamController.add(42);
+          await tick();
+
+          await closeFuture;
+          await streamController.close();
+
+          // The bloc should have closed without any StateError.
+          expect(bloc.isClosed, isTrue);
+          expect(bloc.addErrors, isEmpty);
+        },
+      );
     });
   });
+}
+
+abstract class _OnEachAddEvent {
+  const _OnEachAddEvent();
+}
+
+class _Subscribe extends _OnEachAddEvent {
+  const _Subscribe();
+}
+
+class _DataReceived extends _OnEachAddEvent {
+  const _DataReceived(this.value);
+  final int value;
+}
+
+class _OnEachAddBloc extends Bloc<_OnEachAddEvent, int> {
+  _OnEachAddBloc(this._stream) : super(0) {
+    on<_Subscribe>(_onSubscribe);
+    on<_DataReceived>(_onDataReceived);
+  }
+
+  final Stream<int> _stream;
+  final addErrors = <Object>[];
+
+  Future<void> _onSubscribe(
+    _Subscribe event,
+    Emitter<int> emit,
+  ) async {
+    await emit.onEach<int>(
+      _stream,
+      onData: (value) {
+        // This is the pattern from issue #4749.
+        // The user checks isClosed before calling add().
+        if (!isClosed) {
+          add(_DataReceived(value));
+        }
+      },
+    );
+  }
+
+  void _onDataReceived(_DataReceived event, Emitter<int> emit) {
+    emit(event.value);
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    addErrors.add(error);
+    super.onError(error, stackTrace);
+  }
 }
 
 void unawaited(Future<void> future) {}
