@@ -424,7 +424,12 @@ void main() {
         cubit.onChange(change);
         verify(
           () => storage.write('MyIntKeyMapCubit', {
-            'data': {'0': 'spring', '1': 'summer', '2': 'autumn', '3': 'winter'},
+            'data': {
+              '0': 'spring',
+              '1': 'summer',
+              '2': 'autumn',
+              '3': 'winter'
+            },
           }),
         ).called(1);
       });
