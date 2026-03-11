@@ -91,6 +91,23 @@ class MyMultiHydratedCubit extends HydratedCubit<int> {
   int? fromJson(dynamic json) => json['value'] as int?;
 }
 
+class MyIntKeyMapCubit extends HydratedCubit<Map<int, String>> {
+  MyIntKeyMapCubit() : super(const {});
+
+  void update(Map<int, String> value) => emit(value);
+
+  @override
+  Map<String, dynamic> toJson(Map<int, String> state) {
+    return {'data': state};
+  }
+
+  @override
+  Map<int, String> fromJson(Map<String, dynamic> json) {
+    final raw = json['data'] as Map<String, dynamic>? ?? {};
+    return raw.map((key, value) => MapEntry(int.parse(key), value as String));
+  }
+}
+
 class MyHydratedCubitWithCustomStorage extends HydratedCubit<int> {
   MyHydratedCubitWithCustomStorage(Storage storage)
       : super(0, storage: storage);
@@ -393,6 +410,31 @@ void main() {
         final dynamic initialStateB = secondCaptured.first;
 
         expect(initialStateB, cachedState);
+      });
+    });
+
+    group('MyIntKeyMapCubit', () {
+      test('converts non-string (int) map keys to strings when persisting', () {
+        final cubit = MyIntKeyMapCubit();
+        const data = {0: 'spring', 1: 'summer', 2: 'autumn', 3: 'winter'};
+        const change = Change(
+          currentState: <int, String>{},
+          nextState: data,
+        );
+        cubit.onChange(change);
+        verify(
+          () => storage.write('MyIntKeyMapCubit', {
+            'data': {'0': 'spring', '1': 'summer', '2': 'autumn', '3': 'winter'},
+          }),
+        ).called(1);
+      });
+
+      test('restores state when cache has stringified int keys', () {
+        when<dynamic>(() => storage.read(any())).thenReturn({
+          'data': {'0': 'a', '1': 'b'},
+        });
+        final cubit = MyIntKeyMapCubit();
+        expect(cubit.state, {0: 'a', 1: 'b'});
       });
     });
 

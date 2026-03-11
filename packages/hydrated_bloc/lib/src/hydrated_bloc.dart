@@ -324,7 +324,7 @@ mixin HydratedMixin<State> on BlocBase<State> {
       _checkCycle(object);
       final map = <String, dynamic>{};
       object.forEach((dynamic key, dynamic value) {
-        final castKey = _cast<String>(key);
+        final castKey = key is String ? key : key?.toString();
         if (castKey != null) {
           map[castKey] = _traverseWrite(value).value;
         }
