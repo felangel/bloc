@@ -1649,6 +1649,13 @@ void main() {
         await bloc.close();
         expect(bloc.isClosed, isTrue);
       });
+
+      test('returns true immediately when close is called', () {
+        final bloc = CounterBloc();
+        expect(bloc.isClosed, isFalse);
+        bloc.close();
+        expect(bloc.isClosed, isTrue);
+      });
     });
   });
 }
