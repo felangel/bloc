@@ -2,6 +2,7 @@ export 'bad_cubit.dart';
 export 'cyclic_cubit.dart';
 export 'freezed_cubit.dart';
 export 'from_json_state_cubit.dart';
+export 'int_key_map_cubit.dart';
 export 'json_serializable_cubit.dart';
 export 'list_cubit.dart';
 export 'manual_cubit.dart';

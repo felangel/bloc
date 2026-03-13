@@ -383,6 +383,22 @@ void main() {
       });
     });
 
+    group('IntKeyMapCubit', () {
+      test('persists and restores state with non-string map keys', () async {
+        final palette = Palette({
+          Season.spring: 'green',
+          Season.summer: 'yellow',
+          Season.autumn: 'orange',
+          Season.winter: 'white',
+        });
+        final cubit = IntKeyMapCubit();
+        expect(cubit.state, const Palette({}));
+        cubit.update(palette);
+        await sleep();
+        expect(IntKeyMapCubit().state, palette);
+      });
+    });
+
     group('FromJsonStateCubit', () {
       test('does not throw StackOverflow ', () async {
         final fromJsonCalls = <int>[];
