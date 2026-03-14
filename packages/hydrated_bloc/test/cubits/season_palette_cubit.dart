@@ -1,7 +1,7 @@
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:meta/meta.dart';
 
-/// A cubit that has a state which uses int key values.
+/// A cubit that has a state which uses int key values in its serialized form.
 /// https://github.com/felangel/bloc/issues/3983
 class SeasonPaletteCubit extends HydratedCubit<SeasonPalette> {
   SeasonPaletteCubit() : super(const SeasonPalette({}));
