@@ -3,25 +3,26 @@ import 'package:meta/meta.dart';
 
 /// A cubit that has a state which uses int key values.
 /// https://github.com/felangel/bloc/issues/3983
-class SeasonPaletteCubit extends HydratedCubit<Palette> {
-  SeasonPaletteCubit() : super(const Palette({}));
+class SeasonPaletteCubit extends HydratedCubit<SeasonPalette> {
+  SeasonPaletteCubit() : super(const SeasonPalette({}));
 
-  void update(Palette palette) => emit(palette);
-
-  @override
-  Map<String, dynamic> toJson(Palette state) => state.toJson();
+  void update(SeasonPalette palette) => emit(palette);
 
   @override
-  Palette fromJson(Map<String, dynamic> json) => Palette.fromJson(json);
+  Map<String, dynamic> toJson(SeasonPalette state) => state.toJson();
+
+  @override
+  SeasonPalette fromJson(Map<String, dynamic> json) =>
+      SeasonPalette.fromJson(json);
 }
 
 @immutable
-class Palette {
-  const Palette(this.seasonColors);
+class SeasonPalette {
+  const SeasonPalette(this.colors);
 
-  factory Palette.fromJson(Map<String, dynamic> json) {
-    final raw = json['season_colors'] as Map<String, dynamic>? ?? {};
-    return Palette(
+  factory SeasonPalette.fromJson(Map<String, dynamic> json) {
+    final raw = json['colors'] as Map<String, dynamic>? ?? {};
+    return SeasonPalette(
       raw.map(
         (key, value) => MapEntry(
           Season.fromJson(int.parse(key)),
@@ -31,11 +32,11 @@ class Palette {
     );
   }
 
-  final Map<Season, String> seasonColors;
+  final Map<Season, String> colors;
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'season_colors': seasonColors.map<int, String>(
+      'colors': colors.map<int, String>(
         (key, value) => MapEntry(key.toJson(), value),
       ),
     };
@@ -44,16 +45,16 @@ class Palette {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    if (other is! Palette) return false;
-    if (seasonColors.length != other.seasonColors.length) return false;
-    for (final entry in seasonColors.entries) {
-      if (other.seasonColors[entry.key] != entry.value) return false;
+    if (other is! SeasonPalette) return false;
+    if (colors.length != other.colors.length) return false;
+    for (final entry in colors.entries) {
+      if (other.colors[entry.key] != entry.value) return false;
     }
     return true;
   }
 
   @override
-  int get hashCode => seasonColors.hashCode;
+  int get hashCode => colors.hashCode;
 }
 
 @immutable
