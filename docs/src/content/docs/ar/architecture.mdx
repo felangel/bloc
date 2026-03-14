@@ -1,0 +1,149 @@
+---
+title: الهندسة المعمارية
+description: نظرة عامة على أنماط الهندسة المعمارية الموصى بها عند استخدام bloc.
+---
+
+import DataProviderSnippet from '~/components/architecture/DataProviderSnippet.astro';
+import RepositorySnippet from '~/components/architecture/RepositorySnippet.astro';
+import BusinessLogicComponentSnippet from '~/components/architecture/BusinessLogicComponentSnippet.astro';
+import BlocTightCouplingSnippet from '~/components/architecture/BlocTightCouplingSnippet.astro';
+import BlocLooseCouplingPresentationSnippet from '~/components/architecture/BlocLooseCouplingPresentationSnippet.astro';
+import AppIdeasRepositorySnippet from '~/components/architecture/AppIdeasRepositorySnippet.astro';
+import AppIdeaRankingBlocSnippet from '~/components/architecture/AppIdeaRankingBlocSnippet.astro';
+import PresentationComponentSnippet from '~/components/architecture/PresentationComponentSnippet.astro';
+
+![Bloc Architecture](~/assets/concepts/bloc_architecture_full.png)
+
+يتيح لنا استخدام مكتبة bloc تقسيم التطبيق إلى ثلاث طبقات رئيسية:
+
+- طبقة العرض (Presentation)
+- طبقة منطق الأعمال (Business Logic)
+- طبقة البيانات (Data)
+  - المستودع (Repository)
+  - مزود البيانات (Data Provider)
+
+سنبدأ من الطبقة الأدنى (الأبعد عن واجهة المستخدم) ونتدرج صعودًا حتى نصل إلى طبقة
+العرض.
+
+## طبقة البيانات (Data Layer)
+
+تتمثل مسؤولية طبقة البيانات في جلب البيانات ومعالجتها من مصدر واحد أو أكثر.
+
+يمكن تقسيم هذه الطبقة إلى جزأين:
+
+- المستودع (Repository)
+- مزود البيانات (Data Provider)
+
+تُعد هذه الطبقة الأدنى في التطبيق، وهي المسؤولة عن التفاعل مع قواعد البيانات،
+وطلبات الشبكة، ومصادر البيانات غير المتزامنة الأخرى.
+
+### مزود البيانات (Data Provider)
+
+تتمثل مهمة مزود البيانات في توفير البيانات الخام. يجب أن يكون عامًا ومرنًا
+وقابلًا لإعادة الاستخدام.
+
+عادةً ما يوفّر مزود البيانات واجهات برمجية بسيطة لتنفيذ
+[عمليات الإنشاء والقراءة والتحديث والحذف (CRUD)](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete).
+قد يتضمن ذلك دوال مثل `createData` و `readData` و `updateData` و `deleteData`
+ضمن طبقة البيانات.
+
+<DataProviderSnippet />
+
+### المستودع (Repository)
+
+تمثل طبقة المستودع غلافًا (wrapper) حول مزود بيانات واحد أو أكثر، وتتواصل معها
+طبقة الـ Bloc.
+
+<RepositorySnippet />
+
+كما نلاحظ، يمكن للمستودع التعامل مع عدة مزودي بيانات وإجراء تحويلات على البيانات
+قبل تمرير النتائج إلى طبقة منطق الأعمال.
+
+## طبقة منطق الأعمال (Business Logic Layer)
+
+تتمثل مسؤولية طبقة منطق الأعمال في الاستجابة لمدخلات طبقة العرض بإنتاج حالات
+جديدة. يمكن أن تعتمد هذه الطبقة على مستودع واحد أو أكثر للحصول على البيانات
+اللازمة لبناء حالة التطبيق.
+
+يمكن اعتبار هذه الطبقة جسرًا بين واجهة المستخدم (طبقة العرض) وطبقة البيانات. فهي
+تستقبل الأحداث أو الإجراءات من طبقة العرض، ثم تتواصل مع المستودع لبناء حالة
+جديدة تستهلكها طبقة العرض.
+
+<BusinessLogicComponentSnippet />
+
+### التواصل بين الـ Blocs (Bloc-to-Bloc Communication)
+
+نظرًا لأن الـ blocs تعتمد على الـ streams، قد يكون من المغري إنشاء bloc يستمع
+إلى bloc آخر. يجب **تجنب** هذا الأسلوب. توجد بدائل أفضل من اللجوء إلى الكود
+التالي:
+
+<BlocTightCouplingSnippet />
+
+على الرغم من أن الكود أعلاه صحيح ويعالج الموارد بشكل مناسب، إلا أنه يخلق مشكلة
+أكبر: وهي إنشاء تبعية مباشرة بين bloc وآخر.
+
+بشكل عام، يجب تجنب التبعيات بين كيانات في نفس الطبقة المعمارية قدر الإمكان، لأن
+ذلك يؤدي إلى اقتران محكم (tight coupling) يصعب صيانته. وبما أن الـ blocs تنتمي
+إلى طبقة منطق الأعمال، فلا ينبغي لأي bloc أن يعرف عن bloc آخر.
+
+![Application Architecture Layers](~/assets/architecture/architecture.png)
+
+يجب أن يتلقى الـ bloc المعلومات فقط عبر الأحداث (events) أو من خلال المستودعات
+التي يتم حقنها فيه عبر المُنشئ (constructor).
+
+إذا كنت بحاجة إلى أن يستجيب bloc لآخر، فهناك خياران أفضل: إما رفع الحل إلى طبقة
+العرض، أو نقله إلى طبقة النطاق (Domain).
+
+#### ربط الـ Blocs عبر طبقة العرض
+
+يمكن استخدام `BlocListener` للاستماع إلى bloc معين، وإضافة حدث إلى bloc آخر عند
+تغيّر حالته.
+
+<BlocLooseCouplingPresentationSnippet />
+
+يمنع هذا الأسلوب `SecondBloc` من معرفة أي شيء عن `FirstBloc`، مما يعزز الاقتران
+المرن (loose coupling). يستخدم تطبيق
+[flutter_weather](/ar/tutorials/flutter-weather),
+[هذه التقنية](https://github.com/felangel/bloc/blob/b4c8db938ad71a6b60d4a641ec357905095c3965/examples/flutter_weather/lib/weather/view/weather_page.dart#L38-L42)
+لتغيير سمة التطبيق بناءً على بيانات الطقس.
+
+في بعض الحالات، قد لا يكون من المناسب الربط بين bloc وآخر في طبقة العرض. بدلاً
+من ذلك، قد يكون من الأفضل أن يشتركا في نفس مصدر البيانات ويقوما بالتحديث عند
+تغيّرها.
+
+#### ربط الـ Blocs عبر طبقة النطاق (Domain)
+
+يمكن لبلوكين الاستماع إلى Stream من مستودع مشترك وتحديث حالاتهما بشكل مستقل عند
+تغير البيانات. يُعد هذا النهج شائعًا في التطبيقات المؤسسية واسعة النطاق.
+
+أولًا، أنشئ أو استخدم مستودعًا يوفر Stream للبيانات. على سبيل المثال، يوفر
+المستودع التالي تدفقًا مستمرًا لبعض أفكار التطبيقات:
+
+<AppIdeasRepositorySnippet />
+
+يمكن حقن نفس المستودع في كل bloc يحتاج إلى الاستجابة لهذه البيانات. فيما يلي
+`AppIdeaRankingBloc` الذي يُنتج حالة لكل فكرة جديدة واردة من المستودع:
+
+<AppIdeaRankingBlocSnippet />
+
+لمزيد من التفاصيل حول استخدام streams مع Bloc، راجع:
+[كيفية استخدام Bloc مع الـ streams والتزامن](https://verygood.ventures/blog/how-to-use-bloc-with-streams-and-concurrency).
+
+## طبقة العرض (Presentation Layer)
+
+تتمثل مسؤولية طبقة العرض في تحديد كيفية عرض الواجهة بناءً على حالة bloc واحدة أو
+أكثر، بالإضافة إلى التعامل مع مدخلات المستخدم وأحداث دورة حياة التطبيق.
+
+غالبًا ما تبدأ تدفقات التطبيق بحدث `AppStart` الذي يؤدي إلى جلب البيانات الأولية
+لعرضها للمستخدم.
+
+في هذا السيناريو، تقوم طبقة العرض بإضافة حدث `AppStart`.
+
+كما يجب عليها تحديد ما سيتم عرضه على الشاشة بناءً على الحالة القادمة من طبقة الـ
+bloc.
+
+<PresentationComponentSnippet />
+
+حتى الآن، وعلى الرغم من عرض بعض مقتطفات الكود، ما زال الشرح على مستوى مفاهيمي.
+في قسم الدروس التعليمية، سنجمع كل هذه المفاهيم معًا أثناء بناء عدة تطبيقات
+مثالية مختلفة.

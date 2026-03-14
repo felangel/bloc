@@ -261,10 +261,54 @@ class _TestBlocObserver extends BlocObserver {
   final void Function(Object error) _onError;
 
   @override
+  void onCreate(BlocBase<dynamic> bloc) {
+    _localObserver.onCreate(bloc);
+    super.onCreate(bloc);
+  }
+
+  @override
+  void onEvent(Bloc<dynamic, dynamic> bloc, Object? event) {
+    _localObserver.onEvent(bloc, event);
+    super.onEvent(bloc, event);
+  }
+
+  @override
+  void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
+    _localObserver.onChange(bloc, change);
+    super.onChange(bloc, change);
+  }
+
+  @override
+  void onTransition(
+    Bloc<dynamic, dynamic> bloc,
+    Transition<dynamic, dynamic> transition,
+  ) {
+    _localObserver.onTransition(bloc, transition);
+    super.onTransition(bloc, transition);
+  }
+
+  @override
   void onError(BlocBase<dynamic> bloc, Object error, StackTrace stackTrace) {
     _localObserver.onError(bloc, error, stackTrace);
     _onError(error);
     super.onError(bloc, error, stackTrace);
+  }
+
+  @override
+  void onDone(
+    Bloc<dynamic, dynamic> bloc,
+    Object? event, [
+    Object? error,
+    StackTrace? stackTrace,
+  ]) {
+    _localObserver.onDone(bloc, event, error, stackTrace);
+    super.onDone(bloc, event, error, stackTrace);
+  }
+
+  @override
+  void onClose(BlocBase<dynamic> bloc) {
+    _localObserver.onClose(bloc);
+    super.onClose(bloc);
   }
 }
 

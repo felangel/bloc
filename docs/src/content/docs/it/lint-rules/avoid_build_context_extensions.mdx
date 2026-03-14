@@ -1,0 +1,57 @@
+---
+title: Evitare Estensioni BuildContext
+description: La regola avoid_build_context_extensions.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/avoid_build_context_extensions/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/avoid_build_context_extensions/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+</div>
+
+Evita di usare estensioni di `BuildContext` per accedere a istanze di `Bloc` o
+`Cubit`.
+
+:::note
+
+Questa regola di lint è stata introdotta nella versione `0.3.0` di
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint)
+
+:::
+
+## Motivazione
+
+Per coerenza e per il bene di essere espliciti, preferisci usare direttamente i
+metodi di bloc rispetto le estensioni di `BuildContext`. Questo è anche
+vantaggioso per il testing dato che non è possibile mockare un metodo di una
+estensione.
+
+| estensione       | metodo esplicito                                                   |
+| ---------------- | ------------------------------------------------------------------ |
+| `context.read`   | `BlocProvider.of<Bloc>(context, listen: false)`                    |
+| `context.watch`  | `BlocBuilder<Bloc, State>(...)` o `BlocProvider.of<Bloc>(context)` |
+| `context.select` | `BlocSelector<Bloc, State>(...)`                                   |
+
+## Esempi
+
+**Evita** di usare estensioni `BuildContext` per interagire con istanze di
+`Bloc` o `Cubit`.
+
+**Errato**:
+
+<BadSnippet />
+
+**Buono**:
+
+<GoodSnippet />
+
+## Abilita
+
+Per abilitare la regola `avoid_build_context_extensions`, aggiungila al tuo
+`analysis_options.yaml` sotto `bloc` > `rules`:
+
+<EnableRuleSnippet name="avoid_build_context_extensions" />

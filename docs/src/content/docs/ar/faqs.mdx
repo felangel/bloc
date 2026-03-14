@@ -1,0 +1,228 @@
+---
+title: الأسئلة الشائعة (FAQs)
+description: إجابات للأسئلة المتكررة بخصوص مكتبة bloc.
+---
+
+import StateNotUpdatingGood1Snippet from '~/components/faqs/StateNotUpdatingGood1Snippet.astro';
+import StateNotUpdatingGood2Snippet from '~/components/faqs/StateNotUpdatingGood2Snippet.astro';
+import StateNotUpdatingGood3Snippet from '~/components/faqs/StateNotUpdatingGood3Snippet.astro';
+import StateNotUpdatingBad1Snippet from '~/components/faqs/StateNotUpdatingBad1Snippet.astro';
+import StateNotUpdatingBad2Snippet from '~/components/faqs/StateNotUpdatingBad2Snippet.astro';
+import StateNotUpdatingBad3Snippet from '~/components/faqs/StateNotUpdatingBad3Snippet.astro';
+import EquatableEmitSnippet from '~/components/faqs/EquatableEmitSnippet.astro';
+import EquatableBlocTestSnippet from '~/components/faqs/EquatableBlocTestSnippet.astro';
+import NoEquatableBlocTestSnippet from '~/components/faqs/NoEquatableBlocTestSnippet.astro';
+import SingleStateSnippet from '~/components/faqs/SingleStateSnippet.astro';
+import SingleStateUsageSnippet from '~/components/faqs/SingleStateUsageSnippet.astro';
+import BlocProviderGood1Snippet from '~/components/faqs/BlocProviderGood1Snippet.astro';
+import BlocProviderGood2Snippet from '~/components/faqs/BlocProviderGood2Snippet.astro';
+import BlocProviderBad1Snippet from '~/components/faqs/BlocProviderBad1Snippet.astro';
+import BlocInternalAddEventSnippet from '~/components/faqs/BlocInternalAddEventSnippet.astro';
+import BlocInternalEventSnippet from '~/components/faqs/BlocInternalEventSnippet.astro';
+import BlocExternalForEachSnippet from '~/components/faqs/BlocExternalForEachSnippet.astro';
+
+## عدم تحديث الحالة (State Not Updating)
+
+❔ **سؤال**: أقوم بإصدار حالة داخل الـ bloc، لكن واجهة المستخدم لا تتحدّث. ما
+الخطأ؟
+
+💡 **إجابة**: إذا كنت تستخدم `Equatable`، فتأكّد من تضمين جميع الخصائص داخل
+`props`.
+
+✅ **صحيح (GOOD)**
+
+<StateNotUpdatingGood1Snippet />
+
+❌ **خاطئ (BAD)**
+
+<StateNotUpdatingBad1Snippet />
+
+<StateNotUpdatingBad2Snippet />
+
+كذلك تأكّد من إصدار نسخة جديدة من الحالة داخل الـ bloc، وليس إعادة استخدام نفس
+الكائن.
+
+✅ **صحيح (GOOD)**
+
+<StateNotUpdatingGood2Snippet />
+
+<StateNotUpdatingGood3Snippet />
+
+❌ **خاطئ (BAD)**
+
+<StateNotUpdatingBad3Snippet />
+
+:::caution
+
+يجب دائمًا نسخ الخصائص في الكائنات التي تستخدم `Equatable` بدل تعديلها مباشرة.
+وإذا كانت الفئة تحتوي على `List` أو `Map`، فاستخدم `List.of` أو `Map.of` حتى
+تُحتسب المساواة بناءً على القيم لا على مرجع الكائن.
+
+:::
+
+## متى يجب استخدام Equatable
+
+❔ **سؤال**: متى أستخدم Equatable؟
+
+💡 **إجابة**:
+
+<EquatableEmitSnippet />
+
+في المثال أعلاه، إذا كانت `StateA` ترث من `Equatable` فلن يحدث سوى انتقال حالة
+واحد (سيُتجاهل `emit` الثاني). بشكل عام، استخدم `Equatable` عندما تريد تقليل
+إعادة البناء وتحسين الأداء. ولا تستخدمه إذا كنت تحتاج أن تؤدي الحالة نفسها عند
+تكرارها إلى انتقالات متعددة.
+
+كما أن `Equatable` يسهّل اختبار الـ blocs، لأننا نستطيع توقّع حالات محددة
+مباشرةً بدل الاعتماد على `Matchers` أو `Predicates`.
+
+<EquatableBlocTestSnippet />
+
+بدون `Equatable` سيفشل الاختبار أعلاه، وسنحتاج لإعادة كتابته بهذا الشكل:
+
+<NoEquatableBlocTestSnippet />
+
+## التعامل مع الأخطاء (Handling Errors)
+
+❔ **سؤال**: كيف أتعامل مع الخطأ مع الاستمرار في عرض البيانات السابقة؟
+
+💡 **إجابة**:
+
+يعتمد ذلك بدرجة كبيرة على طريقة نمذجة حالة الـ bloc. إذا كنت تحتاج للاحتفاظ
+بالبيانات حتى عند وقوع خطأ، فمن الأفضل استخدام فئة حالة واحدة.
+
+<SingleStateSnippet />
+
+بهذه الطريقة يمكن للـ widgets الوصول إلى `data` و `error` في الوقت نفسه، ويمكن
+للـ bloc استخدام `state.copyWith` للاحتفاظ بالبيانات السابقة عند حدوث الخطأ.
+
+<SingleStateUsageSnippet />
+
+## Bloc مقابل Redux
+
+❔ **سؤال**: ما الفرق بين Bloc و Redux؟
+
+💡 **إجابة**:
+
+الـ BLoC هو نمط تصميم يقوم على القواعد التالية:
+
+1. مدخلات ومخرجات الـ BLoC هي `Streams` و`Sinks`.
+2. يجب أن تكون الاعتماديات قابلة للحقن ومستقلة عن المنصة.
+3. لا يُسمح بتفرعات منطقية مرتبطة بمنصة محددة.
+4. تفاصيل التنفيذ مرنة ما دمت ملتزمًا بالقواعد السابقة.
+
+أما إرشادات طبقة الواجهة فهي:
+
+1. كل مكوّن "معقّد بما يكفي" ينبغي أن يكون له BLoC خاص به.
+2. على المكوّنات إرسال المدخلات كما هي.
+3. وعلى المكوّنات عرض المخرجات بأقل قدر ممكن من التحويل.
+4. وكل التفرعات المنطقية في الواجهة يجب أن تعتمد على مخارج Boolean بسيطة من الـ
+   BLoC.
+
+مكتبة Bloc تطبق نمط BLoC، وتهدف إلى تجريد `RxDart` لتبسيط تجربة التطوير.
+
+أما Redux فيقوم على ثلاثة مبادئ:
+
+1. مصدر واحد للحقيقة.
+2. الحالة للقراءة فقط.
+3. التعديلات تتم عبر دوال نقية.
+
+مكتبة bloc لا تتوافق مع المبدأ الأول في Redux، لأن الحالة فيها موزعة عبر عدة
+blocs. كذلك لا يوجد فيها مفهوم `middleware` بالشكل الموجود في Redux، وهي مصممة
+لتسهيل تغييرات الحالة غير المتزامنة وإتاحة إصدار عدة حالات لحدث واحد.
+
+## Bloc مقابل Provider
+
+❔ **سؤال**: ما الفرق بين Bloc و Provider؟
+
+💡 **إجابة**: حزمة `provider` مخصّصة أساسًا لحقن الاعتماديات (وهي غلاف حول
+`InheritedWidget`). ما زلت بحاجة لاختيار أسلوب إدارة الحالة بنفسك
+(`ChangeNotifier` أو `Bloc` أو `Mobx` وغيرها). مكتبة Bloc تستخدم `provider`
+داخليًا لتسهيل توفير الـ blocs والوصول إليها عبر شجرة الـ widgets.
+
+## فشل BlocProvider.of() في العثور على Bloc
+
+❔ **سؤال**: عند استخدام `BlocProvider.of(context)`، لا يمكنه العثور على الـ
+bloc. كيف يمكنني إصلاح ذلك؟
+
+💡 **إجابة**: لا يمكنك الوصول إلى bloc من نفس الـ `BuildContext` الذي قمت
+بتوفيره فيه. لذلك تأكّد من استدعاء `BlocProvider.of()` من `BuildContext` تابع
+(ابن).
+
+✅ **صحيح (GOOD)**
+
+<BlocProviderGood1Snippet />
+
+<BlocProviderGood2Snippet />
+
+❌ **خاطئ (BAD)**
+
+<BlocProviderBad1Snippet />
+
+## هيكلة المشروع (Project Structure)
+
+❔ **سؤال**: كيف يجب أن أقوم بهيكلة مشروعي؟
+
+💡 **إجابة**: لا توجد إجابة واحدة صحيحة أو خاطئة تمامًا لهذا السؤال، لكن هذه
+مراجع مفيدة:
+
+- [I/O Photobooth](https://github.com/flutter/photobooth)
+- [I/O Pinball](https://github.com/flutter/pinball)
+- [Flutter News Toolkit](https://github.com/flutter/news_toolkit)
+
+الأهم أن تكون هيكلة المشروع **متسقة** و**مقصودة**.
+
+## إضافة الأحداث داخل Bloc
+
+❔ **سؤال**: هل من المقبول إضافة الأحداث داخل bloc؟
+
+💡 **إجابة**: في أغلب الحالات تُضاف الأحداث من خارج الـ bloc، لكن في حالات محددة
+قد يكون من المنطقي إضافتها من داخله.
+
+أشيع سيناريو للأحداث الداخلية هو عندما يلزم تغيير الحالة استجابةً لتحديثات لحظية
+قادمة من `repository`. هنا يكون مصدر التحفيز هو المستودع نفسه، وليس حدثًا
+خارجيًا مثل ضغط زر.
+
+في المثال التالي، تعتمد حالة `MyBloc` على المستخدم الحالي الذي يتم كشفه عبر
+`Stream<User>` من `UserRepository`. يستمع `MyBloc` لتغيّرات المستخدم الحالي
+ويضيف حدثًا داخليًا `_UserChanged` كلما صدر مستخدم جديد من هذا الـ stream.
+
+<BlocInternalAddEventSnippet />
+
+عند إضافة حدث داخلي يمكننا أيضًا تحديد `transformer` مخصّص للتحكم في طريقة
+معالجة أحداث `_UserChanged` المتعددة. افتراضيًا، تُعالج هذه الأحداث بالتوازي.
+
+يوصى بشدة بأن تكون الأحداث الداخلية `private`. هذا يوضح أن الحدث مخصّص للاستخدام
+الداخلي فقط، ويمنع المكوّنات الخارجية من الاعتماد عليه.
+
+<BlocInternalEventSnippet />
+
+يمكن أيضًا تعريف حدث خارجي `Started` واستخدام `emit.forEach` للتعامل مع تحديثات
+المستخدم اللحظية:
+
+<BlocExternalForEachSnippet />
+
+مزايا هذا النهج:
+
+- لا حاجة لحدث داخلي `_UserChanged`.
+- لا حاجة لإدارة `StreamSubscription` يدويًا.
+- تحكم كامل في توقيت اشتراك الـ bloc في stream تحديثات المستخدم.
+
+عيوب هذا النهج:
+
+- لا يمكن إيقاف (`pause`) الاشتراك أو استئنافه (`resume`) بسهولة.
+- نحتاج إلى كشف حدث عام `Started` ليُضاف من الخارج.
+- لا يمكن استخدام `transformer` مخصص لضبط طريقة التعامل مع تحديثات المستخدم.
+
+## كشف الدوال العامة (Exposing Public Methods)
+
+❔ **سؤال**: هل من المقبول كشف دوال عامة (public methods) على مثيلات bloc و
+cubit الخاصة بي؟
+
+💡 **إجابة**
+
+عند إنشاء cubit، يُنصح بأن تكون الدوال العامة مخصّصة فقط لتحفيز تغيّر الحالة.
+لذلك، من الأفضل غالبًا أن تعيد هذه الدوال `void` أو `Future<void>`.
+
+وعند إنشاء bloc، يُنصح بتجنب كشف دوال عامة مخصّصة، والاكتفاء بإبلاغه بالأحداث
+عبر استدعاء `add`.

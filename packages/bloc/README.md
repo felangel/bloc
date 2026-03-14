@@ -174,6 +174,18 @@ void main() {
 }
 ```
 
+To register multiple `BlocObserver` instances, use `MultiBlocObserver`:
+
+```dart
+Bloc.observer = MultiBlocObserver(
+  observers: [
+    MyLoggingObserver(),
+    MyErrorObserver(),
+    MyPerformanceObserver(),
+  ],
+);
+```
+
 ### Bloc
 
 ![Bloc Architecture](https://raw.githubusercontent.com/felangel/bloc/master/assets/diagrams/bloc_architecture_full.png)
@@ -337,6 +349,18 @@ void main() {
   Bloc.observer = MyBlocObserver();
   // Use blocs...
 }
+```
+
+Just as with `Cubit`, to register multiple `BlocObserver` instances use `MultiBlocObserver`:
+
+```dart
+Bloc.observer = MultiBlocObserver(
+  observers: [
+    MyLoggingObserver(),
+    MyErrorObserver(),
+    MyPerformanceObserver(),
+  ],
+);
 ```
 
 ## Dart Versions

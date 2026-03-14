@@ -1,0 +1,154 @@
+---
+title: تخصيص قواعد أداة التدقيق (Lint Rules)
+description: تخصيص قواعد أداة التدقيق الخاصة بـ bloc
+sidebar:
+  order: 4
+---
+
+import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.astro';
+import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
+import BlocLintEnablingRulesSnippet from '~/components/lint/BlocLintEnablingRulesSnippet.astro';
+import BlocLintDisablingRulesSnippet from '~/components/lint/BlocLintDisablingRulesSnippet.astro';
+import BlocLintChangingSeveritySnippet from '~/components/lint/BlocLintChangingSeveritySnippet.astro';
+import ImportFlutterInfoSnippet from '~/components/lint/ImportFlutterInfoSnippet.mdx';
+import ImportFlutterInfoOutputSnippet from '~/components/lint/ImportFlutterInfoOutputSnippet.astro';
+import BlocLintExcludingFilesSnippet from '~/components/lint/BlocLintExcludingFilesSnippet.astro';
+import BlocLintIgnoreForLineSnippet from '~/components/lint/BlocLintIgnoreForLineSnippet.astro';
+import BlocLintIgnoreForFileSnippet from '~/components/lint/BlocLintIgnoreForFileSnippet.astro';
+
+يمكنك تخصيص سلوك أداة التدقيق في bloc عبر تغيير مستوى الشدة (`severity`) لكل
+قاعدة، أو تمكين القواعد وتعطيلها بشكل فردي، أو استثناء ملفات من التحليل الساكن.
+
+## تمكين وتعطيل القواعد
+
+تدعم أداة التدقيق في bloc قائمة متزايدة من القواعد. وتجدر الإشارة إلى أن هذه
+القواعد قد لا تكون متوافقة دائمًا مع تفضيلات الجميع. على سبيل المثال، قد يفضّل
+بعض المطورين استخدام blocs (`prefer_bloc`) بينما يفضّل آخرون استخدام cubits
+(`prefer_cubit`).
+
+:::note
+
+بعكس التحليل الساكن، قد تنتج قواعد التدقيق أحيانًا **إنذارات كاذبة
+(`false positives`)**. إذا صادفت ذلك أو أي مشكلة أخرى، يمكنك الإبلاغ عنها عبر
+[فتح Issue](https://github.com/felangel/bloc/issues/new/choose).
+
+:::
+
+### تمكين القواعد الموصى بها
+
+توفّر مكتبة bloc مجموعة قواعد تدقيق موصى بها ضمن حزمة
+[`bloc_lint`](https://pub.dev/packages/bloc_lint).
+
+لتمكين هذه المجموعة، أضف حزمة `bloc_lint` كاعتماد تطوير (`dev dependency`):
+
+<InstallBlocLintSnippet />
+
+ثم عدّل ملف `analysis_options.yaml` لإضافة مجموعة القواعد:
+
+<BlocLintRecommendedAnalysisOptionsSnippet />
+
+:::note
+
+عند إصدار نسخة جديدة من `bloc_lint`، قد تبدأ الأكواد البرمجية التي كانت تجتاز
+التحليل الساكن سابقًا في الفشل. نوصي بتحديث الأكواد البرمجية لتتوافق مع القواعد
+الجديدة، أو تمكين/تعطيل القواعد الفردية حسب الحاجة.
+
+:::
+
+### تمكين القواعد الفردية
+
+لتمكين قواعد فردية، أضف `bloc:` إلى ملف `analysis_options.yaml` كمفتاح من
+المستوى الأعلى (`top-level key`)، ثم أضف `rules:` كمفتاح من المستوى الثاني. بعد
+ذلك، اكتب القواعد المطلوبة على شكل قائمة YAML (مسبوقة بعلامة الشرطة `-`).
+
+على سبيل المثال:
+
+<BlocLintEnablingRulesSnippet />
+
+### تعطيل القواعد الفردية
+
+إذا كنت تضمّن مجموعة قواعد موجودة مسبقًا، مثل `recommended`، فقد تحتاج إلى تعطيل
+قاعدة واحدة أو أكثر من القواعد المضمّنة. آلية التعطيل مشابهة للتمكين، لكنها
+تتطلب استخدام YAML map بدلًا من قائمة.
+
+على سبيل المثال، الإعداد التالي يستخدم مجموعة القواعد الموصى بها مع تعطيل
+`avoid_public_bloc_methods`، ويُفعّل أيضًا قاعدة `prefer_bloc`:
+
+<BlocLintDisablingRulesSnippet />
+
+## تخصيص شدة القاعدة
+
+يمكنك تغيير شدة أي قاعدة بالشكل التالي:
+
+<BlocLintChangingSeveritySnippet />
+
+الآن سيتم الإبلاغ عن القاعدة نفسها بمستوى `info` بدلًا من `warning`:
+
+<ImportFlutterInfoSnippet />
+
+يجب أن تبدو المخرجات (output) لأمر `bloc lint` كما يلي:
+
+<ImportFlutterInfoOutputSnippet />
+
+مستويات الشدة المدعومة:
+
+| الشدة (`Severity`) | الوصف (`Description`)                      |
+| :----------------- | :----------------------------------------- |
+| `error`            | يشير إلى أن هذا النمط غير مسموح.           |
+| `warning`          | يشير إلى أن النمط مريب لكنه مسموح.         |
+| `info`             | يقدّم معلومات للمستخدم، لكنه لا يعد مشكلة. |
+| `hint`             | يقترح طريقة أفضل للوصول إلى النتيجة.       |
+
+## استثناء الملفات
+
+أحيانًا يكون من المقبول تجاهل فشل التحليل الساكن. على سبيل المثال، قد ترغب في
+تجاهل التحذيرات أو الأخطاء في الأكواد البرمجية المُولّدة (`generated code`) التي
+لم يكتبها فريقك. وكما في قواعد تدقيق Dart الرسمية، يمكنك استخدام خيار المحلل
+`exclude:` لاستثناء ملفات من التحليل الساكن.
+
+يمكنك إما تحديد ملفات بعينها أو استخدام أنماط
+[`glob`](https://pub.dev/packages/glob).
+
+:::note
+
+يجب أن تكون جميع أنماط `glob` نسبيةً إلى المجلد الذي يحتوي على ملف
+`analysis_options.yaml` المقابل.
+
+:::
+
+على سبيل المثال، يمكننا استثناء جميع أكواد Dart المُولّدة عبر إعدادات التحليل
+التالية:
+
+<BlocLintExcludingFilesSnippet />
+
+## تجاهل القواعد
+
+تمامًا كما هو الحال مع قواعد تدقيق Dart الرسمية، يمكنك تجاهل قواعد bloc لملف
+معيّن أو سطر من الأكواد البرمجية باستخدام `// ignore_for_file` و `// ignore` على
+التوالي.
+
+:::note
+
+لتجاهل عدة قواعد في سطر أو ملف معيّن، استخدم قائمة مفصولة بفواصل.
+
+:::
+
+### تجاهل الأسطر
+
+يمكنك تجاهل حالات محددة من انتهاكات القواعد بإضافة تعليق `ignore` إما فوق السطر
+المخالف مباشرة، أو في نهاية السطر نفسه.
+
+على سبيل المثال، يمكن تجاهل حالات محددة من `prefer_file_naming_conventions` في
+ملف معيّن:
+
+<BlocLintIgnoreForLineSnippet />
+
+### تجاهل الملفات
+
+يمكنك تجاهل جميع حالات انتهاكات القواعد داخل ملف عبر إضافة تعليق
+`ignore_for_file` في أي مكان في الملف.
+
+على سبيل المثال، يمكن تجاهل جميع حالات `prefer_file_naming_conventions` في ملف
+معيّن:
+
+<BlocLintIgnoreForFileSnippet />

@@ -1,0 +1,68 @@
+---
+title: مروری بر لینتر
+description: معرفی لینتر bloc.
+sidebar:
+  order: 1
+---
+
+import AvoidFlutterImportsWarningSnippet from '~/components/lint/ImportFlutterWarningSnippet.mdx';
+import AvoidFlutterImportsWarningOutputSnippet from '~/components/lint/ImportFlutterWarningOutputSnippet.astro';
+import InstallBlocToolsSnippet from '~/components/lint/InstallBlocToolsSnippet.astro';
+import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.astro';
+import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
+import RunBlocLintInCurrentDirectorySnippet from '~/components/lint/RunBlocLintInCurrentDirectorySnippet.astro';
+
+لینتینگ فرایند تحلیل ایستأ کد برای شناسایی باگ‌ها و خطاهای منطقی و نگارشی است.
+
+Bloc دارای یک لینتر داخلی است که می‌توان از طریق IDE یا ابزار خط فرمان
+[`bloc command-line tools`](https://pub.dev/packages/bloc_tools) با دستور
+`bloc lint` از آن استفاده کرد.
+
+با کمک لینتر bloc می‌توانید کیفیت کد و یک‌دستی (consistency) در کدبیس خود را
+بدون اجرای هیچ‌کدام از خطوط کد بهبود دهید.
+
+برای مثال، ممکن است به‌صورت سهوی یک وابستگی فلاتر را در cubit خود وارد کرده
+باشید:
+
+<AvoidFlutterImportsWarningSnippet />
+
+در صورت پیکربندی صحیح، لینتر bloc به آن import اشاره کرده و هشدار زیر را تولید
+خواهد کرد:
+
+<AvoidFlutterImportsWarningOutputSnippet />
+
+در بخش‌های بعدی، نحوه نصب، پیکربندی و سفارشی‌سازی لینتر bloc را بررسی خواهیم کرد
+تا بتوانید از تحلیل ایستا در کد خود بهره ببرید.
+
+## شروع سریع
+
+با چند گام ساده می‌توانید استفاده از لینتر bloc را آغاز کنید.
+
+:::note
+
+برای شروع کار با bloc باید [Dart SDK](https://dart.dev/get-dart) را روی ماشین
+خود نصب داشته باشید.
+
+:::
+
+1. ابزارهای خط فرمان [bloc](https://pub.dev/packages/bloc_tools) را نصب کنید
+
+   <InstallBlocToolsSnippet />
+
+1. پکیج [bloc_lint](https://pub.dev/packages/bloc_lint) را نصب کنید
+
+   <InstallBlocLintSnippet />
+
+1. یک فایل `analysis_options.yaml` به ریشه پروژه اضافه کنید و قوانین پیشنهادی را
+   قرار دهید
+
+   <BlocLintRecommendedAnalysisOptionsSnippet />
+
+1. لینتر را اجرا کنید
+
+   <RunBlocLintInCurrentDirectorySnippet />
+
+تمام شد 🎉
+
+برای بررسی عمیق‌تر در مورد پیکربندی و سفارشی‌سازی لینتر bloc، ادامه مطلب را
+مطالعه کنید.

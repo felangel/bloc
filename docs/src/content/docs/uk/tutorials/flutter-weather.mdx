@@ -1,0 +1,837 @@
+---
+title: Погода Flutter
+description:
+  Детальний посібник зі створення додатку погоди на Flutter з використанням
+  bloc.
+sidebar:
+  order: 5
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import FlutterCreateSnippet from '~/components/tutorials/flutter-weather/FlutterCreateSnippet.astro';
+import FeatureTreeSnippet from '~/components/tutorials/flutter-weather/FeatureTreeSnippet.astro';
+import FlutterCreateApiClientSnippet from '~/components/tutorials/flutter-weather/FlutterCreateApiClientSnippet.astro';
+import OpenMeteoModelsTreeSnippet from '~/components/tutorials/flutter-weather/OpenMeteoModelsTreeSnippet.astro';
+import LocationJsonSnippet from '~/components/tutorials/flutter-weather/LocationJsonSnippet.astro';
+import LocationDartSnippet from '~/components/tutorials/flutter-weather/LocationDartSnippet.astro';
+import WeatherJsonSnippet from '~/components/tutorials/flutter-weather/WeatherJsonSnippet.astro';
+import WeatherDartSnippet from '~/components/tutorials/flutter-weather/WeatherDartSnippet.astro';
+import OpenMeteoModelsBarrelTreeSnippet from '~/components/tutorials/flutter-weather/OpenMeteoModelsBarrelTreeSnippet.astro';
+import OpenMeteoLibrarySnippet from '~/components/tutorials/flutter-weather/OpenMeteoLibrarySnippet.astro';
+import BuildRunnerBuildSnippet from '~/components/tutorials/flutter-weather/BuildRunnerBuildSnippet.astro';
+import OpenMeteoApiClientTreeSnippet from '~/components/tutorials/flutter-weather/OpenMeteoApiClientTreeSnippet.astro';
+import LocationSearchMethodSnippet from '~/components/tutorials/flutter-weather/LocationSearchMethodSnippet.astro';
+import GetWeatherMethodSnippet from '~/components/tutorials/flutter-weather/GetWeatherMethodSnippet.astro';
+import FlutterTestCoverageSnippet from '~/components/tutorials/flutter-weather/FlutterTestCoverageSnippet.astro';
+import FlutterCreateRepositorySnippet from '~/components/tutorials/flutter-weather/FlutterCreateRepositorySnippet.astro';
+import RepositoryModelsBarrelTreeSnippet from '~/components/tutorials/flutter-weather/RepositoryModelsBarrelTreeSnippet.astro';
+import WeatherRepositoryLibrarySnippet from '~/components/tutorials/flutter-weather/WeatherRepositoryLibrarySnippet.astro';
+import WeatherCubitTreeSnippet from '~/components/tutorials/flutter-weather/WeatherCubitTreeSnippet.astro';
+import WeatherBarrelDartSnippet from '~/components/tutorials/flutter-weather/WeatherBarrelDartSnippet.astro';
+
+![advanced](https://img.shields.io/badge/level-advanced-red.svg)
+
+У цьому підручнику ми створимо додаток погоди на Flutter, який демонструє
+керування кількома cubit-ами для реалізації динамічної теми, pull-to-refresh та
+багато іншого. Наш додаток погоди отримуватиме дані про погоду в реальному часі
+з публічного API OpenMeteo та демонструватиме, як розділити наш додаток на шари
+(дані, сховище, бізнес-логіка та представлення).
+
+![demo](~/assets/tutorials/flutter-weather.gif)
+
+## Вимоги до проєкту
+
+Наш додаток повинен дозволяти користувачам
+
+- Шукати місто на спеціальній сторінці пошуку
+- Бачити приємне відображення даних про погоду, отриманих від
+  [Open Meteo API](https://open-meteo.com)
+- Змінювати одиниці вимірювання (метричні чи імперські)
+
+Додатково,
+
+- Тема додатку повинна відображати погоду для обраного міста
+- Стан додатку повинен зберігатися між сесіями: тобто додаток повинен пам'ятати
+  свій стан після закриття та повторного відкриття (використовуючи
+  [HydratedBloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc))
+
+## Ключові концепції
+
+- Спостереження за змінами стану за допомогою
+  [BlocObserver](/uk/bloc-concepts#blocobserver).
+- [BlocProvider](/uk/flutter-bloc-concepts#blocprovider), віджет Flutter, який
+  надає bloc своїм дочірнім елементам.
+- [BlocBuilder](/uk/flutter-bloc-concepts#blocbuilder), віджет Flutter, який
+  обробляє побудову віджета у відповідь на нові стани.
+- Запобігання зайвим перебудовам за допомогою
+  [Equatable](/uk/faqs#коли-використовувати-equatable).
+- [RepositoryProvider](/uk/flutter-bloc-concepts#repositoryprovider), віджет
+  Flutter, який надає сховище своїм дочірнім елементам.
+- [BlocListener](/uk/flutter-bloc-concepts#bloclistener), віджет Flutter, який
+  викликає код слухача у відповідь на зміни стану в bloc.
+- [MultiBlocProvider](/uk/flutter-bloc-concepts#multiblocprovider), віджет
+  Flutter, який об'єднує кілька BlocProvider віджетів в один.
+- [BlocConsumer](/uk/flutter-bloc-concepts#blocconsumer), віджет Flutter, який
+  надає builder та listener для реагування на нові стани.
+- [HydratedBloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc)
+  для керування та збереження стану.
+
+## Налаштування
+
+Для початку створіть новий flutter проєкт
+
+<FlutterCreateSnippet />
+
+### Структура проєкту
+
+Наш додаток складатиметься з ізольованих функціональних модулів у відповідних
+каталогах. Це дозволяє масштабувати по мірі зростання кількості модулів та
+дозволяє розробникам працювати над різними модулями паралельно.
+
+Наш додаток можна розділити на чотири основні модулі: **search, settings, theme,
+weather**. Створимо ці каталоги.
+
+<FeatureTreeSnippet />
+
+### Архітектура
+
+Дотримуючись рекомендацій [архітектури bloc](/uk/architecture), наш додаток
+складатиметься з кількох шарів.
+
+У цьому підручнику ось що робитимуть ці шари:
+
+- **Дані**: отримання необроблених даних про погоду з API
+- **Сховище**: абстрагування шару даних та надання доменних моделей для
+  споживання додатком
+- **Бізнес-логіка**: керування станом кожного модуля (інформація про одиниці,
+  деталі міста, теми тощо)
+- **Представлення**: відображення інформації про погоду та збір введення від
+  користувачів (сторінка налаштувань, сторінка пошуку тощо)
+
+## Шар даних
+
+Для цього додатку ми будемо використовувати
+[Open Meteo API](https://open-meteo.com).
+
+Ми зосередимося на двох ендпоінтах:
+
+- `https://geocoding-api.open-meteo.com/v1/search?name=$city&count=1` для
+  отримання місцезнаходження за назвою міста
+- `https://api.open-meteo.com/v1/forecast?latitude=$latitude&longitude=$longitude&current_weather=true`
+  для отримання погоди за місцезнаходженням
+
+Відкрийте
+[https://geocoding-api.open-meteo.com/v1/search?name=chicago&count=1](https://geocoding-api.open-meteo.com/v1/search?name=chicago&count=1)
+у вашому браузері, щоб побачити відповідь для міста Чикаго. Ми використаємо
+`latitude` та `longitude` з відповіді для запиту до ендпоінта погоди.
+
+`latitude`/`longitude` для Чикаго — `41.85003`/`-87.65005`. Перейдіть за адресою
+[https://api.open-meteo.com/v1/forecast?latitude=43.0389&longitude=-87.90647&current_weather=true](https://api.open-meteo.com/v1/forecast?latitude=43.0389&longitude=-87.90647&current_weather=true)
+у вашому браузері, і ви побачите відповідь для погоди в Чикаго, яка містить усі
+дані, необхідні для нашого додатку.
+
+### OpenMeteo API Client
+
+OpenMeteo API Client незалежний від нашого додатку. Тому ми створимо його як
+внутрішній пакет (і навіть зможемо опублікувати його на
+[pub.dev](https://pub.dev)). Потім ми зможемо використовувати пакет, додавши
+його до `pubspec.yaml` для шару сховища, який оброблятиме запити даних для
+нашого основного додатку погоди.
+
+Створіть новий каталог на рівні проєкту під назвою `packages`. Цей каталог
+зберігатиме всі наші внутрішні пакети.
+
+У цьому каталозі виконайте вбудовану команду `flutter create` для створення
+нового пакету під назвою `open_meteo_api` для нашого API клієнта.
+
+<FlutterCreateApiClientSnippet />
+
+### Модель даних погоди
+
+Далі створимо `location.dart` та `weather.dart`, які міститимуть моделі для
+відповідей ендпоінтів API `location` та `weather`.
+
+<OpenMeteoModelsTreeSnippet />
+
+#### Модель Location
+
+Модель `location.dart` повинна зберігати дані, повернуті API місцезнаходження,
+які виглядають наступним чином:
+
+<LocationJsonSnippet />
+
+Ось файл `location.dart` в процесі розробки, який зберігає наведену вище
+відповідь:
+
+<LocationDartSnippet />
+
+#### Модель Weather
+
+Далі попрацюємо над `weather.dart`. Наша модель погоди повинна зберігати дані,
+повернуті API погоди, які виглядають наступним чином:
+
+<WeatherJsonSnippet />
+
+Ось файл `weather.dart` в процесі розробки, який зберігає наведену вище
+відповідь:
+
+<WeatherDartSnippet />
+
+### Barrel-файли
+
+Поки ми тут, створимо швидко
+[barrel-файл](https://adrianfaciu.dev/posts/barrel-files/) для очищення деяких
+наших імпортів у подальшому.
+
+Створіть barrel-файл `models.dart` та експортуйте дві моделі:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/lib/src/models/models.dart"
+	title="packages/open_meteo_api/lib/src/models/models.dart"
+/>
+
+Створімо також barrel-файл рівня пакету `open_meteo_api.dart`
+
+<OpenMeteoModelsBarrelTreeSnippet />
+
+На верхньому рівні `open_meteo_api.dart` експортуємо моделі:
+
+<OpenMeteoLibrarySnippet />
+
+### Налаштування
+
+Нам потрібно мати можливість
+[серіалізувати та десеріалізувати](https://en.wikipedia.org/wiki/Serialization)
+наші моделі для роботи з даними API. Для цього ми додамо методи `toJson` та
+`fromJson` до наших моделей.
+
+Також нам потрібен спосіб
+[здійснювати HTTP-запити](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
+для отримання даних з API. На щастя, є кілька популярних пакетів саме для цього.
+
+Ми використаємо пакети
+[json_annotation](https://pub.dev/packages/json_annotation),
+[json_serializable](https://pub.dev/packages/json_serializable) та
+[build_runner](https://pub.dev/packages/build_runner) для генерації реалізацій
+`toJson` та `fromJson` за нас.
+
+На наступному кроці ми також використаємо пакет
+[http](https://pub.dev/packages/http) для надсилання мережевих запитів до API
+погоди, щоб наш додаток міг відображати поточні дані про погоду.
+
+Додамо ці залежності до `pubspec.yaml`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/pubspec.yaml"
+	title="packages/open_meteo_api/pubspec.yaml"
+/>
+
+:::note
+
+Не забудьте виконати `flutter pub get` після додавання залежностей.
+
+:::
+
+### (Де)серіалізація
+
+Для роботи генерації коду нам потрібно анотувати наш код наступним чином:
+
+- `@JsonSerializable` для позначення класів, які можна серіалізувати
+- `@JsonKey` для надання рядкових представлень імен полів
+- `@JsonValue` для надання рядкових представлень значень полів
+- Реалізувати `JSONConverter` для перетворення об'єктних представлень у JSON
+  представлення
+
+Для кожного файлу також потрібно:
+
+- Імпортувати `json_annotation`
+- Включити згенерований код за допомогою ключового слова
+  [part](https://dart.dev/tools/pub/create-packages#organizing-a-package)
+- Включити методи `fromJson` для десеріалізації
+
+#### Модель Location
+
+Ось наш завершений файл моделі `location.dart`:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/lib/src/models/location.dart"
+	title="packages/open_meteo_api/lib/src/models/location.dart"
+/>
+
+#### Модель Weather
+
+Ось наш завершений файл моделі `weather.dart`:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/lib/src/models/weather.dart"
+	title="packages/open_meteo_api/lib/src/models/weather.dart"
+/>
+
+#### Створення файлу збірки
+
+У каталозі `open_meteo_api` створіть файл `build.yaml`. Мета цього файлу —
+обробка невідповідностей між конвенціями іменування в іменах полів
+`json_serializable`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/build.yaml"
+	title="packages/open_meteo_api/build.yaml"
+/>
+
+#### Генерація коду
+
+Використаємо `build_runner` для генерації коду.
+
+<BuildRunnerBuildSnippet />
+
+`build_runner` повинен згенерувати файли `location.g.dart` та `weather.g.dart`.
+
+### OpenMeteo API Client
+
+Створимо наш API клієнт у `open_meteo_api_client.dart` в каталозі `src`.
+Структура нашого проєкту тепер повинна виглядати так:
+
+<OpenMeteoApiClientTreeSnippet />
+
+Тепер ми можемо використовувати пакет [http](https://pub.dev/packages/http),
+який ми додали раніше до файлу `pubspec.yaml`, для здійснення HTTP-запитів до
+API погоди та використання цієї інформації в нашому додатку.
+
+Наш API клієнт надасть два методи:
+
+- `locationSearch`, який повертає `Future<Location>`
+- `getWeather`, який повертає `Future<Weather>`
+
+#### Location Search
+
+Метод `locationSearch` звертається до API місцезнаходження та генерує помилки
+`LocationRequestFailure` за потреби. Завершений метод виглядає наступним чином:
+
+<LocationSearchMethodSnippet />
+
+#### Get Weather
+
+Аналогічно, метод `getWeather` звертається до API погоди та генерує помилки
+`WeatherRequestFailure` за потреби. Завершений метод виглядає наступним чином:
+
+<GetWeatherMethodSnippet />
+
+Завершений файл виглядає так:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/lib/src/open_meteo_api_client.dart"
+	title="packages/open_meteo_api/lib/src/open_meteo_api_client.dart"
+/>
+
+#### Оновлення barrel-файлу
+
+Завершимо цей пакет, додавши наш API клієнт до barrel-файлу.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/lib/open_meteo_api.dart"
+	title="packages/open_meteo_api/lib/open_meteo_api.dart"
+/>
+
+### Unit-тести
+
+Особливо важливо писати unit-тести для шару даних, оскільки він є фундаментом
+нашого додатку. Unit-тести дадуть нам впевненість, що пакет працює як
+очікується.
+
+#### Налаштування
+
+Раніше ми додали пакет [test](https://pub.dev/packages/test) до нашого
+pubspec.yaml, що дозволяє легко писати unit-тести.
+
+Ми створимо тестовий файл для API клієнта, а також для двох моделей.
+
+#### Тести Location
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/test/location_test.dart"
+	title="packages/open_meteo_api/test/location_test.dart"
+/>
+
+#### Тести Weather
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/test/weather_test.dart"
+	title="packages/open_meteo_api/test/weather_test.dart"
+/>
+
+#### Тести API Client
+
+Далі протестуємо наш API клієнт. Ми повинні перевірити, що наш API клієнт
+коректно обробляє обидва виклики API, включаючи граничні випадки.
+
+:::note
+
+Ми не хочемо, щоб наші тести здійснювали реальні виклики API, оскільки наша мета
+— тестувати логіку API клієнта (включаючи всі граничні випадки), а не сам API.
+Для забезпечення узгодженого, контрольованого тестового середовища ми
+використаємо [mocktail](https://github.com/felangel/mocktail) (який ми додали до
+файлу pubspec.yaml раніше) для мокування `http` клієнта.
+
+:::
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/test/open_meteo_api_client_test.dart"
+	title="packages/open_meteo_api/test/open_meteo_api_client_test.dart"
+/>
+
+#### Покриття тестами
+
+Нарешті, зберемо покриття тестами, щоб переконатися, що ми покрили кожен рядок
+коду хоча б одним тестовим випадком.
+
+<FlutterTestCoverageSnippet />
+
+## Шар сховища
+
+Мета нашого шару сховища — абстрагувати шар даних та сприяти комунікації з шаром
+bloc. Роблячи це, решта нашої кодової бази залежить лише від функцій, наданих
+нашим шаром сховища, замість конкретних реалізацій постачальників даних. Це
+дозволяє нам змінювати постачальників даних без порушення будь-якого коду на
+рівні додатку. Наприклад, якщо ми вирішимо мігрувати з цього конкретного API
+погоди, ми зможемо створити новий API клієнт та замінити його без необхідності
+вносити зміни до публічного API шарів сховища або додатку.
+
+### Налаштування
+
+У каталозі packages виконайте наступну команду:
+
+<FlutterCreateRepositorySnippet />
+
+Ми використаємо ті самі пакети, що і в пакеті `open_meteo_api`, включаючи пакет
+`open_meteo_api` з попереднього кроку. Оновіть ваш `pubspec.yaml` та виконайте
+`flutter pub get`.
+
+:::note
+
+Ми використовуємо `path` для вказівки розташування `open_meteo_api`, що дозволяє
+обробляти його як зовнішній пакет з `pub.dev`.
+
+:::
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/pubspec.yaml"
+	title="packages/weather_repository/pubspec.yaml"
+/>
+
+### Моделі Weather Repository
+
+Ми створимо новий файл `weather.dart` для надання доменно-специфічної моделі
+погоди. Ця модель міститиме лише дані, релевантні для наших бізнес-потреб —
+іншими словами, вона повинна бути повністю від'єднана від API клієнта та
+необробленого формату даних. Як зазвичай, ми також створимо barrel-файл
+`models.dart`.
+
+<RepositoryModelsBarrelTreeSnippet />
+
+Цього разу наша модель погоди зберігатиме лише властивості
+`location, temperature, condition`. Ми продовжуватимемо анотувати наш код для
+серіалізації та десеріалізації.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/lib/src/models/weather.dart"
+	title="packages/weather_repository/lib/src/models/weather.dart"
+/>
+
+Оновіть barrel-файл, який ми створили раніше, щоб включити моделі.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/lib/src/models/models.dart"
+	title="packages/weather_repository/lib/src/models/models.dart"
+/>
+
+#### Створення файлу збірки
+
+Як і раніше, потрібно створити `build.yaml` з наступним вмістом:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/build.yaml"
+	title="packages/weather_repository/build.yaml"
+/>
+
+#### Генерація коду
+
+Як ми робили раніше, виконайте наступну команду для генерації реалізації
+(де)серіалізації.
+
+<BuildRunnerBuildSnippet />
+
+#### Barrel-файл
+
+Створимо також barrel-файл рівня пакету з іменем
+`packages/weather_repository/lib/weather_repository.dart` для експорту наших
+моделей:
+
+<WeatherRepositoryLibrarySnippet />
+
+### Weather Repository
+
+Основна мета `WeatherRepository` — надати інтерфейс, що абстрагує постачальника
+даних. У цьому випадку `WeatherRepository` матиме залежність від
+`WeatherApiClient` та надаватиме єдиний публічний метод
+`getWeather(String city)`.
+
+:::note
+
+Споживачі `WeatherRepository` не знають про деталі внутрішньої реалізації, такі
+як те, що здійснюються два мережеві запити до API погоди. Мета
+`WeatherRepository` — відокремити "що" від "як" — іншими словами, ми хочемо мати
+спосіб отримати погоду для даного міста, але не турбуємося про те, як або звідки
+ці дані надходять.
+
+:::
+
+#### Налаштування
+
+Створимо файл `weather_repository.dart` у каталозі `src` нашого пакету та
+попрацюємо над реалізацією сховища.
+
+Основний метод, на якому ми зосередимося — `getWeather(String city)`. Ми можемо
+реалізувати його за допомогою двох викликів до API клієнта наступним чином:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/lib/src/weather_repository.dart"
+	title="packages/weather_repository/lib/src/weather_repository.dart"
+/>
+
+#### Barrel-файл
+
+Оновіть barrel-файл, який ми створили раніше.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/lib/weather_repository.dart"
+	title="packages/weather_repository/lib/weather_repository.dart"
+/>
+
+### Unit-тести
+
+Як і з шаром даних, критично важливо тестувати шар сховища, щоб переконатися, що
+логіка доменного рівня коректна. Для тестування нашого `WeatherRepository` ми
+використаємо бібліотеку [mocktail](https://github.com/felangel/mocktail). Ми
+замокуємо базовий API клієнт для unit-тестування логіки `WeatherRepository` в
+ізольованому, контрольованому середовищі.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/test/weather_repository_test.dart"
+	title="packages/weather_repository/test/weather_repository_test.dart"
+/>
+
+## Шар бізнес-логіки
+
+У шарі бізнес-логіки ми будемо споживати доменну модель погоди з
+`WeatherRepository` та надавати модель рівня функціональності, яка буде
+показуватися користувачу через UI.
+
+:::note
+
+Це третій різний тип моделі погоди, який ми реалізуємо. В API клієнті наша
+модель погоди містила всю інформацію, повернуту API. У шарі сховища наша модель
+погоди містила лише абстраговану модель на основі нашого бізнес-випадку. У цьому
+шарі наша модель погоди міститиме релевантну інформацію, необхідну саме для
+поточного набору функціональності.
+
+:::
+
+### Налаштування
+
+Оскільки наш шар бізнес-логіки знаходиться в нашому основному додатку, нам
+потрібно відредагувати `pubspec.yaml` для всього проєкту `flutter_weather` та
+включити всі пакети, які ми використовуватимемо.
+
+- Використання [equatable](https://pub.dev/packages/equatable) дозволяє
+  порівнювати екземпляри класів стану нашого додатку за допомогою оператора
+  рівності `==`. Під капотом bloc порівнюватиме наші стани, щоб перевірити, чи
+  вони рівні, і якщо ні, ініціюватиме перебудову. Це гарантує, що наше дерево
+  віджетів перебудовуватиметься лише за потреби для підтримки швидкої та чуйної
+  продуктивності.
+- Ми можемо покращити наш інтерфейс за допомогою
+  [google_fonts](https://pub.dev/packages/google_fonts).
+- [HydratedBloc](https://pub.dev/packages/hydrated_bloc) дозволяє нам зберігати
+  стан додатку при закритті та повторному відкритті.
+- Ми включимо пакет `weather_repository`, який ми щойно створили, для отримання
+  поточних даних про погоду!
+
+Для тестування ми включимо звичайний пакет `test` разом з `mocktail` для
+мокування залежностей та [bloc_test](https://pub.dev/packages/bloc_test) для
+зручного тестування одиниць бізнес-логіки, або блоків!
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+Далі ми працюватимемо над шаром додатку в каталозі функціональності `weather`.
+
+### Модель Weather
+
+Мета нашої моделі погоди — відстежувати дані про погоду, що відображаються нашим
+додатком, а також налаштування температури (Цельсій або Фаренгейт).
+
+Створіть `flutter_weather/lib/weather/models/weather.dart`:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/models/weather.dart"
+	title="lib/weather/models/weather.dart"
+/>
+
+### Створення файлу збірки
+
+Створіть `build.yaml` для шару бізнес-логіки.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/build.yaml"
+	title="build.yaml"
+/>
+
+### Генерація коду
+
+Виконайте `build_runner` для генерації реалізацій (де)серіалізації.
+
+<BuildRunnerBuildSnippet />
+
+### Barrel-файл
+
+Експортуємо наші моделі з barrel-файлу
+(`flutter_weather/lib/weather/models/models.dart`):
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/models/models.dart"
+	title="lib/weather/models/models.dart"
+/>
+
+Потім створимо barrel-файл верхнього рівня для погоди
+(`flutter_weather/lib/weather/weather.dart`);
+
+<WeatherBarrelDartSnippet />
+
+### Weather
+
+Ми використаємо `HydratedCubit`, щоб наш додаток запам'ятовував свій стан,
+навіть після закриття та повторного відкриття.
+
+:::note
+
+`HydratedCubit` є розширенням `Cubit`, яке обробляє збереження та відновлення
+стану між сесіями.
+
+:::
+
+#### Weather State
+
+Використовуючи розширення
+[Bloc VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+або [Bloc IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc), натисніть
+правою кнопкою на каталог `weather` та створіть новий cubit під назвою
+`Weather`. Структура проєкту повинна виглядати так:
+
+<WeatherCubitTreeSnippet />
+
+Є чотири стани, в яких може перебувати наш додаток погоди:
+
+- `initial` — до завантаження будь-чого
+- `loading` — під час виклику API
+- `success` — якщо виклик API успішний
+- `failure` — якщо виклик API невдалий
+
+Enum `WeatherStatus` представлятиме наведені вище стани.
+
+Повний стан погоди повинен виглядати так:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/cubit/weather_state.dart"
+	title="lib/weather/cubit/weather_state.dart"
+/>
+
+#### Weather Cubit
+
+Тепер, коли ми визначили `WeatherState`, напишемо `WeatherCubit`, який надасть
+наступні методи:
+
+- `fetchWeather(String? city)` — використовує сховище погоди для спроби отримати
+  об'єкт погоди для даного міста
+- `refreshWeather()` — отримує новий об'єкт погоди, використовуючи сховище
+  погоди на основі поточного стану погоди
+- `toggleUnits()` — перемикає стан між Цельсієм та Фаренгейтом
+- `fromJson(Map<String, dynamic> json)`, `toJson(WeatherState state)` —
+  використовуються для збереження
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/cubit/weather_cubit.dart"
+	title="lib/weather/cubit/weather_cubit.dart"
+/>
+
+:::note
+
+Не забудьте згенерувати код (де)серіалізації через:
+
+<BuildRunnerBuildSnippet />
+:::
+
+### Unit-тести
+
+Аналогічно шарам даних та сховища, критично важливо тестувати шар бізнес-логіки
+за допомогою unit-тестів, щоб переконатися, що логіка рівня функціональності
+працює як очікується. Ми використовуватимемо
+[bloc_test](https://pub.dev/packages/bloc_test) на додаток до `mocktail` та
+`test`.
+
+Додамо пакети `test`, `bloc_test` та `mocktail` до `dev_dependencies`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+:::note
+
+Пакет [bloc_test](https://pub.dev/packages/bloc_test) дозволяє нам легко
+підготувати наші блоки для тестування, обробляти зміни стану та перевіряти
+результати послідовним чином.
+
+:::
+
+#### Тести Weather Cubit
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/test/weather/cubit/weather_cubit_test.dart"
+	title="test/weather/cubit/weather_cubit_test.dart"
+/>
+
+## Шар представлення
+
+### Weather Page
+
+Ми почнемо з `WeatherPage`, яка використовує `BlocProvider` для надання
+екземпляра `WeatherCubit` дереву віджетів.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/view/weather_page.dart"
+	title="lib/weather/view/weather_page.dart"
+/>
+
+Ви помітите, що сторінка залежить від віджетів `SettingsPage` та `SearchPage`,
+які ми створимо далі.
+
+### SettingsPage
+
+Сторінка налаштувань дозволяє користувачам оновлювати свої уподобання щодо
+одиниць температури.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/settings/view/settings_page.dart"
+	title="lib/settings/view/settings_page.dart"
+/>
+
+### SearchPage
+
+Сторінка пошуку дозволяє користувачам вводити назву бажаного міста та передає
+результат пошуку попередньому маршруту через `Navigator.of(context).pop`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/search/view/search_page.dart"
+	title="lib/search/view/search_page.dart"
+/>
+
+### Віджети погоди
+
+Додаток відображатиме різні екрани залежно від чотирьох можливих станів
+`WeatherCubit`.
+
+#### WeatherEmpty
+
+Цей екран відображатиметься, коли немає даних для показу, оскільки користувач ще
+не вибрав місто.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/widgets/weather_empty.dart"
+	title="lib/weather/widgets/weather_empty.dart"
+/>
+
+#### WeatherError
+
+Цей екран відображатиметься, якщо виникне помилка.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/widgets/weather_error.dart"
+	title="lib/weather/widgets/weather_error.dart"
+/>
+
+#### WeatherLoading
+
+Цей екран відображатиметься під час завантаження даних додатком.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/widgets/weather_loading.dart"
+	title="lib/weather/widgets/weather_loading.dart"
+/>
+
+#### WeatherPopulated
+
+Цей екран відображатиметься після того, як користувач обрав місто та ми отримали
+дані.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/widgets/weather_populated.dart"
+	title="lib/weather/widgets/weather_populated.dart"
+/>
+
+### Barrel-файл
+
+Додамо ці стани до barrel-файлу для очищення наших імпортів.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/widgets/widgets.dart"
+	title="lib/weather/widgets/widgets.dart"
+/>
+
+### Точка входу
+
+Наш `main.dart` файл повинен ініціалізувати `WeatherApp` та `BlocObserver` (для
+цілей налагодження), а також налаштувати `HydratedStorage` для збереження стану
+між сесіями.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/main.dart"
+	title="lib/main.dart"
+/>
+
+Наш віджет `app.dart` обробляє побудову представлення `WeatherPage`, яке ми
+створили раніше, та використовує `BlocProvider` для впровадження нашого
+`WeatherCubit`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/app.dart"
+	title="lib/app.dart"
+/>
+
+### Widget-тести
+
+Бібліотека [`bloc_test`](https://pub.dev/packages/bloc_test) також надає
+`MockBlocs` та `MockCubits`, які спрощують тестування UI. Ми можемо мокувати
+стани різних cubit-ів та переконатися, що UI реагує коректно.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/test/weather/view/weather_page_test.dart"
+	title="test/weather/view/weather_page_test.dart"
+/>
+
+:::note
+
+Ми використовуємо `MockWeatherCubit` разом з API `when` з `mocktail` для
+підставлення стану cubit у кожному тестовому випадку. Це дозволяє нам симулювати
+всі стани та перевіряти, що UI працює коректно за будь-яких обставин.
+
+:::
+
+## Підсумок
+
+Ось і все, ми завершили підручник!
+
+Ми можемо запустити фінальний додаток за допомогою команди `flutter run`.
+
+Повний вихідний код цього прикладу, включаючи unit та widget тести, можна знайти
+[тут](https://github.com/felangel/bloc/tree/master/examples/flutter_weather).

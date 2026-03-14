@@ -1,0 +1,136 @@
+---
+title: AngularDart Counter
+description:
+  دليل متعمق لبناء تطبيق عدّاد (Counter) باستخدام AngularDart ومكتبة Bloc.
+sidebar:
+  order: 8
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import ActivateStagehandSnippet from '~/components/tutorials/ngdart-counter/ActivateStagehandSnippet.astro';
+import StagehandSnippet from '~/components/tutorials/ngdart-counter/StagehandSnippet.astro';
+import InstallDependenciesSnippet from '~/components/tutorials/ngdart-counter/InstallDependenciesSnippet.astro';
+
+![beginner](https://img.shields.io/badge/level-beginner-green.svg)
+
+في هذا الدليل، سنبني تطبيق عدّاد (Counter) باستخدام AngularDart ومكتبة Bloc.
+
+![demo](~/assets/tutorials/ngdart-counter.gif)
+
+## الإعداد (Setup)
+
+سنبدأ بإنشاء مشروع AngularDart جديد باستخدام
+[`stagehand`](https://github.com/dart-lang/stagehand).
+
+إذا لم يكن `stagehand` مثبتًا لديك، فعِّله عبر:
+
+<ActivateStagehandSnippet />
+
+ثم أنشئ مشروعًا جديدًا عبر:
+
+<StagehandSnippet />
+
+بعد ذلك، استبدل محتوى ملف `pubspec.yaml` بما يلي:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+ثم ثبّت جميع dependencies:
+
+<InstallDependenciesSnippet />
+
+سيحتوي تطبيق العداد على زرين لزيادة/إنقاص قيمة العداد، وعنصر لعرض القيمة
+الحالية. لنبدأ بتصميم `CounterEvents`.
+
+## Counter Bloc
+
+بما أن حالة العداد يمكن تمثيلها بعدد صحيح (`integer`)، فلا حاجة لإنشاء class
+مخصصة، ويمكننا وضع events وBloc في نفس المكان.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/src/counter_page/counter_bloc.dart"
+	title="lib/src/counter_page/counter_bloc.dart"
+/>
+
+:::note
+
+من تعريف class فقط، نعرف أن `CounterBloc` يستقبل `CounterEvents` كمدخلات، ويُنتج
+أعدادًا صحيحة (`integers`).
+
+:::
+
+## تطبيق العداد (Counter App)
+
+بعد اكتمال تنفيذ `CounterBloc`، يمكننا البدء في إنشاء مكوّن تطبيق AngularDart
+(`App Component`).
+
+يجب أن يكون `app.component.dart` كالتالي:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/app_component.dart"
+	title="lib/app_component.dart"
+/>
+
+ويجب أن يكون `app.component.html` كالتالي:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/app_component.html"
+	title="lib/app_component.html"
+/>
+
+## صفحة العداد (Counter Page)
+
+أخيرًا، يتبقى بناء مكوّن صفحة العداد (`Counter Page Component`).
+
+يجب أن يكون `counter_page_component.dart` كالتالي:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/src/counter_page/counter_page_component.dart"
+	title="lib/src/counter_page/counter_page_component.dart"
+/>
+
+:::note
+
+يمكن الوصول إلى نسخة `CounterBloc` عبر نظام حقن الاعتماديات
+(`dependency injection system`) في AngularDart. وبما أننا سجلناه كـ `Provider`،
+يستطيع AngularDart إجراء `resolve` لـ `CounterBloc` بشكل صحيح.
+
+:::
+
+:::note
+
+نغلق `CounterBloc` داخل `ngOnDestroy`.
+
+:::
+
+:::note
+
+نستورد `BlocPipe` حتى نتمكن من استخدامه في القالب (`template`).
+
+:::
+
+أخيرًا، يجب أن يكون `counter_page_component.html` كالتالي:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/src/counter_page/counter_page_component.html"
+	title="lib/src/counter_page/counter_page_component.html"
+/>
+
+:::note
+
+نستخدم `BlocPipe` لعرض حالة `CounterBloc` مع كل تحديث.
+
+:::
+
+هذا كل شيء. قمنا بفصل طبقة العرض (`presentation layer`) عن طبقة منطق الأعمال
+(`business logic layer`). لا يعرف `CounterPageComponent` ماذا يحدث عند ضغط
+المستخدم على الزر؛ هو فقط يضيف حدثًا لإخطار `CounterBloc`. وبالمثل، لا يعرف
+`CounterBloc` تفاصيل العرض الخاصة بالحالة (قيمة العداد)؛ بل يحوّل
+`CounterEvents` إلى أعداد صحيحة.
+
+يمكن تشغيل التطبيق باستخدام `webdev serve` ثم عرضه محليًا.
+
+يمكنك العثور على المصدر الكامل لهذا المثال
+[هنا](https://github.com/felangel/bloc/tree/master/examples/angular_counter).

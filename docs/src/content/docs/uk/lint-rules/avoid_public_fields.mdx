@@ -1,0 +1,42 @@
+---
+title: Уникайте публічних полів
+description: Правило avoid_public_fields.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/avoid_public_fields/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/avoid_public_fields/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+	<Badge text="recommended" variant="success" />
+</div>
+
+Уникайте надання публічних полів в екземплярах `Bloc` та `Cubit`.
+
+## Обґрунтування
+
+Компоненти бізнес-логіки підтримують власний `state` та видають зміни стану
+через API `emit`. У результаті весь публічно доступний стан повинен бути наданий
+через об'єкт `state`.
+
+## Приклади
+
+**НЕ НАДАВАЙТЕ** публічні поля в екземплярах bloc та cubit.
+
+**ПОГАНО**:
+
+<BadSnippet />
+
+**ДОБРЕ**:
+
+<GoodSnippet />
+
+## Увімкнення
+
+Щоб увімкнути правило `avoid_public_fields`, додайте його до
+`analysis_options.yaml` у розділі `bloc` > `rules`:
+
+<EnableRuleSnippet name="avoid_public_fields" />

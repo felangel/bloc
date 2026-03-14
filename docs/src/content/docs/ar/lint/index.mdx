@@ -1,0 +1,66 @@
+---
+title: نظرة عامة على أداة التدقيق (Linter Overview)
+description: مقدمة إلى أداة التدقيق الخاصة بـ bloc.
+sidebar:
+  order: 1
+---
+
+import AvoidFlutterImportsWarningSnippet from '~/components/lint/ImportFlutterWarningSnippet.mdx';
+import AvoidFlutterImportsWarningOutputSnippet from '~/components/lint/ImportFlutterWarningOutputSnippet.astro';
+import InstallBlocToolsSnippet from '~/components/lint/InstallBlocToolsSnippet.astro';
+import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.astro';
+import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
+import RunBlocLintInCurrentDirectorySnippet from '~/components/lint/RunBlocLintInCurrentDirectorySnippet.astro';
+
+التدقيق (Linting) هو عملية تحليل ساكن للكود لاكتشاف الأخطاء المحتملة، إلى جانب
+المشكلات البرمجية ومشكلات الأسلوب.
+
+توفّر مكتبة Bloc أداة تدقيق مدمجة يمكن استخدامها عبر بيئة التطوير (IDE)، أو من
+خلال [`أدوات سطر أوامر bloc`](https://pub.dev/packages/bloc_tools) باستخدام
+الأمر `bloc lint`.
+
+بمساعدة أداة التدقيق في bloc، يمكنك رفع جودة قاعدة الأكواد البرمجية وفرض الاتساق
+دون تنفيذ أي سطر من الكود.
+
+على سبيل المثال، قد تستورد بالخطأ اعتمادًا خاصًا بـ Flutter داخل الـ cubit:
+
+<AvoidFlutterImportsWarningSnippet />
+
+إذا كانت الأداة مُعدّة بشكل صحيح، فستشير إلى هذا الاستيراد وتُظهر التحذير
+التالي:
+
+<AvoidFlutterImportsWarningOutputSnippet />
+
+في الأقسام التالية، سنشرح كيفية تثبيت أداة التدقيق في bloc وإعدادها وتخصيصها،
+حتى تستفيد من التحليل الساكن في مشروعك.
+
+## البدء السريع (Quick Start)
+
+ابدأ باستخدام أداة التدقيق في bloc عبر خطوات سريعة وبسيطة.
+
+:::note
+
+لبدء استخدام bloc، يجب أن تكون [Dart SDK](https://dart.dev/get-dart) مثبتة على
+جهازك.
+
+:::
+
+1.  ثبّت [أدوات سطر أوامر bloc](https://pub.dev/packages/bloc_tools)
+
+    <InstallBlocToolsSnippet />
+
+2.  ثبّت حزمة [bloc_lint](https://pub.dev/packages/bloc_lint)
+
+    <InstallBlocLintSnippet />
+
+3.  أضف ملف `analysis_options.yaml` إلى جذر مشروعك مع القواعد الموصى بها
+
+    <BlocLintRecommendedAnalysisOptionsSnippet />
+
+4.  شغّل أداة التدقيق
+
+    <RunBlocLintInCurrentDirectorySnippet />
+
+وهذا كل ما تحتاج إليه 🎉
+
+تابع القراءة للحصول على شرح أعمق لإعداد أداة التدقيق في bloc وتخصيصها.

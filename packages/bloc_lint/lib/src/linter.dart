@@ -5,6 +5,7 @@ import 'dart:io';
 // ignore: implementation_imports
 import 'package:_fe_analyzer_shared/src/parser/experimental_features.dart'
     show DefaultExperimentalFeatures;
+
 // Use the parser from the shared frontend.
 // ignore: implementation_imports
 import 'package:_fe_analyzer_shared/src/parser/parser.dart' show Parser;

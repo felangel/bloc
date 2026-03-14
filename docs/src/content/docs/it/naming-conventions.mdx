@@ -1,0 +1,101 @@
+---
+title: Convenzioni di Nomenclatura
+description:
+  Panoramica delle convenzioni di nomenclatura raccomandate quando si usa bloc.
+---
+
+import EventExamplesGood1 from '~/components/naming-conventions/EventExamplesGood1Snippet.astro';
+import EventExamplesBad1 from '~/components/naming-conventions/EventExamplesBad1Snippet.astro';
+import StateExamplesGood1Snippet from '~/components/naming-conventions/StateExamplesGood1Snippet.astro';
+import SingleStateExamplesGood1Snippet from '~/components/naming-conventions/SingleStateExamplesGood1Snippet.astro';
+import StateExamplesBad1Snippet from '~/components/naming-conventions/StateExamplesBad1Snippet.astro';
+
+Le seguenti convenzioni di nomenclatura sono semplicemente raccomandazioni e
+sono completamente opzionali. Sentiti libero di usare qualsiasi convenzione di
+nomenclatura preferisci. Potresti notare che alcuni esempi o parti della
+documentazione non seguono le convenzioni di nomenclatura, principalmente per
+ragioni di semplicità e brevità. Tuttavia, queste convenzioni sono caldamente
+raccomandate per progetti di grandi dimensioni che coinvolgono più sviluppatori.
+
+## Convenzioni per gli Eventi
+
+Gli eventi dovrebbero essere nominati al **tempo passato** perché gli eventi
+sono cose che sono già accadute dalla prospettiva del bloc.
+
+### Anatomia
+
+`BlocSubject` + `Sostantivo (opzionale)` + `Verbo (evento)`
+
+Gli eventi di caricamento iniziale dovrebbero seguire la convenzione:
+`BlocSubject` + `Started`
+
+:::note
+
+La classe evento base dovrebbe essere nominata: `BlocSubject` + `Event`.
+
+:::
+
+### Esempi
+
+✅ **Buono**
+
+<EventExamplesGood1 />
+
+❌ **Errato**
+
+<EventExamplesBad1 />
+
+## Convenzioni per gli Stati
+
+Gli stati dovrebbero essere sostantivi perché uno stato è solo un'istantanea in
+un punto particolare nel tempo. Ci sono due modi comuni per rappresentare lo
+stato: usando sottoclassi o usando una singola classe.
+
+### Anatomia
+
+#### Sottoclassi
+
+`BlocSubject` + `Verbo (azione)` + `State`
+
+Quando si rappresenta lo stato come più sottoclassi `State` dovrebbe essere uno
+dei seguenti:
+
+`Initial` | `Success` | `Failure` | `InProgress`
+
+:::note
+
+Gli stati iniziali dovrebbero seguire la convenzione: `BlocSubject` + `Initial`.
+
+:::
+
+#### Classe Singola
+
+`BlocSubject` + `State`
+
+Quando si rappresenta lo stato come una singola classe base un enum chiamato
+`BlocSubject` + `Status` dovrebbe essere usato per rappresentare la condizione
+dello stato:
+
+`initial` | `success` | `failure` | `loading`.
+
+:::note
+
+La classe stato base dovrebbe sempre essere nominata: `BlocSubject` + `State`.
+
+:::
+
+### Esempi
+
+✅ **Buono**
+
+##### Sottoclassi
+
+<StateExamplesGood1Snippet />
+
+##### Classe Singola
+
+<SingleStateExamplesGood1Snippet />
+
+❌ **Errato**
+
+<StateExamplesBad1Snippet />

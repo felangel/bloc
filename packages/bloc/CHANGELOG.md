@@ -1,3 +1,8 @@
+# 9.2.0
+
+- feat: add `MultiBlocObserver` ([#4714](https://github.com/felangel/bloc/pull/4714))
+- docs: minor `README.md` improvements ([#4657](https://github.com/felangel/bloc/pull/4657))
+
 # 9.1.0
 
 - docs: add `onDone` to `README` and `example` ([#4641](https://github.com/felangel/bloc/pull/4641))

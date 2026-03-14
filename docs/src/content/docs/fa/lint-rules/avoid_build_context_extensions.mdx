@@ -1,0 +1,56 @@
+---
+title: از اکستنشن‌های BuildContext اجتناب کنید
+description: قانون avoid_build_context_extensions.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/avoid_build_context_extensions/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/avoid_build_context_extensions/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+</div>
+
+از استفاده از اکستنشن‌های `BuildContext` برای دسترسی به نمونه‌های `Bloc` یا
+`Cubit` خودداری کنید.
+
+:::note
+
+این قانون lint در نسخهٔ `0.3.0` از
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint) معرفی شده است.
+
+:::
+
+## دلیل
+
+برای یکپارچگی و برای صراحت بیشتر، به‌جای استفاده از اکستنشن‌های `BuildContext`
+مستقیم از روش‌های زیرین استفاده کنید. این رویکرد برای تست نیز مفید است، زیرا
+امکان موک کردن یک متد اکستنشن وجود ندارد.
+
+| اکستنشن          | روش صریح                                                            |
+| ---------------- | ------------------------------------------------------------------- |
+| `context.read`   | `BlocProvider.of<Bloc>(context, listen: false)`                     |
+| `context.watch`  | `BlocBuilder<Bloc, State>(...)` یا `BlocProvider.of<Bloc>(context)` |
+| `context.select` | `BlocSelector<Bloc, State>(...)`                                    |
+
+## مثال‌ها
+
+از استفاده از اکستنشن‌های `BuildContext` برای تعامل با نمونه‌های `Bloc` یا
+`Cubit` خودداری کنید.
+
+**بد**:
+
+<BadSnippet />
+
+**خوب**:
+
+<GoodSnippet />
+
+## فعال‌سازی
+
+برای فعال کردن قانون `avoid_build_context_extensions`، آن را به فایل
+`analysis_options.yaml` خود تحت `bloc` > `rules` اضافه کنید:
+
+<EnableRuleSnippet name="avoid_build_context_extensions" />

@@ -1,0 +1,55 @@
+---
+title: تجنب امتدادات BuildContext (Avoid BuildContext Extensions)
+description: قاعدة `avoid_build_context_extensions`.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/avoid_build_context_extensions/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/avoid_build_context_extensions/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+</div>
+
+تجنب استخدام امتدادات `BuildContext` للوصول إلى instances من `Bloc` أو `Cubit`.
+
+:::note
+
+تم تقديم قاعدة التدقيق (lint rule) هذه في الإصدار `0.3.0` من
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint).
+
+:::
+
+## المبرر (Rationale)
+
+لتحقيق الاتساق والوضوح، يفضَّل استخدام الطرق الأساسية (methods) بشكل مباشر بدلًا
+من امتدادات `BuildContext`. وهذا مفيد أيضًا في الاختبارات، لأنه **لا يمكن**
+إنشاء محاكاة (`mock`) لـ `extension method`.
+
+| الامتداد (extension) | الطريقة الصريحة (explicit method)                                   |
+| -------------------- | ------------------------------------------------------------------- |
+| `context.read`       | `BlocProvider.of<Bloc>(context, listen: false)`                     |
+| `context.watch`      | `BlocBuilder<Bloc, State>(...)` أو `BlocProvider.of<Bloc>(context)` |
+| `context.select`     | `BlocSelector<Bloc, State>(...)`                                    |
+
+## أمثلة (Examples)
+
+**تجنب** استخدام امتدادات `BuildContext` للتعامل مع نسخ (instances) من `Bloc` أو
+`Cubit`.
+
+**مثال سيئ (BAD)**:
+
+<BadSnippet />
+
+**مثال جيد (GOOD)**:
+
+<GoodSnippet />
+
+## التفعيل (Enable)
+
+لتفعيل قاعدة `avoid_build_context_extensions`، أضفها إلى `analysis_options.yaml`
+ضمن `bloc` > `rules`:
+
+<EnableRuleSnippet name="avoid_build_context_extensions" />

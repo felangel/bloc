@@ -39,7 +39,7 @@ jobs:
       - name: 📚 Git Checkout
         uses: actions/checkout@v6
 
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@v4
         name: Angular Dart Package Detection
         id: needs_angular_dart_example_checks
         with:
@@ -55,7 +55,7 @@ jobs:
               - ./.github/actions/dart_package/action.yaml
               - examples/github_search/angular_github_search/**
 
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@v4
         name: Bloc Tools E2E Detection
         id: needs_bloc_tools_e2e_checks
         with:
@@ -64,7 +64,7 @@ jobs:
               - ./.github/workflows/main.yaml
               - packages/bloc_tools/**
 
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@v4
         name: Dart Package Detection
         id: needs_dart_package_checks
         with:
@@ -100,7 +100,7 @@ jobs:
               - ./.github/actions/dart_package/action.yaml
               - packages/bloc/**
 
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@v4
         name: Bloc Tools Compile Detection
         id: needs_bloc_tools_compile_checks
         with:
@@ -110,7 +110,7 @@ jobs:
               - ./.github/workflows/main.yaml
               - packages/bloc_tools/**
 
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@v4
         name: Flutter Package Detection
         id: needs_flutter_package_checks
         with:
@@ -131,7 +131,7 @@ jobs:
               - ./.github/actions/flutter_package/action.yaml
               - packages/hydrated_bloc/**
 
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@v4
         name: Example Detection
         id: needs_flutter_example_checks
         with:
@@ -212,7 +212,7 @@ jobs:
               - ./.github/actions/flutter_package/action.yaml
               - examples/github_search/flutter_github_search/**
 
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@v4
         name: Docs Detection
         id: needs_docs_checks
         with:
@@ -291,7 +291,7 @@ jobs:
           [
             { "runs-on": "ubuntu-latest", "os": "linux", "arch": "x64" },
             { "runs-on": "ubuntu-latest", "os": "linux", "arch": "arm64" },
-            { "runs-on": "macos-13", "os": "macos", "arch": "x64" },
+            { "runs-on": "macos-15-intel", "os": "macos", "arch": "x64" },
             { "runs-on": "macos-latest", "os": "macos", "arch": "arm64" },
             { "runs-on": "windows-latest", "os": "windows", "arch": "x64" },
           ]
@@ -383,6 +383,7 @@ jobs:
           analyze_directories: lib
           collect_coverage: false
           collect_score: false
+          flutter_channel: master
           working_directory: examples/${{ matrix.example }}
 
   docs_checks:

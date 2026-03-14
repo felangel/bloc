@@ -12,11 +12,11 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.5",
-    "@astrojs/starlight": "^0.36.2",
+    "@astrojs/check": "^0.9.6",
+    "@astrojs/starlight": "^0.37.6",
     "@astrojs/starlight-tailwind": "^4.0.2",
     "@fontsource-variable/figtree": "^5.2.6",
-    "astro": "^5.15.9",
+    "astro": "^5.17.1",
     "sharp": "^0.34.1",
     "tailwindcss": "^4.1.4",
     "typescript": "^5.7.3"

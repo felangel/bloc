@@ -1,0 +1,63 @@
+---
+title: نصب لینتر
+description: نصب لینتر bloc.
+sidebar:
+  order: 2
+---
+
+import { CardGrid } from '@astrojs/starlight/components';
+import Card from '~/components/landing/Card.astro';
+import InstallBlocToolsSnippet from '~/components/lint/InstallBlocToolsSnippet.astro';
+import BlocToolsLintHelpOutputSnippet from '~/components/lint/BlocToolsLintHelpOutputSnippet.astro';
+import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.astro';
+import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
+import BlocLintMultipleRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintMultipleRecommendedAnalysisOptionsSnippet.astro';
+
+## ابزارهای خط فرمان
+
+برای استفاده از لینتر از خط فرمان، پکیج
+[`package:bloc_tools`](https://pub.dev/packages/bloc_tools) را با دستور زیر نصب
+کنید:
+
+<InstallBlocToolsSnippet />
+
+پس از نصب ابزارهای خط فرمان bloc، می‌توانید لینتر bloc را با دستور `bloc lint`
+اجرا کنید:
+
+<BlocToolsLintHelpOutputSnippet />
+
+## مجموعه قوانین پیشنهادی
+
+برای نصب مجموعه قوانین لینت پیشنهادی، پکیج
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint) را به‌عنوان یک وابستگی
+dev با دستور زیر نصب کنید:
+
+<InstallBlocLintSnippet />
+
+سپس یک فایل `analysis_options.yaml` در ریشهٔ پروژه اضافه کنید و مجموعه قوانین
+پیشنهادی را در آن قرار دهید:
+
+<BlocLintRecommendedAnalysisOptionsSnippet />
+
+در صورت نیاز می‌توانید چند مجموعه قانون را با تعریف آن‌ها به‌صورت یک لیست اضافه
+کنید:
+
+<BlocLintMultipleRecommendedAnalysisOptionsSnippet />
+
+## ادغام با IDE
+
+IDEهای زیر به‌صورت رسمی از لینتر bloc و language server آن پشتیبانی می‌کنند تا
+تشخیص‌های آنی (diagnostics) را مستقیماً درون محیط توسعه‌تان نمایش دهند.
+
+<CardGrid>
+	<Card title="VSCode" icon="vscode">
+		پشتیبانی از [Bloc VSCode
+		Extension](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+		از نسخهٔ v6.8.0 در دسترس است.
+	</Card>
+	<Card title="IntelliJ" icon="jetbrains">
+		پشتیبانی از [Bloc IntelliJ
+		Plugin](https://plugins.jetbrains.com/plugin/12129-bloc) از نسخهٔ v4.1.0 در
+		دسترس است.
+	</Card>
+</CardGrid>

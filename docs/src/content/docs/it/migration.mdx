@@ -1,0 +1,1922 @@
+---
+title: Guida alla Migrazione
+description: Migrare all'ultima versione stabile di Bloc.
+---
+
+import { Code, Tabs, TabItem } from '@astrojs/starlight/components';
+
+:::tip
+
+Fai riferimento al
+[log delle release](https://github.com/felangel/bloc/releases) per maggiori
+informazioni riguardo a cosa è cambiato in ogni release.
+
+:::
+
+## v10.0.0
+
+### `package:bloc_test`
+
+#### ❗✨ Disaccoppiare `blocTest` da `BlocBase`
+
+:::note[Cosa è Cambiato?]
+
+In bloc_test v10.0.0, l'API `blocTest` non è più strettamente accoppiata a
+`BlocBase`.
+
+:::
+
+##### Motivazione
+
+`blocTest` dovrebbe usare le interfacce core di bloc quando possibile per
+aumentare flessibilità e riutilizzabilità. Precedentemente questo non era
+possibile perché `BlocBase` implementava `StateStreamableSource` che non era
+sufficiente per `blocTest` a causa della dipendenza interna sull'API `emit`.
+
+### `package:hydrated_bloc`
+
+#### ❗✨ Supporto WebAssembly
+
+:::note[Cosa è Cambiato?]
+
+In hydrated_bloc v10.0.0, è stato aggiunto il supporto per compilare a
+WebAssembly (wasm).
+
+:::
+
+##### Motivazione
+
+Precedentemente non era possibile compilare app a wasm quando si usava
+`hydrated_bloc`. In v10.0.0, il pacchetto è stato modificato per permettere la
+compilazione a wasm.
+
+**v9.x.x**
+
+```dart
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorage.webStorageDirectory
+        : await getTemporaryDirectory(),
+  );
+  runApp(App());
+}
+```
+
+**v10.x.x**
+
+```dart
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorageDirectory.web
+        : HydratedStorageDirectory((await getTemporaryDirectory()).path),
+  );
+  runApp(const App());
+}
+```
+
+## v9.0.0
+
+### `package:bloc`
+
+#### ❗🧹 Rimuovere API Deprecate
+
+:::note[Cosa è Cambiato?]
+
+In bloc v9.0.0, tutte le API precedentemente deprecate sono state rimosse.
+
+:::
+
+##### Riepilogo
+
+- `BlocOverrides` rimosso a favore di `Bloc.observer` e `Bloc.transformer`.
+
+#### ❗✨ Introdurre nuova Interfaccia `EmittableStateStreamableSource`
+
+:::note[Cosa è Cambiato?]
+
+In bloc v9.0.0, è stata introdotta una nuova interfaccia core
+`EmittableStateStreamableSource`.
+
+:::
+
+##### Motivazione
+
+`package:bloc_test` era precedentemente strettamente accoppiato a `BlocBase`.
+L'interfaccia `EmittableStateStreamableSource` è stata introdotta per permettere
+a `blocTest` di essere disaccoppiato dall'implementazione concreta di
+`BlocBase`.
+
+### `package:hydrated_bloc`
+
+#### ✨ Reintrodurre API `HydratedBloc.storage`
+
+:::note[Cosa è Cambiato?]
+
+In hydrated_bloc v9.0.0, `HydratedBlocOverrides` è stato rimosso a favore
+dell'API `HydratedBloc.storage`.
+
+:::
+
+##### Motivazione
+
+Fai riferimento a
+[Motivazione per reintrodurre gli override di Bloc.observer e Bloc.transformer](/it/migration#-reintrodurre-api-blocobserver-e-bloctransformer).
+
+**v8.x.x**
+
+```dart
+Future<void> main() async {
+  final storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorage.webStorageDirectory
+        : await getTemporaryDirectory(),
+  );
+  HydratedBlocOverrides.runZoned(
+    () => runApp(App()),
+    storage: storage,
+  );
+}
+```
+
+**v9.0.0**
+
+```dart
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorage.webStorageDirectory
+        : await getTemporaryDirectory(),
+  );
+  runApp(App());
+}
+```
+
+## v8.1.0
+
+### `package:bloc`
+
+#### ✨ Reintrodurre API `Bloc.observer` e `Bloc.transformer`
+
+:::note[Cosa è Cambiato?]
+
+In bloc v8.1.0, `BlocOverrides` è stato deprecato a favore delle API
+`Bloc.observer` e `Bloc.transformer`.
+
+:::
+
+##### Motivazione
+
+L'API `BlocOverrides` è stata introdotta in v8.0.0 nel tentativo di supportare
+lo scoping di configurazioni specifiche del bloc come `BlocObserver`,
+`EventTransformer`, e `HydratedStorage`. Nelle applicazioni Dart pure, i
+cambiamenti hanno funzionato bene; tuttavia, nelle applicazioni Flutter la nuova
+API ha causato più problemi di quanti ne risolvesse.
+
+L'API `BlocOverrides` è stata ispirata da API simili in Flutter/Dart:
+
+- [HttpOverrides](https://api.flutter.dev/flutter/dart-io/HttpOverrides-class.html);
+- [IOOverrides](https://api.flutter.dev/flutter/dart-io/IOOverrides-class.html).
+
+**Problemi**
+
+Anche se non era il motivo principale per questi cambiamenti, l'API
+`BlocOverrides` ha introdotto complessità aggiuntiva per gli sviluppatori. Oltre
+ad aumentare la quantità di annidamento e righe di codice necessarie per
+ottenere lo stesso effetto, l'API `BlocOverrides` richiedeva agli sviluppatori
+di avere una solida comprensione delle
+[Zone](https://api.dart.dev/stable/2.17.6/dart-async/Zone-class.html) in Dart.
+Le `Zone` non sono un concetto adatto ai principianti e la non comprensione di
+come funzionano le Zone potrebbe portare all'introduzione di bug (come observer,
+trasformatori e istanze di storage non inizializzati).
+
+Ad esempio, molti sviluppatori avrebbero qualcosa del tipo:
+
+```dart
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  BlocOverrides.runZoned(...);
+}
+```
+
+Il codice sopra, anche se sembra innocuo, può effettivamente portare a molti bug
+difficili da tracciare. Qualunque sia la zona da cui viene inizialmente chiamato
+`WidgetsFlutterBinding.ensureInitialized`, sarà quella in cui verranno gestiti
+gli eventi gestuali (ad esempio callback `onTap`, `onPressed`) grazie a
+`GestureBinding.initInstances`. Questo è solo uno dei molti problemi causati
+dall'uso di `zoneValues`.
+
+Inoltre, Flutter fa molte cose dietro le quinte che coinvolgono
+fork/manipolazione di Zone (specialmente quando si eseguono test) che possono
+portare a comportamenti inaspettati (e in molti casi comportamenti che sono
+fuori dal controllo dello sviluppatore -- vedi "issue" sotto).
+
+A causa dell'uso di
+[runZoned](https://api.flutter.dev/flutter/dart-async/runZoned.html), la
+transizione all'API `BlocOverrides` ha portato alla scoperta di diversi
+bug/limitazioni in Flutter (specificamente intorno ai Test Widget e di
+Integrazione):
+
+- https://github.com/flutter/flutter/issues/96939
+- https://github.com/flutter/flutter/issues/94123
+- https://github.com/flutter/flutter/issues/93676
+
+che hanno colpito molti sviluppatori che usavano la libreria bloc:
+
+- https://github.com/felangel/bloc/issues/3394
+- https://github.com/felangel/bloc/issues/3350
+- https://github.com/felangel/bloc/issues/3319
+
+**v8.0.x**
+
+```dart
+void main() {
+  BlocOverrides.runZoned(
+    () {
+      // ...
+    },
+    blocObserver: CustomBlocObserver(),
+    eventTransformer: customEventTransformer(),
+  );
+}
+```
+
+**v8.1.0**
+
+```dart
+void main() {
+  Bloc.observer = CustomBlocObserver();
+  Bloc.transformer = customEventTransformer();
+
+  // ...
+}
+```
+
+## v8.0.0
+
+### `package:bloc`
+
+#### ❗✨ Introdurre nuova API `BlocOverrides`
+
+:::note[Cosa è Cambiato?]
+
+In bloc v8.0.0, `Bloc.observer` e `Bloc.transformer` sono stati rimossi a favore
+dell'API `BlocOverrides`.
+
+:::
+
+##### Motivazione
+
+L'API precedente usata per sovrascrivere il `BlocObserver` di default e
+`EventTransformer` si basava su un singleton globale sia per `BlocObserver` che
+per `EventTransformer`.
+
+Di conseguenza, non era possibile:
+
+- Avere più implementazioni di `BlocObserver` o `EventTransformer` con ambito su
+  parti diverse dell'applicazione;
+- Limitare l'ambito delle sostituzioni di `BlocObserver` o `EventTransformer` a
+  un pacchetto
+  - Se un pacchetto dipendesse da `package:bloc` e registrasse il proprio
+    `BlocObserver`, qualsiasi consumatore del pacchetto dovrebbe sovrascrivere
+    il `BlocObserver` del pacchetto o segnalarlo al `BlocObserver` del
+    pacchetto.
+
+Era anche più difficile testare a causa dello stato globale condiviso tra test.
+
+Bloc v8.0.0 introduce una classe `BlocOverrides` che permette agli sviluppatori
+di sovrascrivere `BlocObserver` e/o `EventTransformer` per una specifica `Zone`
+piuttosto che affidarsi a un singleton globale mutabile.
+
+**v7.x.x**
+
+```dart
+void main() {
+  Bloc.observer = CustomBlocObserver();
+  Bloc.transformer = customEventTransformer();
+
+  // ...
+}
+```
+
+**v8.0.0**
+
+```dart
+void main() {
+  BlocOverrides.runZoned(
+    () {
+      // ...
+    },
+    blocObserver: CustomBlocObserver(),
+    eventTransformer: customEventTransformer(),
+  );
+}
+```
+
+Le istanze `Bloc` useranno il `BlocObserver` e/o `EventTransformer` per la
+`Zone` corrente tramite `BlocOverrides.current`. Se non ci sono `BlocOverrides`
+per la zona, useranno i default interni esistenti (nessun cambiamento nel
+comportamento/funzionalità).
+
+Questo permette a ogni `Zone` di funzionare indipendentemente con i propri
+`BlocOverrides`.
+
+```dart
+BlocOverrides.runZoned(
+  () {
+    // BlocObserverA e eventTransformerA
+    final overrides = BlocOverrides.current;
+
+    // I Bloc in questa zona segnalano a BlocObserverA
+    // e usano eventTransformerA come trasformatore di default.
+    // ...
+
+    // Più tardi...
+    BlocOverrides.runZoned(
+      () {
+        // BlocObserverB e eventTransformerB
+        final overrides = BlocOverrides.current;
+
+        // I Bloc in questa zona segnalano a BlocObserverB
+        // e usano eventTransformerB come trasformatore di default.
+        // ...
+      },
+      blocObserver: BlocObserverB(),
+      eventTransformer: eventTransformerB(),
+    );
+  },
+  blocObserver: BlocObserverA(),
+  eventTransformer: eventTransformerA(),
+);
+```
+
+#### ❗✨ Migliorare Gestione e Segnalazione degli Errori
+
+:::note[Cosa è Cambiato?]
+
+In bloc v8.0.0, `BlocUnhandledErrorException` è rimosso. Inoltre, qualsiasi
+eccezione non gestita è sempre segnalata a `onError` e rilanciata
+(indipendentemente dalla modalità debug o release). L'API `addError` segnala
+errori a `onError`, ma non tratta gli errori segnalati come eccezioni non
+gestite.
+
+:::
+
+##### Motivazione
+
+L'obiettivo di questi cambiamenti è:
+
+- rendere le eccezioni interne non gestite estremamente ovvie preservando ancora
+  la funzionalità bloc;
+- supportare `addError` senza interrompere il flusso di controllo.
+
+Precedentemente, la gestione e segnalazione degli errori variava a seconda che
+l'applicazione fosse in esecuzione in modalità debug o release. Inoltre, gli
+errori segnalati tramite `addError` erano trattati come eccezioni non gestite in
+modalità debug il che portava a una cattiva esperienza per lo sviluppatore
+quando si usava l'API `addError` (specialmente quando si scrivevano test
+unitari).
+
+In v8.0.0, `addError` può essere usato in sicurezza per segnalare errori e
+`blocTest` può essere usato per verificare che gli errori siano segnalati. Tutti
+gli errori sono ancora segnalati a `onError`, tuttavia, solo le eccezioni non
+gestite sono rilanciate (indipendentemente dalla modalità debug o release).
+
+#### ❗🧹 Rendere `BlocObserver` astratto
+
+:::note[Cosa è Cambiato?]
+
+In bloc v8.0.0, `BlocObserver` è stato convertito in una classe `abstract` il
+che significa che un'istanza di `BlocObserver` non può essere istanziata.
+
+:::
+
+##### Motivazione
+
+`BlocObserver` era inteso per essere un'interfaccia. Poiché l'implementazione
+API di default sono "no-op", `BlocObserver` è ora una classe `abstract` per
+comunicare chiaramente che la classe è pensata per essere estesa e non
+istanziata direttamente.
+
+**v7.x.x**
+
+```dart
+void main() {
+  // Era possibile creare un'istanza della classe base.
+  final observer = BlocObserver();
+}
+```
+
+**v8.0.0**
+
+```dart
+class MyBlocObserver extends BlocObserver {...}
+
+void main() {
+  // Non è possibile istanziare la classe base.
+  final observer = BlocObserver(); // ERRORE
+
+  // Estendi `BlocObserver` invece.
+  final observer = MyBlocObserver(); // OK
+}
+```
+
+#### ❗✨ `add` lancia `StateError` se Bloc è chiuso
+
+:::note[Cosa è Cambiato?]
+
+In bloc v8.0.0, chiamare `add` su un bloc chiuso risulterà in un `StateError`.
+
+:::
+
+##### Motivazione
+
+Precedentemente, era possibile chiamare `add` su un bloc chiuso e l'errore
+interno veniva ingoiato, rendendo difficile il debug del perché l'evento
+aggiunto non era processato. Per rendere questo scenario più visibile, in
+v8.0.0, chiamare `add` su un bloc chiuso lancerà un `StateError` che sarà
+segnalato come eccezione non gestita e propagato a `onError`.
+
+#### ❗✨ `emit` lancia `StateError` se Bloc è chiuso
+
+:::note[Cosa è Cambiato?]
+
+In bloc v8.0.0, chiamare `emit` all'interno di un bloc chiuso risulterà in un
+`StateError`.
+
+:::
+
+##### Motivazione
+
+Precedentemente, era possibile chiamare `emit` all'interno di un bloc chiuso e
+nessun cambiamento di stato si verificava ma non c'era anche alcuna indicazione
+di cosa fosse andato storto, rendendo difficile il debug. Per rendere questo
+scenario più visibile, in v8.0.0, chiamare `emit` all'interno di un bloc chiuso
+lancerà un `StateError` che sarà segnalato come eccezione non gestita e
+propagato a `onError`.
+
+#### ❗🧹 Rimuovere API Deprecate
+
+:::note[Cosa è Cambiato?]
+
+In bloc v8.0.0, tutte le API precedentemente deprecate sono state rimosse.
+
+:::
+
+##### Riepilogo
+
+- `mapEventToState` rimosso a favore di `on<Event>`;
+- `transformEvents` rimosso a favore dell'API `EventTransformer`;
+- `TransitionFunction` typedef rimosso a favore dell'API `EventTransformer`;
+- `listen` rimosso a favore di `stream.listen`.
+
+### `package:bloc_test`
+
+#### ✨ `MockBloc` e `MockCubit` non richiedono più `registerFallbackValue`
+
+:::note[Cosa è Cambiato?]
+
+In bloc_test v9.0.0, gli sviluppatori non devono più chiamare esplicitamente
+`registerFallbackValue` quando usano `MockBloc` o `MockCubit`.
+
+:::
+
+##### Riepilogo
+
+`registerFallbackValue` è necessario solo quando si usa il matcher `any()` da
+`package:mocktail` per un tipo personalizzato. Precedentemente,
+`registerFallbackValue` era necessario per ogni `Event` e `State` quando si
+usava `MockBloc` o `MockCubit`.
+
+**v8.x.x**
+
+```dart
+class FakeMyEvent extends Fake implements MyEvent {}
+class FakeMyState extends Fake implements MyState {}
+class MyMockBloc extends MockBloc<MyEvent, MyState> implements MyBloc {}
+
+void main() {
+  setUpAll(() {
+    registerFallbackValue(FakeMyEvent());
+    registerFallbackValue(FakeMyState());
+  });
+
+  // Test...
+}
+```
+
+**v9.0.0**
+
+```dart
+class MyMockBloc extends MockBloc<MyEvent, MyState> implements MyBloc {}
+
+void main() {
+  // Test...
+}
+```
+
+### `package:hydrated_bloc`
+
+#### ❗✨ Introdurre nuova API `HydratedBlocOverrides`
+
+:::note[Cosa è Cambiato?]
+
+In hydrated_bloc v8.0.0, `HydratedBloc.storage` è stato rimosso a favore
+dell'API `HydratedBlocOverrides`.
+
+:::
+
+##### Motivazione
+
+Precedentemente, veniva usato un singleton globale per sovrascrivere
+l'implementazione `Storage`.
+
+Di conseguenza, non era possibile avere più implementazioni `Storage` con ambito
+in diverse parti dell'applicazione. Era anche più difficile testare a causa
+dello stato globale condiviso tra test.
+
+`HydratedBloc` v8.0.0 introduce una classe `HydratedBlocOverrides` che permette
+agli sviluppatori di sovrascrivere `Storage` per una specifica `Zone` piuttosto
+che affidarsi a un singleton globale mutabile.
+
+**v7.x.x**
+
+```dart
+void main() async {
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: await getApplicationSupportDirectory(),
+  );
+
+  // ...
+}
+```
+
+**v8.0.0**
+
+```dart
+void main() {
+  final storage = await HydratedStorage.build(
+    storageDirectory: await getApplicationSupportDirectory(),
+  );
+
+  HydratedBlocOverrides.runZoned(
+    () {
+      // ...
+    },
+    storage: storage,
+  );
+}
+```
+
+Le istanze `HydratedBloc` useranno il `Storage` per la `Zone` corrente tramite
+`HydratedBlocOverrides.current`.
+
+Questo permette a ogni `Zone` di funzionare indipendentemente con i propri
+`BlocOverrides`.
+
+## v7.2.0
+
+### `package:bloc`
+
+#### ✨ Introdurre nuova API `on<Event>`
+
+:::note[Cosa è Cambiato?]
+
+In bloc v7.2.0, `mapEventToState` è stato deprecato a favore di `on<Event>`.
+`mapEventToState` sarà rimosso in bloc v8.0.0.
+
+:::
+
+##### Motivazione
+
+L'API `on<Event>` è stata introdotta come parte di
+[[Proposta] Sostituire mapEventToState con on\<Event\> in Bloc](https://github.com/felangel/bloc/issues/2526).
+A causa di [un problema in Dart](https://github.com/dart-lang/sdk/issues/44616)
+non è sempre ovvio quale sarà il valore di `state` quando si ha a che fare con
+generatori asincroni annidati (`async*`). Anche se ci sono modi per aggirare il
+problema, uno dei principi fondamentali della libreria bloc è essere
+prevedibile. L'API `on<Event>` è stata creata per rendere la libreria il più
+sicura possibile da usare e per eliminare qualsiasi incertezza quando si tratta
+di cambiamenti di stato.
+
+:::tip
+
+Per maggiori informazioni,
+[leggi la proposta completa](https://github.com/felangel/bloc/issues/2526).
+
+:::
+
+**Riepilogo**
+
+`on<E>` ti permette di registrare un gestore di eventi per tutti gli eventi di
+tipo `E`. Di default, gli eventi saranno processati concorrentemente quando si
+usa `on<E>` al contrario di `mapEventToState` che processa eventi
+`sequenzialmente`.
+
+**v7.1.0**
+
+```dart
+abstract class CounterEvent {}
+class Increment extends CounterEvent {}
+
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+
+  @override
+  Stream<int> mapEventToState(CounterEvent event) async* {
+    if (event is Increment) {
+      yield state + 1;
+    }
+  }
+}
+```
+
+**v7.2.0**
+
+```dart
+abstract class CounterEvent {}
+class Increment extends CounterEvent {}
+
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0) {
+    on<Increment>((event, emit) => emit(state + 1));
+  }
+}
+```
+
+:::note
+
+Ogni `EventHandler` registrato funziona indipendentemente quindi è importante
+registrare gestori di eventi in base al tipo di trasformatore che vuoi
+applicato.
+
+:::
+
+Se vuoi mantenere esattamente lo stesso comportamento di v7.1.0 puoi registrare
+un singolo gestore di eventi per tutti gli eventi e applicare un trasformatore
+`sequential`:
+
+```dart
+import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
+
+class MyBloc extends Bloc<MyEvent, MyState> {
+  MyBloc() : super(MyState()) {
+    on<MyEvent>(_onEvent, transformer: sequential())
+  }
+
+  FutureOr<void> _onEvent(MyEvent event, Emitter<MyState> emit) async {
+    // TODO: la logica va qui...
+  }
+}
+```
+
+Puoi anche sovrascrivere il `EventTransformer` di default per tutti i bloc nella
+tua applicazione:
+
+```dart
+import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
+
+void main() {
+  Bloc.transformer = sequential<dynamic>();
+  ...
+}
+```
+
+#### ✨ Introdurre nuova API `EventTransformer`
+
+:::note[Cosa è Cambiato?]
+
+In bloc v7.2.0, `transformEvents` è stato deprecato a favore dell'API
+`EventTransformer`. `transformEvents` sarà rimosso in bloc v8.0.0.
+
+:::
+
+##### Motivazione
+
+L'API `on<Event>` ha aperto la porta alla possibilità di fornire un
+trasformatore di eventi personalizzato per gestore di eventi. È stato introdotto
+un nuovo typedef `EventTransformer` che permette agli sviluppatori di
+trasformare lo stream di eventi in arrivo per ogni gestore di eventi piuttosto
+che dover specificare un singolo trasformatore di eventi per tutti gli eventi.
+
+**Riepilogo**
+
+Un `EventTransformer` è responsabile di prendere lo stream di eventi in arrivo
+insieme a un `EventMapper` (il tuo gestore di eventi) e restituire un nuovo
+stream di eventi.
+
+```dart
+typedef EventTransformer<Event> = Stream<Event> Function(Stream<Event> events, EventMapper<Event> mapper)
+```
+
+Il `EventTransformer` di default processa tutti gli eventi concorrentemente e
+assomiglia a qualcosa del tipo:
+
+```dart
+EventTransformer<E> concurrent<E>() {
+  return (events, mapper) => events.flatMap(mapper);
+}
+```
+
+:::tip
+
+Dai un'occhiata a
+[package:bloc_concurrency](https://pub.dev/packages/bloc_concurrency) per un set
+opinionato di trasformatori di eventi personalizzati
+
+:::
+
+**v7.1.0**
+
+```dart
+@override
+Stream<Transition<MyEvent, MyState>> transformEvents(events, transitionFn) {
+  return events
+    .debounceTime(const Duration(milliseconds: 300))
+    .flatMap(transitionFn);
+}
+```
+
+**v7.2.0**
+
+```dart
+/// Definisci un `EventTransformer` personalizzato
+EventTransformer<MyEvent> debounce<MyEvent>(Duration duration) {
+  return (events, mapper) => events.debounceTime(duration).flatMap(mapper);
+}
+
+MyBloc() : super(MyState()) {
+  /// Applica il `EventTransformer` personalizzato all'`EventHandler`
+  on<MyEvent>(_onEvent, transformer: debounce(const Duration(milliseconds: 300)))
+}
+```
+
+#### ⚠️ Deprecare API `transformTransitions`
+
+:::note[Cosa è Cambiato?]
+
+In bloc v7.2.0, `transformTransitions` è stato deprecato a favore di
+sovrascrivere l'API `stream`. `transformTransitions` sarà rimosso in bloc
+v8.0.0.
+
+:::
+
+##### Motivazione
+
+Il getter `stream` su `Bloc` rende facile sovrascrivere lo stream in uscita di
+stati quindi non è più prezioso mantenere un'API separata
+`transformTransitions`.
+
+**Riepilogo**
+
+**v7.1.0**
+
+```dart
+@override
+Stream<Transition<Event, State>> transformTransitions(
+  Stream<Transition<Event, State>> transitions,
+) {
+  return transitions.debounceTime(const Duration(milliseconds: 42));
+}
+```
+
+**v7.2.0**
+
+```dart
+@override
+Stream<State> get stream => super.stream.debounceTime(const Duration(milliseconds: 42));
+```
+
+## v7.0.0
+
+### `package:bloc`
+
+#### ❗ Bloc e Cubit estendono BlocBase
+
+##### Motivazione
+
+Come sviluppatore, la relazione tra bloc e cubit era un po' scomoda. Quando
+cubit è stato introdotto per la prima volta è iniziato come classe base per bloc
+il che aveva senso perché aveva un sottoinsieme della funzionalità e i bloc
+avrebbero semplicemente esteso Cubit e definito API aggiuntive. Questo ha
+portato ad alcuni svantaggi:
+
+- Tutte le API dovrebbero essere o rinominate per accettare un cubit per
+  accuratezza o dovrebbero essere mantenute come bloc per coerenza anche se
+  gerarchicamente è inaccurato
+  ([#1708](https://github.com/felangel/bloc/issues/1708),
+  [#1560](https://github.com/felangel/bloc/issues/1560));
+
+- Cubit avrebbe bisogno di estendere Stream e implementare EventSink per avere
+  una base comune su cui widget come BlocBuilder, BlocListener, ecc. possono
+  essere implementati ([#1429](https://github.com/felangel/bloc/issues/1429)).
+
+Più tardi, abbiamo sperimentato invertendo la relazione e rendendo bloc la
+classe base che ha parzialmente risolto il primo punto sopra ma ha introdotto
+altri problemi:
+
+- L'API cubit è gonfia a causa delle API bloc sottostanti come mapEventToState,
+  add, ecc. ([#2228](https://github.com/felangel/bloc/issues/2228))
+  - Gli sviluppatori possono tecnicamente invocare queste API e rompere le cose;
+- Abbiamo ancora lo stesso problema di cubit che espone l'intera API stream come
+  prima. ([#1429](https://github.com/felangel/bloc/issues/1429))
+
+Per affrontare questi problemi abbiamo introdotto una classe base per entrambi
+`Bloc` e `Cubit` chiamata `BlocBase` così che i componenti upstream possano
+ancora interoperare con entrambe le istanze bloc e cubit ma senza esporre
+l'intera API `Stream` e `EventSink` direttamente.
+
+**Riepilogo**
+
+**BlocObserver**
+
+**v6.1.x**
+
+```dart
+class SimpleBlocObserver extends BlocObserver {
+  @override
+  void onCreate(Cubit cubit) {...}
+
+  @override
+  void onEvent(Bloc bloc, Object event) {...}
+
+  @override
+  void onChange(Cubit cubit, Object event) {...}
+
+  @override
+  void onTransition(Bloc bloc, Transition transition) {...}
+
+  @override
+  void onError(Cubit cubit, Object error, StackTrace stackTrace) {...}
+
+  @override
+  void onClose(Cubit cubit) {...}
+}
+```
+
+**v7.0.0**
+
+```dart
+class SimpleBlocObserver extends BlocObserver {
+  @override
+  void onCreate(BlocBase bloc) {...}
+
+  @override
+  void onEvent(Bloc bloc, Object event) {...}
+
+  @override
+  void onChange(BlocBase bloc, Object? event) {...}
+
+  @override
+  void onTransition(Bloc bloc, Transition transition) {...}
+
+  @override
+  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {...}
+
+  @override
+  void onClose(BlocBase bloc) {...}
+}
+```
+
+**Bloc/Cubit**
+
+**v6.1.x**
+
+```dart
+final bloc = MyBloc();
+bloc.listen((state) {...});
+
+final cubit = MyCubit();
+cubit.listen((state) {...});
+```
+
+**v7.0.0**
+
+```dart
+final bloc = MyBloc();
+bloc.stream.listen((state) {...});
+
+final cubit = MyCubit();
+cubit.stream.listen((state) {...});
+```
+
+### `package:bloc_test`
+
+#### ❗seed restituisce una funzione per supportare valori dinamici
+
+##### Motivazione
+
+Per supportare avere un valore seed mutabile che può essere aggiornato
+dinamicamente in `setUp`, `seed` restituisce una funzione.
+
+**Riepilogo**
+
+**v7.x.x**
+
+```dart
+blocTest(
+  '...',
+  seed: MyState(),
+  ...
+);
+```
+
+**v8.0.0**
+
+```dart
+blocTest(
+  '...',
+  seed: () => MyState(),
+  ...
+);
+```
+
+#### ❗expect restituisce una funzione per supportare valori dinamici e include supporto matcher
+
+##### Motivazione
+
+Per supportare avere un'aspettativa mutabile che può essere aggiornata
+dinamicamente in `setUp`, `expect` restituisce una funzione. `expect` supporta
+anche `Matchers`.
+
+**Riepilogo**
+
+**v7.x.x**
+
+```dart
+blocTest(
+  '...',
+  expect: [MyStateA(), MyStateB()],
+  ...
+);
+```
+
+**v8.0.0**
+
+```dart
+blocTest(
+  '...',
+  expect: () => [MyStateA(), MyStateB()],
+  ...
+);
+
+// Può anche essere un `Matcher`
+blocTest(
+  '...',
+  expect: () => contains(MyStateA()),
+  ...
+);
+```
+
+#### ❗errors restituisce una funzione per supportare valori dinamici e include supporto matcher
+
+##### Motivazione
+
+Per supportare avere errori mutabili che possono essere aggiornati dinamicamente
+in `setUp`, `errors` restituisce una funzione. `errors` supporta anche
+`Matchers`.
+
+**Riepilogo**
+
+**v7.x.x**
+
+```dart
+blocTest(
+  '...',
+  errors: [MyError()],
+  ...
+);
+```
+
+**v8.0.0**
+
+```dart
+blocTest(
+  '...',
+  errors: () => [MyError()],
+  ...
+);
+
+// Può anche essere un `Matcher`
+blocTest(
+  '...',
+  errors: () => contains(MyError()),
+  ...
+);
+```
+
+#### ❗MockBloc e MockCubit
+
+##### Motivazione
+
+Per supportare lo stubbing di varie API core, `MockBloc` e `MockCubit` sono
+esportati come parte del pacchetto `bloc_test`. Precedentemente, `MockBloc`
+doveva essere usato per entrambe le istanze `Bloc` e `Cubit` il che non era
+intuitivo.
+
+**Riepilogo**
+
+**v7.x.x**
+
+```dart
+class MockMyBloc extends MockBloc<MyState> implements MyBloc {}
+class MockMyCubit extends MockBloc<MyState> implements MyBloc {}
+```
+
+**v8.0.0**
+
+```dart
+class MockMyBloc extends MockBloc<MyEvent, MyState> implements MyBloc {}
+class MockMyCubit extends MockCubit<MyState> implements MyCubit {}
+```
+
+#### ❗Integrazione Mocktail
+
+##### Motivazione
+
+A causa di varie limitazioni del null-safe
+[package:mockito](https://pub.dev/packages/mockito) descritte
+[qui](https://github.com/dart-lang/mockito/blob/master/NULL_SAFETY_README.md#problems-with-typical-mocking-and-stubbing),
+[package:mocktail](https://pub.dev/packages/mocktail) è usato da `MockBloc` e
+`MockCubit`. Questo permette agli sviluppatori di continuare a usare un'API di
+mocking familiare senza la necessità di scrivere implementazioni simulate (stub)
+manualmente o affidarsi alla generazione di codice.
+
+**Riepilogo**
+
+**v7.x.x**
+
+```dart
+import 'package:mockito/mockito.dart';
+
+...
+
+when(bloc.state).thenReturn(MyState());
+verify(bloc.add(any)).called(1);
+```
+
+**v8.0.0**
+
+```dart
+import 'package:mocktail/mocktail.dart';
+
+...
+
+when(() => bloc.state).thenReturn(MyState());
+verify(() => bloc.add(any())).called(1);
+```
+
+> Fai riferimento a [#347](https://github.com/dart-lang/mockito/issues/347) così
+> come alla
+> [documentazione mocktail](https://github.com/felangel/mocktail/tree/main/packages/mocktail)
+> per maggiori informazioni.
+
+### `package:flutter_bloc`
+
+#### ❗ rinominare parametro `cubit` a `bloc`
+
+##### Motivazione
+
+Come risultato del refactoring in `package:bloc` per introdurre `BlocBase` che
+`Bloc` e `Cubit` estendono, i parametri di `BlocBuilder`, `BlocConsumer`, e
+`BlocListener` sono stati rinominati da `cubit` a `bloc` perché i widget operano
+sul tipo `BlocBase`. Questo si allinea anche ulteriormente con il nome della
+libreria e speriamo migliori la leggibilità.
+
+**Riepilogo**
+
+**v6.1.x**
+
+```dart
+BlocBuilder(
+  cubit: myBloc,
+  ...
+)
+
+BlocListener(
+  cubit: myBloc,
+  ...
+)
+
+BlocConsumer(
+  cubit: myBloc,
+  ...
+)
+```
+
+**v7.0.0**
+
+```dart
+BlocBuilder(
+  bloc: myBloc,
+  ...
+)
+
+BlocListener(
+  bloc: myBloc,
+  ...
+)
+
+BlocConsumer(
+  bloc: myBloc,
+  ...
+)
+```
+
+### `package:hydrated_bloc`
+
+#### ❗storageDirectory è richiesto quando si chiama HydratedStorage.build
+
+##### Motivazione
+
+Per rendere `package:hydrated_bloc` un pacchetto Dart puro, la dipendenza su
+[package:path_provider](https://pub.dev/packages/path_provider) è stata rimossa
+e il parametro `storageDirectory` quando si chiama `HydratedStorage.build` è
+richiesto e non ha più default a `getTemporaryDirectory`.
+
+**Riepilogo**
+
+**v6.x.x**
+
+```dart
+HydratedBloc.storage = await HydratedStorage.build();
+```
+
+**v7.0.0**
+
+```dart
+import 'package:path_provider/path_provider.dart';
+
+...
+
+HydratedBloc.storage = await HydratedStorage.build(
+  storageDirectory: await getTemporaryDirectory(),
+);
+```
+
+## v6.1.0
+
+### `package:flutter_bloc`
+
+#### ❗context.bloc e context.repository sono deprecati a favore di context.read e context.watch
+
+##### Motivazione
+
+`context.read`, `context.watch`, e `context.select` sono stati aggiunti per
+allinearsi con l'API esistente di [provider](https://pub.dev/packages/provider)
+con cui molti sviluppatori hanno familiarità e per affrontare problemi che sono
+stati sollevati dalla comunità. Per migliorare la sicurezza del codice e
+mantenere la coerenza, `context.bloc` è stato deprecato perché può essere
+sostituito con `context.read` o `context.watch` a seconda che sia usato
+direttamente all'interno di `build`.
+
+**context.watch**
+
+`context.watch` affronta la richiesta di avere un
+[MultiBlocBuilder](https://github.com/felangel/bloc/issues/538) perché possiamo
+guardare diversi bloc all'interno di un singolo `Builder` per renderizzare UI
+basata su stati multipli:
+
+```dart
+Builder(
+  builder: (context) {
+    final stateA = context.watch<BlocA>().state;
+    final stateB = context.watch<BlocB>().state;
+    final stateC = context.watch<BlocC>().state;
+
+    // restituisci un Widget che dipende dallo stato di BlocA, BlocB e BlocC
+  }
+);
+```
+
+**context.select**
+
+`context.select` permette agli sviluppatori di renderizzare/aggiornare UI basata
+su una parte di uno stato bloc e affronta la richiesta di avere un
+[buildWhen più semplice](https://github.com/felangel/bloc/issues/1521).
+
+```dart
+final name = context.select((UserBloc bloc) => bloc.state.user.name);
+```
+
+Il frammento sopra ci permette di accedere e ricostruire il widget solo quando
+il nome dell'utente corrente cambia.
+
+**context.read**
+
+Anche se sembra che `context.read` sia identico a `context.bloc` ci sono alcune
+differenze sottili ma significative. Entrambi ti permettono di accedere a un
+bloc con un `BuildContext` e non risultano in aggiornamenti; tuttavia,
+`context.read` non può essere chiamato direttamente all'interno di un metodo
+`build`. Ci sono due ragioni principali per usare `context.bloc` all'interno di
+`build`:
+
+1. **Per accedere allo stato del bloc**
+
+```dart
+@override
+Widget build(BuildContext context) {
+  final state = context.bloc<MyBloc>().state;
+  return Text('$state');
+}
+```
+
+L'uso sopra è soggetto a errori perché il widget `Text` non sarà ricostruito se
+lo stato del bloc cambia. In questo scenario, dovrebbe essere usato un
+`BlocBuilder` o `context.watch`.
+
+```dart
+@override
+Widget build(BuildContext context) {
+  final state = context.watch<MyBloc>().state;
+  return Text('$state');
+}
+```
+
+o
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return BlocBuilder<MyBloc, MyState>(
+    builder: (context, state) => Text('$state'),
+  );
+}
+```
+
+:::note
+
+Usare `context.watch` alla radice del metodo `build` risulterà nel aggiornamento
+dell'intero widget quando lo stato del bloc cambia. Se l'intero widget non ha
+bisogno di essere ricostruito, usa `BlocBuilder` per avvolgere le parti che
+dovrebbero essere ricostruite, usa un `Builder` con `context.watch` per limitare
+gli aggiornamenti, o scomponi il widget in widget più piccoli.
+
+:::
+
+2. **Per accedere al bloc così che un evento possa essere aggiunto**
+
+```dart
+@override
+Widget build(BuildContext context) {
+  final bloc = context.bloc<MyBloc>();
+  return ElevatedButton(
+    onPressed: () => bloc.add(MyEvent()),
+    ...
+  )
+}
+```
+
+L'uso sopra è inefficiente perché risulta in una ricerca del bloc su ogni
+aggiornamento quando il bloc è necessario solo quando l'utente tocca
+l'`ElevatedButton`. In questo scenario, preferisci usare `context.read` per
+accedere al bloc direttamente dove è necessario (in questo caso, nel callback
+`onPressed`).
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return ElevatedButton(
+    onPressed: () => context.read<MyBloc>().add(MyEvent()),
+    ...
+  )
+}
+```
+
+**Riepilogo**
+
+**v6.0.x**
+
+```dart
+@override
+Widget build(BuildContext context) {
+  final bloc = context.bloc<MyBloc>();
+  return ElevatedButton(
+    onPressed: () => bloc.add(MyEvent()),
+    ...
+  )
+}
+```
+
+**v6.1.x**
+
+```dart
+@override
+Widget build(BuildContext context) {
+  return ElevatedButton(
+    onPressed: () => context.read<MyBloc>().add(MyEvent()),
+    ...
+  )
+}
+```
+
+?> Se accedi a un bloc per aggiungere un evento, esegui l'accesso al bloc usando
+`context.read` nel callback dove è necessario.
+
+**v6.0.x**
+
+```dart
+@override
+Widget build(BuildContext context) {
+  final state = context.bloc<MyBloc>().state;
+  return Text('$state');
+}
+```
+
+**v6.1.x**
+
+```dart
+@override
+Widget build(BuildContext context) {
+  final state = context.watch<MyBloc>().state;
+  return Text('$state');
+}
+```
+
+?> Usa `context.watch` quando accedi allo stato del bloc per assicurarti che il
+widget sia ricostruito quando lo stato cambia.
+
+## v6.0.0
+
+### `package:bloc`
+
+#### ❗BlocObserver onError prende Cubit
+
+##### Motivazione
+
+A causa dell'integrazione di `Cubit`, `onError` è ora condiviso tra entrambe le
+istanze `Bloc` e `Cubit`. Poiché `Cubit` è la base, `BlocObserver` accetterà un
+tipo `Cubit` piuttosto che un tipo `Bloc` nell'override `onError`.
+
+**v5.x.x**
+
+```dart
+class MyBlocObserver extends BlocObserver {
+  @override
+  void onError(Bloc bloc, Object error, StackTrace stackTrace) {
+    super.onError(bloc, error, stackTrace);
+  }
+}
+```
+
+**v6.0.0**
+
+```dart
+class MyBlocObserver extends BlocObserver {
+  @override
+  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
+    super.onError(cubit, error, stackTrace);
+  }
+}
+```
+
+#### ❗Bloc non emette ultimo stato su sottoscrizione
+
+##### Motivazione
+
+Questo cambiamento è stato fatto per allineare `Bloc` e `Cubit` con il
+comportamento `Stream` integrato in `Dart`. Inoltre, conformarsi al vecchio
+comportamento nel contesto di `Cubit` ha portato a molti effetti collaterali non
+intenzionali e in generale ha complicato le implementazioni interne di altri
+pacchetti come `flutter_bloc` e `bloc_test` inutilmente (richiedendo `skip(1)`,
+ecc...).
+
+**v5.x.x**
+
+```dart
+final bloc = MyBloc();
+bloc.listen(print);
+```
+
+Precedentemente, il frammento sopra avrebbe emesso lo stato iniziale del bloc
+seguito da cambiamenti di stato successivi.
+
+**v6.x.x**
+
+In v6.0.0, il frammento sopra non emette lo stato iniziale e emette solo
+cambiamenti di stato successivi. Il comportamento precedente può essere ottenuto
+con il seguente:
+
+```dart
+final bloc = MyBloc();
+print(bloc.state);
+bloc.listen(print);
+```
+
+?> **Nota**: Questo cambiamento influenzerà solo il codice che si affida a
+sottoscrizioni bloc diretti. Quando si usa `BlocBuilder`, `BlocListener`, o
+`BlocConsumer` non ci sarà alcun cambiamento evidente nel comportamento.
+
+### `package:bloc_test`
+
+#### ❗MockBloc richiede solo tipo State
+
+##### Motivazione
+
+Non è necessario ed elimina codice extra rendendo anche `MockBloc` compatibile
+con `Cubit`.
+
+**v5.x.x**
+
+```dart
+class MockCounterBloc extends MockBloc<CounterEvent, int> implements CounterBloc {}
+```
+
+**v6.0.0**
+
+```dart
+class MockCounterBloc extends MockBloc<int> implements CounterBloc {}
+```
+
+#### ❗whenListen richiede solo tipo State
+
+##### Motivazione
+
+Non è necessario ed elimina codice extra rendendo anche `whenListen` compatibile
+con `Cubit`.
+
+**v5.x.x**
+
+```dart
+whenListen<CounterEvent,int>(bloc, Stream.fromIterable([0, 1, 2, 3]));
+```
+
+**v6.0.0**
+
+```dart
+whenListen<int>(bloc, Stream.fromIterable([0, 1, 2, 3]));
+```
+
+#### ❗blocTest non richiede tipo Event
+
+##### Motivazione
+
+Non è necessario ed elimina codice extra rendendo anche `blocTest` compatibile
+con `Cubit`.
+
+**v5.x.x**
+
+```dart
+blocTest<CounterBloc, CounterEvent, int>(
+  'emits [1] when increment is called',
+  build: () async => CounterBloc(),
+  act: (bloc) => bloc.add(CounterEvent.increment),
+  expect: const <int>[1],
+);
+```
+
+**v6.0.0**
+
+```dart
+blocTest<CounterBloc, int>(
+  'emits [1] when increment is called',
+  build: () => CounterBloc(),
+  act: (bloc) => bloc.add(CounterEvent.increment),
+  expect: const <int>[1],
+);
+```
+
+#### ❗blocTest skip default a 0
+
+##### Motivazione
+
+Poiché le istanze `bloc` e `cubit` non emetteranno più lo stato più recente per
+nuove sottoscrizioni, non era più necessario impostare `skip` di default a `1`.
+
+**v5.x.x**
+
+```dart
+blocTest<CounterBloc, CounterEvent, int>(
+  'emits [0] when skip is 0',
+  build: () async => CounterBloc(),
+  skip: 0,
+  expect: const <int>[0],
+);
+```
+
+**v6.0.0**
+
+```dart
+blocTest<CounterBloc, int>(
+  'emits [] when skip is 0',
+  build: () => CounterBloc(),
+  skip: 0,
+  expect: const <int>[],
+);
+```
+
+Lo stato iniziale di un bloc o cubit può essere testato con il seguente:
+
+```dart
+test('initial state is correct', () {
+  expect(MyBloc().state, InitialState());
+});
+```
+
+#### ❗blocTest rendere build sincrono
+
+##### Motivazione
+
+Precedentemente, `build` era reso `async` così che varie preparazioni potessero
+essere fatte per mettere il bloc sotto test in uno stato specifico. Non è più
+necessario e risolve anche diversi problemi a causa della latenza aggiunta tra
+la build e l' sottoscrizione internamente. Invece di fare preparazione async per
+ottenere un bloc in uno stato desiderato possiamo ora impostare lo stato del
+bloc concatenando `emit` con lo stato desiderato.
+
+**v5.x.x**
+
+```dart
+blocTest<CounterBloc, CounterEvent, int>(
+  'emits [2] when increment is added',
+  build: () async {
+    final bloc = CounterBloc();
+    bloc.add(CounterEvent.increment);
+    await bloc.take(2);
+    return bloc;
+  }
+  act: (bloc) => bloc.add(CounterEvent.increment),
+  expect: const <int>[2],
+);
+```
+
+**v6.0.0**
+
+```dart
+blocTest<CounterBloc, int>(
+  'emits [2] when increment is added',
+  build: () => CounterBloc()..emit(1),
+  act: (bloc) => bloc.add(CounterEvent.increment),
+  expect: const <int>[2],
+);
+```
+
+:::note
+
+`emit` è visibile solo per il testing e non dovrebbe mai essere usato al di
+fuori dei test.
+
+:::
+
+### `package:flutter_bloc`
+
+#### ❗BlocBuilder parametro bloc rinominato a cubit
+
+##### Motivazione
+
+Per rendere `BlocBuilder` interoperabile con istanze `bloc` e `cubit` il
+parametro `bloc` è stato rinominato a `cubit` (poiché `Cubit` è la classe base).
+
+**v5.x.x**
+
+```dart
+BlocBuilder(
+  bloc: myBloc,
+  builder: (context, state) {...}
+)
+```
+
+**v6.0.0**
+
+```dart
+BlocBuilder(
+  cubit: myBloc,
+  builder: (context, state) {...}
+)
+```
+
+#### ❗BlocListener parametro bloc rinominato a cubit
+
+##### Motivazione
+
+Per rendere `BlocListener` interoperabile con istanze `bloc` e `cubit` il
+parametro `bloc` è stato rinominato a `cubit` (poiché `Cubit` è la classe base).
+
+**v5.x.x**
+
+```dart
+BlocListener(
+  bloc: myBloc,
+  listener: (context, state) {...}
+)
+```
+
+**v6.0.0**
+
+```dart
+BlocListener(
+  cubit: myBloc,
+  listener: (context, state) {...}
+)
+```
+
+#### ❗BlocConsumer parametro bloc rinominato a cubit
+
+##### Motivazione
+
+Per rendere `BlocConsumer` interoperabile con istanze `bloc` e `cubit` il
+parametro `bloc` è stato rinominato a `cubit` (poiché `Cubit` è la classe base).
+
+**v5.x.x**
+
+```dart
+BlocConsumer(
+  bloc: myBloc,
+  listener: (context, state) {...},
+  builder: (context, state) {...}
+)
+```
+
+**v6.0.0**
+
+```dart
+BlocConsumer(
+  cubit: myBloc,
+  listener: (context, state) {...},
+  builder: (context, state) {...}
+)
+```
+
+---
+
+## v5.0.0
+
+### `package:bloc`
+
+#### ❗initialState è stato rimosso
+
+##### Motivazione
+
+Come sviluppatore, dover sovrascrivere `initialState` quando si crea un bloc
+presenta due problemi principali:
+
+- Lo `initialState` del bloc può essere dinamico e può anche essere referenziato
+  in un momento successivo (anche al di fuori del bloc stesso). In alcuni modi,
+  questo può essere visto come perdita di informazioni interne del bloc al
+  livello UI;
+- È verboso.
+
+**v4.x.x**
+
+```dart
+class CounterBloc extends Bloc<CounterEvent, int> {
+  @override
+  int get initialState => 0;
+
+  ...
+}
+```
+
+**v5.0.0**
+
+```dart
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+
+  ...
+}
+```
+
+?> Per maggiori informazioni controlla
+[#1304](https://github.com/felangel/bloc/issues/1304)
+
+#### ❗BlocDelegate rinominato a BlocObserver
+
+##### Motivazione
+
+Il nome `BlocDelegate` non era una descrizione accurata del ruolo che la classe
+giocava. `BlocDelegate` suggerisce che la classe gioca un ruolo attivo mentre in
+realtà il ruolo inteso del `BlocDelegate` era che fosse un componente passivo
+che semplicemente osserva tutti i bloc in un'applicazione.
+
+:::note
+
+Non dovrebbe idealmente esserci funzionalità o caratteristiche user-facing
+gestite all'interno di `BlocObserver`.
+
+:::
+
+**v4.x.x**
+
+```dart
+class MyBlocDelegate extends BlocDelegate {
+  ...
+}
+```
+
+**v5.0.0**
+
+```dart
+class MyBlocObserver extends BlocObserver {
+  ...
+}
+```
+
+#### ❗BlocSupervisor è stato rimosso
+
+##### Motivazione
+
+`BlocSupervisor` era un altro componente che gli sviluppatori dovevano conoscere
+e interagire per il solo scopo di specificare un `BlocDelegate` personalizzato.
+Con il cambiamento a `BlocObserver` abbiamo sentito che migliorava l'esperienza
+dello sviluppatore impostare l'observer direttamente sul bloc stesso.
+
+?> Questo cambiamento ci ha anche permesso di disaccoppiare altri add-on bloc
+come `HydratedStorage` dal `BlocObserver`.
+
+**v4.x.x**
+
+```dart
+BlocSupervisor.delegate = MyBlocDelegate();
+```
+
+**v5.0.0**
+
+```dart
+Bloc.observer = MyBlocObserver();
+```
+
+### `package:flutter_bloc`
+
+#### ❗BlocBuilder condition rinominato a buildWhen
+
+##### Motivazione
+
+Quando si usa `BlocBuilder`, potevamo precedentemente specificare una
+`condition` per determinare se il `builder` dovrebbe essere ricostruito.
+
+```dart
+BlocBuilder<MyBloc, MyState>(
+  condition: (previous, current) {
+    // restituisci true/false per determinare se chiamare builder
+  },
+  builder: (context, state) {...}
+)
+```
+
+Il nome `condition` non è molto auto-esplicativo o ovvio e più importante,
+quando si interagisce con un `BlocConsumer` l'API è diventata inconsistente
+perché gli sviluppatori possono fornire due condizioni (una per `builder` e una
+per `listener`). Di conseguenza, l'API `BlocConsumer` espone un `buildWhen` e
+`listenWhen`
+
+```dart
+BlocConsumer<MyBloc, MyState>(
+  listenWhen: (previous, current) {
+    // restituisci true/false per determinare se chiamare listener
+  },
+  listener: (context, state) {...},
+  buildWhen: (previous, current) {
+    // restituisci true/false per determinare se chiamare builder
+  },
+  builder: (context, state) {...},
+)
+```
+
+Per allineare l'API e fornire un'esperienza più coerente per lo sviluppatore,
+`condition` è stato rinominato a `buildWhen`.
+
+**v4.x.x**
+
+```dart
+BlocBuilder<MyBloc, MyState>(
+  condition: (previous, current) {
+    // restituisci true/false per determinare se chiamare builder
+  },
+  builder: (context, state) {...}
+)
+```
+
+**v5.0.0**
+
+```dart
+BlocBuilder<MyBloc, MyState>(
+  buildWhen: (previous, current) {
+    // restituisci true/false per determinare se chiamare builder
+  },
+  builder: (context, state) {...}
+)
+```
+
+#### ❗BlocListener condition rinominato a listenWhen
+
+##### Motivazione
+
+Per le stesse ragioni descritte sopra, anche la `condition` di `BlocListener` è
+stata rinominata.
+
+**v4.x.x**
+
+```dart
+BlocListener(
+  condition: (previous, current) {
+    // restituisci true/false per determinare se chiamare listener
+  },
+  listener: (context, state) {...}
+)
+```
+
+**v5.0.0**
+
+```dart
+BlocListener(
+  listenWhen: (previous, current) {
+    // restituisci true/false per determinare se chiamare listener
+  },
+  listener: (context, state) {...}
+)
+```
+
+### `package:hydrated_bloc`
+
+#### ❗HydratedStorage e HydratedBlocStorage rinominati
+
+##### Motivazione
+
+Per migliorare il riutilizzo del codice tra
+[hydrated_bloc](https://pub.dev/packages/hydrated_bloc) e
+[hydrated_cubit](https://pub.dev/packages/hydrated_cubit), l'implementazione
+storage concreta di default è stata rinominata da `HydratedBlocStorage` a
+`HydratedStorage`. Inoltre, l'interfaccia `HydratedStorage` è stata rinominata
+da `HydratedStorage` a `Storage`.
+
+**v4.0.0**
+
+```dart
+class MyHydratedStorage implements HydratedStorage {
+  ...
+}
+```
+
+**v5.0.0**
+
+```dart
+class MyHydratedStorage implements Storage {
+  ...
+}
+```
+
+#### ❗HydratedStorage disaccoppiato da BlocDelegate
+
+##### Motivazione
+
+Come menzionato prima, `BlocDelegate` è stato rinominato a `BlocObserver` ed è
+stato impostato direttamente come parte del `bloc` tramite:
+
+```dart
+Bloc.observer = MyBlocObserver();
+```
+
+Il seguente cambiamento è stato fatto per:
+
+- Rimanere coerenti con la nuova API bloc observer;
+- Mantenere lo storage con ambito solo a `HydratedBloc`;
+- Disaccoppiare il `BlocObserver` da `Storage`.
+
+**v4.0.0**
+
+```dart
+BlocSupervisor.delegate = await HydratedBlocDelegate.build();
+```
+
+**v5.0.0**
+
+```dart
+HydratedBloc.storage = await HydratedStorage.build();
+```
+
+#### ❗Inizializzazione Semplificata
+
+##### Motivazione
+
+Precedentemente, gli sviluppatori dovevano chiamare manualmente
+`super.initialState ?? DefaultInitialState()` per impostare le loro istanze
+`HydratedBloc`. Questo è goffo e verboso e anche incompatibile con i cambiamenti
+breaking a `initialState` in `bloc`. Di conseguenza, in v5.0.0
+l'inizializzazione di `HydratedBloc` è identica all'inizializzazione normale di
+`Bloc`.
+
+**v4.0.0**
+
+```dart
+class CounterBloc extends HydratedBloc<CounterEvent, int> {
+  @override
+  int get initialState => super.initialState ?? 0;
+}
+```
+
+**v5.0.0**
+
+```dart
+class CounterBloc extends HydratedBloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+
+  ...
+}
+```

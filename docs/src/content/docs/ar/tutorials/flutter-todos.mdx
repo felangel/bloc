@@ -1,0 +1,789 @@
+---
+title: Flutter Todos
+description:
+  دليل متعمّق لبناء تطبيق مهام (Todos) في Flutter باستخدام مكتبة Bloc.
+sidebar:
+  order: 6
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import FlutterCreateSnippet from '~/components/tutorials/flutter-todos/FlutterCreateSnippet.astro';
+import ActivateVeryGoodCLISnippet from '~/components/tutorials/flutter-todos/ActivateVeryGoodCLISnippet.astro';
+import FlutterCreatePackagesSnippet from '~/components/tutorials/flutter-todos/FlutterCreatePackagesSnippet.astro';
+import ProjectStructureSnippet from '~/components/tutorials/flutter-todos/ProjectStructureSnippet.astro';
+import VeryGoodPackagesGetSnippet from '~/components/tutorials/flutter-todos/VeryGoodPackagesGetSnippet.astro';
+import HomePageTreeSnippet from '~/components/tutorials/flutter-todos/HomePageTreeSnippet.astro';
+import TodosOverviewPageTreeSnippet from '~/components/tutorials/flutter-todos/TodosOverviewPageTreeSnippet.astro';
+import StatsPageTreeSnippet from '~/components/tutorials/flutter-todos/StatsPageTreeSnippet.astro';
+import EditTodosPageTreeSnippet from '~/components/tutorials/flutter-todos/EditTodosPageTreeSnippet.astro';
+
+![advanced](https://img.shields.io/badge/level-advanced-red.svg)
+
+في هذا الدليل التعليمي، سنبني تطبيق مهام (Todos) في Flutter باستخدام مكتبة Bloc.
+
+![demo](~/assets/tutorials/flutter-todos.gif)
+
+## المواضيع الرئيسية
+
+- [Bloc و Cubit](/ar/bloc-concepts/#cubit-مقابل-bloc) لإدارة حالات الميزات
+  المختلفة.
+- [الهيكلية الطبقية](/ar/architecture) لفصل الاهتمامات/المسؤوليات وتسهيل إعادة
+  الاستخدام.
+- [BlocObserver](/ar/bloc-concepts#blocobserver) لمراقبة تغييرات الحالة.
+- [BlocProvider](/ar/flutter-bloc-concepts#blocprovider)، وهي Widget في Flutter
+  توفر Bloc للأبناء.
+- [BlocBuilder](/ar/flutter-bloc-concepts#blocbuilder)، وهي Widget في Flutter
+  تتولى إعادة البناء استجابةً للحالات الجديدة.
+- [BlocListener](/ar/flutter-bloc-concepts#bloclistener)، وهي Widget في Flutter
+  تنفذ تأثيرات جانبية استجابةً لتغيرات الحالة.
+- [RepositoryProvider](/ar/flutter-bloc-concepts#repositoryprovider)، وهي Widget
+  في Flutter توفر مستودع (repository) للأبناء.
+- [Equatable](/ar/faqs/#متى-يجب-استخدام-equatable) لمنع عمليات إعادة البناء غير
+  الضرورية.
+- [MultiBlocListener](/ar/flutter-bloc-concepts#multibloclistener)، وهي Widget
+  في Flutter تقلل التعشيش عند استخدام عدة BlocListeners.
+
+## الإعداد
+
+سنبدأ بإنشاء مشروع Flutter جديد كليًا باستخدام  
+[very_good_cli](https://pub.dev/packages/very_good_cli).
+
+<FlutterCreateSnippet />
+
+:::note
+
+قم بتثبيت `very_good_cli` باستخدام الأمر التالي:
+
+<ActivateVeryGoodCLISnippet />
+
+:::
+
+بعد ذلك، سنقوم بإنشاء الحزم `todos_api`، `local_storage_todos_api`، و  
+`todos_repository` باستخدام `very_good_cli`:
+
+<FlutterCreatePackagesSnippet />
+
+بإمكاننا بعد ذلك استبدال محتويات ملف `pubspec.yaml` بـ:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+وأخيرًا، ثبّت جميع التبعيات (dependencies):
+
+<VeryGoodPackagesGetSnippet />
+
+## هيكلية المشروع
+
+يجب أن تبدو هيكلية مشروع التطبيق لدينا على النحو التالي:
+
+<ProjectStructureSnippet />
+
+نقسم المشروع إلى عدة حزم للحفاظ على تبعيات واضحة وصريحة لكل حزمة، مع حدود واضحة
+تفرض
+[مبدأ المسؤولية الواحدة](https://en.wikipedia.org/wiki/Single-responsibility_principle).
+تؤدي هذه الطريقة في تنظيم المشروع إلى فوائد عديدة تشمل، ولكن لا تقتصر على:
+
+- سهولة إعادة استخدام الحزم عبر مشاريع متعددة
+- تحسينات في الـ CI/CD من حيث الكفاءة (تشغيل الفحوصات فقط على الكود الذي تم
+  تغييره)
+- سهولة صيانة الحزم بمعزل عن بعضها مع مجموعات اختبار مخصصة، وإصدار نسخ دلالية،
+  ودورة/إيقاع إصدار واضحة
+
+## البنية المعمارية
+
+![مخطط بنية تطبيق المهام](~/assets/tutorials/todos-architecture.png)
+
+تنظيم الكود على شكل طبقات أمر بالغ الأهمية ويساعدنا على تطوير التطبيق بسرعة
+وثقة. كل طبقة تتحمل مسؤولية واحدة فقط، ويمكن استخدامها واختبارها بشكل مستقل. هذا
+يسمح لنا بحصر التعديلات داخل طبقة معينة لتقليل تأثيرها على كامل التطبيق.
+بالإضافة إلى ذلك، فصل الطبقات في التطبيق يسمح لنا بإعادة استخدام المكتبات بسهولة
+عبر مشاريع متعددة، خاصة فيما يتعلق بطبقة البيانات.
+
+يتكون تطبيقنا من ثلاث طبقات رئيسية:
+
+- طبقة البيانات
+- طبقة المجال (Domain)
+- طبقة المميزات
+  - طبقة العرض/UI (widgets)
+  - منطق الأعمال (blocs/cubits)
+
+**طبقة البيانات**
+
+هذه الطبقة هي الأدنى في الهيكل، وهي مسؤولة عن جلب البيانات الخام من مصادر خارجية
+مثل قواعد البيانات، واجهات برمجة التطبيقات (APIs)، وغيرها. الحزم (packages) في
+طبقة البيانات عادة لا تعتمد على أي جزء من طبقة العرض، ويمكن إعادة استخدامها أو
+حتى نشرها على [pub.dev](https://pub.dev) كحزمة مستقلة. في هذا المثال، تتضمن طبقة
+البيانات لدينا حزمتَي `todos_api` و `local_storage_todos_api`.
+
+**طبقة المجال**
+
+تجمع هذه الطبقة بين مزود بيانات أو أكثر وتطبق قواعد الأعمال على البيانات. كل
+مكون في هذه الطبقة يسمى repository وتدير كل repository مجالًا واحدًا عادةً.
+الحزم في طبقة الـ repository ينبغي أن تتعامل فقط مع طبقة البيانات. في هذا
+المثال، تتكون طبقة الـ repository لدينا من حزمة `todos_repository`.
+
+**طبقة المميزات**
+
+تحتوي هذه الطبقة على جميع الميزات وحالات الاستخدام الخاصة بالتطبيق. تتضمن كل
+ميزة عادةً بعض عناصر الواجهة (UI) ومنطق الأعمال. يجب أن تكون الميزات مستقلة عن
+بعضها البعض لتسهيل إضافتها أو إزالتها دون التأثير على بقية قاعدة الكود. ضمن كل
+ميزة، يتم إدارة حالة الميزة ومنطق الأعمال بواسطة blocs. تتفاعل الـ blocs مع صفر
+أو أكثر من المستودعات (repositories). تستجيب الـ blocs للأحداث (events) وتصدر
+الحالات (states) التي تؤدي إلى تغيير واجهة المستخدم. الأدوات (widgets) في كل
+ميزة تعتمد عادةً على الـ bloc المناظر وتقوم بعرض واجهة المستخدم بناءً على الحالة
+الحالية. يمكن لواجهة المستخدم إعلام الـ bloc بإدخالات المستخدم عبر الأحداث. في
+هذا المثال، يتكون تطبيقنا من الميزات التالية: `home`، `todos_overview`، `stats`،
+و `edit_todos`.
+
+الآن بعد أن استعرضنا الطبقات على مستوى عالٍ، لنبدأ ببناء تطبيقنا بدءًا من طبقة
+البيانات!
+
+## طبقة البيانات
+
+طبقة البيانات هي الطبقة الأدنى في تطبيقنا وتتكون من موفري البيانات الخام. الحزم
+الموجودة في هذه الطبقة تُعنى أساساً بمصدر البيانات وكيفية الحصول عليها. في
+حالتنا، ستتكون طبقة البيانات من `TodosApi`، وهو واجهة (interface)،
+و`LocalStorageTodosApi`، وهو تنفيذ لـ `TodosApi` يعتمد على `shared_preferences`.
+
+### TodosApi
+
+حزمة `todos_api` ستصدر واجهة عامة للتفاعل مع وإدارة المهام (todos). لاحقًا سنقوم
+بتنفيذ `TodosApi` باستخدام `shared_preferences`. وجود تجريد (abstraction) يجعل
+من السهل دعم تنفيذات أخرى دون الحاجة لتغيير أي جزء آخر من التطبيق. على سبيل
+المثال، يمكننا لاحقًا إضافة `FirestoreTodosApi` التي تستخدم `cloud_firestore`
+بدلاً من `shared_preferences` مع تغييرات برمجية طفيفة في باقي التطبيق.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/pubspec.yaml"
+	title="packages/todos_api/pubspec.yaml"
+/>
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/lib/src/todos_api.dart"
+	title="packages/todos_api/lib/src/todos_api.dart"
+/>
+
+#### نموذج Todo
+
+بعد ذلك سنُعرّف نموذج `Todo`.
+
+أول ما يجب ملاحظته هو أن نموذج `Todo` لا يعيش داخل تطبيقنا مباشرة — بل هو جزء من
+حزمة `todos_api`. السبب في ذلك هو أن `TodosApi` تُعرّف واجهات برمجية تُرجع أو
+تستقبل كائنات `Todo`. النموذج هو تمثيل دُرتي (Dart) للكائن الخام `Todo` الذي
+سيتم تخزينه واسترجاعه.
+
+يستخدم نموذج `Todo` مكتبة  
+[json_serializable](https://pub.dev/packages/json_serializable) لمعالجة
+السيريالايزيشن (serialization) وفكه (deserialization) من وإلى JSON. إذا كنت تتبع
+هذا الشرح، سيتوجب عليك تشغيل  
+[خطوة توليد الأكواد](https://pub.dev/packages/json_serializable#running-the-code-generator) لحل
+أخطاء المترجم.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/lib/src/models/todo.dart"
+	title="packages/todos_api/lib/src/models/todo.dart"
+/>
+
+يوفر `json_map.dart` تعريف نوع (typedef) للمساعدة في مراجعة الأكواد والتنقيح
+(linting).
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/lib/src/models/json_map.dart"
+	title="packages/todos_api/lib/src/models/json_map.dart"
+/>
+
+نموذج `Todo` مُعرّف في `todos_api/models/todo.dart` ويتم تصديره عبر
+`package:todos_api/todos_api.dart`.
+
+#### تحديث التصديرات
+
+نموذج `Todo` و `TodosApi` يتم تصديرهما عبر ملفات البرميل (barrel files). لاحظ
+كيف أننا لا نستورد النموذج مباشرة، بل نستوردها في `lib/src/todos_api.dart` مع
+إشارة إلى ملف البرميل الخاص بالحزمة:
+`import 'package:todos_api/todos_api.dart';`. حدّث ملفات البرميل هذه لحل أي
+أخطاء استيراد متبقية:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/lib/src/models/models.dart"
+	title="packages/todos_api/lib/src/models/models.dart"
+/>
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/lib/todos_api.dart"
+	title="packages/todos_api/lib/todos_api.dart"
+/>
+
+#### Streams مقابل Futures
+
+في نسخة سابقة من هذا الدرس، كانت `TodosApi` تعتمد على `Future` وليست على
+`Stream`.
+
+كمثال على API مبني على `Future`، راجع  
+[تنفيذ براين إيجان في عينات عمارة التطبيقات](https://github.com/brianegan/flutter_architecture_samples/tree/master/todos_repository_core).
+
+يمكن أن يتكون التنفيذ القائم على `Future` من طريقين: `loadTodos` و`saveTodos`
+(لاحظ الجمع). هذا يعني أنه يجب توفير قائمة كاملة من المهام في كل مرة يتم فيها
+استدعاء الطريقة.
+
+- إحدى القيود في هذا الأسلوب هي أن عمليات CRUD القياسية (إنشاء، قراءة، تحديث،
+  حذف) تتطلب إرسال القائمة الكاملة للمهام مع كل استدعاء. على سبيل المثال، في
+  شاشة إضافة مهمة، لا يمكننا فقط إرسال المهمة المضافة، بل يجب تتبع القائمة
+  الكاملة وإرسال القائمة الجديدة كاملة عند حفظ التغييرات.
+- قيد آخر هو أن `loadTodos` تقدم البيانات لمرة واحدة فقط. لذلك يجب أن يحتوي
+  التطبيق على منطق لطلب التحديثات بشكل دوري.
+
+في التنفيذ الحالي، تتيح `TodosApi` دفق `Stream<List<Todo>>` عبر `getTodos()`
+والذي يقوم بإبلاغ جميع المشتركين بالتحديثات في الوقت الحقيقي عند حدوث تغييرات في
+قائمة المهام.
+
+بالإضافة إلى ذلك، يمكن إنشاء المهام وحذفها وتحديثها بشكل منفرد. على سبيل المثال،
+يتم حذف المهمة أو حفظها بتمرير المهمة وحدها فقط كوسيط. لا يلزم توفير القائمة
+الكاملة المحدثة في كل مرة.
+
+### LocalStorageTodosApi
+
+تقوم هذه الحزمة بتنفيذ `todos_api` باستخدام  
+حزمة [`shared_preferences`](https://pub.dev/packages/shared_preferences).
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/local_storage_todos_api/pubspec.yaml"
+	title="packages/local_storage_todos_api/pubspec.yaml"
+/>
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/local_storage_todos_api/lib/src/local_storage_todos_api.dart"
+	title="packages/local_storage_todos_api/lib/src/local_storage_todos_api.dart"
+/>
+
+## طبقة المستودع (Repository Layer)
+
+يُعدّ [المستودع](/ar/architecture/#المستودع-repository) جزءًا من طبقة منطق
+العمل/الأعمال. يعتمد المستودع على واحد أو أكثر من مزودي البيانات الذين لا
+يمتلكون قيمة منطقية للأعمال، ويجمع واجهات برمجة التطبيقات (APIs) الخاصة بهم في
+واجهات توفر قيمة أعمال. بالإضافة إلى ذلك، يساعد وجود طبقة المستودع في تجريد
+عملية الحصول على البيانات عن بقية التطبيق، مما يتيح لنا تغيير مكان أو طريقة
+تخزين البيانات دون التأثير على باقي أجزاء التطبيق.
+
+### TodosRepository
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_repository/lib/src/todos_repository.dart"
+	title="packages/todos_repository/lib/src/todos_repository.dart"
+/>
+
+يتطلب إنشاء نسخة من المستودع تحديد `TodosApi`، الذي ناقشناه سابقًا في هذا
+الدليل، لذا قمنا بإضافته كاعتماد في ملف `pubspec.yaml` الخاص بنا:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_repository/pubspec.yaml"
+	title="packages/todos_repository/pubspec.yaml"
+/>
+
+#### تصدير المكتبة
+
+بالإضافة إلى تصدير فصل `TodosRepository`، نقوم أيضًا بتصدير نموذج `Todo` من حزمة
+`todos_api`. تساهم هذه الخطوة في منع الربط الوثيق بين التطبيق ومزودي البيانات.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_repository/lib/todos_repository.dart"
+	title="packages/todos_repository/lib/todos_repository.dart"
+/>
+
+قررنا إعادة تصدير نفس نموذج `Todo` من `todos_api` بدلاً من تعريف نموذج منفصل في
+`todos_repository`، لأننا في هذه الحالة نمتلك السيطرة الكاملة على نموذج
+البيانات. في العديد من الحالات، لن يكون مزود البيانات شيئًا يمكنك التحكم فيه. في
+هذه الحالات، يصبح من الضروري بشكل متزايد الحفاظ على تعريفات النماذج الخاصة بك
+داخل طبقة المستودع للحفاظ على سيطرة كاملة على الواجهة وعقد الـ API.
+
+## طبقة الخاصية (Feature Layer)
+
+### نقطة الدخول (Entrypoint)
+
+نقطة الدخول لتطبيقنا هي `main.dart`. في هذه الحالة، هناك ثلاث نسخ:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/main_development.dart"
+	title="lib/main_development.dart"
+/>
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/main_staging.dart"
+	title="lib/main_staging.dart"
+/>
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/main_production.dart"
+	title="lib/main_production.dart"
+/>
+
+أبرز ما يميز هذه النسخ هو أن التنفيذ الملموس لـ `local_storage_todos_api` يتم
+إنشاؤه داخل كل نقطة دخول.
+
+### البوتستراب (Bootstrapping)
+
+`bootstrap.dart` يقوم بتحميل مراقب الـ `BlocObserver` الخاص بنا وينشئ نسخة من
+`TodosRepository`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/bootstrap.dart"
+	title="lib/bootstrap.dart"
+/>
+
+### التطبيق (App)
+
+`App` يغلف ويدير Widget `RepositoryProvider` الذي يوفر الـ repository لجميع
+الأبناء. بما أن شجرتي الـ widgets الخاصة بصفحة `EditTodoPage` وصفحة `HomePage`
+هي منحدرات لـ `App`، فيمكن لجميع الـ blocs والـ cubits الوصول إلى الـ
+repository.
+
+`AppView` يقوم بإنشاء تطبيق `MaterialApp` ويضبط الثيم والتعريب (الترجمة).
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/app/app.dart"
+	title="lib/app/app.dart"
+/>
+
+### الثيم (Theme)
+
+يوفر هذا تعريف الثيم للوضع الفاتح والغامق.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/theme/theme.dart"
+	title="lib/theme/theme.dart"
+/>
+
+### الصفحة الرئيسية (Home)
+
+الميزة الرئيسية مسؤولة عن إدارة حالة التبويب المختار حالياً وعرض الشجرة الفرعية
+المناسبة.
+
+#### HomeState
+
+هناك حالتان فقط مرتبطتان بالشاشتين: `todos` و `stats`.
+
+:::note
+
+`EditTodo` هي مسار منفصل لذلك ليست جزءًا من `HomeState`.
+
+:::
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/home/cubit/home_state.dart"
+	title="lib/home/cubit/home_state.dart"
+/>
+
+#### HomeCubit
+
+الـ cubit مناسب هنا بسبب بساطة منطق الأعمال. لدينا دالة واحدة `setTab` لتغيير
+التبويب.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/home/cubit/home_cubit.dart"
+	title="lib/home/cubit/home_cubit.dart"
+/>
+
+#### HomeView
+
+الملف `view.dart` هو ملف تجميعي (barrel file) يصدر كل مكونات واجهة المستخدم
+المتعلقة بميزة الصفحة الرئيسية.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/home/view/view.dart"
+	title="lib/home/view/view.dart"
+/>
+
+الملف `home_page.dart` يحتوي على واجهة المستخدم للصفحة الجذرية التي يراها
+المستخدم عند إطلاق التطبيق.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/home/view/home_page.dart"
+	title="lib/home/view/home_page.dart"
+/>
+
+تمثيل مبسط لشجرة Widget الخاصة بـ `HomePage` هو:
+
+<HomePageTreeSnippet />
+
+تقدم `HomePage` نسخة من `HomeCubit` إلى `HomeView`. يستخدم `HomeView` الدالة
+`context.select` لإعادة البناء بشكل انتقائي كلما تغير التبويب. هذا يسمح لنا
+باختبار Widget `HomeView` بسهولة عن طريق توفير نسخة Mock من `HomeCubit` وتمثيل
+الحالة (stubbing state).
+
+شريط التطبيق السفلي (`BottomAppBar`) يحتوي على أزرار `HomeTabButton` التي تستدعي
+`setTab` على `HomeCubit`. يتم الحصول على نسخة الـ cubit عبر `context.read` ويتم
+استدعاء الدالة المناسبة على هذه النسخة.
+
+:::caution
+
+`context.read` لا يستمع للتغييرات، يستخدم فقط للوصول إلى `HomeCubit` واستدعاء
+`setTab`.
+
+:::
+
+### ملخص المهام (TodosOverview)
+
+ميزة ملخص المهام تتيح للمستخدمين إدارة مهامهم من خلال الإنشاء، التعديل، الحذف،
+والتصفية.
+
+#### أحداث TodosOverviewEvent
+
+لننشئ الملف `todos_overview/bloc/todos_overview_event.dart` ونعرف فيه الأحداث.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/bloc/todos_overview_event.dart"
+	title="lib/todos_overview/bloc/todos_overview_event.dart"
+/>
+
+- `TodosOverviewSubscriptionRequested`: هذا هو الحدث الذي يُطلق عند بدء التشغيل.
+  عند استقباله، يقوم الـ bloc بالاشتراك في تيار المهام من `TodosRepository`.
+- `TodosOverviewTodoDeleted`: هذا الحدث يحذف مهمة.
+- `TodosOverviewTodoCompletionToggled`: يقوم بتبديل حالة إكمال المهمة.
+- `TodosOverviewToggleAllRequested`: يبدل حالة إكمال كل المهام.
+- `TodosOverviewClearCompletedRequested`: يحذف كل المهام المكتملة.
+- `TodosOverviewUndoDeletionRequested`: يتراجع عن حذف مهمة، على سبيل المثال في
+  حالة الحذف بالخطأ.
+- `TodosOverviewFilterChanged`: يأخذ مرشح العرض `TodosViewFilter` كوسيط ويغير
+  العرض بتطبيق الفلتر.
+
+#### الحالة TodosOverviewState
+
+لننشئ الملف `todos_overview/bloc/todos_overview_state.dart` ونعرف فيه الحالة.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/bloc/todos_overview_state.dart"
+	title="lib/todos_overview/bloc/todos_overview_state.dart"
+/>
+
+`TodosOverviewState` يحتفظ بقائمة المهام، المرشح النشط، المهمة المحذوفة الأخيرة
+(`lastDeletedTodo`)، والحالة العامة.
+
+:::note
+
+إلى جانب الـ getters والـ setters الافتراضية، لدينا getter مخصص يسمى
+`filteredTodos`. يستخدم واجهة المستخدم `BlocBuilder` للوصول إما إلى
+`state.filteredTodos` أو `state.todos`.
+
+:::
+
+#### الـ Bloc - TodosOverviewBloc
+
+لننشئ الملف `todos_overview/bloc/todos_overview_bloc.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/bloc/todos_overview_bloc.dart"
+	title="lib/todos_overview/bloc/todos_overview_bloc.dart"
+/>
+
+:::note
+
+الـ bloc لا ينشئ نسخة من `TodosRepository` داخليًا. بدلاً من ذلك، يعتمد على حقن
+نسخة الـ repository عبر المُنشئ (constructor).
+
+:::
+
+##### عند طلب الاشتراك (onSubscriptionRequested)
+
+عند إضافة حدث `TodosOverviewSubscriptionRequested`، يبدأ الـ bloc بإصدار حالة
+`loading`. في المقابل، يمكن لواجهة المستخدم عرض مؤشر تحميل.
+
+بعد ذلك، نستخدم `emit.forEach<List<Todo>>( ... )` التي تنشئ اشتراكًا على تيار
+المهام من `TodosRepository`.
+
+:::caution
+
+`emit.forEach()` ليست نفسها `forEach()` المستخدمة في القوائم. هذه الدالة تسمح
+للـ bloc بالاشتراك في `Stream` وإصدار حالة جديدة مع كل تحديث.
+
+:::
+
+:::note
+
+`stream.listen` لا يتم استدعاؤه مباشرةً في هذا الدليل. استخدام
+`await emit.forEach()` هو نمط أحدث للاشتراك في تيارات يسمح للـ bloc بإدارة
+الاشتراك داخليًا.
+
+:::
+
+بمجرد التعامل مع الاشتراك، سيتم التعامل مع الأحداث الأخرى مثل إضافة، تعديل، وحذف
+المهام.
+
+##### عند حفظ المهمة (onTodoSaved)
+
+`_onTodoSaved` ببساطة يستدعي `_todosRepository.saveTodo(event.todo)`.
+
+:::note
+
+`emit` لا يتم استدعاؤه من داخل `onTodoSaved` والعديد من معالجات الأحداث الأخرى.
+بدلاً من ذلك، تقوم هذه المعالجات بإعلام الـ repository الذي يصدر قائمة محدثة عبر
+تيار المهام. راجع قسم [تدفق البيانات](#تدفق-البيانات-data-flow) لمزيد من
+التفاصيل.
+
+:::
+
+##### التراجع (Undo)
+
+ميزة التراجع تتيح للمستخدمين استعادة آخر عنصر تم حذفه.
+
+`_onTodoDeleted` يقوم بشيئين: أولاً، يصدر حالة جديدة مع المهمة التي سيتم حذفها.
+ثم يحذف المهمة عن طريق استدعاء الـ repository.
+
+`_onUndoDeletionRequested` يُنفذ عند استقبال حدث طلب التراجع من واجهة المستخدم.
+
+يقوم `_onUndoDeletionRequested` بما يلي:
+
+- يحفظ مؤقتًا نسخة من المهمة المحذوفة الأخيرة.
+- يحدث الحالة بإزالة `lastDeletedTodo`.
+- يعكس عملية الحذف.
+
+##### التصفية (Filtering)
+
+`_onFilterChanged` يصدر حالة جديدة مع الفلتر الجديد.
+
+#### النماذج (Models)
+
+يوجد ملف نموذج واحد يتعامل مع تصفية العرض.
+
+`todos_view_filter.dart` هو enum يمثل مرشحات العرض الثلاثة بالإضافة إلى الدوال
+لتطبيق الفلتر.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/models/todos_view_filter.dart"
+	title="lib/todos_overview/models/todos_view_filter.dart"
+/>
+
+`models.dart` هو ملف تجميعي لإعادة التصدير.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/models/models.dart"
+	title="lib/todos_overview/models/models.dart"
+/>
+
+بعد ذلك، لنلقي نظرة على `TodosOverviewPage`.
+
+#### صفحة ملخص المهام TodosOverviewPage
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/view/todos_overview_page.dart"
+	title="lib/todos_overview/view/todos_overview_page.dart"
+/>
+
+تمثيل مبسط لشجرة Widget الخاصة بـ `TodosOverviewPage` هو:
+
+<TodosOverviewPageTreeSnippet />
+
+تمامًا مثل ميزة الصفحة الرئيسية، تقوم `TodosOverviewPage` بتوفير نسخة من
+`TodosOverviewBloc` للشجرة الفرعية عبر `BlocProvider<TodosOverviewBloc>`، مما
+يقتصر نطاق هذا الـ bloc على Widgets الموجودة تحت `TodosOverviewPage` فقط.
+
+هناك ثلاث ويدجتات تستمع للتغييرات في `TodosOverviewBloc`.
+
+1. الأولى هي `BlocListener` يستمع للأخطاء. الدالة `listener` تُستدعى فقط حين
+   يعيد `listenWhen` القيمة `true`. إذا كانت الحالة
+   `TodosOverviewStatus.failure`، يتم عرض `SnackBar`.
+
+2. لدينا أيضًا `BlocListener` آخر يستمع لعمليات الحذف. عند حذف مهمة، يعرض
+   `SnackBar` مع زر التراجع. إذا ضغط المستخدم على التراجع، يتم إضافة حدث
+   `TodosOverviewUndoDeletionRequested` إلى الـ bloc.
+
+3. وأخيرًا نستخدم `BlocBuilder` لبناء قائمة تظهر المهام.
+
+شريط التطبيق (`AppBar`) يحتوي على عمليتين كرُفع قوائم (dropdowns) للتصفية
+والتعديل على المهام.
+
+:::note
+
+الأحداث `TodosOverviewTodoCompletionToggled` و `TodosOverviewTodoDeleted` تمت
+إضافتها إلى الـ bloc باستخدام `context.read`.
+
+:::
+
+الملف `view.dart` هو ملف تجميعي يصدر `todos_overview_page.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/view/view.dart"
+	title="lib/todos_overview/view/view.dart"
+/>
+
+#### Widgets
+
+`widgets.dart` هو ملف تجميعي آخر يصدر جميع المكونات المستخدمة ضمن ميزة
+`todos_overview`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/widgets/widgets.dart"
+	title="lib/todos_overview/widgets/widgets.dart"
+/>
+
+`todo_list_tile.dart` هو `ListTile` لكل عنصر مهمة.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/widgets/todo_list_tile.dart"
+	title="lib/todos_overview/widgets/todo_list_tile.dart"
+/>
+
+`todos_overview_options_button.dart` يعرض خيارين للتحكم بالمهام:
+
+- `toggleAll`
+- `clearCompleted`
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/widgets/todos_overview_options_button.dart"
+	title="lib/todos_overview/widgets/todos_overview_options_button.dart"
+/>
+
+`todos_overview_filter_button.dart` يعرض ثلاثة خيارات للتصفية:
+
+- `all`
+- `activeOnly`
+- `completedOnly`
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/widgets/todos_overview_filter_button.dart"
+	title="lib/todos_overview/widgets/todos_overview_filter_button.dart"
+/>
+
+### الإحصائيات (Stats)
+
+ميزة الإحصائيات تعرض معلومات عن المهام النشطة والمكتملة.
+
+#### StatsState
+
+`StatsState` يحتفظ بمعلومات ملخصة وحالة `StatsStatus` الحالية.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/stats/bloc/stats_state.dart"
+	title="lib/stats/bloc/stats_state.dart"
+/>
+
+#### StatsEvent
+
+لدى `StatsEvent` حدث وحيد هو `StatsSubscriptionRequested`:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/stats/bloc/stats_event.dart"
+	title="lib/stats/bloc/stats_event.dart"
+/>
+
+#### StatsBloc
+
+`StatsBloc` يعتمد على `TodosRepository` كما هو الحال مع `TodosOverviewBloc`.
+يشترك في تيار المهام عبر `_todosRepository.getTodos`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/stats/bloc/stats_bloc.dart"
+	title="lib/stats/bloc/stats_bloc.dart"
+/>
+
+#### واجهة الإحصائيات (Stats View)
+
+`view.dart` هو الملف التجميعي الخاص بصفحة الإحصائيات `stats_page`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/stats/view/view.dart"
+	title="lib/stats/view/view.dart"
+/>
+
+`stats_page.dart` يحتوي على واجهة المستخدم للصفحة التي تعرض إحصاءات المهام.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/stats/view/stats_page.dart"
+	title="lib/stats/view/stats_page.dart"
+/>
+
+تمثيل مبسط لشجرة Widget الخاصة بـ `StatsPage` هو:
+
+<StatsPageTreeSnippet />
+
+:::caution
+
+كل من `TodosOverviewBloc` و `StatsBloc` يتواصلان مع `TodosRepository`, لكن من
+المهم ملاحظة أنه لا يوجد تواصل مباشر بين الـ blocs. راجع قسم
+[تدفق البيانات](#تدفق-البيانات-data-flow) لمزيد من التفاصيل.
+
+:::
+
+### تعديل المهمة (EditTodo)
+
+ميزة `EditTodo` تتيح للمستخدمين تعديل مهمة موجودة وحفظ التغييرات.
+
+#### EditTodoState
+
+`EditTodoState` يحتفظ بالمعلومات اللازمة أثناء تعديل مهمة.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/edit_todo/bloc/edit_todo_state.dart"
+	title="lib/edit_todo/bloc/edit_todo_state.dart"
+/>
+
+#### أحداث EditTodoEvent
+
+الأحداث التي يستجيب لها الـ bloc هي:
+
+- `EditTodoTitleChanged`
+- `EditTodoDescriptionChanged`
+- `EditTodoSubmitted`
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/edit_todo/bloc/edit_todo_event.dart"
+	title="lib/edit_todo/bloc/edit_todo_event.dart"
+/>
+
+#### EditTodoBloc
+
+`EditTodoBloc` يعتمد على `TodosRepository` مثل `TodosOverviewBloc` و
+`StatsBloc`.
+
+:::caution
+
+على عكس الـ blocs الأخرى، `EditTodoBloc` لا يشترك في
+`_todosRepository.getTodos`. إنه bloc "للكتابة فقط" يعني أنه لا يحتاج لقراءة
+المعلومات من الـ repository.
+
+:::
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/edit_todo/bloc/edit_todo_bloc.dart"
+	title="lib/edit_todo/bloc/edit_todo_bloc.dart"
+/>
+
+##### تدفق البيانات (Data Flow)
+
+رغم وجود العديد من الميزات التي تعتمد على نفس قائمة المهام، لا يوجد تواصل مباشر
+بين الـ blocs. بدلاً من ذلك، كل ميزة مستقلة وتعتمد على `TodosRepository`
+للاستماع للتغييرات في قائمة المهام، بالإضافة لأداء التحديثات عليها.
+
+على سبيل المثال، ميزة `EditTodos` لا تعرف شيئًا عن ميزات `TodosOverview` أو
+`Stats`.
+
+عند إرسال واجهة المستخدم حدث `EditTodoSubmitted`:
+
+- `EditTodoBloc` يتولى منطق الأعمال بتحديث الـ `TodosRepository`.
+- `TodosRepository` يُبلغ كل من `TodosOverviewBloc` و `StatsBloc`.
+- `TodosOverviewBloc` و `StatsBloc` يُبلغان الواجهة التي تقوم بالتحديث وفقًا
+  للحالة الجديدة.
+
+#### صفحة تعديل المهمة (EditTodoPage)
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/edit_todo/view/edit_todo_page.dart"
+	title="lib/edit_todo/view/edit_todo_page.dart"
+/>
+
+تمامًا مثل الميزات السابقة، توفر `EditTodosPage` نسخة من `EditTodosBloc` عبر
+`BlocProvider`. على عكس الميزات الأخرى، صفحة `EditTodosPage` هي مسار منفصل ولهذا
+توفر طريقة `static` اسمها `route`. هذا يسهل دفع الصفحة على مكدس التنقل عبر
+`Navigator.of(context).push(...)`.
+
+تمثيل مبسط لشجرة Widget الخاصة بـ `EditTodosPage` هو:
+
+<EditTodosPageTreeSnippet />
+
+## الملخص
+
+هذا كل شيء، لقد أكملنا الدرس التعليمي! 🎉
+
+يمكنك العثور على الأكواد البرمجية المصدرية الكاملة لهذا المثال، بما في ذلك
+اختبارات الوحدة واختبارات Widgets،
+[هنا](https://github.com/felangel/bloc/tree/master/examples/flutter_todos).
