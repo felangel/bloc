@@ -12,8 +12,9 @@ class SeasonPaletteCubit extends HydratedCubit<SeasonPalette> {
   Map<String, dynamic> toJson(SeasonPalette state) => state.toJson();
 
   @override
-  SeasonPalette fromJson(Map<String, dynamic> json) =>
-      SeasonPalette.fromJson(json);
+  SeasonPalette fromJson(Map<String, dynamic> json) {
+    return SeasonPalette.fromJson(json);
+  }
 }
 
 @immutable
