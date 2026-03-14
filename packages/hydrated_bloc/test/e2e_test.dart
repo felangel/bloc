@@ -383,7 +383,7 @@ void main() {
       });
     });
 
-    group('IntKeyMapCubit', () {
+    group('SeasonPaletteCubit', () {
       test('persists and restores state with non-string map keys', () async {
         final palette = Palette({
           Season.spring: 'green',
@@ -391,11 +391,11 @@ void main() {
           Season.autumn: 'orange',
           Season.winter: 'white',
         });
-        final cubit = IntKeyMapCubit();
+        final cubit = SeasonPaletteCubit();
         expect(cubit.state, const Palette({}));
         cubit.update(palette);
         await sleep();
-        expect(IntKeyMapCubit().state, palette);
+        expect(SeasonPaletteCubit().state, palette);
       });
     });
 

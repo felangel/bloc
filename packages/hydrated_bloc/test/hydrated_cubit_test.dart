@@ -414,7 +414,7 @@ void main() {
     group('MyIntKeyMapCubit', () {
       test('converts non-string (int) map keys to strings when persisting', () {
         final cubit = MyIntKeyMapCubit();
-        const data = {0: 'spring', 1: 'summer', 2: 'autumn', 3: 'winter'};
+        const data = {0: 'a', 1: 'b', 2: 'c'};
         const change = Change(
           currentState: <int, String>{},
           nextState: data,
@@ -422,12 +422,7 @@ void main() {
         cubit.onChange(change);
         verify(
           () => storage.write('MyIntKeyMapCubit', {
-            'data': {
-              '0': 'spring',
-              '1': 'summer',
-              '2': 'autumn',
-              '3': 'winter',
-            },
+            'data': {'0': 'a', '1': 'b', '2': 'c'},
           }),
         ).called(1);
       });
