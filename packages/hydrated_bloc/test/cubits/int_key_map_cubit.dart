@@ -18,6 +18,7 @@ class IntKeyMapCubit extends HydratedCubit<Palette> {
 
 /// An enum whose serialized form uses int values,
 /// similar to `@JsonValue(int)` from json_annotation.
+@immutable
 class Season {
   const Season._(this.index, this.name);
 
