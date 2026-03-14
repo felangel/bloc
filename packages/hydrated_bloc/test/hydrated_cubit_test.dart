@@ -412,13 +412,10 @@ void main() {
     });
 
     group('MyIntKeyMapCubit', () {
-      test('converts non-string (int) map keys to strings when persisting', () {
+      test('serializes non-string keys', () {
         final cubit = MyIntKeyMapCubit();
         const data = {0: 'a', 1: 'b', 2: 'c'};
-        const change = Change(
-          currentState: <int, String>{},
-          nextState: data,
-        );
+        const change = Change(currentState: <int, String>{}, nextState: data);
         cubit.onChange(change);
         verify(
           () => storage.write('MyIntKeyMapCubit', {

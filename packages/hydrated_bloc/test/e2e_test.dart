@@ -384,7 +384,9 @@ void main() {
     });
 
     group('SeasonPaletteCubit', () {
-      test('persists and restores state with non-string map keys', () async {
+      test(
+          'persists and restores state '
+          'when serialized state uses non-string keys', () async {
         final palette = SeasonPalette({
           Season.spring: 'green',
           Season.summer: 'yellow',
