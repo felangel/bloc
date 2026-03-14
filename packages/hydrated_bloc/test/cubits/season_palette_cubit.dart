@@ -22,9 +22,9 @@ class SeasonPalette {
   const SeasonPalette(this.colors);
 
   factory SeasonPalette.fromJson(Map<String, dynamic> json) {
-    final deserialized = json['colors'] as Map<String, dynamic>? ?? {};
+    final raw = json['colors'] as Map<String, dynamic>? ?? {};
     return SeasonPalette(
-      deserialized.map(
+      raw.map(
         (key, value) => MapEntry(
           Season.fromJson(int.parse(key)),
           value as String,
