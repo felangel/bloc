@@ -16,38 +16,6 @@ class SeasonPaletteCubit extends HydratedCubit<Palette> {
 }
 
 @immutable
-class Season {
-  const Season._(this.index, this.name);
-
-  static const spring = Season._(0, 'spring');
-  static const summer = Season._(1, 'summer');
-  static const autumn = Season._(2, 'autumn');
-  static const winter = Season._(3, 'winter');
-
-  static const values = [spring, summer, autumn, winter];
-
-  final int index;
-  final String name;
-
-  int toJson() => index;
-
-  static Season fromJson(int value) {
-    return values.firstWhere((e) => e.index == value);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) || other is Season && other.index == index;
-  }
-
-  @override
-  int get hashCode => index.hashCode;
-
-  @override
-  String toString() => 'Season.$name';
-}
-
-@immutable
 class Palette {
   const Palette(this.seasonColors);
 
@@ -86,4 +54,36 @@ class Palette {
 
   @override
   int get hashCode => seasonColors.hashCode;
+}
+
+@immutable
+class Season {
+  const Season._(this.index, this.name);
+
+  static const spring = Season._(0, 'spring');
+  static const summer = Season._(1, 'summer');
+  static const autumn = Season._(2, 'autumn');
+  static const winter = Season._(3, 'winter');
+
+  static const values = [spring, summer, autumn, winter];
+
+  final int index;
+  final String name;
+
+  int toJson() => index;
+
+  static Season fromJson(int value) {
+    return values.firstWhere((e) => e.index == value);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) || other is Season && other.index == index;
+  }
+
+  @override
+  int get hashCode => index.hashCode;
+
+  @override
+  String toString() => 'Season.$name';
 }
