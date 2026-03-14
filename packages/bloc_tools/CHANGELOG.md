@@ -1,3 +1,7 @@
+# 0.1.0-dev.23
+
+- deps: bump `pkg:bloc_lint` to `^0.4.0`
+
 # 0.1.0-dev.22
 
 - fix: version config mismatch
