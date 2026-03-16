@@ -1,6 +1,6 @@
 ---
 title: تجنب استخدام دوال Bloc العامة
-description: قاعدة avoid_public_bloc_methods.
+description: قاعدة `avoid_public_bloc_methods`.
 ---
 
 import { Badge } from '@astrojs/starlight/components';
@@ -14,32 +14,32 @@ import GoodSnippet from '~/components/lint-rules/avoid_public_bloc_methods/GoodS
 	<Badge text="recommended" variant="success" />
 </div>
 
-تجنب كشف الدوال العامة (Public Methods) على كائنات `Bloc`.
+تجنب كشف الدوال العامة (public methods) على instances من `Bloc`.
 
-## الأساس المنطقي
+## المبرر (Rationale)
 
-تستجيب كائنات Bloc للأحداث الواردة (incoming events) وتُصدر حالات صادرة
-(outgoing states). ونتيجة لذلك، فإن الطريقة الموصى بها للتواصل مع كائن Bloc هي
-عبر الدالة `add`. في معظم الحالات، لا توجد حاجة لإنشاء تجريدات إضافية
-(additional abstractions) فوق واجهة برمجة التطبيقات `add`.
+يتفاعل الـ Bloc مع الأحداث الواردة (incoming events) ويُصدر الحالات الصادرة
+(outgoing states). لذلك، الطريقة الموصى بها للتواصل مع instance من `Bloc` هي عبر
+الدالة `add`. في معظم الحالات، لا حاجة لبناء تجريدات إضافية (additional
+abstractions) فوق واجهة `add` (API).
 
 ![هيكلية Bloc](~/assets/concepts/bloc_architecture_full.png)
 
-## أمثلة
+## أمثلة (Examples)
 
-**لا تقم** بكشف الدوال العامة على كائنات Bloc.
+**لا تقم** بكشف الدوال العامة على instances من `Bloc`.
 
-**مثال سيئ**:
+**مثال سيئ (BAD)**:
 
 <BadSnippet />
 
-**مثال جيد**:
+**مثال جيد (GOOD)**:
 
 <GoodSnippet />
 
-## التفعيل
+## التفعيل (Enable)
 
-لتفعيل قاعدة `avoid_public_bloc_methods`، أضفها إلى ملف `analysis_options.yaml`
-الخاص بك تحت المسار `bloc` > `rules`:
+لتفعيل قاعدة `avoid_public_bloc_methods`، أضفها إلى `analysis_options.yaml` ضمن
+`bloc` > `rules`:
 
 <EnableRuleSnippet name="avoid_public_bloc_methods" />

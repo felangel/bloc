@@ -1,0 +1,141 @@
+---
+title: AngularDart Counter
+description:
+  Una guida approfondita su come costruire un'app AngularDart counter con bloc.
+sidebar:
+  order: 8
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import ActivateStagehandSnippet from '~/components/tutorials/ngdart-counter/ActivateStagehandSnippet.astro';
+import StagehandSnippet from '~/components/tutorials/ngdart-counter/StagehandSnippet.astro';
+import InstallDependenciesSnippet from '~/components/tutorials/ngdart-counter/InstallDependenciesSnippet.astro';
+
+![beginner](https://img.shields.io/badge/level-beginner-green.svg)
+
+In questo tutorial, costruiremo un counter in AngularDart usando la libreria
+bloc.
+
+![demo](~/assets/tutorials/ngdart-counter.gif)
+
+## Configurazione
+
+Inizieremo creando un nuovo progetto AngularDart con
+[stagehand](https://github.com/dart-lang/stagehand).
+
+Se non hai stagehand installato, attivalo tramite:
+
+<ActivateStagehandSnippet />
+
+Poi genera un nuovo progetto tramite:
+
+<StagehandSnippet />
+
+Possiamo poi sostituire il contenuto di `pubspec.yaml` con:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+e poi installare tutte le nostre dipendenze
+
+<InstallDependenciesSnippet />
+
+La nostra app counter avrà solo due pulsanti per incrementare/decrementare il
+valore del counter e un elemento per visualizzare il valore corrente. Iniziamo
+progettando i `CounterEvents`.
+
+## Counter Bloc
+
+Poiché lo stato del nostro counter può essere rappresentato da un intero non
+abbiamo bisogno di creare una classe personalizzata e possiamo co-localizzare
+gli eventi e il bloc.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/src/counter_page/counter_bloc.dart"
+	title="lib/src/counter_page/counter_bloc.dart"
+/>
+
+:::note
+
+Solo dalla dichiarazione della classe possiamo dire che il nostro `CounterBloc`
+prenderà `CounterEvents` come input e produrrà interi.
+
+:::
+
+## Counter App
+
+Ora che abbiamo il nostro `CounterBloc` completamente implementato, possiamo
+iniziare creando il nostro Componente App AngularDart.
+
+Il nostro `app.component.dart` dovrebbe essere:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/app_component.dart"
+	title="lib/app_component.dart"
+/>
+
+e il nostro `app.component.html` dovrebbe essere:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/app_component.html"
+	title="lib/app_component.html"
+/>
+
+## Counter Page
+
+Infine, tutto quello che resta è costruire il nostro Componente Counter Page.
+
+Il nostro `counter_page_component.dart` dovrebbe essere:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/src/counter_page/counter_page_component.dart"
+	title="lib/src/counter_page/counter_page_component.dart"
+/>
+
+:::note
+
+Siamo in grado di accedere all'istanza del `CounterBloc` usando il sistema di
+dependency injection di AngularDart. Poiché l'abbiamo registrato come
+`Provider`, AngularDart può risolvere correttamente `CounterBloc`.
+
+:::
+
+:::note
+
+Stiamo chiudendo il `CounterBloc` in `ngOnDestroy`.
+
+:::
+
+:::note
+
+Stiamo importando il `BlocPipe` così possiamo usarlo nel nostro template.
+
+:::
+
+Infine, il nostro `counter_page_component.html` dovrebbe essere:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/src/counter_page/counter_page_component.html"
+	title="lib/src/counter_page/counter_page_component.html"
+/>
+
+:::note
+
+Stiamo usando il `BlocPipe` così possiamo visualizzare lo stato del nostro
+`CounterBloc` mentre viene aggiornato.
+
+:::
+
+Questo è tutto! Abbiamo separato il nostro livello di presentazione dal nostro
+livello di logica applicativa. Il nostro `CounterPageComponent` non ha idea di
+cosa succede quando un utente preme un pulsante; aggiunge semplicemente un
+evento per notificare il `CounterBloc`. Inoltre, il nostro `CounterBloc` non ha
+idea di cosa sta succedendo con lo stato (valore del counter); sta semplicemente
+convertendo i `CounterEvents` in interi.
+
+Possiamo eseguire la nostra app con `webdev serve` e visualizzarla localmente.
+
+Il codice sorgente completo per questo esempio può essere trovato
+[qui](https://github.com/felangel/bloc/tree/master/examples/angular_counter).

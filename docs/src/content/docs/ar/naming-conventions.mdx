@@ -1,6 +1,6 @@
 ---
 title: اصطلاحات التسمية
-description: نظرة عامة على اصطلاحات التسمية الموصى بها عند استخدام حزمة bloc.
+description: نظرة عامة على اصطلاحات التسمية الموصى بها عند استخدام bloc.
 ---
 
 import EventExamplesGood1 from '~/components/naming-conventions/EventExamplesGood1Snippet.astro';
@@ -9,26 +9,26 @@ import StateExamplesGood1Snippet from '~/components/naming-conventions/StateExam
 import SingleStateExamplesGood1Snippet from '~/components/naming-conventions/SingleStateExamplesGood1Snippet.astro';
 import StateExamplesBad1Snippet from '~/components/naming-conventions/StateExamplesBad1Snippet.astro';
 
-اصطلاحات التسمية التالية هي مجرد توصيات وهي **اختيارية بالكامل**. لا تتردد في
-استخدام أي اصطلاحات تسمية تفضلها. قد تجد أن بعض الأمثلة/التوثيقات لا تتبع
-اصطلاحات التسمية هذه، ويرجع ذلك بشكل أساسي إلى البساطة/الإيجاز. يوصى بشدة بهذه
-الاصطلاحات للمشاريع الكبيرة التي تضم عدة مطورين.
+اصطلاحات التسمية التالية هي مجرد توصيات وهي اختيارية بالكامل. لا تتردد في
+استخدام أي أسلوب تسمية تفضله. قد تلاحظ أن بعض الأمثلة أو أجزاء التوثيق لا تلتزم
+بهذه الاصطلاحات، وذلك غالبًا من أجل البساطة أو الإيجاز. ومع ذلك، يُوصى بشدة بهذه
+الاصطلاحات في المشاريع الكبيرة التي يعمل عليها عدة مطورين.
 
 ## اصطلاحات الأحداث (Event Conventions)
 
-يجب تسمية الأحداث بصيغة **الماضي** لأن الأحداث هي أشياء حدثت بالفعل من منظور الـ
-bloc.
+يجب أن تُسمّى الأحداث بصيغة **الماضي**، لأن الحدث من منظور الـ bloc هو شيء حدث
+بالفعل.
 
-### الهيكلية (Anatomy)
+### البنية (Anatomy)
 
 `BlocSubject` + `Noun (اختياري)` + `Verb (الحدث)`
 
-يجب أن تتبع أحداث التحميل الأولية الاصطلاح التالي: `BlocSubject` + `Started`
+يجب أن تتبع أحداث التحميل الأولي الاصطلاح التالي: `BlocSubject` + `Started`
 
 :::note
 
-يجب أن يكون اسم فئة الحدث الأساسية (base event class) هو: `BlocSubject` +
-`Event`.
+يجب أن يكون اسم فئة الحدث الأساسية (base event class) بالشكل التالي:
+`BlocSubject` + `Event`.
 
 :::
 
@@ -44,24 +44,24 @@ bloc.
 
 ## اصطلاحات الحالات (State Conventions)
 
-يجب أن تكون الحالات أسماء (Nouns) لأن الحالة هي مجرد لقطة (snapshot) في نقطة
-زمنية معينة. هناك طريقتان شائعتان لتمثيل الحالة: استخدام الفئات الفرعية
-(subclasses) أو استخدام فئة واحدة (single class).
+يجب أن تكون الحالات أسماء (Nouns)، لأن الحالة تمثل مجرد لقطة (snapshot) في نقطة
+زمنية محددة. هناك طريقتان شائعتان لتمثيل الحالة: باستخدام فئات فرعية
+(subclasses) أو باستخدام فئة واحدة (single class).
 
-### الهيكلية (Anatomy)
+### البنية (Anatomy)
 
 #### الفئات الفرعية (Subclasses)
 
 `BlocSubject` + `Verb (الإجراء)` + `State`
 
-عند تمثيل الحالة كفئات فرعية متعددة، يجب أن تكون `State` واحدة مما يلي:
+عند تمثيل الحالة باستخدام فئات فرعية متعددة، يجب أن تكون `State` واحدة من القيم
+التالية:
 
 `Initial` | `Success` | `Failure` | `InProgress`
 
 :::note
 
-يجب أن تتبع الحالات الأولية (Initial states) الاصطلاح التالي: `BlocSubject` +
-`Initial`.
+يجب أن تتبع الحالات الأولية الاصطلاح التالي: `BlocSubject` + `Initial`.
 
 :::
 
@@ -69,10 +69,10 @@ bloc.
 
 `BlocSubject` + `State`
 
-عند تمثيل الحالة كفئة أساسية واحدة، يجب استخدام تعداد (enum) باسم
+عند تمثيل الحالة كفئة أساسية واحدة، يجب استخدام تعداد (enum) باسم:
 `BlocSubject` + `Status` لتمثيل حالة الـ State:
 
-`initial` | `success` | `failure` | `loading`.
+`initial` | `success` | `failure` | `loading`
 
 :::note
 

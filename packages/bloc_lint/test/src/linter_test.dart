@@ -39,6 +39,13 @@ void main() {
 
       setUp(() {
         tempDir = Directory.systemTemp.createTempSync();
+        File(p.join(tempDir.path, 'pubspec.yaml')).writeAsStringSync('''
+name: _
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+dependencies:
+  bloc: any
+''');
         File(p.join(tempDir.path, 'pubspec.lock')).writeAsStringSync('''
 packages:
   bloc:

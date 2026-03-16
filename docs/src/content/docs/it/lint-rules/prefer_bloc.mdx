@@ -1,0 +1,48 @@
+---
+title: Preferire Bloc
+description: La regola prefer_bloc.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/prefer_bloc/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/prefer_bloc/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+</div>
+
+Preferisci usare istanze `Bloc` invece di istanze `Cubit`.
+
+## Motivazione
+
+Questa regola è puramente una regola stilistica. In alcuni casi, i team
+potrebbero preferire standardizzare solo sull'uso di istanze `Bloc` in tutta la
+loro applicazione per coerenza.
+
+:::tip
+
+Scopri di più sui vantaggi di `Bloc` in
+[Concetti Bloc](/it/bloc-concepts/#vantaggi-del-bloc).
+
+:::
+
+## Esempi
+
+**Evita** di usare istanze `Cubit`.
+
+**Errato**:
+
+<BadSnippet />
+
+**Buono**:
+
+<GoodSnippet />
+
+## Abilita
+
+Per abilitare la regola `prefer_bloc`, aggiungila al tuo `analysis_options.yaml`
+sotto `bloc` > `rules`:
+
+<EnableRuleSnippet name="prefer_bloc" />

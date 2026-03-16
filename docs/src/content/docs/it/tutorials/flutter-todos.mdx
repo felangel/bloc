@@ -1,0 +1,824 @@
+---
+title: Flutter Todos
+description: Guida completa alla creazione di un'app Flutter todos con bloc.
+sidebar:
+  order: 6
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import FlutterCreateSnippet from '~/components/tutorials/flutter-todos/FlutterCreateSnippet.astro';
+import ActivateVeryGoodCLISnippet from '~/components/tutorials/flutter-todos/ActivateVeryGoodCLISnippet.astro';
+import FlutterCreatePackagesSnippet from '~/components/tutorials/flutter-todos/FlutterCreatePackagesSnippet.astro';
+import ProjectStructureSnippet from '~/components/tutorials/flutter-todos/ProjectStructureSnippet.astro';
+import VeryGoodPackagesGetSnippet from '~/components/tutorials/flutter-todos/VeryGoodPackagesGetSnippet.astro';
+import HomePageTreeSnippet from '~/components/tutorials/flutter-todos/HomePageTreeSnippet.astro';
+import TodosOverviewPageTreeSnippet from '~/components/tutorials/flutter-todos/TodosOverviewPageTreeSnippet.astro';
+import StatsPageTreeSnippet from '~/components/tutorials/flutter-todos/StatsPageTreeSnippet.astro';
+import EditTodosPageTreeSnippet from '~/components/tutorials/flutter-todos/EditTodosPageTreeSnippet.astro';
+
+![advanced](https://img.shields.io/badge/level-advanced-red.svg)
+
+In questo tutorial costruiremo una applicazione in Flutter per spuntare le cose
+da fare usando la libreria bloc.
+
+![demo](~/assets/tutorials/flutter-todos.gif)
+
+## Argomenti Chiave
+
+- [Bloc e Cubit](/it/bloc-concepts#cubit-vs-bloc) per gestire i vari stati delle
+  funzionalità;
+- [Architettura a Livelli](/it/architecture) per separazione delle
+  responsabilità e per facilitare la riutilizzabilità;
+- [BlocObserver](/it/bloc-concepts#blocobserver) per osservare i cambiamenti di
+  stato;
+- [BlocProvider](/it/flutter-bloc-concepts#blocprovider), widget Flutter che
+  fornisce un bloc ai suoi figli;
+- [BlocBuilder](/it/flutter-bloc-concepts#blocbuilder), widget Flutter che
+  gestisce la costruzione del widget in risposta a nuovi stati;
+- [BlocListener](/it/flutter-bloc-concepts#bloclistener), widget Flutter che
+  gestisce l'esecuzione di effetti collaterali (side-effects) in risposta ai
+  cambiamenti di stato;
+- [RepositoryProvider](/it/flutter-bloc-concepts#repositoryprovider), widget
+  Flutter per fornire un repository ai suoi figli;
+- [Equatable](/it/faqs/#quando-usare-equatable) per prevenire aggiornamenti non
+  necessari;
+- [MultiBlocListener](/it/flutter-bloc-concepts#multibloclistener), widget
+  Flutter che riduce l'annidamento quando si usano più BlocListener.
+
+## Configurazione
+
+Inizieremo creando un nuovo progetto Flutter usando
+[very_good_cli](https://pub.dev/packages/very_good_cli).
+
+<FlutterCreateSnippet />
+
+:::note
+
+Installa `very_good_cli` usando il seguente comando:
+
+<ActivateVeryGoodCLISnippet />
+
+:::
+
+Successivamente creeremo i pacchetti `todos_api`, `local_storage_todos_api` e
+`todos_repository` usando `very_good_cli`:
+
+<FlutterCreatePackagesSnippet />
+
+Possiamo poi sostituire il contenuto di `pubspec.yaml` con:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+Infine, installiamo tutte le dipendenze:
+
+<VeryGoodPackagesGetSnippet />
+
+## Struttura del Progetto
+
+La struttura del progetto della nostra applicazione dovrebbe essere:
+
+<ProjectStructureSnippet />
+
+Dividiamo il progetto in più pacchetti per mantenere esplicite le dipendenze di
+ognuno e chiari i confini, rispettando il
+[principio della singola responsabilità](https://it.wikipedia.org/wiki/Principio_di_singola_responsabilit%C3%A0).
+
+Modularizzare il progetto in questo modo offre molti vantaggi, inclusi:
+
+- facilitare il riutilizzo dei pacchetti tra più progetti;
+- migliorare CI/CD in termini di efficienza (eseguire controlli solo sul codice
+  modificato);
+- facilità nella manutenzione dei pacchetti, con suite di test dedicate,
+  versionamento semantico e cicli di rilascio indipendenti.
+
+## Architettura
+
+![Todos Architecture Diagram](~/assets/tutorials/todos-architecture.png)
+
+La stratificazione del codice è fondamentale per iterare rapidamente e in
+sicurezza. Ogni strato ha una singola responsabilità e può essere usato e
+testato in isolamento.
+
+Questo ci permette di contenere le modifiche in uno strato specifico,
+minimizzando l'impatto sull'intera applicazione. Inoltre, stratificare
+l'applicazione ci consente di riutilizzare facilmente le librerie tra più
+progetti (specialmente per quanto riguarda il livello dati).
+
+La nostra applicazione consiste in tre strati principali:
+
+- livello dati;
+- livello dominio;
+- livello funzionalità (feature layer).
+  - presentazione/UI (widget)
+  - logica applicativa (bloc/cubit)
+
+**Livello Dati**
+
+Questo è il livello più basso ed è responsabile del recupero di dati grezzi da
+sorgenti esterne come database, API e altro. I pacchetti nel livello dati non
+dovrebbero dipendere da alcuna UI e possono essere riutilizzati e persino
+pubblicati su [pub.dev](https://pub.dev) come pacchetti standalone.
+
+In questo esempio, il nostro livello dati consiste nei pacchetti `todos_api` e
+`local_storage_todos_api`.
+
+**Livello Dominio**
+
+Questo strato combina uno o più data provider e applica "regole di business" ai
+dati. Ogni componente in questo strato è chiamato repository e ogni repository
+gestisce generalmente un singolo dominio. I pacchetti nel livello repository
+dovrebbero interagire solo con il livello dati.
+
+In questo esempio, il livello repository consiste nel pacchetto
+`todos_repository`.
+
+**Livello Funzionalità**
+
+Questo strato contiene tutte le funzionalità e i casi d'uso specifici
+dell'applicazione. Ogni funzionalità è generalmente composta da una parte UI e
+dalla logica applicativa. Le funzionalità dovrebbero essere indipendenti tra
+loro per poter essere aggiunte o rimosse facilmente senza impattare il resto del
+progetto.
+
+All'interno di ogni funzionalità, lo stato e la logica applicativa sono gestiti
+dai bloc. I bloc interagiscono con zero o più repository, reagiscono agli eventi
+ed emettono stati che attivano cambiamenti nella UI.
+
+I widget all'interno di ogni funzionalità dovrebbero dipendere solo dal bloc
+corrispondente e renderizzare l'interfaccia basata sullo stato corrente. La UI
+può notificare il bloc dell'input utente tramite eventi.
+
+In questo esempio, l'applicazione consisterà delle funzionalità `home`,
+`todos_overview`, `stats` e `edit_todos`.
+
+Ora che abbiamo visto gli strati ad alto livello, iniziamo a costruire la nostra
+applicazione partendo dal livello dati!
+
+## Livello Dati
+
+Il livello dati è lo strato più basso dell'applicazione e consiste in data
+provider grezzi. I pacchetti in questo strato si occupano principalmente della
+provenienza e del recupero dei dati.
+
+In questo caso il livello dati consisterà del `TodosApi`, che è un'interfaccia,
+e del `LocalStorageTodosApi`, un'implementazione del `TodosApi` basata su
+`shared_preferences`.
+
+### TodosApi
+
+Il pacchetto `todos_api` esporterà un'interfaccia generica per interagire e
+gestire i todos. Successivamente implementeremo il `TodosApi` usando
+`shared_preferences`.
+
+Avere un'astrazione renderà facile supportare altre implementazioni senza dover
+modificare altre parti dell'applicazione. Ad esempio, potremmo aggiungere un
+`FirestoreTodosApi` (che usa `cloud_firestore` invece di `shared_preferences`)
+con modifiche minime al resto del codice.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/pubspec.yaml"
+	title="packages/todos_api/pubspec.yaml"
+/>
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/lib/src/todos_api.dart"
+	title="packages/todos_api/lib/src/todos_api.dart"
+/>
+
+#### Modello Todo
+
+Successivamente definiremo il modello `Todo`.
+
+La prima cosa da notare è che il modello `Todo` non vive nell'app, ma è parte
+del pacchetto `todos_api`. Questo perché il `TodosApi` definisce API che
+restituiscono e accettano oggetti `Todo`. Il modello è una rappresentazione Dart
+dell'oggetto Todo grezzo che sarà memorizzato e recuperato.
+
+Il modello `Todo` usa
+[json_serializable](https://pub.dev/packages/json_serializable) per gestire la
+(de)serializzazione JSON. Se stai seguendo il tutorial, dovrai eseguire la
+[generazione del codice](https://pub.dev/packages/json_serializable#running-the-code-generator)
+per risolvere gli errori del compilatore.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/lib/src/models/todo.dart"
+	title="packages/todos_api/lib/src/models/todo.dart"
+/>
+
+`json_map.dart` fornisce un `typedef` per il controllo del codice e il linting.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/lib/src/models/json_map.dart"
+	title="packages/todos_api/lib/src/models/json_map.dart"
+/>
+
+Il modello `Todo` è definito in `todos_api/models/todo.dart` ed è esportato da
+`package:todos_api/todos_api.dart`.
+
+#### Aggiornare Esportazioni
+
+Il modello `Todo` e il `TodosApi` sono esportati tramite file "barrel". Nota
+come non importiamo il modello direttamente, ma lo importiamo in
+`lib/src/todos_api.dart` con un riferimento al file "barrel" del pacchetto:
+`import 'package:todos_api/todos_api.dart';`.
+
+Aggiorna i file "barrel" per risolvere eventuali errori di import rimanenti:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/lib/src/models/models.dart"
+	title="packages/todos_api/lib/src/models/models.dart"
+/>
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/lib/todos_api.dart"
+	title="packages/todos_api/lib/todos_api.dart"
+/>
+
+#### Stream vs Futures
+
+In una versione precedente di questo tutorial, il `TodosApi` era basato su
+`Future` piuttosto che su `Stream`.
+
+Per un esempio di API basata su `Future`, vedi
+[l'implementazione di Brian Egan nei suoi Architecture Samples](https://github.com/brianegan/flutter_architecture_samples/tree/master/todos_repository_core).
+
+Un'implementazione basata su `Future` potrebbe consistere in due metodi:
+`loadTodos` e `saveTodos` (nota il plurale). Questo significa che una lista
+completa di todos deve essere fornita al metodo ogni volta.
+
+- Una limitazione di questo approccio è che le operazioni CRUD standard (Create,
+  Read, Update e Delete) richiedono l'invio dell'intera lista di todos a ogni
+  chiamata. Ad esempio, in una schermata "Aggiungi Todo", non si può
+  semplicemente inviare il singolo todo aggiunto. Dobbiamo tenere traccia
+  dell'intera lista e fornirla completa quando persistiamo i dati.
+- Una seconda limitazione è che `loadTodos` è un recupero dati _una tantum_.
+  L'app deve contenere logica per richiedere aggiornamenti periodicamente.
+
+Nell'implementazione corrente, il `TodosApi` espone uno `Stream<List<Todo>>`
+tramite `getTodos()` che segnalerà aggiornamenti in tempo reale a tutti i
+sottoscritti quando la lista di todos cambia. Inoltre, i todos possono essere
+creati, eliminati o aggiornati individualmente. Ad esempio, sia eliminare che
+salvare un todo viene fatto passando solo il `todo` come argomento. Non è
+necessario fornire la lista appena aggiornata di tutti i todos ogni volta.
+
+### LocalStorageTodosApi
+
+Questo pacchetto implementa il `todos_api` usando il pacchetto
+[`shared_preferences`](https://pub.dev/packages/shared_preferences).
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/local_storage_todos_api/pubspec.yaml"
+	title="packages/local_storage_todos_api/pubspec.yaml"
+/>
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/local_storage_todos_api/lib/src/local_storage_todos_api.dart"
+	title="packages/local_storage_todos_api/lib/src/local_storage_todos_api.dart"
+/>
+
+## Livello Repository
+
+Un [repository](/it/architecture#repository) è parte del livello applicativo. Un
+repository dipende da uno o più data provider privi di logica di dominio e
+combina le loro API pubbliche in API che forniscono valore applicativo
+("business value").
+
+In aggiunta, avere un livello repository aiuta ad astrarre l'acquisizione dati
+dal resto dell'applicazione, permettendoci di cambiare dove e come i dati
+vengono memorizzati senza influenzare altre parti dell'app.
+
+### TodosRepository
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_repository/lib/src/todos_repository.dart"
+	title="packages/todos_repository/lib/src/todos_repository.dart"
+/>
+
+Per istanziare il repository è necessario specificare un `TodosApi`, che abbiamo
+discusso prima in questo tutorial; l'abbiamo quindi aggiunto come dipendenza nel
+`pubspec.yaml`:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_repository/pubspec.yaml"
+	title="packages/todos_repository/pubspec.yaml"
+/>
+
+#### Esportazioni Libreria
+
+Oltre a esportare la classe `TodosRepository`, esportiamo anche il modello
+`Todo` dal pacchetto `todos_api`. Questo passo previene l'accoppiamento stretto
+tra l'applicazione e i data provider.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_repository/lib/todos_repository.dart"
+	title="packages/todos_repository/lib/todos_repository.dart"
+/>
+
+Abbiamo deciso di riesportare lo stesso modello `Todo` dal `todos_api`,
+piuttosto che ridefinire un modello separato nel `todos_repository`, perché in
+questo caso abbiamo controllo completo del modello dati. In molti casi, il data
+provider non sarà qualcosa sotto il tuo controllo. In quei casi, diventa
+importante mantenere le proprie definizioni di modello nel livello repository
+per mantenere il pieno controllo dell'interfaccia e del contratto API.
+
+## Livello Funzionalità
+
+### Entrypoint
+
+Il punto di ingresso della nostra app è `main.dart`. In questo caso, ci sono tre
+versioni:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/main_development.dart"
+	title="lib/main_development.dart"
+/>
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/main_staging.dart"
+	title="lib/main_staging.dart"
+/>
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/main_production.dart"
+	title="lib/main_production.dart"
+/>
+
+La cosa più notevole è che l'implementazione concreta del
+`local_storage_todos_api` viene istanziata all'interno di ogni entrypoint.
+
+### Bootstrapping
+
+`bootstrap.dart` carica il `BlocObserver` e crea l'istanza di `TodosRepository`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/bootstrap.dart"
+	title="lib/bootstrap.dart"
+/>
+
+### App
+
+`App` avvolge un widget `RepositoryProvider` che fornisce il repository a tutti
+i figli. Poiché sia i sottoalberi `EditTodoPage` che `HomePage` sono
+discendenti, tutti i bloc e cubit possono accedere al repository.
+
+`AppView` crea la `MaterialApp` e configura tema e localizzazioni.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/app/app.dart"
+	title="lib/app/app.dart"
+/>
+
+### Theme
+
+Fornisce la definizione del tema per la modalità chiara e scura.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/theme/theme.dart"
+	title="lib/theme/theme.dart"
+/>
+
+### Home
+
+La funzionalità home è responsabile della gestione della tab attualmente
+selezionata e della visualizzazione del sottoalbero corretto.
+
+#### HomeState
+
+Ci sono solo due stati associati alle due schermate: `todos` e `stats`.
+
+:::note
+
+`EditTodo` è una route separata, quindi non fa parte dello `HomeState`.
+
+:::
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/home/cubit/home_state.dart"
+	title="lib/home/cubit/home_state.dart"
+/>
+
+#### HomeCubit
+
+Un cubit è appropriato in questo caso data la semplicità della logica
+applicativa. Abbiamo un metodo `setTab` per cambiare la tab selezionata.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/home/cubit/home_cubit.dart"
+	title="lib/home/cubit/home_cubit.dart"
+/>
+
+#### HomeView
+
+`view.dart` è un file "barrel" che esporta tutti i componenti UI rilevanti per
+la funzionalità home.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/home/view/view.dart"
+	title="lib/home/view/view.dart"
+/>
+
+`home_page.dart` contiene la UI per la pagina root che l'utente vedrà all'avvio
+dell'app.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/home/view/home_page.dart"
+	title="lib/home/view/home_page.dart"
+/>
+
+Una rappresentazione semplificata dell'albero dei widget per la `HomePage` è:
+
+<HomePageTreeSnippet />
+
+La `HomePage` fornisce un'istanza di `HomeCubit` a `HomeView`. `HomeView` usa
+`context.select` per ricostruire selettivamente la view ogni volta che la tab
+cambia. Questo ci permette di testare facilmente il widget `HomeView` fornendo
+un `HomeCubit` fittizio (mock) e simulando lo stato.
+
+Il `BottomAppBar` contiene widget `HomeTabButton` che chiamano `setTab` sul
+`HomeCubit`. L'istanza del cubit viene recuperata tramite `context.read` e il
+metodo appropriato viene invocato.
+
+:::caution
+
+`context.read` non ascolta i cambiamenti, è usato solo per accedere al
+`HomeCubit` e chiamare `setTab`.
+
+:::
+
+### TodosOverview
+
+La funzionalità "todos overview" permette agli utenti di gestire i propri todos
+creando, modificando, eliminando e filtrando gli elementi.
+
+#### TodosOverviewEvent
+
+Creiamo `todos_overview/bloc/todos_overview_event.dart` e definiamo gli eventi.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/bloc/todos_overview_event.dart"
+	title="lib/todos_overview/bloc/todos_overview_event.dart"
+/>
+
+- `TodosOverviewSubscriptionRequested`: Questo è l'evento di avvio. In risposta,
+  il bloc si sottoscrive allo stream di todos dal `TodosRepository`;
+- `TodosOverviewTodoDeleted`: Elimina un Todo;
+- `TodosOverviewTodoCompletionToggled`: Attiva/disattiva lo stato completato di
+  un todo;
+- `TodosOverviewToggleAllRequested`: Attiva/disattiva il completamento per tutti
+  i todos;
+- `TodosOverviewClearCompletedRequested`: Elimina tutti i todos completati;
+- `TodosOverviewUndoDeletionRequested`: Annulla un'eliminazione di todo (es.
+  eliminazione accidentale);
+- `TodosOverviewFilterChanged`: Prende un `TodosViewFilter` come argomento e
+  cambia la vista applicando un filtro.
+
+#### TodosOverviewState
+
+Creiamo `todos_overview/bloc/todos_overview_state.dart` e definiamo lo stato.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/bloc/todos_overview_state.dart"
+	title="lib/todos_overview/bloc/todos_overview_state.dart"
+/>
+
+`TodosOverviewState` terrà traccia di una lista di todos, del filtro attivo, del
+`lastDeletedTodo` e dello status.
+
+:::note
+
+Oltre ai getter e setter di default, abbiamo un getter personalizzato chiamato
+`filteredTodos`. L'interfaccia usa `BlocBuilder` per accedere a
+`state.filteredTodos` o `state.todos`.
+
+:::
+
+#### TodosOverviewBloc
+
+Creiamo `todos_overview/bloc/todos_overview_bloc.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/bloc/todos_overview_bloc.dart"
+	title="lib/todos_overview/bloc/todos_overview_bloc.dart"
+/>
+
+:::note
+
+Il bloc non crea un'istanza del `TodosRepository` internamente. Si affida invece
+a un'istanza del repository iniettata tramite costruttore.
+
+:::
+
+##### onSubscriptionRequested
+
+Quando viene aggiunto `TodosOverviewSubscriptionRequested`, il bloc inizia
+emettendo uno stato `loading`. In risposta, la UI può renderizzare un indicatore
+di caricamento. Successivamente, usiamo `emit.forEach<List<Todo>>( ... )` che
+crea una sottoscrizione allo stream di todos dal `TodosRepository`.
+
+:::caution
+
+`emit.forEach()` non è lo stesso `forEach()` usato dalle liste. Questo `forEach`
+permette al bloc di sottoscriversi a uno `Stream` ed emettere un nuovo stato per
+ogni aggiornamento dello stream.
+
+:::
+
+:::note
+
+`stream.listen` non è mai chiamato direttamente in questo tutorial. Usare
+`await emit.forEach()` è un pattern più recente per sottoscriversi a uno stream
+che permette al bloc di gestire la sottoscrizione internamente.
+
+:::
+
+Ora che la sottoscrizione è attiva, gestiremo gli altri eventi come aggiungere,
+modificare ed eliminare i todos.
+
+##### onTodoSaved
+
+`_onTodoSaved` chiama semplicemente `_todosRepository.saveTodo(event.todo)`.
+
+:::note
+
+`emit` non è mai chiamato dentro `onTodoSaved` e in molti altri gestori di
+eventi. Invece, questi notificano il repository che emette una lista aggiornata
+tramite lo stream todos. Vedi la sezione [flusso dati](#flusso-dati) per
+maggiori informazioni.
+
+:::
+
+##### Undo
+
+La funzionalità undo permette agli utenti di ripristinare l'ultimo elemento
+eliminato. `_onTodoDeleted` fa due cose:
+
+1. Emette un nuovo stato con il `Todo` da eliminare (per tenerne traccia).
+2. Elimina il `Todo` tramite una chiamata al repository.
+
+`_onUndoDeletionRequested` viene eseguito quando arriva la richiesta di
+annullamento dalla interfaccia utente. Questo metodo:
+
+- Salva temporaneamente una copia dell'ultimo todo eliminato;
+- Aggiorna lo stato rimuovendo il `lastDeletedTodo`;
+- Ripristina l'eliminazione chiamando il repository.
+
+##### Filtraggio
+
+`_onFilterChanged` emette un nuovo stato con il nuovo filtro dell'evento.
+
+#### Modelli
+
+C'è un file modello che si occupa del filtraggio della vista.
+`todos_view_filter.dart` è un enum che rappresenta i tre filtri di vista e i
+metodi per applicarli.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/models/todos_view_filter.dart"
+	title="lib/todos_overview/models/todos_view_filter.dart"
+/>
+
+`models.dart` è il file "barrel" per le esportazioni.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/models/models.dart"
+	title="lib/todos_overview/models/models.dart"
+/>
+
+Passiamo ora alla `TodosOverviewPage`.
+
+#### TodosOverviewPage
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/view/todos_overview_page.dart"
+	title="lib/todos_overview/view/todos_overview_page.dart"
+/>
+
+Una rappresentazione semplificata dell'albero dei widget per la
+`TodosOverviewPage` è:
+
+<TodosOverviewPageTreeSnippet />
+
+Proprio come con la funzionalità `Home`, `TodosOverviewPage` fornisce un'istanza
+del `TodosOverviewBloc` al sottoalbero tramite
+`BlocProvider<TodosOverviewBloc>`. Questo limita il `TodosOverviewBloc` solo ai
+widget sotto `TodosOverviewPage`.
+
+Ci sono tre widget che ascoltano i cambiamenti nel `TodosOverviewBloc`:
+
+1. Un `BlocListener` che ascolta gli errori. Il `listener` sarà chiamato solo
+   quando `listenWhen` restituisce `true`. Se lo status è
+   `TodosOverviewStatus.failure`, viene visualizzato uno `SnackBar`;
+2. Un secondo `BlocListener` che ascolta le eliminazioni. Quando un todo viene
+   eliminato, viene visualizzato uno `SnackBar` con un pulsante undo. Se
+   l'utente tocca undo, l'evento `TodosOverviewUndoDeletionRequested` sarà
+   aggiunto al bloc;
+3. Infine, usiamo un `BlocBuilder` per costruire la ListView che visualizza i
+   todos.
+
+L'`AppBar` contiene due azioni (dropdown) per filtrare e manipolare i todos.
+
+:::note
+
+`TodosOverviewTodoCompletionToggled` e `TodosOverviewTodoDeleted` vengono
+aggiunti al bloc tramite `context.read`.
+
+:::
+
+`view.dart` è il file "barrel" che esporta `todos_overview_page.dart`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/view/view.dart"
+	title="lib/todos_overview/view/view.dart"
+/>
+
+#### Widget
+
+`widgets.dart` è un altro file "barrel" che esporta tutti i componenti usati
+all'interno della funzionalità `todos_overview`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/widgets/widgets.dart"
+	title="lib/todos_overview/widgets/widgets.dart"
+/>
+
+`todo_list_tile.dart` è il `ListTile` per ogni elemento todo.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/widgets/todo_list_tile.dart"
+	title="lib/todos_overview/widgets/todo_list_tile.dart"
+/>
+
+`todos_overview_options_button.dart` espone due opzioni per manipolare i todos:
+
+- `toggleAll`;
+- `clearCompleted`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/widgets/todos_overview_options_button.dart"
+	title="lib/todos_overview/widgets/todos_overview_options_button.dart"
+/>
+
+`todos_overview_filter_button.dart` espone tre opzioni di filtro:
+
+- `all`;
+- `activeOnly`;
+- `completedOnly`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/widgets/todos_overview_filter_button.dart"
+	title="lib/todos_overview/widgets/todos_overview_filter_button.dart"
+/>
+
+### Stats
+
+La funzionalità stats visualizza statistiche sui todos attivi e completati.
+
+#### StatsState
+
+`StatsState` tiene traccia delle informazioni di riepilogo e dello `StatsStatus`
+corrente.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/stats/bloc/stats_state.dart"
+	title="lib/stats/bloc/stats_state.dart"
+/>
+
+#### StatsEvent
+
+`StatsEvent` ha solo un evento chiamato `StatsSubscriptionRequested`:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/stats/bloc/stats_event.dart"
+	title="lib/stats/bloc/stats_event.dart"
+/>
+
+#### StatsBloc
+
+`StatsBloc` dipende dal `TodosRepository` proprio come `TodosOverviewBloc`. Si
+sottoscrive allo stream todos tramite `_todosRepository.getTodos`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/stats/bloc/stats_bloc.dart"
+	title="lib/stats/bloc/stats_bloc.dart"
+/>
+
+#### Stats View
+
+`view.dart` è il file "barrel" per `stats_page`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/stats/view/view.dart"
+	title="lib/stats/view/view.dart"
+/>
+
+`stats_page.dart` contiene la interffacia utente per la pagina che visualizza le
+statistiche dei todos.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/stats/view/stats_page.dart"
+	title="lib/stats/view/stats_page.dart"
+/>
+
+Una rappresentazione semplificata dell'albero dei widget per la `StatsPage` è:
+
+<StatsPageTreeSnippet />
+
+:::caution
+
+`TodosOverviewBloc` e `StatsBloc` comunicano entrambi con il `TodosRepository`,
+ma è importante notare che non c'è comunicazione diretta tra i bloc. Vedi la
+sezione [flusso dati](#flusso-dati) per maggiori informazioni.
+
+:::
+
+### EditTodo
+
+La funzionalità `EditTodo` permette agli utenti di modificare un elemento todo
+esistente e salvare le modifiche.
+
+#### EditTodoState
+
+`EditTodoState` tiene traccia delle informazioni necessarie durante la modifica
+di un todo.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/edit_todo/bloc/edit_todo_state.dart"
+	title="lib/edit_todo/bloc/edit_todo_state.dart"
+/>
+
+#### EditTodoEvent
+
+Gli eventi a cui il bloc reagirà sono:
+
+- `EditTodoTitleChanged`;
+- `EditTodoDescriptionChanged`;
+- `EditTodoSubmitted`.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/edit_todo/bloc/edit_todo_event.dart"
+	title="lib/edit_todo/bloc/edit_todo_event.dart"
+/>
+
+#### EditTodoBloc
+
+`EditTodoBloc` dipende dal `TodosRepository`, proprio come `TodosOverviewBloc` e
+`StatsBloc`.
+
+:::caution
+
+A differenza degli altri bloc, `EditTodoBloc` non si sottoscrive a
+`_todosRepository.getTodos`. È un bloc di "sola scrittura", il che significa che
+non ha bisogno di leggere informazioni dal repository.
+
+:::
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/edit_todo/bloc/edit_todo_bloc.dart"
+	title="lib/edit_todo/bloc/edit_todo_bloc.dart"
+/>
+
+##### Flusso Dati
+
+Anche se ci sono molte funzionalità che dipendono dalla stessa lista di todos,
+non c'è comunicazione bloc-to-bloc. Invece, tutte le funzionalità sono
+indipendenti tra loro e si affidano al `TodosRepository` per ascoltare i
+cambiamenti nella lista di todos ed eseguire aggiornamenti.
+
+Ad esempio, `EditTodo` non sa nulla delle funzionalità `TodosOverview` o
+`Stats`.
+
+Quando la UI invia un evento `EditTodoSubmitted`:
+
+1. `EditTodoBloc` gestisce la logica applicativa per aggiornare il
+   `TodosRepository`;
+2. `TodosRepository` notifica `TodosOverviewBloc` e `StatsBloc`;
+3. `TodosOverviewBloc` e `StatsBloc` notificano l'interfaccia che si aggiorna
+   con il nuovo stato.
+
+#### EditTodoPage
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/edit_todo/view/edit_todo_page.dart"
+	title="lib/edit_todo/view/edit_todo_page.dart"
+/>
+
+Come per le funzionalità precedenti, `EditTodoPage` fornisce un'istanza del
+`EditTodoBloc` tramite `BlocProvider`. A differenza delle altre funzionalità,
+`EditTodoPage` è una route separata, motivo per cui espone un metodo `static`
+`route`. Questo rende facile spingere `EditTodoPage` sullo stack di navigazione
+tramite `Navigator.of(context).push(...)`.
+
+Una rappresentazione semplificata dell'albero dei widget per `EditTodoPage` è:
+
+<EditTodosPageTreeSnippet />
+
+## Riepilogo
+
+Questo è tutto, abbiamo completato il tutorial! 🎉
+
+Il codice sorgente completo per questo esempio, inclusi test unitari e widget,
+può essere trovato
+[qui](https://github.com/felangel/bloc/tree/master/examples/flutter_todos).

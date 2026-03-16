@@ -383,6 +383,24 @@ void main() {
       });
     });
 
+    group('SeasonPaletteCubit', () {
+      test(
+          'persists and restores state '
+          'when serialized state uses non-string keys', () async {
+        final palette = SeasonPalette({
+          Season.spring: 'green',
+          Season.summer: 'yellow',
+          Season.autumn: 'orange',
+          Season.winter: 'white',
+        });
+        final cubit = SeasonPaletteCubit();
+        expect(cubit.state, const SeasonPalette({}));
+        cubit.update(palette);
+        await sleep();
+        expect(SeasonPaletteCubit().state, palette);
+      });
+    });
+
     group('FromJsonStateCubit', () {
       test('does not throw StackOverflow ', () async {
         final fromJsonCalls = <int>[];
