@@ -12,6 +12,42 @@ more information regarding what changed in each release.
 
 :::
 
+## v11.0.0
+
+### `package:hydrated_bloc`
+
+#### ❗🧹 Change `storage` override to a named parameter in `HydratedCubit`
+
+:::note[What Changed?]
+
+In hydrated_bloc v11.0.0, the `HydratedCubit` optional `storage` override was
+refactored to a named parameter instead of a positional parameter.
+
+:::
+
+##### Rationale
+
+This just slipped through the cracks during the initial implementation and the
+above breaking change adjusts the API to be consistent across `HydratedBloc` and
+`HydratedCubit`. See [#4537](https://github.com/felangel/bloc/pull/4537) for
+more information.
+
+**v10.x.x**
+
+```dart
+class CounterCubit extends HydratedCubit<int> {
+  CounterCubit(Storage storage) : super(0, storage);
+}
+```
+
+**v11.x.x**
+
+```dart
+class CounterCubit extends HydratedCubit<int> {
+  CounterCubit(Storage storage) : super(0, storage: storage);
+}
+```
+
 ## v10.0.0
 
 ### `package:bloc_test`
