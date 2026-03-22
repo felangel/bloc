@@ -1,3 +1,11 @@
+# 11.0.0
+
+- **BREAKING** fix: `HydratedCubit` storage override should be a named paramter ([#4537](https://github.com/felangel/bloc/pull/4537))
+- fix: serialize non-string keys ([#3983](https://github.com/felangel/bloc/issues/3983))
+- refactor: update analysis options
+- refactor: add `pkg:bloc_lint` ([#4625](https://github.com/felangel/bloc/pull/4625))
+- chore: adjust license and copyright years ([#4738](https://github.com/felangel/bloc/pull/4738))
+
 # 10.1.1
 
 - fix: make `defaultOnHydrationError` public ([#4567](https://github.com/felangel/bloc/issues/4567))
@@ -13,7 +21,6 @@
 # 10.0.0
 
 - **BREAKING** feat!: support for `wasm` ([#4313](https://github.com/felangel/bloc/pull/4313))
-
   - introduces `HydratedStorageDirectory` and modifies `HydratedStorage.build` signature to use `HydratedStorageDirectory` instead of `Directory` from `dart:io`
 
   ```dart
