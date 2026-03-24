@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.0
-  hydrated_bloc: ^10.0.0
+  hydrated_bloc: ^11.0.0
   path_provider: ^2.0.15
 
 flutter:
