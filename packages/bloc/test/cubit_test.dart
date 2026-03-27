@@ -297,6 +297,13 @@ void main() {
         await cubit.close();
         expect(cubit.isClosed, isTrue);
       });
+
+      test('returns true immediately when close is called', () {
+        final cubit = CounterCubit();
+        expect(cubit.isClosed, isFalse);
+        cubit.close();
+        expect(cubit.isClosed, isTrue);
+      });
     });
   });
 }
