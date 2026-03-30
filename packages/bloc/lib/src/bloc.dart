@@ -126,6 +126,9 @@ abstract class Bloc<Event, State> extends BlocBase<State>
     _blocObserver.onEvent(this, event);
   }
 
+  @override
+  bool get isClosed => _closed || _eventController.isClosed;
+
   /// {@template emit}
   /// **[emit] is only for internal use and should never be called directly
   /// outside of tests. The [Emitter] instance provided to each [EventHandler]
@@ -196,7 +199,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
       _eventController.stream.where((event) => event is E).cast<E>(),
       (dynamic event) {
         void onEmit(State state) {
-          if (isClosed) return;
+          if (_stateController.isClosed) return;
           if (this.state == state && _emitted) return;
           onTransition(
             Transition(
