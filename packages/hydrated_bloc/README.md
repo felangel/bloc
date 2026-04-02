@@ -102,6 +102,36 @@ class CounterBloc extends HydratedBloc<CounterEvent, int> {
 
 Now the `CounterCubit` and `CounterBloc` will automatically persist/restore their state. We can increment the counter value, hot restart, kill the app, etc... and the previous state will be retained.
 
+### Cache Expiration
+
+You can optionally specify an `expirationDuration` for cached state. When specified, the cached state will be automatically cleared and the default state will be used if the cache has expired.
+
+```dart
+class CounterCubit extends HydratedCubit<int> {
+  CounterCubit()
+      : super(
+          0,
+          // Cached state will expire after 7 days
+          expirationDuration: const Duration(days: 7),
+        );
+
+  void increment() => emit(state + 1);
+
+  @override
+  int fromJson(Map<String, dynamic> json) => json['value'] as int;
+
+  @override
+  Map<String, int> toJson(int state) => {'value': state};
+}
+```
+
+This is useful for scenarios where:
+- You want to ensure users don't see stale data after a certain period
+- You have session-based data that should expire
+- You want to limit how long cached data is kept
+
+**Note:** Expired state is automatically cleared from storage to free up space.
+
 ### HydratedMixin
 
 ```dart
