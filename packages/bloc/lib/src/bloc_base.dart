@@ -110,6 +110,17 @@ abstract class BlocBase<State>
     }
   }
 
+  /// Updates the [state] only if the bloc is not closed.
+  ///
+  /// Unlike [emit], [emitX] does not throw a [StateError]
+  /// when called on a closed bloc. It silently returns instead.
+  @protected
+  @visibleForTesting
+  void emitX(State state) {
+    if (isClosed) return;
+    emit(state);
+  }
+
   /// Called whenever a [change] occurs with the given [change].
   /// A [change] occurs when a new `state` is emitted.
   /// [onChange] is called before the `state` of the `cubit` is updated.
