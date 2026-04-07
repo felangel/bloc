@@ -69,6 +69,8 @@ abstract class BlocBase<State>
 
   bool _emitted = false;
 
+  bool _closed = false;
+
   @override
   State get state => _state;
 
@@ -80,7 +82,7 @@ abstract class BlocBase<State>
   /// A bloc is considered closed once [close] is called.
   /// Subsequent state changes cannot occur within a closed bloc.
   @override
-  bool get isClosed => _stateController.isClosed;
+  bool get isClosed => _closed;
 
   /// Updates the [state] to the provided [state].
   /// [emit] does nothing if the [state] being emitted
@@ -96,7 +98,7 @@ abstract class BlocBase<State>
   @override
   void emit(State state) {
     try {
-      if (isClosed) {
+      if (_stateController.isClosed) {
         throw StateError('Cannot emit new states after calling close');
       }
       if (state == _state && _emitted) return;
@@ -171,6 +173,7 @@ abstract class BlocBase<State>
   @mustCallSuper
   @override
   Future<void> close() async {
+    _closed = true;
     // ignore: invalid_use_of_protected_member
     _blocObserver.onClose(this);
     await _stateController.close();
