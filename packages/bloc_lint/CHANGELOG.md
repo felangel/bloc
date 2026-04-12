@@ -1,3 +1,7 @@
+# 0.4.1
+
+- deps: adjust upper bound for `_fe_analyzer_shared`
+
 # 0.4.0
 
 - feat: upgrade to latest analyzer frontend
