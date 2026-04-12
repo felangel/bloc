@@ -278,6 +278,7 @@ jobs:
         uses: ./.github/actions/dart_package
         with:
           codecov_token: ${{ secrets.CODECOV_TOKEN }}
+          collect_score: ${{ matrix.package != 'angular_bloc'}}
           working_directory: packages/${{ matrix.package }}
           min_coverage: 100
 
