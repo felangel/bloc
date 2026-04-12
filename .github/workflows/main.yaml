@@ -63,6 +63,7 @@ jobs:
             bloc_tools:
               - ./.github/workflows/main.yaml
               - packages/bloc_tools/**
+              - packages/bloc_lint/**
 
       - uses: dorny/paths-filter@v4
         name: Dart Package Detection
@@ -277,6 +278,7 @@ jobs:
         uses: ./.github/actions/dart_package
         with:
           codecov_token: ${{ secrets.CODECOV_TOKEN }}
+          collect_score: ${{ matrix.package != 'angular_bloc'}}
           working_directory: packages/${{ matrix.package }}
           min_coverage: 100
 
@@ -383,7 +385,7 @@ jobs:
           analyze_directories: lib
           collect_coverage: false
           collect_score: false
-          flutter_channel: master
+          flutter_channel: stable
           working_directory: examples/${{ matrix.example }}
 
   docs_checks:
