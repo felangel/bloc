@@ -63,6 +63,7 @@ jobs:
             bloc_tools:
               - ./.github/workflows/main.yaml
               - packages/bloc_tools/**
+              - packages/bloc_lint/**
 
       - uses: dorny/paths-filter@v4
         name: Dart Package Detection
