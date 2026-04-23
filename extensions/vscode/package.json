@@ -257,7 +257,7 @@
     "node-fetch": "^2.0.0",
     "rimraf": "^3.0.2",
     "semver": "^6.3.1",
-    "uuid": "^8.3.2",
+    "uuid": "^14.0.0",
     "vscode-languageclient": "^7.0.0"
   }
 }
