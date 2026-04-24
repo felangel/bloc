@@ -143,6 +143,10 @@ void main() {
       });
 
       test('skips update check when $updateCheckEnv=false', () async {
+        when(
+          () => pubUpdater.getLatestVersion(any()),
+        ).thenAnswer((_) async => latestVersion);
+
         commandRunner = BlocToolsCommandRunner(
           logger: logger,
           pubUpdater: pubUpdater,
