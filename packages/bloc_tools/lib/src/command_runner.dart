@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
 import 'package:bloc_lint/bloc_lint.dart';
@@ -10,17 +12,24 @@ import 'package:pub_updater/pub_updater.dart';
 /// The package name.
 const packageName = 'bloc_tools';
 
+/// Environment variable that can be used to disable update checks.
+/// Update checks are enabled by default.
+/// To disable them, export `BLOC_UPDATE_CHECK=false`.
+const updateCheckEnv = 'BLOC_UPDATE_CHECK';
+
 /// {@template bloc_tools_command_runner}
 /// A [CommandRunner] for the Bloc Tools CLI.
 /// {@endtemplate}
 class BlocToolsCommandRunner extends CommandRunner<int> {
   /// {@macro bloc_tools_command_runner}
   BlocToolsCommandRunner({
+    Map<String, String>? environment,
     Logger? logger,
     PubUpdater? pubUpdater,
     Linter linter = const Linter(),
     LanguageServer Function()? languageServerBuilder,
-  }) : _logger = logger ?? Logger(),
+  }) : _environment = environment ?? Platform.environment,
+       _logger = logger ?? Logger(),
        _pubUpdater = pubUpdater ?? PubUpdater(),
        super('bloc', 'Command Line Tools for the Bloc Library.') {
     argParser.addFlag(
@@ -35,6 +44,7 @@ class BlocToolsCommandRunner extends CommandRunner<int> {
     addCommand(LintCommand(linter: linter, logger: _logger));
   }
 
+  final Map<String, String> _environment;
   final Logger _logger;
   final PubUpdater _pubUpdater;
 
@@ -70,6 +80,7 @@ class BlocToolsCommandRunner extends CommandRunner<int> {
     }
     // Avoid disrupting stdout when running the language server.
     if (topLevelResults.command?.name == 'language-server') return exitCode;
+    if (_environment[updateCheckEnv] == 'false') return exitCode;
     await _checkForUpdates();
     return exitCode;
   }

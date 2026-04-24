@@ -108,6 +108,27 @@ void main() {
         verify(() => logger.confirm('Would you like to update?')).called(1);
       });
 
+      test('prompts for update when newer version exists '
+          'and $updateCheckEnv=true', () async {
+        commandRunner = BlocToolsCommandRunner(
+          logger: logger,
+          pubUpdater: pubUpdater,
+          languageServerBuilder: () => languageServer,
+          environment: {updateCheckEnv: 'true'},
+        );
+
+        when(
+          () => pubUpdater.getLatestVersion(any()),
+        ).thenAnswer((_) async => latestVersion);
+
+        when(() => logger.confirm(any())).thenReturn(false);
+
+        final result = await commandRunner.run(['--version']);
+        expect(result, equals(ExitCode.success.code));
+        verify(() => logger.info(updatePrompt)).called(1);
+        verify(() => logger.confirm('Would you like to update?')).called(1);
+      });
+
       test('skips update check when running language-server', () async {
         when(
           () => pubUpdater.getLatestVersion(any()),
@@ -116,6 +137,24 @@ void main() {
         when(() => logger.confirm(any())).thenReturn(false);
 
         final result = await commandRunner.run(['language-server']);
+        expect(result, equals(ExitCode.success.code));
+        verifyNever(() => logger.info(updatePrompt));
+        verifyNever(() => logger.confirm('Would you like to update?'));
+      });
+
+      test('skips update check when $updateCheckEnv=false', () async {
+        when(
+          () => pubUpdater.getLatestVersion(any()),
+        ).thenAnswer((_) async => latestVersion);
+
+        commandRunner = BlocToolsCommandRunner(
+          logger: logger,
+          pubUpdater: pubUpdater,
+          languageServerBuilder: () => languageServer,
+          environment: {updateCheckEnv: 'false'},
+        );
+
+        final result = await commandRunner.run(['--version']);
         expect(result, equals(ExitCode.success.code));
         verifyNever(() => logger.info(updatePrompt));
         verifyNever(() => logger.confirm('Would you like to update?'));
