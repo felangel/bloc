@@ -44,9 +44,9 @@ class BlocToolsCommandRunner extends CommandRunner<int> {
     addCommand(LintCommand(linter: linter, logger: _logger));
   }
 
+  final Map<String, String> _environment;
   final Logger _logger;
   final PubUpdater _pubUpdater;
-  final Map<String, String> _environment;
 
   @override
   Future<int> run(Iterable<String> args) async {
