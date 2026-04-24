@@ -26,8 +26,9 @@ const expectedUsage = [
       'Usage: bloc <command> [arguments]\n'
       '\n'
       'Global options:\n'
-      '-h, --help       Print this usage information.\n'
-      '    --version    Print the current version.\n'
+      '-h, --help                Print this usage information.\n'
+      '    --version             Print the current version.\n'
+      '    --no-version-check    Skip the version check.\n'
       '\n'
       'Available commands:\n'
       '  lint   bloc lint [arguments]\n'
@@ -206,6 +207,35 @@ void main() {
           final result = await commandRunner.run(['--version']);
           expect(result, equals(ExitCode.success.code));
           verify(() => logger.info(packageVersion)).called(1);
+        });
+      });
+
+      group('--no-version-check', () {
+        test('skips version check when flag is provided', () async {
+          when(
+            () => pubUpdater.getLatestVersion(any()),
+          ).thenAnswer((_) async => latestVersion);
+
+          when(() => logger.confirm(any())).thenReturn(false);
+
+          final result = await commandRunner.run([
+            '--no-version-check',
+            '--version',
+          ]);
+          expect(result, equals(ExitCode.success.code));
+          verifyNever(() => pubUpdater.getLatestVersion(any()));
+          verifyNever(() => logger.info(updatePrompt));
+          verifyNever(() => logger.confirm('Would you like to update?'));
+        });
+
+        test('does not update when flag is provided', () async {
+          final result = await commandRunner.run([
+            '--no-version-check',
+            '--version',
+          ]);
+          expect(result, equals(ExitCode.success.code));
+          verifyNever(() => pubUpdater.getLatestVersion(any()));
+          verifyNever(() => pubUpdater.update(packageName: any(named: 'packageName')));
         });
       });
     });

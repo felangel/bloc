@@ -28,6 +28,11 @@ class BlocToolsCommandRunner extends CommandRunner<int> {
       negatable: false,
       help: 'Print the current version.',
     );
+    argParser.addFlag(
+      'no-version-check',
+      negatable: false,
+      help: 'Skip the version check.',
+    );
     addCommand(
       LanguageServerCommand(languageServerBuilder: languageServerBuilder),
     );
@@ -70,6 +75,7 @@ class BlocToolsCommandRunner extends CommandRunner<int> {
     }
     // Avoid disrupting stdout when running the language server.
     if (topLevelResults.command?.name == 'language-server') return exitCode;
+    if (topLevelResults['no-version-check'] == true) return exitCode;
     await _checkForUpdates();
     return exitCode;
   }
