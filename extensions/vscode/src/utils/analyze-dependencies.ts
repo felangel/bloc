@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import * as semver from "semver";
-import { window, env, Uri } from "vscode";
+import { window, env, Uri, workspace } from "vscode";
 import { getLatestPackageVersion, getPubspecLock } from ".";
 import { updatePubspecDependency } from "./update-pubspec-dependency";
 
@@ -90,7 +90,7 @@ function showUpdateMessage(dependency : Dependency, dependencyVersion : string) 
     window
       .showWarningMessage(
         `This workspace contains an outdated version of ${dependency.name}. Please update to ${dependency.version}.`,
-        ...dependency.actions.map((action) => action.name).concat("Update")
+        ...dependency.actions.map((action) => action.name).concat("Update", "Don't Show Again")
       )
       .then((invokedAction) => {
         if (invokedAction === "Update") {
@@ -99,6 +99,9 @@ function showUpdateMessage(dependency : Dependency, dependencyVersion : string) 
             latestVersion: `^${dependency.version}`,
             currentVersion: dependencyVersion,
           });
+        }
+        if (invokedAction === "Don't Show Again") {
+          return workspace.getConfiguration("bloc").update("checkForUpdates", false, true);
         }
         const action = dependency.actions.find(
           (action) => action.name === invokedAction
