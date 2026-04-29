@@ -1,41 +1,73 @@
----
-title: دليل البدء
-description: كل ما تحتاجه لبدء البناء باستخدام Bloc.
----
+import 'package:flutter/material.dart';
 
-import InstallationTabs from '~/components/getting-started/InstallationTabs.astro';
-import ImportTabs from '~/components/getting-started/ImportTabs.astro';
+void main() {
+  runApp(SamyTelecomApp());
+}
 
-## الحزم
+class SamyTelecomApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Samy Telecom',
+      debugShowCheckedModeBanner: false,
+      home: HomePage(),
+    );
+  }
+}
 
-يتكوّن نظام Bloc من عدة حزم مدرجة أدناه:
+class HomePage extends StatelessWidget {
+  Widget buildCard(String title, IconData icon) {
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Icon(icon, size: 40, color: Colors.red),
+            SizedBox(height: 10),
+            Text(title),
+          ],
+        ),
+      ),
+    );
+  }
 
-| الحزمة                                                                                     | الوصف                              | الرابط                                                                                                         |
-| ------------------------------------------------------------------------------------------ | ---------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| [angular_bloc](https://github.com/felangel/bloc/tree/master/packages/angular_bloc)         | مكونات AngularDart                 | [![pub package](https://img.shields.io/pub/v/angular_bloc.svg)](https://pub.dev/packages/angular_bloc)         |
-| [bloc](https://github.com/felangel/bloc/tree/master/packages/bloc)                         | واجهات برمجة تطبيقات Dart الأساسية | [![pub package](https://img.shields.io/pub/v/bloc.svg)](https://pub.dev/packages/bloc)                         |
-| [bloc_concurrency](https://github.com/felangel/bloc/tree/master/packages/bloc_concurrency) | محولات الأحداث                     | [![pub package](https://img.shields.io/pub/v/bloc_concurrency.svg)](https://pub.dev/packages/bloc_concurrency) |
-| [bloc_lint](https://github.com/felangel/bloc/tree/master/packages/bloc_lint)               | مدقق مخصص                          | [![pub package](https://img.shields.io/pub/v/bloc_lint.svg)](https://pub.dev/packages/bloc_lint)               |
-| [bloc_test](https://github.com/felangel/bloc/tree/master/packages/bloc_test)               | واجهات برمجة تطبيقات للاختبار      | [![pub package](https://img.shields.io/pub/v/bloc_test.svg)](https://pub.dev/packages/bloc_test)               |
-| [bloc_tools](https://github.com/felangel/bloc/tree/master/packages/bloc_tools)             | أدوات سطر الأوامر                  | [![pub package](https://img.shields.io/pub/v/bloc_tools.svg)](https://pub.dev/packages/bloc_tools)             |
-| [flutter_bloc](https://github.com/felangel/bloc/tree/master/packages/flutter_bloc)         | عناصر واجهة Flutter                | [![pub package](https://img.shields.io/pub/v/flutter_bloc.svg)](https://pub.dev/packages/flutter_bloc)         |
-| [hydrated_bloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc)       | دعم التخزين المؤقت/الاستمرارية     | [![pub package](https://img.shields.io/pub/v/hydrated_bloc.svg)](https://pub.dev/packages/hydrated_bloc)       |
-| [replay_bloc](https://github.com/felangel/bloc/tree/master/packages/replay_bloc)           | دعم التراجع/الإعادة                | [![pub package](https://img.shields.io/pub/v/replay_bloc.svg)](https://pub.dev/packages/replay_bloc)           |
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Samy Telecom"),
+        backgroundColor: Colors.red,
+      ),
+      body: Column(
+        children: [
+          SizedBox(height: 20),
+          Text("سامي تليكوم",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
 
-## التثبيت
+          SizedBox(height: 20),
 
-<InstallationTabs />
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              buildCard("شحن رصيد", Icons.phone_android),
+              buildCard("باقات", Icons.wifi),
+            ],
+          ),
 
-:::note
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              buildCard("كروت", Icons.credit_card),
+              buildCard("تحويل", Icons.swap_horiz),
+            ],
+          ),
 
-من أجل البدء باستخدام bloc، يجب أن يكون
-[Dart SDK مُثبت](https://dart.dev/get-dart) على جهازك.
+          SizedBox(height: 20),
 
-:::
-
-## الاستيراد
-
-الآن بعد أن قمنا بتثبيت bloc بنجاح، يمكننا إنشاء ملف `main.dart` واستيراد حزمة
-`bloc` المناسبة.
-
-<ImportTabs />
+          Text("771751444",
+              style: TextStyle(fontSize: 20, color: Colors.red)),
+        ],
+      ),
+    );
+  }
+}
