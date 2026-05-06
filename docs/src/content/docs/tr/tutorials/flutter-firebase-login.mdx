@@ -1,0 +1,469 @@
+---
+title: Flutter Firebase Login
+description:
+  Bloc ve Firebase ile bir Flutter giriş akışı yapmaya yönelik ayrıntılı rehber.
+sidebar:
+  order: 7
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import FlutterCreateSnippet from '~/components/tutorials/flutter-firebase-login/FlutterCreateSnippet.astro';
+import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.astro';
+
+![advanced](https://img.shields.io/badge/level-advanced-red.svg)
+
+Aşağıdaki eğitimde, Bloc kütüphanesini kullanarak Flutter'da bir Firebase Giriş
+Akışı geliştireceğiz.
+
+![demo](~/assets/tutorials/flutter-firebase-login.gif)
+
+## Önemli Konular
+
+- Alt widget'larına bir bloc sağlayan Flutter widget'ı:
+  [BlocProvider](/flutter-bloc-concepts#blocprovider).
+- Bloc yerine Cubit kullanma.
+  [Aralarındaki fark nedir?](/bloc-concepts#cubit-vs-bloc)
+- [context.read](/flutter-bloc-concepts#contextread) ile olay ekleme.
+- [Equatable](/faqs#when-to-use-equatable) ile gereksiz yeniden inşaları önleme.
+- Alt widget'larına bir depo sağlayan Flutter widget'ı:
+  [RepositoryProvider](/flutter-bloc-concepts#repositoryprovider).
+- Bloc'taki durum değişikliklerine yanıt olarak listener kodunu çağıran Flutter
+  widget'ı: [BlocListener](/flutter-bloc-concepts#bloclistener).
+- [context.read](/flutter-bloc-concepts#contextselect) ile olay ekleme.
+
+## Kurulum
+
+Yepyeni bir Flutter projesi oluşturarak başlayalım.
+
+<FlutterCreateSnippet />
+
+[Login eğitiminde](/tutorials/flutter-login) olduğu gibi, uygulama mimarimizi
+daha iyi katmanlandırmak, net sınırlar korumak ve hem yeniden kullanılabilirliği
+en üst düzeye çıkarıp hem de test edilebilirliği artırmak için dahili paketler
+oluşturacağız.
+
+Bu durumda, [firebase_auth](https://pub.dev/packages/firebase_auth) ve
+[google_sign_in](https://pub.dev/packages/google_sign_in) paketleri veri
+katmanımız olacak; bu nedenle iki API istemcisinden gelen verileri bir araya
+getirmek için yalnızca bir `AuthenticationRepository` oluşturacağız.
+
+## Authentication Repository
+
+`AuthenticationRepository`, kullanıcının nasıl kimlik doğrulanacağı ve
+kullanıcı bilgilerinin nasıl alınacağına dair dahili uygulama ayrıntılarını
+soyutlamaktan sorumlu olacak. Bu durumda Firebase ile entegre olacak; ancak
+dahili uygulamayı daha sonra her zaman değiştirebiliriz ve uygulamamız
+etkilenmez.
+
+### Kurulum
+
+Projenin köküne `packages/authentication_repository` ve bir `pubspec.yaml`
+oluşturarak başlayacağız.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/authentication_repository/pubspec.yaml"
+	title="packages/authentication_repository/pubspec.yaml"
+/>
+
+Sırada, bağımlılıkları şu komutla kurabiliriz:
+
+<FlutterPubGetSnippet />
+
+bunu `authentication_repository` dizininde çalıştırın.
+
+Çoğu pakette olduğu gibi, `authentication_repository` API yüzeyini
+`packages/authentication_repository/lib/authentication_repository.dart`
+üzerinden tanımlayacak.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/authentication_repository/lib/authentication_repository.dart"
+	title="packages/authentication_repository/lib/authentication_repository.dart"
+/>
+
+:::note
+
+`authentication_repository` paketi, modellerin yanı sıra bir
+`AuthenticationRepository` de açığa çıkaracak.
+
+:::
+
+Sırada modellere bakalım.
+
+### User
+
+`User` modeli, kimlik doğrulama alanı bağlamında bir kullanıcıyı tanımlayacak.
+Bu örnek için, bir kullanıcı `email`, `id`, `name` ve `photo`'dan oluşacak.
+
+:::note
+
+Kendi alanınız bağlamında bir kullanıcının nasıl görünmesi gerektiğini
+tanımlamak tamamen size kalmıştır.
+
+:::
+
+[user.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/authentication_repository/lib/src/models/user.dart ':include')
+
+:::note
+
+`User` sınıfı, eşitlik karşılaştırmalarını ezerek farklı `User` örneklerini
+değere göre karşılaştırabilmemiz için
+[equatable](https://pub.dev/packages/equatable)'ı miras alır.
+
+:::
+
+:::tip
+
+`null` Kullanıcılar ile uğraşmak zorunda kalmamak ve her zaman somut bir `User`
+nesnesiyle çalışabilmek için boş bir `static` `User` tanımlamak yararlıdır.
+
+:::
+
+### Repository
+
+`AuthenticationRepository`, bir kullanıcının nasıl kimlik doğrulandığı ve nasıl
+alındığına dair alttaki uygulamayı soyutlamaktan sorumludur.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/authentication_repository/lib/src/authentication_repository.dart"
+	title="packages/authentication_repository/lib/src/authentication_repository.dart"
+/>
+
+`AuthenticationRepository`, bir `User` değiştiğinde bilgilendirilmek için
+abone olabileceğimiz bir `Stream<User>` açığa çıkarır. Ayrıca `signUp`,
+`logInWithGoogle`, `logInWithEmailAndPassword` ve `logOut` metotlarını da
+açığa çıkarır.
+
+:::note
+
+`AuthenticationRepository`, ayrıca veri katmanında oluşabilecek düşük seviyeli
+hataları ele almaktan da sorumludur ve alanla hizalanmış temiz, basit bir hata
+seti açığa çıkarır.
+
+:::
+
+`AuthenticationRepository` için hepsi bu kadar. Sırada bunu oluşturduğumuz
+Flutter projesine nasıl entegre edeceğimize bakalım.
+
+## Firebase Kurulumu
+
+Uygulamamızı Firebase'e bağlamak ve
+[google_sign_in](https://pub.dev/packages/google_sign_in)'i etkinleştirmek için
+[firebase_auth kullanım talimatlarını](https://pub.dev/packages/firebase_auth#usage)
+takip etmemiz gerekiyor.
+
+:::caution
+
+Android'de `google-services.json`'u, iOS'ta `GoogleService-Info.plist` ve
+`Info.plist`'i güncellemeyi unutmayın; aksi takdirde uygulama çökecektir.
+
+:::
+
+## Proje Bağımlılıkları
+
+Projenin kökünde oluşturulan `pubspec.yaml`'yi şununla değiştirebiliriz:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+Tüm uygulama yerel varlıklarımız için bir assets dizini belirttiğimize dikkat
+edin. Projenizin kökünde bir `assets` dizini oluşturun ve (daha sonra
+kullanacağımız)
+[bloc logosu](https://github.com/felangel/bloc/blob/master/examples/flutter_firebase_login/assets/bloc_logo_small.png)
+varlığını ekleyin.
+
+Ardından tüm bağımlılıkları kurun:
+
+<FlutterPubGetSnippet />
+
+:::note
+
+`authentication_repository` paketine path üzerinden bağımlıyız; bu, hızla
+yineleme yaparken net bir ayrımı korumamıza olanak tanıyacak.
+
+:::
+
+## main.dart
+
+`main.dart` dosyası şununla değiştirilebilir:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/main.dart"
+	title="lib/main.dart"
+/>
+
+Yalnızca uygulama için bazı global yapılandırmalar yapıyor ve bir `App`
+örneğiyle `runApp`'i çağırıyor.
+
+:::note
+
+`AuthenticationRepository`'nin tek bir örneğini `App`'e enjekte ediyoruz ve
+bu, açık bir yapıcı bağımlılığıdır.
+
+:::
+
+## App
+
+[Login eğitiminde](/tutorials/flutter-login) olduğu gibi, `app.dart`'ımız
+uygulamaya `AuthenticationRepository`'nin bir örneğini `RepositoryProvider`
+aracılığıyla sağlayacak ve aynı zamanda bir `AuthenticationBloc` örneği
+oluşturup sağlayacak. Ardından `AppView`, `AuthenticationBloc`'u tüketir ve
+`AuthenticationState`'e göre mevcut route'u güncellemeyi üstlenir.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/app/view/app.dart"
+	title="lib/app/view/app.dart"
+/>
+
+## App Bloc
+
+`AppBloc`, uygulamanın global durumunu yönetmekten sorumludur.
+`AuthenticationRepository`'ye bağımlıdır ve mevcut kullanıcıdaki değişikliklere
+yanıt olarak yeni durumlar yaymak için `user` Stream'ine abone olur.
+
+### State
+
+`AppState`, bir `AppStatus` ve bir `User`'dan oluşur. Varsayılan yapıcı
+isteğe bağlı bir `User` kabul eder ve uygun kimlik doğrulama durumuyla
+private yapıcıya yönlendirir.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/app/bloc/app_state.dart"
+	title="lib/app/bloc/app_state.dart"
+/>
+
+### Event
+
+`AppEvent`'in iki alt sınıfı vardır:
+
+- `AppUserSubscriptionRequested`: bloc'a kullanıcı stream'ine abone olmasını
+  bildirir.
+- `AppLogoutPressed`: bloc'a bir kullanıcı çıkış eylemini bildirir.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/app/bloc/app_event.dart"
+	title="lib/app/bloc/app_event.dart"
+/>
+
+### Bloc
+
+Yapıcı gövdesinde, `AppEvent` alt sınıfları, ilgili olay işleyicilerine
+eşlenir.
+
+`_onUserSubscriptionRequested` olay işleyicisinde, `AppBloc`,
+`AuthenticationRepository`'nin kullanıcı stream'ine abone olmak ve her `User`'a
+yanıt olarak bir durum yaymak için `emit.onEach`'i kullanır.
+
+`emit.onEach` dahili olarak bir stream aboneliği oluşturur ve `AppBloc` veya
+kullanıcı stream'i kapatıldığında onu iptal etme işini üstlenir.
+
+Kullanıcı stream'i bir hata yayarsa, `addError`, hatayı ve stack trace'i
+dinleyen herhangi bir `BlocObserver`'a iletir.
+
+:::caution
+
+`onError` atlanırsa, kullanıcı stream'indeki herhangi bir hata, ele alınmamış
+sayılır ve `onEach` tarafından fırlatılır. Sonuç olarak, kullanıcı stream'ine
+olan abonelik iptal edilir.
+
+:::
+
+:::tip
+
+Bir [`BlocObserver`](/bloc-concepts/#blocobserver-1), özellikle analitik ve
+çökme raporlama bağlamında Bloc olaylarını, hatalarını ve durum
+değişikliklerini log'lamak için harikadır.
+
+:::
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/app/bloc/app_bloc.dart"
+	title="lib/app/bloc/app_bloc.dart"
+/>
+
+## Modeller
+
+Doğrulama mantığını sarmak (encapsulate) için bir `Email` ve `Password` girdi
+modeli yararlıdır ve hem `LoginForm` hem de `SignUpForm` (eğitimin ilerleyen
+kısımlarında) içinde kullanılacak.
+
+Her iki girdi modeli de [formz](https://pub.dev/packages/formz) paketi
+kullanılarak yapılır ve bir `String` gibi ilkel bir tür yerine doğrulanmış
+bir nesneyle çalışmamıza olanak tanır.
+
+### Email
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/form_inputs/lib/src/email.dart"
+	title="packages/form_inputs/lib/src/email.dart"
+/>
+
+### Password
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/form_inputs/lib/src/password.dart"
+	title="packages/form_inputs/lib/src/password.dart"
+/>
+
+## Login Page
+
+`LoginPage`, `LoginForm`'a bir `LoginCubit` örneği oluşturmaktan ve sağlamaktan
+sorumludur.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/login/view/login_page.dart"
+	title="lib/login/view/login_page.dart"
+/>
+
+:::tip
+
+Bloc'ların/cubit'lerin oluşturulmasını, tüketildikleri yerden ayrı tutmak çok
+önemlidir. Bu, mock örnekleri kolayca enjekte edip görünümünüzü izole bir
+şekilde test etmenize olanak tanır.
+
+:::
+
+## Login Cubit
+
+`LoginCubit`, formun `LoginState`'ini yönetmekten sorumludur.
+`logInWithCredentials`, `logInWithGoogle` API'lerini açığa çıkarır ve
+e-posta/parola güncellendiğinde bilgilendirilir.
+
+### State
+
+`LoginState`, bir `Email`, `Password` ve `FormzStatus`'tan oluşur. `Email` ve
+`Password` modelleri, [formz](https://pub.dev/packages/formz) paketinden
+`FormzInput`'u miras alır.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/login/cubit/login_state.dart"
+	title="lib/login/cubit/login_state.dart"
+/>
+
+### Cubit
+
+`LoginCubit`, kullanıcıyı kimlik bilgileriyle veya google sign in ile oturum
+açtırmak için `AuthenticationRepository`'ye bağımlıdır.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/login/cubit/login_cubit.dart"
+	title="lib/login/cubit/login_cubit.dart"
+/>
+
+:::note
+
+Burada `Bloc` yerine bir `Cubit` kullandık; çünkü `LoginState` oldukça basit ve
+yereldir. Olaylar olmadan bile, bir durumdan diğerine geçişlere bakarak ne
+olduğuna dair oldukça iyi bir fikir sahibi olabiliriz ve kodumuz çok daha basit
+ve özlüdür.
+
+:::
+
+## Login Form
+
+`LoginForm`, `LoginState`'e yanıt olarak formu render etmekten sorumludur ve
+kullanıcı etkileşimlerine yanıt olarak `LoginCubit` üzerindeki metotları
+çağırır.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/login/view/login_form.dart"
+	title="lib/login/view/login_form.dart"
+/>
+
+`LoginForm` ayrıca, kullanıcının yepyeni bir hesap oluşturabileceği
+`SignUpPage`'e yönlendiren bir "Hesap Oluştur" düğmesi de render eder.
+
+## Sign Up Page
+
+`SignUp` yapısı, `Login` yapısını yansıtır ve bir `SignUpPage`, `SignUpView`
+ve `SignUpCubit`'ten oluşur.
+
+`SignUpPage`, yalnızca `SignUpCubit`'in bir örneğini oluşturmaktan ve
+`SignUpForm`'a sağlamaktan sorumludur (tıpkı `LoginPage`'de olduğu gibi).
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/view/sign_up_page.dart"
+	title="lib/sign_up/view/sign_up_page.dart"
+/>
+
+:::note
+
+Tıpkı `LoginCubit`'te olduğu gibi, `SignUpCubit` de yeni kullanıcı hesapları
+oluşturmak için `AuthenticationRepository`'ye bağımlıdır.
+
+:::
+
+## Sign Up Cubit
+
+`SignUpCubit`, `SignUpForm`'un durumunu yönetir ve yeni kullanıcı hesapları
+oluşturmak için `AuthenticationRepository` ile iletişim kurar.
+
+### State
+
+`SignUpState`, doğrulama mantığı aynı olduğu için aynı `Email` ve `Password`
+form girdi modellerini yeniden kullanır.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/cubit/sign_up_state.dart"
+	title="lib/sign_up/cubit/sign_up_state.dart"
+/>
+
+### Cubit
+
+`SignUpCubit`, login yerine formu göndermek için bir API açığa çıkarması
+dışında `LoginCubit`'e son derece benzerdir.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/cubit/sign_up_cubit.dart"
+	title="lib/sign_up/cubit/sign_up_cubit.dart"
+/>
+
+## Sign Up Form
+
+`SignUpForm`, `SignUpState`'e yanıt olarak formu render etmekten sorumludur ve
+kullanıcı etkileşimlerine yanıt olarak `SignUpCubit` üzerindeki metotları
+çağırır.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/sign_up/view/sign_up_form.dart"
+	title="lib/sign_up/view/sign_up_form.dart"
+/>
+
+## Home Page
+
+Bir kullanıcı başarıyla oturum açtıktan veya kaydolduktan sonra, `user`
+stream'i güncellenecek; bu da `AuthenticationBloc`'ta bir durum değişikliğini
+tetikleyecek ve `AppView`'ın `HomePage` route'unu yönlendirme yığınına itmesine
+yol açacaktır.
+
+`HomePage`'den, kullanıcı profil bilgilerini görüntüleyebilir ve `AppBar`'daki
+çıkış simgesine dokunarak oturumu kapatabilir.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/lib/home/view/home_page.dart"
+	title="lib/home/view/home_page.dart"
+/>
+
+:::note
+
+`home` özelliği içindeki `view` dizininin yanında, o özelliğe özgü yeniden
+kullanılabilir bileşenler için bir `widgets` dizini oluşturuldu. Bu durumda
+basit bir `Avatar` widget'ı dışa aktarılır ve `HomePage` içinde kullanılır.
+
+:::
+
+:::note
+
+Çıkış `IconButton`'una dokunulduğunda, `AuthenticationBloc`'a kullanıcının
+oturumunu kapatan ve `LoginPage`'e geri yönlendiren bir
+`AuthenticationLogoutRequested` olayı eklenir.
+
+:::
+
+Bu noktada Firebase kullanan oldukça sağlam bir giriş uygulamamız var ve Bloc
+Kütüphanesini kullanarak sunum katmanımızı iş mantığı katmanından ayırdık.
+
+Bu örneğin tam kaynağına
+[buradan](https://github.com/felangel/bloc/tree/master/examples/flutter_firebase_login)
+ulaşabilirsiniz.

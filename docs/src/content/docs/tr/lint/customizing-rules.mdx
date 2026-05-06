@@ -1,0 +1,163 @@
+---
+title: Lint Kurallarını Özelleştirme
+description: Bloc lint kurallarını özelleştirme
+sidebar:
+  order: 4
+---
+
+import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.astro';
+import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
+import BlocLintEnablingRulesSnippet from '~/components/lint/BlocLintEnablingRulesSnippet.astro';
+import BlocLintDisablingRulesSnippet from '~/components/lint/BlocLintDisablingRulesSnippet.astro';
+import BlocLintChangingSeveritySnippet from '~/components/lint/BlocLintChangingSeveritySnippet.astro';
+import ImportFlutterInfoSnippet from '~/components/lint/ImportFlutterInfoSnippet.mdx';
+import ImportFlutterInfoOutputSnippet from '~/components/lint/ImportFlutterInfoOutputSnippet.astro';
+import BlocLintExcludingFilesSnippet from '~/components/lint/BlocLintExcludingFilesSnippet.astro';
+import BlocLintIgnoreForLineSnippet from '~/components/lint/BlocLintIgnoreForLineSnippet.astro';
+import BlocLintIgnoreForFileSnippet from '~/components/lint/BlocLintIgnoreForFileSnippet.astro';
+
+Bloc linter'ın davranışını; tek tek kuralların ciddiyetini değiştirerek,
+kuralları teker teker etkinleştirip devre dışı bırakarak ve dosyaları statik
+analizden hariç tutarak özelleştirebilirsiniz.
+
+## Kuralları Etkinleştirme ve Devre Dışı Bırakma
+
+Bloc linter, sürekli büyüyen bir lint kuralları listesini destekler. Lint
+kurallarının birbiriyle uyuşmak zorunda olmadığını unutmayın. Örneğin, bazı
+geliştiriciler bloc kullanmayı (`prefer_bloc`) tercih ederken, diğerleri cubit
+kullanmayı (`prefer_cubit`) tercih edebilir.
+
+:::note
+
+Statik analizin aksine, lint kuralları false positive (hatalı pozitif) içerebilir.
+Tespit ettiğiniz false positive veya diğer sorunları
+[bir issue açarak](https://github.com/felangel/bloc/issues/new/choose) çekinmeden
+bildirebilirsiniz.
+
+:::
+
+### Önerilen Kuralları Etkinleştirme
+
+Bloc kütüphanesi, [`bloc_lint`](https://pub.dev/packages/bloc_lint) paketinin
+parçası olarak önerilen bir lint kuralları seti sağlar.
+
+Önerilen lint setini etkinleştirmek için `bloc_lint` paketini geliştirme
+bağımlılığı olarak ekleyin:
+
+<InstallBlocLintSnippet />
+
+Ardından `analysis_options.yaml` dosyanızı kural setini içerecek şekilde
+düzenleyin:
+
+<BlocLintRecommendedAnalysisOptionsSnippet />
+
+:::note
+
+`bloc_lint`'in yeni bir sürümü yayınlandığında, daha önce statik analizden
+geçen kod başarısız olmaya başlayabilir. Kodunuzu yeni kurallarla çalışacak
+şekilde güncellemenizi öneririz; isteğe bağlı olarak tek tek kuralları
+etkinleştirip devre dışı da bırakabilirsiniz.
+
+:::
+
+### Tek Tek Kuralları Etkinleştirme
+
+Tek tek kuralları etkinleştirmek için `analysis_options.yaml` dosyasına üst
+düzey anahtar olarak `bloc:` ve ikinci düzey anahtar olarak `rules:` ekleyin.
+Ardından, istediğiniz kuralları YAML listesi olarak (tireyle başlayan)
+belirtin.
+
+Örneğin:
+
+<BlocLintEnablingRulesSnippet />
+
+### Tek Tek Kuralları Devre Dışı Bırakma
+
+`recommended` gibi mevcut bir kural setini dahil ediyorsanız, dahil edilen lint
+kurallarından bir veya birkaçını devre dışı bırakmak isteyebilirsiniz.
+Kuralları devre dışı bırakma, etkinleştirmeye benzer; ancak liste yerine YAML
+map kullanılmasını gerektirir.
+
+Örneğin, aşağıdaki örnek `avoid_public_bloc_methods` hariç önerilen lint
+kuralları setini dahil eder ve ayrıca `prefer_bloc` kuralını da etkinleştirir:
+
+<BlocLintDisablingRulesSnippet />
+
+## Kural Ciddiyetini Özelleştirme
+
+Herhangi bir kuralın ciddiyetini şu şekilde ayarlayabilirsiniz:
+
+<BlocLintChangingSeveritySnippet />
+
+Artık aynı lint kuralı `warning` yerine `info` ciddiyetiyle bildirilecektir:
+
+<ImportFlutterInfoSnippet />
+
+`bloc lint` komutunun çıktısı şu şekilde görünmelidir:
+
+<ImportFlutterInfoOutputSnippet />
+
+Desteklenen ciddiyet seçenekleri şunlardır:
+
+| Ciddiyet  | Açıklama                                                |
+| --------- | ------------------------------------------------------- |
+| `error`   | Kalıba izin verilmediğini belirtir.                     |
+| `warning` | Kalıbın şüpheli olduğunu ancak izin verildiğini belirtir. |
+| `info`    | Kullanıcılara bilgi verir ancak bir sorun değildir       |
+| `hint`    | Bir sonuca ulaşmak için daha iyi bir yol önerir.         |
+
+## Dosyaları Hariç Tutma
+
+Bazen statik analizin başarısız olması sorun değildir. Örneğin, sizin ya da
+ekibiniz tarafından yazılmamış oluşturulmuş (generated) kodda bildirilen uyarı
+veya hataları yok saymak isteyebilirsiniz. Tıpkı resmi Dart lint kurallarında
+olduğu gibi, dosyaları statik analizden hariç tutmak için `exclude:` analyzer
+seçeneğini kullanabilirsiniz.
+
+Tek tek dosyaları listeleyebilir veya
+[`glob`](https://pub.dev/packages/glob) kalıplarını kullanabilirsiniz.
+
+:::note
+
+Tüm glob kalıbı kullanımları, ilgili `analysis_options.yaml` dosyasını içeren
+dizine göre göreli (relative) olmalıdır.
+
+:::
+
+Örneğin, oluşturulmuş tüm Dart kodunu aşağıdaki analiz seçenekleriyle hariç
+tutabiliriz:
+
+<BlocLintExcludingFilesSnippet />
+
+## Kuralları Yok Sayma
+
+Tıpkı resmi Dart lint kurallarında olduğu gibi, belirli bir dosya ya da kod
+satırı için bloc lint kurallarını sırasıyla `// ignore_for_file` ve `// ignore`
+kullanarak yok sayabilirsiniz.
+
+:::note
+
+Belirli bir satır ya da dosya için birden fazla kuralı yok saymak istiyorsanız,
+virgülle ayrılmış bir liste girin.
+
+:::
+
+### Satırları Yok Sayma
+
+Belirli kural ihlallerinin oluşumlarını, `ignore` yorumunu hatalı satırın
+hemen üstüne ekleyerek ya da hatalı satıra ekleyerek yok sayabiliriz.
+
+Örneğin, bir dosyada `prefer_file_naming_conventions` kuralının belirli
+oluşumlarını yok sayabiliriz:
+
+<BlocLintIgnoreForLineSnippet />
+
+### Dosyaları Yok Sayma
+
+Bir dosyadaki tüm kural ihlallerini, dosyada herhangi bir yere
+`ignore_for_file` yorumu ekleyerek yok sayabiliriz.
+
+Örneğin, bir dosyada `prefer_file_naming_conventions` kuralının tüm
+oluşumlarını yok sayabiliriz:
+
+<BlocLintIgnoreForFileSnippet />

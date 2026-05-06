@@ -1,0 +1,48 @@
+---
+title: Cubit'i Tercih Edin
+description: prefer_cubit kuralı.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/prefer_cubit/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/prefer_cubit/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+</div>
+
+`Bloc` örnekleri yerine `Cubit` örneklerini tercih edin.
+
+## Gerekçe
+
+Bu kural tamamen stilistik bir kuraldır. Bazı durumlarda, ekipler tutarlılık
+adına uygulamalarının tamamında yalnızca `Cubit` örneklerini kullanma
+standardını benimsemeyi tercih edebilir.
+
+:::tip
+
+`Cubit`'in avantajları hakkında daha fazla bilgi edinmek için
+[Temel Kavramlar](/bloc-concepts/#cubit-advantages) bölümüne bakın.
+
+:::
+
+## Örnekler
+
+`Bloc` örneklerini kullanmaktan **kaçının**.
+
+**KÖTÜ**:
+
+<BadSnippet />
+
+**İYİ**:
+
+<GoodSnippet />
+
+## Etkinleştirme
+
+`prefer_cubit` kuralını etkinleştirmek için `analysis_options.yaml` dosyanızda
+`bloc` > `rules` altına ekleyin:
+
+<EnableRuleSnippet name="prefer_cubit" />

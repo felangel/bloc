@@ -1,0 +1,140 @@
+---
+title: AngularDart Counter
+description:
+  Bloc ile bir AngularDart sayaç uygulaması yapmaya yönelik ayrıntılı rehber.
+sidebar:
+  order: 8
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import ActivateStagehandSnippet from '~/components/tutorials/ngdart-counter/ActivateStagehandSnippet.astro';
+import StagehandSnippet from '~/components/tutorials/ngdart-counter/StagehandSnippet.astro';
+import InstallDependenciesSnippet from '~/components/tutorials/ngdart-counter/InstallDependenciesSnippet.astro';
+
+![beginner](https://img.shields.io/badge/level-beginner-green.svg)
+
+Aşağıdaki eğitimde, Bloc kütüphanesini kullanarak AngularDart'ta bir Sayaç
+geliştireceğiz.
+
+![demo](~/assets/tutorials/ngdart-counter.gif)
+
+## Kurulum
+
+[stagehand](https://github.com/dart-lang/stagehand) ile yepyeni bir
+AngularDart projesi oluşturarak başlayacağız.
+
+stagehand kurulu değilse şu komutla etkinleştirin:
+
+<ActivateStagehandSnippet />
+
+Ardından şu komutla yeni bir proje oluşturun:
+
+<StagehandSnippet />
+
+Sonra `pubspec.yaml` içeriğini şununla değiştirebiliriz:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+ve tüm bağımlılıklarımızı kuralım.
+
+<InstallDependenciesSnippet />
+
+Sayaç uygulamamızda yalnızca sayaç değerini arttıran/azaltan iki düğme ve
+mevcut değeri gösteren bir öğe olacak. `CounterEvents`'i tasarlamaya başlayalım.
+
+## Counter Bloc
+
+Sayaç durumumuz bir tam sayı (integer) ile temsil edilebileceğinden özel bir
+sınıf oluşturmaya gerek yok ve olaylarla bloc'u tek bir yerde tutabiliriz.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/src/counter_page/counter_bloc.dart"
+	title="lib/src/counter_page/counter_bloc.dart"
+/>
+
+:::note
+
+Sınıf bildiriminden, `CounterBloc`'umuzun girdi olarak `CounterEvents`'i
+alacağını ve çıktı olarak tam sayılar üreteceğini söyleyebiliriz.
+
+:::
+
+## Counter App
+
+Artık `CounterBloc`'umuz tamamen uygulandığına göre, AngularDart App
+Component'imizi oluşturmaya başlayabiliriz.
+
+`app.component.dart` dosyamız şu şekilde olmalı:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/app_component.dart"
+	title="lib/app_component.dart"
+/>
+
+ve `app.component.html` dosyamız şu şekilde olmalı:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/app_component.html"
+	title="lib/app_component.html"
+/>
+
+## Counter Page
+
+Son olarak, geriye kalan tek şey Counter Page Component'imizi oluşturmak.
+
+`counter_page_component.dart` dosyamız şu şekilde olmalı:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/src/counter_page/counter_page_component.dart"
+	title="lib/src/counter_page/counter_page_component.dart"
+/>
+
+:::note
+
+`CounterBloc` örneğine, AngularDart'ın bağımlılık enjeksiyonu sistemini
+kullanarak erişebiliyoruz. Onu bir `Provider` olarak kaydettiğimiz için
+AngularDart, `CounterBloc`'u doğru şekilde çözebiliyor.
+
+:::
+
+:::note
+
+`ngOnDestroy` içinde `CounterBloc`'u kapatıyoruz.
+
+:::
+
+:::note
+
+`BlocPipe`'ı, şablonumuzda kullanabilmek için içe aktarıyoruz.
+
+:::
+
+Son olarak, `counter_page_component.html` dosyamız şu şekilde olmalı:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/angular_counter/lib/src/counter_page/counter_page_component.html"
+	title="lib/src/counter_page/counter_page_component.html"
+/>
+
+:::note
+
+`CounterBloc` durumumuzu güncellendikçe görüntüleyebilmek için `BlocPipe`'ı
+kullanıyoruz.
+
+:::
+
+Hepsi bu kadar! Sunum katmanımızı iş mantığı katmanımızdan ayırdık.
+`CounterPageComponent`'imizin bir kullanıcı bir düğmeye bastığında ne olacağı
+hakkında hiçbir fikri yok; yalnızca `CounterBloc`'a haber vermek için bir olay
+ekliyor. Ayrıca `CounterBloc`'umuzun durumla (sayaç değeri) ne olduğu hakkında
+hiçbir fikri yok; yalnızca `CounterEvents`'i tam sayılara dönüştürüyor.
+
+Uygulamamızı `webdev serve` ile çalıştırabilir ve yerel olarak
+görüntüleyebiliriz.
+
+Bu örneğin tam kaynağına
+[buradan](https://github.com/felangel/bloc/tree/master/examples/angular_counter)
+ulaşabilirsiniz.

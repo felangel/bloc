@@ -1,0 +1,160 @@
+---
+title: Mimari
+description: Bloc kullanırken önerilen mimari kalıplara genel bir bakış.
+---
+
+import DataProviderSnippet from '~/components/architecture/DataProviderSnippet.astro';
+import RepositorySnippet from '~/components/architecture/RepositorySnippet.astro';
+import BusinessLogicComponentSnippet from '~/components/architecture/BusinessLogicComponentSnippet.astro';
+import BlocTightCouplingSnippet from '~/components/architecture/BlocTightCouplingSnippet.astro';
+import BlocLooseCouplingPresentationSnippet from '~/components/architecture/BlocLooseCouplingPresentationSnippet.astro';
+import AppIdeasRepositorySnippet from '~/components/architecture/AppIdeasRepositorySnippet.astro';
+import AppIdeaRankingBlocSnippet from '~/components/architecture/AppIdeaRankingBlocSnippet.astro';
+import PresentationComponentSnippet from '~/components/architecture/PresentationComponentSnippet.astro';
+
+![Bloc Mimarisi](~/assets/concepts/bloc_architecture_full.png)
+
+Bloc kütüphanesini kullanmak, uygulamamızı üç katmana ayırmamıza olanak tanır:
+
+- Sunum (Presentation)
+- İş Mantığı (Business Logic)
+- Veri (Data)
+  - Depo (Repository)
+  - Veri Sağlayıcı (Data Provider)
+
+En alt seviyedeki katmandan (kullanıcı arayüzünden en uzak olandan) başlayıp
+yukarı doğru, sunum katmanına kadar ilerleyeceğiz.
+
+## Veri Katmanı
+
+Veri katmanının sorumluluğu, bir veya daha fazla kaynaktan veri almak/veriyi
+işlemektir.
+
+Veri katmanı iki bölüme ayrılabilir:
+
+- Depo (Repository)
+- Veri Sağlayıcı (Data Provider)
+
+Bu katman uygulamanın en alt seviyesidir; veritabanlarıyla, ağ istekleriyle ve
+diğer asenkron veri kaynaklarıyla etkileşime girer.
+
+### Veri Sağlayıcı
+
+Veri sağlayıcının sorumluluğu, ham veriyi sağlamaktır. Veri sağlayıcı genel ve
+çok yönlü olmalıdır.
+
+Veri sağlayıcı genellikle
+[CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete)
+işlemlerini gerçekleştirmek için basit API'ler sunar. Veri katmanımızın
+parçası olarak `createData`, `readData`, `updateData` ve `deleteData`
+metotlarımız olabilir.
+
+<DataProviderSnippet />
+
+### Depo
+
+Depo katmanı; bir veya daha fazla veri sağlayıcısının üzerine inşa edilen ve
+Bloc katmanının iletişim kurduğu bir sarmalayıcıdır.
+
+<RepositorySnippet />
+
+Gördüğünüz gibi depo katmanımız birden fazla veri sağlayıcıyla etkileşime
+girebilir ve sonucu iş mantığı katmanına teslim etmeden önce veri üzerinde
+dönüşümler gerçekleştirebilir.
+
+## İş Mantığı Katmanı
+
+İş mantığı katmanının sorumluluğu, sunum katmanından gelen girdiye yeni
+durumlarla yanıt vermektir. Bu katman, uygulama durumunu oluşturmak için
+gereken veriyi almak amacıyla bir veya daha fazla depoya bağımlı olabilir.
+
+İş mantığı katmanını, kullanıcı arayüzü (sunum katmanı) ile veri katmanı
+arasındaki bir köprü olarak düşünebilirsiniz. İş mantığı katmanı, sunum
+katmanından gelen olaylar/eylemler hakkında bilgilendirilir ve ardından sunum
+katmanının tüketmesi için yeni bir durum oluşturmak üzere depoyla iletişim
+kurar.
+
+<BusinessLogicComponentSnippet />
+
+### Bloc'lar Arası İletişim
+
+Bloc'lar Stream sundukları için, başka bir bloc'u dinleyen bir bloc oluşturmak
+cazip görünebilir. Bunu **yapmamalısınız**. Aşağıdaki koda başvurmaktansa daha
+iyi alternatifler vardır:
+
+<BlocTightCouplingSnippet />
+
+Yukarıdaki kod hatasız olsa da (ve hatta kendi ardından temizleme yapsa da)
+daha büyük bir sorunu vardır: iki bloc arasında bir bağımlılık oluşturur.
+
+Genel olarak, aynı mimari katmandaki iki varlık arasındaki kardeş bağımlılıklar
+ne pahasına olursa olsun engellenmelidir; çünkü bu, sürdürülmesi zor bir sıkı
+bağlanma (tight-coupling) yaratır. Bloc'lar iş mantığı mimari katmanında yer
+aldığından, hiçbir bloc başka bir bloc'tan haberdar olmamalıdır.
+
+![Uygulama Mimari Katmanları](~/assets/architecture/architecture.png)
+
+Bir bloc, bilgiyi yalnızca olaylar aracılığıyla ve enjekte edilen depolardan
+(yani yapıcısı üzerinden bloc'a verilen depolardan) almalıdır.
+
+Bir bloc'un başka bir bloc'a yanıt vermesi gereken bir durumla
+karşılaşırsanız, iki seçeneğiniz daha vardır. Sorunu bir katman yukarıya (sunum
+katmanına) ya da bir katman aşağıya (alan/domain katmanına) taşıyabilirsiniz.
+
+#### Bloc'ları Sunum Katmanı Üzerinden Bağlamak
+
+Bir bloc'u dinlemek ve ilk bloc her değiştiğinde başka bir bloc'a olay eklemek
+için bir `BlocListener` kullanabilirsiniz.
+
+<BlocLooseCouplingPresentationSnippet />
+
+Yukarıdaki kod, `SecondBloc`'un `FirstBloc`'tan haberdar olmasına gerek
+bırakmayarak gevşek bağlanmayı (loose-coupling) teşvik eder.
+[flutter_weather](/tutorials/flutter-weather) uygulaması, alınan hava durumu
+bilgisine göre uygulamanın temasını değiştirmek için
+[bu tekniği kullanır](https://github.com/felangel/bloc/blob/b4c8db938ad71a6b60d4a641ec357905095c3965/examples/flutter_weather/lib/weather/view/weather_page.dart#L38-L42).
+
+Bazı durumlarda iki bloc'u sunum katmanında birbirine bağlamak istemeyebilirsiniz.
+Bunun yerine, çoğu zaman iki bloc'un aynı veri kaynağını paylaşması ve veri
+değiştiğinde her birinin güncellenmesi daha mantıklı olabilir.
+
+#### Bloc'ları Alan Katmanı Üzerinden Bağlamak
+
+İki bloc, bir depodan gelen Stream'i dinleyebilir ve depo verisi her
+değiştiğinde durumlarını birbirinden bağımsız olarak güncelleyebilir. Durumu
+senkronize tutmak için reaktif depolar kullanmak, büyük ölçekli kurumsal
+uygulamalarda yaygın bir yaklaşımdır.
+
+Önce, bir veri `Stream`'i sağlayan bir depo oluşturun veya kullanın. Örneğin,
+aşağıdaki depo aynı birkaç uygulama fikrinin asla bitmeyen bir akışını sunar:
+
+<AppIdeasRepositorySnippet />
+
+Aynı depo, yeni uygulama fikirlerine tepki vermesi gereken her bloc'a enjekte
+edilebilir. Aşağıda, yukarıdaki depodan gelen her uygulama fikri için bir
+durum yayan bir `AppIdeaRankingBloc` görebilirsiniz:
+
+<AppIdeaRankingBlocSnippet />
+
+Stream'leri Bloc ile kullanma hakkında daha fazla bilgi için bkz.
+[Bloc'u stream'ler ve eşzamanlılıkla nasıl kullanmalı?](https://verygood.ventures/blog/how-to-use-bloc-with-streams-and-concurrency).
+
+## Sunum Katmanı
+
+Sunum katmanının sorumluluğu, bir veya daha fazla bloc durumuna göre kendisini
+nasıl render edeceğini belirlemektir. Ek olarak, kullanıcı girdisini ve
+uygulama yaşam döngüsü olaylarını da yönetmelidir.
+
+Çoğu uygulama akışı, uygulamanın kullanıcıya sunmak üzere veri çekmesini
+tetikleyen bir `AppStart` olayı ile başlar.
+
+Bu senaryoda, sunum katmanı bir `AppStart` olayı eklerdi.
+
+Ayrıca sunum katmanı, bloc katmanından gelen duruma göre ekranda neyi render
+edeceğini de belirlemek zorundadır.
+
+<PresentationComponentSnippet />
+
+Şimdiye dek, birkaç kod parçacığı görmüş olsak da, hepsi oldukça üst seviyedeydi.
+Eğitim bölümünde tüm bunları bir araya getirip birkaç farklı örnek uygulama
+geliştireceğiz.

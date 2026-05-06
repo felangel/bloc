@@ -1,0 +1,55 @@
+---
+title: Flutter İçe Aktarmalarından Kaçının
+description: avoid_flutter_imports bloc lint kuralı.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/avoid_flutter_imports/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/avoid_flutter_imports/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+	<Badge text="recommended" variant="success" />
+</div>
+
+İş mantığı bileşenleri (`Bloc` veya `Cubit` örnekleri) içinde Flutter'a yönelik
+bağımlılıklar oluşturmaktan kaçının.
+
+## Gerekçe
+
+Bir uygulamayı katmanlara ayırmak, sürdürülebilir bir kod tabanı oluşturmanın
+temel bir parçasıdır ve geliştiricilerin hızlıca, güvenle yineleme yapmasına
+yardımcı olur. Her katmanın tek bir sorumluluğu olmalı ve izole bir şekilde
+çalışıp test edilebilmelidir. Bu, değişiklikleri belirli katmanlarda
+sınırlamanıza ve uygulamanın tamamına olan etkisini en aza indirmenize olanak
+tanır.
+
+Sonuç olarak, iş mantığı bileşenleri genel olarak özellik durumunu yönetmeli ve
+UI katmanından bağımsız (decoupled) olmalıdır. Olaylar UI katmanından iş
+mantığı bileşenlerine doğru akmalı, durum ise iş mantığı katmanından UI
+katmanına doğru akmalıdır.
+
+İş mantığı bileşenlerini Flutter'dan bağımsız tutmak, iş mantığını birden
+fazla platform/çatı arasında (örneğin Flutter, AngularDart, Jaspr vb.)
+yeniden kullanma olanağı sağlar.
+
+## Örnekler
+
+İş mantığı bileşenlerinizde Flutter'ı içe **aktarmayın**.
+
+**KÖTÜ**:
+
+<BadSnippet />
+
+**İYİ**:
+
+<GoodSnippet />
+
+## Etkinleştirme
+
+`avoid_flutter_imports` kuralını etkinleştirmek için
+`analysis_options.yaml` dosyanızda `bloc` > `rules` altına ekleyin:
+
+<EnableRuleSnippet name="avoid_flutter_imports" />

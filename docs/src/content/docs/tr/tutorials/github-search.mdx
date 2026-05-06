@@ -1,0 +1,647 @@
+---
+title: GitHub Search
+description:
+  Bloc ile Flutter ve AngularDart'ta bir GitHub Search uygulaması yapmaya yönelik
+  ayrıntılı rehber.
+sidebar:
+  order: 9
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import SetupSnippet from '~/components/tutorials/github-search/SetupSnippet.astro';
+import DartPubGetSnippet from '~/components/tutorials/github-search/DartPubGetSnippet.astro';
+import FlutterCreateSnippet from '~/components/tutorials/github-search/FlutterCreateSnippet.astro';
+import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.astro';
+import StagehandSnippet from '~/components/tutorials/github-search/StagehandSnippet.astro';
+import ActivateStagehandSnippet from '~/components/tutorials/github-search/ActivateStagehandSnippet.astro';
+
+![advanced](https://img.shields.io/badge/level-advanced-red.svg)
+
+Aşağıdaki eğitimde, iki proje arasında veri ve iş mantığı katmanlarının nasıl
+paylaşılacağını göstermek için Flutter ve AngularDart'ta bir GitHub Search
+uygulaması geliştireceğiz.
+
+![demo](~/assets/tutorials/flutter-github-search.gif)
+
+![demo](~/assets/tutorials/ngdart-github-search.gif)
+
+## Önemli Konular
+
+- Alt widget'larına bir bloc sağlayan Flutter widget'ı:
+  [BlocProvider](/flutter-bloc-concepts#blocprovider).
+- Yeni durumlara yanıt olarak widget'ı oluşturmayı yöneten Flutter widget'ı:
+  [BlocBuilder](/flutter-bloc-concepts#blocbuilder).
+- Bloc yerine Cubit kullanma.
+  [Aralarındaki fark nedir?](/bloc-concepts#cubit-vs-bloc)
+- [Equatable](/faqs#when-to-use-equatable) ile gereksiz yeniden inşaları önleme.
+- [`bloc_concurrency`](https://pub.dev/packages/bloc_concurrency) ile özel
+  bir `EventTransformer` kullanma.
+- `http` paketini kullanarak ağ istekleri yapma.
+
+## Common GitHub Search Kütüphanesi
+
+Common GitHub Search kütüphanesi; modelleri, veri sağlayıcıyı, depoyu ve
+AngularDart ile Flutter arasında paylaşılacak olan bloc'u içerecek.
+
+### Kurulum
+
+Uygulamamız için yeni bir dizin oluşturarak başlayalım.
+
+<SetupSnippet />
+
+:::note
+
+`common_github_search` dizini paylaşılan kütüphaneyi içerecek.
+
+:::
+
+Gerekli bağımlılıklarla bir `pubspec.yaml` oluşturmamız gerekiyor.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/pubspec.yaml"
+	title="common_github_search/pubspec.yaml"
+/>
+
+Son olarak, bağımlılıklarımızı kurmamız gerekiyor.
+
+<DartPubGetSnippet />
+
+Proje kurulumu için hepsi bu kadar! Şimdi `common_github_search` paketini
+geliştirmeye başlayabiliriz.
+
+### Github Client
+
+[GitHub API'sinden](https://developer.github.com/v3/) ham veri sağlayacak olan
+`GithubClient`.
+
+:::note
+
+Aldığımız verinin nasıl görüneceğine dair bir örneği
+[burada](https://api.github.com/search/repositories?q=dartlang) görebilirsiniz.
+
+:::
+
+`github_client.dart`'ı oluşturalım.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/github_client.dart"
+	title="common_github_search/lib/src/github_client.dart"
+/>
+
+:::note
+
+`GithubClient`'ımız yalnızca Github'ın Repository Search API'sine bir ağ
+isteği yapıyor ve sonucu bir `Future` olarak ya `SearchResult` ya da
+`SearchResultError`'a dönüştürüyor.
+
+:::
+
+:::note
+
+`GithubClient` uygulaması, henüz uygulamadığımız `SearchResult.fromJson`'a
+bağımlıdır.
+
+:::
+
+Sırada `SearchResult` ve `SearchResultError` modellerimizi tanımlamamız var.
+
+#### Search Result Modeli
+
+Kullanıcı sorgusuna göre bir `SearchResultItems` listesini temsil eden
+`search_result.dart`'ı oluşturun:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/models/search_result.dart"
+	title="lib/src/models/search_result.dart"
+/>
+
+:::note
+
+`SearchResult` uygulaması, henüz uygulamadığımız `SearchResultItem.fromJson`'a
+bağımlıdır.
+
+:::
+
+:::note
+
+Modelimizde kullanılmayacak özellikleri dahil etmiyoruz.
+
+:::
+
+#### Search Result Item Modeli
+
+Sırada `search_result_item.dart`'ı oluşturacağız.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/models/search_result_item.dart"
+	title="lib/src/models/search_result_item.dart"
+/>
+
+:::note
+
+Yine, `SearchResultItem` uygulaması henüz uygulamadığımız
+`GithubUser.fromJson`'a bağımlıdır.
+
+:::
+
+#### GitHub User Modeli
+
+Sırada `github_user.dart`'ı oluşturacağız.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/models/github_user.dart"
+	title="lib/src/models/github_user.dart"
+/>
+
+Bu noktada `SearchResult` ve bağımlılıklarını uygulamayı tamamladık. Şimdi
+`SearchResultError`'a geçeceğiz.
+
+#### Search Result Error Modeli
+
+`search_result_error.dart`'ı oluşturun.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/models/search_result_error.dart"
+	title="lib/src/models/search_result_error.dart"
+/>
+
+`GithubClient`'ımız bittiğine göre sırada
+[memoization](https://en.wikipedia.org/wiki/Memoization) ile performans
+optimizasyonundan sorumlu olacak `GithubCache`'e geçiyoruz.
+
+### GitHub Cache
+
+`GithubCache`'imiz, gereksiz ağ isteklerinden kaçınmak için tüm geçmiş
+sorguları hatırlamaktan sorumlu olacak. Bu aynı zamanda uygulamamızın
+performansını artırmaya yardımcı olacak.
+
+`github_cache.dart`'ı oluşturun.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/github_cache.dart"
+	title="lib/src/github_cache.dart"
+/>
+
+Şimdi `GithubRepository`'mizi oluşturmaya hazırız!
+
+### GitHub Repository
+
+Github Repository, veri katmanı (`GithubClient`) ile İş Mantığı Katmanı
+(`Bloc`) arasında bir soyutlama oluşturmaktan sorumludur. Burası ayrıca
+`GithubCache`'imizi de kullanacağımız yer.
+
+`github_repository.dart`'ı oluşturun.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/github_repository.dart"
+	title="lib/src/github_repository.dart"
+/>
+
+:::note
+
+`GithubRepository`, `GithubCache` ve `GithubClient`'a bağımlıdır ve alttaki
+uygulamayı soyutlar. Uygulamamızın verinin nasıl alındığını veya nereden
+geldiğini hiçbir zaman bilmesi gerekmez; çünkü bunu önemsememeli. Deponun
+nasıl çalıştığını istediğimiz zaman değiştirebiliriz; arayüzü değiştirmediğimiz
+sürece istemci kodunu değiştirmemize gerek yoktur.
+
+:::
+
+Bu noktada veri sağlayıcı katmanını ve depo katmanını tamamladık; iş mantığı
+katmanına geçmeye hazırız.
+
+### GitHub Search Event
+
+Bloc'umuz, kullanıcı bir deponun adını yazdığında bilgilendirilecek; bunu
+`TextChanged` `GithubSearchEvent` olarak temsil edeceğiz.
+
+`github_search_event.dart`'ı oluşturun.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/github_search_bloc/github_search_event.dart"
+	title="lib/src/github_search_bloc/github_search_event.dart"
+/>
+
+:::note
+
+`GithubSearchEvent` örneklerini karşılaştırabilmek için
+[`Equatable`](https://pub.dev/packages/equatable)'ı miras alıyoruz. Varsayılan
+olarak, eşitlik operatörü yalnızca this ve other aynı örnek olduğunda true
+döndürür.
+
+:::
+
+### Github Search State
+
+Sunum katmanımızın kendisini düzgün şekilde yerleştirebilmesi için birkaç
+bilgiye ihtiyacı olacak:
+
+- `SearchStateEmpty`- sunum katmanına kullanıcı tarafından hiçbir girdi
+  verilmediğini söyleyecek.
+
+- `SearchStateLoading`- sunum katmanına bir tür yükleme göstergesi göstermesi
+  gerektiğini söyleyecek.
+
+- `SearchStateSuccess`- sunum katmanına sunacak veriye sahip olduğunu söyleyecek.
+
+  - `items`- görüntülenecek `List<SearchResultItem>` olacak.
+
+- `SearchStateError`- sunum katmanına depolar getirilirken bir hata oluştuğunu
+  söyleyecek.
+
+  - `error`- oluşan kesin hata olacak.
+
+Şimdi `github_search_state.dart`'ı oluşturup şu şekilde uygulayabiliriz.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/github_search_bloc/github_search_state.dart"
+	title="lib/src/github_search_bloc/github_search_state.dart"
+/>
+
+:::note
+
+`GithubSearchState` örneklerini karşılaştırabilmek için
+[`Equatable`](https://pub.dev/packages/equatable)'ı miras alıyoruz. Varsayılan
+olarak, eşitlik operatörü yalnızca this ve other aynı örnek olduğunda true
+döndürür.
+
+:::
+
+Artık Events ve States'imiz uygulanmış olduğuna göre, `GithubSearchBloc`'umuzu
+oluşturabiliriz.
+
+### GitHub Search Bloc
+
+`github_search_bloc.dart`'ı oluşturun:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/common_github_search/lib/src/github_search_bloc/github_search_bloc.dart"
+	title="lib/src/github_search_bloc/github_search_bloc.dart"
+/>
+
+:::note
+
+`GithubSearchBloc`'umuz `GithubSearchEvent`'i `GithubSearchState`'e dönüştürür
+ve `GithubRepository`'ye bağımlıdır.
+
+:::
+
+:::note
+
+`GithubSearchEvents`'i
+[debounce](https://pub.dev/documentation/stream_transform/latest/stream_transform/RateLimit/debounce.html)
+etmek için özel bir `EventTransformer` oluşturuyoruz. `Cubit` yerine `Bloc`
+oluşturmamızın bir nedeni de stream transformer'lardan yararlanmaktı.
+
+:::
+
+Harika! `common_github_search` paketimiz tamam.
+[Burada](https://github.com/felangel/bloc/tree/master/examples/github_search/common_github_search)
+bitmiş ürünü görebilirsiniz.
+
+Sırada Flutter uygulamasını yapacağız.
+
+## Flutter GitHub Search
+
+Flutter Github Search; Github Search'i uygulamak için
+`common_github_search`'ten modelleri, veri sağlayıcılarını, depoları ve
+bloc'ları yeniden kullanan bir Flutter uygulaması olacak.
+
+### Kurulum
+
+`common_github_search` ile aynı seviyede `github_search` dizinimizde yeni bir
+Flutter projesi oluşturarak başlamamız gerekiyor.
+
+<FlutterCreateSnippet />
+
+Sırada, gerekli tüm bağımlılıkları dahil etmek için `pubspec.yaml`'imizi
+güncellememiz gerekiyor.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/flutter_github_search/pubspec.yaml"
+	title="flutter_github_search/pubspec.yaml"
+/>
+
+:::note
+
+Yeni oluşturduğumuz `common_github_search` kütüphanesini bağımlılık olarak
+dahil ediyoruz.
+
+:::
+
+Şimdi bağımlılıkları kurmamız gerekiyor.
+
+<FlutterPubGetSnippet />
+
+Proje kurulumu için hepsi bu kadar. `common_github_search` paketi veri
+katmanımızı ve iş mantığı katmanımızı içerdiğinden, geriye yalnızca sunum
+katmanını oluşturmak kalıyor.
+
+### Search Form
+
+`_SearchBar` ve `_SearchBody` widget'larıyla bir form oluşturmamız gerekecek.
+
+- `_SearchBar` kullanıcı girdisini almaktan sorumlu olacak.
+- `_SearchBody` arama sonuçlarını, yükleme göstergelerini ve hataları
+  görüntülemekten sorumlu olacak.
+
+`search_form.dart`'ı oluşturalım.
+
+`SearchForm`'umuz, `_SearchBar` ve `_SearchBody` widget'larını render eden bir
+`StatelessWidget` olacak.
+
+`_SearchBar` da bir `StatefulWidget` olacak; çünkü kullanıcının girdi olarak
+yazdığını takip edebilmek için kendi `TextEditingController`'ını sürdürmesi
+gerekecek.
+
+`_SearchBody`, arama sonuçlarını, hataları ve yükleme göstergelerini
+görüntülemekten sorumlu olacak bir `StatelessWidget`'tır.
+`GithubSearchBloc`'un tüketicisi olacak.
+
+Durumumuz `SearchStateSuccess` ise, sırada uygulayacağımız `_SearchResults`'u
+render ederiz.
+
+`_SearchResults`, bir `List<SearchResultItem>` alan ve bunları
+`_SearchResultItems` listesi olarak görüntüleyen bir `StatelessWidget`'tır.
+
+`_SearchResultItem`, tek bir arama sonucunun bilgilerini render etmekten
+sorumlu olan bir `StatelessWidget`'tır. Ayrıca kullanıcı etkileşimini ele
+almaktan ve kullanıcı dokunduğunda depo URL'sine yönlendirmekten de
+sorumludur.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/flutter_github_search/lib/search_form.dart"
+	title="flutter_github_search/lib/search_form.dart"
+/>
+
+:::note
+
+`_SearchBar`, `GitHubSearchBloc`'a `context.read<GithubSearchBloc>()`
+aracılığıyla erişir ve bloc'u `TextChanged` olaylarından haberdar eder.
+
+:::
+
+:::note
+
+`_SearchBody`, durum değişikliklerine yanıt olarak yeniden inşa etmek için
+`BlocBuilder` kullanır. `BlocBuilder` nesnesinin bloc parametresi atlandığı
+için, `BlocBuilder` `BlocProvider` ve mevcut `BuildContext` aracılığıyla
+otomatik olarak arama yapacaktır. Daha fazlasını
+[buradan](/flutter-bloc-concepts#blocbuilder) okuyun.
+:::
+
+:::note
+
+Kaydırılabilir bir `_SearchResultItem` listesi oluşturmak için
+`ListView.builder` kullanırız.
+
+:::
+
+:::note
+
+Harici URL'leri açmak için
+[url_launcher](https://pub.dev/packages/url_launcher) paketini kullanırız.
+
+:::
+
+### Hepsini Bir Araya Getirme
+
+Geriye yalnızca `main.dart`'ta ana uygulamamızı uygulamak kalıyor.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/flutter_github_search/lib/main.dart"
+	title="flutter_github_search/lib/main.dart"
+/>
+
+:::note
+
+`GithubRepository`'miz `main`'de oluşturulup `App`'imize enjekte edilir.
+`SearchForm`'umuz; `GithubSearchBloc` örneğini başlatmaktan, kapatmaktan ve
+`SearchForm` widget'ı ile alt widget'larına sunmaktan sorumlu olan bir
+`BlocProvider` ile sarmalanmıştır.
+
+:::
+
+Hepsi bu kadar! [bloc](https://pub.dev/packages/bloc) ve
+[flutter_bloc](https://pub.dev/packages/flutter_bloc) paketlerini kullanarak
+Flutter'da bir GitHub search uygulamasını başarıyla uyguladık ve sunum
+katmanımızı iş mantığımızdan başarıyla ayırdık.
+
+Tam kaynağa
+[buradan](https://github.com/felangel/bloc/tree/master/examples/github_search/flutter_github_search)
+ulaşabilirsiniz.
+
+Son olarak, AngularDart GitHub Search uygulamamızı geliştireceğiz.
+
+## AngularDart GitHub Search
+
+AngularDart GitHub Search; Github Search'i uygulamak için
+`common_github_search`'ten modelleri, veri sağlayıcılarını, depoları ve
+bloc'ları yeniden kullanan bir AngularDart uygulaması olacak.
+
+### Kurulum
+
+`common_github_search` ile aynı seviyede github_search dizinimizde yeni bir
+AngularDart projesi oluşturarak başlamamız gerekiyor.
+
+<StagehandSnippet />
+
+:::note
+
+`stagehand`'i şu komutla kurabilirsiniz:
+
+<ActivateStagehandSnippet />
+:::
+
+Sonra `pubspec.yaml` içeriğini şununla değiştirebiliriz:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/pubspec.yaml"
+	title="angular_github_search/pubspec.yaml"
+/>
+
+### Search Form
+
+Tıpkı Flutter uygulamamızda olduğu gibi, bir `SearchBar` ve `SearchBody`
+component'i ile bir `SearchForm` oluşturmamız gerekecek.
+
+`SearchForm` component'imiz, bir `GithubSearchBloc` oluşturup kapatması
+gerekeceği için `OnInit` ve `OnDestroy`'i uygulayacak.
+
+- `SearchBar` kullanıcı girdisini almaktan sorumlu olacak.
+- `SearchBody` arama sonuçlarını, yükleme göstergelerini ve hataları
+  görüntülemekten sorumlu olacak.
+
+`search_form_component.dart`'ı oluşturalım.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_form_component.dart"
+	title="angular_github_search/lib/src/search_form/search_form_component.dart"
+/>
+
+:::note
+
+`GithubRepository`, `SearchFormComponent`'e enjekte edilir.
+
+:::
+
+:::note
+
+`GithubSearchBloc`, `SearchFormComponent` tarafından oluşturulur ve kapatılır.
+
+:::
+
+Şablonumuz (`search_form_component.html`) şu şekilde olacak:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_form_component.html"
+	title="angular_github_search/lib/src/search_form/search_form_component.html"
+/>
+
+Sırada `SearchBar` component'ini uygulayacağız.
+
+### Search Bar
+
+`SearchBar`, kullanıcı girdisini almaktan ve `GithubSearchBloc`'u metin
+değişikliklerinden haberdar etmekten sorumlu olacak bir component'tir.
+
+`search_bar_component.dart`'ı oluşturun.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_bar/search_bar_component.dart"
+	title="angular_github_search/lib/src/search_form/search_bar/search_bar_component.dart"
+/>
+
+:::note
+
+`SearchBarComponent`, `TextChanged` olaylarından bloc'u haberdar etmekten
+sorumlu olduğu için `GitHubSearchBloc`'a bağımlıdır.
+
+:::
+
+Sırada `search_bar_component.html`'i oluşturabiliriz.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_bar/search_bar_component.html"
+	title="angular_github_search/lib/src/search_form/search_bar/search_bar_component.html"
+/>
+
+`SearchBar` ile işimiz bitti, şimdi `SearchBody`'ye geçelim.
+
+### Search Body
+
+`SearchBody`, arama sonuçlarını, hataları ve yükleme göstergelerini
+görüntülemekten sorumlu olacak bir component'tir. `GithubSearchBloc`'un
+tüketicisi olacak.
+
+`search_body_component.dart`'ı oluşturun.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_body/search_body_component.dart"
+	title="angular_github_search/lib/src/search_form/search_body/search_body_component.dart"
+/>
+
+:::note
+
+`SearchBodyComponent`, `angular_bloc` bloc pipe'ı kullanılarak
+`GithubSearchBloc` tarafından sağlanan `GithubSearchState`'e bağımlıdır.
+
+:::
+
+`search_body_component.html`'i oluşturun.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_body/search_body_component.html"
+	title="angular_github_search/lib/src/search_form/search_body/search_body_component.html"
+/>
+
+Durumumuz `isSuccess` ise, `SearchResults`'u render ederiz. Sırada onu
+uygulayacağız.
+
+### Search Results
+
+`SearchResults`, bir `List<SearchResultItem>` alan ve bunları
+`SearchResultItems` listesi olarak görüntüleyen bir component'tir.
+
+`search_results_component.dart`'ı oluşturun.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_body/search_results/search_results_component.dart"
+	title="angular_github_search/lib/src/search_form/search_body/search_results/search_results_component.dart"
+/>
+
+Sırada `search_results_component.html`'i oluşturacağız.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_body/search_results/search_results_component.html"
+	title="angular_github_search/lib/src/search_form/search_body/search_results/search_results_component.html"
+/>
+
+:::note
+
+Bir `SearchResultItem` component'leri listesi oluşturmak için `ngFor`
+kullanırız.
+:::
+
+Sıra `SearchResultItem`'ı uygulamada.
+
+### Search Result Item
+
+`SearchResultItem`, tek bir arama sonucunun bilgilerini render etmekten
+sorumlu olan bir component'tir. Ayrıca kullanıcı etkileşimini ele almaktan
+ve kullanıcı dokunduğunda depo URL'sine yönlendirmekten de sorumludur.
+
+`search_result_item_component.dart`'ı oluşturun.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_body/search_results/search_result_item/search_result_item_component.dart"
+	title="angular_github_search/lib/src/search_form/search_body/search_results/search_result_item/search_result_item_component.dart"
+/>
+
+ve `search_result_item_component.html`'deki ilgili şablon.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/src/search_form/search_body/search_results/search_result_item/search_result_item_component.html"
+	title="angular_github_search/lib/src/search_form/search_body/search_results/search_result_item/search_result_item_component.html"
+/>
+
+### Hepsini Bir Araya Getirme
+
+Tüm component'lerimize sahibiz; şimdi onları `app_component.dart`'ta bir
+araya getirme zamanı.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/github_search/angular_github_search/lib/app_component.dart"
+	title="angular_github_search/lib/app_component.dart"
+/>
+
+:::note
+
+`GithubRepository`'yi `AppComponent`'te oluşturup `SearchForm` component'ine
+enjekte ediyoruz.
+
+:::
+
+Hepsi bu kadar! `bloc` ve `angular_bloc` paketlerini kullanarak AngularDart'ta
+bir GitHub search uygulamasını başarıyla uyguladık ve sunum katmanımızı iş
+mantığımızdan başarıyla ayırdık.
+
+Tam kaynağa
+[buradan](https://github.com/felangel/bloc/tree/master/examples/github_search/angular_github_search)
+ulaşabilirsiniz.
+
+## Özet
+
+Bu eğitimde, modellerin, veri sağlayıcıların ve bloc'ların tamamını ikisi
+arasında paylaşırken bir Flutter ve AngularDart uygulaması oluşturduk.
+
+Aslında iki kez yazmamız gereken tek şey sunum katmanıydı (UI); bu da
+verimlilik ve geliştirme hızı açısından harika. Ayrıca, web uygulamaları ile
+mobil uygulamaların farklı kullanıcı deneyimi ve stillerine sahip olması
+oldukça yaygındır ve bu yaklaşım, tamamen farklı görünen ancak aynı veri ve
+iş mantığı katmanlarını paylaşan iki uygulamanın geliştirilmesinin ne kadar
+kolay olduğunu çok güzel gösteriyor.
+
+Tam kaynağa
+[buradan](https://github.com/felangel/bloc/tree/master/examples/github_search)
+ulaşabilirsiniz.

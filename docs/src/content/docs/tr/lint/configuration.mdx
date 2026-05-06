@@ -1,0 +1,59 @@
+---
+title: Linter Yapılandırması
+description: Bloc linter'ı yapılandırma.
+sidebar:
+  order: 3
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import BlocLintBasicAnalysisOptionsSnippet from '~/components/lint/BlocLintBasicAnalysisOptionsSnippet.astro';
+import RunBlocLintInCurrentDirectorySnippet from '~/components/lint/RunBlocLintInCurrentDirectorySnippet.astro';
+import RunBlocLintInSrcTestSnippet from '~/components/lint/RunBlocLintInSrcTestSnippet.astro';
+import AvoidFlutterImportsWarningSnippet from '~/components/lint/ImportFlutterWarningSnippet.mdx';
+import RunBlocLintCounterCubitSnippet from '~/components/lint/RunBlocLintCounterCubitSnippet.astro';
+import AvoidFlutterImportsWarningOutputSnippet from '~/components/lint/ImportFlutterWarningOutputSnippet.astro';
+
+Varsayılan olarak, bir projenin analiz seçeneklerini açıkça yapılandırmadığınız
+sürece bloc linter herhangi bir tanılama (diagnostic) bildirmez.
+
+Başlamak için, projenizin kökünde `analysis_options.yaml` dosyasını oluşturun
+veya mevcut olanı düzenleyerek üst düzey `bloc` anahtarı altında bir kural
+listesi ekleyin:
+
+<BlocLintBasicAnalysisOptionsSnippet />
+
+Linter'ı terminalinizde aşağıdaki komutla çalıştırın:
+
+<RunBlocLintInCurrentDirectorySnippet />
+
+Yukarıdaki komut, mevcut dizindeki ve alt dizinlerindeki tüm dosyaları analiz
+eder; ancak komut satırı argümanı olarak ileterek belirli dosya ve dizinleri
+de lint edebilirsiniz:
+
+<RunBlocLintInSrcTestSnippet />
+
+Yukarıdaki komut, `src` ve `test` dizinlerindeki tüm kodu analiz eder.
+
+`avoid_flutter_imports` kuralı etkinse, flutter import içeren her bloc veya
+cubit dosyası uyarı olarak bildirilir:
+
+<AvoidFlutterImportsWarningSnippet />
+
+`bloc lint` komutunu çalıştırarak uyarıyı görebilirsiniz:
+
+<RunBlocLintCounterCubitSnippet />
+
+Çıktı şu şekilde olmalıdır:
+
+<AvoidFlutterImportsWarningOutputSnippet />
+
+:::note
+
+Desteklenen tüm lint kuralları aşağıdadır:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/packages/bloc_lint/lib/all.yaml"
+	title="package:bloc_lint/all.yaml"
+/>
+
+:::

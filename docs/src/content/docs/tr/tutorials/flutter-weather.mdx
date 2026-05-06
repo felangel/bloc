@@ -1,0 +1,847 @@
+---
+title: Flutter Weather
+description: Bloc ile bir Flutter hava durumu uygulaması yapmaya yönelik ayrıntılı rehber.
+sidebar:
+  order: 5
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import FlutterCreateSnippet from '~/components/tutorials/flutter-weather/FlutterCreateSnippet.astro';
+import FeatureTreeSnippet from '~/components/tutorials/flutter-weather/FeatureTreeSnippet.astro';
+import FlutterCreateApiClientSnippet from '~/components/tutorials/flutter-weather/FlutterCreateApiClientSnippet.astro';
+import OpenMeteoModelsTreeSnippet from '~/components/tutorials/flutter-weather/OpenMeteoModelsTreeSnippet.astro';
+import LocationJsonSnippet from '~/components/tutorials/flutter-weather/LocationJsonSnippet.astro';
+import LocationDartSnippet from '~/components/tutorials/flutter-weather/LocationDartSnippet.astro';
+import WeatherJsonSnippet from '~/components/tutorials/flutter-weather/WeatherJsonSnippet.astro';
+import WeatherDartSnippet from '~/components/tutorials/flutter-weather/WeatherDartSnippet.astro';
+import OpenMeteoModelsBarrelTreeSnippet from '~/components/tutorials/flutter-weather/OpenMeteoModelsBarrelTreeSnippet.astro';
+import OpenMeteoLibrarySnippet from '~/components/tutorials/flutter-weather/OpenMeteoLibrarySnippet.astro';
+import BuildRunnerBuildSnippet from '~/components/tutorials/flutter-weather/BuildRunnerBuildSnippet.astro';
+import OpenMeteoApiClientTreeSnippet from '~/components/tutorials/flutter-weather/OpenMeteoApiClientTreeSnippet.astro';
+import LocationSearchMethodSnippet from '~/components/tutorials/flutter-weather/LocationSearchMethodSnippet.astro';
+import GetWeatherMethodSnippet from '~/components/tutorials/flutter-weather/GetWeatherMethodSnippet.astro';
+import FlutterTestCoverageSnippet from '~/components/tutorials/flutter-weather/FlutterTestCoverageSnippet.astro';
+import FlutterCreateRepositorySnippet from '~/components/tutorials/flutter-weather/FlutterCreateRepositorySnippet.astro';
+import RepositoryModelsBarrelTreeSnippet from '~/components/tutorials/flutter-weather/RepositoryModelsBarrelTreeSnippet.astro';
+import WeatherRepositoryLibrarySnippet from '~/components/tutorials/flutter-weather/WeatherRepositoryLibrarySnippet.astro';
+import WeatherCubitTreeSnippet from '~/components/tutorials/flutter-weather/WeatherCubitTreeSnippet.astro';
+import WeatherBarrelDartSnippet from '~/components/tutorials/flutter-weather/WeatherBarrelDartSnippet.astro';
+
+![advanced](https://img.shields.io/badge/level-advanced-red.svg)
+
+Bu eğitimde, dinamik temalandırma, aşağı çekerek yenileme (pull-to-refresh)
+ve daha fazlasını uygulamak için birden fazla cubit'in nasıl yönetileceğini
+gösteren bir Hava Durumu uygulamasını Flutter'da geliştireceğiz. Hava durumu
+uygulamamız, halka açık OpenMeteo API'sinden canlı hava durumu verilerini
+çekecek ve uygulamamızı katmanlara (veri, depo, iş mantığı ve sunum) nasıl
+ayıracağımızı gösterecek.
+
+![demo](~/assets/tutorials/flutter-weather.gif)
+
+## Proje Gereksinimleri
+
+Uygulamamız kullanıcılara şunları yapma imkânı vermeli:
+
+- Adanmış bir arama sayfasında bir şehir aramak
+- [Open Meteo API](https://open-meteo.com) tarafından döndürülen hava durumu
+  verilerinin hoş bir gösterimini görmek
+- Görüntülenen birimleri değiştirmek (metric vs imperial)
+
+Ek olarak,
+
+- Uygulamanın teması, seçilen şehirdeki hava durumunu yansıtmalı
+- Uygulama durumu oturumlar arasında kalıcı olmalı: yani, uygulama kapatılıp
+  yeniden açıldığında durumunu hatırlamalı
+  ([HydratedBloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc)
+  kullanılarak)
+
+## Önemli Kavramlar
+
+- [BlocObserver](/bloc-concepts#blocobserver) ile durum değişikliklerini
+  gözlemleme.
+- Alt widget'larına bir bloc sağlayan Flutter widget'ı:
+  [BlocProvider](/flutter-bloc-concepts#blocprovider).
+- Yeni durumlara yanıt olarak widget'ı oluşturmayı yöneten Flutter widget'ı:
+  [BlocBuilder](/flutter-bloc-concepts#blocbuilder).
+- [Equatable](/faqs#when-to-use-equatable) ile gereksiz yeniden inşaları
+  önleme.
+- Alt widget'larına bir depo sağlayan Flutter widget'ı:
+  [RepositoryProvider](/flutter-bloc-concepts#repositoryprovider).
+- Bloc'taki durum değişikliklerine yanıt olarak listener kodunu çağıran
+  Flutter widget'ı: [BlocListener](/flutter-bloc-concepts#bloclistener).
+- Birden fazla BlocProvider widget'ını tek bir widget'ta birleştiren Flutter
+  widget'ı: [MultiBlocProvider](/flutter-bloc-concepts#multiblocprovider).
+- Yeni durumlara tepki vermek için bir builder ve listener açığa çıkaran
+  Flutter widget'ı: [BlocConsumer](/flutter-bloc-concepts#blocconsumer).
+- Durumu yönetmek ve kalıcı hale getirmek için
+  [HydratedBloc](https://github.com/felangel/bloc/tree/master/packages/hydrated_bloc).
+
+## Kurulum
+
+Başlamak için yeni bir flutter projesi oluşturun.
+
+<FlutterCreateSnippet />
+
+### Proje Yapısı
+
+Uygulamamız, ilgili dizinlerde izole özelliklerden oluşacak. Bu, özellik
+sayısı arttıkça ölçeklendirmemize ve geliştiricilerin farklı özellikler
+üzerinde paralel çalışmasına olanak tanır.
+
+Uygulamamız dört ana özelliğe ayrılabilir: **search, settings, theme,
+weather**. Bu dizinleri oluşturalım.
+
+<FeatureTreeSnippet />
+
+### Mimari
+
+[Bloc mimari](/architecture) yönergelerine göre, uygulamamız birkaç
+katmandan oluşacak.
+
+Bu eğitimde, bu katmanların yapacağı şey:
+
+- **Veri (Data)**: API'den ham hava durumu verisini almak
+- **Depo (Repository)**: veri katmanını soyutlamak ve uygulamanın tüketmesi
+  için alan modellerini açığa çıkarmak
+- **İş Mantığı (Business Logic)**: her özelliğin durumunu yönetmek (birim
+  bilgileri, şehir ayrıntıları, temalar vb.)
+- **Sunum (Presentation)**: hava durumu bilgisini göstermek ve kullanıcıdan
+  girdi toplamak (ayarlar sayfası, arama sayfası vb.)
+
+## Veri Katmanı
+
+Bu uygulamada [Open Meteo API](https://open-meteo.com)'a istek yapacağız.
+
+İki uç noktaya odaklanacağız:
+
+- Belirli bir şehir adı için bir konum almak için
+  `https://geocoding-api.open-meteo.com/v1/search?name=$city&count=1`
+- Belirli bir konum için hava durumunu almak için
+  `https://api.open-meteo.com/v1/forecast?latitude=$latitude&longitude=$longitude&current_weather=true`
+
+Tarayıcınızda
+[https://geocoding-api.open-meteo.com/v1/search?name=chicago&count=1](https://geocoding-api.open-meteo.com/v1/search?name=chicago&count=1)
+adresini açarak Chicago şehri için yanıtı görebilirsiniz. Hava durumu uç
+noktasına istek yapmak için yanıttaki `latitude` ve `longitude`'u kullanacağız.
+
+Chicago'nun `latitude`/`longitude`'u `41.85003`/`-87.65005`'tir. Tarayıcınızda
+[https://api.open-meteo.com/v1/forecast?latitude=43.0389&longitude=-87.90647&current_weather=true](https://api.open-meteo.com/v1/forecast?latitude=43.0389&longitude=-87.90647&current_weather=true)
+adresine giderseniz, uygulamamız için ihtiyaç duyacağımız tüm verileri içeren
+Chicago hava durumu yanıtını göreceksiniz.
+
+### OpenMeteo API Client
+
+OpenMeteo API Client uygulamamızdan bağımsızdır. Bu nedenle, onu dahili bir
+paket olarak oluşturacağız (ve hatta [pub.dev](https://pub.dev) üzerinde
+yayımlayabiliriz). Daha sonra paketimizi, ana hava durumu uygulamamız için
+veri isteklerini ele alacak olan depo katmanının `pubspec.yaml`'ına ekleyerek
+kullanabiliriz.
+
+Proje seviyesinde `packages` adında yeni bir dizin oluşturun. Bu dizin tüm
+dahili paketlerimizi saklayacak.
+
+Bu dizinin içinde, API client'ımız için `open_meteo_api` adlı yeni bir paket
+oluşturmak üzere yerleşik `flutter create` komutunu çalıştırın.
+
+<FlutterCreateApiClientSnippet />
+
+### Hava Durumu Veri Modeli
+
+Sırada, `location` ve `weather` API uç noktası yanıtlarına ait modelleri
+içerecek olan `location.dart` ve `weather.dart`'ı oluşturalım.
+
+<OpenMeteoModelsTreeSnippet />
+
+#### Location Modeli
+
+`location.dart` modeli, location API'sinin döndürdüğü veriyi saklamalıdır;
+bu veri şuna benzer:
+
+<LocationJsonSnippet />
+
+İşte yukarıdaki yanıtı saklayan, üzerinde çalışılan `location.dart` dosyası:
+
+<LocationDartSnippet />
+
+#### Weather Modeli
+
+Sırada, `weather.dart` üzerinde çalışalım. Hava durumu modelimiz, weather
+API'sinin döndürdüğü veriyi saklamalıdır; bu veri şuna benzer:
+
+<WeatherJsonSnippet />
+
+İşte yukarıdaki yanıtı saklayan, üzerinde çalışılan `weather.dart` dosyası:
+
+<WeatherDartSnippet />
+
+### Barrel Dosyaları
+
+Bu arada, daha sonra import'larımızı temizlemek için hızlıca bir
+[barrel dosyası](https://adrianfaciu.dev/posts/barrel-files/) oluşturalım.
+
+Bir `models.dart` barrel dosyası oluşturun ve iki modeli dışa aktarın:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/lib/src/models/models.dart"
+	title="packages/open_meteo_api/lib/src/models/models.dart"
+/>
+
+Paket düzeyinde bir barrel dosyası, `open_meteo_api.dart` da oluşturalım.
+
+<OpenMeteoModelsBarrelTreeSnippet />
+
+Üst düzeyde, `open_meteo_api.dart` içinde modelleri dışa aktaralım:
+
+<OpenMeteoLibrarySnippet />
+
+### Kurulum
+
+API verisiyle çalışabilmek için modellerimizi
+[serileştirip ve deserileştirebilmemiz](https://en.wikipedia.org/wiki/Serialization)
+gerekir. Bunu yapmak için modellerimize `toJson` ve `fromJson` metotları
+ekleyeceğiz.
+
+Ayrıca, bir API'den veri almak için
+[HTTP ağ istekleri yapmanın](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
+bir yoluna ihtiyacımız var. Neyse ki bunun için pek çok popüler paket var.
+
+`toJson` ve `fromJson` uygulamalarını bizim için üretmek üzere
+[json_annotation](https://pub.dev/packages/json_annotation),
+[json_serializable](https://pub.dev/packages/json_serializable) ve
+[build_runner](https://pub.dev/packages/build_runner) paketlerini
+kullanacağız.
+
+Sonraki bir adımda, uygulamamızın mevcut hava durumu verisini görüntüleyebilmesi
+için weather API'sine ağ istekleri göndermek üzere
+[http](https://pub.dev/packages/http) paketini de kullanacağız.
+
+Bu bağımlılıkları `pubspec.yaml`'a ekleyelim.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/pubspec.yaml"
+	title="packages/open_meteo_api/pubspec.yaml"
+/>
+
+:::note
+
+Bağımlılıkları ekledikten sonra `flutter pub get`'i çalıştırmayı unutmayın.
+
+:::
+
+### (De)Serileştirme
+
+Kod üretiminin çalışması için kodumuzu aşağıdakileri kullanarak işaretlememiz
+gerekir:
+
+- Serileştirilebilen sınıfları etiketlemek için `@JsonSerializable`
+- Alan adlarının string temsillerini sağlamak için `@JsonKey`
+- Alan değerlerinin string temsillerini sağlamak için `@JsonValue`
+- Nesne temsillerini JSON temsillerine dönüştürmek için `JSONConverter`'ı
+  uygulamak
+
+Her dosya için ayrıca:
+
+- `json_annotation`'ı içe aktarmamız
+- Üretilen kodu
+  [part](https://dart.dev/tools/pub/create-packages#organizing-a-package)
+  anahtar sözcüğüyle dahil etmemiz
+- Deserileştirme için `fromJson` metotlarını dahil etmemiz gerekir
+
+#### Location Modeli
+
+İşte tamamlanmış `location.dart` model dosyamız:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/lib/src/models/location.dart"
+	title="packages/open_meteo_api/lib/src/models/location.dart"
+/>
+
+#### Weather Modeli
+
+İşte tamamlanmış `weather.dart` model dosyamız:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/lib/src/models/weather.dart"
+	title="packages/open_meteo_api/lib/src/models/weather.dart"
+/>
+
+#### Build Dosyası Oluşturma
+
+`open_meteo_api` klasöründe bir `build.yaml` dosyası oluşturun. Bu dosyanın
+amacı, `json_serializable` alan adlarındaki adlandırma kuralı tutarsızlıklarını
+ele almaktır.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/build.yaml"
+	title="packages/open_meteo_api/build.yaml"
+/>
+
+#### Kod Üretimi
+
+Kodu üretmek için `build_runner`'ı kullanalım.
+
+<BuildRunnerBuildSnippet />
+
+`build_runner`, `location.g.dart` ve `weather.g.dart` dosyalarını üretmelidir.
+
+### OpenMeteo API Client
+
+API client'ımızı `src` dizini içinde `open_meteo_api_client.dart` olarak
+oluşturalım. Proje yapımız şimdi şuna benzer görünmeli:
+
+<OpenMeteoApiClientTreeSnippet />
+
+Daha önce `pubspec.yaml`'a eklediğimiz [http](https://pub.dev/packages/http)
+paketini, weather API'sine HTTP istekleri yapmak ve bu bilgiyi uygulamamızda
+kullanmak için kullanabiliriz.
+
+API client'ımız iki metot açığa çıkaracak:
+
+- `Future<Location>` döndüren `locationSearch`
+- `Future<Weather>` döndüren `getWeather`
+
+#### Location Search
+
+`locationSearch` metodu, location API'sine istek yapar ve uygun olduğunda
+`LocationRequestFailure` hataları fırlatır. Tamamlanmış metot şu şekildedir:
+
+<LocationSearchMethodSnippet />
+
+#### Get Weather
+
+Benzer şekilde, `getWeather` metodu weather API'sine istek yapar ve uygun
+olduğunda `WeatherRequestFailure` hataları fırlatır. Tamamlanmış metot şu
+şekildedir:
+
+<GetWeatherMethodSnippet />
+
+Tamamlanmış dosya şuna benzer:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/lib/src/open_meteo_api_client.dart"
+	title="packages/open_meteo_api/lib/src/open_meteo_api_client.dart"
+/>
+
+#### Barrel Dosya Güncellemeleri
+
+API client'ımızı barrel dosyasına ekleyerek bu paketi tamamlayalım.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/lib/open_meteo_api.dart"
+	title="packages/open_meteo_api/lib/open_meteo_api.dart"
+/>
+
+### Birim Testleri
+
+Veri katmanı için birim testleri yazmak özellikle önemlidir; çünkü uygulamamızın
+temelidir. Birim testleri, paketin beklendiği gibi davrandığına dair güven
+verir.
+
+#### Kurulum
+
+Daha önce [test](https://pub.dev/packages/test) paketini birim testleri
+yazmamızı kolaylaştırmak için pubspec.yaml'mıza ekledik.
+
+API client ve iki model için birer test dosyası oluşturacağız.
+
+#### Location Testleri
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/test/location_test.dart"
+	title="packages/open_meteo_api/test/location_test.dart"
+/>
+
+#### Weather Testleri
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/test/weather_test.dart"
+	title="packages/open_meteo_api/test/weather_test.dart"
+/>
+
+#### API Client Testleri
+
+Sırada, API client'ımızı test edelim. Tüm sınır durumları (edge case'ler)
+dahil olmak üzere, API client'ımızın her iki API çağrısını doğru ele aldığından
+emin olmak için test etmeliyiz.
+
+:::note
+
+Testlerimizin gerçek API çağrıları yapmasını istemeyiz; çünkü amacımız API
+client mantığını (tüm sınır durumları dahil) test etmek, API'nin kendisini
+değil. Tutarlı, kontrollü bir test ortamı için (önceden pubspec.yaml dosyasına
+eklediğimiz) [mocktail](https://github.com/felangel/mocktail)'i `http`
+client'ı mocklamak için kullanacağız.
+
+:::
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/open_meteo_api/test/open_meteo_api_client_test.dart"
+	title="packages/open_meteo_api/test/open_meteo_api_client_test.dart"
+/>
+
+#### Test Kapsamı
+
+Son olarak, her kod satırını en az bir test senaryosuyla kapsadığımızı
+doğrulamak için test kapsamını toplayalım.
+
+<FlutterTestCoverageSnippet />
+
+## Repository Katmanı
+
+Depo katmanımızın amacı, veri katmanımızı soyutlamak ve bloc katmanıyla
+iletişimi kolaylaştırmaktır. Bunu yaparak, kod tabanımızın geri kalanı belirli
+veri sağlayıcı uygulamaları yerine yalnızca depo katmanımızın açığa çıkardığı
+fonksiyonlara bağlı olur. Bu, uygulama düzeyindeki kodu bozmadan veri
+sağlayıcılarını değiştirmemize olanak tanır. Örneğin, bu belirli weather
+API'sinden vazgeçmeye karar verirsek, deponun veya uygulama katmanlarının
+public API'sinde değişiklik yapmadan yeni bir API client oluşturup
+değiştirebilmeliyiz.
+
+### Kurulum
+
+packages dizini içinde aşağıdaki komutu çalıştırın:
+
+<FlutterCreateRepositorySnippet />
+
+`open_meteo_api` paketinde olduğu gibi aynı paketleri ve önceki adımdaki
+`open_meteo_api` paketini kullanacağız. `pubspec.yaml`'ınızı güncelleyin ve
+`flutter pub get`'i çalıştırın.
+
+:::note
+
+`open_meteo_api`'ın konumunu belirtmek için bir `path` kullanıyoruz; bu, onu
+`pub.dev`'deki harici bir paket gibi kullanmamıza olanak tanır.
+
+:::
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/pubspec.yaml"
+	title="packages/weather_repository/pubspec.yaml"
+/>
+
+### Weather Repository Modelleri
+
+Alana özgü bir hava durumu modelini açığa çıkarmak için yeni bir `weather.dart`
+dosyası oluşturacağız. Bu model, yalnızca iş senaryolarımızla ilgili veriyi
+içerecek — başka bir deyişle, API client ve ham veri formatından tamamen
+ayrı (decoupled) olmalıdır. Her zamanki gibi, bir `models.dart` barrel
+dosyası da oluşturacağız.
+
+<RepositoryModelsBarrelTreeSnippet />
+
+Bu sefer, hava durumu modelimiz yalnızca
+`location, temperature, condition` özelliklerini saklayacak. Serileştirme ve
+deserileştirmeyi sağlamak için kodumuzu işaretlemeye de devam edeceğiz.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/lib/src/models/weather.dart"
+	title="packages/weather_repository/lib/src/models/weather.dart"
+/>
+
+Modelleri dahil etmek için daha önce oluşturduğumuz barrel dosyasını
+güncelleyin.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/lib/src/models/models.dart"
+	title="packages/weather_repository/lib/src/models/models.dart"
+/>
+
+#### Build Dosyası Oluşturma
+
+Daha önce olduğu gibi, aşağıdaki içerikle bir `build.yaml` dosyası
+oluşturmamız gerekiyor:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/build.yaml"
+	title="packages/weather_repository/build.yaml"
+/>
+
+#### Kod Üretimi
+
+Daha önce yaptığımız gibi, (de)serileştirme uygulamasını üretmek için
+aşağıdaki komutu çalıştırın.
+
+<BuildRunnerBuildSnippet />
+
+#### Barrel Dosyası
+
+Modellerimizi dışa aktarmak için
+`packages/weather_repository/lib/weather_repository.dart` adında paket düzeyinde
+bir barrel dosyası da oluşturalım:
+
+<WeatherRepositoryLibrarySnippet />
+
+### Weather Repository
+
+`WeatherRepository`'nin ana hedefi, veri sağlayıcısını soyutlayan bir arayüz
+sağlamaktır. Bu durumda, `WeatherRepository`'nin `WeatherApiClient`'a bir
+bağımlılığı olacak ve tek bir public metot, `getWeather(String city)`, açığa
+çıkaracak.
+
+:::note
+
+`WeatherRepository`'nin tüketicileri, weather API'sine iki ağ isteği
+yapıldığı gibi alttaki uygulama detaylarını bilmez. `WeatherRepository`'nin
+amacı, "ne"yi "nasıl"dan ayırmaktır — başka bir deyişle, belirli bir şehir
+için hava durumunu almanın bir yolunu istiyoruz, ancak bu verinin nasıl veya
+nereden geldiğini umursamıyoruz.
+
+:::
+
+#### Kurulum
+
+Paketimizin `src` dizini içinde `weather_repository.dart` dosyasını oluşturalım
+ve depo uygulaması üzerinde çalışalım.
+
+Odaklanacağımız ana metot `getWeather(String city)`'dir. Bunu API client'a
+yapılan iki çağrı kullanarak şu şekilde uygulayabiliriz:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/lib/src/weather_repository.dart"
+	title="packages/weather_repository/lib/src/weather_repository.dart"
+/>
+
+#### Barrel Dosyası
+
+Daha önce oluşturduğumuz barrel dosyasını güncelleyin.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/lib/weather_repository.dart"
+	title="packages/weather_repository/lib/weather_repository.dart"
+/>
+
+### Birim Testleri
+
+Veri katmanında olduğu gibi, alan düzeyindeki mantığın doğru olduğundan emin
+olmak için depo katmanını test etmek de kritik öneme sahiptir.
+`WeatherRepository`'mizi test etmek için
+[mocktail](https://github.com/felangel/mocktail) kütüphanesini kullanacağız.
+`WeatherRepository` mantığını izole, kontrollü bir ortamda birim test etmek
+için alttaki API client'ı mockleyeceğiz.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/packages/weather_repository/test/weather_repository_test.dart"
+	title="packages/weather_repository/test/weather_repository_test.dart"
+/>
+
+## İş Mantığı Katmanı
+
+İş mantığı katmanında, `WeatherRepository`'den hava durumu alan modelini
+tüketeceğiz ve UI aracılığıyla kullanıcıya sunulacak özellik düzeyinde bir
+modeli açığa çıkaracağız.
+
+:::note
+
+Bu, uyguladığımız üçüncü farklı hava durumu modeli türü. API client'ta, hava
+durumu modelimiz API tarafından döndürülen tüm bilgileri içeriyordu. Depo
+katmanında, hava durumu modelimiz iş senaryomuza dayalı yalnızca soyutlanmış
+modeli içeriyordu. Bu katmanda, hava durumu modelimiz mevcut özellik seti için
+özellikle ihtiyaç duyulan ilgili bilgileri içerecek.
+
+:::
+
+### Kurulum
+
+İş mantığı katmanımız ana uygulamamızda yer aldığından, tüm `flutter_weather`
+projesi için `pubspec.yaml`'ı düzenleyip kullanacağımız tüm paketleri dahil
+etmemiz gerekiyor.
+
+- [equatable](https://pub.dev/packages/equatable) kullanmak, uygulamamızın
+  durum sınıfı örneklerinin eşittir `==` operatörü ile karşılaştırılmasını
+  sağlar. Perde arkasında, bloc durumlarımızı eşit olup olmadıklarını görmek
+  için karşılaştırır ve eşit değillerse bir yeniden inşa tetikler. Bu,
+  performansı hızlı ve duyarlı tutmak için widget ağacımızın yalnızca gerekli
+  olduğunda yeniden inşa edilmesini garanti eder.
+- Kullanıcı arayüzümüzü
+  [google_fonts](https://pub.dev/packages/google_fonts) ile renklendirebiliriz.
+- [HydratedBloc](https://pub.dev/packages/hydrated_bloc), uygulama
+  kapatılıp yeniden açıldığında uygulama durumunu kalıcı hale getirmemize
+  olanak tanır.
+- Az önce oluşturduğumuz `weather_repository` paketini, mevcut hava durumu
+  verisini almamıza izin verecek şekilde dahil edeceğiz!
+
+Test için, her zamanki `test` paketini, bağımlılıkları mocklamak için
+`mocktail`'i ve iş mantığı birimlerinin (yani bloc'ların!) kolayca test
+edilebilmesini sağlamak için
+[bloc_test](https://pub.dev/packages/bloc_test)'i dahil etmek isteriz!
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+Sırada, `weather` özellik dizini içindeki uygulama katmanı üzerinde
+çalışacağız.
+
+### Weather Modeli
+
+Hava durumu modelimizin amacı, uygulamamız tarafından görüntülenen hava
+durumu verisini ve sıcaklık ayarlarını (Celsius veya Fahrenheit) takip
+etmektir.
+
+`flutter_weather/lib/weather/models/weather.dart`'ı oluşturun:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/models/weather.dart"
+	title="lib/weather/models/weather.dart"
+/>
+
+### Build Dosyası Oluşturma
+
+İş mantığı katmanı için bir `build.yaml` dosyası oluşturun.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/build.yaml"
+	title="build.yaml"
+/>
+
+### Kod Üretimi
+
+(De)serileştirme uygulamalarını üretmek için `build_runner`'ı çalıştırın.
+
+<BuildRunnerBuildSnippet />
+
+### Barrel Dosyası
+
+Modellerimizi
+(`flutter_weather/lib/weather/models/models.dart`) barrel dosyasından dışa
+aktaralım:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/models/models.dart"
+	title="lib/weather/models/models.dart"
+/>
+
+Sırada, üst düzey bir hava durumu barrel dosyası
+(`flutter_weather/lib/weather/weather.dart`) oluşturalım:
+
+<WeatherBarrelDartSnippet />
+
+### Weather
+
+Uygulamamızın kapatılıp yeniden açıldıktan sonra bile uygulama durumunu
+hatırlamasını sağlamak için `HydratedCubit` kullanacağız.
+
+:::note
+
+`HydratedCubit`, durumun oturumlar arasında kalıcı hale getirilmesini ve geri
+yüklenmesini ele alan `Cubit`'in bir uzantısıdır.
+
+:::
+
+#### Weather State
+
+[Bloc VSCode](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+veya [Bloc IntelliJ](https://plugins.jetbrains.com/plugin/12129-bloc)
+eklentisini kullanarak `weather` dizinine sağ tıklayın ve `Weather` adında yeni
+bir cubit oluşturun. Proje yapısı şuna benzer olmalı:
+
+<WeatherCubitTreeSnippet />
+
+Hava durumu uygulamamızın bulunabileceği dört durum vardır:
+
+- her şey yüklenmeden önce `initial`
+- API çağrısı sırasında `loading`
+- API çağrısı başarılıysa `success`
+- API çağrısı başarısızsa `failure`
+
+`WeatherStatus` enum'u yukarıdakileri temsil edecek.
+
+Tamamlanmış weather state şu şekilde olmalıdır:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/cubit/weather_state.dart"
+	title="lib/weather/cubit/weather_state.dart"
+/>
+
+#### Weather Cubit
+
+`WeatherState`'i tanımladığımıza göre, şimdi aşağıdaki metotları açığa
+çıkaracak `WeatherCubit`'i yazalım:
+
+- `fetchWeather(String? city)`, verilen şehir için bir hava durumu nesnesi
+  almaya çalışmak için weather repository'mizi kullanır
+- `refreshWeather()`, mevcut hava durumu durumuna göre weather repository
+  kullanarak yeni bir hava durumu nesnesi alır
+- `toggleUnits()`, durumu Celsius ile Fahrenheit arasında değiştirir
+- `fromJson(Map<String, dynamic> json)`, `toJson(WeatherState state)`,
+  kalıcılık için kullanılır
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/cubit/weather_cubit.dart"
+	title="lib/weather/cubit/weather_cubit.dart"
+/>
+
+:::note
+
+(De)serileştirme kodunu şu komutla üretmeyi unutmayın:
+
+<BuildRunnerBuildSnippet />
+:::
+
+### Birim Testleri
+
+Veri ve depo katmanlarına benzer şekilde, özellik düzeyindeki mantığın
+beklediğimiz gibi davrandığından emin olmak için iş mantığı katmanını birim
+test etmek kritik öneme sahiptir. `mocktail` ve `test`'e ek olarak
+[bloc_test](https://pub.dev/packages/bloc_test)'e güveneceğiz.
+
+`test`, `bloc_test` ve `mocktail` paketlerini `dev_dependencies`'e ekleyelim.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+:::note
+
+[bloc_test](https://pub.dev/packages/bloc_test) paketi, bloc'larımızı test
+için kolayca hazırlamamıza, durum değişikliklerini ele almamıza ve sonuçları
+tutarlı bir şekilde kontrol etmemize olanak tanır.
+
+:::
+
+#### Weather Cubit Testleri
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/test/weather/cubit/weather_cubit_test.dart"
+	title="test/weather/cubit/weather_cubit_test.dart"
+/>
+
+## Sunum Katmanı
+
+### Weather Page
+
+`WeatherCubit`'in bir örneğini widget ağacına sağlamak için `BlocProvider`
+kullanan `WeatherPage` ile başlayacağız.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/view/weather_page.dart"
+	title="lib/weather/view/weather_page.dart"
+/>
+
+Sayfanın `SettingsPage` ve `SearchPage` widget'larına bağlı olduğunu fark
+edeceksiniz; bunları sırada oluşturacağız.
+
+### SettingsPage
+
+Ayarlar sayfası, kullanıcıların sıcaklık birimleri için tercihlerini
+güncellemesine olanak tanır.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/settings/view/settings_page.dart"
+	title="lib/settings/view/settings_page.dart"
+/>
+
+### SearchPage
+
+Arama sayfası, kullanıcıların istedikleri şehrin adını girmesine olanak tanır
+ve arama sonucunu önceki route'a `Navigator.of(context).pop` aracılığıyla
+sağlar.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/search/view/search_page.dart"
+	title="lib/search/view/search_page.dart"
+/>
+
+### Weather Widget'ları
+
+Uygulama, `WeatherCubit`'in dört olası durumuna bağlı olarak farklı ekranlar
+gösterecek.
+
+#### WeatherEmpty
+
+Bu ekran, kullanıcı henüz bir şehir seçmediği için görüntülenecek veri
+olmadığında gösterilecek.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/widgets/weather_empty.dart"
+	title="lib/weather/widgets/weather_empty.dart"
+/>
+
+#### WeatherError
+
+Bu ekran, bir hata olduğunda gösterilecek.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/widgets/weather_error.dart"
+	title="lib/weather/widgets/weather_error.dart"
+/>
+
+#### WeatherLoading
+
+Bu ekran, uygulama veriyi alırken gösterilecek.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/widgets/weather_loading.dart"
+	title="lib/weather/widgets/weather_loading.dart"
+/>
+
+#### WeatherPopulated
+
+Bu ekran, kullanıcı bir şehir seçtikten ve veriyi aldıktan sonra gösterilecek.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/widgets/weather_populated.dart"
+	title="lib/weather/widgets/weather_populated.dart"
+/>
+
+### Barrel Dosyası
+
+Import'larımızı temizlemek için bu durumları bir barrel dosyasına ekleyelim.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/weather/widgets/widgets.dart"
+	title="lib/weather/widgets/widgets.dart"
+/>
+
+### Giriş Noktası
+
+`main.dart` dosyamız `WeatherApp` ve `BlocObserver`'ı (hata ayıklama amaçlı)
+başlatmalı, ayrıca durumu oturumlar arasında kalıcı hale getirmek için
+`HydratedStorage`'ımızı kurmalıdır.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/main.dart"
+	title="lib/main.dart"
+/>
+
+`app.dart` widget'ımız, daha önce oluşturduğumuz `WeatherPage` görünümünü
+inşa etmekten ve `WeatherCubit`'imizi enjekte etmek için `BlocProvider`'ı
+kullanmaktan sorumlu olacak.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/lib/app.dart"
+	title="lib/app.dart"
+/>
+
+### Widget Testleri
+
+[`bloc_test`](https://pub.dev/packages/bloc_test) kütüphanesi ayrıca UI'ı
+test etmeyi kolaylaştıran `MockBlocs` ve `MockCubits` da açığa çıkarır.
+Çeşitli cubit'lerin durumlarını mock'layabilir ve UI'ın doğru tepki
+verdiğinden emin olabiliriz.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_weather/test/weather/view/weather_page_test.dart"
+	title="test/weather/view/weather_page_test.dart"
+/>
+
+:::note
+
+Test senaryolarının her birinde cubit'in durumunu stub'lamak için
+`mocktail`'in `when` API'si ile birlikte bir `MockWeatherCubit` kullanıyoruz.
+Bu, tüm durumları simüle etmemize ve UI'ın tüm koşullar altında doğru
+davrandığını doğrulamamıza olanak tanır.
+
+:::
+
+## Özet
+
+Hepsi bu kadar, eğitimi tamamladık! 🎉
+
+Son uygulamayı `flutter run` komutuyla çalıştırabiliriz.
+
+Bu örneğin tam kaynak koduna (birim ve widget testleri dahil)
+[buradan](https://github.com/felangel/bloc/tree/master/examples/flutter_weather)
+ulaşabilirsiniz.

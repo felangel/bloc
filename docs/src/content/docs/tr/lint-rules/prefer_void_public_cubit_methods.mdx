@@ -1,0 +1,61 @@
+---
+title: Public Cubit Metotlarını Void Tercih Edin
+description: prefer_void_public_cubit_methods kuralı.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/prefer_void_public_cubit_methods/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/prefer_void_public_cubit_methods/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+	<Badge text="recommended" variant="success" />
+</div>
+
+`Cubit` örneklerinde public metotların void olmasını tercih edin.
+
+:::note
+
+Bu lint kuralı,
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint) paketinin `0.2.0-dev.2`
+sürümünde tanıtıldı.
+
+:::
+
+## Gerekçe
+
+`Cubit` örneklerindeki public metotlar, `Cubit`'i bilgilendirmek ve `emit`
+metodu aracılığıyla durum değişikliklerini başlatmak için kullanılmalıdır.
+Çağrıyı yapan tarafın herhangi bir durum bilgisine erişmesi gerekiyorsa,
+bu bilgiye `state` üzerinden erişmelidir.
+
+:::note
+
+Aşağıdaki kurallar ilişkilidir ve genellikle
+`prefer_void_public_cubit_methods` ile birlikte etkinleştirilir.
+
+- [`avoid_public_bloc_methods`](/lint-rules/avoid_public_bloc_methods)
+- [`avoid_public_fields`](/lint-rules/avoid_public_fields)
+
+:::
+
+## Örnekler
+
+`Cubit` örneklerinde void olmayan public metotlar kullanmaktan **kaçının**.
+
+**KÖTÜ**:
+
+<BadSnippet />
+
+**İYİ**:
+
+<GoodSnippet />
+
+## Etkinleştirme
+
+`prefer_void_public_cubit_methods` kuralını etkinleştirmek için
+`analysis_options.yaml` dosyanızda `bloc` > `rules` altına ekleyin:
+
+<EnableRuleSnippet name="prefer_void_public_cubit_methods" />

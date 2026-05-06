@@ -1,0 +1,246 @@
+---
+title: SSS
+description: Bloc kütüphanesiyle ilgili sıkça sorulan soruların yanıtları.
+---
+
+import StateNotUpdatingGood1Snippet from '~/components/faqs/StateNotUpdatingGood1Snippet.astro';
+import StateNotUpdatingGood2Snippet from '~/components/faqs/StateNotUpdatingGood2Snippet.astro';
+import StateNotUpdatingGood3Snippet from '~/components/faqs/StateNotUpdatingGood3Snippet.astro';
+import StateNotUpdatingBad1Snippet from '~/components/faqs/StateNotUpdatingBad1Snippet.astro';
+import StateNotUpdatingBad2Snippet from '~/components/faqs/StateNotUpdatingBad2Snippet.astro';
+import StateNotUpdatingBad3Snippet from '~/components/faqs/StateNotUpdatingBad3Snippet.astro';
+import EquatableEmitSnippet from '~/components/faqs/EquatableEmitSnippet.astro';
+import EquatableBlocTestSnippet from '~/components/faqs/EquatableBlocTestSnippet.astro';
+import NoEquatableBlocTestSnippet from '~/components/faqs/NoEquatableBlocTestSnippet.astro';
+import SingleStateSnippet from '~/components/faqs/SingleStateSnippet.astro';
+import SingleStateUsageSnippet from '~/components/faqs/SingleStateUsageSnippet.astro';
+import BlocProviderGood1Snippet from '~/components/faqs/BlocProviderGood1Snippet.astro';
+import BlocProviderGood2Snippet from '~/components/faqs/BlocProviderGood2Snippet.astro';
+import BlocProviderBad1Snippet from '~/components/faqs/BlocProviderBad1Snippet.astro';
+import BlocInternalAddEventSnippet from '~/components/faqs/BlocInternalAddEventSnippet.astro';
+import BlocInternalEventSnippet from '~/components/faqs/BlocInternalEventSnippet.astro';
+import BlocExternalForEachSnippet from '~/components/faqs/BlocExternalForEachSnippet.astro';
+
+## Durum Güncellenmiyor
+
+❔ **Soru**: Bloc'umda bir durum yayıyorum (emit) ama UI güncellenmiyor. Neyi
+yanlış yapıyorum?
+
+💡 **Yanıt**: Equatable kullanıyorsanız, tüm özellikleri `props` getter'ına
+geçirdiğinizden emin olun.
+
+✅ **DOĞRU**
+
+<StateNotUpdatingGood1Snippet />
+
+❌ **YANLIŞ**
+
+<StateNotUpdatingBad1Snippet />
+
+<StateNotUpdatingBad2Snippet />
+
+Ek olarak, bloc'unuzda durumun yeni bir örneğini yaydığınızdan emin olun.
+
+✅ **DOĞRU**
+
+<StateNotUpdatingGood2Snippet />
+
+<StateNotUpdatingGood3Snippet />
+
+❌ **YANLIŞ**
+
+<StateNotUpdatingBad3Snippet />
+
+:::caution
+
+`Equatable` özellikleri her zaman değiştirilmek yerine kopyalanmalıdır. Eğer
+bir `Equatable` sınıfı özellik olarak `List` veya `Map` içeriyorsa, eşitliğin
+referansa göre değil özelliklerin değerlerine göre değerlendirildiğinden emin
+olmak için sırasıyla `List.of` veya `Map.of` kullandığınızdan emin olun.
+
+:::
+
+## Equatable Ne Zaman Kullanılmalı?
+
+❔**Soru**: Equatable'ı ne zaman kullanmalıyım?
+
+💡**Yanıt**:
+
+<EquatableEmitSnippet />
+
+Yukarıdaki senaryoda, eğer `StateA`, `Equatable`'ı miras alıyorsa yalnızca tek
+bir durum değişikliği gerçekleşir (ikinci emit yok sayılır). Genel olarak,
+yeniden inşa (rebuild) sayısını azaltmak için kodunuzu optimize etmek
+istiyorsanız `Equatable` kullanmalısınız. Ardı ardına aynı durumun birden fazla
+geçişi tetiklemesini istiyorsanız `Equatable` kullanmamalısınız.
+
+Ayrıca, `Equatable` kullanmak bloc'ları test etmeyi çok daha kolaylaştırır;
+çünkü `Matchers` veya `Predicates` kullanmak yerine bloc durumlarının belirli
+örneklerini bekleyebiliriz.
+
+<EquatableBlocTestSnippet />
+
+`Equatable` olmadan yukarıdaki test başarısız olur ve şu şekilde yeniden
+yazılması gerekirdi:
+
+<NoEquatableBlocTestSnippet />
+
+## Hataları Yönetme
+
+❔ **Soru**: Önceki veriyi göstermeye devam ederken bir hatayı nasıl
+yönetebilirim?
+
+💡 **Yanıt**:
+
+Bu büyük ölçüde bloc'un durumunun nasıl modellendiğine bağlıdır. Hata olsa
+bile verinin korunması gereken durumlarda, tek bir durum sınıfı kullanmayı
+düşünün.
+
+<SingleStateSnippet />
+
+Bu, widget'ların `data` ve `error` özelliklerine eşzamanlı olarak erişmesine
+imkân tanır; ayrıca bloc, bir hata oluştuğunda bile eski veriyi korumak için
+`state.copyWith`'i kullanabilir.
+
+<SingleStateUsageSnippet />
+
+## Bloc ve Redux
+
+❔ **Soru**: Bloc ile Redux arasındaki fark nedir?
+
+💡 **Yanıt**:
+
+BLoC, aşağıdaki kurallarla tanımlanan bir tasarım kalıbıdır:
+
+1. BLoC'un girdisi ve çıktısı basit Stream'ler ve Sink'lerdir.
+2. Bağımlılıklar enjekte edilebilir ve platformdan bağımsız olmalıdır.
+3. Platforma göre dallanma (branching) yapılmasına izin verilmez.
+4. Yukarıdaki kurallara uyduğunuz sürece uygulama istediğiniz şekilde olabilir.
+
+UI yönergeleri ise şunlardır:
+
+1. "Yeterince karmaşık" her bileşene karşılık gelen bir BLoC vardır.
+2. Bileşenler girdileri "olduğu gibi" göndermelidir.
+3. Bileşenler çıktıları mümkün olduğunca "olduğu gibi" göstermelidir.
+4. Tüm dallanmalar basit BLoC boolean çıktılarına dayanmalıdır.
+
+Bloc kütüphanesi, BLoC Tasarım Kalıbı'nı uygular ve geliştirici deneyimini
+sadeleştirmek için RxDart'ı soyutlamayı amaçlar.
+
+Redux'un üç ilkesi şunlardır:
+
+1. Tek bir doğruluk kaynağı
+2. Durum salt okunurdur
+3. Değişiklikler saf fonksiyonlarla yapılır
+
+Bloc kütüphanesi ilk ilkeyi ihlal eder; bloc'ta durum birden fazla bloc'a
+dağıtılmıştır. Ayrıca bloc'ta middleware kavramı yoktur ve bloc, asenkron durum
+değişikliklerini çok kolay hale getirmek üzere tasarlanmıştır; tek bir olay
+için birden fazla durum yaymanıza olanak tanır.
+
+## Bloc ve Provider
+
+❔ **Soru**: Bloc ile Provider arasındaki fark nedir?
+
+💡 **Yanıt**: `provider`, bağımlılık enjeksiyonu için tasarlanmıştır
+(`InheritedWidget`'i sarmalar). Durumunuzu nasıl yöneteceğinizi
+(`ChangeNotifier`, `Bloc`, `Mobx` vb. aracılığıyla) yine de belirlemeniz
+gerekir. Bloc kütüphanesi, widget ağacı boyunca bloc'ları kolayca sağlamayı ve
+bunlara erişmeyi sağlamak için dahili olarak `provider`'ı kullanır.
+
+## BlocProvider.of() Bloc'u Bulamıyor
+
+❔ **Soru**: `BlocProvider.of(context)` kullanırken bloc bulunamıyor. Bunu nasıl
+düzeltebilirim?
+
+💡 **Yanıt**: Bir bloc'a, sağlandığı context ile aynı context içinden
+erişemezsiniz; bu nedenle `BlocProvider.of()`'un bir alt `BuildContext` içinden
+çağrıldığından emin olmalısınız.
+
+✅ **DOĞRU**
+
+<BlocProviderGood1Snippet />
+
+<BlocProviderGood2Snippet />
+
+❌ **YANLIŞ**
+
+<BlocProviderBad1Snippet />
+
+## Proje Yapısı
+
+❔ **Soru**: Projemi nasıl yapılandırmalıyım?
+
+💡 **Yanıt**: Bu sorunun gerçekten doğru/yanlış bir yanıtı yoktur, ancak
+önerilen bazı kaynaklar şunlardır:
+
+- [I/O Photobooth](https://github.com/flutter/photobooth)
+- [I/O Pinball](https://github.com/flutter/pinball)
+- [Flutter News Toolkit](https://github.com/flutter/news_toolkit)
+
+En önemli şey, **tutarlı** ve **bilinçli** bir proje yapısına sahip olmaktır.
+
+## Bloc İçinde Olay Eklemek
+
+❔ **Soru**: Bir bloc içinde olay eklemek uygun mudur?
+
+💡 **Yanıt**: Çoğu durumda olaylar dışarıdan eklenmelidir, ancak bazı seçili
+durumlarda olayların içeriden eklenmesi mantıklı olabilir.
+
+Dahili olayların kullanıldığı en yaygın durum, durum değişikliklerinin bir
+depodan gelen gerçek zamanlı güncellemelere yanıt olarak gerçekleşmesi gereken
+durumlardır. Bu durumlarda, durum değişikliğinin uyarıcısı bir düğmeye
+dokunmak gibi harici bir olay yerine depodur.
+
+Aşağıdaki örnekte, `MyBloc`'un durumu, `UserRepository`'den gelen
+`Stream<User>` üzerinden açığa çıkarılan mevcut kullanıcıya bağlıdır. `MyBloc`,
+mevcut kullanıcıdaki değişiklikleri dinler ve kullanıcı stream'inden bir
+kullanıcı yayıldığında dahili bir `_UserChanged` olayı ekler.
+
+<BlocInternalAddEventSnippet />
+
+Dahili bir olay ekleyerek, olay için özel bir `transformer` belirleyerek
+birden fazla `_UserChanged` olayının nasıl işleneceğini de belirleyebiliriz —
+varsayılan olarak eşzamanlı (concurrent) işlenirler.
+
+Dahili olayların private (özel) olması şiddetle tavsiye edilir. Bu, belirli
+bir olayın yalnızca bloc'un kendi içinde kullanıldığını açıkça belirtmenin bir
+yoludur ve dış bileşenlerin olaydan haberdar olmasını engeller.
+
+<BlocInternalEventSnippet />
+
+Alternatif olarak, harici bir `Started` olayı tanımlayabilir ve gerçek zamanlı
+kullanıcı güncellemelerine tepki vermeyi yönetmek için `emit.forEach` API'sini
+kullanabiliriz:
+
+<BlocExternalForEachSnippet />
+
+Yukarıdaki yaklaşımın avantajları şunlardır:
+
+- Dahili bir `_UserChanged` olayına ihtiyacımız yok.
+- `StreamSubscription`'ı manuel olarak yönetmemiz gerekmiyor.
+- Bloc'un kullanıcı güncellemeleri stream'ine ne zaman abone olacağı üzerinde
+  tam kontrolümüz var.
+
+Yukarıdaki yaklaşımın dezavantajları şunlardır:
+
+- Aboneliği kolayca `pause` veya `resume` edemeyiz.
+- Dışarıdan eklenmesi gereken public (genel) bir `Started` olayını açığa
+  çıkarmak zorundayız.
+- Kullanıcı güncellemelerine nasıl tepki vereceğimizi ayarlamak için özel bir
+  `transformer` kullanamayız.
+
+## Public Metotları Açığa Çıkarma
+
+❔ **Soru**: Bloc ve cubit örneklerinde public metotları açığa çıkarmak uygun
+mudur?
+
+💡 **Yanıt**
+
+Bir cubit oluştururken, yalnızca durum değişikliklerini tetikleme amacıyla
+public metotlar açığa çıkarılması önerilir. Bu nedenle, bir cubit
+örneğindeki tüm public metotlar genel olarak `void` veya `Future<void>`
+döndürmelidir.
+
+Bir bloc oluştururken, herhangi bir özel public metot açığa çıkarmamak ve bunun
+yerine `add` çağrılarıyla bloc'a olayları bildirmek tavsiye edilir.

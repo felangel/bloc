@@ -1,0 +1,44 @@
+---
+title: Public Bloc Metotlarından Kaçının
+description: avoid_public_bloc_methods kuralı.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/avoid_public_bloc_methods/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/avoid_public_bloc_methods/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+	<Badge text="recommended" variant="success" />
+</div>
+
+`Bloc` örnekleri üzerinde public metotlar açığa çıkarmaktan kaçının.
+
+## Gerekçe
+
+Bloc'lar, gelen olaylara tepki verir ve giden durumları yayar. Bu nedenle,
+bir bloc örneğiyle iletişim kurmanın önerilen yolu `add` metodu üzerindendir.
+Çoğu durumda, `add` API'sinin üzerine ek soyutlamalar oluşturmaya gerek yoktur.
+
+![Bloc Mimarisi](~/assets/concepts/bloc_architecture_full.png)
+
+## Örnekler
+
+Bloc örnekleri üzerinde public metotlar **açığa çıkarmayın**.
+
+**KÖTÜ**:
+
+<BadSnippet />
+
+**İYİ**:
+
+<GoodSnippet />
+
+## Etkinleştirme
+
+`avoid_public_bloc_methods` kuralını etkinleştirmek için
+`analysis_options.yaml` dosyanızda `bloc` > `rules` altına ekleyin:
+
+<EnableRuleSnippet name="avoid_public_bloc_methods" />

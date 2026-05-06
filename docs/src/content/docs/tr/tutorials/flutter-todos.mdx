@@ -1,0 +1,819 @@
+---
+title: Flutter Todos
+description: Bloc ile bir Flutter yapılacaklar uygulaması yapmaya yönelik ayrıntılı rehber.
+sidebar:
+  order: 6
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import FlutterCreateSnippet from '~/components/tutorials/flutter-todos/FlutterCreateSnippet.astro';
+import ActivateVeryGoodCLISnippet from '~/components/tutorials/flutter-todos/ActivateVeryGoodCLISnippet.astro';
+import FlutterCreatePackagesSnippet from '~/components/tutorials/flutter-todos/FlutterCreatePackagesSnippet.astro';
+import ProjectStructureSnippet from '~/components/tutorials/flutter-todos/ProjectStructureSnippet.astro';
+import VeryGoodPackagesGetSnippet from '~/components/tutorials/flutter-todos/VeryGoodPackagesGetSnippet.astro';
+import HomePageTreeSnippet from '~/components/tutorials/flutter-todos/HomePageTreeSnippet.astro';
+import TodosOverviewPageTreeSnippet from '~/components/tutorials/flutter-todos/TodosOverviewPageTreeSnippet.astro';
+import StatsPageTreeSnippet from '~/components/tutorials/flutter-todos/StatsPageTreeSnippet.astro';
+import EditTodosPageTreeSnippet from '~/components/tutorials/flutter-todos/EditTodosPageTreeSnippet.astro';
+
+![advanced](https://img.shields.io/badge/level-advanced-red.svg)
+
+Aşağıdaki eğitimde, Bloc kütüphanesini kullanarak Flutter'da bir yapılacaklar
+(todos) uygulaması geliştireceğiz.
+
+![demo](~/assets/tutorials/flutter-todos.gif)
+
+## Önemli Konular
+
+- Çeşitli özelliklerin durumlarını yönetmek için
+  [Bloc ve Cubit](/bloc-concepts#cubit-vs-bloc).
+- Sorumlulukların ayrılığı ve yeniden kullanılabilirliği kolaylaştırmak için
+  [Katmanlı Mimari](/architecture).
+- Durum değişikliklerini gözlemlemek için
+  [BlocObserver](/bloc-concepts#blocobserver).
+- Alt widget'larına bir bloc sağlayan Flutter widget'ı:
+  [BlocProvider](/flutter-bloc-concepts#blocprovider).
+- Yeni durumlara yanıt olarak widget'ı oluşturmayı yöneten Flutter widget'ı:
+  [BlocBuilder](/flutter-bloc-concepts#blocbuilder).
+- Durum değişikliklerine yanıt olarak yan etkiler gerçekleştiren Flutter
+  widget'ı: [BlocListener](/flutter-bloc-concepts#bloclistener).
+- Alt widget'larına bir depo sağlayan Flutter widget'ı:
+  [RepositoryProvider](/flutter-bloc-concepts#repositoryprovider).
+- Gereksiz yeniden inşaları önlemek için
+  [Equatable](/faqs#when-to-use-equatable).
+- Birden fazla BlocListener kullanırken iç içe yapıyı azaltan Flutter widget'ı:
+  [MultiBlocListener](/flutter-bloc-concepts#multibloclistener).
+
+## Kurulum
+
+[very_good_cli](https://pub.dev/packages/very_good_cli)'yi kullanarak yepyeni
+bir Flutter projesi oluşturarak başlayalım.
+
+<FlutterCreateSnippet />
+
+:::note
+
+`very_good_cli`'yi şu komutla kurun:
+
+<ActivateVeryGoodCLISnippet />
+
+:::
+
+Sırada, `very_good_cli`'yi kullanarak `todos_api`, `local_storage_todos_api`
+ve `todos_repository` paketlerini oluşturacağız:
+
+<FlutterCreatePackagesSnippet />
+
+Ardından `pubspec.yaml` içeriğini şununla değiştirebiliriz:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+Son olarak, tüm bağımlılıkları kurabiliriz:
+
+<VeryGoodPackagesGetSnippet />
+
+## Proje Yapısı
+
+Uygulama proje yapımız şu şekilde görünmelidir:
+
+<ProjectStructureSnippet />
+
+Projeyi birden fazla pakete bölmemizin nedeni, her paket için
+[tek sorumluluk ilkesini](https://en.wikipedia.org/wiki/Single-responsibility_principle)
+zorunlu kılan net sınırlarla açık bağımlılıkları sürdürmektir. Projemizi bu
+şekilde modülerleştirmenin pek çok faydası vardır; bunlardan bazıları:
+
+- paketleri birden fazla projede kolayca yeniden kullanmak
+- verimlilik açısından CI/CD iyileştirmeleri (yalnızca değişen kod üzerinde
+  kontroller çalıştırmak)
+- paketleri kendi adanmış test paketleri, semantik sürüm numaralandırması ve
+  yayın döngüsü/temposuyla izole şekilde sürdürmek
+
+## Mimari
+
+![Todos Mimari Diyagramı](~/assets/tutorials/todos-architecture.png)
+
+Kodumuzu katmanlandırmak son derece önemlidir; hızla ve güvenle yineleme
+yapmamıza yardımcı olur. Her katmanın tek bir sorumluluğu vardır ve izole
+şekilde kullanılıp test edilebilir. Bu, değişiklikleri belirli bir katmanda
+sınırlayarak uygulamanın tamamına olan etkisini en aza indirmemizi sağlar.
+Ayrıca uygulamamızı katmanlandırmak, kütüphaneleri birden fazla projede
+kolayca yeniden kullanmamıza olanak tanır (özellikle veri katmanı için).
+
+Uygulamamız üç ana katmandan oluşur:
+
+- veri katmanı
+- alan (domain) katmanı
+- özellik (feature) katmanı
+  - sunum/UI (widget'lar)
+  - iş mantığı (bloc'lar/cubit'ler)
+
+**Veri Katmanı**
+
+Bu katman en alt katmandır ve veritabanları, API'ler vb. harici kaynaklardan
+ham veri almaktan sorumludur. Veri katmanındaki paketler genellikle hiçbir
+UI'a bağlı olmamalı ve yeniden kullanılabilir, hatta
+[pub.dev](https://pub.dev) üzerinde bağımsız bir paket olarak yayımlanabilir
+olmalıdır. Bu örnekte, veri katmanımız `todos_api` ve
+`local_storage_todos_api` paketlerinden oluşur.
+
+**Alan (Domain) Katmanı**
+
+Bu katman bir veya daha fazla veri sağlayıcıyı birleştirir ve veriye "iş
+kurallarını" uygular. Bu katmandaki her bileşene depo (repository) denir ve
+her depo genellikle tek bir alanı yönetir. Depo katmanındaki paketler
+genellikle yalnızca veri katmanıyla etkileşime girmelidir. Bu örnekte, depo
+katmanımız `todos_repository` paketinden oluşur.
+
+**Özellik Katmanı**
+
+Bu katman, uygulamaya özgü tüm özellikleri ve kullanım senaryolarını içerir.
+Her özellik genellikle bir miktar UI ve iş mantığından oluşur. Özellikler
+genellikle birbirinden bağımsız olmalıdır; böylece kod tabanının geri kalanını
+etkilemeden kolayca eklenip kaldırılabilirler. Her özelliğin içinde, özelliğin
+durumu ve iş mantığı bloc'lar tarafından yönetilir. Bloc'lar sıfır veya daha
+fazla depoyla etkileşime girer. Bloc'lar olaylara tepki verir ve UI'da
+değişiklikleri tetikleyen durumlar yayar. Her özellikteki widget'lar genellikle
+yalnızca ilgili bloc'a bağlı olmalı ve mevcut duruma göre UI render etmelidir.
+UI, bloc'a olaylar aracılığıyla kullanıcı girdisini bildirebilir. Bu örnekte,
+uygulamamız `home`, `todos_overview`, `stats` ve `edit_todos`
+özelliklerinden oluşacak.
+
+Artık katmanları üst düzeyde ele aldığımıza göre, uygulamamızı veri katmanından
+başlayarak geliştirmeye koyulalım!
+
+## Veri Katmanı
+
+Veri katmanı, uygulamamızdaki en alt katmandır ve ham veri sağlayıcılardan
+oluşur. Bu katmandaki paketler öncelikle verinin nereden/nasıl geldiği ile
+ilgilenir. Bu durumda veri katmanımız, bir arayüz olan `TodosApi` ve
+`shared_preferences` ile desteklenen `TodosApi` uygulaması olan
+`LocalStorageTodosApi`'dan oluşacak.
+
+### TodosApi
+
+`todos_api` paketi, todos ile etkileşim/yönetim için generic bir arayüz dışa
+aktaracak. Daha sonra `TodosApi`'ı `shared_preferences` kullanarak
+uygulayacağız. Bir soyutlamaya sahip olmak, uygulamamızın başka herhangi bir
+parçasını değiştirmeden diğer uygulamaları desteklemeyi kolaylaştıracak.
+Örneğin, daha sonra `shared_preferences` yerine `cloud_firestore`'u
+kullanan bir `FirestoreTodosApi`'ı, uygulamanın geri kalanına minimum kod
+değişikliğiyle ekleyebiliriz.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/pubspec.yaml"
+	title="packages/todos_api/pubspec.yaml"
+/>
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/lib/src/todos_api.dart"
+	title="packages/todos_api/lib/src/todos_api.dart"
+/>
+
+#### Todo modeli
+
+Sırada `Todo` modelimizi tanımlayacağız.
+
+İlk dikkat çekici nokta, `Todo` modelinin uygulamamızda yer almamasıdır —
+`todos_api` paketinin bir parçasıdır. Bunun nedeni, `TodosApi`'ın `Todo`
+nesnelerini döndüren/kabul eden API'ler tanımlamasıdır. Model;
+saklanacak/alınacak ham Todo nesnesinin bir Dart temsilidir.
+
+`Todo` modeli, json (de)serializasyonunu ele almak için
+[json_serializable](https://pub.dev/packages/json_serializable)'ı kullanır.
+Eğer takip ediyorsanız, derleyici hatalarını çözmek için
+[kod üretim adımını](https://pub.dev/packages/json_serializable#running-the-code-generator)
+çalıştırmanız gerekecek.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/lib/src/models/todo.dart"
+	title="packages/todos_api/lib/src/models/todo.dart"
+/>
+
+`json_map.dart`, kod kontrolü ve linting için bir `typedef` sağlar.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/lib/src/models/json_map.dart"
+	title="packages/todos_api/lib/src/models/json_map.dart"
+/>
+
+`Todo` modeli `todos_api/models/todo.dart` içinde tanımlanır ve
+`package:todos_api/todos_api.dart` tarafından dışa aktarılır.
+
+#### Dışa Aktarmaları Güncelleme
+
+`Todo` modelimiz ve `TodosApi` barrel dosyaları aracılığıyla dışa aktarılır.
+Modeli doğrudan içe aktarmadığımıza ancak `lib/src/todos_api.dart` içinde
+paket barrel dosyasına referansla içe aktardığımıza dikkat edin:
+`import 'package:todos_api/todos_api.dart';`. Kalan import hatalarını çözmek
+için barrel dosyalarını güncelleyin:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/lib/src/models/models.dart"
+	title="packages/todos_api/lib/src/models/models.dart"
+/>
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_api/lib/todos_api.dart"
+	title="packages/todos_api/lib/todos_api.dart"
+/>
+
+#### Streams ve Futures
+
+Bu eğitimin önceki bir sürümünde, `TodosApi` `Stream` tabanlı yerine `Future`
+tabanlıydı.
+
+`Future` tabanlı bir API örneği için
+[Brian Egan'ın Architecture Samples'taki uygulamasına](https://github.com/brianegan/flutter_architecture_samples/tree/master/todos_repository_core)
+bakın.
+
+`Future` tabanlı bir uygulama iki metottan oluşabilir: `loadTodos` ve
+`saveTodos` (çoğul olduğuna dikkat edin). Bu, metoda her seferinde tam bir
+todo listesinin sağlanması gerektiği anlamına gelir.
+
+- Bu yaklaşımın bir sınırlaması, standart CRUD (Oluştur, Oku, Güncelle ve Sil)
+  işleminin her çağrıda tam todo listesini göndermeyi gerektirmesidir. Örneğin,
+  bir Todo Ekle ekranında, yalnızca eklenen todo öğesini gönderemezsiniz.
+  Bunun yerine, tüm listeyi takip etmemiz ve güncellenmiş listeyi kalıcı
+  hale getirirken yeni todo listesinin tamamını sağlamamız gerekir.
+- İkinci bir sınırlama, `loadTodos`'un verinin bir defaya mahsus
+  iletilmesidir. Uygulamanın güncellemeleri periyodik olarak istemek için
+  mantığa sahip olması gerekir.
+
+Mevcut uygulamada, `TodosApi`, todos listesi değiştiğinde tüm abonelere gerçek
+zamanlı güncellemeler raporlayacak bir `Stream<List<Todo>>` açığa çıkarır.
+
+Ayrıca, todo'lar bireysel olarak oluşturulabilir, silinebilir veya
+güncellenebilir. Örneğin, bir todo'yu silmek de kaydetmek de yalnızca
+argüman olarak `todo` ile yapılır. Her seferinde yeni güncellenmiş todo
+listesini sağlamak gerekmez.
+
+### LocalStorageTodosApi
+
+Bu paket, `todos_api`'ı
+[`shared_preferences`](https://pub.dev/packages/shared_preferences) paketini
+kullanarak uygular.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/local_storage_todos_api/pubspec.yaml"
+	title="packages/local_storage_todos_api/pubspec.yaml"
+/>
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/local_storage_todos_api/lib/src/local_storage_todos_api.dart"
+	title="packages/local_storage_todos_api/lib/src/local_storage_todos_api.dart"
+/>
+
+## Repository Katmanı
+
+Bir [depo (repository)](/architecture#repository), iş katmanının bir parçasıdır.
+Bir depo, iş değeri olmayan bir veya daha fazla veri sağlayıcıya bağımlıdır
+ve bunların public API'lerini iş değeri sunan API'lerle birleştirir. Ayrıca,
+bir depo katmanı, veri ediniminin uygulamanın geri kalanından soyutlanmasına
+yardımcı olur; böylece uygulamanın diğer kısımlarını etkilemeden verinin
+nerede/nasıl saklandığını değiştirebiliriz.
+
+### TodosRepository
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_repository/lib/src/todos_repository.dart"
+	title="packages/todos_repository/lib/src/todos_repository.dart"
+/>
+
+Depoyu örneklemek, bu eğitimin başlarında ele aldığımız bir `TodosApi`'ı
+belirtmeyi gerektirir; bu yüzden onu `pubspec.yaml`'mize bir bağımlılık olarak
+ekledik:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_repository/pubspec.yaml"
+	title="packages/todos_repository/pubspec.yaml"
+/>
+
+#### Kütüphane Dışa Aktarmaları
+
+`TodosRepository` sınıfını dışa aktarmaya ek olarak, `todos_api` paketinden
+`Todo` modelini de dışa aktarıyoruz. Bu adım, uygulama ile veri sağlayıcılar
+arasında sıkı bağlanmayı engeller.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/packages/todos_repository/lib/todos_repository.dart"
+	title="packages/todos_repository/lib/todos_repository.dart"
+/>
+
+`todos_repository`'de ayrı bir model yeniden tanımlamak yerine, aynı `Todo`
+modelini `todos_api`'dan yeniden dışa aktarmaya karar verdik; çünkü bu durumda
+veri modeli üzerinde tam kontrol sahibiyiz. Çoğu durumda, veri sağlayıcı
+kontrol edebileceğiniz bir şey olmayacaktır. Bu durumlarda, arayüz ve API
+sözleşmesi üzerinde tam kontrol sürdürmek için depo katmanında kendi model
+tanımlarınızı sürdürmek daha da önemli hale gelir.
+
+## Özellik Katmanı
+
+### Giriş Noktası
+
+Uygulamamızın giriş noktası `main.dart`'tır. Bu durumda, üç sürüm vardır:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/main_development.dart"
+	title="lib/main_development.dart"
+/>
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/main_staging.dart"
+	title="lib/main_staging.dart"
+/>
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/main_production.dart"
+	title="lib/main_production.dart"
+/>
+
+En dikkat çekici şey, `local_storage_todos_api`'ın somut uygulamasının her
+giriş noktasında örneklenmesidir.
+
+### Bootstrapping
+
+`bootstrap.dart`, `BlocObserver`'ımızı yükler ve `TodosRepository`'nin
+örneğini oluşturur.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/bootstrap.dart"
+	title="lib/bootstrap.dart"
+/>
+
+### App
+
+`App`, deposu tüm alt widget'lara sağlayan bir `RepositoryProvider` widget'ını
+sarmalar. Hem `EditTodoPage` hem de `HomePage` alt ağaçları onun torunları
+olduğu için, tüm bloc'lar ve cubit'ler depoya erişebilir.
+
+`AppView`, `MaterialApp`'i oluşturur ve temayı ile yerelleştirmeleri
+yapılandırır.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/app/app.dart"
+	title="lib/app/app.dart"
+/>
+
+### Tema
+
+Bu, açık ve koyu mod için tema tanımı sağlar.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/theme/theme.dart"
+	title="lib/theme/theme.dart"
+/>
+
+### Home
+
+Home özelliği, şu anda seçili olan sekmenin durumunu yönetmekten ve doğru alt
+ağacı görüntülemekten sorumludur.
+
+#### HomeState
+
+İki ekrana karşılık gelen yalnızca iki durum vardır: `todos` ve `stats`.
+
+:::note
+
+`EditTodo` ayrı bir route'tur; bu nedenle `HomeState`'in bir parçası değildir.
+
+:::
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/home/cubit/home_state.dart"
+	title="lib/home/cubit/home_state.dart"
+/>
+
+#### HomeCubit
+
+İş mantığının basitliği nedeniyle bu durumda bir cubit uygundur. Sekmeyi
+değiştirmek için `setTab` adında tek bir metodumuz var.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/home/cubit/home_cubit.dart"
+	title="lib/home/cubit/home_cubit.dart"
+/>
+
+#### HomeView
+
+`view.dart`, home özelliği için tüm ilgili UI bileşenlerini dışa aktaran bir
+barrel dosyasıdır.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/home/view/view.dart"
+	title="lib/home/view/view.dart"
+/>
+
+`home_page.dart`, kullanıcının uygulama başlatıldığında göreceği kök sayfanın
+UI'ını içerir.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/home/view/home_page.dart"
+	title="lib/home/view/home_page.dart"
+/>
+
+`HomePage` için widget ağacının basitleştirilmiş bir gösterimi şu şekildedir:
+
+<HomePageTreeSnippet />
+
+`HomePage`, `HomeView`'a bir `HomeCubit` örneği sağlar. `HomeView`, sekme
+değiştiğinde seçici olarak yeniden inşa etmek için `context.select`'i kullanır.
+Bu, mock bir `HomeCubit` sağlayıp durumu stub'layarak `HomeView`'u kolayca
+widget testi yapmamıza olanak tanır.
+
+`BottomAppBar`, `HomeCubit` üzerindeki `setTab`'i çağıran `HomeTabButton`
+widget'larını içerir. Cubit örneği `context.read` aracılığıyla bulunur ve
+cubit örneğinde uygun metot çağrılır.
+
+:::caution
+
+`context.read` değişiklikleri dinlemez; yalnızca `HomeCubit`'e erişmek ve
+`setTab`'i çağırmak için kullanılır.
+
+:::
+
+### TodosOverview
+
+Todos overview özelliği, kullanıcıların todo'ları oluşturarak, düzenleyerek,
+silerek ve filtreleyerek yönetmesine olanak tanır.
+
+#### TodosOverviewEvent
+
+`todos_overview/bloc/todos_overview_event.dart`'ı oluşturalım ve olayları
+tanımlayalım.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/bloc/todos_overview_event.dart"
+	title="lib/todos_overview/bloc/todos_overview_event.dart"
+/>
+
+- `TodosOverviewSubscriptionRequested`: Bu, başlangıç olayıdır. Yanıt olarak,
+  bloc, `TodosRepository`'den gelen todos stream'ine abone olur.
+- `TodosOverviewTodoDeleted`: Bu, bir Todo'yu siler.
+- `TodosOverviewTodoCompletionToggled`: Bu, bir todo'nun tamamlanma durumunu
+  değiştirir.
+- `TodosOverviewToggleAllRequested`: Bu, tüm todo'lar için tamamlanma durumunu
+  değiştirir.
+- `TodosOverviewClearCompletedRequested`: Bu, tüm tamamlanmış todo'ları siler.
+- `TodosOverviewUndoDeletionRequested`: Bu, bir todo silme işlemini geri alır
+  (örneğin yanlışlıkla silme).
+- `TodosOverviewFilterChanged`: Bu, argüman olarak bir `TodosViewFilter` alır
+  ve bir filtre uygulayarak görünümü değiştirir.
+
+#### TodosOverviewState
+
+`todos_overview/bloc/todos_overview_state.dart`'ı oluşturalım ve durumu
+tanımlayalım.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/bloc/todos_overview_state.dart"
+	title="lib/todos_overview/bloc/todos_overview_state.dart"
+/>
+
+`TodosOverviewState`, todo'lar listesini, etkin filtreyi, `lastDeletedTodo`'yu
+ve durumu (status) takip edecek.
+
+:::note
+
+Varsayılan getter ve setter'lara ek olarak, `filteredTodos` adında özel bir
+getter'ımız var. UI, `state.filteredTodos`'a veya `state.todos`'a erişmek
+için `BlocBuilder` kullanır.
+
+:::
+
+#### TodosOverviewBloc
+
+`todos_overview/bloc/todos_overview_bloc.dart`'ı oluşturalım.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/bloc/todos_overview_bloc.dart"
+	title="lib/todos_overview/bloc/todos_overview_bloc.dart"
+/>
+
+:::note
+
+Bloc dahili olarak bir `TodosRepository` örneği oluşturmaz. Bunun yerine,
+deponun bir örneğinin yapıcı aracılığıyla enjekte edilmesine güvenir.
+
+:::
+
+##### onSubscriptionRequested
+
+`TodosOverviewSubscriptionRequested` eklendiğinde, bloc bir `loading` durumu
+yayarak başlar. Yanıt olarak, UI bir yükleme göstergesi render edebilir.
+
+Sırada, `TodosRepository`'den gelen todos stream'ine bir abonelik oluşturan
+`emit.forEach<List<Todo>>( ... )`'i kullanırız.
+
+:::caution
+
+`emit.forEach()`, listeler tarafından kullanılan `forEach()` ile aynı değildir.
+Bu `forEach`, bloc'un bir `Stream`'e abone olmasını ve stream'den gelen her
+güncelleme için yeni bir durum yaymasını sağlar.
+
+:::
+
+:::note
+
+Bu eğitimde `stream.listen` doğrudan asla çağrılmaz.
+`await emit.forEach()`'i kullanmak, bir stream'e abone olmak için daha yeni
+bir kalıptır ve bloc'un aboneliği dahili olarak yönetmesine olanak tanır.
+
+:::
+
+Artık abonelik ele alındığına göre, todo'ları ekleme, değiştirme ve silme gibi
+diğer olayları ele alacağız.
+
+##### onTodoSaved
+
+`_onTodoSaved` yalnızca `_todosRepository.saveTodo(event.todo)`'yu çağırır.
+
+:::note
+
+`emit`, `onTodoSaved` ve diğer birçok olay işleyicisi içinden asla
+çağrılmaz. Bunun yerine, deponun todos stream'i aracılığıyla güncellenmiş bir
+liste yayan depoyu bilgilendirirler. Daha fazla bilgi için
+[veri akışı](#data-flow) bölümüne bakın.
+
+:::
+
+##### Geri Alma (Undo)
+
+Geri alma özelliği, kullanıcıların son silinen öğeyi geri yüklemesine olanak
+tanır.
+
+`_onTodoDeleted` iki şey yapar. İlk olarak, silinecek `Todo` ile yeni bir
+durum yayar. Ardından, `Todo`'yu depoya yapılan bir çağrı aracılığıyla siler.
+
+`_onUndoDeletionRequested`, geri alma silme isteği olayı UI'dan geldiğinde
+çalışır.
+
+`_onUndoDeletionRequested` şunları yapar:
+
+- Son silinen todo'nun bir kopyasını geçici olarak kaydeder.
+- `lastDeletedTodo`'yu kaldırarak durumu günceller.
+- Silmeyi geri alır.
+
+##### Filtreleme
+
+`_onFilterChanged`, yeni olay filtresiyle yeni bir durum yayar.
+
+#### Modeller
+
+Görünüm filtrelemesiyle ilgilenen tek bir model dosyası vardır.
+
+`todos_view_filter.dart`, üç görünüm filtresini ve filtreyi uygulamak için
+metotları temsil eden bir enum'dur.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/models/todos_view_filter.dart"
+	title="lib/todos_overview/models/todos_view_filter.dart"
+/>
+
+`models.dart`, dışa aktarmalar için barrel dosyasıdır.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/models/models.dart"
+	title="lib/todos_overview/models/models.dart"
+/>
+
+Sırada `TodosOverviewPage`'e bakalım.
+
+#### TodosOverviewPage
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/view/todos_overview_page.dart"
+	title="lib/todos_overview/view/todos_overview_page.dart"
+/>
+
+`TodosOverviewPage` için widget ağacının basitleştirilmiş bir gösterimi şu
+şekildedir:
+
+<TodosOverviewPageTreeSnippet />
+
+Tıpkı `Home` özelliğinde olduğu gibi, `TodosOverviewPage` alt ağaca bir
+`TodosOverviewBloc` örneğini `BlocProvider<TodosOverviewBloc>` aracılığıyla
+sağlar. Bu, `TodosOverviewBloc`'u yalnızca `TodosOverviewPage` altındaki
+widget'larla sınırlar.
+
+`TodosOverviewBloc`'taki değişiklikleri dinleyen üç widget vardır.
+
+1. İlki, hataları dinleyen bir `BlocListener`'dır. `listener` yalnızca
+   `listenWhen` `true` döndürdüğünde çağrılır. Durum
+   `TodosOverviewStatus.failure` ise, bir `SnackBar` görüntülenir.
+
+2. Silinmeleri dinleyen ikinci bir `BlocListener` oluşturduk. Bir todo
+   silindiğinde, bir geri al düğmesiyle birlikte bir `SnackBar` görüntülenir.
+   Kullanıcı geri al'a dokunursa, bloc'a `TodosOverviewUndoDeletionRequested`
+   olayı eklenecektir.
+
+3. Son olarak, todo'ları görüntüleyen ListView'i inşa etmek için bir
+   `BlocBuilder` kullanırız.
+
+`AppBar`, todo'ları filtrelemek ve manipüle etmek için açılır menüler olan
+iki eylem içerir.
+
+:::note
+
+`TodosOverviewTodoCompletionToggled` ve `TodosOverviewTodoDeleted`, bloc'a
+`context.read` aracılığıyla eklenir.
+
+:::
+
+`view.dart`, `todos_overview_page.dart`'ı dışa aktaran barrel dosyasıdır.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/view/view.dart"
+	title="lib/todos_overview/view/view.dart"
+/>
+
+#### Widget'lar
+
+`widgets.dart`, `todos_overview` özelliği içinde kullanılan tüm bileşenleri
+dışa aktaran başka bir barrel dosyasıdır.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/widgets/widgets.dart"
+	title="lib/todos_overview/widgets/widgets.dart"
+/>
+
+`todo_list_tile.dart`, her todo öğesi için `ListTile`'dır.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/widgets/todo_list_tile.dart"
+	title="lib/todos_overview/widgets/todo_list_tile.dart"
+/>
+
+`todos_overview_options_button.dart`, todo'ları manipüle etmek için iki
+seçenek açığa çıkarır:
+
+- `toggleAll`
+- `clearCompleted`
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/widgets/todos_overview_options_button.dart"
+	title="lib/todos_overview/widgets/todos_overview_options_button.dart"
+/>
+
+`todos_overview_filter_button.dart`, üç filtre seçeneği açığa çıkarır:
+
+- `all`
+- `activeOnly`
+- `completedOnly`
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/todos_overview/widgets/todos_overview_filter_button.dart"
+	title="lib/todos_overview/widgets/todos_overview_filter_button.dart"
+/>
+
+### Stats
+
+Stats özelliği, etkin ve tamamlanmış todo'lar hakkında istatistikleri
+görüntüler.
+
+#### StatsState
+
+`StatsState`, özet bilgileri ve mevcut `StatsStatus`'u takip eder.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/stats/bloc/stats_state.dart"
+	title="lib/stats/bloc/stats_state.dart"
+/>
+
+#### StatsEvent
+
+`StatsEvent`, `StatsSubscriptionRequested` adında yalnızca bir olay içerir:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/stats/bloc/stats_event.dart"
+	title="lib/stats/bloc/stats_event.dart"
+/>
+
+#### StatsBloc
+
+`StatsBloc`, tıpkı `TodosOverviewBloc` gibi `TodosRepository`'ye bağımlıdır.
+`_todosRepository.getTodos` aracılığıyla todos stream'ine abone olur.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/stats/bloc/stats_bloc.dart"
+	title="lib/stats/bloc/stats_bloc.dart"
+/>
+
+#### Stats Görünümü
+
+`view.dart`, `stats_page` için barrel dosyasıdır.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/stats/view/view.dart"
+	title="lib/stats/view/view.dart"
+/>
+
+`stats_page.dart`, todo istatistiklerini görüntüleyen sayfanın UI'ını içerir.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/stats/view/stats_page.dart"
+	title="lib/stats/view/stats_page.dart"
+/>
+
+`StatsPage` için widget ağacının basitleştirilmiş bir gösterimi şu şekildedir:
+
+<StatsPageTreeSnippet />
+
+:::caution
+
+`TodosOverviewBloc` ve `StatsBloc` ikisi de `TodosRepository` ile iletişim
+kurar; ancak bloc'lar arasında doğrudan bir iletişimin olmadığını belirtmek
+önemlidir. Daha fazla bilgi için [veri akışı](#data-flow) bölümüne bakın.
+
+:::
+
+### EditTodo
+
+`EditTodo` özelliği, kullanıcıların mevcut bir todo öğesini düzenlemesine ve
+değişiklikleri kaydetmesine olanak tanır.
+
+#### EditTodoState
+
+`EditTodoState`, bir todo düzenlerken gereken bilgileri takip eder.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/edit_todo/bloc/edit_todo_state.dart"
+	title="lib/edit_todo/bloc/edit_todo_state.dart"
+/>
+
+#### EditTodoEvent
+
+Bloc'un tepki vereceği farklı olaylar şunlardır:
+
+- `EditTodoTitleChanged`
+- `EditTodoDescriptionChanged`
+- `EditTodoSubmitted`
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/edit_todo/bloc/edit_todo_event.dart"
+	title="lib/edit_todo/bloc/edit_todo_event.dart"
+/>
+
+#### EditTodoBloc
+
+`EditTodoBloc`, tıpkı `TodosOverviewBloc` ve `StatsBloc` gibi
+`TodosRepository`'ye bağımlıdır.
+
+:::caution
+
+Diğer Bloc'ların aksine, `EditTodoBloc` `_todosRepository.getTodos`'a abone
+olmaz. "Yalnızca yazma" amaçlı bir bloc'tur; yani depodan herhangi bir bilgi
+okuması gerekmez.
+
+:::
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/edit_todo/bloc/edit_todo_bloc.dart"
+	title="lib/edit_todo/bloc/edit_todo_bloc.dart"
+/>
+
+##### Veri Akışı
+
+Aynı todos listesine bağımlı pek çok özellik olsa da, bloc'lar arasında
+iletişim yoktur. Bunun yerine tüm özellikler birbirinden bağımsızdır ve
+todos listesindeki değişiklikleri dinlemek ve listeye güncellemeler yapmak
+için `TodosRepository`'ye güvenir.
+
+Örneğin, `EditTodos`'un `TodosOverview` veya `Stats` özellikleri hakkında
+hiçbir bilgisi yoktur.
+
+UI bir `EditTodoSubmitted` olayı gönderdiğinde:
+
+- `EditTodoBloc`, `TodosRepository`'yi güncellemek için iş mantığını ele alır.
+- `TodosRepository`, `TodosOverviewBloc` ve `StatsBloc`'u bilgilendirir.
+- `TodosOverviewBloc` ve `StatsBloc`, yeni durumla güncellenen UI'ı
+  bilgilendirir.
+
+#### EditTodoPage
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_todos/lib/edit_todo/view/edit_todo_page.dart"
+	title="lib/edit_todo/view/edit_todo_page.dart"
+/>
+
+Tıpkı önceki özelliklerde olduğu gibi, `EditTodosPage`, `EditTodosBloc`'un bir
+örneğini `BlocProvider` aracılığıyla sağlar. Diğer özelliklerin aksine,
+`EditTodosPage` ayrı bir route'tur; bu yüzden `static` bir `route` metodu
+açığa çıkarır. Bu, `EditTodosPage`'i `Navigator.of(context).push(...)`
+aracılığıyla yönlendirme yığınına itmeyi kolaylaştırır.
+
+`EditTodosPage` için widget ağacının basitleştirilmiş bir gösterimi şu
+şekildedir:
+
+<EditTodosPageTreeSnippet />
+
+## Özet
+
+Hepsi bu kadar, eğitimi tamamladık! 🎉
+
+Bu örneğin tam kaynak koduna (birim ve widget testleri dahil)
+[buradan](https://github.com/felangel/bloc/tree/master/examples/flutter_todos)
+ulaşabilirsiniz.

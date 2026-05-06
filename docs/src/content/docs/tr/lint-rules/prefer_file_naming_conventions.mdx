@@ -1,0 +1,58 @@
+---
+title: Dosya Adlandırma Kurallarını Tercih Edin
+description: prefer_file_naming_conventions kuralı.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/prefer_file_naming_conventions/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/prefer_file_naming_conventions/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+	<Badge text="recommended" variant="success" />
+</div>
+
+Dosya adlandırma kurallarına uymayı tercih edin.
+
+:::note
+
+Bu lint kuralı,
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint) paketinin `0.3.0`
+sürümünde tanıtıldı.
+
+:::
+
+## Gerekçe
+
+Tutarlılık, bakım kolaylığı ve sorumlulukların ayrılığı (separation of concerns)
+adına bloc ve cubit örneklerini satır içine almak (inline) yerine kendi Dart
+dosyalarında tanımlamayı tercih edin.
+
+:::tip
+
+Yeni bloc/cubit örneklerini hızlı ve tutarlı şekilde oluşturmak için
+[package:bloc_tools](https://pub.dev/packages/bloc_tools) paketinin
+`bloc new <component>` komutunu kullanmayı düşünün.
+
+:::
+
+## Örnekler
+
+Bloc/cubit örneklerini kendi ilgili dosyalarında bildirmeyi **tercih edin**.
+
+**İYİ**:
+
+<GoodSnippet />
+
+**KÖTÜ**:
+
+<BadSnippet />
+
+## Etkinleştirme
+
+`prefer_file_naming_conventions` kuralını etkinleştirmek için
+`analysis_options.yaml` dosyanızda `bloc` > `rules` altına ekleyin:
+
+<EnableRuleSnippet name="prefer_file_naming_conventions" />

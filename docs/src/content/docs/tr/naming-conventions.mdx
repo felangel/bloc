@@ -1,0 +1,98 @@
+---
+title: Adlandırma Kuralları
+description: Bloc kullanırken önerilen adlandırma kurallarına genel bir bakış.
+---
+
+import EventExamplesGood1 from '~/components/naming-conventions/EventExamplesGood1Snippet.astro';
+import EventExamplesBad1 from '~/components/naming-conventions/EventExamplesBad1Snippet.astro';
+import StateExamplesGood1Snippet from '~/components/naming-conventions/StateExamplesGood1Snippet.astro';
+import SingleStateExamplesGood1Snippet from '~/components/naming-conventions/SingleStateExamplesGood1Snippet.astro';
+import StateExamplesBad1Snippet from '~/components/naming-conventions/StateExamplesBad1Snippet.astro';
+
+Aşağıdaki adlandırma kuralları yalnızca tavsiye niteliğindedir ve tamamen
+isteğe bağlıdır. Tercih ettiğiniz herhangi bir adlandırma kuralını rahatça
+kullanabilirsiniz. Bazı örneklerin/belgelerin —çoğunlukla sadelik ve özlük
+amacıyla— bu kurallara uymadığını görebilirsiniz. Bu kurallar, birden fazla
+geliştiricinin yer aldığı büyük projelerde şiddetle tavsiye edilir.
+
+## Olay Kuralları
+
+Olaylar **geçmiş zaman** kipinde adlandırılmalıdır; çünkü olaylar, bloc'un
+bakış açısından zaten gerçekleşmiş şeylerdir.
+
+### Yapı
+
+`BlocKonusu` + `İsim (isteğe bağlı)` + `Fiil (olay)`
+
+İlk yükleme olayları şu kurala uymalıdır: `BlocKonusu` + `Started`
+
+:::note
+
+Temel olay sınıfı şöyle adlandırılmalıdır: `BlocKonusu` + `Event`.
+
+:::
+
+### Örnekler
+
+✅ **İyi**
+
+<EventExamplesGood1 />
+
+❌ **Kötü**
+
+<EventExamplesBad1 />
+
+## Durum Kuralları
+
+Durumlar isim olmalıdır; çünkü bir durum, belirli bir andaki yalnızca anlık bir
+görüntüdür. Durumu temsil etmenin iki yaygın yolu vardır: alt sınıflar
+kullanmak veya tek bir sınıf kullanmak.
+
+### Yapı
+
+#### Alt Sınıflar
+
+`BlocKonusu` + `Fiil (eylem)` + `State`
+
+Durumu birden fazla alt sınıf olarak temsil ederken `State` aşağıdakilerden
+biri olmalıdır:
+
+`Initial` | `Success` | `Failure` | `InProgress`
+
+:::note
+
+İlk durumlar şu kurala uymalıdır: `BlocKonusu` + `Initial`.
+
+:::
+
+#### Tek Sınıf
+
+`BlocKonusu` + `State`
+
+Durumu tek bir temel sınıf olarak temsil ederken, durumun mevcut aşamasını
+ifade etmek için `BlocKonusu` + `Status` adında bir enum kullanılmalıdır:
+
+`initial` | `success` | `failure` | `loading`.
+
+:::note
+
+Temel durum sınıfı her zaman şu şekilde adlandırılmalıdır: `BlocKonusu` +
+`State`.
+
+:::
+
+### Örnekler
+
+✅ **İyi**
+
+##### Alt Sınıflar
+
+<StateExamplesGood1Snippet />
+
+##### Tek Sınıf
+
+<SingleStateExamplesGood1Snippet />
+
+❌ **Kötü**
+
+<StateExamplesBad1Snippet />

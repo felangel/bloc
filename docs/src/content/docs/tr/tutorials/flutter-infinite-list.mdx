@@ -1,0 +1,395 @@
+---
+title: Flutter Infinite List
+description:
+  Bloc ile bir Flutter sonsuz liste uygulaması yapmaya yönelik ayrıntılı rehber.
+sidebar:
+  order: 3
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import FlutterCreateSnippet from '~/components/tutorials/flutter-infinite-list/FlutterCreateSnippet.astro';
+import FlutterPubGetSnippet from '~/components/tutorials/flutter-infinite-list/FlutterPubGetSnippet.astro';
+import PostsJsonSnippet from '~/components/tutorials/flutter-infinite-list/PostsJsonSnippet.astro';
+import PostBlocInitialStateSnippet from '~/components/tutorials/flutter-infinite-list/PostBlocInitialStateSnippet.astro';
+import PostBlocOnPostFetchedSnippet from '~/components/tutorials/flutter-infinite-list/PostBlocOnPostFetchedSnippet.astro';
+import PostBlocTransformerSnippet from '~/components/tutorials/flutter-infinite-list/PostBlocTransformerSnippet.astro';
+
+![intermediate](https://img.shields.io/badge/level-intermediate-orange.svg)
+
+Bu eğitimde, Flutter ve bloc kütüphanesini kullanarak ağ üzerinden veri çeken
+ve kullanıcı kaydırdıkça bunu yükleyen bir uygulama geliştireceğiz.
+
+![demo](~/assets/tutorials/flutter-infinite-list.gif)
+
+## Önemli Konular
+
+- [BlocObserver](/bloc-concepts#blocobserver) ile durum değişikliklerini gözlemleme.
+- Alt widget'larına bir bloc sağlayan Flutter widget'ı:
+  [BlocProvider](/flutter-bloc-concepts#blocprovider).
+- Yeni durumlara yanıt olarak widget'ı oluşturmayı yöneten Flutter widget'ı:
+  [BlocBuilder](/flutter-bloc-concepts#blocbuilder).
+- [context.read](/flutter-bloc-concepts#contextread) ile olay ekleme.
+- [Equatable](/faqs#when-to-use-equatable) ile gereksiz yeniden inşaları önleme.
+- `transformEvents` metodunu Rx ile kullanma.
+
+## Kurulum
+
+Yepyeni bir Flutter projesi oluşturarak başlayalım.
+
+<FlutterCreateSnippet />
+
+Ardından `pubspec.yaml` içeriğini şununla değiştirebiliriz:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+ve tüm bağımlılıklarımızı kuralım.
+
+<FlutterPubGetSnippet />
+
+## Proje Yapısı
+
+```
+├── lib
+|   ├── posts
+│   │   ├── bloc
+│   │   │   └── post_bloc.dart
+|   |   |   └── post_event.dart
+|   |   |   └── post_state.dart
+|   |   └── models
+|   |   |   └── models.dart*
+|   |   |   └── post.dart
+│   │   └── view
+│   │   |   ├── posts_page.dart
+│   │   |   └── posts_list.dart
+|   |   |   └── view.dart*
+|   |   └── widgets
+|   |   |   └── bottom_loader.dart
+|   |   |   └── post_list_item.dart
+|   |   |   └── widgets.dart*
+│   │   ├── posts.dart*
+│   ├── app.dart
+│   ├── simple_bloc_observer.dart
+│   └── main.dart
+├── pubspec.lock
+├── pubspec.yaml
+```
+
+Uygulama, özellik (feature) odaklı bir dizin yapısı kullanır. Bu proje yapısı,
+projeyi kendi kendine yeten özelliklerle ölçeklendirmemize olanak tanır. Bu
+örnekte yalnızca tek bir özelliğimiz olacak (post özelliği) ve yıldızla (\*)
+işaretlenmiş barrel dosyalarıyla ilgili klasörlere bölünmüştür.
+
+## REST API
+
+Bu demo uygulaması için, veri kaynağı olarak
+[jsonplaceholder](http://jsonplaceholder.typicode.com)'ı kullanacağız.
+
+:::note
+
+jsonplaceholder, sahte veri sunan çevrimiçi bir REST API'dir; prototip
+oluşturmak için çok yararlıdır.
+
+:::
+
+Tarayıcınızda yeni bir sekme açın ve API'nin ne döndürdüğünü görmek için
+https://jsonplaceholder.typicode.com/posts?_start=0&_limit=2 adresini ziyaret
+edin.
+
+<PostsJsonSnippet />
+
+:::note
+
+URL'mizde başlangıç ve limiti GET isteğine sorgu parametresi olarak belirttik.
+
+:::
+
+Harika, şimdi verimizin nasıl görüneceğini bildiğimize göre modeli oluşturalım.
+
+## Veri Modeli
+
+`post.dart`'ı oluşturun ve Post nesnemizin modelini oluşturmaya başlayalım.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/models/post.dart"
+	title="lib/posts/models/post.dart"
+/>
+
+`Post`, yalnızca `id`, `title` ve `body`'ye sahip bir sınıftır.
+
+:::note
+
+`Posts`'ları karşılaştırabilmek için
+[`Equatable`](https://pub.dev/packages/equatable)'ı miras alıyoruz. Bu
+olmadan, iki `Posts` nesnesi arasındaki farkı söyleyebilmemiz için sınıfımızı
+manuel olarak değiştirip equality ve hashCode'u ezmemiz gerekirdi. Daha fazla
+ayrıntı için [pakete](https://pub.dev/packages/equatable) bakın.
+
+:::
+
+Artık `Post` nesne modelimiz olduğuna göre, İş Mantığı Bileşeni (bloc)
+üzerinde çalışmaya başlayalım.
+
+## Post Olayları
+
+Uygulamaya dalmadan önce, `PostBloc`'umuzun ne yapacağını tanımlamamız
+gerekiyor.
+
+Üst düzeyde, kullanıcı girdisine (kaydırma) yanıt verecek ve sunum katmanının
+bunları görüntülemesi için daha fazla post çekecek. `Event`'imizi oluşturarak
+başlayalım.
+
+`PostBloc`'umuz yalnızca tek bir olaya yanıt verecek; sunum katmanı sunmak
+için daha fazla Post'a ihtiyaç duyduğunda eklenecek olan `PostFetched`. Bizim
+`PostFetched` olayımız bir `PostEvent` türü olduğundan,
+`bloc/post_event.dart`'ı oluşturup olayı şu şekilde uygulayabiliriz.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/bloc/post_event.dart"
+	title="lib/posts/bloc/post_event.dart"
+/>
+
+Özetle, `PostBloc`'umuz `PostEvents` alacak ve bunları `PostStates`'e
+dönüştürecek. Tüm `PostEvents`'i (PostFetched) tanımladık; sırada
+`PostState`'imizi tanımlayalım.
+
+## Post Durumları
+
+Sunum katmanımızın kendisini düzgün şekilde yerleştirebilmesi için birkaç
+bilgiye ihtiyacı olacak:
+
+- `PostInitial`- sunum katmanına, ilk post grubu yüklenirken bir yükleme
+  göstergesi render etmesi gerektiğini söyleyecek
+- `PostSuccess`- sunum katmanına, render edecek içeriği olduğunu söyleyecek
+  - `posts`- görüntülenecek `List<Post>` olacak
+  - `hasReachedMax`- sunum katmanına, maksimum post sayısına ulaşılıp
+    ulaşılmadığını söyleyecek
+- `PostFailure`- sunum katmanına, post'lar çekilirken bir hata oluştuğunu
+  söyleyecek
+
+Şimdi `bloc/post_state.dart`'ı oluşturup şu şekilde uygulayabiliriz.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/bloc/post_state.dart"
+	title="lib/posts/bloc/post_state.dart"
+/>
+
+:::note
+
+`copyWith`'i, bir `PostSuccess` örneğini kopyalayıp sıfır veya daha fazla
+özelliği kolayca güncelleyebilelim diye uyguladık (bu daha sonra işe
+yarayacak).
+
+:::
+
+Artık `Events` ve `States`'imiz uygulanmış olduğuna göre, `PostBloc`'umuzu
+oluşturabiliriz.
+
+## Post Bloc
+
+Sadelik için, `PostBloc`'umuz bir `http client`'a doğrudan bağımlı olacak;
+ancak üretim uygulamasında bunun yerine bir api client enjekte etmenizi ve
+repository pattern'i [docs](/architecture) kullanmanızı öneririz.
+
+`post_bloc.dart`'ı oluşturalım ve boş `PostBloc`'umuzu oluşturalım.
+
+<PostBlocInitialStateSnippet />
+
+:::note
+
+Sınıf bildiriminden, PostBloc'umuzun girdi olarak PostEvents'i alacağını ve
+çıktı olarak PostStates üreteceğini söyleyebiliriz.
+
+:::
+
+Sırada, gelen `PostFetched` olaylarını işlemek için bir olay işleyicisi
+kaydetmemiz gerekiyor. Bir `PostFetched` olayına yanıt olarak, post'ları
+API'den çekmek için `_fetchPosts`'u çağıracağız.
+
+<PostBlocOnPostFetchedSnippet />
+
+`PostBloc`'umuz, olay işleyicisinde sağlanan `Emitter<PostState>` aracılığıyla
+yeni durumlar `emit` edecek. Daha fazla bilgi için
+[temel kavramlar](/bloc-concepts#streams) bölümüne göz atın.
+
+Artık her `PostEvent` eklendiğinde, eğer bu bir `PostFetched` olayıysa ve
+çekilecek daha fazla post varsa, `PostBloc`'umuz sonraki 20 post'u çekecek.
+
+Maksimum post sayısının (100) ötesinde post çekmeye çalışırsak API boş bir
+dizi döndürür; bu yüzden boş bir dizi alırsak, bloc'umuz `hasReachedMax`'ı
+true yaparak currentState'i `emit` edecek.
+
+Post'ları getiremezsek `PostStatus.failure` yayarız.
+
+Post'ları getirebilirsek `PostStatus.success` ve post'ların tüm listesini
+yayarız.
+
+Yapabileceğimiz bir optimizasyon, API'mizi gereksiz yere meşgul etmemek için
+`PostFetched` olayını `throttle` etmektir. Bunu, `_onFetched` olay
+işleyicisini kaydederken `transform` parametresini kullanarak yapabiliriz.
+
+:::note
+
+`on<PostFetched>`'e bir `transformer` geçmek, olayların nasıl işleneceğini
+özelleştirmemize olanak tanır.
+
+:::
+
+:::note
+
+`throttle` API'sini kullanmak için
+[`package:stream_transform`](https://pub.dev/packages/stream_transform)
+paketini içe aktardığınızdan emin olun.
+
+:::
+
+<PostBlocTransformerSnippet />
+
+Bitmiş `PostBloc`'umuz şimdi şuna benzer görünmeli:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/bloc/post_bloc.dart"
+	title="lib/posts/bloc/post_bloc.dart"
+/>
+
+Harika! Artık iş mantığını uyguladığımıza göre, geriye sunum katmanını
+uygulamak kalıyor.
+
+## Sunum Katmanı
+
+`main.dart`'ımızda, ana fonksiyonumuzu uygulayarak ve kök widget'ımızı render
+etmek için `runApp`'i çağırarak başlayabiliriz. Burada ayrıca geçişleri
+(transitions) ve hataları log'lamak için bloc observer'ımızı da dahil
+edebiliriz.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/main.dart"
+	title="lib/main.dart"
+/>
+
+Projemizin kökü olan `App` widget'ımızda, home'u `PostsPage` olarak
+ayarlayabiliriz.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/app.dart"
+	title="lib/app.dart"
+/>
+
+`PostsPage` widget'ımızda, alt ağaca bir `PostBloc` örneği oluşturup sağlamak
+için `BlocProvider`'ı kullanırız. Ayrıca uygulama yüklendiğinde, ilk Post
+grubunu istemesi için bir `PostFetched` olayı ekleriz.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/view/posts_page.dart"
+	title="lib/posts/view/posts_page.dart"
+/>
+
+Sırada, post'larımızı gösterecek ve `PostBloc`'umuza bağlanacak olan
+`PostsList` görünümümüzü uygulamamız gerekiyor.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/view/posts_list.dart"
+	title="lib/posts/view/posts_list.dart"
+/>
+
+:::note
+
+`PostsList`, bir `ScrollController` sürdürmesi gerekeceği için bir
+`StatefulWidget`'tır. `initState` içinde, kaydırma olaylarına yanıt
+verebilmemiz için `ScrollController`'ımıza bir dinleyici ekleriz. Ayrıca
+`PostBloc` örneğimize `context.read<PostBloc>()` aracılığıyla erişiriz.
+
+:::
+
+Devam edersek, build metodumuz bir `BlocBuilder` döndürür. `BlocBuilder`,
+yeni bloc durumlarına yanıt olarak bir widget'ı inşa etme işini yöneten,
+[flutter_bloc paketinden](https://pub.dev/packages/flutter_bloc) bir Flutter
+widget'ıdır. `PostBloc` durumumuz her değiştiğinde, builder fonksiyonumuz yeni
+`PostState` ile çağrılacaktır.
+
+:::caution
+
+Kendimizden sonra temizlik yapmayı ve StatefulWidget dispose edildiğinde
+`ScrollController`'ımızı dispose etmeyi unutmamamız gerekir.
+
+:::
+
+Kullanıcı kaydırdığında, sayfada ne kadar aşağı kaydırdığını hesaplarız ve
+mesafemiz `maxScrollExtent`'in ≥ %90'ı ise daha fazla post yüklemek için bir
+`PostFetched` olayı ekleriz.
+
+Sırada, kullanıcıya daha fazla post yüklediğimizi belirtecek olan
+`BottomLoader` widget'ımızı uygulamamız gerekiyor.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/widgets/bottom_loader.dart"
+	title="lib/posts/widgets/bottom_loader.dart"
+/>
+
+Son olarak, bireysel bir `Post`'u render edecek olan `PostListItem`'ımızı
+uygulamamız gerekiyor.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/posts/widgets/post_list_item.dart"
+	title="lib/posts/widgets/post_list_item.dart"
+/>
+
+Bu noktada uygulamamızı çalıştırabilmeli ve her şey çalışmalı; ancak bir şey
+daha yapabiliriz.
+
+Bloc kütüphanesini kullanmanın bir başka avantajı, tüm `Transitions`'a tek bir
+yerden erişebilmemizdir.
+
+Bir durumdan diğerine geçişe `Transition` denir.
+
+:::note
+
+Bir `Transition`; mevcut durum, olay ve sonraki durumdan oluşur.
+
+:::
+
+Bu uygulamada yalnızca bir bloc'umuz olsa da, daha büyük uygulamalarda
+uygulamanın durumunun farklı kısımlarını yöneten birçok bloc'a sahip olmak
+oldukça yaygındır.
+
+Tüm `Transitions`'a tepki olarak bir şey yapabilmek istiyorsak kendi
+`BlocObserver`'ımızı oluşturabiliriz.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_infinite_list/lib/simple_bloc_observer.dart"
+	title="lib/simple_bloc_observer.dart"
+/>
+
+:::note
+
+Tek yapmamız gereken `BlocObserver`'ı miras almak ve `onTransition` metodunu
+ezmektir.
+
+:::
+
+Artık her Bloc `Transition`'ı gerçekleştiğinde geçişin konsola yazdırıldığını
+görebiliriz.
+
+:::note
+
+Pratikte, farklı `BlocObservers`'lar oluşturabilirsiniz; her durum
+değişikliği kayıt altında olduğundan, uygulamalarımızı çok kolay bir şekilde
+enstrümante edebilir ve tüm kullanıcı etkileşimleri ile durum değişikliklerini
+tek bir yerden takip edebiliriz!
+
+:::
+
+Hepsi bu kadar! [bloc](https://pub.dev/packages/bloc) ve
+[flutter_bloc](https://pub.dev/packages/flutter_bloc) paketlerini kullanarak
+flutter'da sonsuz bir listeyi başarıyla uyguladık ve sunum katmanımızı iş
+mantığımızdan başarıyla ayırdık.
+
+`PostsPage`'imizin `Posts`'ların nereden geldiği veya nasıl alındığı hakkında
+hiçbir fikri yok. Tersine, `PostBloc`'umuzun `State`'in nasıl render edildiği
+hakkında hiçbir fikri yok; yalnızca olayları durumlara dönüştürüyor.
+
+Bu örneğin tam kaynağına
+[buradan](https://github.com/felangel/Bloc/tree/master/examples/flutter_infinite_list)
+ulaşabilirsiniz.

@@ -1,0 +1,57 @@
+---
+title: BuildContext Eklentilerinden Kaçının
+description: avoid_build_context_extensions kuralı.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/avoid_build_context_extensions/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/avoid_build_context_extensions/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+</div>
+
+`Bloc` veya `Cubit` örneklerine erişmek için `BuildContext` eklentilerini
+kullanmaktan kaçının.
+
+:::note
+
+Bu lint kuralı,
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint) paketinin `0.3.0`
+sürümünde tanıtıldı.
+
+:::
+
+## Gerekçe
+
+Tutarlılık ve açıklık adına, `BuildContext` eklentileri yerine doğrudan
+altta yatan metotları kullanmayı tercih edin. Bir eklenti metodunu mock
+etmek mümkün olmadığından bu, test açısından da avantaj sağlar.
+
+| eklenti          | açık (explicit) metot                                                |
+| ---------------- | -------------------------------------------------------------------- |
+| `context.read`   | `BlocProvider.of<Bloc>(context, listen: false)`                      |
+| `context.watch`  | `BlocBuilder<Bloc, State>(...)` veya `BlocProvider.of<Bloc>(context)`|
+| `context.select` | `BlocSelector<Bloc, State>(...)`                                     |
+
+## Örnekler
+
+`Bloc` veya `Cubit` örnekleriyle etkileşim kurmak için `BuildContext`
+eklentilerini kullanmaktan **kaçının**.
+
+**KÖTÜ**:
+
+<BadSnippet />
+
+**İYİ**:
+
+<GoodSnippet />
+
+## Etkinleştirme
+
+`avoid_build_context_extensions` kuralını etkinleştirmek için
+`analysis_options.yaml` dosyanızda `bloc` > `rules` altına ekleyin:
+
+<EnableRuleSnippet name="avoid_build_context_extensions" />
