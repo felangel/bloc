@@ -196,7 +196,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
       _eventController.stream.where((event) => event is E).cast<E>(),
       (dynamic event) {
         void onEmit(State state) {
-          if (isClosed) return;
+          if (_stateController.isClosed) return;
           if (this.state == state && _emitted) return;
           onTransition(
             Transition(
@@ -308,6 +308,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
   @mustCallSuper
   @override
   Future<void> close() async {
+    _closed = true;
     await _eventController.close();
     for (final emitter in _emitters) {
       emitter.cancel();

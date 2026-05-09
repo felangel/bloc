@@ -1649,8 +1649,118 @@ void main() {
         await bloc.close();
         expect(bloc.isClosed, isTrue);
       });
+
+      test('returns true synchronously when close is called', () {
+        final bloc = CounterBloc();
+        expect(bloc.isClosed, isFalse);
+        bloc.close();
+        expect(bloc.isClosed, isTrue);
+      });
+
+      test(
+        'returns true during close teardown so add() guard works '
+        'in onEach callbacks (regression #4749)',
+        () async {
+          final streamController = StreamController<int>.broadcast();
+          final bloc = _OnEachAddBloc(streamController.stream)
+            ..add(const _Subscribe());
+          await tick();
+
+          final closeFuture = bloc.close();
+          streamController.add(42);
+          await tick();
+
+          await closeFuture;
+          await streamController.close();
+
+          expect(bloc.isClosed, isTrue);
+          expect(bloc.addErrors, isEmpty);
+        },
+      );
+
+      test(
+        'in-flight event handler can still emit during close teardown',
+        () async {
+          final resume = Completer<void>();
+          final bloc = _TeardownEmitBloc(resume);
+          final states = <int>[];
+          final subscription = bloc.stream.listen(states.add);
+
+          bloc.add(const _StartLongHandler());
+          await tick();
+
+          final closeFuture = bloc.close();
+          resume.complete();
+
+          await closeFuture;
+          await subscription.cancel();
+
+          expect(states, [99]);
+        },
+      );
     });
   });
+}
+
+abstract class _OnEachAddEvent {
+  const _OnEachAddEvent();
+}
+
+class _Subscribe extends _OnEachAddEvent {
+  const _Subscribe();
+}
+
+class _DataReceived extends _OnEachAddEvent {
+  const _DataReceived(this.value);
+  final int value;
+}
+
+class _OnEachAddBloc extends Bloc<_OnEachAddEvent, int> {
+  _OnEachAddBloc(this._stream) : super(0) {
+    on<_Subscribe>(_onSubscribe);
+    on<_DataReceived>(_onDataReceived);
+  }
+
+  final Stream<int> _stream;
+  final addErrors = <Object>[];
+
+  Future<void> _onSubscribe(_Subscribe event, Emitter<int> emit) async {
+    await emit.onEach<int>(
+      _stream,
+      onData: (value) {
+        if (!isClosed) add(_DataReceived(value));
+      },
+    );
+  }
+
+  void _onDataReceived(_DataReceived event, Emitter<int> emit) {
+    emit(event.value);
+  }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    addErrors.add(error);
+    super.onError(error, stackTrace);
+  }
+}
+
+abstract class _TeardownEmitEvent {
+  const _TeardownEmitEvent();
+}
+
+class _StartLongHandler extends _TeardownEmitEvent {
+  const _StartLongHandler();
+}
+
+class _TeardownEmitBloc extends Bloc<_TeardownEmitEvent, int> {
+  _TeardownEmitBloc(this._resume) : super(0) {
+    on<_StartLongHandler>((event, emit) async {
+      await _resume.future;
+      emit(99);
+    });
+  }
+
+  final Completer<void> _resume;
 }
 
 void unawaited(Future<void> future) {}
