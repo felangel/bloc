@@ -66,6 +66,43 @@ void main() {
           () => observer.onError(cubit, expectedError, expectedStackTrace),
         ).called(1);
       });
+
+      test('omits BlocBase.addError frame when no stackTrace is passed',
+          () async {
+        StackTrace? captured;
+        CounterCubit(
+          onErrorCallback: (_, stackTrace) => captured = stackTrace,
+          // ignore: invalid_use_of_protected_member
+        ).addError(Exception('fatal exception'));
+
+        expect(captured, isNotNull);
+        final firstLine = captured!.toString().split('\n').first;
+        expect(firstLine, isNot(contains('BlocBase.addError')));
+        expect(firstLine, isNot(contains('bloc_base.dart')));
+      });
+
+      test('passes through an explicit stackTrace unchanged', () async {
+        final explicit = StackTrace.fromString('#0 user_call (test.dart:1)');
+        StackTrace? captured;
+        CounterCubit(
+          onErrorCallback: (_, stackTrace) => captured = stackTrace,
+          // ignore: invalid_use_of_protected_member
+        ).addError(Exception('fatal exception'), explicit);
+
+        expect(captured, same(explicit));
+      });
+
+      test('captured stackTrace is non-empty when no stackTrace is passed',
+          () async {
+        StackTrace? captured;
+        CounterCubit(
+          onErrorCallback: (_, stackTrace) => captured = stackTrace,
+          // ignore: invalid_use_of_protected_member
+        ).addError(Exception('fatal exception'));
+
+        expect(captured, isNotNull);
+        expect(captured!.toString(), isNotEmpty);
+      });
     });
 
     group('onChange', () {
