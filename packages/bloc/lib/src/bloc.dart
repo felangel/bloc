@@ -196,7 +196,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
       _eventController.stream.where((event) => event is E).cast<E>(),
       (dynamic event) {
         void onEmit(State state) {
-          if (isClosed) return;
+          if (super.isClosed) return;
           if (this.state == state && _emitted) return;
           onTransition(
             Transition(
@@ -298,6 +298,9 @@ abstract class Bloc<Event, State> extends BlocBase<State>
     // ignore: invalid_use_of_protected_member
     _blocObserver.onDone(this, event, error, stackTrace);
   }
+
+  @override
+  bool get isClosed => _eventController.isClosed || super.isClosed;
 
   /// Closes the `event` and `state` `Streams`.
   /// This method should be called when a [Bloc] is no longer needed.
