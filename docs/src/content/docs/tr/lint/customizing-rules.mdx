@@ -1,0 +1,164 @@
+---
+title: Lint Kurallarını Özelleştirme
+description: Bloc lint kurallarını özelleştirme
+sidebar:
+  order: 4
+---
+
+import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.astro';
+import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
+import BlocLintEnablingRulesSnippet from '~/components/lint/BlocLintEnablingRulesSnippet.astro';
+import BlocLintDisablingRulesSnippet from '~/components/lint/BlocLintDisablingRulesSnippet.astro';
+import BlocLintChangingSeveritySnippet from '~/components/lint/BlocLintChangingSeveritySnippet.astro';
+import ImportFlutterInfoSnippet from '~/components/lint/ImportFlutterInfoSnippet.mdx';
+import ImportFlutterInfoOutputSnippet from '~/components/lint/ImportFlutterInfoOutputSnippet.astro';
+import BlocLintExcludingFilesSnippet from '~/components/lint/BlocLintExcludingFilesSnippet.astro';
+import BlocLintIgnoreForLineSnippet from '~/components/lint/BlocLintIgnoreForLineSnippet.astro';
+import BlocLintIgnoreForFileSnippet from '~/components/lint/BlocLintIgnoreForFileSnippet.astro';
+
+Bloc linter'ın davranışını; tek tek kuralların önem derecesini değiştirerek,
+kuralları ayrı ayrı etkinleştirip devre dışı bırakarak ve dosyaları statik
+çözümlemenin dışında tutarak özelleştirebilirsiniz.
+
+## Kuralları Etkinleştirme ve Devre Dışı Bırakma
+
+Bloc linter, sürekli büyüyen bir lint kuralları listesini destekler. Lint
+kurallarının birbiriyle uyuşmak zorunda olmadığını unutmayın. Örneğin, bazı
+geliştiriciler bloc kullanmayı (`prefer_bloc`) tercih ederken, diğerleri cubit
+kullanmayı (`prefer_cubit`) tercih edebilir.
+
+:::note
+
+Statik çözümlemenin aksine, lint kuralları yanlış pozitifler içerebilir. Yanlış
+pozitifleri veya diğer sorunları
+[bir issue açarak](https://github.com/felangel/bloc/issues/new/choose)
+bildirmekten çekinmeyin.
+
+:::
+
+### Önerilen Kuralları Etkinleştirme
+
+Bloc kütüphanesi, [`bloc_lint`](https://pub.dev/packages/bloc_lint) paketinin
+bir parçası olarak önerilen lint kurallarından oluşan bir set sağlar.
+
+Önerilen lint setini etkinleştirmek için `bloc_lint` paketini bir dev
+bağımlılığı olarak ekleyin:
+
+<InstallBlocLintSnippet />
+
+Ardından `analysis_options.yaml` dosyanızı kural setini içerecek şekilde
+düzenleyin:
+
+<BlocLintRecommendedAnalysisOptionsSnippet />
+
+:::note
+
+`bloc_lint`'in yeni bir sürümü yayınlandığında, daha önce statik çözümlemeden
+geçen kod başarısız olmaya başlayabilir. Kodunuzu yeni kurallarla çalışacak
+şekilde güncellemenizi öneririz; ayrıca isteğe bağlı olarak tek tek kuralları
+etkinleştirebilir veya devre dışı bırakabilirsiniz.
+
+:::
+
+### Tek Tek Kuralları Etkinleştirme
+
+Tek tek kuralları etkinleştirmek için `analysis_options.yaml` dosyasına üst
+düzey anahtar olarak `bloc:` ve ikinci düzey anahtar olarak `rules:` ekleyin.
+Sonraki satırlarda, istediğiniz kuralları YAML listesi olarak (tirelerle
+başlayarak) belirtin.
+
+Örneğin:
+
+<BlocLintEnablingRulesSnippet />
+
+### Tek Tek Kuralları Devre Dışı Bırakma
+
+`recommended` set gibi mevcut bir kural setini dahil ederseniz, dahil edilen bir
+veya daha fazla lint kuralını devre dışı bırakmak isteyebilirsiniz. Kuralları
+devre dışı bırakmak, etkinleştirmeye benzer; ancak liste yerine YAML map
+kullanılmasını gerektirir.
+
+Örneğin, aşağıdakiler `avoid_public_bloc_methods` hariç önerilen lint
+kurallarını içerir ve ek olarak `prefer_bloc` kuralını etkinleştirir:
+
+<BlocLintDisablingRulesSnippet />
+
+## Kural Önem Derecesini Özelleştirme
+
+Herhangi bir kuralın önem derecesini şu şekilde ayarlayabilirsiniz:
+
+<BlocLintChangingSeveritySnippet />
+
+Artık aynı lint kuralı, `warning` yerine `info` önem derecesiyle raporlanacak:
+
+<ImportFlutterInfoSnippet />
+
+`bloc lint` komutunun çıktısı şöyle görünmelidir:
+
+<ImportFlutterInfoOutputSnippet />
+
+Desteklenen önem derecesi seçenekleri şunlardır:
+
+| Önem Derecesi | Açıklama                                                  |
+| ------------- | --------------------------------------------------------- |
+| `error`       | Desenin izin verilmediğini gösterir.                      |
+| `warning`     | Desenin şüpheli olduğunu ancak izin verildiğini gösterir. |
+| `info`        | Kullanıcılara bilgi sağlar ancak bir sorun değildir.      |
+| `hint`        | Bir sonuca ulaşmanın daha iyi bir yolunu önerir.          |
+
+## Dosyaları Hariç Tutma
+
+Bazen statik çözümlemenin başarısız olması sorun değildir. Örneğin, sizin ve
+ekibinizin yazmadığı, üretilmiş (generated) kodda raporlanan uyarıları veya
+hataları yoksaymak isteyebilirsiniz. Resmi Dart lint kurallarında olduğu gibi,
+dosyaları statik çözümlemeden hariç tutmak için `exclude:` çözümleyici
+seçeneğini kullanabilirsiniz.
+
+Tek tek dosyaları listeleyebilir veya [`glob`](https://pub.dev/packages/glob)
+desenleri kullanabilirsiniz.
+
+:::note
+
+Tüm glob deseni kullanımları, ilgili `analysis_options.yaml` dosyasını içeren
+dizine göre göreli olmalıdır.
+
+:::
+
+Örneğin, üretilmiş (generated) tüm Dart kodunu aşağıdaki çözümleme seçenekleri
+ile hariç tutabiliriz:
+
+<BlocLintExcludingFilesSnippet />
+
+## Kuralları Yoksayma
+
+Resmi Dart lint kurallarında olduğu gibi, belirli bir dosya veya kod satırı için
+bloc lint kurallarını sırasıyla `// ignore_for_file` ve `// ignore` kullanarak
+yoksayabilirsiniz.
+
+:::note
+
+Belirli bir satır veya dosya için birden fazla kuralı yoksaymak için virgülle
+ayrılmış bir liste sağlayın.
+
+:::
+
+### Satırları Yoksayma
+
+Belirli kural ihlallerinin tek tek örneklerini, ihlal eden satırın hemen üstüne
+bir `ignore` yorum satırı ekleyerek veya ihlal eden satırın sonuna ekleyerek
+yoksayabiliriz.
+
+Örneğin, belirli bir dosyada `prefer_file_naming_conventions` kuralının belirli
+örneklerini yoksayabiliriz:
+
+<BlocLintIgnoreForLineSnippet />
+
+### Dosyaları Yoksayma
+
+Bir dosyadaki tüm kural ihlali örneklerini, dosyanın herhangi bir yerine bir
+`ignore_for_file` yorum satırı ekleyerek yoksayabiliriz.
+
+Örneğin, belirli bir dosyada `prefer_file_naming_conventions` kuralının tüm
+örneklerini yoksayabiliriz:
+
+<BlocLintIgnoreForFileSnippet />

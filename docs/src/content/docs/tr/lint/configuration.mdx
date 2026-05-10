@@ -1,0 +1,59 @@
+---
+title: Linter Yapılandırması
+description: Bloc linter'ın yapılandırılması.
+sidebar:
+  order: 3
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import BlocLintBasicAnalysisOptionsSnippet from '~/components/lint/BlocLintBasicAnalysisOptionsSnippet.astro';
+import RunBlocLintInCurrentDirectorySnippet from '~/components/lint/RunBlocLintInCurrentDirectorySnippet.astro';
+import RunBlocLintInSrcTestSnippet from '~/components/lint/RunBlocLintInSrcTestSnippet.astro';
+import AvoidFlutterImportsWarningSnippet from '~/components/lint/ImportFlutterWarningSnippet.mdx';
+import RunBlocLintCounterCubitSnippet from '~/components/lint/RunBlocLintCounterCubitSnippet.astro';
+import AvoidFlutterImportsWarningOutputSnippet from '~/components/lint/ImportFlutterWarningOutputSnippet.astro';
+
+Varsayılan olarak, bloc linter, projenizin çözümleme seçeneklerini açıkça
+yapılandırmadığınız sürece herhangi bir tanılama (diagnostic) raporlamaz.
+
+Başlamak için, projenizin kökündeki mevcut `analysis_options.yaml` dosyasını
+oluşturun veya değiştirin ve üst düzey bloc anahtarı altında bir kural listesi
+ekleyin:
+
+<BlocLintBasicAnalysisOptionsSnippet />
+
+Linter'ı terminalinizde aşağıdaki komutla çalıştırın:
+
+<RunBlocLintInCurrentDirectorySnippet />
+
+Yukarıdaki komut, geçerli dizindeki ve alt dizinlerindeki tüm dosyaları
+çözümler; ancak komut satırı argümanı olarak ileterek belirli dosya ve dizinleri
+de lint'leyebilirsiniz:
+
+<RunBlocLintInSrcTestSnippet />
+
+Yukarıdaki komut, `src` ve `test` dizinlerindeki tüm kodu çözümler.
+
+`avoid_flutter_imports` kuralı etkinleştirilmişse, bir flutter import içeren
+herhangi bir bloc veya cubit dosyası uyarı olarak raporlanır:
+
+<AvoidFlutterImportsWarningSnippet />
+
+Uyarıyı `bloc lint` komutunu çalıştırarak görebilirsiniz:
+
+<RunBlocLintCounterCubitSnippet />
+
+Çıktı şöyle görünmelidir:
+
+<AvoidFlutterImportsWarningOutputSnippet />
+
+:::note
+
+Desteklenen tüm lint kuralları aşağıdadır:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/packages/bloc_lint/lib/all.yaml"
+	title="package:bloc_lint/all.yaml"
+/>
+
+:::

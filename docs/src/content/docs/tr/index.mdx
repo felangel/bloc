@@ -1,0 +1,86 @@
+---
+template: splash
+title: Bloc Durum Yönetimi Kütüphanesi
+description:
+  Bloc durum yönetimi kütüphanesinin resmi dokümantasyonu. Dart, Flutter ve
+  AngularDart desteği. Örnekler ve eğitimler içerir.
+banner:
+  content: |
+    ✨ Şuraya göz atın
+    <a href="https://shop.bloclibrary.dev">Bloc Shop</a> ✨
+editUrl: false
+lastUpdated: false
+hero:
+  title: Bloc <sup><span style="font-size:0.4em">v9.2.0</span></sup>
+  tagline: Dart için öngörülebilir bir durum yönetimi kütüphanesi.
+  image:
+    alt: Bloc logo
+    file: ~/assets/bloc.svg
+  actions:
+    - text: Başlarken
+      link: /tr/getting-started/
+      variant: primary
+      icon: rocket
+    - text: GitHub'da Görüntüle
+      link: https://github.com/felangel/bloc
+      icon: github
+      variant: secondary
+---
+
+import { CardGrid } from '@astrojs/starlight/components';
+import SponsorsGrid from '~/components/landing/SponsorsGrid.astro';
+import Card from '~/components/landing/Card.astro';
+import ListCard from '~/components/landing/ListCard.astro';
+import SplitCard from '~/components/landing/SplitCard.astro';
+import Discord from '~/components/landing/Discord.astro';
+
+<SponsorsGrid />
+
+<hr />
+
+<CardGrid>
+
+<SplitCard title="Başlarken" icon="rocket">
+	```sh
+	# Bloc'u projenize ekleyin.
+	dart pub add bloc
+	```
+
+[Başlarken rehberimiz](/tr/getting-started), Bloc'u sadece birkaç dakikada
+kullanmaya başlamanız için adım adım talimatlar içerir.
+
+</SplitCard>
+
+<Card title="Rehberli tura çıkın" icon="star">
+	Bloc ile çalıştırılan farklı uygulamalar oluşturmak ve en iyi uygulamaları
+	öğrenmek için [resmi eğitimleri](/tr/tutorials/flutter-counter) tamamlayın.
+</Card>
+
+<Card title="Bloc ile geliştirin" icon="laptop">
+	Sayaç, zamanlayıcı, sonsuz liste, hava durumu, todo ve daha fazlası gibi
+	yüksek kaliteli ve tamamen test edilmiş [örnek
+	uygulamaları](https://github.com/felangel/bloc/tree/master/examples) keşfedin!
+</Card>
+
+<ListCard title="Öğren" icon="open-book">
+
+    - [Neden Bloc?](/tr/why-bloc)
+    - [Temel Kavramlar](/tr/bloc-concepts)
+    - [Mimari](/tr/architecture)
+    - [Test Etme](/tr/testing)
+    - [Adlandırma Kuralları](/tr/naming-conventions)
+    - [SSS](/tr/faqs)
+
+</ListCard>
+
+  <ListCard title="Entegrasyonlar" icon="puzzle">
+    - [VSCode Entegrasyonu](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+    - [IntelliJ Entegrasyonu](https://plugins.jetbrains.com/plugin/12129-bloc)
+    - [Neovim Entegrasyonu](https://github.com/wa11breaker/flutter-bloc.nvim)
+    - [Mason CLI Entegrasyonu](https://github.com/felangel/bloc/blob/master/bricks/README.md)
+    - [Özel Şablonlar](https://brickhub.dev/search?q=bloc)
+    - [Geliştirici Araçları](https://github.com/felangel/bloc/blob/master/packages/bloc_tools/README.md)
+  </ListCard>
+</CardGrid>
+
+<Discord />

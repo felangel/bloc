@@ -1,0 +1,42 @@
+---
+title: Genel Alanlardan Kaçının
+description: avoid_public_fields kuralı.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/avoid_public_fields/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/avoid_public_fields/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+	<Badge text="recommended" variant="success" />
+</div>
+
+`Bloc` ve `Cubit` örnekleri üzerinde genel (public) alanlar açmaktan kaçının.
+
+## Neden?
+
+İş mantığı bileşenleri kendi `state`'lerini tutar ve durum değişikliklerini
+`emit` API'si ile yayar. Bu nedenle dışa açık tüm durum bilgisi `state` nesnesi
+üzerinden açılmalıdır.
+
+## Örnekler
+
+Bloc ve cubit örnekleri üzerinde genel alanlar **AÇMAYIN**.
+
+**Kötü**:
+
+<BadSnippet />
+
+**İyi**:
+
+<GoodSnippet />
+
+## Etkinleştir
+
+`avoid_public_fields` kuralını etkinleştirmek için `analysis_options.yaml`
+dosyanızda `bloc` > `rules` altına ekleyin:
+
+<EnableRuleSnippet name="avoid_public_fields" />
