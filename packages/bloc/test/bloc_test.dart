@@ -1382,6 +1382,20 @@ void main() {
       });
     });
 
+    group('InternalAddBloc', () {
+      test('does not throw when internal add is called after close', () async {
+        final controller = StreamController<int>.broadcast();
+        final bloc = InternalAddBloc(stream: controller.stream)
+          ..add(const InternalAddSubscriptionRequested());
+        await Future<void>.delayed(Duration.zero);
+        final close = bloc.close();
+        controller.add(42);
+        await close;
+        await controller.close();
+        expect(bloc.stream, emitsInOrder([emitsDone]));
+      });
+    });
+
     group('Exception', () {
       test('does not break stream', () {
         runZonedGuarded(() {
@@ -1643,10 +1657,17 @@ void main() {
     });
 
     group('isClosed', () {
-      test('returns true after bloc is closed', () async {
+      test('returns true after bloc is closed (async)', () async {
         final bloc = CounterBloc();
         expect(bloc.isClosed, isFalse);
         await bloc.close();
+        expect(bloc.isClosed, isTrue);
+      });
+
+      test('returns true after bloc is closed (sync)', () {
+        final bloc = CounterBloc();
+        expect(bloc.isClosed, isFalse);
+        bloc.close();
         expect(bloc.isClosed, isTrue);
       });
     });
