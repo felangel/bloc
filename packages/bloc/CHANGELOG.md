@@ -1,3 +1,7 @@
+# 9.3.0
+
+- fix: omit synthetic `BlocBase.addError` frame from stack traces auto-captured when no `stackTrace` is passed to `addError` ([#3585](https://github.com/felangel/bloc/issues/3585))
+
 # 9.2.0
 
 - feat: add `MultiBlocObserver` ([#4714](https://github.com/felangel/bloc/pull/4714))

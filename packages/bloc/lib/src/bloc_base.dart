@@ -138,11 +138,15 @@ abstract class BlocBase<State>
   }
 
   /// Reports an [error] which triggers [onError] with an optional [StackTrace].
+  ///
+  /// If no [stackTrace] is provided, the current stack trace is captured with
+  /// the synthetic `BlocBase.addError` frame stripped, so the resulting trace
+  /// begins at the caller's call site.
   @protected
   @mustCallSuper
   @override
   void addError(Object error, [StackTrace? stackTrace]) {
-    onError(error, stackTrace ?? StackTrace.current);
+    onError(error, stackTrace ?? _withoutTopFrame(StackTrace.current));
   }
 
   /// Called whenever an [error] occurs and notifies [BlocObserver.onError].
@@ -174,5 +178,12 @@ abstract class BlocBase<State>
     // ignore: invalid_use_of_protected_member
     _blocObserver.onClose(this);
     await _stateController.close();
+  }
+
+  static StackTrace _withoutTopFrame(StackTrace trace) {
+    final raw = trace.toString();
+    final newline = raw.indexOf('\n');
+    if (newline < 0) return trace;
+    return StackTrace.fromString(raw.substring(newline + 1));
   }
 }
