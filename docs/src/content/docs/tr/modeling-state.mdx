@@ -1,0 +1,110 @@
+---
+title: Durum Modelleme
+description:
+  package:bloc kullanırken durumları modellemenin çeşitli yollarına genel bir
+  bakış.
+---
+
+import ConcreteClassAndStatusEnumSnippet from '~/components/modeling-state/ConcreteClassAndStatusEnumSnippet.astro';
+import SealedClassAndSubclassesSnippet from '~/components/modeling-state/SealedClassAndSubclassesSnippet.astro';
+
+Uygulama durumunu yapılandırma konusunda birçok farklı yaklaşım vardır. Her
+birinin kendi avantajları ve dezavantajları bulunur. Bu bölümde birkaç
+yaklaşıma, artılarına ve eksilerine ve her birinin ne zaman kullanılacağına
+bakacağız.
+
+Aşağıdaki yaklaşımlar yalnızca önerilerdir ve tamamen isteğe bağlıdır. Tercih
+ettiğiniz yaklaşımı kullanmaktan çekinmeyin. Örneklerin/dokümantasyonun bir
+kısmının, çoğunlukla basitlik/özlülük adına bu yaklaşımları izlemediğini
+görebilirsiniz.
+
+:::tip
+
+Aşağıdaki kod parçacıkları durum yapısına odaklanmıştır. Pratikte şunları da
+yapmak isteyebilirsiniz:
+
+- [`package:equatable`](https://pub.dev/packages/equatable) paketinden
+  `Equatable`'ı extend etmek
+- [`package:data_class`](https://pub.dev/packages/data_class) paketinden
+  `@Data()` ile sınıfı işaretlemek
+- [`package:meta`](https://pub.dev/packages/meta) paketinden **@immutable** ile
+  sınıfı işaretlemek
+- Bir `copyWith` metodu uygulamak
+- Constructor'lar için `const` anahtar kelimesini kullanmak
+
+:::
+
+## Somut Sınıf ve Durum Enum'u
+
+Bu yaklaşım, tüm durumlar için **tek bir somut sınıf** ile birlikte farklı
+durumları temsil eden bir `enum`'dan oluşur. Özellikler nullable yapılır ve
+mevcut duruma göre ele alınır. Bu yaklaşım, kesin biçimde birbirini dışlamayan
+ve/veya çok sayıda paylaşılan özellik içeren durumlar için en iyi şekilde
+çalışır.
+
+<ConcreteClassAndStatusEnumSnippet />
+
+#### Artıları
+
+- **Basit**: Tek bir sınıfı ve bir durum enum'unu yönetmek kolaydır ve tüm
+  özelliklere kolayca erişilebilir.
+- **Özlü**: Diğer yaklaşımlara kıyasla genellikle daha az satır kod gerektirir.
+
+#### Eksileri
+
+- **Tip Güvenli Değil**: Özelliklere erişmeden önce `status`'u kontrol etmeyi
+  gerektirir. Hatalara yol açabilecek bozuk biçimli bir durum `emit` etmek
+  mümkündür. Belirli durumlar için özellikler nullable olduğundan, yönetimi
+  zahmetli olabilir ve ya zorla unwrap etmeyi ya da null kontrolü yapmayı
+  gerektirir. Bu eksilerin bir kısmı birim testler yazılarak ve özelleşmiş,
+  isimli constructor'lar yazılarak hafifletilebilir.
+- **Şişmiş**: Zaman içinde birçok özellikle şişebilen tek bir durumla
+  sonuçlanır.
+
+#### Karar
+
+Bu yaklaşım, basit durumlar veya gereksinimlerin birbirini dışlamayan durumları
+gerektirdiği yerlerde (örneğin, son başarı durumundan eski verileri göstermeye
+devam ederken bir hata oluştuğunda snackbar göstermek) en iyi şekilde çalışır.
+Bu yaklaşım, tip güvenliği pahasına esneklik ve özlülük sağlar.
+
+## Sealed Sınıf ve Alt Sınıflar
+
+Bu yaklaşım, paylaşılan tüm özellikleri tutan bir **sealed sınıf** ve ayrı
+durumlar için birden fazla alt sınıftan oluşur. Bu yaklaşım, ayrı ve birbirini
+dışlayan durumlar için harikadır.
+
+<SealedClassAndSubclassesSnippet />
+
+#### Artıları
+
+- **Tip Güvenli**: Kod derleme zamanında güvenlidir ve yanlışlıkla geçersiz bir
+  özelliğe erişmek mümkün değildir. Her alt sınıf kendi özelliklerini tutar, bu
+  da hangi özelliklerin hangi duruma ait olduğunu netleştirir.
+- **Açık:** Paylaşılan özellikleri duruma özgü özelliklerden ayırır.
+- **Kapsayıcı (Exhaustive)**: Her durumun açıkça ele alındığından emin olmak
+  için kapsama (exhaustiveness) kontrollü bir `switch` ifadesi kullanmak.
+  - Eğer
+    [exhaustive switching](https://dart.dev/language/branches#exhaustiveness-checking)
+    istemiyorsanız veya API'yi bozmadan daha sonra alt türler ekleyebilmek
+    istiyorsanız, [final](https://dart.dev/language/class-modifiers#final)
+    modifikatörünü kullanın.
+  - Daha fazla ayrıntı için
+    [sealed sınıf dokümantasyonuna](https://dart.dev/language/class-modifiers#sealed)
+    bakın.
+
+#### Eksileri
+
+- **Ayrıntılı**: Daha fazla kod gerektirir (bir temel sınıf ve durum başına bir
+  alt sınıf). Ayrıca, alt sınıflar arasında paylaşılan özellikler için yinelenen
+  kod gerektirebilir.
+- **Karmaşık**: Yeni özellikler eklemek, her alt sınıfın ve temel sınıfın
+  güncellenmesini gerektirir; bu zahmetli olabilir ve durumun karmaşıklığında
+  artışlara yol açabilir. Ek olarak, özelliklere erişmek için gereksiz/aşırı tip
+  kontrolü gerektirebilir.
+
+#### Karar
+
+Bu yaklaşım, benzersiz özelliklere sahip iyi tanımlanmış, birbirini dışlayan
+durumlar için en iyi şekilde çalışır. Bu yaklaşım tip güvenliği ve kapsama
+kontrolleri sağlar ve özlülük ile basitlik yerine güvenliği vurgular.

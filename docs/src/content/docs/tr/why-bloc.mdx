@@ -1,0 +1,45 @@
+---
+title: Neden Bloc?
+description:
+  Bloc'u sağlam bir durum yönetimi çözümü yapan unsurlara genel bakış.
+sidebar:
+  order: 1
+---
+
+Bloc, sunum katmanını iş mantığından ayırmayı kolaylaştırır; bu da kodunuzu
+_hızlı_, _test edilmesi kolay_ ve _yeniden kullanılabilir_ hale getirir.
+
+Üretim kalitesinde uygulamalar geliştirirken durum yönetimi kritik bir öneme
+sahip olur.
+
+Geliştiriciler olarak şunları istiyoruz:
+
+- Uygulamamızın herhangi bir andaki durumunu bilmek.
+- Uygulamamızın doğru tepki verdiğinden emin olmak için her senaryoyu kolayca
+  test etmek.
+- Veriye dayalı kararlar verebilmek için uygulamamızdaki her kullanıcı
+  etkileşimini kayıt altına almak.
+- Mümkün olduğunca verimli çalışmak ve bileşenleri hem aynı uygulama içinde hem
+  de diğer uygulamalar arasında yeniden kullanmak.
+- Birçok geliştiricinin tek bir kod tabanında aynı desenleri ve kuralları takip
+  ederek sorunsuz çalışabilmesini sağlamak.
+- Hızlı ve tepkisel uygulamalar geliştirmek.
+
+Bloc, tüm bu ihtiyaçları ve çok daha fazlasını karşılamak için tasarlanmıştır.
+
+Pek çok durum yönetimi çözümü mevcut ve hangisini kullanacağınıza karar vermek
+göz korkutucu bir görev olabilir. Mükemmel bir durum yönetimi çözümü yoktur!
+Önemli olan ekibiniz ve projeniz için en uygun olanı seçmenizdir.
+
+Bloc, üç temel değer göz önünde bulundurularak tasarlandı:
+
+- **Basit:** Anlaması kolay ve farklı beceri seviyelerindeki geliştiriciler
+  tarafından kullanılabilir.
+- **Güçlü:** Daha küçük bileşenleri bir araya getirerek harika ve karmaşık
+  uygulamalar oluşturmaya yardımcı olur.
+- **Test Edilebilir:** Bir uygulamanın her yönünü kolayca test ederek güvenle
+  geliştirme yapmamızı sağlar.
+
+Genel olarak Bloc, durum değişikliğinin ne zaman gerçekleşebileceğini
+düzenleyerek ve uygulama genelinde durumu değiştirmek için tek bir yol zorunlu
+kılarak durum değişikliklerini öngörülebilir hale getirmeye çalışır.

@@ -1,0 +1,48 @@
+---
+title: Bloc'u Tercih Edin
+description: prefer_bloc kuralı.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/prefer_bloc/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/prefer_bloc/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+</div>
+
+`Cubit` örnekleri yerine `Bloc` örneklerini kullanmayı tercih edin.
+
+## Neden?
+
+Bu kural tamamen stilistik bir kuraldır. Bazı durumlarda ekipler, tutarlılık
+adına uygulamalarının tamamında yalnızca `Bloc` örneklerini kullanmayı
+standartlaştırmak isteyebilir.
+
+:::tip
+
+`Bloc`'un avantajları hakkında daha fazla bilgi için
+[Temel Kavramlar](/tr/bloc-concepts/#blocun-avantajları) bölümüne göz atın.
+
+:::
+
+## Örnekler
+
+`Cubit` örneklerini kullanmaktan **kaçının**.
+
+**Kötü**:
+
+<BadSnippet />
+
+**İyi**:
+
+<GoodSnippet />
+
+## Etkinleştir
+
+`prefer_bloc` kuralını etkinleştirmek için `analysis_options.yaml` dosyanızda
+`bloc` > `rules` altına ekleyin:
+
+<EnableRuleSnippet name="prefer_bloc" />

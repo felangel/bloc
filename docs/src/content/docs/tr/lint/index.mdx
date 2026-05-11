@@ -1,0 +1,70 @@
+---
+title: Linter Genel Bakış
+description: Bloc linter'a giriş.
+sidebar:
+  order: 1
+---
+
+import AvoidFlutterImportsWarningSnippet from '~/components/lint/ImportFlutterWarningSnippet.mdx';
+import AvoidFlutterImportsWarningOutputSnippet from '~/components/lint/ImportFlutterWarningOutputSnippet.astro';
+import InstallBlocToolsSnippet from '~/components/lint/InstallBlocToolsSnippet.astro';
+import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.astro';
+import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
+import RunBlocLintInCurrentDirectorySnippet from '~/components/lint/RunBlocLintInCurrentDirectorySnippet.astro';
+
+Linting; programatik ve stilistik hataların yanı sıra olası hataları tespit
+etmek için kodu statik olarak çözümleme sürecidir.
+
+Bloc'un, IDE'niz aracılığıyla ya da `bloc lint` komutuyla
+[`bloc komut satırı araçları`](https://pub.dev/packages/bloc_tools) üzerinden
+kullanabileceğiniz yerleşik bir linter'ı vardır.
+
+Bloc linter'ın yardımıyla, tek bir satır kod çalıştırmadan kod tabanınızın
+kalitesini artırabilir ve tutarlılığı sağlayabilirsiniz.
+
+Örneğin, cubit'inize yanlışlıkla bir Flutter bağımlılığı import etmiş
+olabilirsiniz:
+
+<AvoidFlutterImportsWarningSnippet />
+
+Doğru şekilde yapılandırılmışsa, bloc linter bu import'u işaret eder ve
+aşağıdaki uyarıyı üretir:
+
+<AvoidFlutterImportsWarningOutputSnippet />
+
+İlerleyen bölümlerde, kod tabanınızda statik çözümlemeden faydalanabilmeniz için
+bloc linter'ın nasıl kurulacağını, yapılandırılacağını ve özelleştirileceğini
+ele alacağız.
+
+## Hızlı Başlangıç
+
+Bloc linter'ı birkaç hızlı ve kolay adımda kullanmaya başlayın.
+
+:::note
+
+Bloc'u kullanmaya başlamak için makinenizde
+[Dart SDK](https://dart.dev/get-dart)'nın kurulu olması gerekir.
+
+:::
+
+1. [bloc komut satırı araçları](https://pub.dev/packages/bloc_tools)'nı kurun
+
+   <InstallBlocToolsSnippet />
+
+1. [bloc_lint](https://pub.dev/packages/bloc_lint) paketini kurun
+
+   <InstallBlocLintSnippet />
+
+1. Projenizin köküne, önerilen kuralları içeren bir `analysis_options.yaml`
+   dosyası ekleyin
+
+   <BlocLintRecommendedAnalysisOptionsSnippet />
+
+1. Linter'ı çalıştırın
+
+   <RunBlocLintInCurrentDirectorySnippet />
+
+Hepsi bu kadar 🎉
+
+Bloc linter'ı yapılandırma ve özelleştirme konusunda daha ayrıntılı bilgi için
+okumaya devam edin.

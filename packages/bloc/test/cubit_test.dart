@@ -328,10 +328,17 @@ void main() {
     });
 
     group('isClosed', () {
-      test('returns true after cubit is closed', () async {
+      test('returns true after cubit is closed (async)', () async {
         final cubit = CounterCubit();
         expect(cubit.isClosed, isFalse);
         await cubit.close();
+        expect(cubit.isClosed, isTrue);
+      });
+
+      test('returns true after cubit is closed (sync)', () {
+        final cubit = CounterCubit();
+        expect(cubit.isClosed, isFalse);
+        cubit.close();
         expect(cubit.isClosed, isTrue);
       });
     });

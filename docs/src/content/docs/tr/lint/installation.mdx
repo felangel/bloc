@@ -1,0 +1,61 @@
+---
+title: Linter Kurulumu
+description: Bloc linter'ın kurulumu.
+sidebar:
+  order: 2
+---
+
+import { CardGrid } from '@astrojs/starlight/components';
+import Card from '~/components/landing/Card.astro';
+import InstallBlocToolsSnippet from '~/components/lint/InstallBlocToolsSnippet.astro';
+import BlocToolsLintHelpOutputSnippet from '~/components/lint/BlocToolsLintHelpOutputSnippet.astro';
+import InstallBlocLintSnippet from '~/components/lint/InstallBlocLintSnippet.astro';
+import BlocLintRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintRecommendedAnalysisOptionsSnippet.astro';
+import BlocLintMultipleRecommendedAnalysisOptionsSnippet from '~/components/lint/BlocLintMultipleRecommendedAnalysisOptionsSnippet.astro';
+
+## Komut Satırı Araçları
+
+Linter'ı komut satırından kullanmak için aşağıdaki komutla
+[`package:bloc_tools`](https://pub.dev/packages/bloc_tools) paketini kurun:
+
+<InstallBlocToolsSnippet />
+
+Bloc komut satırı araçları kurulduktan sonra, bloc linter'ı `bloc lint` komutu
+ile çalıştırabilirsiniz:
+
+<BlocToolsLintHelpOutputSnippet />
+
+## Önerilen Kural Seti
+
+Önerilen lint kural setini kurmak için
+[`package:bloc_lint`](https://pub.dev/packages/bloc_lint) paketini aşağıdaki
+komutla bir dev bağımlılığı olarak kurun:
+
+<InstallBlocLintSnippet />
+
+Ardından, projenizin köküne önerilen kural setini içeren bir
+`analysis_options.yaml` dosyası ekleyin:
+
+<BlocLintRecommendedAnalysisOptionsSnippet />
+
+Gerekirse, birden fazla kural setini liste olarak tanımlayarak dahil
+edebilirsiniz:
+
+<BlocLintMultipleRecommendedAnalysisOptionsSnippet />
+
+## IDE Entegrasyonları
+
+Aşağıdaki IDE'ler, anlık tanılamaları (diagnostic) doğrudan IDE'niz içinde
+sağlamak için bloc linter ve dil sunucusunu resmi olarak destekler.
+
+<CardGrid>
+	<Card title="VSCode" icon="vscode">
+		[Bloc VSCode
+		Eklentisi](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+		desteği v6.8.0'dan itibaren mevcuttur.
+	</Card>
+	<Card title="IntelliJ" icon="jetbrains">
+		[Bloc IntelliJ Plugin](https://plugins.jetbrains.com/plugin/12129-bloc)
+		desteği v4.1.0'dan itibaren mevcuttur.
+	</Card>
+</CardGrid>

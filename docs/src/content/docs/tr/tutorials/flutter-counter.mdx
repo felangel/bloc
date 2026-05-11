@@ -1,0 +1,236 @@
+---
+title: Flutter Sayaç
+description:
+  Bloc ile Flutter sayaç uygulamasının nasıl oluşturulacağına dair kapsamlı bir
+  rehber.
+sidebar:
+  order: 1
+---
+
+import RemoteCode from '~/components/code/RemoteCode.astro';
+import FlutterCreateSnippet from '~/components/tutorials/flutter-counter/FlutterCreateSnippet.astro';
+import FlutterPubGetSnippet from '~/components/tutorials/FlutterPubGetSnippet.astro';
+
+![başlangıç](https://img.shields.io/badge/level-beginner-green.svg)
+
+Bu eğitimde, Bloc kütüphanesini kullanarak Flutter ile bir Sayaç uygulaması
+oluşturacağız.
+
+![demo](~/assets/tutorials/flutter-counter.gif)
+
+## Önemli Konular
+
+- [BlocObserver](/tr/bloc-concepts#blocobserver) ile durum değişikliklerini
+  gözlemleme.
+- [BlocProvider](/tr/flutter-bloc-concepts#blocprovider), alt widget'larına bir
+  bloc sağlayan Flutter widget'ı.
+- [BlocBuilder](/tr/flutter-bloc-concepts#blocbuilder), yeni durumlara karşılık
+  widget'ın yeniden oluşturulmasını yöneten Flutter widget'ı.
+- Bloc yerine Cubit kullanma.
+  [Aralarındaki fark nedir?](/tr/bloc-concepts/#cubit-ve-bloc-karşılaştırması)
+- [context.read](/tr/flutter-bloc-concepts#contextread) ile olay ekleme.
+
+## Kurulum
+
+Yepyeni bir Flutter projesi oluşturarak başlayacağız
+
+<FlutterCreateSnippet />
+
+Ardından `pubspec.yaml` dosyasının içeriğini şununla değiştirebiliriz
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/pubspec.yaml"
+	title="pubspec.yaml"
+/>
+
+ve sonrasında tüm bağımlılıklarımızı kuralım
+
+<FlutterPubGetSnippet />
+
+## Proje Yapısı
+
+```
+├── lib
+│   ├── app.dart
+│   ├── counter
+│   │   ├── counter.dart
+│   │   ├── cubit
+│   │   │   └── counter_cubit.dart
+│   │   └── view
+│   │       ├── counter_page.dart
+│   │       ├── counter_view.dart
+│   │       └── view.dart
+│   ├── counter_observer.dart
+│   └── main.dart
+├── pubspec.lock
+├── pubspec.yaml
+```
+
+Uygulama, özellik odaklı bir dizin yapısı kullanır. Bu proje yapısı, kendi
+içinde bağımsız özelliklere sahip olarak projeyi ölçeklendirmemizi sağlar. Bu
+örnekte yalnızca tek bir özelliğimiz olacak (sayacın kendisi), ancak daha
+karmaşık uygulamalarda yüzlerce farklı özelliğimiz olabilir.
+
+## BlocObserver
+
+İlk inceleyeceğimiz şey, uygulamadaki tüm durum değişikliklerini gözlemlememize
+yardımcı olacak bir `BlocObserver`'ın nasıl oluşturulacağıdır.
+
+`lib/counter_observer.dart` dosyasını oluşturalım:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter_observer.dart"
+	title="lib/counter_observer.dart"
+/>
+
+Bu durumda, gerçekleşen tüm durum değişikliklerini görmek için yalnızca
+`onChange` metodunu geçersiz kılıyoruz.
+
+:::note
+
+`onChange`, hem `Bloc` hem de `Cubit` örnekleri için aynı şekilde çalışır.
+
+:::
+
+## main.dart
+
+Sırada, `lib/main.dart` dosyasının içeriğini şununla değiştirelim:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/main.dart"
+	title="lib/main.dart"
+/>
+
+Az önce oluşturduğumuz `CounterObserver`'ı başlatıyor ve birazdan
+inceleyeceğimiz `CounterApp` widget'ı ile `runApp`'i çağırıyoruz.
+
+## Counter App
+
+`lib/app.dart` dosyasını oluşturalım:
+
+`CounterApp` bir `MaterialApp` olacak ve `home` olarak `CounterPage`'i
+belirtecektir.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/app.dart"
+	title="lib/app.dart"
+/>
+
+:::note
+
+`MaterialApp`'i genişletiyoruz çünkü `CounterApp` _bir_ `MaterialApp`'tir. Çoğu
+durumda `StatelessWidget` veya `StatefulWidget` örnekleri oluşturup `build`
+içinde widget'ları birleştireceğiz, ancak bu durumda birleştirilecek widget
+olmadığından `MaterialApp`'i genişletmek daha basittir.
+
+:::
+
+Sırada `CounterPage`'e bakalım!
+
+## Counter Page
+
+`lib/counter/view/counter_page.dart` dosyasını oluşturalım:
+
+`CounterPage` widget'ı, bir `CounterCubit` (birazdan inceleyeceğiz)
+oluşturmaktan ve bunu `CounterView`'a sağlamaktan sorumludur.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_page.dart"
+	title="lib/counter/view/counter_page.dart"
+/>
+
+:::note
+
+Çok daha test edilebilir ve yeniden kullanılabilir kod elde etmek için bir
+`Cubit`'in oluşturulmasını, tüketiminden ayırmak veya gevşek bağlamak önemlidir.
+
+:::
+
+## Counter Cubit
+
+`lib/counter/cubit/counter_cubit.dart` dosyasını oluşturalım:
+
+`CounterCubit` sınıfı iki metot sunacak:
+
+- `increment`: mevcut duruma 1 ekler
+- `decrement`: mevcut durumdan 1 çıkarır
+
+`CounterCubit`'in yönettiği durumun türü yalnızca bir `int`'tir ve başlangıç
+durumu `0`'dır.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/cubit/counter_cubit.dart"
+	title="lib/counter/cubit/counter_cubit.dart"
+/>
+
+:::tip
+
+Yeni cubit'leri otomatik olarak oluşturmak için
+[VSCode Eklentisi](https://marketplace.visualstudio.com/items?itemName=FelixAngelov.bloc)
+veya [IntelliJ Plugin](https://plugins.jetbrains.com/plugin/12129-bloc)
+kullanın.
+
+:::
+
+Sırada, durumu tüketmekten ve `CounterCubit` ile etkileşim kurmaktan sorumlu
+olacak `CounterView`'a bakalım.
+
+## Counter View
+
+`lib/counter/view/counter_view.dart` dosyasını oluşturalım:
+
+`CounterView`, mevcut sayacı görüntülemekten ve sayacı artırmak/azaltmak için
+iki FloatingActionButton oluşturmaktan sorumludur.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/counter_view.dart"
+	title="lib/counter/view/counter_view.dart"
+/>
+
+`CounterCubit` durumu her değiştiğinde metni güncellemek için `Text` widget'ı
+bir `BlocBuilder` ile sarmalanmıştır. Ek olarak, en yakın `CounterCubit`
+örneğini bulmak için `context.read<CounterCubit>()` kullanılır.
+
+:::note
+
+Yalnızca `Text` widget'ı bir `BlocBuilder` ile sarmalanmıştır çünkü
+`CounterCubit`'teki durum değişikliklerine tepki olarak yeniden oluşturulması
+gereken tek widget odur. Bir durum değiştiğinde yeniden oluşturulması gerekmeyen
+widget'ları gereksiz yere sarmalamaktan kaçının.
+
+:::
+
+## Barrel
+
+`lib/counter/view/view.dart` dosyasını oluşturun:
+
+Counter view'in tüm dışa açık parçalarını dışa aktarmak için `view.dart`
+dosyasını ekleyin.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/view/view.dart"
+	title="lib/counter/view/view.dart"
+/>
+
+`lib/counter/counter.dart` dosyasını oluşturalım:
+
+Counter özelliğinin tüm dışa açık parçalarını dışa aktarmak için `counter.dart`
+dosyasını ekleyin.
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_counter/lib/counter/counter.dart"
+	title="lib/counter/counter.dart"
+/>
+
+İşte bu kadar! Sunum katmanını iş mantığı katmanından ayırdık. `CounterView`,
+bir kullanıcı bir düğmeye bastığında ne olacağını bilmez; sadece
+`CounterCubit`'i bilgilendirir. Üstelik `CounterCubit` de durumla (sayaç değeri)
+ne olduğundan habersizdir; çağrılan metotlara karşılık olarak yalnızca yeni
+durumlar yayar.
+
+Uygulamamızı `flutter run` ile çalıştırabilir ve cihazımızda veya
+simülatör/emülatörde görüntüleyebiliriz.
+
+Bu örneğin tam kaynak kodu (birim ve widget testleri dahil)
+[buradan](https://github.com/felangel/Bloc/tree/master/examples/flutter_counter)
+ulaşılabilir.

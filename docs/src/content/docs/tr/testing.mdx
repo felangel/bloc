@@ -1,0 +1,80 @@
+---
+title: Test Etme
+description: Bloc'larınız için test yazmanın temelleri.
+---
+
+import CounterBlocSnippet from '~/components/testing/CounterBlocSnippet.astro';
+import AddDevDependenciesSnippet from '~/components/testing/AddDevDependenciesSnippet.astro';
+import CounterBlocTestImportsSnippet from '~/components/testing/CounterBlocTestImportsSnippet.astro';
+import CounterBlocTestMainSnippet from '~/components/testing/CounterBlocTestMainSnippet.astro';
+import CounterBlocTestSetupSnippet from '~/components/testing/CounterBlocTestSetupSnippet.astro';
+import CounterBlocTestInitialStateSnippet from '~/components/testing/CounterBlocTestInitialStateSnippet.astro';
+import CounterBlocTestBlocTestSnippet from '~/components/testing/CounterBlocTestBlocTestSnippet.astro';
+
+Bloc, test etmesi son derece kolay olacak şekilde tasarlanmıştır. Bu bölümde,
+bir bloc'un birim testinin nasıl yapılacağını adım adım inceleyeceğiz.
+
+Basitlik adına, [Temel Kavramlar](/tr/bloc-concepts) bölümünde oluşturduğumuz
+`CounterBloc` için testler yazalım.
+
+Hatırlatmak gerekirse, `CounterBloc` uygulaması şöyle görünür:
+
+<CounterBlocSnippet />
+
+## Kurulum
+
+Testlerimizi yazmaya başlamadan önce bağımlılıklarımıza bir test framework'ü
+eklememiz gerekecek.
+
+Projemize [test](https://pub.dev/packages/test) ve
+[bloc_test](https://pub.dev/packages/bloc_test) eklememiz gerekiyor.
+
+<AddDevDependenciesSnippet />
+
+## Test Etme
+
+`CounterBloc` testlerimiz için dosyamızı, `counter_bloc_test.dart`'ı oluşturup
+test paketini import ederek başlayalım.
+
+<CounterBlocTestImportsSnippet />
+
+Sonrasında `main`'imizi ve test grubumuzu oluşturmamız gerekiyor.
+
+<CounterBlocTestMainSnippet />
+
+:::note
+
+Gruplar, bireysel testleri organize etmek ve tüm bireysel testler arasında ortak
+bir `setUp` ve `tearDown` paylaşabileceğiniz bir bağlam oluşturmak içindir.
+
+:::
+
+Tüm testlerimizde kullanılacak olan `CounterBloc`'umuzun bir örneğini
+oluşturarak başlayalım.
+
+<CounterBlocTestSetupSnippet />
+
+Şimdi bireysel testlerimizi yazmaya başlayabiliriz.
+
+<CounterBlocTestInitialStateSnippet />
+
+:::note
+
+Tüm testlerimizi `dart test` komutu ile çalıştırabiliriz.
+
+:::
+
+Bu noktada ilk geçen testimiz olmalı! Şimdi
+[bloc_test](https://pub.dev/packages/bloc_test) paketini kullanarak daha
+karmaşık bir test yazalım.
+
+<CounterBlocTestBlocTestSnippet />
+
+Testleri çalıştırabilmeli ve hepsinin geçtiğini görebilmeliyiz.
+
+Hepsi bu kadar; test etmek çok kolay olmalı ve değişiklik yaparken ve kodumuzu
+yeniden düzenlerken kendimizi güvende hissetmeliyiz.
+
+Tamamen test edilmiş bir uygulama örneği için
+[Weather App](https://github.com/felangel/bloc/tree/master/examples/flutter_weather)
+örneğine başvurabilirsiniz.

@@ -96,7 +96,7 @@ abstract class BlocBase<State>
   @override
   void emit(State state) {
     try {
-      if (isClosed) {
+      if (_stateController.isClosed) {
         throw StateError('Cannot emit new states after calling close');
       }
       if (state == _state && _emitted) return;
