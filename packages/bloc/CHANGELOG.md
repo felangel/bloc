@@ -1,3 +1,7 @@
+# 9.2.1
+
+- fix: `isClosed` should incorporate event controller state ([#4809](https://github.com/felangel/bloc/pull/4809))
+
 # 9.2.0
 
 - feat: add `MultiBlocObserver` ([#4714](https://github.com/felangel/bloc/pull/4714))
