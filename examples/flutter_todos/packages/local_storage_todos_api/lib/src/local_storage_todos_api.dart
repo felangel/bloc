@@ -11,9 +11,7 @@ import 'package:todos_api/todos_api.dart';
 /// {@endtemplate}
 class LocalStorageTodosApi extends TodosApi {
   /// {@macro local_storage_todos_api}
-  LocalStorageTodosApi({
-    required SharedPreferences plugin,
-  }) : _plugin = plugin {
+  LocalStorageTodosApi({required this._plugin}) {
     _init();
   }
 

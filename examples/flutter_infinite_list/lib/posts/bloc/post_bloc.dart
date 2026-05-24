@@ -21,9 +21,7 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 }
 
 class PostBloc extends Bloc<PostEvent, PostState> {
-  PostBloc({required http.Client httpClient})
-    : _httpClient = httpClient,
-      super(const PostState()) {
+  PostBloc({required this._httpClient}) : super(const PostState()) {
     on<PostFetched>(
       _onFetched,
       transformer: throttleDroppable(throttleDuration),
