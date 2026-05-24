@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 
-import '../counter/counter_bloc.dart';
+import 'counter_bloc.dart';
 
 class OnErrorBloc extends Bloc<CounterEvent, int> {
   OnErrorBloc({required this.error, required this.onErrorCallback}) : super(0) {
