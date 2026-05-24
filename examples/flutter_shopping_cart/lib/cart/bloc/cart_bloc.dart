@@ -9,8 +9,7 @@ part 'cart_event.dart';
 part 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
-  CartBloc({required this._shoppingRepository})
-    : super(CartLoading()) {
+  CartBloc({required this._shoppingRepository}) : super(CartLoading()) {
     on<CartStarted>(_onStarted);
     on<CartItemAdded>(_onItemAdded);
     on<CartItemRemoved>(_onItemRemoved);
