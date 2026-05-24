@@ -6,8 +6,8 @@ import 'package:todos_api/todos_api.dart';
 class TodosRepository {
   /// {@macro todos_repository}
   const TodosRepository({
-    required TodosApi todosApi,
-  }) : _todosApi = todosApi;
+    required this._todosApi,
+  });
 
   final TodosApi _todosApi;
 

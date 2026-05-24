@@ -7,9 +7,9 @@ import 'package:flutter_firebase_login/theme.dart';
 
 class App extends StatelessWidget {
   const App({
-    required AuthenticationRepository authenticationRepository,
+    required this._authenticationRepository,
     super.key,
-  }) : _authenticationRepository = authenticationRepository;
+  });
 
   final AuthenticationRepository _authenticationRepository;
 

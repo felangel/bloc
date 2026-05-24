@@ -7,10 +7,9 @@ part 'edit_todo_state.dart';
 
 class EditTodoBloc extends Bloc<EditTodoEvent, EditTodoState> {
   EditTodoBloc({
-    required TodosRepository todosRepository,
+    required this._todosRepository,
     required Todo? initialTodo,
-  }) : _todosRepository = todosRepository,
-       super(
+  }) : super(
          EditTodoState(
            initialTodo: initialTodo,
            title: initialTodo?.title ?? '',

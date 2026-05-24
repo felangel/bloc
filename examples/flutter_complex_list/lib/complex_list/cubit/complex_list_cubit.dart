@@ -8,9 +8,8 @@ import 'package:flutter_complex_list/repository.dart';
 part 'complex_list_state.dart';
 
 class ComplexListCubit extends Cubit<ComplexListState> {
-  ComplexListCubit({required Repository repository})
-    : _repository = repository,
-      super(const ComplexListState.loading());
+  ComplexListCubit({required this._repository})
+    : super(const ComplexListState.loading());
 
   final Repository _repository;
 

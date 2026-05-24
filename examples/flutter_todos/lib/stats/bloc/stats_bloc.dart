@@ -7,9 +7,8 @@ part 'stats_state.dart';
 
 class StatsBloc extends Bloc<StatsEvent, StatsState> {
   StatsBloc({
-    required TodosRepository todosRepository,
-  }) : _todosRepository = todosRepository,
-       super(const StatsState()) {
+    required this._todosRepository,
+  }) : super(const StatsState()) {
     on<StatsSubscriptionRequested>(_onSubscriptionRequested);
   }
 

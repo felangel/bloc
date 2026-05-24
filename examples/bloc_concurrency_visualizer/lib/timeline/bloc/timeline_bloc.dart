@@ -11,9 +11,8 @@ part 'timeline_state.dart';
 class TimelineBloc extends Bloc<TimelineEvent, TimelineState> {
   TimelineBloc({
     required Transformer transformer,
-    required double Function() now,
-  }) : _now = now,
-       _transformer = transformer,
+    required this._now,
+  }) : _transformer = transformer,
        super(const TimelineState()) {
     on<TimelineTaskQueued>(_onTaskQueued);
     on<_TimelineTaskAdded>(_onTaskAdded, transformer: transformer.create());

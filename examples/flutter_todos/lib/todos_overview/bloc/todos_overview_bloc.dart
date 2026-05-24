@@ -8,9 +8,8 @@ part 'todos_overview_state.dart';
 
 class TodosOverviewBloc extends Bloc<TodosOverviewEvent, TodosOverviewState> {
   TodosOverviewBloc({
-    required TodosRepository todosRepository,
-  }) : _todosRepository = todosRepository,
-       super(const TodosOverviewState()) {
+    required this._todosRepository,
+  }) : super(const TodosOverviewState()) {
     on<TodosOverviewSubscriptionRequested>(_onSubscriptionRequested);
     on<TodosOverviewTodoCompletionToggled>(_onTodoCompletionToggled);
     on<TodosOverviewTodoDeleted>(_onTodoDeleted);
