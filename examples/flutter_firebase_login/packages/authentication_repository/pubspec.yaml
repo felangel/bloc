@@ -9,7 +9,7 @@ environment:
 dependencies:
   cache:
     path: ../cache
-  equatable: ^2.0.0
+  equatable: ^2.1.0-dev.0
   firebase_auth: ^5.0.0
   firebase_core: ^3.0.0
   flutter:

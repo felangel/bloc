@@ -138,10 +138,10 @@ packages:
     dependency: "direct main"
     description:
       name: equatable
-      sha256: "567c64b3cb4cf82397aac55f4f0cbd3ca20d77c6c03bedbc4ceaddc08904aef7"
+      sha256: f8b1ad1d299796e7bd23f576985f1b3649438e402833636af675e127e0c42dc0
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.7"
+    version: "2.1.0-dev.0"
   fake_async:
     dependency: transitive
     description:

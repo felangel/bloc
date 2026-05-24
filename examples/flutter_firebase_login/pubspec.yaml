@@ -10,7 +10,7 @@ dependencies:
   authentication_repository:
     path: packages/authentication_repository
   bloc: ^9.0.0
-  equatable: ^2.0.0
+  equatable: ^2.1.0-dev.0
   firebase_core: ^3.0.0
   flow_builder: ^0.1.0
   flutter:

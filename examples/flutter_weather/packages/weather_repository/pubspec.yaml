@@ -7,7 +7,7 @@ environment:
   sdk: ^3.12.0
 
 dependencies:
-  equatable: ^2.0.0
+  equatable: ^2.1.0-dev.0
   json_annotation: ^4.6.0
   open_meteo_api:
     path: ../open_meteo_api
