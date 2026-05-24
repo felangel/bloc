@@ -1,1 +1,1 @@
-export './bloc_pipe.dart' show BlocPipe;
+export 'bloc_pipe.dart' show BlocPipe;

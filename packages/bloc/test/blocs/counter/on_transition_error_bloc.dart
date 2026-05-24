@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 
-import '../counter/counter_bloc.dart';
+import 'counter_bloc.dart';
 
 class OnTransitionErrorBloc extends Bloc<CounterEvent, int> {
   OnTransitionErrorBloc({
