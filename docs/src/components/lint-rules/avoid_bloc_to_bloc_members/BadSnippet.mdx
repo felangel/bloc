@@ -1,0 +1,25 @@
+import { Code } from '@astrojs/starlight/components';
+import { transformerMetaHighlight } from '@shikijs/transformers';
+
+<Code
+	code={`
+  import 'package:bloc/bloc.dart';
+  import 'package:notification_bloc/notification_bloc.dart';
+
+  enum CounterEvent { increment };
+
+  class CounterBloc extends Bloc<CounterEvent, int> { 
+    // Avoid blocs as members
+    final NotificationBloc _notificationBloc;
+
+    CounterBloc(this._notificationBloc) : super(0) {
+      on<CounterEvent>((event, emit) {
+        emit(state + 1);
+        _notificationBloc.add(NotificationEvent(message: 'Counter value incremented'));
+      });
+    }
+  }
+`}
+lang="dart" title="counter_page.dart"
+transformers={[transformerMetaHighlight()]} class='warning' meta="{8}"
+/> 

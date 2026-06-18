@@ -1,0 +1,26 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+import '../bloc/counter_bloc.dart';
+import '../bloc/notification_bloc.dart';
+
+class MyNotifier extends StatelessWidget {
+  final Widget child;
+  const MyNotifier({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    // Handle at the application layer
+    return BlocListener<CounterBloc, CounterState>(
+      listener: (context, state) {
+        context.read<NotificationBloc>().add(NotificationEvent(message: 'Counter value incremented'));
+      },
+      child: child,
+    );
+  }
+}
+`;
+---
+
+<Code code={code} lang="dart" title="my_notifier.dart" />
