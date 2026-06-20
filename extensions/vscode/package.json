@@ -251,7 +251,7 @@
   "dependencies": {
     "axios": "^1.16.0",
     "change-case": "^4.1.2",
-    "js-yaml": "^4.1.1",
+    "js-yaml": "^4.2.0",
     "lodash": "^4.18.1",
     "mkdirp": "^0.5.1",
     "node-fetch": "^2.0.0",
