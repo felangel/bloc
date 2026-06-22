@@ -202,10 +202,16 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-    } on firebase_auth.FirebaseAuthException catch (e) {
-      throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
-    } catch (_) {
-      throw const SignUpWithEmailAndPasswordFailure();
+    } on firebase_auth.FirebaseAuthException catch (e, stackTrace) {
+      Error.throwWithStackTrace(
+        SignUpWithEmailAndPasswordFailure.fromCode(e.code),
+        stackTrace,
+      );
+    } on Object catch (_, stackTrace) {
+      Error.throwWithStackTrace(
+        const SignUpWithEmailAndPasswordFailure(),
+        stackTrace,
+      );
     }
   }
 
@@ -231,10 +237,16 @@ class AuthenticationRepository {
       }
 
       await _firebaseAuth.signInWithCredential(credential);
-    } on firebase_auth.FirebaseAuthException catch (e) {
-      throw LogInWithGoogleFailure.fromCode(e.code);
-    } catch (_) {
-      throw const LogInWithGoogleFailure();
+    } on firebase_auth.FirebaseAuthException catch (e, stackTrace) {
+      Error.throwWithStackTrace(
+        LogInWithGoogleFailure.fromCode(e.code),
+        stackTrace,
+      );
+    } on Object catch (_, stackTrace) {
+      Error.throwWithStackTrace(
+        const LogInWithGoogleFailure(),
+        stackTrace,
+      );
     }
   }
 
@@ -250,10 +262,16 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-    } on firebase_auth.FirebaseAuthException catch (e) {
-      throw LogInWithEmailAndPasswordFailure.fromCode(e.code);
-    } catch (_) {
-      throw const LogInWithEmailAndPasswordFailure();
+    } on firebase_auth.FirebaseAuthException catch (e, stackTrace) {
+      Error.throwWithStackTrace(
+        LogInWithEmailAndPasswordFailure.fromCode(e.code),
+        stackTrace,
+      );
+    } on Object catch (_, stackTrace) {
+      Error.throwWithStackTrace(
+        const LogInWithEmailAndPasswordFailure(),
+        stackTrace,
+      );
     }
   }
 
@@ -267,8 +285,8 @@ class AuthenticationRepository {
         _firebaseAuth.signOut(),
         _googleSignIn.signOut(),
       ]);
-    } catch (_) {
-      throw LogOutFailure();
+    } on Object catch (_, stackTrace) {
+      Error.throwWithStackTrace(LogOutFailure(), stackTrace);
     }
   }
 }
