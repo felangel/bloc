@@ -207,7 +207,7 @@ class AuthenticationRepository {
         SignUpWithEmailAndPasswordFailure.fromCode(e.code),
         stackTrace,
       );
-    } on Object catch (_, stackTrace) {
+    } on Exception catch (_, stackTrace) {
       Error.throwWithStackTrace(
         const SignUpWithEmailAndPasswordFailure(),
         stackTrace,
@@ -242,7 +242,7 @@ class AuthenticationRepository {
         LogInWithGoogleFailure.fromCode(e.code),
         stackTrace,
       );
-    } on Object catch (_, stackTrace) {
+    } on Exception catch (_, stackTrace) {
       Error.throwWithStackTrace(
         const LogInWithGoogleFailure(),
         stackTrace,
@@ -267,7 +267,7 @@ class AuthenticationRepository {
         LogInWithEmailAndPasswordFailure.fromCode(e.code),
         stackTrace,
       );
-    } on Object catch (_, stackTrace) {
+    } on Exception catch (_, stackTrace) {
       Error.throwWithStackTrace(
         const LogInWithEmailAndPasswordFailure(),
         stackTrace,
@@ -285,7 +285,7 @@ class AuthenticationRepository {
         _firebaseAuth.signOut(),
         _googleSignIn.signOut(),
       ]);
-    } on Object catch (_, stackTrace) {
+    } on Exception catch (_, stackTrace) {
       Error.throwWithStackTrace(LogOutFailure(), stackTrace);
     }
   }
