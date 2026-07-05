@@ -9,9 +9,8 @@ EventTransformer<Event> debounce<Event>(Duration duration) {
 }
 
 class GithubSearchBloc extends Bloc<GithubSearchEvent, GithubSearchState> {
-  GithubSearchBloc({required GithubRepository githubRepository})
-    : _githubRepository = githubRepository,
-      super(SearchStateEmpty()) {
+  GithubSearchBloc({required this._githubRepository})
+    : super(SearchStateEmpty()) {
     on<TextChanged>(_onTextChanged, transformer: debounce(_duration));
   }
 

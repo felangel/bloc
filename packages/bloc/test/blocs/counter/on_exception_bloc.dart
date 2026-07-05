@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 
-import '../counter/counter_bloc.dart';
+import 'counter_bloc.dart';
 
 class OnExceptionBloc extends Bloc<CounterEvent, int> {
   OnExceptionBloc({

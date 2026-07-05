@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 
-import '../counter/counter_bloc.dart';
+import 'counter_bloc.dart';
 
 class CounterExceptionBloc extends Bloc<CounterEvent, int> {
   CounterExceptionBloc() : super(0) {
