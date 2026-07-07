@@ -54,6 +54,29 @@ implementation details of how we authenticate and fetch user information. In
 this case, it will be integrating with Firebase but we can always change the
 internal implementation later on and our application will be unaffected.
 
+### Caching
+
+The example uses a small, local cache to persist the current `User` between
+app restarts and to avoid unnecessary network calls. The `AuthenticationRepository`
+accepts an optional `CacheClient` and defaults to an in-memory implementation
+(`CacheClient()`) when none is provided. The cache key used for the current
+user is `AuthenticationRepository.userCacheKey` and the repository exposes helper
+methods which write the `User` to cache on login and read the cached `User` on
+startup (defaulting to `User.empty` when no cached value exists).
+
+If you want to inspect or replace the cache implementation used in the example,
+see the cache package used by the tutorial:
+
+- [examples/flutter_firebase_login/packages/cache/lib/cache.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/cache/lib/cache.dart)
+
+and the repository usage here:
+
+- [packages/authentication_repository/lib/src/authentication_repository.dart](https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/authentication_repository/lib/src/authentication_repository.dart)
+
+This simple cache is intentionally lightweight for the tutorial; in a production
+app you might swap in a persistent cache (e.g., Hive, SharedPreferences or
+secure storage) depending on your security and persistence requirements.
+
 ### Setup
 
 We'll start by creating `packages/authentication_repository` and a
