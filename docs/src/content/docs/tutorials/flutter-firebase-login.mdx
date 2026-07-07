@@ -77,6 +77,35 @@ This simple cache is intentionally lightweight for the tutorial; in a production
 app you might swap in a persistent cache (e.g., Hive, SharedPreferences or
 secure storage) depending on your security and persistence requirements.
 
+#### Example: persistent storage with SharedPreferences
+
+Below is a minimal example showing how to persist and restore the `User` using
+`SharedPreferences`. This example serializes the `User` to JSON; adapt as
+required for your app and consider encryption for sensitive data.
+
+```dart
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+
+const _kUserKey = 'cached_user';
+
+Future<void> persistUser(User user) async {
+	final prefs = await SharedPreferences.getInstance();
+	await prefs.setString(_kUserKey, jsonEncode(user.toJson()));
+}
+
+Future<User> readCachedUser() async {
+	final prefs = await SharedPreferences.getInstance();
+	final json = prefs.getString(_kUserKey);
+	if (json == null) return User.empty;
+	return User.fromJson(jsonDecode(json));
+}
+```
+
+If you prefer a fully-featured local database with typed models and better
+performance, consider `Hive` or `moor` (Drift). For sensitive user data use
+secure storage solutions such as `flutter_secure_storage`.
+
 ### Setup
 
 We'll start by creating `packages/authentication_repository` and a
