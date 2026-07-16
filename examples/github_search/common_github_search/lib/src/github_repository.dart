@@ -10,13 +10,23 @@ class GithubRepository {
   final GithubCache _cache;
   final GithubClient _client;
 
-  Future<SearchResult> search(String term) async {
-    final cachedResult = _cache.get(term);
-    if (cachedResult != null) {
-      return cachedResult;
+  Future<SearchResult> search(
+    String term, {
+    int page = 1,
+    int perPage = 30,
+    bool forceRefresh = false,
+  }) async {
+    // ponytail: composite term+page cache key so pages cache independently.
+    final cacheKey = '$term::$page';
+    if (!forceRefresh) {
+      final cachedResult = _cache.get(cacheKey);
+      if (cachedResult != null) {
+        return cachedResult;
+      }
     }
-    final result = await _client.search(term);
-    _cache.set(term, result);
+    final result = await _client.search(term, page: page, perPage: perPage);
+    // Overwrite so a forced refresh never leaves stale cached data behind.
+    _cache.set(cacheKey, result);
     return result;
   }
 
