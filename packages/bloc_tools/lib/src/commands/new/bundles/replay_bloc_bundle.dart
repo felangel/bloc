@@ -68,13 +68,13 @@ final replayBlocBundle = MasonBundle.fromJson(<String, dynamic>{
     {
       "path": "{{~ freezed_event }}",
       "data":
-          "cGFydCBvZiAne3tuYW1lLnNuYWtlQ2FzZSgpfX1fYmxvYy5kYXJ0JzsKCkBmcmVlemVkCmNsYXNzIHt7bmFtZS5wYXNjYWxDYXNlKCl9fUV2ZW50IGV4dGVuZHMgUmVwbGF5RXZlbnQgd2l0aCBfJHt7bmFtZS5wYXNjYWxDYXNlKCl9fUV2ZW50IHsKICBjb25zdCBmYWN0b3J5IHt7bmFtZS5wYXNjYWxDYXNlKCl9fUV2ZW50LnN0YXJ0ZWQoKSA9IF9TdGFydGVkOwp9Cg==",
+          "cGFydCBvZiAne3tuYW1lLnNuYWtlQ2FzZSgpfX1fYmxvYy5kYXJ0JzsKCkBmcmVlemVkCmFic3RyYWN0IGNsYXNzIHt7bmFtZS5wYXNjYWxDYXNlKCl9fUV2ZW50IGV4dGVuZHMgUmVwbGF5RXZlbnQgd2l0aCBfJHt7bmFtZS5wYXNjYWxDYXNlKCl9fUV2ZW50IHsKICBjb25zdCBmYWN0b3J5IHt7bmFtZS5wYXNjYWxDYXNlKCl9fUV2ZW50LnN0YXJ0ZWQoKSA9IF9TdGFydGVkOwp9Cg==",
       "type": "text",
     },
     {
       "path": "{{~ freezed_state }}",
       "data":
-          "cGFydCBvZiAne3tuYW1lLnNuYWtlQ2FzZSgpfX1fYmxvYy5kYXJ0JzsKCkBmcmVlemVkCmNsYXNzIHt7bmFtZS5wYXNjYWxDYXNlKCl9fVN0YXRlIHdpdGggXyR7e25hbWUucGFzY2FsQ2FzZSgpfX1TdGF0ZSB7CiAgY29uc3QgZmFjdG9yeSB7e25hbWUucGFzY2FsQ2FzZSgpfX1TdGF0ZS5pbml0aWFsKCkgPSBfSW5pdGlhbDsKfQo=",
+          "cGFydCBvZiAne3tuYW1lLnNuYWtlQ2FzZSgpfX1fYmxvYy5kYXJ0JzsKCkBmcmVlemVkCmFic3RyYWN0IGNsYXNzIHt7bmFtZS5wYXNjYWxDYXNlKCl9fVN0YXRlIHdpdGggXyR7e25hbWUucGFzY2FsQ2FzZSgpfX1TdGF0ZSB7CiAgY29uc3QgZmFjdG9yeSB7e25hbWUucGFzY2FsQ2FzZSgpfX1TdGF0ZS5pbml0aWFsKCkgPSBfSW5pdGlhbDsKfQo=",
       "type": "text",
     },
   ],
