@@ -803,13 +803,13 @@ UI bir `EditTodoSubmitted` olayı gönderdiğinde:
 	title="lib/edit_todo/view/edit_todo_page.dart"
 />
 
-Önceki özelliklerde olduğu gibi, `EditTodosPage` `BlocProvider` aracılığıyla bir
-`EditTodosBloc` örneği sağlar. Diğer özelliklerin aksine, `EditTodosPage` ayrı
+Önceki özelliklerde olduğu gibi, `EditTodoPage` `BlocProvider` aracılığıyla bir
+`EditTodoBloc` örneği sağlar. Diğer özelliklerin aksine, `EditTodoPage` ayrı
 bir route'tur, bu yüzden `static` bir `route` metodu sunar. Bu,
-`Navigator.of(context).push(...)` aracılığıyla `EditTodosPage`'i navigasyon
+`Navigator.of(context).push(...)` aracılığıyla `EditTodoPage`'i navigasyon
 yığınına eklemeyi kolaylaştırır.
 
-`EditTodosPage` için widget ağacının basitleştirilmiş bir gösterimi:
+`EditTodoPage` için widget ağacının basitleştirilmiş bir gösterimi:
 
 <EditTodosPageTreeSnippet />
 
