@@ -98,6 +98,7 @@ For more information, check out the [official documentation](https://bloclibrary
 
 - [avoid_build_context_extensions](https://bloclibrary.dev/lint-rules/avoid_build_context_extensions)
 - [avoid_flutter_imports](https://bloclibrary.dev/lint-rules/avoid_flutter_imports)
+- [avoid_mutable_events](https://bloclibrary.dev/lint-rules/avoid_mutable_events)
 - [avoid_public_bloc_methods](https://bloclibrary.dev/lint-rules/avoid_public_bloc_methods)
 - [avoid_public_fields](https://bloclibrary.dev/lint-rules/avoid_public_fields)
 - [prefer_bloc](https://bloclibrary.dev/lint-rules/prefer_bloc)
