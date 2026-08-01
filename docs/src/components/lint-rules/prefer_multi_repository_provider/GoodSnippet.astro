@@ -1,0 +1,18 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+MultiRepositoryProvider(
+  providers: [
+    RepositoryProvider<RepositoryA>(create: (context) => RepositoryA()),
+    RepositoryProvider<RepositoryB>(create: (context) => RepositoryB()),
+    RepositoryProvider<RepositoryC>(create: (context) => RepositoryC()),
+  ],
+  child: ChildA(),
+);
+`;
+---
+
+<Code code={code} lang="dart" title="app.dart" />
