@@ -484,6 +484,52 @@ void main() {
       expect(states, expectedStates);
     });
 
+    testWidgets(
+        'calls listener with initial state when startWithCurrentState is true',
+        (tester) async {
+      final counterCubit = CounterCubit();
+      final states = <int>[];
+      const expectedStates = [0];
+      await tester.pumpWidget(
+        BlocListener<CounterCubit, int>(
+          bloc: counterCubit,
+          startWithCurrentState: true,
+          listener: (_, state) {
+            states.add(state);
+          },
+          child: const SizedBox(),
+        ),
+      );
+
+      await tester.pump();
+
+      expect(states, expectedStates);
+    });
+
+    testWidgets(
+        'calls listener when further states emitted when startWithCurrentState '
+        'is true', (tester) async {
+      final counterCubit = CounterCubit();
+      final states = <int>[];
+      const expectedStates = [0, 1];
+      await tester.pumpWidget(
+        BlocListener<CounterCubit, int>(
+          bloc: counterCubit,
+          startWithCurrentState: true,
+          listener: (_, state) {
+            states.add(state);
+          },
+          child: const SizedBox(),
+        ),
+      );
+
+      await tester.pump();
+      counterCubit.increment();
+      await tester.pump();
+
+      expect(states, expectedStates);
+    });
+
     testWidgets('overrides debugFillProperties', (tester) async {
       final builder = DiagnosticPropertiesBuilder();
 
@@ -504,6 +550,7 @@ void main() {
           "bloc: Instance of 'CounterCubit'",
           'has listener',
           'has listenWhen',
+          'without current state',
         ],
       );
     });
