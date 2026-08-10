@@ -63,6 +63,7 @@ export default defineConfig({
 						ru: 'Введение',
 						tr: 'Giriş',
 						uk: 'Вступ',
+						'pt-BR': 'Introdução',
 					},
 					items: [
 						{
@@ -77,6 +78,7 @@ export default defineConfig({
 								ru: 'Начало работы',
 								tr: 'Başlarken',
 								uk: 'Початок роботи',
+								'pt-BR': 'Começando',
 							},
 						},
 						{
@@ -91,6 +93,7 @@ export default defineConfig({
 								ru: 'Почему Bloc?',
 								tr: 'Neden Bloc?',
 								uk: 'Чому Bloc?',
+								'pt-BR': 'Por que Bloc?',
 							},
 						},
 						{
@@ -105,6 +108,7 @@ export default defineConfig({
 								ru: 'Концепции Bloc',
 								tr: 'Bloc Kavramları',
 								uk: 'Концепції Bloc',
+								'pt-BR': 'Conceitos do Bloc',
 							},
 						},
 						{
@@ -119,6 +123,7 @@ export default defineConfig({
 								ru: 'Концепции Flutter Bloc',
 								tr: 'Flutter Bloc Kavramları',
 								uk: 'Концепції Flutter Bloc',
+								'pt-BR': 'Conceitos do Flutter Bloc',
 							},
 						},
 						{
@@ -132,6 +137,7 @@ export default defineConfig({
 								ru: 'Архитектура',
 								tr: 'Mimari',
 								uk: 'Архітектура',
+								'pt-BR': 'Arquitetura',
 							},
 						},
 						{
@@ -145,6 +151,7 @@ export default defineConfig({
 								ru: 'Моделирование состояния',
 								tr: 'Durum Modelleme',
 								uk: 'Моделювання стану',
+								'pt-BR': 'Modelagem de Estado',
 							},
 						},
 						{
@@ -158,6 +165,7 @@ export default defineConfig({
 								ru: 'Тестирование',
 								tr: 'Test Etme',
 								uk: 'Тестування',
+								'pt-BR': 'Testes',
 							},
 						},
 						{
@@ -171,6 +179,7 @@ export default defineConfig({
 								ru: 'Соглашения об именовании',
 								tr: 'Adlandırma Kuralları',
 								uk: 'Угоди про іменування',
+								'pt-BR': 'Convenções de Nomenclatura',
 							},
 						},
 						{
@@ -184,6 +193,7 @@ export default defineConfig({
 								ru: 'Руководство по миграции',
 								tr: 'Geçiş Rehberi',
 								uk: 'Посібник з міграції',
+								'pt-BR': 'Guia de Migração',
 							},
 						},
 						{
@@ -197,6 +207,7 @@ export default defineConfig({
 								ru: 'Часто задаваемые вопросы',
 								tr: 'SSS',
 								uk: 'Часті запитання',
+								'pt-BR': 'FAQs',
 							},
 						},
 					],
@@ -204,7 +215,7 @@ export default defineConfig({
 				{
 					label: 'Linter',
 					badge: { text: 'new' },
-					translations: { ar: 'المدقق', tr: 'Linter', uk: 'Лінтер' },
+					translations: { ar: 'المدقق', tr: 'Linter', uk: 'Лінтер', 'pt-BR': 'Linter' },
 					items: [
 						{
 							label: 'Overview ',
@@ -215,6 +226,7 @@ export default defineConfig({
 								ru: 'Обзор',
 								tr: 'Genel Bakış',
 								uk: 'Огляд',
+								'pt-BR': 'Visão Geral',
 							},
 						},
 						{
@@ -226,6 +238,7 @@ export default defineConfig({
 								ru: 'Установка',
 								tr: 'Kurulum',
 								uk: 'Встановлення',
+								'pt-BR': 'Instalação',
 							},
 						},
 						{
@@ -237,6 +250,7 @@ export default defineConfig({
 								ru: 'Конфигурация',
 								tr: 'Yapılandırma',
 								uk: 'Конфігурація',
+								'pt-BR': 'Configuração',
 							},
 						},
 						{
@@ -248,6 +262,7 @@ export default defineConfig({
 								ru: 'Настройка правил',
 								tr: 'Kuralları Özelleştirme',
 								uk: 'Налаштування правил',
+								'pt-BR': 'Personalizando Regras',
 							},
 						},
 						{
@@ -259,6 +274,7 @@ export default defineConfig({
 								ru: 'Правила',
 								tr: 'Kurallar',
 								uk: 'Правила',
+								'pt-BR': 'Regras',
 							},
 						},
 					],
@@ -273,6 +289,7 @@ export default defineConfig({
 						ru: 'Руководства',
 						tr: 'Eğitimler',
 						uk: 'Посібники',
+						'pt-BR': 'Tutoriais',
 					},
 					autogenerate: { directory: 'tutorials' },
 				},
@@ -286,6 +303,7 @@ export default defineConfig({
 						ru: 'Инструменты',
 						tr: 'Araçlar',
 						uk: 'Інструменти',
+						'pt-BR': 'Ferramentas',
 					},
 					items: [
 						{
@@ -298,6 +316,7 @@ export default defineConfig({
 								ru: 'Плагин IntelliJ',
 								tr: 'IntelliJ Eklentisi',
 								uk: 'Плагін IntelliJ',
+								'pt-BR': 'Plugin do IntelliJ',
 							},
 						},
 						{
@@ -310,6 +329,7 @@ export default defineConfig({
 								ru: 'Расширение VSCode',
 								tr: 'VSCode Eklentisi',
 								uk: 'Розширення VSCode',
+								'pt-BR': 'Extensão do VSCode',
 							},
 						},
 					],
@@ -324,6 +344,7 @@ export default defineConfig({
 						ru: 'Справочник',
 						tr: 'Referans',
 						uk: 'Довідник',
+						'pt-BR': 'Referência',
 					},
 					items: [
 						{
