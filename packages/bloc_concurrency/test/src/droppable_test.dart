@@ -105,5 +105,39 @@ void main() {
 
       expect(states, isEmpty);
     });
+
+    test('closes the output stream when the source ends mid-event', () async {
+      final states = <int>[];
+      var isDone = false;
+      final controller = StreamController<int>();
+      final stream = droppable<int>()(controller.stream, (x) async* {
+        await wait();
+        yield x;
+      });
+
+      final subscription = stream.listen(
+        states.add,
+        onDone: () => isDone = true,
+      );
+
+      controller.add(0);
+
+      await tick();
+
+      // The event handler is in flight when the source stream completes.
+      await controller.close();
+
+      expect(isDone, isFalse);
+      expect(states, isEmpty);
+
+      await wait();
+      await tick();
+
+      // The in-flight event is still delivered and the output stream closes.
+      expect(states, equals([0]));
+      expect(isDone, isTrue);
+
+      await subscription.cancel();
+    });
   });
 }
