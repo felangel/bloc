@@ -6,6 +6,10 @@ import 'package:bloc/bloc.dart';
 /// until the current event is done.
 ///
 /// **Note**: dropped events never trigger the event handler.
+///
+/// This guarantee applies only to the specific handler using this
+/// transformer. Different handlers registered on the same [Bloc] operate
+/// on independent stream pipelines and do not affect each other.
 EventTransformer<Event> droppable<Event>() {
   return (events, mapper) {
     return events.transform(_ExhaustMapStreamTransformer(mapper));

@@ -622,5 +622,39 @@ opinionated set of event transformers.
 
 :::
 
+#### Per-Handler Event Transformers
+
+Each event handler registered via `on<E>()` operates on its own independent
+stream pipeline. Internally, every call to `on<E>()` filters the shared event
+stream by the event type `E` and applies the specified transformer to that
+filtered sub-stream. As a result, different handlers with different transformers
+run completely independently — there is no cross-handler coordination.
+
+For example, if a single `Bloc` has two handlers — one with `sequential` and
+another with `restartable` — the two handlers will not affect each other's event
+queues or execution order:
+
+```dart
+class SearchBloc extends Bloc<SearchEvent, SearchState> {
+  SearchBloc() : super(const SearchState()) {
+    // Uses sequential transformer: events of this type are processed
+    // one at a time in FIFO order.
+    on<SearchQueryChanged>(_onQueryChanged, transformer: sequential());
+
+    // Uses restartable transformer: if a new ClearSearch event arrives
+    // before the previous one completes, the previous handler is cancelled.
+    on<ClearSearch>(_onClearSearch, transformer: restartable());
+  }
+}
+```
+
+In the example above, `SearchQueryChanged` events are guaranteed to be handled
+sequentially relative to each other, and `ClearSearch` events use restartable
+semantics — but the two handlers never block or interfere with one another.
+
+Similarly, when a transformer's documentation says "there is no event handler
+overlap" (as in `sequential`), it refers only to invocations of that specific
+handler — not to other handlers registered on the same `Bloc`.
+
 If you are unsure about which to use, start with `Cubit` and you can later
 refactor or scale-up to a `Bloc` as needed.
