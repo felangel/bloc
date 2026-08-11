@@ -30,6 +30,7 @@ final allRules = <String, LintRuleBuilder>{
   PreferCubit.rule: PreferCubit.new,
   PreferFileNamingConventions.rule: PreferFileNamingConventions.new,
   PreferVoidPublicCubitMethods.rule: PreferVoidPublicCubitMethods.new,
+  AvoidAsyncEmit.rule: AvoidAsyncEmit.new,
 };
 
 /// {@template linter}
