@@ -23,5 +23,7 @@
       <p>No Results</p>
     </div>
     <search-results [items]="items"></search-results>
+    <button *ngIf="!hasReachedMax" (click)="loadMore()">Load More</button>
+    <button (click)="refresh()">Refresh</button>
   </div>
 </div>
