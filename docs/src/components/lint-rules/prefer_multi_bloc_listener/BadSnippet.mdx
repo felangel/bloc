@@ -1,0 +1,23 @@
+import { Code } from '@astrojs/starlight/components';
+import { transformerMetaHighlight } from '@shikijs/transformers';
+
+<Code
+	code={`
+  import 'package:flutter_bloc/flutter_bloc.dart';
+
+  // Avoid nesting BlocListener widgets!
+  // Prefer a single MultiBlocListener instead.
+  BlocListener<BlocA, BlocAState>(
+    listener: (context, state) {},
+    child: BlocListener<BlocB, BlocBState>(
+      listener: (context, state) {},
+      child: BlocListener<BlocC, BlocCState>(
+        listener: (context, state) {},
+        child: ChildA(),
+      ),
+    ),
+  );
+`}
+lang="dart" title="home_page.dart"
+transformers={[transformerMetaHighlight()]} class='warning' meta="{5}"
+/>

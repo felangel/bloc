@@ -1,0 +1,23 @@
+import { Code } from '@astrojs/starlight/components';
+import { transformerMetaHighlight } from '@shikijs/transformers';
+
+<Code
+	code={`
+  import 'package:flutter_bloc/flutter_bloc.dart';
+
+  // Avoid nesting RepositoryProvider widgets!
+  // Prefer a single MultiRepositoryProvider instead.
+  RepositoryProvider<RepositoryA>(
+    create: (context) => RepositoryA(),
+    child: RepositoryProvider<RepositoryB>(
+      create: (context) => RepositoryB(),
+      child: RepositoryProvider<RepositoryC>(
+        create: (context) => RepositoryC(),
+        child: ChildA(),
+      ),
+    ),
+  );
+`}
+lang="dart" title="app.dart"
+transformers={[transformerMetaHighlight()]} class='warning' meta="{5}"
+/>
