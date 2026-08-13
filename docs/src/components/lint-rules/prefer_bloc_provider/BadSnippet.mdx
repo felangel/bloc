@@ -1,0 +1,23 @@
+import { Code } from '@astrojs/starlight/components';
+import { transformerMetaHighlight } from '@shikijs/transformers';
+
+<Code
+	code={`
+  import 'package:flutter/material.dart';
+  import 'package:provider/provider.dart';
+
+  class CounterPage extends StatelessWidget {
+    const CounterPage({super.key});
+
+    @override
+    Widget build(BuildContext context) {
+      return Provider<CounterBloc>(
+        create: (_) => CounterBloc(),
+        child: const CounterView(),
+      );
+    }
+  }
+`}
+lang="dart" title="counter_page.dart"
+transformers={[transformerMetaHighlight()]} class='warning' meta="{9}"
+/>

@@ -26,6 +26,7 @@ final allRules = <String, LintRuleBuilder>{
   AvoidPublicBlocMethods.rule: AvoidPublicBlocMethods.new,
   AvoidPublicFields.rule: AvoidPublicFields.new,
   PreferBloc.rule: PreferBloc.new,
+  PreferBlocProvider.rule: PreferBlocProvider.new,
   PreferBuildContextExtensions.rule: PreferBuildContextExtensions.new,
   PreferCubit.rule: PreferCubit.new,
   PreferFileNamingConventions.rule: PreferFileNamingConventions.new,

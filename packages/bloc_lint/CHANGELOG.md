@@ -1,3 +1,7 @@
+# 0.4.3
+
+- feat: add [prefer_bloc_provider](https://bloclibrary.dev/lint-rules/prefer_bloc_provider)
+
 # 0.4.2
 
 - deps: adjust bounds for `_fe_analyzer_shared`
