@@ -72,9 +72,51 @@ complex test using the [bloc_test](https://pub.dev/packages/bloc_test) package.
 
 We should be able to run the tests and see that all are passing.
 
+## Testing Initial Events
+
+If you add an initial event in `BlocProvider.create`, that behavior is part of
+the widget tree, not the bloc. Cover it with a widget test instead of a bloc
+unit test.
+
+For example, `TodosOverviewPage` creates the bloc and immediately adds
+`TodosOverviewSubscriptionRequested`:
+
+```dart
+BlocProvider(
+  create: (context) => TodosOverviewBloc(
+    todosRepository: context.read<TodosRepository>(),
+  )..add(const TodosOverviewSubscriptionRequested()),
+  child: const TodosOverviewView(),
+);
+```
+
+Pump the page with a mocked repository and assert the effect of that event:
+
+```dart
+testWidgets(
+  'subscribes to todos from repository on initialization',
+  (tester) async {
+    await tester.pumpApp(
+      const TodosOverviewPage(),
+      todosRepository: todosRepository,
+    );
+
+    verify(() => todosRepository.getTodos()).called(1);
+  },
+);
+```
+
+`pumpApp` is a test helper that wraps the page in a `RepositoryProvider` and
+`MaterialApp`. The full test is in the
+[flutter_todos example](https://github.com/felangel/bloc/blob/master/examples/flutter_todos/test/todos_overview/view/todos_overview_page_test.dart).
+
+Integration tests will catch a missing initial event as well.
+
 That's all there is to it, testing should be a breeze and we should feel
 confident when making changes and refactoring our code.
 
 You can refer to the
 [Weather App](https://github.com/felangel/bloc/tree/master/examples/flutter_weather)
+or the
+[Todos App](https://github.com/felangel/bloc/tree/master/examples/flutter_todos)
 for an example of a fully tested application.
