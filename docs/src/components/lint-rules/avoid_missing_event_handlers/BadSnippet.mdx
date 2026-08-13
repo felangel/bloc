@@ -1,0 +1,21 @@
+import { Code } from '@astrojs/starlight/components';
+import { transformerMetaHighlight } from '@shikijs/transformers';
+
+<Code
+	code={`
+  import 'package:bloc/bloc.dart';
+
+  sealed class CounterEvent {}
+  final class Increment extends CounterEvent {}
+  final class Decrement extends CounterEvent {}
+
+  class CounterBloc extends Bloc<CounterEvent, int> {
+    CounterBloc() : super(0) {
+      on<Increment>((event, emit) => emit(state + 1));
+      // Missing on<Decrement>!
+    }
+  }
+`}
+lang="dart" title="counter_bloc.dart"
+transformers={[transformerMetaHighlight()]} class='warning' meta="{7}"
+/>

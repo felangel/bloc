@@ -10,6 +10,7 @@ export 'src/rules/rules.dart'
     show
         AvoidBuildContextExtensions,
         AvoidFlutterImports,
+        AvoidMissingEventHandlers,
         AvoidPublicBlocMethods,
         AvoidPublicFields,
         PreferBloc,

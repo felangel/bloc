@@ -1,3 +1,7 @@
+# 0.4.3
+
+- feat: add [avoid_missing_event_handlers](https://bloclibrary.dev/lint-rules/avoid_missing_event_handlers)
+
 # 0.4.2
 
 - deps: adjust bounds for `_fe_analyzer_shared`

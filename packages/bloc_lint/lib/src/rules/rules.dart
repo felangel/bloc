@@ -1,5 +1,6 @@
 export 'avoid_build_context_extensions.dart';
 export 'avoid_flutter_imports.dart';
+export 'avoid_missing_event_handlers.dart';
 export 'avoid_public_bloc_methods.dart';
 export 'avoid_public_fields.dart';
 export 'prefer_bloc.dart';
