@@ -63,16 +63,16 @@ mixin ReplayCubitMixin<State> on Cubit<State> {
   set limit(int limit) => _changeStack.limit = limit;
 
   @override
-  void emit(State state) {
+  void emit(State state, {bool force = false}) {
     _changeStack.add(
       _Change<State>(
         this.state,
         state,
-        () => super.emit(state),
-        (val) => super.emit(val),
+        () => super.emit(state, force: force),
+        (val) => super.emit(val, force: force),
       ),
     );
-    super.emit(state);
+    super.emit(state, force: force);
   }
 
   /// Undo the last change.

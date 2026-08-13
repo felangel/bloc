@@ -915,6 +915,63 @@ void main() {
           ..add('event')
           ..close();
       });
+
+      test('emits repeated states when force is true', () {
+        final seededBloc = SeededBloc(
+          seed: 0,
+          states: [1, 2, 1, 1],
+          force: true,
+        );
+        final expectedStates = [1, 2, 1, 1, emitsDone];
+
+        expectLater(seededBloc.stream, emitsInOrder(expectedStates));
+
+        seededBloc
+          ..add('event')
+          ..close();
+      });
+
+      test('emits the seed state when force is true', () {
+        final seededBloc = SeededBloc(seed: 0, states: [0, 0], force: true);
+        final expectedStates = [0, 0, emitsDone];
+
+        expectLater(seededBloc.stream, emitsInOrder(expectedStates));
+
+        seededBloc
+          ..add('event')
+          ..close();
+      });
+
+      test('emits duplicate states across events when force is true', () {
+        final seededBloc = SeededBloc(seed: 0, states: [1], force: true);
+        final expectedStates = [1, 1, 1, emitsDone];
+
+        expectLater(seededBloc.stream, emitsInOrder(expectedStates));
+
+        seededBloc
+          ..add('eventA')
+          ..add('eventB')
+          ..add('eventC')
+          ..close();
+      });
+
+      test('notifies onTransition for each forced emit', () async {
+        final transitions = <Transition<String, int>>[];
+        final seededBloc = SeededBloc(
+          seed: 0,
+          states: [1, 1],
+          force: true,
+          onTransitionCallback: transitions.add,
+        )..add('event');
+
+        await tick();
+        await seededBloc.close();
+
+        expect(transitions, const [
+          Transition(currentState: 0, event: 'event', nextState: 1),
+          Transition(currentState: 1, event: 'event', nextState: 1),
+        ]);
+      });
     });
 
     group('StreamBloc', () {
