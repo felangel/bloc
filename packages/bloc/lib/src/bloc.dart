@@ -145,10 +145,15 @@ abstract class Bloc<Event, State> extends BlocBase<State>
   /// Updates the state of the bloc to the provided [state].
   /// A bloc's state should only be updated by `emitting` a new `state`
   /// from an [EventHandler] in response to an incoming event.
+  ///
+  /// Set [force] to `true` to emit the [state] even if it is equal to the
+  /// current [state].
   /// {@endtemplate}
   @visibleForTesting
   @override
-  void emit(State state) => super.emit(state);
+  void emit(State state, {bool force = false}) {
+    super.emit(state, force: force);
+  }
 
   /// Register event handler for an event of type `E`.
   /// There should only ever be one event handler per event type `E`.
@@ -195,9 +200,9 @@ abstract class Bloc<Event, State> extends BlocBase<State>
     final subscription = (transformer ?? _eventTransformer)(
       _eventController.stream.where((event) => event is E).cast<E>(),
       (dynamic event) {
-        void onEmit(State state) {
+        void onEmit(State state, {bool force = false}) {
           if (super.isClosed) return;
-          if (this.state == state && _emitted) return;
+          if (!force && this.state == state && _emitted) return;
           onTransition(
             Transition(
               currentState: this.state,
@@ -205,7 +210,7 @@ abstract class Bloc<Event, State> extends BlocBase<State>
               nextState: state,
             ),
           );
-          emit(state);
+          emit(state, force: force);
         }
 
         final emitter = _Emitter(onEmit);

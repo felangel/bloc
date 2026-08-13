@@ -4,4 +4,6 @@ class SeededCubit<T> extends Cubit<T> {
   SeededCubit({required T initialState}) : super(initialState);
 
   void emitState(T state) => emit(state);
+
+  void emitStateForced(T state) => emit(state, force: true);
 }

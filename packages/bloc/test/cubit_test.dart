@@ -136,6 +136,20 @@ void main() {
           ),
         ).called(1);
       });
+
+      test('is called for each forced emit of an identical state', () async {
+        final cubit = SeededCubit(initialState: 0)
+          ..emitStateForced(1)
+          ..emitStateForced(1);
+        await cubit.close();
+        verify(
+          // ignore: invalid_use_of_protected_member
+          () => observer.onChange(
+            cubit,
+            const Change<int>(currentState: 1, nextState: 1),
+          ),
+        ).called(1);
+      });
     });
 
     group('emit', () {
@@ -215,6 +229,62 @@ void main() {
         await cubit.close();
         await subscription.cancel();
         expect(states, [1, 2, 3]);
+      });
+
+      test('emits duplicate states when force is true', () async {
+        final states = <int>[];
+        final cubit = SeededCubit(initialState: 0);
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..emitStateForced(1)
+          ..emitStateForced(1)
+          ..emitStateForced(2)
+          ..emitStateForced(2);
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, [1, 1, 2, 2]);
+      });
+
+      test('emits the current state when force is true', () async {
+        final states = <int>[];
+        final cubit = SeededCubit(initialState: 0);
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..emitStateForced(0)
+          ..emitStateForced(0);
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, [0, 0]);
+        expect(cubit.state, equals(0));
+      });
+
+      test('force does not affect subsequent emits', () async {
+        final states = <int>[];
+        final cubit = SeededCubit(initialState: 0);
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..emitStateForced(1)
+          ..emitState(1)
+          ..emitState(2);
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, [1, 2]);
+      });
+
+      test('throws StateError when force is true and cubit is closed',
+          () async {
+        final cubit = SeededCubit(initialState: 0);
+        await cubit.close();
+        expect(
+          () => cubit.emitStateForced(0),
+          throwsA(
+            isA<StateError>().having(
+              (e) => e.message,
+              'message',
+              'Cannot emit new states after calling close',
+            ),
+          ),
+        );
       });
     });
 

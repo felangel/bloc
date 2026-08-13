@@ -32,7 +32,10 @@ abstract class Closable {
 // ignore: one_member_abstracts
 abstract class Emittable<State extends Object?> {
   /// Emits a new [state].
-  void emit(State state);
+  ///
+  /// If [force] is `true`, the [state] is emitted even if it is equal
+  /// to the current state.
+  void emit(State state, {bool force = false});
 }
 
 /// A generic destination for errors.
@@ -90,16 +93,24 @@ abstract class BlocBase<State>
   /// emitting a state which is equal to the initial state is allowed as long
   /// as it is the first thing emitted by the instance.
   ///
+  /// Set [force] to `true` to emit the [state] even if it is equal to the
+  /// current [state]. This will notify listeners and trigger [onChange]
+  /// just like any other state change.
+  ///
+  /// ```dart
+  /// emit(state, force: true);
+  /// ```
+  ///
   /// * Throws a [StateError] if the bloc is closed.
   @protected
   @visibleForTesting
   @override
-  void emit(State state) {
+  void emit(State state, {bool force = false}) {
     try {
       if (_stateController.isClosed) {
         throw StateError('Cannot emit new states after calling close');
       }
-      if (state == _state && _emitted) return;
+      if (!force && state == _state && _emitted) return;
       onChange(Change<State>(currentState: this.state, nextState: state));
       _state = state;
       _stateController.add(_state);
