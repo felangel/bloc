@@ -31,19 +31,55 @@ class _ChangeStack<T> {
     _redos.clear();
   }
 
-  void redo() {
-    if (canRedo) {
-      final change = _redos.removeFirst();
-      _history.addLast(change);
-      return _shouldReplay(change._newValue) ? change.execute() : redo();
+  void redo(int steps) {
+    if (steps <= 0) return;
+
+    var effectiveSteps = steps;
+    while (effectiveSteps > 0 && canRedo) {
+      _Change<T>? changeToExecute;
+      while (_redos.isNotEmpty) {
+        final change = _redos.first;
+        if (_shouldReplay(change._newValue)) {
+          changeToExecute = _redos.removeFirst();
+          break;
+        } else {
+          _history.addLast(_redos.removeFirst());
+        }
+      }
+
+      if (changeToExecute != null) {
+        _history.addLast(changeToExecute);
+        changeToExecute.execute();
+        effectiveSteps--;
+      } else {
+        break;
+      }
     }
   }
 
-  void undo() {
-    if (canUndo) {
-      final change = _history.removeLast();
-      _redos.addFirst(change);
-      return _shouldReplay(change._oldValue) ? change.undo() : undo();
+  void undo(int steps) {
+    if (steps <= 0) return;
+
+    var effectiveSteps = steps;
+    while (effectiveSteps > 0 && canUndo) {
+      _Change<T>? changeToUndo;
+      while (_history.isNotEmpty) {
+        final change = _history.last;
+        if (_shouldReplay(change._oldValue)) {
+          changeToUndo = _history.removeLast();
+          break;
+        } else {
+          _redos.addFirst(_history.removeLast());
+        }
+      }
+
+      if (changeToUndo != null) {
+        _redos.addFirst(changeToUndo);
+        changeToUndo.undo();
+        effectiveSteps--;
+      } else {
+        break;
+      }
     }
   }
 }
