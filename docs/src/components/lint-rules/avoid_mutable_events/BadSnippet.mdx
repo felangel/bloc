@@ -1,0 +1,20 @@
+import { Code } from '@astrojs/starlight/components';
+import { transformerMetaHighlight } from '@shikijs/transformers';
+
+<Code
+	code={`
+  import 'package:bloc/bloc.dart';
+
+  sealed class CounterEvent {}
+
+  final class CounterIncrementPressed extends CounterEvent {
+    CounterIncrementPressed(this.amount);
+
+    // Avoid mutable events!
+    // Prefer marking fields as final.
+    int amount;
+  }
+`}
+lang="dart" title="counter_event.dart"
+transformers={[transformerMetaHighlight()]} class='warning' meta="{10}"
+/>
