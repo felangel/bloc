@@ -25,8 +25,13 @@ class _Listener extends Listener {
   static const allowedReturnTypes = ['void', 'Future<void>', 'FutureOr<void>'];
 
   @override
+  void beginMetadataStar(Token token) {
+    _isOverride = false;
+  }
+
+  @override
   void beginMetadata(Token token) {
-    _isOverride = token.next?.lexeme == 'override';
+    if (token.next?.lexeme == 'override') _isOverride = true;
   }
 
   @override
