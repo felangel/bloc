@@ -12,6 +12,7 @@ export 'src/rules/rules.dart'
         AvoidFlutterImports,
         AvoidPublicBlocMethods,
         AvoidPublicFields,
+        AvoidReturningExistingInstanceFromBlocProviderCreate,
         PreferBloc,
         PreferBuildContextExtensions,
         PreferCubit,
