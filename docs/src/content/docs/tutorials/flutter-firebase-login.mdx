@@ -44,8 +44,40 @@ testability.
 
 In this case, the [firebase_auth](https://pub.dev/packages/firebase_auth) and
 [google_sign_in](https://pub.dev/packages/google_sign_in) packages are going to
-be our data layer so we're only going to be creating an
+be our data layer so we're going to create a small `cache` package plus an
 `AuthenticationRepository` to compose data from the two API clients.
+
+## Cache
+
+Before building the authentication repository, we'll create a tiny local
+`cache` package. This is **not** a Flutter or Firebase caching solution — it's
+a simple in-memory key/value store used by `AuthenticationRepository` to keep
+the current `User` readily available without re-querying Firebase on every
+read.
+
+Create `packages/cache` with the following implementation:
+
+<RemoteCode
+	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/cache/lib/cache.dart"
+	title="packages/cache/lib/cache.dart"
+/>
+
+:::note
+
+`CacheClient` stores values in a `Map` for the lifetime of the Dart process.
+When Firebase emits a new authenticated user, the repository writes that user
+into the cache. Later, synchronous getters (like `currentUser`) can read the
+cached value instead of waiting on another async call.
+
+:::
+
+:::tip
+
+Keeping `cache` as its own package makes the repository easier to test: you can
+inject a mock `CacheClient` and assert that users are written/read with the
+expected key (`AuthenticationRepository.userCacheKey`).
+
+:::
 
 ## Authentication Repository
 
@@ -57,7 +89,8 @@ internal implementation later on and our application will be unaffected.
 ### Setup
 
 We'll start by creating `packages/authentication_repository` and a
-`pubspec.yaml` at the root of the project.
+`pubspec.yaml` at the root of the project. Notice that it depends on the local
+`cache` package via a path dependency.
 
 <RemoteCode
 	url="https://raw.githubusercontent.com/felangel/bloc/master/examples/flutter_firebase_login/packages/authentication_repository/pubspec.yaml"
@@ -132,6 +165,12 @@ The `AuthenticationRepository` exposes a `Stream<User>` which we can subscribe
 to in order to be notified of when a `User` changes. In addition, it exposes
 methods to `signUp`, `logInWithGoogle`, `logInWithEmailAndPassword`, and
 `logOut`.
+
+Internally, the repository uses `CacheClient` to cache the latest `User` under
+`userCacheKey`. Each authentication state change writes to the cache, and
+`currentUser` reads from it (falling back to `User.empty` when nothing is
+cached yet). That keeps the rest of the app able to access the signed-in user
+synchronously after the first auth event.
 
 :::note
 
