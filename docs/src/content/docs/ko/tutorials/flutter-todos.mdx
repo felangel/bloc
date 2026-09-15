@@ -761,13 +761,13 @@ UI가 `EditTodoSubmitted` 이벤트를 제출하면:
 	title="lib/edit_todo/view/edit_todo_page.dart"
 />
 
-이전 기능과 마찬가지로 `EditTodosPage`는 `BlocProvider`를 통해 `EditTodosBloc`
-인스턴스를 제공합니다. 다른 기능과 달리 `EditTodosPage`는 별도의 라우트이므로
+이전 기능과 마찬가지로 `EditTodoPage`는 `BlocProvider`를 통해 `EditTodoBloc`
+인스턴스를 제공합니다. 다른 기능과 달리 `EditTodoPage`는 별도의 라우트이므로
 `static` `route` 메서드를 노출합니다. 이를 통해
-`Navigator.of(context).push(...)`를 통해 네비게이션 스택에 `EditTodosPage`를
+`Navigator.of(context).push(...)`를 통해 네비게이션 스택에 `EditTodoPage`를
 쉽게 푸시할 수 있습니다.
 
-`EditTodosPage`의 위젯 트리를 간략하게 나타내면:
+`EditTodoPage`의 위젯 트리를 간략하게 나타내면:
 
 <EditTodosPageTreeSnippet />
 
