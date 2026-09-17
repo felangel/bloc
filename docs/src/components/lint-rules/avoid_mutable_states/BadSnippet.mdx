@@ -1,0 +1,20 @@
+import { Code } from '@astrojs/starlight/components';
+import { transformerMetaHighlight } from '@shikijs/transformers';
+
+<Code
+	code={`
+  import 'package:bloc/bloc.dart';
+
+  sealed class CounterState {}
+
+  final class CounterInitial extends CounterState {
+    CounterInitial(this.count);
+
+    // Avoid mutable states!
+    // Prefer marking fields as final.
+    int count;
+  }
+`}
+lang="dart" title="counter_state.dart"
+transformers={[transformerMetaHighlight()]} class='warning' meta="{10}"
+/>
