@@ -49,11 +49,10 @@ be our data layer so we're going to create a small `cache` package plus an
 
 ## Cache
 
-Before building the authentication repository, we'll create a tiny local
-`cache` package. This is **not** a Flutter or Firebase caching solution — it's
-a simple in-memory key/value store used by `AuthenticationRepository` to keep
-the current `User` readily available without re-querying Firebase on every
-read.
+Before building the authentication repository, we'll create a tiny local `cache`
+package. This is **not** a Flutter or Firebase caching solution — it's a simple
+in-memory key/value store used by `AuthenticationRepository` to keep the current
+`User` readily available without re-querying Firebase on every read.
 
 Create `packages/cache` with the following implementation:
 
@@ -168,8 +167,8 @@ methods to `signUp`, `logInWithGoogle`, `logInWithEmailAndPassword`, and
 
 Internally, the repository uses `CacheClient` to cache the latest `User` under
 `userCacheKey`. Each authentication state change writes to the cache, and
-`currentUser` reads from it (falling back to `User.empty` when nothing is
-cached yet). That keeps the rest of the app able to access the signed-in user
+`currentUser` reads from it (falling back to `User.empty` when nothing is cached
+yet). That keeps the rest of the app able to access the signed-in user
 synchronously after the first auth event.
 
 :::note
