@@ -789,8 +789,8 @@ When the UI submits a `EditTodoSubmitted` event:
 	title="lib/edit_todo/view/edit_todo_page.dart"
 />
 
-Just like with the previous features, the `EditTodoPage` provides an instance
-of the `EditTodoBloc` via `BlocProvider`. Unlike the other features, the
+Just like with the previous features, the `EditTodoPage` provides an instance of
+the `EditTodoBloc` via `BlocProvider`. Unlike the other features, the
 `EditTodoPage` is a separate route which is why it exposes a `static` `route`
 method. This makes it easy to push the `EditTodoPage` onto the navigation stack
 via `Navigator.of(context).push(...)`.
