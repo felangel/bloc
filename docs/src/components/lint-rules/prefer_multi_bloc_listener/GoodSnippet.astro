@@ -1,0 +1,24 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+MultiBlocListener(
+  listeners: [
+    BlocListener<BlocA, BlocAState>(
+      listener: (context, state) {},
+    ),
+    BlocListener<BlocB, BlocBState>(
+      listener: (context, state) {},
+    ),
+    BlocListener<BlocC, BlocCState>(
+      listener: (context, state) {},
+    ),
+  ],
+  child: ChildA(),
+);
+`;
+---
+
+<Code code={code} lang="dart" title="home_page.dart" />
