@@ -22,6 +22,7 @@ import 'package:path/path.dart' as p;
 /// All supported lint rules.
 final allRules = <String, LintRuleBuilder>{
   AvoidBuildContextExtensions.rule: AvoidBuildContextExtensions.new,
+  AvoidDuplicateEventHandlers.rule: AvoidDuplicateEventHandlers.new,
   AvoidFlutterImports.rule: AvoidFlutterImports.new,
   AvoidPublicBlocMethods.rule: AvoidPublicBlocMethods.new,
   AvoidPublicFields.rule: AvoidPublicFields.new,

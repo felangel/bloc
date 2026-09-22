@@ -1,0 +1,23 @@
+import { Code } from '@astrojs/starlight/components';
+import { transformerMetaHighlight } from '@shikijs/transformers';
+
+<Code
+	code={`
+  import 'package:bloc/bloc.dart';
+
+  sealed class CounterEvent {}
+  final class CounterIncrementPressed extends CounterEvent {}
+
+  class CounterBloc extends Bloc<CounterEvent, int> {
+    CounterBloc() : super(0) {
+      on<CounterIncrementPressed>((event, emit) => emit(state + 1));
+
+      // Avoid duplicate event handlers!
+      // A handler is already registered for [CounterIncrementPressed].
+      on<CounterIncrementPressed>((event, emit) => emit(state + 10));
+    }
+  }
+`}
+lang="dart" title="counter_bloc.dart"
+transformers={[transformerMetaHighlight()]} class='warning' meta="{12}"
+/>
