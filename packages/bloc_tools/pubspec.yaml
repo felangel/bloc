@@ -17,7 +17,7 @@ dependencies:
   lsp_server_ce: ^0.4.0
   mason: ^0.1.0
   path: ^1.9.1
-  pub_updater: ^0.5.0
+  pub_updater: ^0.6.0
 
 dev_dependencies:
   build_runner: ^2.0.0
