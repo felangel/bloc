@@ -1,3 +1,7 @@
+export 'package:_fe_analyzer_shared/src/parser/formal_parameter_kind.dart'
+    show FormalParameterKind;
+export 'package:_fe_analyzer_shared/src/parser/member_kind.dart'
+    show MemberKind;
 export 'package:_fe_analyzer_shared/src/parser/parser.dart'
     show DeclarationKind, IdentifierContext, Listener;
 export 'package:_fe_analyzer_shared/src/scanner/token.dart'
@@ -8,6 +12,7 @@ export 'src/lint_rule.dart' show LintRule, LintRuleBuilder;
 export 'src/linter.dart' show LintContext, Linter;
 export 'src/rules/rules.dart'
     show
+        AvoidBlocToBlocMembers,
         AvoidBuildContextExtensions,
         AvoidFlutterImports,
         AvoidPublicBlocMethods,
