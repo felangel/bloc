@@ -1,6 +1,9 @@
 analyzer:
   exclude:
     - bricks/**
+    - build/**
+    - ios/**
+    - web/**
 
   language:
     strict-casts: true
