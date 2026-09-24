@@ -68,13 +68,13 @@ final blocBundle = MasonBundle.fromJson(<String, dynamic>{
     {
       "path": "{{~ freezed_event }}",
       "data":
-          "cGFydCBvZiAne3tuYW1lLnNuYWtlQ2FzZSgpfX1fYmxvYy5kYXJ0JzsKCkBmcmVlemVkCmNsYXNzIHt7bmFtZS5wYXNjYWxDYXNlKCl9fUV2ZW50IHdpdGggXyR7e25hbWUucGFzY2FsQ2FzZSgpfX1FdmVudCB7CiAgY29uc3QgZmFjdG9yeSB7e25hbWUucGFzY2FsQ2FzZSgpfX1FdmVudC5zdGFydGVkKCkgPSBfU3RhcnRlZDsKfQo=",
+          "cGFydCBvZiAne3tuYW1lLnNuYWtlQ2FzZSgpfX1fYmxvYy5kYXJ0JzsKCkBmcmVlemVkCmFic3RyYWN0IGNsYXNzIHt7bmFtZS5wYXNjYWxDYXNlKCl9fUV2ZW50IHdpdGggXyR7e25hbWUucGFzY2FsQ2FzZSgpfX1FdmVudCB7CiAgY29uc3QgZmFjdG9yeSB7e25hbWUucGFzY2FsQ2FzZSgpfX1FdmVudC5zdGFydGVkKCkgPSBfU3RhcnRlZDsKfQo=",
       "type": "text",
     },
     {
       "path": "{{~ freezed_state }}",
       "data":
-          "cGFydCBvZiAne3tuYW1lLnNuYWtlQ2FzZSgpfX1fYmxvYy5kYXJ0JzsKCkBmcmVlemVkCmNsYXNzIHt7bmFtZS5wYXNjYWxDYXNlKCl9fVN0YXRlIHdpdGggXyR7e25hbWUucGFzY2FsQ2FzZSgpfX1TdGF0ZSB7CiAgY29uc3QgZmFjdG9yeSB7e25hbWUucGFzY2FsQ2FzZSgpfX1TdGF0ZS5pbml0aWFsKCkgPSBfSW5pdGlhbDsKfQo=",
+          "cGFydCBvZiAne3tuYW1lLnNuYWtlQ2FzZSgpfX1fYmxvYy5kYXJ0JzsKCkBmcmVlemVkCmFic3RyYWN0IGNsYXNzIHt7bmFtZS5wYXNjYWxDYXNlKCl9fVN0YXRlIHdpdGggXyR7e25hbWUucGFzY2FsQ2FzZSgpfX1TdGF0ZSB7CiAgY29uc3QgZmFjdG9yeSB7e25hbWUucGFzY2FsQ2FzZSgpfX1TdGF0ZS5pbml0aWFsKCkgPSBfSW5pdGlhbDsKfQo=",
       "type": "text",
     },
   ],

@@ -50,7 +50,7 @@ final cubitBundle = MasonBundle.fromJson(<String, dynamic>{
     {
       "path": "{{~ freezed_state }}",
       "data":
-          "cGFydCBvZiAne3tuYW1lLnNuYWtlQ2FzZSgpfX1fY3ViaXQuZGFydCc7CgpAZnJlZXplZApjbGFzcyB7e25hbWUucGFzY2FsQ2FzZSgpfX1TdGF0ZSB3aXRoIF8ke3tuYW1lLnBhc2NhbENhc2UoKX19U3RhdGUgewogIGNvbnN0IGZhY3Rvcnkge3tuYW1lLnBhc2NhbENhc2UoKX19U3RhdGUuaW5pdGlhbCgpID0gX0luaXRpYWw7Cn0K",
+          "cGFydCBvZiAne3tuYW1lLnNuYWtlQ2FzZSgpfX1fY3ViaXQuZGFydCc7CgpAZnJlZXplZAphYnN0cmFjdCBjbGFzcyB7e25hbWUucGFzY2FsQ2FzZSgpfX1TdGF0ZSB3aXRoIF8ke3tuYW1lLnBhc2NhbENhc2UoKX19U3RhdGUgewogIGNvbnN0IGZhY3Rvcnkge3tuYW1lLnBhc2NhbENhc2UoKX19U3RhdGUuaW5pdGlhbCgpID0gX0luaXRpYWw7Cn0K",
       "type": "text",
     },
   ],
