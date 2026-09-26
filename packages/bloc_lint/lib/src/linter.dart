@@ -25,6 +25,8 @@ final allRules = <String, LintRuleBuilder>{
   AvoidFlutterImports.rule: AvoidFlutterImports.new,
   AvoidPublicBlocMethods.rule: AvoidPublicBlocMethods.new,
   AvoidPublicFields.rule: AvoidPublicFields.new,
+  AvoidReturningExistingInstanceFromBlocProviderCreate.rule:
+      AvoidReturningExistingInstanceFromBlocProviderCreate.new,
   PreferBloc.rule: PreferBloc.new,
   PreferBuildContextExtensions.rule: PreferBuildContextExtensions.new,
   PreferCubit.rule: PreferCubit.new,
