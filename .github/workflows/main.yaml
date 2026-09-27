@@ -28,6 +28,7 @@ jobs:
       needs_angular_dart_example_checks: ${{ steps.needs_angular_dart_example_checks.outputs.changes }}
       needs_bloc_tools_e2e_checks: ${{ steps.needs_bloc_tools_e2e_checks.outputs.changes }}
       needs_dart_package_checks: ${{ steps.needs_dart_package_checks.outputs.changes }}
+      needs_common_github_search_checks: ${{ steps.needs_common_github_search_checks.outputs.changes }}
       needs_bloc_tools_compile_checks: ${{ steps.needs_bloc_tools_compile_checks.outputs.changes }}
       needs_flutter_package_checks: ${{ steps.needs_flutter_package_checks.outputs.changes }}
       needs_flutter_example_checks: ${{ steps.needs_flutter_example_checks.outputs.changes }}
@@ -100,6 +101,17 @@ jobs:
               - ./.github/workflows/main.yaml
               - ./.github/actions/dart_package/action.yaml
               - packages/bloc/**
+
+      - uses: dorny/paths-filter@v4
+        name: Common GitHub Search Detection
+        id: needs_common_github_search_checks
+        with:
+          filters: |
+            common_github_search:
+              - ./.github/codecov.yml
+              - ./.github/workflows/main.yaml
+              - ./.github/actions/dart_package/action.yaml
+              - examples/github_search/common_github_search/**
 
       - uses: dorny/paths-filter@v4
         name: Bloc Tools Compile Detection
@@ -280,6 +292,31 @@ jobs:
           codecov_token: ${{ secrets.CODECOV_TOKEN }}
           collect_score: ${{ matrix.package != 'angular_bloc'}}
           working_directory: packages/${{ matrix.package }}
+          min_coverage: 100
+
+  common_github_search_checks:
+    needs: changes
+    if: ${{ needs.changes.outputs.needs_common_github_search_checks != '[]' }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(needs.changes.outputs.needs_common_github_search_checks) }}
+
+    runs-on: ubuntu-latest
+
+    name: 🎯 ${{ matrix.package }}
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v7
+
+      - name: 🎯 Build ${{ matrix.package }}
+        uses: ./.github/actions/dart_package
+        with:
+          codecov_token: ${{ secrets.CODECOV_TOKEN }}
+          collect_score: false
+          working_directory: examples/github_search/${{ matrix.package }}
           min_coverage: 100
 
   bloc_tools_compile_checks:

@@ -13,8 +13,16 @@ class GithubClient {
   final String baseUrl;
   final http.Client _httpClient;
 
-  Future<SearchResult> search(String term) async {
-    final response = await _httpClient.get(Uri.parse('$baseUrl$term'));
+  Future<SearchResult> search(
+    String term, {
+    int page = 1,
+    int perPage = 30,
+  }) async {
+    // ponytail: encode the term so an embedded `&` can't inject query params.
+    final query = Uri.encodeQueryComponent(term);
+    final response = await _httpClient.get(
+      Uri.parse('$baseUrl$query&page=$page&per_page=$perPage'),
+    );
     final results = json.decode(response.body) as Map<String, dynamic>;
 
     if (response.statusCode == 200) {

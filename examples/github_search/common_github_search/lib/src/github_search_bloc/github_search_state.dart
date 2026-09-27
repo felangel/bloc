@@ -13,15 +13,37 @@ final class SearchStateEmpty extends GithubSearchState {}
 final class SearchStateLoading extends GithubSearchState {}
 
 final class SearchStateSuccess extends GithubSearchState {
-  const SearchStateSuccess(this.items);
+  const SearchStateSuccess({
+    required this.items,
+    required this.searchTerm,
+    required this.page,
+    required this.hasReachedMax,
+    required this.generation,
+  });
 
   final List<SearchResultItem> items;
+  final String searchTerm;
+  final int page;
+  final bool hasReachedMax;
+
+  /// Race-guard stamp bumped by every fresh search (TextChanged/Refreshed);
+  /// see GithubSearchBloc — a stale in-flight next page is dropped unless the
+  /// current success state still carries the same generation.
+  final int generation;
 
   @override
-  List<Object> get props => [items];
+  List<Object> get props => [
+    items,
+    searchTerm,
+    page,
+    hasReachedMax,
+    generation,
+  ];
 
   @override
-  String toString() => 'SearchStateSuccess { items: ${items.length} }';
+  String toString() =>
+      'SearchStateSuccess { items: ${items.length}, page: $page, '
+      'hasReachedMax: $hasReachedMax, generation: $generation }';
 }
 
 final class SearchStateError extends GithubSearchState {

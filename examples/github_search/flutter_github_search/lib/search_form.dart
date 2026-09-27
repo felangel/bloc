@@ -78,25 +78,97 @@ class _SearchBody extends StatelessWidget {
           SearchStateSuccess() =>
             state.items.isEmpty
                 ? const Text('No Results')
-                : Expanded(child: _SearchResults(items: state.items)),
+                : Expanded(child: _SearchResults(state: state)),
         };
       },
     );
   }
 }
 
-class _SearchResults extends StatelessWidget {
-  const _SearchResults({required this.items});
+class _SearchResults extends StatefulWidget {
+  const _SearchResults({required this.state});
 
-  final List<SearchResultItem> items;
+  final SearchStateSuccess state;
+
+  @override
+  State<_SearchResults> createState() => _SearchResultsState();
+}
+
+class _SearchResultsState extends State<_SearchResults> {
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (BuildContext context, int index) {
-        return _SearchResultItem(item: items[index]);
+    final items = widget.state.items;
+    final hasReachedMax = widget.state.hasReachedMax;
+    return RefreshIndicator(
+      onRefresh: () {
+        // ponytail: RefreshIndicator needs a Future to dismiss its spinner —
+        // fire Refreshed and await the next terminal (success/error) state.
+        // orElse guards a closed stream (firstWhere would throw StateError),
+        // catchError guards any other stream error, and timeout guarantees the
+        // spinner always dismisses even if no terminal state ever arrives.
+        final bloc = context.read<GithubSearchBloc>()..add(const Refreshed());
+        return bloc.stream
+            .firstWhere(
+              (s) => s is SearchStateSuccess || s is SearchStateError,
+              orElse: () => bloc.state,
+            )
+            .timeout(
+              const Duration(seconds: 10),
+              onTimeout: () => bloc.state,
+            )
+            .catchError((_) => bloc.state);
       },
+      child: ListView.builder(
+        controller: _scrollController,
+        itemCount: hasReachedMax ? items.length : items.length + 1,
+        itemBuilder: (BuildContext context, int index) {
+          return index >= items.length
+              ? const _BottomLoader()
+              : _SearchResultItem(item: items[index]);
+        },
+      ),
+    );
+  }
+
+  void _onScroll() {
+    if (_isBottom) {
+      context.read<GithubSearchBloc>().add(const NextPageRequested());
+    }
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.offset;
+    return currentScroll >= (maxScroll * 0.9);
+  }
+}
+
+class _BottomLoader extends StatelessWidget {
+  const _BottomLoader();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: SizedBox(
+        height: 24,
+        width: 24,
+        child: CircularProgressIndicator.adaptive(strokeWidth: 1.5),
+      ),
     );
   }
 }

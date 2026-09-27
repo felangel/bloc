@@ -8,8 +8,12 @@ environment:
 
 dependencies:
   bloc: ^9.0.0
+  bloc_concurrency: ^0.3.0
   equatable: ^2.1.0-dev.0
   http: ^1.0.0
   stream_transform: ^2.0.0
 dev_dependencies:
   bloc_lint: ^0.3.0
+  bloc_test: ^10.0.0
+  mocktail: ^1.0.0
+  test: ^1.17.0

@@ -15,3 +15,17 @@ final class TextChanged extends GithubSearchEvent {
   @override
   String toString() => 'TextChanged { text: $text }';
 }
+
+final class NextPageRequested extends GithubSearchEvent {
+  const NextPageRequested();
+
+  @override
+  List<Object> get props => [];
+}
+
+final class Refreshed extends GithubSearchEvent {
+  const Refreshed();
+
+  @override
+  List<Object> get props => [];
+}
