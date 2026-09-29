@@ -297,5 +297,42 @@ class ToggleCubit extends Cubit<bool> {
 }
 ''',
     );
+
+    lintTest(
+      'lints when a non-void public method follows an @override method',
+      rule: PreferVoidPublicCubitMethods.new,
+      path: 'counter_cubit.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+
+class CounterCubit extends Cubit<int> {
+  CounterCubit() : super(0);
+
+  @override
+  void emit(int state) => super.emit(state);
+
+  Future<bool> increment() async => true;
+               ^^^^^^^^^
+}
+''',
+    );
+
+    lintTest(
+      'does not lint an @override method annotated more than once',
+      rule: PreferVoidPublicCubitMethods.new,
+      path: 'counter_cubit.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
+
+class CounterCubit extends Cubit<int> {
+  CounterCubit() : super(0);
+
+  @override
+  @visibleForTesting
+  Future<bool> isReady() async => true;
+}
+''',
+    );
   });
 }

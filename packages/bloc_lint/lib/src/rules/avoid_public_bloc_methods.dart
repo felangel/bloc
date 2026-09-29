@@ -38,8 +38,13 @@ class _Listener extends Listener {
   var _isOverride = false;
 
   @override
+  void beginMetadataStar(Token token) {
+    _isOverride = false;
+  }
+
+  @override
   void beginMetadata(Token token) {
-    _isOverride = token.next?.lexeme == 'override';
+    if (token.next?.lexeme == 'override') _isOverride = true;
   }
 
   @override
