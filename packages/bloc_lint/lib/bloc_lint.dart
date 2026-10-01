@@ -16,6 +16,8 @@ export 'src/rules/rules.dart'
         PreferBuildContextExtensions,
         PreferCubit,
         PreferFileNamingConventions,
+        PreferMultiBlocListener,
+        PreferMultiRepositoryProvider,
         PreferVoidPublicCubitMethods;
 export 'src/text_document.dart'
     show

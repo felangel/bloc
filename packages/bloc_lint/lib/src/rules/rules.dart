@@ -6,4 +6,6 @@ export 'prefer_bloc.dart';
 export 'prefer_build_context_extensions.dart';
 export 'prefer_cubit.dart';
 export 'prefer_file_naming_conventions.dart';
+export 'prefer_multi_bloc_listener.dart';
+export 'prefer_multi_repository_provider.dart';
 export 'prefer_void_public_cubit_methods.dart';
