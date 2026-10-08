@@ -8,3 +8,11 @@ class BlocWrapWithBlocListenerIntentionAction : BlocWrapWithIntentionAction(Snip
         return "Wrap with BlocListener"
     }
 }
+class BlocWrapWithCubitListenerIntentionAction : BlocWrapWithIntentionAction(SnippetType.CubitListener) {
+    /**
+     * If this action is applicable, returns the text to be shown in the list of intention actions available.
+     */
+    override fun getText(): String {
+        return "Wrap with BlocListener (Cubit)"
+    }
+}

@@ -4,6 +4,7 @@ object Snippets {
     const val PREFIX_SELECTION = "Subject"
 
     private const val SUFFIX_BLOC = "Bloc"
+    private const val SUFFIX_CUBIT = "Cubit"
     private const val SUFFIX_STATE = "State"
     private const val SUFFIX_REPOSITORY = "Repository"
 
@@ -16,9 +17,13 @@ object Snippets {
     fun getSnippet(snippetType: SnippetType?, blocWidget: String, widget: String): String {
         return when (snippetType) {
             SnippetType.BlocSelector -> blocSelectorSnippet(widget)
+            SnippetType.CubitSelector -> blocSelectorSnippet(widget, SUFFIX_CUBIT)
             SnippetType.BlocListener -> blocListenerSnippet(widget)
+            SnippetType.CubitListener -> blocListenerSnippet(widget, SUFFIX_CUBIT)
             SnippetType.BlocProvider -> blocProviderSnippet(widget)
+            SnippetType.CubitProvider -> blocProviderSnippet(widget, SUFFIX_CUBIT)
             SnippetType.BlocConsumer -> blocConsumerSnippet(widget)
+            SnippetType.CubitConsumer -> blocConsumerSnippet(widget, SUFFIX_CUBIT)
             SnippetType.RepositoryProvider -> repositoryProviderSnippet(widget)
             SnippetType.MultiBlocProvider -> multiBlocProviderSnippet(blocWidget, widget)
             SnippetType.MultiBlocListener -> multiBlocListenerSnippet(blocWidget, widget)
@@ -27,16 +32,16 @@ object Snippets {
         }
     }
 
-    private fun blocBuilderSnippet(widget: String): String {
-        return "BlocBuilder<$BLOC_SNIPPET_KEY, $STATE_SNIPPET_KEY>(\n" +
+    private fun blocBuilderSnippet(widget: String, type: String = SUFFIX_BLOC): String {
+        return "BlocBuilder<$PREFIX_SELECTION$type, $STATE_SNIPPET_KEY>(\n" +
                 "  builder: (context, state) {\n" +
                 "    return $widget;\n" +
                 "  },\n" +
                 ")"
     }
 
-    private fun blocSelectorSnippet(widget: String): String {
-        return "BlocSelector<$BLOC_SNIPPET_KEY, $STATE_SNIPPET_KEY, $SELECTED_STATE_SNIPPET_KEY>(\n" +
+    private fun blocSelectorSnippet(widget: String, type: String = SUFFIX_BLOC): String {
+        return "BlocSelector<$PREFIX_SELECTION$type, $STATE_SNIPPET_KEY, $SELECTED_STATE_SNIPPET_KEY>(\n" +
                 "  selector: (state) {\n" +
                 "    // TODO: return selected state\n" +
                 "  },\n" +
@@ -46,8 +51,8 @@ object Snippets {
                 ")"
     }
 
-    private fun blocListenerSnippet(widget: String): String {
-        return "BlocListener<$BLOC_SNIPPET_KEY, $STATE_SNIPPET_KEY>(\n" +
+    private fun blocListenerSnippet(widget: String, type: String = SUFFIX_BLOC): String {
+        return "BlocListener<$PREFIX_SELECTION$type, $STATE_SNIPPET_KEY>(\n" +
                 "  listener: (context, state) {\n" +
                 "    // TODO: implement listener\n" +
                 "  },\n" +
@@ -55,15 +60,15 @@ object Snippets {
                 ")"
     }
 
-    private fun blocProviderSnippet(widget: String): String {
+    private fun blocProviderSnippet(widget: String, type: String = SUFFIX_BLOC): String {
         return "BlocProvider(\n" +
-                "  create: (context) => $BLOC_SNIPPET_KEY(),\n" +
+                "  create: (context) => $PREFIX_SELECTION$type(),\n" +
                 "  child: $widget,\n" +
                 ")"
     }
 
-    private fun blocConsumerSnippet(widget: String): String {
-        return "BlocConsumer<$BLOC_SNIPPET_KEY, $STATE_SNIPPET_KEY>(\n" +
+    private fun blocConsumerSnippet(widget: String, type: String = SUFFIX_BLOC): String {
+        return "BlocConsumer<$PREFIX_SELECTION$type, $STATE_SNIPPET_KEY>(\n" +
                 "  listener: (context, state) {\n" +
                 "    // TODO: implement listener\n" +
                 "  },\n" +
