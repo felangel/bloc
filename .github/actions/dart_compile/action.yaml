@@ -27,7 +27,8 @@ runs:
   using: "composite"
   steps:
     - name: 🎯 Setup Dart
-      uses: dart-lang/setup-dart@v1
+       # TODO: Revert to setup-dart@v1 once https://github.com/dart-lang/setup-dart/issues/198 is fixed
+      uses: dart-lang/setup-dart@v1.7.2
       with:
         sdk: ${{inputs.dart_sdk}}
 
