@@ -1,0 +1,50 @@
+---
+title: Avoid Mutable Events
+description: The avoid_mutable_events rule.
+---
+
+import { Badge } from '@astrojs/starlight/components';
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+import BadSnippet from '~/components/lint-rules/avoid_mutable_events/BadSnippet.mdx';
+import GoodSnippet from '~/components/lint-rules/avoid_mutable_events/GoodSnippet.astro';
+
+<div class="badges">
+	<Badge text="new" />
+	<Badge text="dart" variant="note" />
+</div>
+
+Avoid mutable fields and setters on `Bloc` events.
+
+## Rationale
+
+Events are not handled the moment they are added. They are queued and processed
+asynchronously, and an `EventTransformer` such as `debounce` or `throttle` can
+delay them further. If an event is mutated after being added, the handler
+observes different data than the caller intended, and the resulting behavior
+depends on timing.
+
+Mutable fields also break value equality, which blocs and tests rely on when
+comparing events — for example when extending `Equatable` or when a transformer
+compares incoming events.
+
+Modeling events as immutable value objects keeps them a faithful record of what
+happened.
+
+## Examples
+
+**Avoid** mutable fields and setters on events.
+
+**BAD**:
+
+<BadSnippet />
+
+**GOOD**:
+
+<GoodSnippet />
+
+## Enable
+
+To enable the `avoid_mutable_events` rule, add it to your
+`analysis_options.yaml` under `bloc` > `rules`:
+
+<EnableRuleSnippet name="avoid_mutable_events" />
