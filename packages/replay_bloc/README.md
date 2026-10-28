@@ -74,7 +74,7 @@ void main() {
 
 ## ReplayCubitMixin
 
-If you wish to be able to use a `ReplayCubit` in conjuction with a different type of cubit like `HydratedCubit`, you can use the `ReplayCubitMixin`.
+If you wish to be able to use a `ReplayCubit` in conjunction with a different type of cubit like `HydratedCubit`, you can use the `ReplayCubitMixin`.
 
 ```dart
 class CounterCubit extends HydratedCubit<int> with ReplayCubitMixin {
@@ -131,7 +131,7 @@ void main() {
 
 ## ReplayBlocMixin
 
-If you wish to be able to use a `ReplayBloc` in conjuction with a different type of cubit like `HydratedBloc`, you can use the `ReplayBlocMixin`.
+If you wish to be able to use a `ReplayBloc` in conjunction with a different type of cubit like `HydratedBloc`, you can use the `ReplayBlocMixin`.
 
 ```dart
 sealed class CounterEvent with ReplayEvent {}
