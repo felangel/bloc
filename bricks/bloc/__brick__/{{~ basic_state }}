@@ -3,3 +3,9 @@ part of '{{name.snakeCase()}}_bloc.dart';
 class {{name.pascalCase()}}State {
   const {{name.pascalCase()}}State();
 }
+{{#states}}
+
+final class {{stateName.pascalCase()}} extends {{name.pascalCase()}}State {
+  const {{stateName.pascalCase()}}();
+}
+{{/states}}
