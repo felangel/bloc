@@ -4,6 +4,7 @@ bloc:
     - avoid_flutter_imports
     - avoid_public_bloc_methods
     - avoid_public_fields
+    - avoid_returning_existing_instance_from_bloc_provider_create
     - prefer_bloc
     - prefer_build_context_extensions
     - prefer_cubit
