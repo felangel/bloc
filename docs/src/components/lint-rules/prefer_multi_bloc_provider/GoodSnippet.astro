@@ -1,0 +1,18 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+MultiBlocProvider(
+  providers: [
+    BlocProvider<BlocA>(create: (context) => BlocA()),
+    BlocProvider<BlocB>(create: (context) => BlocB()),
+    BlocProvider<BlocC>(create: (context) => BlocC()),
+  ],
+  child: const ChildA(),
+);
+`;
+---
+
+<Code code={code} lang="dart" title="home_page.dart" />

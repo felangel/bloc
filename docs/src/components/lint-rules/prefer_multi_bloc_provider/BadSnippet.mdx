@@ -1,0 +1,23 @@
+import { Code } from '@astrojs/starlight/components';
+import { transformerMetaHighlight } from '@shikijs/transformers';
+
+<Code
+	code={`
+  import 'package:flutter_bloc/flutter_bloc.dart';
+
+  // Avoid nesting BlocProvider widgets!
+  // Prefer a single MultiBlocProvider instead.
+  BlocProvider<BlocA>(
+    create: (context) => BlocA(),
+    child: BlocProvider<BlocB>(
+      create: (context) => BlocB(),
+      child: BlocProvider<BlocC>(
+        create: (context) => BlocC(),
+        child: const ChildA(),
+      ),
+    ),
+  );
+`}
+lang="dart" title="home_page.dart"
+transformers={[transformerMetaHighlight()]} class='warning' meta="{5}"
+/>
