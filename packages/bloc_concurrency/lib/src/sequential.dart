@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 ///
 /// **Note**: there is no event handler overlap and every event is guaranteed
 /// to be handled in the order it was received.
+/// A burst of incoming events can grow the pending event queue.
 EventTransformer<Event> sequential<Event>() {
   return (events, mapper) => events.asyncExpand(mapper);
 }
