@@ -33,19 +33,17 @@ class _ExhaustMapStreamTransformer<T> extends StreamTransformerBase<T, T> {
     subscription = stream.listen(
       (data) {
         if (mappedSubscription != null) return;
-        final Stream<T> mappedStream;
-
         try {
-          mappedStream = mapper(data);
+          mappedSubscription = mapper(data).listen(
+            controller.add,
+            onError: controller.addError,
+            onDone: () => mappedSubscription = null,
+          );
         } catch (error, stackTrace) {
+          // A throwing mapper or listen() (e.g. an already-listened stream)
+          // is an output error, not an uncaught one; later events still run.
           controller.addError(error, stackTrace);
-          return;
         }
-        mappedSubscription = mappedStream.listen(
-          controller.add,
-          onError: controller.addError,
-          onDone: () => mappedSubscription = null,
-        );
       },
       onError: controller.addError,
       onDone: () => mappedSubscription ?? controller.close(),
