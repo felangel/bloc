@@ -17,7 +17,7 @@ permissions:
 jobs:
   semantic_pull_request:
     name: ✅ Semantic Pull Request
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v2
 
   changes:
     runs-on: ubuntu-latest
