@@ -388,5 +388,6 @@ export default defineConfig({
 			],
 		}),
 	],
+	markdown: { gfm: true },
 	vite: { plugins: [tailwindcss()] },
 });
