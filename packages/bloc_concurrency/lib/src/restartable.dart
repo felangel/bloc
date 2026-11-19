@@ -7,8 +7,12 @@ import 'package:stream_transform/stream_transform.dart';
 /// Avoid using [restartable] if you expect an event to have
 /// immediate results -- it should only be used with asynchronous APIs.
 ///
-/// **Note**: there is no event handler overlap and any currently running tasks
-/// will be aborted if a new event is added before a prior one completes.
+/// **Note**: a new event cancels the previous invocation of the handler:
+/// its later `emit` calls are ignored and its `emit.forEach`/`emit.onEach`
+/// subscriptions are cancelled, but a [Future] or I/O operation it already
+/// started keeps running.
+/// Check `emit.isDone` after `await` points and explicitly cancel expensive
+/// underlying work when the API supports cancellation.
 EventTransformer<Event> restartable<Event>() {
   return (events, mapper) => events.switchMap(mapper);
 }
