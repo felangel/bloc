@@ -3,14 +3,22 @@ part of 'replay_cubit.dart';
 typedef _Predicate<T> = bool Function(T);
 
 class _ChangeStack<T> {
-  _ChangeStack({required _Predicate<T> shouldReplay, this.limit})
-      : _shouldReplay = shouldReplay;
+  _ChangeStack({required _Predicate<T> shouldReplay, int? limit})
+      : _shouldReplay = shouldReplay,
+        _limit = limit;
 
   final Queue<_Change<T>> _history = ListQueue();
   final Queue<_Change<T>> _redos = ListQueue();
   final _Predicate<T> _shouldReplay;
 
-  int? limit;
+  int? _limit;
+
+  int? get limit => _limit;
+
+  set limit(int? limit) {
+    _limit = limit;
+    _trimHistory();
+  }
 
   bool get canRedo => _redos.any((c) => _shouldReplay(c._newValue));
   bool get canUndo => _history.any((c) => _shouldReplay(c._oldValue));
@@ -20,9 +28,14 @@ class _ChangeStack<T> {
 
     _history.addLast(change);
     _redos.clear();
+    _trimHistory();
+  }
 
-    if (limit != null && _history.length > limit!) {
-      if (limit! > 0) _history.removeFirst();
+  void _trimHistory() {
+    final limit = _limit;
+    if (limit == null || limit < 0) return;
+    while (_history.length > limit) {
+      _history.removeFirst();
     }
   }
 
@@ -35,6 +48,7 @@ class _ChangeStack<T> {
     if (canRedo) {
       final change = _redos.removeFirst();
       _history.addLast(change);
+      _trimHistory();
       return _shouldReplay(change._newValue) ? change.execute() : redo();
     }
   }
