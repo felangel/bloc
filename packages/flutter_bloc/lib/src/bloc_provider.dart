@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:provider/single_child_widget.dart';
 
 /// {@template bloc_provider}
 /// Takes a `create` function that is responsible for
@@ -32,16 +31,21 @@ import 'package:provider/single_child_widget.dart';
 ///
 /// {@endtemplate}
 class BlocProvider<T extends StateStreamableSource<Object?>>
-    extends SingleChildStatelessWidget {
+    extends InheritedProvider<T> {
   /// {@macro bloc_provider}
-  const BlocProvider({
+  BlocProvider({
     required T Function(BuildContext context) create,
     Key? key,
-    this.child,
     this.lazy = true,
-  })  : _create = create,
-        _value = null,
-        super(key: key, child: child);
+    Widget? child,
+  }) : super(
+          key: key,
+          create: create,
+          dispose: (_, bloc) => bloc.close(),
+          startListening: _startListening,
+          lazy: lazy,
+          child: child,
+        );
 
   /// Takes a [value] and a [child] which will have access to the [value] via
   /// `BlocProvider.of(context)`.
@@ -60,25 +64,21 @@ class BlocProvider<T extends StateStreamableSource<Object?>>
   ///   child: ScreenA(),
   /// );
   /// ```
-  const BlocProvider.value({
+  BlocProvider.value({
     required T value,
     Key? key,
-    this.child,
-  })  : _value = value,
-        _create = null,
-        lazy = true,
-        super(key: key, child: child);
-
-  /// Widget which will have access to the [Bloc] or [Cubit].
-  final Widget? child;
+    Widget? child,
+  })  : lazy = true,
+        super.value(
+          key: key,
+          value: value,
+          startListening: _startListening,
+          child: child,
+        );
 
   /// Whether the [Bloc] or [Cubit] should be created lazily.
   /// Defaults to `true`.
   final bool lazy;
-
-  final T Function(BuildContext context)? _create;
-
-  final T? _value;
 
   /// Method that allows widgets to access a [Bloc] or [Cubit] instance
   /// as long as their `BuildContext` contains a [BlocProvider] instance.
@@ -108,29 +108,6 @@ class BlocProvider<T extends StateStreamableSource<Object?>>
         ''',
       );
     }
-  }
-
-  @override
-  Widget buildWithChild(BuildContext context, Widget? child) {
-    assert(
-      child != null,
-      '$runtimeType used outside of MultiBlocProvider must specify a child',
-    );
-    final value = _value;
-    return value != null
-        ? InheritedProvider<T>.value(
-            value: value,
-            startListening: _startListening,
-            lazy: lazy,
-            child: child,
-          )
-        : InheritedProvider<T>(
-            create: _create,
-            dispose: (_, bloc) => bloc.close(),
-            startListening: _startListening,
-            lazy: lazy,
-            child: child,
-          );
   }
 
   static VoidCallback _startListening(
