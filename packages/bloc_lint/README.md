@@ -100,6 +100,7 @@ For more information, check out the [official documentation](https://bloclibrary
 - [avoid_flutter_imports](https://bloclibrary.dev/lint-rules/avoid_flutter_imports)
 - [avoid_public_bloc_methods](https://bloclibrary.dev/lint-rules/avoid_public_bloc_methods)
 - [avoid_public_fields](https://bloclibrary.dev/lint-rules/avoid_public_fields)
+- [avoid_returning_existing_instance_from_bloc_provider_create](https://bloclibrary.dev/lint-rules/avoid_returning_existing_instance_from_bloc_provider_create)
 - [prefer_bloc](https://bloclibrary.dev/lint-rules/prefer_bloc)
 - [prefer_build_context_extensions](https://bloclibrary.dev/lint-rules/prefer_build_context_extensions)
 - [prefer_cubit](https://bloclibrary.dev/lint-rules/prefer_cubit)
