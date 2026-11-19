@@ -1,0 +1,17 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+import 'package:bloc/bloc.dart';
+
+sealed class CounterState {}
+
+final class CounterInitial extends CounterState {
+  const CounterInitial(this.count);
+
+  final int count;
+}
+`;
+---
+
+<Code code={code} lang="dart" title="counter_state.dart" />
