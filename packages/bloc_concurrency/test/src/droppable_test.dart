@@ -7,6 +7,71 @@ import 'helpers.dart';
 
 void main() {
   group('droppable', () {
+    test('forwards synchronous mapper errors with their stack traces',
+        () async {
+      final expectedError = Exception('mapper failed');
+      late StackTrace expectedStackTrace;
+      final errors = <Object>[];
+      final stackTraces = <StackTrace>[];
+      final uncaughtErrors = <Object>[];
+      final done = Completer<void>();
+
+      runZonedGuarded(
+        () {
+          droppable<int>()(
+            Stream<int>.value(0),
+            (_) {
+              try {
+                throw expectedError;
+              } catch (error, stackTrace) {
+                expectedStackTrace = stackTrace;
+                rethrow;
+              }
+            },
+          ).listen(
+            null,
+            onError: (Object error, StackTrace stackTrace) {
+              errors.add(error);
+              stackTraces.add(stackTrace);
+            },
+            onDone: done.complete,
+          );
+        },
+        (error, stackTrace) => uncaughtErrors.add(error),
+      );
+
+      await done.future;
+
+      expect(errors, [same(expectedError)]);
+      expect(stackTraces.single.toString(), expectedStackTrace.toString());
+      expect(uncaughtErrors, isEmpty);
+    });
+
+    test('continues mapping events after a synchronous mapper error', () async {
+      final expectedError = StateError('mapper failed');
+      final uncaughtErrors = <Object>[];
+      late Stream<int> stream;
+
+      runZonedGuarded(
+        () {
+          stream = droppable<int>()(
+            Stream<int>.fromIterable([0, 1]),
+            (event) {
+              if (event == 0) throw expectedError;
+              return Stream<int>.value(event);
+            },
+          );
+        },
+        (error, stackTrace) => uncaughtErrors.add(error),
+      );
+
+      await expectLater(
+        stream,
+        emitsInOrder([emitsError(same(expectedError)), 1]),
+      );
+      expect(uncaughtErrors, isEmpty);
+    });
+
     test('processes only the current event and ignores remaining', () async {
       final states = <int>[];
       final bloc = CounterBloc(droppable())
