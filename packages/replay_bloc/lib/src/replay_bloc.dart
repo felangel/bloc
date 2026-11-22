@@ -132,10 +132,10 @@ mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
   }
 
   /// Undo the last change.
-  void undo() => _changeStack.undo();
+  void undo([int steps = 1]) => _changeStack.undo(steps);
 
   /// Redo the previous change.
-  void redo() => _changeStack.redo();
+  void redo([int steps = 1]) => _changeStack.redo(steps);
 
   /// Checks whether the undo/redo stack is empty.
   bool get canUndo => _changeStack.canUndo;
