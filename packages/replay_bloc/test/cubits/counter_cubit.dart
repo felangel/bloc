@@ -9,6 +9,7 @@ class CounterCubit extends ReplayCubit<int> {
 
   void increment() => emit(state + 1);
   void decrement() => emit(state - 1);
+  void set(int value) => emit(value);
 
   @override
   bool shouldReplay(int state) {
