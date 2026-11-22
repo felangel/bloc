@@ -14,6 +14,9 @@ class SearchBodyComponent {
   @Input()
   late GithubSearchState state;
 
+  @Input()
+  late GithubSearchBloc githubSearchBloc;
+
   bool get isEmpty => state is SearchStateEmpty;
   bool get isLoading => state is SearchStateLoading;
   bool get isSuccess => state is SearchStateSuccess;
@@ -22,5 +25,12 @@ class SearchBodyComponent {
   List<SearchResultItem> get items =>
       isSuccess ? (state as SearchStateSuccess).items : [];
 
+  bool get hasReachedMax =>
+      isSuccess && (state as SearchStateSuccess).hasReachedMax;
+
   String get error => isError ? (state as SearchStateError).error : '';
+
+  void loadMore() => githubSearchBloc.add(const NextPageRequested());
+
+  void refresh() => githubSearchBloc.add(const Refreshed());
 }

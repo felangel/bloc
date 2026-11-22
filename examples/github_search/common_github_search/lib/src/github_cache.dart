@@ -1,6 +1,8 @@
 import 'package:common_github_search/common_github_search.dart';
 
 class GithubCache {
+  // ponytail: key is a composite 'term::page' string built by the repository;
+  // the cache stays a plain String-keyed map (no per-page class needed).
   final _cache = <String, SearchResult>{};
 
   SearchResult? get(String term) => _cache[term];
