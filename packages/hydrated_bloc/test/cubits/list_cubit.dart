@@ -76,6 +76,23 @@ class ListCubitList<T extends ToJsonList<E>, E> extends HydratedCubit<List<T>> {
   }
 }
 
+class ListCubitCustom<T> extends HydratedCubit<List<T>> {
+  ListCubitCustom(this._fromJson) : super(<T>[]);
+  final T Function(dynamic json) _fromJson;
+
+  void setItems(List<T> items) => emit(items);
+
+  @override
+  Map<String, dynamic> toJson(List<T> state) {
+    return <String, dynamic>{'state': state};
+  }
+
+  @override
+  List<T> fromJson(Map<String, dynamic> json) {
+    return (json['state'] as List).map(_fromJson).toList();
+  }
+}
+
 mixin ToJsonMap<T> {
   Map<String, T> toJson();
 }

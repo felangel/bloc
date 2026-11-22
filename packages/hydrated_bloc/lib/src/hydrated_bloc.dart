@@ -311,11 +311,21 @@ mixin HydratedMixin<State> on BlocBase<State> {
       if (object.isEmpty) return object;
       _checkCycle(object);
       List<dynamic>? list;
+      var isTypedCopy = false;
       for (var i = 0; i < object.length; i++) {
         final traversed = _traverseWrite(object[i]);
-        list ??= traversed.outcome == _Outcome.atomic
-            ? object.sublist(0)
-            : (<dynamic>[]..length = object.length);
+        final isAtomic = traversed.outcome == _Outcome.atomic;
+        if (list == null) {
+          isTypedCopy = isAtomic;
+          list = isAtomic
+              ? object.sublist(0)
+              : (<dynamic>[]..length = object.length);
+        } else if (isTypedCopy && !isAtomic) {
+          // The copy keeps the static type of `object`, which cannot hold
+          // the converted element (e.g. a `Map` in a `List<Item?>`).
+          isTypedCopy = false;
+          list = List<dynamic>.of(list);
+        }
         list[i] = traversed.value;
       }
       _removeSeen(object);
