@@ -6,3 +6,9 @@ class {{name.pascalCase()}}State extends Equatable {
   @override
   List<Object> get props => [];
 }
+{{#states}}
+
+final class {{stateName.pascalCase()}} extends {{name.pascalCase()}}State {
+  const {{stateName.pascalCase()}}();
+}
+{{/states}}
