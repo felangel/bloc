@@ -1,6 +1,7 @@
 bloc:
   rules:
     - avoid_build_context_extensions
+    - avoid_duplicate_event_handlers
     - avoid_flutter_imports
     - avoid_public_bloc_methods
     - avoid_public_fields

@@ -9,6 +9,7 @@ export 'src/linter.dart' show LintContext, Linter;
 export 'src/rules/rules.dart'
     show
         AvoidBuildContextExtensions,
+        AvoidDuplicateEventHandlers,
         AvoidFlutterImports,
         AvoidPublicBlocMethods,
         AvoidPublicFields,
