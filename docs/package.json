@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",
-    "@astrojs/starlight": "^0.43.1",
+    "@astrojs/starlight": "^0.42.11",
     "@astrojs/starlight-tailwind": "^5.0.0",
     "@fontsource-variable/figtree": "^5.2.6",
     "astro": "^7.4.13",
@@ -27,6 +27,6 @@
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "starlight-links-validator": "^0.16.0"
+    "starlight-links-validator": "^0.26.0"
   }
 }
