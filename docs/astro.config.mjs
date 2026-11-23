@@ -32,19 +32,18 @@ export default defineConfig({
 		starlight({
 			expressiveCode: { themes: ['dark-plus', 'github-light'] },
 			logo: {
-				light: 'src/assets/light-bloc-logo.svg',
-				dark: 'src/assets/dark-bloc-logo.svg',
+				light: './src/assets/light-bloc-logo.svg',
+				dark: './src/assets/dark-bloc-logo.svg',
 				replacesTitle: true,
 			},
 			title: 'Bloc',
 			editLink: { baseUrl: 'https://github.com/felangel/bloc/edit/master/docs/' },
-			tagline: 'A predictable state management library for Dart.',
 			favicon: 'favicon.ico',
 			head: [
 				{ tag: 'meta', attrs: { property: 'og:image', content: site + 'og.png?v=1' } },
 				{ tag: 'meta', attrs: { property: 'twitter:image', content: site + 'og.png?v=1' } },
 			],
-			customCss: ['src/tailwind.css', 'src/styles/landing.css', '@fontsource-variable/figtree'],
+			customCss: ['./src/tailwind.css', './src/styles/landing.css', '@fontsource-variable/figtree'],
 			social: [
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/felangel/bloc' },
 				{ icon: 'discord', label: 'Discord', href: 'https://discord.gg/bloc' },
@@ -267,7 +266,6 @@ export default defineConfig({
 						},
 						{
 							label: 'Rules',
-							autogenerate: { directory: '/lint-rules' },
 							translations: {
 								ar: 'القواعد',
 								fa: 'قوانین',
@@ -276,6 +274,7 @@ export default defineConfig({
 								uk: 'Правила',
 								'pt-BR': 'Regras',
 							},
+							items: [{ autogenerate: { directory: 'lint-rules' } }],
 						},
 					],
 				},
@@ -291,7 +290,7 @@ export default defineConfig({
 						uk: 'Посібники',
 						'pt-BR': 'Tutoriais',
 					},
-					autogenerate: { directory: 'tutorials' },
+					items: [{ autogenerate: { directory: 'tutorials' } }],
 				},
 				{
 					label: 'Tools',
@@ -388,6 +387,5 @@ export default defineConfig({
 			],
 		}),
 	],
-	markdown: { gfm: true },
 	vite: { plugins: [tailwindcss()] },
 });
