@@ -125,6 +125,61 @@ bloc:
         );
       });
 
+      test('uses analysis_options.yaml from an ancestor directory '
+          '(e.g. pub workspace member)', () {
+        File(p.join(tempDir.path, 'analysis_options.yaml')).writeAsStringSync(
+          '''
+bloc:
+  rules:
+    - ${AvoidFlutterImports.rule}
+''',
+        );
+        final member = Directory(p.join(tempDir.path, 'packages', 'member'))
+          ..createSync(recursive: true);
+        File(p.join(member.path, 'pubspec.yaml')).writeAsStringSync('''
+name: member
+resolution: workspace
+''');
+        final file =
+            File(p.join(member.path, 'lib', 'counter_bloc.dart'))
+              ..createSync(recursive: true)
+              ..writeAsStringSync('''
+import 'package:flutter/material.dart';
+''');
+        final diagnostics = linter.analyze(uri: file.uri)[file.path];
+        expect(diagnostics, hasLength(1));
+        expect(diagnostics!.first.code, equals(AvoidFlutterImports.rule));
+      });
+
+      test('prefers the nearest analysis_options.yaml', () {
+        File(p.join(tempDir.path, 'analysis_options.yaml')).writeAsStringSync(
+          '''
+bloc:
+  rules:
+    - ${AvoidFlutterImports.rule}
+''',
+        );
+        final member = Directory(p.join(tempDir.path, 'packages', 'member'))
+          ..createSync(recursive: true);
+        File(p.join(member.path, 'pubspec.yaml')).writeAsStringSync('''
+name: member
+resolution: workspace
+''');
+        File(
+          p.join(member.path, 'analysis_options.yaml'),
+        ).writeAsStringSync('{}');
+        final file =
+            File(p.join(member.path, 'lib', 'counter_bloc.dart'))
+              ..createSync(recursive: true)
+              ..writeAsStringSync('''
+import 'package:flutter/material.dart';
+''');
+        expect(
+          linter.analyze(uri: file.uri),
+          equals({file.path: <Diagnostic>[]}),
+        );
+      });
+
       lintTest(
         'does not report when rule is ignored for file',
         rule: AvoidFlutterImports.new,
