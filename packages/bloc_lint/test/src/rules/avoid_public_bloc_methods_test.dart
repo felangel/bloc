@@ -118,5 +118,43 @@ class CounterBloc extends Bloc<CounterEvent, int> {
 }
 ''',
     );
+
+    lintTest(
+      'lints public methods declared after an overridden method',
+      rule: AvoidPublicBlocMethods.new,
+      path: 'counter_bloc.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+
+enum CounterEvent { increment, decrement }
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+
+  @override
+  Future<void> close() => super.close();
+
+  void foo() { print('foo'); }
+       ^^^
+}
+''',
+    );
+
+    lintTest(
+      'does not lint overridden methods with multiple annotations',
+      rule: AvoidPublicBlocMethods.new,
+      path: 'counter_bloc.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+
+enum CounterEvent { increment, decrement }
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0);
+
+  @override
+  @Deprecated('legacy')
+  bool operator==(Object other) => false;
+}
+''',
+    );
   });
 }
