@@ -10,11 +10,6 @@ String packageConfigPath(Directory cwd) {
   return p.join(cwd.path, '.dart_tool', 'package_config.json');
 }
 
-/// The `pubspec.yaml` file path for this project.
-String pubspecYamlPath(Directory cwd) {
-  return p.join(cwd.path, 'pubspec.yaml');
-}
-
 /// The `pubspec.lock` file path for this project.
 String pubspecLockPath(Directory cwd) {
   return p.join(cwd.path, 'pubspec.lock');
@@ -36,15 +31,18 @@ File? findPackageConfigFile(Directory cwd) {
   return file;
 }
 
-/// The `analysis_options.yaml` file for this package.
+/// The nearest `analysis_options.yaml` file relative to the [cwd].
 ///
-/// Returns `null` if the file does not exist or is invalid.
+/// Like the Dart analyzer, this walks up from [cwd] through its ancestors
+/// (including beyond the package root) which allows a single
+/// `analysis_options.yaml` to be shared, for example, across a pub workspace.
+///
+/// Returns `null` if the file does not exist.
 File? findAnalysisOptionsFile(Directory cwd) {
-  final root = findPackageRoot(cwd);
-  if (root == null) return null;
-  final file = File(analysisOptionsPath(root));
-  if (!file.existsSync()) return null;
-  return file;
+  return findNearestAncestor(
+    where: (path) => File(analysisOptionsPath(Directory(path))),
+    cwd: cwd,
+  );
 }
 
 /// The resolved `analysis_options.yaml` file for this project.
@@ -70,16 +68,6 @@ PubspecLock? findPubspecLock(Directory cwd) {
   } on Exception {
     return null;
   }
-}
-
-/// Returns the root directory of the nearest package.
-Directory? findPackageRoot(Directory cwd) {
-  final file = findNearestAncestor(
-    where: (path) => File(pubspecYamlPath(Directory(path))),
-    cwd: cwd,
-  );
-  if (file == null) return null;
-  return Directory(p.dirname(file.path));
 }
 
 /// Returns the root directory of the nearest project.
