@@ -1,0 +1,17 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+import 'package:bloc/bloc.dart';
+
+sealed class CounterEvent {}
+
+final class CounterIncrementPressed extends CounterEvent {
+  const CounterIncrementPressed(this.amount);
+
+  final int amount;
+}
+`;
+---
+
+<Code code={code} lang="dart" title="counter_event.dart" />
