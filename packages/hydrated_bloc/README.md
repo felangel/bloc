@@ -164,7 +164,9 @@ Any `storageDirectory` can be used when creating an instance of `HydratedStorage
 
 ```dart
 final storage = await HydratedStorage.build(
-  storageDirectory: await getApplicationDocumentsDirectory(),
+  storageDirectory: HydratedStorageDirectory(
+    (await getApplicationDocumentsDirectory()).path,
+  ),
 );
 ```
 
@@ -194,6 +196,11 @@ class MyHydratedStorage implements Storage {
   @override
   Future<void> clear() async {
     // TODO: implement clear
+  }
+
+  @override
+  Future<void> close() async {
+    // TODO: implement close
   }
 }
 ```
