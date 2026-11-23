@@ -1,3 +1,5 @@
 dependency_overrides:
   bloc:
     path: ../bloc
+  # Newer versions require Dart 3.13. Remove when Dart 3.13 is stable.
+  build_web_compilers: 4.8.0

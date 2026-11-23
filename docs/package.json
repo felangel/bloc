@@ -13,11 +13,11 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",
-    "@astrojs/starlight": "^0.38.2",
+    "@astrojs/starlight": "^0.42.11",
     "@astrojs/starlight-tailwind": "^5.0.0",
     "@fontsource-variable/figtree": "^5.2.6",
-    "astro": "^6.3.2",
-    "sharp": "^0.34.1",
+    "astro": "^7.4.13",
+    "sharp": "^0.35.5",
     "tailwindcss": "^4.1.4",
     "typescript": "^5.7.3"
   },
@@ -27,6 +27,6 @@
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "starlight-links-validator": "^0.16.0"
+    "starlight-links-validator": "^0.26.0"
   }
 }
