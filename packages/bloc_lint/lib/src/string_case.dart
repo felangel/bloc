@@ -7,7 +7,7 @@ extension SnakeCaseX on String {
   String toSnakeCase() {
     return split('').mapIndexed((index, character) {
       if (index == 0) return character.toLowerCase();
-      if (character.toUpperCase() == character) {
+      if (character.toLowerCase() != character) {
         return '_${character.toLowerCase()}';
       }
       return character;
