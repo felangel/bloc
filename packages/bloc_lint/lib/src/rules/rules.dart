@@ -2,6 +2,7 @@ export 'avoid_build_context_extensions.dart';
 export 'avoid_flutter_imports.dart';
 export 'avoid_public_bloc_methods.dart';
 export 'avoid_public_fields.dart';
+export 'avoid_returning_new_instance_from_bloc_provider_value.dart';
 export 'prefer_bloc.dart';
 export 'prefer_build_context_extensions.dart';
 export 'prefer_cubit.dart';

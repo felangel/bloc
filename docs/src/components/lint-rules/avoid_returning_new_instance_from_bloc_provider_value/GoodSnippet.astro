@@ -1,0 +1,26 @@
+---
+import { Code } from '@astrojs/starlight/components';
+
+const code = `
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+Widget build(BuildContext context) {
+  // Use the default BlocProvider constructor when creating a new instance.
+  return BlocProvider(
+    create: (context) => CounterBloc(),
+    child: const CounterView(),
+  );
+}
+
+Widget buildExisting(BuildContext context, CounterBloc bloc) {
+  // Use BlocProvider.value only when providing an existing instance.
+  return BlocProvider.value(
+    value: bloc,
+    child: const CounterView(),
+  );
+}
+`;
+---
+
+<Code code={code} lang="dart" title="counter_page.dart" />
