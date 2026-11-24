@@ -34,6 +34,17 @@ class _ExhaustMapStreamTransformer<T> extends StreamTransformerBase<T, T> {
       sync: true,
     );
 
+    var isDone = false;
+    void onSubscriptionDone() {
+      isDone = true;
+      if (mappedSubscription == null) controller.close();
+    }
+
+    void onMappedSubscriptionDone() {
+      mappedSubscription = null;
+      if (isDone) controller.close();
+    }
+
     subscription = stream.listen(
       (data) {
         if (mappedSubscription != null) return;
@@ -43,11 +54,11 @@ class _ExhaustMapStreamTransformer<T> extends StreamTransformerBase<T, T> {
         mappedSubscription = mappedStream.listen(
           controller.add,
           onError: controller.addError,
-          onDone: () => mappedSubscription = null,
+          onDone: onMappedSubscriptionDone,
         );
       },
       onError: controller.addError,
-      onDone: () => mappedSubscription ?? controller.close(),
+      onDone: onSubscriptionDone,
     );
 
     return controller.stream;
