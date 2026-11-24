@@ -20,10 +20,10 @@ dev_dependencies:
   build_runner: ^2.0.0
   build_test: ^2.0.0
   build_web_compilers: ^4.0.0
-  meta: ^1.8.0
+  meta: ^1.0.0
   mocktail: ^1.0.0
   ngtest: ^5.0.0-dev.3
-  test: ^1.16.0
+  test: ^1.0.0
 
 screenshots:
   - description: The angular bloc package logo.
