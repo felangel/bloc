@@ -1,7 +1,7 @@
 id = "bloc"
 name = "Bloc"
 description = "Support for the Bloc state management library for Dart and Flutter. Provides snippets and the Bloc language server."
-version = "0.1.0"
+version = "0.1.1"
 schema_version = 1
 authors = ["Felix Angelov <felangelov@gmail.com>", "Johannes Naylor <me@jonaylor.com>"]
 repository = "https://github.com/felangel/bloc"
