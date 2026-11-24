@@ -136,5 +136,50 @@ void main() {
 
       await subscription.cancel();
     });
+
+    test('cancels source promptly if mapped cancellation stalls', () async {
+      var sourceCancelled = false;
+      final mappedCancelRelease = Completer<void>();
+      final source = StreamController<int>(
+        onCancel: () => sourceCancelled = true,
+      );
+      final mapped = StreamController<int>(
+        onCancel: () => mappedCancelRelease.future,
+      );
+      final subscription = droppable<int>()(
+        source.stream,
+        (_) => mapped.stream,
+      ).listen((_) {});
+
+      source.add(1);
+      await tick();
+
+      var cancelCompleted = false;
+      final cancelling =
+          subscription.cancel().then((_) => cancelCompleted = true);
+
+      expect(sourceCancelled, isTrue);
+      expect(cancelCompleted, isFalse);
+
+      mappedCancelRelease.complete();
+      await cancelling;
+
+      expect(cancelCompleted, isTrue);
+    });
+
+    test('releases the source when cancelled while idle', () async {
+      final source = StreamController<int>.broadcast();
+      final output = droppable<int>()(
+        source.stream,
+        (event) => Stream<int>.value(event),
+      );
+      final subscription = output.listen((_) {});
+
+      expect(source.hasListener, isTrue);
+      await subscription.cancel();
+      expect(source.hasListener, isFalse);
+
+      await source.close();
+    });
   });
 }
