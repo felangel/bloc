@@ -1,3 +1,8 @@
+# 9.2.2
+
+- refactor: various dependency updates ([#4938](https://github.com/felangel/bloc/pull/4938))
+- refactor: analysis options updates ([#4816](https://github.com/felangel/bloc/pull/4816))
+
 # 9.2.1
 
 - fix: `isClosed` should incorporate event controller state ([#4809](https://github.com/felangel/bloc/pull/4809))
