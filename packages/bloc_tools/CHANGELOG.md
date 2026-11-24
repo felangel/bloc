@@ -1,3 +1,7 @@
+# 0.1.0-dev.26
+
+- deps: bump `pkg:bloc_lint` to `^0.4.4`
+
 # 0.1.0-dev.25
 
 - deps: bump `pkg:pub_upgrader` to `^0.6.0`
