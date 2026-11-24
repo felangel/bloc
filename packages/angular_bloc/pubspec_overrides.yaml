@@ -1,6 +1,6 @@
 dependency_overrides:
-  _fe_analyzer_shared: 91.0.0
   bloc:
     path: ../bloc
-  # Newer versions require Dart 3.13. Remove when Dart 3.13 is stable.
+  # Remove when ngdart 8 is stable.
+  _fe_analyzer_shared: 91.0.0
   build_web_compilers: 4.8.0
