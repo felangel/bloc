@@ -96,6 +96,7 @@ For more information, check out the [official documentation](https://bloclibrary
 
 ## All Lint Rules
 
+- [avoid_bloc_to_bloc_members](https://bloclibrary.dev/lint-rules/avoid_bloc_to_bloc_members)
 - [avoid_build_context_extensions](https://bloclibrary.dev/lint-rules/avoid_build_context_extensions)
 - [avoid_flutter_imports](https://bloclibrary.dev/lint-rules/avoid_flutter_imports)
 - [avoid_public_bloc_methods](https://bloclibrary.dev/lint-rules/avoid_public_bloc_methods)
