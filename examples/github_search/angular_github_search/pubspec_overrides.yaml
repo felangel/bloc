@@ -3,5 +3,6 @@ dependency_overrides:
     path: ../../../packages/angular_bloc
   bloc:
     path: ../../../packages/bloc
+  # Remove when ngdart 8 is stable.
   build_modules: ^5.0.0
-  build_web_compilers: ^4.0.0
+  build_web_compilers: 4.8.0

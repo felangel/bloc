@@ -107,6 +107,6 @@ String lint(String projectRoot) {
     'bloc',
     ['lint', '.'],
     workingDirectory: projectRoot,
-    exitCode: Platform.isWindows ? 0 : 1,
+    exitCode: 1,
   );
 }

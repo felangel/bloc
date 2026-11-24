@@ -2,7 +2,7 @@ use std::fs;
 use zed_extension_api::{self as zed, LanguageServerId, Result, settings::LspSettings};
 
 const BLOC_TOOLS_REPO: &str = "felangel/bloc";
-const BLOC_TOOLS_RELEASE_TAG: &str = "bloc_tools-v0.1.0-dev.22";
+const BLOC_TOOLS_RELEASE_TAG: &str = "bloc_tools-v0.1.0-dev.26";
 
 struct BlocExtension {
     cached_binary_path: Option<String>,

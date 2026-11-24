@@ -191,6 +191,7 @@ class TextDocument {
   int _ensureBeforeEndOfLine({required int offset, required int lineOffset}) {
     while (offset > lineOffset &&
         _isEndOfLine(_content.codeUnitAt(offset - 1))) {
+      // ignore: parameter_assignments
       offset--;
     }
     return offset;

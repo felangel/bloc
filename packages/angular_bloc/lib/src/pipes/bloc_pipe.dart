@@ -33,25 +33,19 @@ class BlocPipe implements OnDestroy {
 
   @override
   void ngOnDestroy() {
-    if (_subscription != null) {
-      _dispose();
-    }
+    if (_subscription != null) _dispose();
   }
 
   /// Angular invokes the [transform] method with the value of a binding as the
   /// first argument, and any parameters as the second argument in list form.
   dynamic transform(BlocBase<dynamic>? bloc) {
     if (_bloc == null) {
-      if (bloc != null) {
-        _subscribe(bloc);
-      }
+      if (bloc != null) _subscribe(bloc);
     } else if (!_maybeStreamIdentical(bloc, _bloc)) {
       _dispose();
       return transform(bloc);
     }
-    if (bloc == null) {
-      return null;
-    }
+    if (bloc == null) return null;
     return _latestValue ?? bloc.state;
   }
 
@@ -80,9 +74,7 @@ class BlocPipe implements OnDestroy {
   // operator== check is also needed. See
   // https://github.com/dart-lang/angular2/issues/260
   static bool _maybeStreamIdentical(dynamic a, dynamic b) {
-    if (!identical(a, b)) {
-      return a is Stream && b is Stream && a == b;
-    }
+    if (!identical(a, b)) return a is Stream && b is Stream && a == b;
     return true;
   }
 }

@@ -1,3 +1,18 @@
+# 0.4.4
+
+- fix: do not split on digits in `prefer_file_naming_conventions`
+- fix: reset `@override` exemption per member
+- fix: resolve `analysis_options.yaml` from ancestor directories
+- deps: adjust bounds for `_fe_analyzer_shared`
+
+# 0.4.3
+
+- deps: adjust bounds for `_fe_analyzer_shared`
+
+# 0.4.2
+
+- deps: adjust bounds for `_fe_analyzer_shared`
+
 # 0.4.1
 
 - deps: adjust upper bound for `_fe_analyzer_shared`
