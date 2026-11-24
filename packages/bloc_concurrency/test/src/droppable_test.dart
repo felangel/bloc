@@ -108,7 +108,7 @@ void main() {
 
     test('closes the output stream when the source ends mid-event', () async {
       final states = <int>[];
-      var isDone = false;
+      var isDoneCallCount = 0;
       final controller = StreamController<int>();
       final stream = droppable<int>()(controller.stream, (x) async* {
         await wait();
@@ -117,7 +117,7 @@ void main() {
 
       final subscription = stream.listen(
         states.add,
-        onDone: () => isDone = true,
+        onDone: () => isDoneCallCount++,
       );
 
       controller.add(0);
@@ -125,14 +125,14 @@ void main() {
       await tick();
       await controller.close();
 
-      expect(isDone, isFalse);
+      expect(isDoneCallCount, equals(0));
       expect(states, isEmpty);
 
       await wait();
       await tick();
 
+      expect(isDoneCallCount, equals(1));
       expect(states, equals([0]));
-      expect(isDone, isTrue);
 
       await subscription.cancel();
     });
