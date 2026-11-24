@@ -123,8 +123,6 @@ void main() {
       controller.add(0);
 
       await tick();
-
-      // The event handler is in flight when the source stream completes.
       await controller.close();
 
       expect(isDone, isFalse);
@@ -133,7 +131,6 @@ void main() {
       await wait();
       await tick();
 
-      // The in-flight event is still delivered and the output stream closes.
       expect(states, equals([0]));
       expect(isDone, isTrue);
 

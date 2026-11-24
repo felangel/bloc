@@ -21,7 +21,6 @@ class _ExhaustMapStreamTransformer<T> extends StreamTransformerBase<T, T> {
   Stream<T> bind(Stream<T> stream) {
     late StreamSubscription<T> subscription;
     StreamSubscription<T>? mappedSubscription;
-    var isSourceDone = false;
 
     final controller = StreamController<T>(
       onCancel: () async {
@@ -31,10 +30,15 @@ class _ExhaustMapStreamTransformer<T> extends StreamTransformerBase<T, T> {
       sync: true,
     );
 
-    // Close the output stream once the source has completed and there is no
-    // event currently in flight.
-    void maybeClose() {
-      if (isSourceDone && mappedSubscription == null) controller.close();
+    var isDone = false;
+    void onSubscriptionDone() {
+      isDone = true;
+      if (mappedSubscription == null) controller.close();
+    }
+
+    void onMappedSubscriptionDone() {
+      mappedSubscription = null;
+      if (isDone) controller.close();
     }
 
     subscription = stream.listen(
@@ -46,17 +50,11 @@ class _ExhaustMapStreamTransformer<T> extends StreamTransformerBase<T, T> {
         mappedSubscription = mappedStream.listen(
           controller.add,
           onError: controller.addError,
-          onDone: () {
-            mappedSubscription = null;
-            maybeClose();
-          },
+          onDone: onMappedSubscriptionDone,
         );
       },
       onError: controller.addError,
-      onDone: () {
-        isSourceDone = true;
-        maybeClose();
-      },
+      onDone: onSubscriptionDone,
     );
 
     return controller.stream;
