@@ -27,10 +27,10 @@ class _ExhaustMapStreamTransformer<T> extends StreamTransformerBase<T, T> {
     StreamSubscription<T>? mappedSubscription;
 
     final controller = StreamController<T>(
-      onCancel: () async {
-        await mappedSubscription?.cancel();
-        return subscription.cancel();
-      },
+      onCancel: () => Future.wait<void>([
+        if (mappedSubscription != null) mappedSubscription!.cancel(),
+        subscription.cancel(),
+      ]),
       sync: true,
     );
 
