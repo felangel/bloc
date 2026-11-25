@@ -7,8 +7,7 @@ import 'helpers.dart';
 
 void main() {
   group('droppable', () {
-    test('forwards synchronous mapper errors with their stack traces',
-        () async {
+    test('forwards synchronous mapper errors', () async {
       final expectedError = Exception('mapper failed');
       late StackTrace expectedStackTrace;
       final errors = <Object>[];
@@ -44,6 +43,46 @@ void main() {
 
       expect(errors, [same(expectedError)]);
       expect(stackTraces.single.toString(), expectedStackTrace.toString());
+      expect(uncaughtErrors, isEmpty);
+    });
+
+    test('forwards mapper subscription errors', () async {
+      final errors = <Object>[];
+      final stackTraces = <StackTrace>[];
+      final uncaughtErrors = <Object>[];
+      final controller = StreamController<int>();
+      final subscription = controller.stream.listen(null);
+
+      runZonedGuarded(
+        () {
+          droppable<int>()(
+            controller.stream,
+            (v) => Stream.value(v),
+          ).listen(
+            null,
+            onError: (Object error, StackTrace stackTrace) {
+              errors.add(error);
+              stackTraces.add(stackTrace);
+            },
+          );
+        },
+        (error, stackTrace) => uncaughtErrors.add(error),
+      );
+
+      await subscription.cancel();
+      await controller.close();
+
+      expect(
+        errors,
+        [
+          isA<StateError>().having(
+            (e) => e.message,
+            'message',
+            'Stream has already been listened to.',
+          ),
+        ],
+      );
+      expect(stackTraces.single.toString(), contains('droppable'));
       expect(uncaughtErrors, isEmpty);
     });
 
