@@ -81,10 +81,7 @@ void main() {
 
       runZonedGuarded(
         () {
-          droppable<int>()(
-            controller.stream,
-            (v) => Stream.value(v),
-          ).listen(
+          droppable<int>()(controller.stream, (v) => Stream.value(v)).listen(
             null,
             onError: (Object error, StackTrace stackTrace) {
               errors.add(error);
