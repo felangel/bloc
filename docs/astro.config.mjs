@@ -331,6 +331,19 @@ export default defineConfig({
 								'pt-BR': 'Extensão do VSCode',
 							},
 						},
+						{
+							label: 'Zed Extension',
+							link: 'https://zed.dev/extensions/bloc',
+							translations: {
+								ar: 'إضافة Zed',
+								fa: 'پلاگین Zed',
+								es: 'Extensión de Zed',
+								ru: 'Расширение Zed',
+								tr: 'Zed Eklentisi',
+								uk: 'Розширення Zed',
+								'pt-BR': 'Extensão do Zed',
+							},
+						},
 					],
 				},
 				{
