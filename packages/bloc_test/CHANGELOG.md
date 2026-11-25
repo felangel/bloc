@@ -1,3 +1,12 @@
+# 10.0.1
+
+- fix: propagate lifecycle events to registered `BlocObserver`
+- refactor: add `pkg:bloc_lint`
+- refactor: various dependency updates
+- chore: update build status badge
+- chore: update copyright year
+- chore: update sponsors
+
 # 10.0.0
 
 - refactor: `blocTest` depends on core interfaces instead of `BlocBase` ([#4311](https://github.com/felangel/bloc/pull/4311))
