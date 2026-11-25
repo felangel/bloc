@@ -1,3 +1,12 @@
+# 10.0.0-dev.6
+
+- refactor: minor cleanup and dependency adjustments
+- refactor: fix angular dart builds
+- refactor: update analysis options
+- chore: update copyright/license year
+- chore: update build status badge
+- chore: update sponsors
+
 # 10.0.0-dev.5
 
 - chore(deps): upgrade to `package:bloc v9.0.0`

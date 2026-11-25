@@ -6,6 +6,10 @@ import 'package:bloc/bloc.dart';
 /// until the current event is done.
 ///
 /// **Note**: dropped events never trigger the event handler.
+///
+/// This transformer applies only to its registered handler. Different handlers
+/// registered on the same [Bloc] operate on independent stream pipelines and do
+/// not affect each other.
 EventTransformer<Event> droppable<Event>() {
   return (events, mapper) {
     return events.transform(_ExhaustMapStreamTransformer(mapper));
@@ -23,12 +27,23 @@ class _ExhaustMapStreamTransformer<T> extends StreamTransformerBase<T, T> {
     StreamSubscription<T>? mappedSubscription;
 
     final controller = StreamController<T>(
-      onCancel: () async {
-        await mappedSubscription?.cancel();
-        return subscription.cancel();
-      },
+      onCancel: () => Future.wait<void>([
+        if (mappedSubscription != null) mappedSubscription!.cancel(),
+        subscription.cancel(),
+      ]),
       sync: true,
     );
+
+    var isDone = false;
+    void onSubscriptionDone() {
+      isDone = true;
+      if (mappedSubscription == null) controller.close();
+    }
+
+    void onMappedSubscriptionDone() {
+      mappedSubscription = null;
+      if (isDone) controller.close();
+    }
 
     subscription = stream.listen(
       (data) {
@@ -44,11 +59,11 @@ class _ExhaustMapStreamTransformer<T> extends StreamTransformerBase<T, T> {
         mappedSubscription = mappedStream.listen(
           controller.add,
           onError: controller.addError,
-          onDone: () => mappedSubscription = null,
+          onDone: onMappedSubscriptionDone,
         );
       },
       onError: controller.addError,
-      onDone: () => mappedSubscription ?? controller.close(),
+      onDone: onSubscriptionDone,
     );
 
     return controller.stream;

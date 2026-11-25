@@ -1,6 +1,6 @@
 <div class="counter-page-container">
-  <h1>Counter App</h1>
-  <h2>Current Count: {{ $pipe.bloc(counterBloc) }}</h2>
-  <button class="counter-button" (click)="increment()">➕</button>
+  <h1>Counter</h1>
+  <h2>{{ $pipe.bloc(counterBloc) }}</h2>
   <button class="counter-button" (click)="decrement()">➖</button>
+  <button class="counter-button" (click)="increment()">➕</button>
 </div>

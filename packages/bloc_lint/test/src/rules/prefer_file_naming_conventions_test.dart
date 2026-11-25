@@ -91,6 +91,19 @@ class CounterCubit extends Cubit<int> {
     );
 
     lintTest(
+      'does not lint when Oauth2Cubit is declared in oauth2_cubit.dart',
+      rule: PreferFileNamingConventions.new,
+      path: 'oauth2_cubit.dart',
+      content: '''
+import 'package:bloc/bloc.dart';
+
+class Oauth2Cubit extends Cubit<int> {
+  Oauth2Cubit() : super(0);
+}
+''',
+    );
+
+    lintTest(
       'does not lint when extending MockBloc in tests',
       rule: PreferFileNamingConventions.new,
       path: 'counter_test.dart',
