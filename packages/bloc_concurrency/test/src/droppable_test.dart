@@ -264,6 +264,7 @@ void main() {
           subscription.cancel().then((_) => cancelCompleted = true);
 
       expect(sourceCancelled, isTrue);
+      await tick();
       expect(cancelCompleted, isFalse);
 
       mappedCancelRelease.complete();
