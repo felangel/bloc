@@ -172,6 +172,41 @@ void main() {
         await subscription.cancel();
         expect(states, const <int>[1, 2, 1]);
       });
+
+      test('ignores emitting the current state', () async {
+        final states = <int>[];
+        final cubit = CounterCubit();
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..set(1)
+          ..undo();
+        expect(cubit.canUndo, isFalse);
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 0]);
+      });
+
+      test('ignores emitting the initial state', () async {
+        final states = <int>[];
+        final cubit = CounterCubit();
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..set(0)
+          ..set(0)
+          ..undo();
+        expect(cubit.canUndo, isFalse);
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[0]);
+      });
+
+      test('does not record when the cubit is closed', () async {
+        final cubit = CounterCubit();
+        await cubit.close();
+        expect(() => cubit.set(1), throwsStateError);
+        expect(cubit.canUndo, isFalse);
+      });
     });
 
     group('redo', () {
@@ -289,6 +324,21 @@ void main() {
         await cubit.close();
         await subscription.cancel();
         expect(states, const <int>[1, 2, 3, 1, 2, 3]);
+      });
+
+      test('keeps redo history when the current state is emitted', () async {
+        final states = <int>[];
+        final cubit = CounterCubit();
+        final subscription = cubit.stream.listen(states.add);
+        cubit
+          ..increment()
+          ..undo()
+          ..set(0);
+        expect(cubit.canRedo, isTrue);
+        cubit.redo();
+        await cubit.close();
+        await subscription.cancel();
+        expect(states, const <int>[1, 0, 1]);
       });
     });
   });
