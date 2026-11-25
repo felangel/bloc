@@ -7,6 +7,111 @@ import 'helpers.dart';
 
 void main() {
   group('droppable', () {
+    test('forwards synchronous mapper errors', () async {
+      final expectedError = Exception('mapper failed');
+      late StackTrace expectedStackTrace;
+      final errors = <Object>[];
+      final stackTraces = <StackTrace>[];
+      final uncaughtErrors = <Object>[];
+      final done = Completer<void>();
+
+      runZonedGuarded(
+        () {
+          droppable<int>()(
+            Stream<int>.value(0),
+            (_) {
+              try {
+                throw expectedError;
+              } catch (error, stackTrace) {
+                expectedStackTrace = stackTrace;
+                rethrow;
+              }
+            },
+          ).listen(
+            null,
+            onError: (Object error, StackTrace stackTrace) {
+              errors.add(error);
+              stackTraces.add(stackTrace);
+            },
+            onDone: done.complete,
+          );
+        },
+        (error, stackTrace) => uncaughtErrors.add(error),
+      );
+
+      await done.future;
+
+      expect(errors, [same(expectedError)]);
+      expect(stackTraces.single.toString(), expectedStackTrace.toString());
+      expect(uncaughtErrors, isEmpty);
+    });
+
+    test('continues mapping events after a synchronous mapper error', () async {
+      final expectedError = StateError('mapper failed');
+      final uncaughtErrors = <Object>[];
+      late Stream<int> stream;
+
+      runZonedGuarded(
+        () {
+          stream = droppable<int>()(
+            Stream<int>.fromIterable([0, 1]),
+            (event) {
+              if (event == 0) throw expectedError;
+              return Stream<int>.value(event);
+            },
+          );
+        },
+        (error, stackTrace) => uncaughtErrors.add(error),
+      );
+
+      await expectLater(
+        stream,
+        emitsInOrder([emitsError(same(expectedError)), 1, emitsDone]),
+      );
+      expect(uncaughtErrors, isEmpty);
+    });
+
+    test('forwards mapper subscription errors', () async {
+      final errors = <Object>[];
+      final stackTraces = <StackTrace>[];
+      final uncaughtErrors = <Object>[];
+      final controller = StreamController<int>();
+      final subscription = controller.stream.listen(null);
+      final done = Completer<void>();
+
+      runZonedGuarded(
+        () {
+          droppable<int>()(controller.stream, (v) => Stream.value(v)).listen(
+            null,
+            onError: (Object error, StackTrace stackTrace) {
+              errors.add(error);
+              stackTraces.add(stackTrace);
+            },
+            onDone: done.complete,
+          );
+        },
+        (error, stackTrace) => uncaughtErrors.add(error),
+      );
+
+      await done.future;
+
+      expect(
+        errors,
+        [
+          isA<StateError>().having(
+            (e) => e.message,
+            'message',
+            'Stream has already been listened to.',
+          ),
+        ],
+      );
+      expect(stackTraces.single.toString(), contains('droppable'));
+      expect(uncaughtErrors, isEmpty);
+
+      await subscription.cancel();
+      await controller.close();
+    });
+
     test('processes only the current event and ignores remaining', () async {
       final states = <int>[];
       final bloc = CounterBloc(droppable())
@@ -159,6 +264,7 @@ void main() {
           subscription.cancel().then((_) => cancelCompleted = true);
 
       expect(sourceCancelled, isTrue);
+      await tick();
       expect(cancelCompleted, isFalse);
 
       mappedCancelRelease.complete();
