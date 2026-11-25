@@ -1,3 +1,13 @@
+# 9.1.2
+
+- refactor: upgrade to `bloc_lint: ^0.4.0` ([#4995](https://github.com/felangel/bloc/pull/4995))
+- refactor: update analysis options ([#4816](https://github.com/felangel/bloc/pull/4816))
+- chore: update copyright year ([#4738](https://github.com/felangel/bloc/pull/4738))
+- refactor: add `bloc_lint` ([#4624](https://github.com/felangel/bloc/pull/4624))
+- feat: support for `BlocListener` with no `child` ([#4584](https://github.com/felangel/bloc/pull/4584))
+- docs: remove stray backtick from `RepositoryProvider` docs ([#4555](https://github.com/felangel/bloc/pull/4555))
+- chore: update build status badge ([#4502](https://github.com/felangel/bloc/pull/4502))
+
 # 9.1.1
 
 - fix: `BlocSelector` rebuilds when `selector` changes ([#4415](https://github.com/felangel/bloc/pull/4415))
