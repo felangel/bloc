@@ -46,6 +46,31 @@ void main() {
       expect(uncaughtErrors, isEmpty);
     });
 
+    test('continues mapping events after a synchronous mapper error', () async {
+      final expectedError = StateError('mapper failed');
+      final uncaughtErrors = <Object>[];
+      late Stream<int> stream;
+
+      runZonedGuarded(
+        () {
+          stream = droppable<int>()(
+            Stream<int>.fromIterable([0, 1]),
+            (event) {
+              if (event == 0) throw expectedError;
+              return Stream<int>.value(event);
+            },
+          );
+        },
+        (error, stackTrace) => uncaughtErrors.add(error),
+      );
+
+      await expectLater(
+        stream,
+        emitsInOrder([emitsError(same(expectedError)), 1, emitsDone]),
+      );
+      expect(uncaughtErrors, isEmpty);
+    });
+
     test('forwards mapper subscription errors', () async {
       final errors = <Object>[];
       final stackTraces = <StackTrace>[];
@@ -88,31 +113,6 @@ void main() {
 
       await subscription.cancel();
       await controller.close();
-    });
-
-    test('continues mapping events after a synchronous mapper error', () async {
-      final expectedError = StateError('mapper failed');
-      final uncaughtErrors = <Object>[];
-      late Stream<int> stream;
-
-      runZonedGuarded(
-        () {
-          stream = droppable<int>()(
-            Stream<int>.fromIterable([0, 1]),
-            (event) {
-              if (event == 0) throw expectedError;
-              return Stream<int>.value(event);
-            },
-          );
-        },
-        (error, stackTrace) => uncaughtErrors.add(error),
-      );
-
-      await expectLater(
-        stream,
-        emitsInOrder([emitsError(same(expectedError)), 1]),
-      );
-      expect(uncaughtErrors, isEmpty);
     });
 
     test('processes only the current event and ignores remaining', () async {
