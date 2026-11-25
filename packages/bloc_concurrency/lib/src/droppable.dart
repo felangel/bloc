@@ -23,13 +23,13 @@ class _ExhaustMapStreamTransformer<T> extends StreamTransformerBase<T, T> {
 
   @override
   Stream<T> bind(Stream<T> stream) {
-    late StreamSubscription<T> subscription;
+    StreamSubscription<T>? subscription;
     StreamSubscription<T>? mappedSubscription;
 
     final controller = StreamController<T>(
       onCancel: () => Future.wait<void>([
         if (mappedSubscription != null) mappedSubscription!.cancel(),
-        subscription.cancel(),
+        if (subscription != null) subscription.cancel(),
       ]),
       sync: true,
     );
@@ -45,21 +45,29 @@ class _ExhaustMapStreamTransformer<T> extends StreamTransformerBase<T, T> {
       if (isDone) controller.close();
     }
 
-    subscription = stream.listen(
-      (data) {
-        if (mappedSubscription != null) return;
-        final Stream<T> mappedStream;
-
-        mappedStream = mapper(data);
-        mappedSubscription = mappedStream.listen(
-          controller.add,
-          onError: controller.addError,
-          onDone: onMappedSubscriptionDone,
-        );
-      },
-      onError: controller.addError,
-      onDone: onSubscriptionDone,
-    );
+    try {
+      subscription = stream.listen(
+        (data) {
+          if (mappedSubscription != null) return;
+          try {
+            final mappedStream = mapper(data);
+            mappedSubscription = mappedStream.listen(
+              controller.add,
+              onError: controller.addError,
+              onDone: onMappedSubscriptionDone,
+            );
+          } catch (error, stackTrace) {
+            controller.addError(error, stackTrace);
+          }
+        },
+        onError: controller.addError,
+        onDone: onSubscriptionDone,
+      );
+    } catch (error, stackTrace) {
+      controller
+        ..addError(error, stackTrace)
+        ..close();
+    }
 
     return controller.stream;
   }
