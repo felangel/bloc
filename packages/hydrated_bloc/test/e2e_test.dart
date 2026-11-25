@@ -81,6 +81,36 @@ void main() {
         expect(ListCubit().state, const <String>[item]);
       });
 
+      test('persists and restores nullable list with leading null', () async {
+        CustomObject? fromJson(dynamic json) {
+          return json == null
+              ? null
+              : CustomObject.fromJson(json as Map<String, dynamic>);
+        }
+
+        ListCubitCustom<CustomObject?>(fromJson)
+            .setItems(const <CustomObject?>[null, CustomObject(1)]);
+        await sleep();
+        expect(
+          ListCubitCustom<CustomObject?>(fromJson).state,
+          const <CustomObject?>[null, CustomObject(1)],
+        );
+      });
+
+      test('persists and restores non-nullable object list', () async {
+        CustomObject fromJson(dynamic json) {
+          return CustomObject.fromJson(json as Map<String, dynamic>);
+        }
+
+        ListCubitCustom<CustomObject>(fromJson)
+            .setItems(const <CustomObject>[CustomObject(1), CustomObject(2)]);
+        await sleep();
+        expect(
+          ListCubitCustom<CustomObject>(fromJson).state,
+          const <CustomObject>[CustomObject(1), CustomObject(2)],
+        );
+      });
+
       test('persists and restores object->map list correctly', () async {
         const item = MapObject(1);
         const fromJson = MapObject.fromJson;
