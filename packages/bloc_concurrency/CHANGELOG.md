@@ -1,3 +1,16 @@
+# 0.3.1
+
+- fix: correct `droppable` error propagation
+- perf: cancel `droppable` subscriptions concurrently
+- fix: close `droppable` stream when source ends mid-event
+- docs: clarify `restartable` cancellation and resource use
+- chore(deps): various dependency upgrades
+- docs: clarify per-handler event transformer semantics
+- chore: adjust license and copyright year
+- refactor: add `package:bloc_lint`
+- chore: update build status badge
+- chore: update sponsors
+
 # 0.3.0
 
 - chore(deps): upgrade to `package:bloc v9.0.0`
