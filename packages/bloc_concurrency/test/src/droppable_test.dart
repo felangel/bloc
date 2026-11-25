@@ -52,6 +52,7 @@ void main() {
       final uncaughtErrors = <Object>[];
       final controller = StreamController<int>();
       final subscription = controller.stream.listen(null);
+      final done = Completer<void>();
 
       runZonedGuarded(
         () {
@@ -64,13 +65,13 @@ void main() {
               errors.add(error);
               stackTraces.add(stackTrace);
             },
+            onDone: done.complete,
           );
         },
         (error, stackTrace) => uncaughtErrors.add(error),
       );
 
-      await subscription.cancel();
-      await controller.close();
+      await done.future;
 
       expect(
         errors,
@@ -84,6 +85,9 @@ void main() {
       );
       expect(stackTraces.single.toString(), contains('droppable'));
       expect(uncaughtErrors, isEmpty);
+
+      await subscription.cancel();
+      await controller.close();
     });
 
     test('continues mapping events after a synchronous mapper error', () async {
