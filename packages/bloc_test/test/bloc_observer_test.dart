@@ -78,7 +78,7 @@ void main() {
           // ignore: invalid_use_of_protected_member
           () => blocObserver.onError(
             bloc,
-            ExceptionCounterBlocException(),
+            any(that: isA<ExceptionCounterBlocException>()),
             any(),
           ),
         ).called(1);
