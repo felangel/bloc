@@ -1,4 +1,6 @@
 // ignore_for_file: prefer_const_constructors
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_weather/weather/weather.dart';
@@ -88,6 +90,64 @@ void main() {
         expect: () => <WeatherState>[
           WeatherState(status: WeatherStatus.loading),
           WeatherState(status: WeatherStatus.failure),
+        ],
+      );
+
+      blocTest<WeatherCubit, WeatherState>(
+        'keeps the latest city when an earlier search finishes last',
+        build: () => weatherCubit,
+        act: (cubit) async {
+          final paris = Completer<weather_repository.Weather>();
+          when(
+            () => weatherRepository.getWeather('Paris'),
+          ).thenAnswer((_) => paris.future);
+
+          final firstSearch = cubit.fetchWeather('Paris');
+          await cubit.fetchWeather(weatherLocation);
+
+          paris.complete(
+            const weather_repository.Weather(
+              location: 'Paris',
+              temperature: weatherTemperature,
+              condition: weatherCondition,
+            ),
+          );
+          await firstSearch;
+        },
+        expect: () => [
+          WeatherState(status: WeatherStatus.loading),
+          isA<WeatherState>()
+              .having((w) => w.status, 'status', WeatherStatus.success)
+              .having((w) => w.weather.location, 'location', weatherLocation),
+        ],
+      );
+
+      blocTest<WeatherCubit, WeatherState>(
+        'ignores an earlier search error while the latest search is pending',
+        build: () => weatherCubit,
+        act: (cubit) async {
+          final paris = Completer<weather_repository.Weather>();
+          final london = Completer<weather_repository.Weather>();
+          when(
+            () => weatherRepository.getWeather('Paris'),
+          ).thenAnswer((_) => paris.future);
+          when(
+            () => weatherRepository.getWeather(weatherLocation),
+          ).thenAnswer((_) => london.future);
+
+          final firstSearch = cubit.fetchWeather('Paris');
+          final latestSearch = cubit.fetchWeather(weatherLocation);
+
+          paris.completeError(Exception('oops'));
+          await firstSearch;
+          london.complete(weather);
+          await latestSearch;
+        },
+        expect: () => [
+          WeatherState(status: WeatherStatus.loading),
+          isA<WeatherState>()
+              .having((w) => w.status, 'status', WeatherStatus.success)
+              .having((w) => w.weather.location, 'location', weatherLocation),
         ],
       );
 
@@ -203,6 +263,48 @@ void main() {
         ),
         act: (cubit) => cubit.refreshWeather(),
         expect: () => <WeatherState>[],
+      );
+
+      blocTest<WeatherCubit, WeatherState>(
+        'keeps the searched city when an earlier refresh finishes last',
+        build: () => weatherCubit,
+        seed: () => WeatherState(
+          status: WeatherStatus.success,
+          weather: Weather(
+            location: 'Paris',
+            temperature: Temperature(value: weatherTemperature),
+            lastUpdated: DateTime(2020),
+            condition: weatherCondition,
+          ),
+        ),
+        act: (cubit) async {
+          final paris = Completer<weather_repository.Weather>();
+          when(
+            () => weatherRepository.getWeather('Paris'),
+          ).thenAnswer((_) => paris.future);
+
+          final refresh = cubit.refreshWeather();
+          await cubit.fetchWeather(weatherLocation);
+
+          paris.complete(
+            const weather_repository.Weather(
+              location: 'Paris',
+              temperature: weatherTemperature,
+              condition: weatherCondition,
+            ),
+          );
+          await refresh;
+        },
+        expect: () => [
+          isA<WeatherState>().having(
+            (w) => w.status,
+            'status',
+            WeatherStatus.loading,
+          ),
+          isA<WeatherState>()
+              .having((w) => w.status, 'status', WeatherStatus.success)
+              .having((w) => w.weather.location, 'location', weatherLocation),
+        ],
       );
 
       blocTest<WeatherCubit, WeatherState>(

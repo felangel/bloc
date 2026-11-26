@@ -12,40 +12,28 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
   WeatherCubit(this._weatherRepository) : super(WeatherState());
 
   final WeatherRepository _weatherRepository;
+  var _weatherRequestId = 0;
 
   Future<void> fetchWeather(String? city) async {
     if (city == null || city.isEmpty) return;
-
-    emit(state.copyWith(status: WeatherStatus.loading));
-
-    try {
-      final weather = Weather.fromRepository(
-        await _weatherRepository.getWeather(city),
-      );
-      final units = state.temperatureUnits;
-      final value = units.isFahrenheit
-          ? weather.temperature.value.toFahrenheit()
-          : weather.temperature.value;
-
-      emit(
-        state.copyWith(
-          status: WeatherStatus.success,
-          temperatureUnits: units,
-          weather: weather.copyWith(temperature: Temperature(value: value)),
-        ),
-      );
-    } on Exception {
-      emit(state.copyWith(status: WeatherStatus.failure));
-    }
+    await _updateWeather(city, showLoading: true);
   }
 
   Future<void> refreshWeather() async {
     if (!state.status.isSuccess) return;
     if (state.weather == Weather.empty) return;
+    await _updateWeather(state.weather.location, showLoading: false);
+  }
+
+  Future<void> _updateWeather(String city, {required bool showLoading}) async {
+    final requestId = ++_weatherRequestId;
+    if (showLoading) emit(state.copyWith(status: WeatherStatus.loading));
+
     try {
-      final weather = Weather.fromRepository(
-        await _weatherRepository.getWeather(state.weather.location),
-      );
+      final result = await _weatherRepository.getWeather(city);
+      if (requestId != _weatherRequestId) return;
+
+      final weather = Weather.fromRepository(result);
       final units = state.temperatureUnits;
       final value = units.isFahrenheit
           ? weather.temperature.value.toFahrenheit()
@@ -59,7 +47,8 @@ class WeatherCubit extends HydratedCubit<WeatherState> {
         ),
       );
     } on Exception {
-      emit(state);
+      if (requestId != _weatherRequestId) return;
+      emit(showLoading ? state.copyWith(status: WeatherStatus.failure) : state);
     }
   }
 
