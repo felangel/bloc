@@ -73,7 +73,7 @@ abstract class ReplayBloc<Event extends ReplayEvent, State>
 mixin ReplayBlocMixin<Event extends ReplayEvent, State> on Bloc<Event, State> {
   late final _changeStack = _ChangeStack<State>(shouldReplay: shouldReplay);
 
-  BlocObserver get _observer => Bloc.observer;
+  final BlocObserver _observer = Bloc.observer;
 
   /// Sets the internal `undo`/`redo` size limit.
   /// By default there is no limit.

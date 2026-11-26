@@ -563,5 +563,71 @@ void main() {
         expect(states, const <int>[1, 2, 1, 0]);
       });
     });
+
+    group('Bloc.observer', () {
+      late BlocObserver previousObserver;
+
+      setUp(() => previousObserver = Bloc.observer);
+
+      tearDown(() => Bloc.observer = previousObserver);
+
+      Future<void> expectCreationObserver(
+        Bloc<CounterEvent, int> Function() create,
+      ) async {
+        final created = _RecordingObserver();
+        final replaced = _RecordingObserver();
+        Bloc.observer = created;
+        final bloc = create();
+        Bloc.observer = replaced;
+        bloc.add(Increment());
+        await Future<void>.delayed(Duration.zero);
+        (bloc as ReplayBlocMixin<CounterEvent, int>).undo();
+        await bloc.close();
+        expect(created.events, [
+          isA<Increment>(),
+          isA<ReplayEvent>().having((e) => '$e', 'toString', 'Undo'),
+        ]);
+        expect(created.transitions, 2);
+        expect(created.changes, 2);
+        expect(replaced.events, isEmpty);
+        expect(replaced.transitions, 0);
+        expect(replaced.changes, 0);
+      }
+
+      test('uses the observer set when the ReplayBloc was created', () {
+        return expectCreationObserver(() => CounterBloc());
+      });
+
+      test('uses the observer set when the ReplayBlocMixin was created', () {
+        return expectCreationObserver(() => CounterBlocMixin());
+      });
+    });
   });
+}
+
+class _RecordingObserver extends BlocObserver {
+  final events = <Object?>[];
+  int transitions = 0;
+  int changes = 0;
+
+  @override
+  void onEvent(Bloc<dynamic, dynamic> bloc, Object? event) {
+    super.onEvent(bloc, event);
+    events.add(event);
+  }
+
+  @override
+  void onTransition(
+    Bloc<dynamic, dynamic> bloc,
+    Transition<dynamic, dynamic> transition,
+  ) {
+    super.onTransition(bloc, transition);
+    transitions++;
+  }
+
+  @override
+  void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
+    super.onChange(bloc, change);
+    changes++;
+  }
 }
