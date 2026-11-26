@@ -660,6 +660,44 @@ Alternatively, consider using Matchers in the expect of the blocTest rather than
         });
         expect((actualError as TestFailure).message, expectedError);
       });
+
+      test('shows no equality warning when verify fails after expect',
+          () async {
+        await expectLater(
+          () => testBloc<CounterBloc, int>(
+            build: () => CounterBloc(),
+            act: (bloc) => bloc.add(CounterEvent.increment),
+            expect: () => const <int>[1],
+            verify: (_) => fail('verify failed'),
+          ),
+          throwsA(
+            isA<TestFailure>().having(
+              (e) => e.message,
+              'message',
+              allOf(contains('verify failed'), isNot(contains('Equatable'))),
+            ),
+          ),
+        );
+      });
+
+      test('shows no equality warning when tearDown fails after expect',
+          () async {
+        await expectLater(
+          () => testBloc<CounterBloc, int>(
+            build: () => CounterBloc(),
+            act: (bloc) => bloc.add(CounterEvent.increment),
+            expect: () => const <int>[1],
+            tearDown: () => fail('tearDown failed'),
+          ),
+          throwsA(
+            isA<TestFailure>().having(
+              (e) => e.message,
+              'message',
+              allOf(contains('tearDown failed'), isNot(contains('Equatable'))),
+            ),
+          ),
+        );
+      });
     });
   });
 
