@@ -466,6 +466,98 @@ void main() {
           isA<ErrorCounterBlocError>(),
         ],
       );
+
+      group('when errors are expected', () {
+        test('fails when expect is incorrect', () async {
+          await expectLater(
+            () => testBloc<ErrorCounterBloc, int>(
+              build: () => ErrorCounterBloc(),
+              act: (bloc) => bloc.add(CounterEvent.increment),
+              expect: () => const <int>[2],
+              errors: () => [isA<ErrorCounterBlocError>()],
+            ),
+            throwsA(isA<TestFailure>()),
+          );
+        });
+
+        test('fails when verify is incorrect', () async {
+          var verifyCallCount = 0;
+          await expectLater(
+            () => testBloc<ErrorCounterBloc, int>(
+              build: () => ErrorCounterBloc(),
+              act: (bloc) => bloc.add(CounterEvent.increment),
+              verify: (_) {
+                verifyCallCount++;
+                fail('verify failed');
+              },
+              errors: () => [isA<ErrorCounterBlocError>()],
+            ),
+            throwsA(isA<TestFailure>()),
+          );
+          expect(verifyCallCount, 1);
+        });
+
+        test('calls verify and tearDown when everything passes', () async {
+          var verifyCallCount = 0;
+          var tearDownCallCount = 0;
+          await testBloc<ErrorCounterBloc, int>(
+            build: () => ErrorCounterBloc(),
+            act: (bloc) => bloc.add(CounterEvent.increment),
+            expect: () => const <int>[1],
+            verify: (bloc) {
+              verifyCallCount++;
+              expect(bloc.state, 1);
+            },
+            errors: () => [isA<ErrorCounterBlocError>()],
+            tearDown: () => tearDownCallCount++,
+          );
+          expect(verifyCallCount, 1);
+          expect(tearDownCallCount, 1);
+        });
+
+        test('fails when tearDown is incorrect', () async {
+          var tearDownCallCount = 0;
+          await expectLater(
+            () => testBloc<ErrorCounterBloc, int>(
+              build: () => ErrorCounterBloc(),
+              act: (bloc) => bloc.add(CounterEvent.increment),
+              errors: () => [isA<ErrorCounterBlocError>()],
+              tearDown: () {
+                tearDownCallCount++;
+                fail('tearDown failed');
+              },
+            ),
+            throwsA(isA<TestFailure>()),
+          );
+          expect(tearDownCallCount, 1);
+        });
+
+        test('fails when errors do not match', () async {
+          await expectLater(
+            () => testBloc<ErrorCounterBloc, int>(
+              build: () => ErrorCounterBloc(),
+              act: (bloc) => bloc.add(CounterEvent.increment),
+              expect: () => const <int>[1],
+              errors: () => [isA<StateError>()],
+            ),
+            throwsA(isA<TestFailure>()),
+          );
+        });
+
+        test('fails when an unexpected error is thrown', () async {
+          await expectLater(
+            () => testBloc<ErrorCounterBloc, int>(
+              build: () => ErrorCounterBloc(),
+              act: (bloc) {
+                bloc.add(CounterEvent.increment);
+                Future<void>.error(StateError('unexpected'));
+              },
+              errors: () => isNotEmpty,
+            ),
+            throwsA(isA<StateError>()),
+          );
+        });
+      });
     });
 
     group('ExceptionCounterBloc', () {

@@ -194,8 +194,14 @@ Future<void> testBloc<B extends EmittableStateStreamableSource<State>, State>({
   );
   Bloc.observer = testObserver;
 
+  // Without `errors` an uncaught error fails the test right away. With
+  // `errors` the expected ones must not end it early: the body still has to
+  // run `expect`, `verify` and `tearDown`.
+  final isExpected =
+      errors == null ? (Object _) => false : unhandledErrors.contains;
+
   try {
-    await _runZonedGuarded(() async {
+    await _runZonedGuarded(isExpected, () async {
       await setUp?.call();
       final states = <State>[];
       final bloc = build();
@@ -243,12 +249,20 @@ Alternatively, consider using Matchers in the expect of the blocTest rather than
   if (errors != null) test.expect(unhandledErrors, test.wrapMatcher(errors()));
 }
 
-Future<void> _runZonedGuarded(Future<void> Function() body) {
+Future<void> _runZonedGuarded(
+  bool Function(Object error) isExpected,
+  Future<void> Function() body,
+) {
   final completer = Completer<void>();
   runZonedGuarded(() async {
-    await body();
-    if (!completer.isCompleted) completer.complete();
+    try {
+      await body();
+      if (!completer.isCompleted) completer.complete();
+    } catch (error, stackTrace) {
+      if (!completer.isCompleted) completer.completeError(error, stackTrace);
+    }
   }, (error, stackTrace) {
+    if (isExpected(error)) return;
     if (!completer.isCompleted) completer.completeError(error, stackTrace);
   });
   return completer.future;
