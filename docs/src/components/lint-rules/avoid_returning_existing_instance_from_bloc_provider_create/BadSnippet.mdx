@@ -1,0 +1,27 @@
+import { Code } from '@astrojs/starlight/components';
+import { transformerMetaHighlight } from '@shikijs/transformers';
+
+<Code
+	code={`
+  import 'package:flutter/material.dart';
+  import 'package:flutter_bloc/flutter_bloc.dart';
+
+  class CounterPage extends StatelessWidget {
+    const CounterPage({required this.bloc, super.key});
+
+    final CounterBloc bloc;
+
+    @override
+    Widget build(BuildContext context) {
+      return BlocProvider(
+        // Avoid returning an existing instance!
+        // The instance will be closed when the provider is removed.
+        create: (_) => bloc,
+        child: const CounterView(),
+      );
+    }
+  }
+`}
+lang="dart" title="counter_page.dart"
+transformers={[transformerMetaHighlight()]} class='warning' meta="{14}"
+/>
