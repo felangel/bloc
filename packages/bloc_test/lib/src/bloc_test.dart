@@ -212,10 +212,10 @@ Future<void> testBloc<B extends EmittableStateStreamableSource<State>, State>({
       await bloc.close();
       if (expect != null) {
         final dynamic expected = await expect();
-        shallowEquality = '$states' == '$expected';
         try {
           test.expect(states, test.wrapMatcher(expected));
         } on test.TestFailure catch (e) {
+          shallowEquality = '$states' == '$expected';
           if (shallowEquality || expected is! List<State>) rethrow;
           final diff = _diff(expected: expected, actual: states);
           final message = '${e.message}\n$diff';
