@@ -103,6 +103,7 @@ For more information, check out the [official documentation](https://bloclibrary
 - [prefer_bloc](https://bloclibrary.dev/lint-rules/prefer_bloc)
 - [prefer_build_context_extensions](https://bloclibrary.dev/lint-rules/prefer_build_context_extensions)
 - [prefer_cubit](https://bloclibrary.dev/lint-rules/prefer_cubit)
+- [prefer_emit_for_each](https://bloclibrary.dev/lint-rules/prefer_emit_for_each)
 - [prefer_file_naming_conventions](https://bloclibrary.dev/lint-rules/prefer_file_naming_conventions)
 - [prefer_void_public_cubit_methods](https://bloclibrary.dev/lint-rules/prefer_void_public_cubit_methods)
 
