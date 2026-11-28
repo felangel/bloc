@@ -104,6 +104,7 @@ For more information, check out the [official documentation](https://bloclibrary
 - [prefer_build_context_extensions](https://bloclibrary.dev/lint-rules/prefer_build_context_extensions)
 - [prefer_cubit](https://bloclibrary.dev/lint-rules/prefer_cubit)
 - [prefer_file_naming_conventions](https://bloclibrary.dev/lint-rules/prefer_file_naming_conventions)
+- [prefer_multi_bloc_provider](https://bloclibrary.dev/lint-rules/prefer_multi_bloc_provider)
 - [prefer_void_public_cubit_methods](https://bloclibrary.dev/lint-rules/prefer_void_public_cubit_methods)
 
 ## Dart Versions
