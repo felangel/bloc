@@ -15,6 +15,7 @@ export 'src/rules/rules.dart'
         PreferBloc,
         PreferBuildContextExtensions,
         PreferCubit,
+        PreferEmitForEach,
         PreferFileNamingConventions,
         PreferVoidPublicCubitMethods;
 export 'src/text_document.dart'

@@ -28,6 +28,7 @@ final allRules = <String, LintRuleBuilder>{
   PreferBloc.rule: PreferBloc.new,
   PreferBuildContextExtensions.rule: PreferBuildContextExtensions.new,
   PreferCubit.rule: PreferCubit.new,
+  PreferEmitForEach.rule: PreferEmitForEach.new,
   PreferFileNamingConventions.rule: PreferFileNamingConventions.new,
   PreferVoidPublicCubitMethods.rule: PreferVoidPublicCubitMethods.new,
 };

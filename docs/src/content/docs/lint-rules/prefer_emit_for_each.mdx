@@ -1,0 +1,53 @@
+---
+title: Prefer Emit For Each
+description: Use emit.forEach to map stream values to bloc states.
+---
+
+import EnableRuleSnippet from '~/components/lint-rules/EnableRuleSnippet.astro';
+
+When a stream supplies the states of a bloc, use `emit.forEach` in an event
+handler. Returning or awaiting its future lets the emitter cancel the
+subscription when the handler is canceled or the bloc is closed.
+
+This rule reports instance fields declared as `StreamSubscription` in bloc
+classes. It is opt-in. A subscription that needs to be paused or resumed
+independently may still need manual management.
+
+## Examples
+
+This bloc stores a subscription and has to cancel it in `close`:
+
+```dart
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc(Stream<int> counts) : super(0) {
+    on<CountChanged>((event, emit) => emit(event.value));
+    _subscription = counts.listen((value) => add(CountChanged(value)));
+  }
+
+  late final StreamSubscription<int> _subscription;
+
+  @override
+  Future<void> close() async {
+    await _subscription.cancel();
+    return super.close();
+  }
+}
+```
+
+Starting the subscription from an event handler removes the field and the
+`close` override:
+
+```dart
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc(Stream<int> counts) : super(0) {
+    on<CounterStarted>((event, emit) {
+      return emit.forEach<int>(counts, onData: (value) => value);
+    });
+    add(CounterStarted());
+  }
+}
+```
+
+## Enable
+
+<EnableRuleSnippet name="prefer_emit_for_each" />
